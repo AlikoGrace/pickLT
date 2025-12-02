@@ -1,0 +1,274 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/aspect-ratio';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-primary-50: rgb(238, 242, 255);
+  --color-primary-100: rgb(224, 231, 255);
+  --color-primary-200: rgb(199, 210, 254);
+  --color-primary-300: rgb(165, 180, 252);
+  --color-primary-400: rgb(129, 140, 248);
+  --color-primary-500: rgb(99, 102, 241);
+  --color-primary-600: rgb(79, 70, 229);
+  --color-primary-700: rgb(67, 56, 202);
+  --color-primary-800: rgb(55, 48, 163);
+  --color-primary-900: rgb(49, 46, 129);
+
+  --color-secondary-50: rgb(240, 253, 250);
+  --color-secondary-100: rgb(204, 251, 241);
+  --color-secondary-200: rgb(153, 246, 228);
+  --color-secondary-300: rgb(153, 246, 228);
+  --color-secondary-400: rgb(45, 212, 191);
+  --color-secondary-500: rgb(20, 184, 166);
+  --color-secondary-600: rgb(13, 148, 136);
+  --color-secondary-700: rgb(15, 118, 110);
+  --color-secondary-800: rgb(17, 94, 89);
+  --color-secondary-900: rgb(19, 78, 74);
+
+  --color-neutral-50: rgb(249, 250, 251);
+  --color-neutral-100: rgb(243, 244, 246);
+  --color-neutral-200: rgb(229, 231, 235);
+  --color-neutral-300: rgb(209, 213, 219);
+  --color-neutral-400: rgb(156, 163, 175);
+  --color-neutral-500: rgb(107, 114, 128);
+  --color-neutral-600: rgb(75, 85, 99);
+  --color-neutral-700: rgb(55, 65, 81);
+  --color-neutral-800: rgb(31, 41, 55);
+  --color-neutral-900: rgb(17, 24, 39);
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    @apply border-neutral-200 dark:border-neutral-700;
+  }
+
+  button.gm-control-active.gm-fullscreen-control {
+    border-radius: var(--radius-xl) !important;
+  }
+  [type='button'] {
+    -webkit-appearance: none !important;
+  }
+
+  hr {
+    @apply border-t border-neutral-200 dark:border-neutral-700;
+  }
+
+  input[type='time']::-webkit-calendar-picker-indicator {
+    @apply rounded-md dark:bg-neutral-500;
+  }
+}
+
+@utility container {
+  margin-inline: auto;
+  padding-inline: 1rem;
+  @media screen and (min-width: 1536px) {
+    padding-inline: 8rem;
+  }
+}
+
+@utility pl-container {
+  @apply pl-4 sm:pl-[calc((100vw-40rem+2rem)/2)] md:pl-[calc((100vw-48rem+2rem)/2)] lg:pl-[calc((100vw-64rem+2rem)/2)] xl:pl-[calc((100vw-80rem+2rem)/2)] 2xl:pl-[calc((100vw-96rem+16rem)/2)];
+}
+
+/* embla carousel */
+@utility embla {
+  overflow: hidden;
+}
+@utility embla-overflow-unset {
+  overflow: unset;
+}
+@utility embla__container {
+  display: flex;
+  touch-action: pan-y pinch-zoom;
+}
+@utility embla__slide {
+  flex-shrink: 0;
+  flex-grow: 0;
+  transform: translate3d(0, 0, 0);
+}
+
+/* // some quick customizations */
+@utility mySnapItem {
+  @apply shrink-0 snap-start;
+}
+
+@utility nc-header-bg {
+  @apply bg-white/70 backdrop-blur-2xl backdrop-filter dark:bg-neutral-900/60;
+}
+
+@utility menu-item {
+  @apply flex;
+
+  &:hover {
+    > .sub-menu {
+      @apply block;
+    }
+  }
+}
+
+@utility sub-menu {
+  @apply hidden;
+}
+
+.react-datepicker {
+  @apply relative grid grid-cols-1 gap-10 md:grid-cols-2;
+}
+.react-datepicker__aria-live {
+  @apply hidden;
+}
+.react-datepicker__month-container {
+  @apply text-center;
+}
+.react-datepicker__current-month {
+  @apply text-sm font-semibold text-gray-900 dark:text-gray-100;
+}
+.react-datepicker__day-names {
+  @apply mt-6 grid grid-cols-7 text-center text-xs leading-6 text-gray-500 dark:text-gray-400;
+}
+.react-datepicker__month {
+  @apply mt-5;
+}
+.react-datepicker__week {
+  @apply my-0.5 grid grid-cols-7;
+}
+
+.react-datepicker__day {
+  @apply flex w-full cursor-pointer items-center justify-center text-sm empty:cursor-auto empty:opacity-0 empty:hover:bg-transparent;
+  &:empty {
+    background-color: transparent !important;
+  }
+  span {
+    @apply rounded-full hover:bg-gray-100 dark:hover:bg-gray-700/60;
+  }
+}
+
+.react-datepicker__day--in-range,
+.react-datepicker__day--in-selecting-range {
+  @apply rounded-none bg-gray-100 dark:bg-gray-700/50;
+}
+
+.react-datepicker__day--range-start {
+  @apply relative z-[1] bg-transparent after:absolute after:inset-y-0 after:end-0 after:-z-10 after:w-1/2 after:bg-gray-100 dark:after:bg-gray-700/50;
+}
+.react-datepicker__day--range-end {
+  @apply relative z-[1] bg-transparent after:absolute after:inset-y-0 after:start-0 after:-z-10 after:w-1/2 after:bg-gray-100 dark:after:bg-gray-700/50;
+}
+
+.react-datepicker__day--range-start,
+.react-datepicker__day--selecting-range-start {
+  @apply rounded-l-full;
+}
+.react-datepicker__day--range-end,
+.react-datepicker__day--selecting-range-end {
+  @apply rounded-r-full;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--range-start,
+.react-datepicker__day--range-end,
+.react-datepicker__day--selecting-range-start,
+.react-datepicker__day--selecting-range-end {
+  span {
+    @apply rounded-full bg-primary-500 text-white hover:bg-primary-500 dark:bg-primary-500 dark:hover:bg-primary-500;
+  }
+}
+.react-datepicker__day--disabled {
+  @apply text-neutral-400 dark:text-neutral-500;
+}
+.react-datepicker__day_span {
+  @apply flex size-10 items-center justify-center rounded-full xl:size-11;
+}
+.addListingDatePickerExclude {
+  .react-datepicker__day--disabled {
+    @apply relative rounded-none bg-gray-100 empty:opacity-0 dark:bg-gray-700/50;
+    &::after {
+      content: '';
+      @apply absolute block h-full rotate-45 border-l border-neutral-300 dark:border-neutral-700;
+    }
+  }
+}
+
+/* // ================== CUSTOM ============================== */
+@utility root {
+  overflow: hidden;
+}
+#headlessui-portal-root {
+  @apply text-base text-neutral-900 dark:text-neutral-200;
+}
+@utility hidden-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+@utility z-max {
+  z-index: 999;
+}
+
+@utility nc-box-has-hover {
+  @apply rounded-3xl border border-neutral-200/79 bg-white dark:border-neutral-700 dark:bg-neutral-800/30;
+}
+
+@utility listingSection__wrap {
+  @apply flex w-full flex-col gap-y-6 border-b border-neutral-200 px-0 pb-10 leading-relaxed sm:gap-y-8 sm:rounded-2xl sm:border sm:p-4 xl:p-8 dark:border-neutral-700;
+}
+
+@utility menuIsNew_lv1 {
+  > a::before {
+    content: 'New!';
+    position: absolute;
+    top: -2px;
+    right: 0;
+    display: inline-block;
+    padding: 0 5px;
+    line-height: 15px;
+    border-radius: 4px;
+    background-color: #f35656;
+    color: #fff;
+    font-size: 10px;
+    font-weight: normal;
+  }
+}
+@utility menuIsNew {
+  > a::after {
+    content: 'New!';
+    display: inline-block;
+    padding: 0 5px;
+    line-height: 15px;
+    border-radius: 4px;
+    background-color: #f35656;
+    color: #fff;
+    font-size: 10px;
+    margin-inline-start: 6px;
+  }
+}
+
+@keyframes myblur {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@utility custom-shadow-1 {
+  box-shadow:
+    rgba(17, 17, 26, 0.05) 0px 4px 16px,
+    rgba(17, 17, 26, 0.05) 0px 8px 32px;
+}
+
+/* FOR SEARCH FORM DEFAULT */
+@utility hero-search-form__field-after {
+  @apply after:absolute after:-end-1 after:top-1/2 after:-z-10 after:hidden after:h-9 after:w-2 after:-translate-y-1/2 after:bg-(--form-bg) data-open:after:block;
+}
+@utility hero-search-form__field-before {
+  @apply before:absolute before:-start-1 before:top-1/2 before:-z-10 before:hidden before:h-9 before:w-2 before:-translate-y-1/2 before:bg-(--form-bg) data-open:before:block;
+}
