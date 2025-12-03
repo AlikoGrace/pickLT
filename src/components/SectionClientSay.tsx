@@ -24,17 +24,20 @@ const DEMO_DATA = [
   {
     id: 1,
     clientName: 'Tiana Abie',
-    content: 'Great quality products, affordable prices, fast and friendly delivery. I very recommend.',
+    content:
+      'The movers were punctual and professional — they wrapped our furniture carefully and unloaded everything without a scratch. Highly recommended!',
   },
   {
     id: 2,
     clientName: 'Lennie Swiffan',
-    content: 'Great quality products, affordable prices, fast and friendly delivery. I very recommend.',
+    content:
+      'Excellent communication and efficient packing. No damage, on time, and fair price — the whole relocation felt stress-free.',
   },
   {
     id: 3,
     clientName: 'Berta Emili',
-    content: 'Great quality products, affordable prices, fast and friendly delivery. I very recommend.',
+    content:
+      'Handled fragile items with exceptional care and even helped assemble furniture in our new place. Outstanding service and friendly crew!',
   },
 ]
 
@@ -52,7 +55,7 @@ const SectionClientSay: FC<SectionClientSayProps> = ({
     loop: true,
   },
   heading = 'Good news from far away 🥇',
-  subHeading = "Let's see what people think of Chisfis",
+  subHeading = "Let's see what people think of PickLt ",
 }) => {
   const theme = useContext(ThemeContext)
 

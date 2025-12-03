@@ -14,27 +14,26 @@ const navigation: {
   }[]
 } = {
   solutions: [
-    { name: 'Marketing', href: '#' },
-    { name: 'Analytics', href: '#' },
-    { name: 'Automation', href: '#' },
-    { name: 'Commerce', href: '#' },
-    { name: 'Insights', href: '#' },
+    { name: 'Local Moving', href: '#' },
+    { name: 'Long Distance Moving', href: '#' },
+    { name: 'Packing Services', href: '#' },
+    { name: 'Storage Solutions', href: '#' },
+    { name: 'Commercial Moving', href: '#' },
   ],
   support: [
-    { name: 'Submit ticket', href: '#' },
-    { name: 'Documentation', href: '#' },
-    { name: 'Guides', href: '#' },
+    { name: 'Get a Quote', href: '#' },
+    { name: 'Contact Us', href: '#' },
+    { name: 'FAQs', href: '#' },
   ],
   company: [
-    { name: 'About', href: '#' },
-    { name: 'Blog', href: '#' },
-    { name: 'Jobs', href: '#' },
-    { name: 'Press', href: '#' },
+    { name: 'About Us', href: '#' },
+    { name: 'Careers', href: '#' },
+    { name: 'Locations', href: '#' },
   ],
   legal: [
-    { name: 'Terms of service', href: '#' },
-    { name: 'Privacy policy', href: '#' },
-    { name: 'License', href: '#' },
+    { name: 'Terms of Service', href: '#' },
+    { name: 'Privacy Policy', href: '#' },
+    { name: 'Insurance & Claims', href: '#' },
   ],
   social: [
     {
@@ -173,7 +172,7 @@ export default function Footer3() {
             ))}
           </div>
           <p className="mt-8 text-sm/6 text-gray-600 md:order-1 md:mt-0 dark:text-neutral-400">
-            &copy; 2025 Your Company, Inc. All rights reserved.
+            &copy; 2025 PickLt, All rights reserved.
           </p>
         </div>
       </div>

@@ -14,27 +14,26 @@ const navigation: {
   }[]
 } = {
   solutions: [
-    { name: 'Marketing', href: '#' },
-    { name: 'Analytics', href: '#' },
-    { name: 'Automation', href: '#' },
-    { name: 'Commerce', href: '#' },
+    { name: 'Local Moving', href: '#' },
+    { name: 'Long Distance Moving', href: '#' },
+    { name: 'Packing Services', href: '#' },
+    { name: 'Storage Solutions', href: '#' },
+    { name: 'Commercial Moving', href: '#' },
   ],
   support: [
-    { name: 'Submit ticket', href: '#' },
-    { name: 'Documentation', href: '#' },
-    { name: 'Guides', href: '#' },
+    { name: 'Get a Quote', href: '#' },
+    { name: 'Contact Us', href: '#' },
+    { name: 'FAQs', href: '#' },
   ],
   company: [
-    { name: 'About', href: '#' },
-    { name: 'Blog', href: '#' },
-    { name: 'Jobs', href: '#' },
-    { name: 'Press', href: '#' },
+    { name: 'About Us', href: '#' },
+    { name: 'Careers', href: '#' },
+    { name: 'Locations', href: '#' },
   ],
   legal: [
-    { name: 'Terms of service', href: '#' },
-    { name: 'Privacy policy', href: '#' },
-    { name: 'License', href: '#' },
-    { name: 'Insights', href: '#' },
+    { name: 'Terms of Service', href: '#' },
+    { name: 'Privacy Policy', href: '#' },
+    { name: 'Insurance & Claims', href: '#' },
   ],
   social: [
     {

@@ -28,51 +28,51 @@ type Suggest = {
 const demoInitSuggests: Suggest[] = [
   {
     id: '1',
-    name: 'Bangkok, Thailand',
+    name: 'Berlin, Germany',
     icon: HutIcon,
   },
   {
     id: '2',
-    name: 'Ueno, Taito, Tokyo',
-    icon: EiffelTowerIcon,
-  },
-  {
-    id: '3',
-    name: 'Ikebukuro, Toshima, Tokyo',
+    name: 'Munich (München), Germany',
     icon: TwinTowerIcon,
   },
   {
+    id: '3',
+    name: 'Hamburg, Germany',
+    icon: EiffelTowerIcon,
+  },
+  {
     id: '4',
-    name: 'San Diego, CA',
-    icon: BeachIcon,
+    name: 'Cologne (Köln), Germany',
+    icon: LakeIcon,
   },
   {
     id: '5',
-    name: 'Humboldt Park, Chicago, IL',
-    icon: LakeIcon,
+    name: 'Frankfurt am Main, Germany',
+    icon: BeachIcon,
   },
 ]
 
 const demoSearchingSuggests: Suggest[] = [
   {
     id: '1',
-    name: 'San Diego, CA',
+    name: 'Stuttgart, Germany',
   },
   {
     id: '2',
-    name: 'Humboldt Park, Chicago, IL',
+    name: 'Dresden, Germany',
   },
   {
     id: '3',
-    name: 'Bangor, Northern Ireland',
+    name: 'Leipzig, Germany',
   },
   {
     id: '4',
-    name: 'New York, NY, United States',
+    name: 'Nuremberg (Nürnberg), Germany',
   },
   {
     id: '5',
-    name: 'Los Angeles, CA, United States',
+    name: 'Düsseldorf, Germany',
   },
 ]
 
