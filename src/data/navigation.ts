@@ -47,7 +47,7 @@ export async function getNavigation(): Promise<TNavigationItem[]> {
           href: '#',
           name: 'Categories',
           children: [
-            { id: '2-1', href: '/stay-categories/all', name: 'Stay Categories' },
+            { id: '2-1', href: '/add-listing/1', name: 'Stay Categories' },
             { id: '2-4', href: '/car-categories/all', name: 'Car Categories' },
             { id: '2-2', href: '/real-estate-categories/all', name: 'Real Estate ' },
             { id: '2-3', href: '/experience-categories/all', name: 'Experiences ' },

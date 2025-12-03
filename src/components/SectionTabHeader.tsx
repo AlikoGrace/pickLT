@@ -22,7 +22,7 @@ const SectionTabHeader: FC<Props> = ({
   subHeading,
   heading,
   onChangeTab,
-  rightButtonHref = '/stay-categories/all',
+  rightButtonHref = '/add-listing/1',
 }) => {
   return (
     <div className="relative flex flex-col">

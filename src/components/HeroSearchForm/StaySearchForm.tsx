@@ -16,7 +16,7 @@ export const StaySearchForm = ({ className, formStyle = 'default' }: Props) => {
 
   // Prefetch the stay categories page to improve performance
   useEffect(() => {
-    router.prefetch('/stay-categories/all')
+    router.prefetch('/add-listing/1')
   }, [router])
 
   const handleFormSubmit = (formData: FormData) => {
@@ -26,7 +26,7 @@ export const StaySearchForm = ({ className, formStyle = 'default' }: Props) => {
 
     // example: add location to the URL
     const location = formDataEntries['location'] as string
-    let url = '/stay-categories/all'
+    let url = '/add-listing/1'
     if (location) {
       url = url + `?location=${encodeURIComponent(location)}`
     }

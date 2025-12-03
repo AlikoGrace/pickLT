@@ -34,7 +34,7 @@ const Page = async ({ params }: { params: Promise<{ handle?: string[] }> }) => {
   const filterOptions = await getStayListingFilterOptions()
 
   if (!category?.id) {
-    return redirect('/stay-categories/all')
+    return redirect('/add-listing/1')
   }
 
   return (

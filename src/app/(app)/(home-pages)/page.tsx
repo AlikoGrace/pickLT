@@ -45,21 +45,21 @@ async function Page() {
               <p className="max-w-xl text-base text-neutral-500 sm:text-xl dark:text-neutral-400">
                 Trusted movers for life’s big moments.
               </p>
-              <ButtonPrimary href={'/stay-categories/all'} className="sm:text-base/normal">
-                Start your search
-              </ButtonPrimary>
+              {/* <ButtonPrimary href={'/add-listing/1'} className="sm:text-base/normal">
+                Start booking move
+              </ButtonPrimary> */}
             </>
           }
         />
 
-        <div>
+        {/* <div>
           <HeadingWithSub subheading="Explore the best places to stay in the world.">
             Let&apos;s go on an adventure
           </HeadingWithSub>
           <SectionSliderNewCategories categoryCardType="card3" categories={categories.slice(0, 7)} />
-        </div>
+        </div> */}
 
-        <SectionOurFeatures className="py-14" />
+        {/* <SectionOurFeatures className="py-14" />
         <SectionGridFeaturePlaces stayListings={stayListings} cardType="card2" />
         <Divider />
         <SectionHowItWork />
@@ -71,21 +71,21 @@ async function Page() {
           <SectionGridAuthorBox authors={authors} />
         </div>
         <SectionSubscribe2 />
-        <Divider />
+        <Divider /> */}
 
-        <div>
+        {/* <div>
           <HeadingWithSub isCenter subheading={'Great places near where you live'}>
             Explore nearby
           </HeadingWithSub>
           <SectionGridCategoryBox categories={categories.slice(0, 8)} />
-        </div>
+        </div> */}
 
-        <div className="relative py-16">
+        {/* <div className="relative py-16">
           <BackgroundSection />
           <SectionBecomeAnAuthor />
-        </div>
+        </div> */}
 
-        <div>
+        {/* <div>
           <HeadingWithSub subheading="Explore houses based on 10 types of stays">
             Explore by types of stays.
           </HeadingWithSub>
@@ -94,8 +94,8 @@ async function Page() {
             categories={categories.slice(7, 16)}
             categoryCardType="card5"
           />
-        </div>
-        <SectionVideos />
+        </div> */}
+        {/* <SectionVideos /> */}
         <div className="relative py-16">
           <SectionClientSay />
         </div>

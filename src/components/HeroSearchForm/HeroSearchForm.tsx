@@ -33,7 +33,7 @@ export const formTabs: {
 const HeroSearchForm = ({ className, initTab = 'Stays' }: { className?: string; initTab: ListingType }) => {
   return (
     <div className={clsx('hero-search-form', className)}>
-      <Headless.TabGroup defaultIndex={formTabs.findIndex((tab) => tab.name === initTab)}>
+      {/* <Headless.TabGroup defaultIndex={formTabs.findIndex((tab) => tab.name === initTab)}>
         <Headless.TabList className="ms-3 mb-8 flex sm:gap-x-6 xl:ms-10 xl:gap-x-10">
           {formTabs.map((tab) => {
             return (
@@ -49,7 +49,7 @@ const HeroSearchForm = ({ className, initTab = 'Stays' }: { className?: string; 
             )
           })}
         </Headless.TabList>
-      </Headless.TabGroup>
+      </Headless.TabGroup> */}
       {formTabs.map((tab) =>
         tab.name === initTab ? (
           <Fragment key={tab.name}>

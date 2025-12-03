@@ -200,7 +200,7 @@ export async function getStayCategoryByHandle(handle?: string) {
       id: 'stay://all',
       name: 'Explore stays',
       handle: 'all',
-      href: '/stay-categories/all',
+      href: '/add-listing/1',
       region: 'Worldwide',
       count: 144000,
       description: 'Explore all stays around the world',

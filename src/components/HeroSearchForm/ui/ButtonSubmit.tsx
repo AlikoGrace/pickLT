@@ -1,4 +1,4 @@
-import { Search01Icon } from '@hugeicons/core-free-icons'
+import { ArrowRight02Icon, Search01Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import clsx from 'clsx'
 import { FC } from 'react'
@@ -17,7 +17,7 @@ interface Props {
 export const ButtonSubmit: FC<Props> = ({ className, fieldStyle = 'default' }) => {
   return (
     <button type="submit" className={clsx(styles.base, styles[fieldStyle], className)}>
-      <HugeiconsIcon icon={Search01Icon} size={24} />
+      <HugeiconsIcon icon={ArrowRight02Icon} size={24} />
     </button>
   )
 }
