@@ -142,11 +142,11 @@ const Page = () => {
         <input type="hidden" name="moveDate" value={String((useMoveSearch() as any).moveDate || '')} />
         <input type="hidden" name="moveType" value={String((useMoveSearch() as any).moveType || '')} />
 
-        <div className="pt-4 border-t border-neutral-100 flex justify-end">
+        {/* <div className="pt-4 border-t border-neutral-100 flex justify-end">
           <button type="submit" className="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded">
             Continue
           </button>
-        </div>
+        </div> */}
       </Form>
     </>
   )
