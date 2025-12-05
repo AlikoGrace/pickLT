@@ -43,10 +43,10 @@ const Pagination = () => {
   // get the number from the end of pathname
   const index = pathname.match(/\d+$/) ? parseInt(pathname.match(/\d+$/)?.[0] || '1') : 1
 
-  let nextHref = index < 10 ? undefined : '/stay-listings/preview-stay-84763232'
-  let backtHref = index > 1 ? `/add-listing/${index - 1}` : `/add-listing/${1}`
+  let nextHref = index < 10 ? undefined : '/move-preview'
+  let backtHref = index > 1 ? `/add-listing/${index - 1}` : '/'
 
-  let nextBtnText = index > 9 ? 'Publish listing' : 'Next step ' + (index + 1)
+  let nextBtnText = index > 9 ? 'Review & Book' : 'Next step ' + (index + 1)
   let backBtnText = index > 1 ? 'Go back' : 'Back to home'
 
   return (

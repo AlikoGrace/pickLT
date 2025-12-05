@@ -48,6 +48,14 @@ export type AdditionalService =
   | 'moveout_cleaning'
   | 'temporary_storage'
 
+// Move photos type
+export type MovePhoto = {
+  id: string
+  file: File | null
+  preview: string // base64 or object URL for preview
+  type: 'cover' | 'gallery'
+}
+
 // Step 9 types - Contact Information
 export type ContactInfo = {
   fullName: string
@@ -145,6 +153,8 @@ type MoveSearchState = {
   additionalServices: AdditionalService[]
   storageWeeks: number
   disposalItems: string
+  coverPhoto: string | null // base64 or URL
+  galleryPhotos: string[] // array of base64 or URLs
 
   // Step 9 - Contact Information
   contactInfo: ContactInfo
@@ -212,6 +222,9 @@ type MoveSearchActions = {
   toggleAdditionalService: (service: AdditionalService) => void
   setStorageWeeks: (weeks: number) => void
   setDisposalItems: (items: string) => void
+  setCoverPhoto: (photo: string | null) => void
+  addGalleryPhoto: (photo: string) => void
+  removeGalleryPhoto: (index: number) => void
 
   // Step 9 actions
   updateContactInfo: (info: Partial<ContactInfo>) => void
@@ -276,6 +289,8 @@ const defaultState: MoveSearchState = {
   additionalServices: [],
   storageWeeks: 0,
   disposalItems: '',
+  coverPhoto: null,
+  galleryPhotos: [],
 
   // Step 9
   contactInfo: {
@@ -351,6 +366,9 @@ const MoveSearchContext = createContext<MoveSearchState & MoveSearchActions>({
   toggleAdditionalService: () => {},
   setStorageWeeks: () => {},
   setDisposalItems: () => {},
+  setCoverPhoto: () => {},
+  addGalleryPhoto: () => {},
+  removeGalleryPhoto: () => {},
 
   // Step 9
   updateContactInfo: () => {},
@@ -416,6 +434,8 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
   const [additionalServices, setAdditionalServices] = useState<AdditionalService[]>(defaultState.additionalServices)
   const [storageWeeks, setStorageWeeks] = useState<number>(defaultState.storageWeeks)
   const [disposalItems, setDisposalItems] = useState<string>(defaultState.disposalItems)
+  const [coverPhoto, setCoverPhoto] = useState<string | null>(defaultState.coverPhoto)
+  const [galleryPhotos, setGalleryPhotos] = useState<string[]>(defaultState.galleryPhotos)
 
   // Step 9 state
   const [contactInfo, setContactInfo] = useState<ContactInfo>(defaultState.contactInfo)
@@ -492,6 +512,14 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
     )
   }
 
+  const addGalleryPhoto = (photo: string) => {
+    setGalleryPhotos((prev) => [...prev, photo])
+  }
+
+  const removeGalleryPhoto = (index: number) => {
+    setGalleryPhotos((prev) => prev.filter((_, i) => i !== index))
+  }
+
   // Step 9 actions
   const updateContactInfo = (info: Partial<ContactInfo>) => {
     setContactInfo((prev) => ({ ...prev, ...info }))
@@ -548,6 +576,8 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
     setAdditionalServices(defaultState.additionalServices)
     setStorageWeeks(defaultState.storageWeeks)
     setDisposalItems(defaultState.disposalItems)
+    setCoverPhoto(defaultState.coverPhoto)
+    setGalleryPhotos(defaultState.galleryPhotos)
     // Step 9
     setContactInfo(defaultState.contactInfo)
     // Step 10
@@ -605,6 +635,8 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
         additionalServices,
         storageWeeks,
         disposalItems,
+        coverPhoto,
+        galleryPhotos,
 
         // Step 9 state
         contactInfo,
@@ -665,6 +697,9 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
         toggleAdditionalService,
         setStorageWeeks,
         setDisposalItems,
+        setCoverPhoto,
+        addGalleryPhoto,
+        removeGalleryPhoto,
 
         // Step 9 actions
         updateContactInfo,
