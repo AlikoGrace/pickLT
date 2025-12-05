@@ -18,6 +18,53 @@ export type CustomMaterial = {
   name: string
 }
 
+// Step 6 types
+export type ArrivalWindow = 'morning' | 'midday' | 'afternoon' | 'flexible'
+export type FlexibilityOption = 'flexible_1hr' | 'not_flexible'
+
+// Step 7 types
+export type CrewSize = '1' | '2' | '3' | '4plus'
+export type VehicleType = 'small_van' | 'medium_truck' | 'large_truck' | 'multiple'
+export type TruckAccess = 'easy' | 'moderate' | 'difficult'
+
+export type HeavyItem = {
+  id: string
+  name: string
+  selected: boolean
+  lengthCm?: number
+  widthCm?: number
+  heightCm?: number
+  weightKg?: number
+}
+
+// Step 8 types - Additional Services
+export type AdditionalService = 
+  | 'furniture_disassembly'
+  | 'furniture_assembly'
+  | 'tv_mount_remove'
+  | 'appliance_disconnect'
+  | 'appliance_connect'
+  | 'disposal_entsorgung'
+  | 'moveout_cleaning'
+  | 'temporary_storage'
+
+// Step 9 types - Contact Information
+export type ContactInfo = {
+  fullName: string
+  phoneNumber: string
+  email: string
+  notesForMovers: string
+  companyName?: string
+  vatId?: string
+  isBusinessMove: boolean
+}
+
+// Step 10 types - Confirmation
+export type LegalConsent = {
+  termsAccepted: boolean
+  privacyAccepted: boolean
+}
+
 // Inventory item with metadata
 export type InventoryItem = {
   id: string
@@ -79,6 +126,31 @@ type MoveSearchState = {
   customMaterials: CustomMaterial[]
   packingBoxQuantities: Record<string, number> // box type -> quantity
   packingNotes: string
+
+  // Step 6 - Move Timing
+  arrivalWindow: ArrivalWindow | null
+  flexibility: FlexibilityOption | null
+  preferEarliestArrival: boolean
+  avoidLunchBreak: boolean
+  avoidEveningDelivery: boolean
+
+  // Step 7 - Crew & Vehicle
+  crewSize: CrewSize | null
+  vehicleType: VehicleType | null
+  truckAccess: TruckAccess | null
+  heavyItems: HeavyItem[]
+  customHeavyItems: HeavyItem[]
+
+  // Step 8 - Additional Services
+  additionalServices: AdditionalService[]
+  storageWeeks: number
+  disposalItems: string
+
+  // Step 9 - Contact Information
+  contactInfo: ContactInfo
+
+  // Step 10 - Legal Consent
+  legalConsent: LegalConsent
 }
 
 type MoveSearchActions = {
@@ -120,6 +192,34 @@ type MoveSearchActions = {
   setPackingBoxQuantity: (boxType: string, quantity: number) => void
   setPackingNotes: (notes: string) => void
 
+  // Step 6 actions
+  setArrivalWindow: (window: ArrivalWindow | null) => void
+  setFlexibility: (flexibility: FlexibilityOption | null) => void
+  setPreferEarliestArrival: (prefer: boolean) => void
+  setAvoidLunchBreak: (avoid: boolean) => void
+  setAvoidEveningDelivery: (avoid: boolean) => void
+
+  // Step 7 actions
+  setCrewSize: (size: CrewSize | null) => void
+  setVehicleType: (type: VehicleType | null) => void
+  setTruckAccess: (access: TruckAccess | null) => void
+  toggleHeavyItem: (itemId: string) => void
+  updateHeavyItemDimensions: (itemId: string, dimensions: Partial<HeavyItem>) => void
+  addCustomHeavyItem: (item: HeavyItem) => void
+  removeCustomHeavyItem: (itemId: string) => void
+
+  // Step 8 actions
+  toggleAdditionalService: (service: AdditionalService) => void
+  setStorageWeeks: (weeks: number) => void
+  setDisposalItems: (items: string) => void
+
+  // Step 9 actions
+  updateContactInfo: (info: Partial<ContactInfo>) => void
+
+  // Step 10 actions
+  setTermsAccepted: (accepted: boolean) => void
+  setPrivacyAccepted: (accepted: boolean) => void
+
   reset: () => void
 }
 
@@ -157,6 +257,42 @@ const defaultState: MoveSearchState = {
   customMaterials: [],
   packingBoxQuantities: {},
   packingNotes: '',
+
+  // Step 6
+  arrivalWindow: null,
+  flexibility: null,
+  preferEarliestArrival: false,
+  avoidLunchBreak: false,
+  avoidEveningDelivery: false,
+
+  // Step 7
+  crewSize: null,
+  vehicleType: null,
+  truckAccess: null,
+  heavyItems: [],
+  customHeavyItems: [],
+
+  // Step 8
+  additionalServices: [],
+  storageWeeks: 0,
+  disposalItems: '',
+
+  // Step 9
+  contactInfo: {
+    fullName: '',
+    phoneNumber: '',
+    email: '',
+    notesForMovers: '',
+    companyName: '',
+    vatId: '',
+    isBusinessMove: false,
+  },
+
+  // Step 10
+  legalConsent: {
+    termsAccepted: false,
+    privacyAccepted: false,
+  },
 }
 
 const MoveSearchContext = createContext<MoveSearchState & MoveSearchActions>({
@@ -194,6 +330,34 @@ const MoveSearchContext = createContext<MoveSearchState & MoveSearchActions>({
   removeCustomMaterial: () => {},
   setPackingBoxQuantity: () => {},
   setPackingNotes: () => {},
+
+  // Step 6
+  setArrivalWindow: () => {},
+  setFlexibility: () => {},
+  setPreferEarliestArrival: () => {},
+  setAvoidLunchBreak: () => {},
+  setAvoidEveningDelivery: () => {},
+
+  // Step 7
+  setCrewSize: () => {},
+  setVehicleType: () => {},
+  setTruckAccess: () => {},
+  toggleHeavyItem: () => {},
+  updateHeavyItemDimensions: () => {},
+  addCustomHeavyItem: () => {},
+  removeCustomHeavyItem: () => {},
+
+  // Step 8
+  toggleAdditionalService: () => {},
+  setStorageWeeks: () => {},
+  setDisposalItems: () => {},
+
+  // Step 9
+  updateContactInfo: () => {},
+
+  // Step 10
+  setTermsAccepted: () => {},
+  setPrivacyAccepted: () => {},
 
   reset: () => {},
 })
@@ -234,6 +398,31 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
   const [packingBoxQuantities, setPackingBoxQuantities] = useState<Record<string, number>>(defaultState.packingBoxQuantities)
   const [packingNotes, setPackingNotes] = useState<string>(defaultState.packingNotes)
 
+  // Step 6 state
+  const [arrivalWindow, setArrivalWindow] = useState<ArrivalWindow | null>(defaultState.arrivalWindow)
+  const [flexibility, setFlexibility] = useState<FlexibilityOption | null>(defaultState.flexibility)
+  const [preferEarliestArrival, setPreferEarliestArrival] = useState<boolean>(defaultState.preferEarliestArrival)
+  const [avoidLunchBreak, setAvoidLunchBreak] = useState<boolean>(defaultState.avoidLunchBreak)
+  const [avoidEveningDelivery, setAvoidEveningDelivery] = useState<boolean>(defaultState.avoidEveningDelivery)
+
+  // Step 7 state
+  const [crewSize, setCrewSize] = useState<CrewSize | null>(defaultState.crewSize)
+  const [vehicleType, setVehicleType] = useState<VehicleType | null>(defaultState.vehicleType)
+  const [truckAccess, setTruckAccess] = useState<TruckAccess | null>(defaultState.truckAccess)
+  const [heavyItems, setHeavyItems] = useState<HeavyItem[]>(defaultState.heavyItems)
+  const [customHeavyItems, setCustomHeavyItems] = useState<HeavyItem[]>(defaultState.customHeavyItems)
+
+  // Step 8 state
+  const [additionalServices, setAdditionalServices] = useState<AdditionalService[]>(defaultState.additionalServices)
+  const [storageWeeks, setStorageWeeks] = useState<number>(defaultState.storageWeeks)
+  const [disposalItems, setDisposalItems] = useState<string>(defaultState.disposalItems)
+
+  // Step 9 state
+  const [contactInfo, setContactInfo] = useState<ContactInfo>(defaultState.contactInfo)
+
+  // Step 10 state
+  const [legalConsent, setLegalConsent] = useState<LegalConsent>(defaultState.legalConsent)
+
   const setInventoryItem = (itemId: string, quantity: number) => {
     setInventory((prev) => ({ ...prev, [itemId]: quantity }))
   }
@@ -271,6 +460,52 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
     setPackingBoxQuantities((prev) => ({ ...prev, [boxType]: quantity }))
   }
 
+  // Step 7 actions
+  const toggleHeavyItem = (itemId: string) => {
+    setHeavyItems((prev) =>
+      prev.map((item) =>
+        item.id === itemId ? { ...item, selected: !item.selected } : item
+      )
+    )
+  }
+
+  const updateHeavyItemDimensions = (itemId: string, dimensions: Partial<HeavyItem>) => {
+    setHeavyItems((prev) =>
+      prev.map((item) =>
+        item.id === itemId ? { ...item, ...dimensions } : item
+      )
+    )
+  }
+
+  const addCustomHeavyItem = (item: HeavyItem) => {
+    setCustomHeavyItems((prev) => [...prev, item])
+  }
+
+  const removeCustomHeavyItem = (itemId: string) => {
+    setCustomHeavyItems((prev) => prev.filter((item) => item.id !== itemId))
+  }
+
+  // Step 8 actions
+  const toggleAdditionalService = (service: AdditionalService) => {
+    setAdditionalServices((prev) =>
+      prev.includes(service) ? prev.filter((s) => s !== service) : [...prev, service]
+    )
+  }
+
+  // Step 9 actions
+  const updateContactInfo = (info: Partial<ContactInfo>) => {
+    setContactInfo((prev) => ({ ...prev, ...info }))
+  }
+
+  // Step 10 actions
+  const setTermsAccepted = (accepted: boolean) => {
+    setLegalConsent((prev) => ({ ...prev, termsAccepted: accepted }))
+  }
+
+  const setPrivacyAccepted = (accepted: boolean) => {
+    setLegalConsent((prev) => ({ ...prev, privacyAccepted: accepted }))
+  }
+
   const reset = () => {
     setPickupLocation(defaultState.pickupLocation)
     setMoveDate(defaultState.moveDate)
@@ -297,6 +532,26 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
     setCustomMaterials(defaultState.customMaterials)
     setPackingBoxQuantities(defaultState.packingBoxQuantities)
     setPackingNotes(defaultState.packingNotes)
+    // Step 6
+    setArrivalWindow(defaultState.arrivalWindow)
+    setFlexibility(defaultState.flexibility)
+    setPreferEarliestArrival(defaultState.preferEarliestArrival)
+    setAvoidLunchBreak(defaultState.avoidLunchBreak)
+    setAvoidEveningDelivery(defaultState.avoidEveningDelivery)
+    // Step 7
+    setCrewSize(defaultState.crewSize)
+    setVehicleType(defaultState.vehicleType)
+    setTruckAccess(defaultState.truckAccess)
+    setHeavyItems(defaultState.heavyItems)
+    setCustomHeavyItems(defaultState.customHeavyItems)
+    // Step 8
+    setAdditionalServices(defaultState.additionalServices)
+    setStorageWeeks(defaultState.storageWeeks)
+    setDisposalItems(defaultState.disposalItems)
+    // Step 9
+    setContactInfo(defaultState.contactInfo)
+    // Step 10
+    setLegalConsent(defaultState.legalConsent)
   }
 
   return (
@@ -332,6 +587,31 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
         packingBoxQuantities,
         packingNotes,
 
+        // Step 6 state
+        arrivalWindow,
+        flexibility,
+        preferEarliestArrival,
+        avoidLunchBreak,
+        avoidEveningDelivery,
+
+        // Step 7 state
+        crewSize,
+        vehicleType,
+        truckAccess,
+        heavyItems,
+        customHeavyItems,
+
+        // Step 8 state
+        additionalServices,
+        storageWeeks,
+        disposalItems,
+
+        // Step 9 state
+        contactInfo,
+
+        // Step 10 state
+        legalConsent,
+
         setPickupLocation,
         setMoveDate,
         setMoveType,
@@ -364,6 +644,34 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
         removeCustomMaterial,
         setPackingBoxQuantity,
         setPackingNotes,
+
+        // Step 6 actions
+        setArrivalWindow,
+        setFlexibility,
+        setPreferEarliestArrival,
+        setAvoidLunchBreak,
+        setAvoidEveningDelivery,
+
+        // Step 7 actions
+        setCrewSize,
+        setVehicleType,
+        setTruckAccess,
+        toggleHeavyItem,
+        updateHeavyItemDimensions,
+        addCustomHeavyItem,
+        removeCustomHeavyItem,
+
+        // Step 8 actions
+        toggleAdditionalService,
+        setStorageWeeks,
+        setDisposalItems,
+
+        // Step 9 actions
+        updateContactInfo,
+
+        // Step 10 actions
+        setTermsAccepted,
+        setPrivacyAccepted,
 
         reset,
       }}
