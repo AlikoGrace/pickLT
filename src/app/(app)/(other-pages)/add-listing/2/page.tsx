@@ -1,23 +1,30 @@
 'use client'
 
-import ButtonSecondary from '@/shared/ButtonSecondary'
+import { useMoveSearch } from '@/context/moveSearch'
 import { Divider } from '@/shared/divider'
 import Input from '@/shared/Input'
-import Select from '@/shared/Select'
-import T from '@/utils/getT'
-import { MapPinIcon } from '@heroicons/react/24/outline'
-import { Map, Marker } from '@vis.gl/react-google-maps'
+import Textarea from '@/shared/Textarea'
 import Form from 'next/form'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import FormItem from '../FormItem'
 
 const Page = () => {
-  const [mapPosition, setMapPosition] = useState({
-    lat: 55.9607277,
-    lng: 36.2172614,
-  })
   const router = useRouter()
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({})
+
+  const {
+    pickupStreetAddress,
+    pickupApartmentUnit,
+    pickupAccessNotes,
+    pickupLoadingZoneRequired,
+    pickupArrangeHaltverbot,
+    setPickupStreetAddress,
+    setPickupApartmentUnit,
+    setPickupAccessNotes,
+    setPickupLoadingZoneRequired,
+    setPickupArrangeHaltverbot,
+  } = useMoveSearch()
 
   // Prefetch the next step to improve performance
   useEffect(() => {
@@ -26,8 +33,24 @@ const Page = () => {
 
   const handleSubmitForm = async (formData: FormData) => {
     const formObject = Object.fromEntries(formData.entries())
-    // Handle form submission logic here
     console.log('Form submitted:', formObject)
+
+    // Basic validation
+    const errors: Record<string, string> = {}
+    if (!formObject['streetAddress'] || String(formObject['streetAddress']).trim() === '') {
+      errors.streetAddress = 'Please enter a street address'
+    }
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors)
+      return
+    }
+
+    // Sync form values into context
+    setPickupStreetAddress(String(formObject['streetAddress'] || ''))
+    setPickupApartmentUnit(String(formObject['apartmentUnit'] || ''))
+    setPickupAccessNotes(String(formObject['accessNotes'] || ''))
+    setPickupLoadingZoneRequired(formObject['loadingZoneRequired'] === 'yes')
+    setPickupArrangeHaltverbot(formObject['arrangeHaltverbot'] === 'yes')
 
     // Redirect to the next step
     router.push('/add-listing/3')
@@ -35,85 +58,115 @@ const Page = () => {
 
   return (
     <>
-      <h1 className="text-2xl font-semibold">{T['addListings']['page2']['pageTitle']}</h1>
+      <h1 className="text-2xl font-semibold">Pickup Address</h1>
       <Divider className="w-14!" />
 
       {/* FORM */}
       <Form id="add-listing-form" action={handleSubmitForm} className="flex flex-col gap-y-8">
-        <div>
-          <ButtonSecondary>
-            <MapPinIcon className="h-5 w-5" />
-            <span>{T['addListings']['page2']['Use current location']}</span>
-          </ButtonSecondary>
-        </div>
-        {/* ITEM */}
-        <FormItem label={T['addListings']['page2']['Country/Region']}>
-          <Select name="country-region">
-            <option value="United States">United States</option>
-            <option value="Viet Nam">Viet Nam</option>
-            <option value="Thailand">Thailand</option>
-            <option value="France">France</option>
-            <option value="Singapore">Singapore</option>
-            <option value="Jappan">Jappan</option>
-            <option value="Korea">Korea</option>
-            <option value="...">...</option>
-          </Select>
+        {/* Street Address */}
+        <FormItem label="Street address" desccription="Enter the full pickup street address">
+          <Input
+            name="streetAddress"
+            placeholder="e.g., Hauptstraße 45"
+            defaultValue={pickupStreetAddress}
+            onChange={(e) => setPickupStreetAddress(e.target.value)}
+          />
+          {formErrors.streetAddress && (
+            <div className="text-sm text-red-600 mt-2">{formErrors.streetAddress}</div>
+          )}
         </FormItem>
-        <FormItem label={T['addListings']['page2']['Street']}>
-          <Input name="Street" placeholder="..." />
-        </FormItem>
-        <FormItem label={T['addListings']['page2']['Room number (optional)']}>
-          <Input name="room-number" type="number" />
-        </FormItem>
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-5">
-          <FormItem label={T['addListings']['page2']['City']}>
-            <Input name="city" />
-          </FormItem>
-          <FormItem label={T['addListings']['page2']['State']}>
-            <Input name="state" />
-          </FormItem>
-          <FormItem label={T['addListings']['page2']['Postal code']}>
-            <Input name="Postal" />
-          </FormItem>
-        </div>
-        <div>
-          <p>{T['addListings']['page2']['Detailed address']}</p>
-          <span className="mt-1 block text-sm text-neutral-500 dark:text-neutral-400">
-            1110 Pennsylvania Avenue NW, Washington, DC 20230
-          </span>
-          <div className="mt-4">
-            <div className="aspect-w-5 aspect-h-7 sm:aspect-h-3">
-              <div className="overflow-hidden rounded-xl">
-                <Map
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                  }}
-                  defaultZoom={15}
-                  defaultCenter={{
-                    lat: 55.9607277,
-                    lng: 36.2172614,
-                  }}
-                  gestureHandling={'greedy'}
-                >
-                  <Marker
-                    position={mapPosition}
-                    draggable
-                    onDragEnd={(e) => {
-                      setMapPosition({
-                        lat: e.latLng?.lat() || 55.9607277,
-                        lng: e.latLng?.lng() || 36.2172614,
-                      })
-                    }}
-                  />
-                </Map>
 
-                <input type="hidden" name="latMapPosition" value={mapPosition.lat} />
-                <input type="hidden" name="lngMapPosition" value={mapPosition.lng} />
-              </div>
-            </div>
+        {/* Apartment/Unit */}
+        <FormItem label="Apartment / Unit (optional)" desccription="Floor, apartment number, or unit name">
+          <Input
+            name="apartmentUnit"
+            placeholder="e.g., 3rd floor, Apt 12"
+            defaultValue={pickupApartmentUnit}
+            onChange={(e) => setPickupApartmentUnit(e.target.value)}
+          />
+        </FormItem>
+
+        {/* Access Notes */}
+        <FormItem label="Access notes (optional)" desccription="Any details that will help our team access the location">
+          <Textarea
+            name="accessNotes"
+            placeholder="e.g., narrow corridor, steep stairs, construction at entrance"
+            defaultValue={pickupAccessNotes}
+            onChange={(e) => setPickupAccessNotes(e.target.value)}
+          />
+        </FormItem>
+
+        <Divider />
+
+        {/* Loading Zone Required */}
+        <FormItem
+          label="Loading zone required? (German Haltverbot permit)"
+          desccription="A Haltverbot zone reserves parking space for the moving truck"
+        >
+          <div className="flex items-center gap-6 mt-2">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                name="loadingZoneRequired"
+                value="yes"
+                checked={pickupLoadingZoneRequired === true}
+                onChange={() => setPickupLoadingZoneRequired(true)}
+                className="w-4 h-4 text-primary-600"
+              />
+              <span className="text-sm">Yes</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                name="loadingZoneRequired"
+                value="no"
+                checked={pickupLoadingZoneRequired === false}
+                onChange={() => setPickupLoadingZoneRequired(false)}
+                className="w-4 h-4 text-primary-600"
+              />
+              <span className="text-sm">No</span>
+            </label>
           </div>
-        </div>
+        </FormItem>
+
+        {/* Conditional: Arrange Haltverbot */}
+        {pickupLoadingZoneRequired && (
+          <div className="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-2xl border border-neutral-200 dark:border-neutral-700">
+            <FormItem
+              label="Do you want us to arrange the Haltverbot permit for you?"
+              desccription="We'll handle the permit application with your local municipality"
+            >
+              <div className="flex items-center gap-6 mt-2">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="arrangeHaltverbot"
+                    value="yes"
+                    checked={pickupArrangeHaltverbot === true}
+                    onChange={() => setPickupArrangeHaltverbot(true)}
+                    className="w-4 h-4 text-primary-600"
+                  />
+                  <span className="text-sm">Yes, arrange it for me</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="arrangeHaltverbot"
+                    value="no"
+                    checked={pickupArrangeHaltverbot === false}
+                    onChange={() => setPickupArrangeHaltverbot(false)}
+                    className="w-4 h-4 text-primary-600"
+                  />
+                  <span className="text-sm">No, I'll handle it</span>
+                </label>
+              </div>
+            </FormItem>
+          </div>
+        )}
+
+        {/* Hidden fields for form submission */}
+        <input type="hidden" name="pickupLoadingZoneRequired" value={pickupLoadingZoneRequired ? 'yes' : 'no'} />
+        <input type="hidden" name="pickupArrangeHaltverbot" value={pickupArrangeHaltverbot ? 'yes' : 'no'} />
       </Form>
     </>
   )

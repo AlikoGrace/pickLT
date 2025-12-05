@@ -103,7 +103,15 @@ const Page = () => {
             <option value="1">1st floor</option>
             <option value="2">2nd floor</option>
             <option value="3">3rd floor</option>
-            <option value="4plus">4th floor or higher</option>
+            <option value="4">4th floor</option>
+            <option value="5">5th floor</option>
+            <option value="6">6th floor</option>
+            <option value="7">7th floor</option>
+            <option value="8">8th floor</option>
+            <option value="9">9th floor</option>
+            <option value="10">10th floor</option>
+            <option value="11">11th floor</option>
+            <option value="12">12th floor</option>
           </Select>
 
           <div className="mt-3 flex items-center gap-3">
