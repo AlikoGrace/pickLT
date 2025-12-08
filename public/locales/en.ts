@@ -284,9 +284,11 @@ export const en = {
     Signup: 'Signup',
     'Already have an account?': 'Already have an account?',
     'Sign in': 'Sign in',
+    'Contact number': 'Contact number',
   },
   subscriptionPage: {
     Subscription: 'Subscription',
     popular: 'POPULAR',
   },
+  
 }
