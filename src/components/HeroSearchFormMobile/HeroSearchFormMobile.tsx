@@ -95,7 +95,7 @@ const HeroSearchFormMobile = ({ className }: { className?: string }) => {
                     >
                       {T['HeroSearchForm']['Clear all']}
                     </ButtonThird>
-                    <ButtonPrimary type="submit" form="form-hero-search-form-mobile" onClick={closeModal}>
+                    <ButtonPrimary type="submit" form="form-hero-search-form-mobile">
                       <HugeiconsIcon icon={Search01Icon} size={16} />
                       <span>{T['HeroSearchForm']['search']}</span>
                     </ButtonPrimary>

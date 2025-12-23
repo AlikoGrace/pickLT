@@ -19,7 +19,7 @@ export type CustomMaterial = {
 }
 
 // Step 6 types
-export type ArrivalWindow = 'morning' | 'midday' | 'afternoon' | 'flexible'
+export type ArrivalWindow = string // Time format like "08:00", "09:00", etc.
 export type FlexibilityOption = 'flexible_1hr' | 'not_flexible'
 
 // Step 7 types

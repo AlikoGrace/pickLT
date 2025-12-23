@@ -32,7 +32,7 @@ const PageHeading = () => {
   return (
     <div>
       <span className="text-5xl font-semibold">{index}</span>
-      <span className="text-lg text-neutral-500 dark:text-neutral-400"> /9</span>
+      <span className="text-lg text-neutral-500 dark:text-neutral-400"> /8</span>
     </div>
   )
 }
@@ -43,10 +43,10 @@ const Pagination = () => {
   // get the number from the end of pathname
   const index = pathname.match(/\d+$/) ? parseInt(pathname.match(/\d+$/)?.[0] || '1') : 1
 
-  let nextHref = index < 9 ? undefined : '/move-preview'
+  let nextHref = index < 8 ? undefined : '/move-preview'
   let backtHref = index > 1 ? `/add-listing/${index - 1}` : '/'
 
-  let nextBtnText = index > 8 ? 'Review & Book' : 'Next step ' + (index + 1)
+  let nextBtnText = index > 7 ? 'Review & Book' : 'Next step ' + (index + 1)
   let backBtnText = index > 1 ? 'Go back' : 'Back to home'
 
   return (

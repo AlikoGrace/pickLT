@@ -1,42 +1,79 @@
 'use client'
 
-import { useMoveSearch, type CrewSize, type VehicleType, type TruckAccess, type HeavyItem } from '@/context/moveSearch'
-import ButtonSecondary from '@/shared/ButtonSecondary'
+import NcInputNumber from '@/components/NcInputNumber'
+import { useMoveSearch, type AdditionalService } from '@/context/moveSearch'
 import { Checkbox, CheckboxField, CheckboxGroup } from '@/shared/Checkbox'
 import { Divider } from '@/shared/divider'
-import { Fieldset, Label, Legend } from '@/shared/fieldset'
-import Input from '@/shared/Input'
-import { Radio, RadioField, RadioGroup } from '@/shared/radio'
-import { ChevronDownIcon, ChevronUpIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/solid'
+import { Fieldset, Label } from '@/shared/fieldset'
+import Textarea from '@/shared/Textarea'
+import { ImageAdd02Icon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
+import { XMarkIcon } from '@heroicons/react/24/solid'
 import Form from 'next/form'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef } from 'react'
+
+const ADDITIONAL_SERVICES: { id: AdditionalService; label: string; description: string }[] = [
+  {
+    id: 'furniture_disassembly',
+    label: 'Furniture disassembly',
+    description: 'We disassemble beds, wardrobes, tables before loading',
+  },
+  {
+    id: 'furniture_assembly',
+    label: 'Furniture assembly',
+    description: 'We reassemble furniture at the new location',
+  },
+  {
+    id: 'tv_mount_remove',
+    label: 'TV mount / remove',
+    description: 'Mount or remove wall-mounted TVs',
+  },
+  {
+    id: 'appliance_disconnect',
+    label: 'Appliance disconnect',
+    description: 'Disconnect washing machine, dishwasher, dryer',
+  },
+  {
+    id: 'appliance_connect',
+    label: 'Appliance connect',
+    description: 'Reconnect appliances at the new address',
+  },
+  {
+    id: 'disposal_entsorgung',
+    label: 'Disposal (Entsorgung)',
+    description: 'Dispose of unwanted furniture and items',
+  },
+  {
+    id: 'moveout_cleaning',
+    label: 'Move-out cleaning',
+    description: 'Professional cleaning of your old apartment',
+  },
+  {
+    id: 'temporary_storage',
+    label: 'Temporary storage',
+    description: 'Store items securely between moves',
+  },
+]
 
 const Page = () => {
   const router = useRouter()
-  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set())
-  const [showAddCustom, setShowAddCustom] = useState(false)
-  const [customItemForm, setCustomItemForm] = useState({
-    name: '',
-    lengthCm: '',
-    widthCm: '',
-    heightCm: '',
-    weightKg: '',
-  })
+  const coverInputRef = useRef<HTMLInputElement>(null)
+  const galleryInputRef = useRef<HTMLInputElement>(null)
 
   const {
-    crewSize,
-    vehicleType,
-    truckAccess,
-    heavyItems,
-    customHeavyItems,
-    setCrewSize,
-    setVehicleType,
-    setTruckAccess,
-    toggleHeavyItem,
-    updateHeavyItemDimensions,
-    addCustomHeavyItem,
-    removeCustomHeavyItem,
+    additionalServices,
+    storageWeeks,
+    disposalItems,
+    coverPhoto,
+    galleryPhotos,
+    toggleAdditionalService,
+    setStorageWeeks,
+    setDisposalItems,
+    setCoverPhoto,
+    addGalleryPhoto,
+    removeGalleryPhoto,
   } = useMoveSearch()
 
   // Prefetch the next step to improve performance
@@ -52,373 +89,254 @@ const Page = () => {
     router.push('/add-listing/8')
   }
 
-  const toggleExpanded = (itemId: string) => {
-    setExpandedItems((prev) => {
-      const newSet = new Set(prev)
-      if (newSet.has(itemId)) {
-        newSet.delete(itemId)
-      } else {
-        newSet.add(itemId)
+  const handleCoverPhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setCoverPhoto(reader.result as string)
       }
-      return newSet
-    })
-  }
-
-  const handleAddCustomHeavyItem = () => {
-    if (!customItemForm.name.trim()) return
-    const newItem: HeavyItem = {
-      id: `custom_heavy_${Date.now()}`,
-      name: customItemForm.name.trim(),
-      selected: true,
-      lengthCm: customItemForm.lengthCm ? parseInt(customItemForm.lengthCm) : undefined,
-      widthCm: customItemForm.widthCm ? parseInt(customItemForm.widthCm) : undefined,
-      heightCm: customItemForm.heightCm ? parseInt(customItemForm.heightCm) : undefined,
-      weightKg: customItemForm.weightKg ? parseInt(customItemForm.weightKg) : undefined,
+      reader.readAsDataURL(file)
     }
-    addCustomHeavyItem(newItem)
-    setCustomItemForm({ name: '', lengthCm: '', widthCm: '', heightCm: '', weightKg: '' })
-    setShowAddCustom(false)
   }
 
-  const renderDimensionsInput = (item: HeavyItem, isCustom: boolean = false) => {
-    const isExpanded = expandedItems.has(item.id)
-    
-    return (
-      <div className="mt-2">
-        <button
-          type="button"
-          onClick={() => toggleExpanded(item.id)}
-          className="flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700"
-        >
-          {isExpanded ? (
-            <>
-              <ChevronUpIcon className="h-4 w-4" />
-              <span>Hide dimensions</span>
-            </>
-          ) : (
-            <>
-              <ChevronDownIcon className="h-4 w-4" />
-              <span>Add dimensions (optional)</span>
-            </>
-          )}
-        </button>
-        
-        {isExpanded && (
-          <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <div>
-              <label className="block text-xs text-neutral-500 mb-1">Length (cm)</label>
-              <Input
-                type="number"
-                min={0}
-                placeholder="0"
-                value={item.lengthCm || ''}
-                onChange={(e) => {
-                  const value = e.target.value ? parseInt(e.target.value) : undefined
-                  if (isCustom) {
-                    // For custom items, we'd need a different update mechanism
-                  } else {
-                    updateHeavyItemDimensions(item.id, { lengthCm: value })
-                  }
-                }}
-                sizeClass="h-9 px-3 py-2"
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-neutral-500 mb-1">Width (cm)</label>
-              <Input
-                type="number"
-                min={0}
-                placeholder="0"
-                value={item.widthCm || ''}
-                onChange={(e) => {
-                  const value = e.target.value ? parseInt(e.target.value) : undefined
-                  if (!isCustom) {
-                    updateHeavyItemDimensions(item.id, { widthCm: value })
-                  }
-                }}
-                sizeClass="h-9 px-3 py-2"
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-neutral-500 mb-1">Height (cm)</label>
-              <Input
-                type="number"
-                min={0}
-                placeholder="0"
-                value={item.heightCm || ''}
-                onChange={(e) => {
-                  const value = e.target.value ? parseInt(e.target.value) : undefined
-                  if (!isCustom) {
-                    updateHeavyItemDimensions(item.id, { heightCm: value })
-                  }
-                }}
-                sizeClass="h-9 px-3 py-2"
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-neutral-500 mb-1">Weight (kg)</label>
-              <Input
-                type="number"
-                min={0}
-                placeholder="0"
-                value={item.weightKg || ''}
-                onChange={(e) => {
-                  const value = e.target.value ? parseInt(e.target.value) : undefined
-                  if (!isCustom) {
-                    updateHeavyItemDimensions(item.id, { weightKg: value })
-                  }
-                }}
-                sizeClass="h-9 px-3 py-2"
-              />
-            </div>
-          </div>
-        )}
-      </div>
-    )
+  const handleGalleryPhotosChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (files) {
+      Array.from(files).forEach((file) => {
+        const reader = new FileReader()
+        reader.onloadend = () => {
+          addGalleryPhoto(reader.result as string)
+        }
+        reader.readAsDataURL(file)
+      })
+    }
   }
+
+  const showStorageOptions = additionalServices.includes('temporary_storage')
+  const showDisposalOptions = additionalServices.includes('disposal_entsorgung')
 
   return (
     <>
       <div>
-        <h2 className="text-2xl font-semibold">Crew & vehicle</h2>
+        <h2 className="text-2xl font-semibold">Additional services & photos</h2>
         <span className="mt-2 block text-neutral-500 dark:text-neutral-400">
-          Choose the movers and truck size appropriate for your inventory.
+          Select extra services and upload photos of items to be moved.
         </span>
       </div>
 
       <Divider />
 
       <Form id="add-listing-form" action={handleSubmitForm} className="flex flex-col gap-y-8">
-        {/* Crew Size */}
-        <Fieldset>
-          <Legend className="text-lg!">Crew size</Legend>
-          <RadioGroup
-            name="crewSize"
-            value={crewSize || ''}
-            onChange={(value: string) => setCrewSize(value as CrewSize)}
-          >
-            <RadioField>
-              <Radio value="1" />
-              <Label>1 mover (small load, help required)</Label>
-            </RadioField>
-            <RadioField>
-              <Radio value="2" />
-              <Label>2 movers (standard apartment move)</Label>
-            </RadioField>
-            <RadioField>
-              <Radio value="3" />
-              <Label>3 movers (large apartment / small house)</Label>
-            </RadioField>
-            <RadioField>
-              <Radio value="4plus" />
-              <Label>4+ movers (big homes or heavy items)</Label>
-            </RadioField>
-          </RadioGroup>
-        </Fieldset>
-
-        <Divider />
-
-        {/* Vehicle Selection */}
-        <Fieldset>
-          <Legend className="text-lg!">Vehicle selection</Legend>
-          <RadioGroup
-            name="vehicleType"
-            value={vehicleType || ''}
-            onChange={(value: string) => setVehicleType(value as VehicleType)}
-          >
-            <RadioField>
-              <Radio value="small_van" />
-              <Label>Small van</Label>
-            </RadioField>
-            <RadioField>
-              <Radio value="medium_truck" />
-              <Label>Medium truck (3.5t — EU standard)</Label>
-            </RadioField>
-            <RadioField>
-              <Radio value="large_truck" />
-              <Label>Large truck (7.5t)</Label>
-            </RadioField>
-            <RadioField>
-              <Radio value="multiple" />
-              <Label>Multiple vehicles</Label>
-            </RadioField>
-          </RadioGroup>
-        </Fieldset>
-
-        <Divider />
-
-        {/* Truck Access */}
-        <Fieldset>
-          <Legend className="text-lg!">Truck access</Legend>
-          <RadioGroup
-            name="truckAccess"
-            value={truckAccess || ''}
-            onChange={(value: string) => setTruckAccess(value as TruckAccess)}
-          >
-            <RadioField>
-              <Radio value="full_access" />
-              <Label>Truck can access the street</Label>
-            </RadioField>
-            <RadioField>
-              <Radio value="small_only" />
-              <Label>Only small vehicles allowed</Label>
-            </RadioField>
-            <RadioField>
-              <Radio value="not_sure" />
-              <Label>Not sure</Label>
-            </RadioField>
-          </RadioGroup>
-        </Fieldset>
-
-        <Divider />
-
-        {/* Heavy / Special Items */}
+        {/* Cover Photo Upload */}
         <div>
-          <p className="text-lg font-semibold">Heavy / Special items</p>
+          <span className="text-lg font-semibold">Cover photo</span>
           <span className="mt-1 block text-sm text-neutral-500 dark:text-neutral-400">
-            Select items that require special handling. Add dimensions if known.
+            Upload a main photo showing your items or space
           </span>
-          
+          <div className="mt-5">
+            {coverPhoto ? (
+              <div className="relative rounded-2xl overflow-hidden">
+                <Image
+                  src={coverPhoto}
+                  alt="Cover photo"
+                  width={600}
+                  height={400}
+                  className="w-full h-64 object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={() => setCoverPhoto(null)}
+                  className="absolute top-3 right-3 p-2 bg-black/50 rounded-full text-white hover:bg-black/70"
+                >
+                  <XMarkIcon className="h-5 w-5" />
+                </button>
+              </div>
+            ) : (
+              <div
+                onClick={() => coverInputRef.current?.click()}
+                className="mt-1 flex justify-center rounded-2xl border-2 border-dashed border-neutral-300 px-6 pt-5 pb-6 dark:border-neutral-600 cursor-pointer hover:border-primary-500 transition-colors"
+              >
+                <div className="space-y-1 text-center">
+                  <HugeiconsIcon
+                    className="mx-auto text-neutral-400"
+                    icon={ImageAdd02Icon}
+                    size={48}
+                    strokeWidth={1}
+                  />
+                  <div className="flex text-sm text-neutral-600 dark:text-neutral-300">
+                    <label
+                      htmlFor="cover-upload"
+                      className="relative cursor-pointer rounded-md font-medium text-primary-600 focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 focus-within:outline-hidden hover:text-primary-500"
+                    >
+                      <span>Upload a file</span>
+                      <input
+                        ref={coverInputRef}
+                        id="cover-upload"
+                        name="cover"
+                        type="file"
+                        accept="image/*"
+                        className="sr-only"
+                        onChange={handleCoverPhotoChange}
+                      />
+                    </label>
+                    <p className="ps-1">or drag and drop</p>
+                  </div>
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                    PNG, JPG, GIF up to 10MB
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Gallery Photos Upload */}
+        <div>
+          <span className="text-lg font-semibold">Gallery photos</span>
+          <span className="mt-1 block text-sm text-neutral-500 dark:text-neutral-400">
+            Upload additional photos of furniture, rooms, or items
+          </span>
+          <div className="mt-5">
+            {galleryPhotos.length > 0 && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-4">
+                {galleryPhotos.map((photo, index) => (
+                  <div key={index} className="relative rounded-xl overflow-hidden">
+                    <Image
+                      src={photo}
+                      alt={`Gallery photo ${index + 1}`}
+                      width={200}
+                      height={150}
+                      className="w-full h-32 object-cover"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeGalleryPhoto(index)}
+                      className="absolute top-2 right-2 p-1.5 bg-black/50 rounded-full text-white hover:bg-black/70"
+                    >
+                      <XMarkIcon className="h-4 w-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div
+              onClick={() => galleryInputRef.current?.click()}
+              className="mt-1 flex justify-center rounded-2xl border-2 border-dashed border-neutral-300 px-6 pt-5 pb-6 dark:border-neutral-600 cursor-pointer hover:border-primary-500 transition-colors"
+            >
+              <div className="space-y-1 text-center">
+                <HugeiconsIcon
+                  className="mx-auto text-neutral-400"
+                  icon={ImageAdd02Icon}
+                  size={48}
+                  strokeWidth={1}
+                />
+                <div className="flex text-sm text-neutral-600 dark:text-neutral-300">
+                  <label
+                    htmlFor="gallery-upload"
+                    className="relative cursor-pointer rounded-md font-medium text-primary-600 focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 focus-within:outline-hidden hover:text-primary-500"
+                  >
+                    <span>Upload files</span>
+                    <input
+                      ref={galleryInputRef}
+                      id="gallery-upload"
+                      name="gallery"
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      className="sr-only"
+                      onChange={handleGalleryPhotosChange}
+                    />
+                  </label>
+                  <p className="ps-1">or drag and drop</p>
+                </div>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                  PNG, JPG, GIF up to 10MB
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <Divider />
+
+        {/* Additional Services Checkboxes */}
+        <div>
+          <span className="text-lg font-semibold">Additional services</span>
+          <span className="mt-1 block text-sm text-neutral-500 dark:text-neutral-400">
+            These are standard offerings from German movers.
+          </span>
           <Fieldset className="mt-4">
             <CheckboxGroup className="space-y-4">
-              {heavyItems.map((item) => (
-                <div key={item.id} className="border-b border-neutral-100 dark:border-neutral-800 pb-4 last:border-0">
-                  <CheckboxField>
-                    <Checkbox
-                      name={`heavyItem_${item.id}`}
-                      checked={item.selected}
-                      onChange={() => toggleHeavyItem(item.id)}
-                    />
-                    <Label>{item.name}</Label>
-                  </CheckboxField>
-                  {item.selected && renderDimensionsInput(item)}
-                </div>
+              {ADDITIONAL_SERVICES.map((service) => (
+                <CheckboxField key={service.id}>
+                  <Checkbox
+                    name={`service_${service.id}`}
+                    checked={additionalServices.includes(service.id)}
+                    onChange={() => toggleAdditionalService(service.id)}
+                  />
+                  <Label className="flex flex-col">
+                    <span className="font-medium">{service.label}</span>
+                    <span className="text-sm text-neutral-500 dark:text-neutral-400">
+                      {service.description}
+                    </span>
+                  </Label>
+                </CheckboxField>
               ))}
             </CheckboxGroup>
           </Fieldset>
-
-          {/* Custom Heavy Items */}
-          {customHeavyItems.length > 0 && (
-            <div className="mt-4 space-y-4">
-              <p className="text-sm font-medium text-neutral-700 dark:text-neutral-300">Custom items</p>
-              {customHeavyItems.map((item) => (
-                <div
-                  key={item.id}
-                  className="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-2xl border border-neutral-200 dark:border-neutral-700"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium">{item.name}</span>
-                    <button
-                      type="button"
-                      onClick={() => removeCustomHeavyItem(item.id)}
-                      className="p-1 text-neutral-500 hover:text-red-500 transition-colors"
-                    >
-                      <XMarkIcon className="h-5 w-5" />
-                    </button>
-                  </div>
-                  {(item.lengthCm || item.widthCm || item.heightCm || item.weightKg) && (
-                    <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
-                      {item.lengthCm && `L: ${item.lengthCm}cm`}
-                      {item.widthCm && ` W: ${item.widthCm}cm`}
-                      {item.heightCm && ` H: ${item.heightCm}cm`}
-                      {item.weightKg && ` Weight: ${item.weightKg}kg`}
-                    </p>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Add Custom Item */}
-          {!showAddCustom ? (
-            <div className="mt-4">
-              <ButtonSecondary type="button" onClick={() => setShowAddCustom(true)}>
-                <PlusIcon className="h-5 w-5" />
-                <span>Add custom item</span>
-              </ButtonSecondary>
-            </div>
-          ) : (
-            <div className="mt-4 p-4 bg-neutral-50 dark:bg-neutral-800 rounded-2xl border border-neutral-200 dark:border-neutral-700">
-              <p className="text-sm font-medium mb-3">Add custom heavy item</p>
-              <div className="space-y-3">
-                <div>
-                  <label className="block text-xs text-neutral-500 mb-1">Item name *</label>
-                  <Input
-                    placeholder="e.g., Grand piano"
-                    value={customItemForm.name}
-                    onChange={(e) => setCustomItemForm({ ...customItemForm, name: e.target.value })}
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                  <div>
-                    <label className="block text-xs text-neutral-500 mb-1">Length (cm)</label>
-                    <Input
-                      type="number"
-                      min={0}
-                      placeholder="0"
-                      value={customItemForm.lengthCm}
-                      onChange={(e) => setCustomItemForm({ ...customItemForm, lengthCm: e.target.value })}
-                      sizeClass="h-9 px-3 py-2"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-neutral-500 mb-1">Width (cm)</label>
-                    <Input
-                      type="number"
-                      min={0}
-                      placeholder="0"
-                      value={customItemForm.widthCm}
-                      onChange={(e) => setCustomItemForm({ ...customItemForm, widthCm: e.target.value })}
-                      sizeClass="h-9 px-3 py-2"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-neutral-500 mb-1">Height (cm)</label>
-                    <Input
-                      type="number"
-                      min={0}
-                      placeholder="0"
-                      value={customItemForm.heightCm}
-                      onChange={(e) => setCustomItemForm({ ...customItemForm, heightCm: e.target.value })}
-                      sizeClass="h-9 px-3 py-2"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-neutral-500 mb-1">Weight (kg)</label>
-                    <Input
-                      type="number"
-                      min={0}
-                      placeholder="0"
-                      value={customItemForm.weightKg}
-                      onChange={(e) => setCustomItemForm({ ...customItemForm, weightKg: e.target.value })}
-                      sizeClass="h-9 px-3 py-2"
-                    />
-                  </div>
-                </div>
-                <div className="flex gap-2 pt-2">
-                  <ButtonSecondary type="button" onClick={() => setShowAddCustom(false)}>
-                    Cancel
-                  </ButtonSecondary>
-                  <button
-                    type="button"
-                    onClick={handleAddCustomHeavyItem}
-                    disabled={!customItemForm.name.trim()}
-                    className="px-4 py-2 bg-primary-600 text-white rounded-full font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary-700 transition-colors"
-                  >
-                    Add item
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
 
+        {/* Conditional: Storage Duration */}
+        {showStorageOptions && (
+          <>
+            <Divider />
+            <div className="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-2xl border border-neutral-200 dark:border-neutral-700">
+              <p className="text-lg font-semibold mb-4">Storage details</p>
+              <NcInputNumber
+                inputName="storageWeeks"
+                inputId="storageWeeks"
+                label="How many weeks of storage?"
+                defaultValue={storageWeeks}
+                min={1}
+                max={52}
+                onChange={(value) => setStorageWeeks(value)}
+              />
+              <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
+                Standard storage units are climate-controlled and insured.
+              </p>
+            </div>
+          </>
+        )}
+
+        {/* Conditional: Disposal Items */}
+        {showDisposalOptions && (
+          <>
+            <Divider />
+            <div className="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-2xl border border-neutral-200 dark:border-neutral-700">
+              <p className="text-lg font-semibold">Items for disposal</p>
+              <span className="mt-1 block text-sm text-neutral-500 dark:text-neutral-400">
+                List the furniture or items you want us to dispose of.
+              </span>
+              <div className="mt-4">
+                <Textarea
+                  name="disposalItems"
+                  placeholder="e.g., Old sofa, broken bookshelf, mattress..."
+                  value={disposalItems}
+                  onChange={(e) => setDisposalItems(e.target.value)}
+                  rows={3}
+                />
+              </div>
+            </div>
+          </>
+        )}
+
         {/* Hidden fields for form data */}
-        <input type="hidden" name="crewSizeValue" value={crewSize || ''} />
-        <input type="hidden" name="vehicleTypeValue" value={vehicleType || ''} />
-        <input type="hidden" name="truckAccessValue" value={truckAccess || ''} />
-        <input type="hidden" name="heavyItemsData" value={JSON.stringify(heavyItems.filter(i => i.selected))} />
-        <input type="hidden" name="customHeavyItemsData" value={JSON.stringify(customHeavyItems)} />
+        <input type="hidden" name="additionalServices" value={JSON.stringify(additionalServices)} />
+        <input type="hidden" name="storageWeeksValue" value={storageWeeks} />
+        <input type="hidden" name="disposalItemsValue" value={disposalItems} />
+        <input type="hidden" name="coverPhoto" value={coverPhoto || ''} />
+        <input type="hidden" name="galleryPhotos" value={JSON.stringify(galleryPhotos)} />
       </Form>
     </>
   )
