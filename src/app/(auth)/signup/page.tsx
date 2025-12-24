@@ -9,7 +9,7 @@ import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { Suspense, useState, useRef } from 'react'
 import type { JSX } from 'react'
-import { PhotoIcon, TruckIcon, DocumentIcon } from '@heroicons/react/24/outline'
+import { PhotoIcon, TruckIcon, DocumentIcon, UserCircleIcon, CameraIcon } from '@heroicons/react/24/outline'
 
 const socials: {
   name: string
@@ -55,6 +55,7 @@ function SignupContent() {
   const [confirmPassword, setConfirmPassword] = useState('')
 
   // Mover-specific state
+  const [profilePhoto, setProfilePhoto] = useState<string | null>(null)
   const [driversLicense, setDriversLicense] = useState<string | null>(null)
   const [driversLicenseFileName, setDriversLicenseFileName] = useState('')
   const [vehicleBrand, setVehicleBrand] = useState('')
@@ -64,6 +65,18 @@ function SignupContent() {
   const [vehicleCapacity, setVehicleCapacity] = useState('')
 
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const profilePhotoRef = useRef<HTMLInputElement>(null)
+
+  const handleProfilePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setProfilePhoto(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
 
   const handleDriversLicenseUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -87,6 +100,7 @@ function SignupContent() {
       email,
       password,
       ...(isMover && {
+        profilePhoto,
         driversLicense,
         vehicleBrand,
         vehicleModel,
@@ -205,6 +219,57 @@ function SignupContent() {
           {/* Mover-specific fields */}
           {isMover && (
             <>
+              {/* Profile Photo Section */}
+              <div className="border-t border-neutral-200 dark:border-neutral-700 pt-6">
+                <h3 className="text-lg font-medium text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+                  <UserCircleIcon className="h-5 w-5" />
+                  Profile Photo
+                </h3>
+                <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
+                  Upload a clear photo of yourself for client identification
+                </p>
+              </div>
+
+              {/* Profile Photo Upload */}
+              <Field className="block">
+                <div className="flex justify-center">
+                  <input
+                    ref={profilePhotoRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleProfilePhotoUpload}
+                    className="hidden"
+                  />
+                  <div className="relative">
+                    {profilePhoto ? (
+                      <div className="relative">
+                        <img
+                          src={profilePhoto}
+                          alt="Profile"
+                          className="w-32 h-32 rounded-full object-cover border-4 border-primary-500"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => profilePhotoRef.current?.click()}
+                          className="absolute bottom-0 right-0 p-2 bg-primary-600 rounded-full text-white hover:bg-primary-700 transition-colors shadow-lg"
+                        >
+                          <CameraIcon className="h-5 w-5" />
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => profilePhotoRef.current?.click()}
+                        className="w-32 h-32 rounded-full border-2 border-dashed border-neutral-300 dark:border-neutral-600 flex flex-col items-center justify-center hover:border-primary-500 dark:hover:border-primary-400 transition-colors bg-neutral-50 dark:bg-neutral-800"
+                      >
+                        <CameraIcon className="h-8 w-8 text-neutral-400" />
+                        <span className="mt-1 text-xs text-neutral-500">Add photo</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </Field>
+
               <div className="border-t border-neutral-200 dark:border-neutral-700 pt-6">
                 <h3 className="text-lg font-medium text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
                   <DocumentIcon className="h-5 w-5" />

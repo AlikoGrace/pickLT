@@ -1,14 +1,25 @@
 'use client'
 
-import { Bars3Icon, HeartIcon, MagnifyingGlassIcon, UserCircleIcon } from '@heroicons/react/24/outline'
+import {
+  Bars3Icon,
+  HeartIcon,
+  MagnifyingGlassIcon,
+  UserCircleIcon,
+  HomeIcon,
+  TruckIcon,
+  UsersIcon,
+  CurrencyEuroIcon,
+} from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { RefObject, useCallback, useEffect, useRef } from 'react'
 import { useIntersection } from 'react-use'
 import { useAside } from './aside'
+import { useAuth } from '@/context/auth'
 
-const FOOTER_QUICK_NAV = [
+// Client navigation items
+const CLIENT_NAV = [
   {
     name: 'Explore',
     link: '/',
@@ -29,6 +40,34 @@ const FOOTER_QUICK_NAV = [
     icon: Bars3Icon,
   },
 ]
+
+// Mover navigation items
+const MOVER_NAV = [
+  {
+    name: 'Dashboard',
+    link: '/dashboard',
+    icon: HomeIcon,
+  },
+  {
+    name: 'Moves',
+    link: '/available-moves',
+    icon: TruckIcon,
+  },
+  {
+    name: 'My Crew',
+    link: '/my-crew',
+    icon: UsersIcon,
+  },
+  {
+    name: 'Earnings',
+    link: '/earnings',
+    icon: CurrencyEuroIcon,
+  },
+  {
+    name: 'Menu',
+    icon: Bars3Icon,
+  },
+]
 const SCROLL_THRESHOLD = 80
 
 const FooterQuickNavigation = () => {
@@ -37,12 +76,16 @@ const FooterQuickNavigation = () => {
   const lastScrollY = useRef<number>(0)
   const pathname = usePathname()
   const { open: openAside } = useAside()
+  const { user } = useAuth()
   const intersection = useIntersection(containerRef as RefObject<HTMLDivElement>, {
     root: null,
     rootMargin: '0px',
     threshold: 1,
   })
   const isInViewport = intersection && intersection.intersectionRatio >= 1
+
+  // Determine which nav items to show based on user type
+  const navItems = user?.userType === 'mover' ? MOVER_NAV : CLIENT_NAV
 
   useEffect(() => {
     // update the lastScrollY position when the showNav is shown/hidden
@@ -94,7 +137,7 @@ const FooterQuickNavigation = () => {
     >
       <div className="mx-auto flex w-full max-w-lg justify-around text-center">
         {/* MENU */}
-        {FOOTER_QUICK_NAV.map((item) => {
+        {navItems.map((item) => {
           const isActive = pathname === item.link
           return item.link ? (
             <Link

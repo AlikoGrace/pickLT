@@ -5,6 +5,7 @@ import 'rc-slider/assets/index.css'
 import CustomizeControl from './customize-control'
 import ThemeProvider from './theme-provider'
 import MoveSearchProvider from '@/context/moveSearch'
+import { AuthProvider } from '@/context/auth'
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -27,7 +28,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-white text-neutral-900 dark:bg-neutral-900 dark:text-neutral-100">
         <ThemeProvider>
           <div>
-            <MoveSearchProvider>{children}</MoveSearchProvider>
+            <AuthProvider>
+              <MoveSearchProvider>{children}</MoveSearchProvider>
+            </AuthProvider>
             <CustomizeControl />
           </div>
         </ThemeProvider>
