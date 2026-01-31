@@ -77,9 +77,9 @@ const InstantMovePhotosPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-neutral-900">
+    <div className="min-h-screen bg-white  dark:bg-neutral-900">
       {/* Header */}
-      <div className="sticky top-0 z-20 bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800">
+      <div className="sticky top-0 z-20  bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800">
         <div className="container">
           <div className="flex items-center justify-between h-16">
             <Link
@@ -100,7 +100,7 @@ const InstantMovePhotosPage = () => {
         </div>
       </div>
 
-      <div className="container py-8 pb-32">
+      <div className="container max-w-4xl py-8 pb-32">
         {/* Move Summary */}
         <div className="rounded-2xl bg-neutral-50 dark:bg-neutral-800/50 p-4 mb-8">
           <div className="flex items-center justify-between text-sm">
@@ -114,7 +114,7 @@ const InstantMovePhotosPage = () => {
         </div>
 
         {/* Info Banner */}
-        <div className="rounded-2xl bg-primary-50 dark:bg-primary-900/20 border border-primary-100 dark:border-primary-800 p-4 mb-8">
+        <div className="rounded-2xl max-w-4xl bg-primary-50 dark:bg-primary-900/20 border border-primary-100 dark:border-primary-800 p-4 mb-8">
           <div className="flex items-start gap-3">
             <HugeiconsIcon
               icon={Camera01Icon}

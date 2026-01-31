@@ -330,7 +330,7 @@ const SelectMoverPage = () => {
         </div>
       </div>
 
-      <div className="container py-6 pb-32">
+      <div className="container max-w-4xl py-6 pb-32">
         {/* Move Summary Card */}
         <div className="rounded-2xl bg-white dark:bg-neutral-800 shadow-sm p-4 mb-6">
           <div className="flex items-center justify-between mb-3">
