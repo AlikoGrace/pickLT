@@ -5,76 +5,21 @@ import { Divider } from '@/shared/divider'
 import T from '@/utils/getT'
 import * as Headless from '@headlessui/react'
 import { MapPinIcon } from '@heroicons/react/24/outline'
-import {
-  BeachIcon,
-  EiffelTowerIcon,
-  HutIcon,
-  LakeIcon,
-  Location01Icon,
-  TwinTowerIcon,
-} from '@hugeicons/core-free-icons'
-import { HugeiconsIcon, IconSvgElement } from '@hugeicons/react'
+import { Location01Icon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
 import clsx from 'clsx'
-import _ from 'lodash'
 import { FC, useCallback, useEffect, useRef, useState } from 'react'
 import { ClearDataButton } from './ClearDataButton'
 
-type Suggest = {
+export type LocationSuggestion = {
   id: string
   name: string
-  icon?: IconSvgElement
+  fullAddress: string
+  coordinates?: {
+    latitude: number
+    longitude: number
+  }
 }
-
-const demoInitSuggests: Suggest[] = [
-  {
-    id: '1',
-    name: 'Berlin, Germany',
-    icon: HutIcon,
-  },
-  {
-    id: '2',
-    name: 'Munich (München), Germany',
-    icon: TwinTowerIcon,
-  },
-  {
-    id: '3',
-    name: 'Hamburg, Germany',
-    icon: EiffelTowerIcon,
-  },
-  {
-    id: '4',
-    name: 'Cologne (Köln), Germany',
-    icon: LakeIcon,
-  },
-  {
-    id: '5',
-    name: 'Frankfurt am Main, Germany',
-    icon: BeachIcon,
-  },
-]
-
-const demoSearchingSuggests: Suggest[] = [
-  {
-    id: '1',
-    name: 'Stuttgart, Germany',
-  },
-  {
-    id: '2',
-    name: 'Dresden, Germany',
-  },
-  {
-    id: '3',
-    name: 'Leipzig, Germany',
-  },
-  {
-    id: '4',
-    name: 'Nuremberg (Nürnberg), Germany',
-  },
-  {
-    id: '5',
-    name: 'Düsseldorf, Germany',
-  },
-]
 
 const styles = {
   button: {
@@ -89,7 +34,7 @@ const styles = {
     small: 'text-base',
   },
   panel: {
-    base: 'absolute start-0 top-full z-40 mt-3 hidden-scrollbar max-h-96  overflow-y-auto rounded-3xl bg-white py-3 shadow-xl transition duration-150 data-closed:translate-y-1 data-closed:opacity-0  dark:bg-neutral-800',
+    base: 'absolute start-0 top-full z-40 mt-3 hidden-scrollbar max-h-96 overflow-y-auto rounded-3xl bg-white py-3 shadow-xl transition duration-150 data-closed:translate-y-1 data-closed:opacity-0 dark:bg-neutral-800',
     default: 'w-lg sm:py-6',
     small: 'w-md sm:py-5',
   },
@@ -100,9 +45,50 @@ interface Props {
   description?: string
   className?: string
   inputName?: string
-  initSuggests?: Suggest[]
-  searchingSuggests?: Suggest[]
   fieldStyle: 'default' | 'small'
+  onChange?: (location: LocationSuggestion | null) => void
+}
+
+// Mapbox Geocoding API function
+async function searchLocations(query: string): Promise<LocationSuggestion[]> {
+  if (!query || query.length < 2) return []
+
+  const accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
+  if (!accessToken) {
+    console.error('Mapbox access token is not configured')
+    return []
+  }
+
+  try {
+    const response = await fetch(
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?` +
+        new URLSearchParams({
+          access_token: accessToken,
+          autocomplete: 'true',
+          types: 'place,locality,neighborhood,address,poi',
+          limit: '6',
+        })
+    )
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch locations')
+    }
+
+    const data = await response.json()
+
+    return data.features.map((feature: any) => ({
+      id: feature.id,
+      name: feature.text,
+      fullAddress: feature.place_name,
+      coordinates: {
+        latitude: feature.center[1],
+        longitude: feature.center[0],
+      },
+    }))
+  } catch (error) {
+    console.error('Error fetching locations:', error)
+    return []
+  }
 }
 
 export const LocationInputField: FC<Props> = ({
@@ -110,18 +96,17 @@ export const LocationInputField: FC<Props> = ({
   description = T['HeroSearchForm']['Where are you going?'],
   className = 'flex-1',
   inputName = 'location',
-  initSuggests = demoInitSuggests,
-  searchingSuggests = demoSearchingSuggests,
   fieldStyle = 'default',
+  onChange,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const [showPopover, setShowPopover] = useState(false)
-  const [selected, setSelected] = useState<Suggest | null>(null)
-
-  // Controlled props support
-  // @ts-ignore: augmenting function signature dynamically
-  const controlledValue = (undefined as unknown) as string | undefined
+  const [selected, setSelected] = useState<LocationSuggestion | null>(null)
+  const [inputValue, setInputValue] = useState('')
+  const [suggestions, setSuggestions] = useState<LocationSuggestion[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+  const debounceRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
     const _inputFocusTimeOut = setTimeout(() => {
@@ -134,38 +119,63 @@ export const LocationInputField: FC<Props> = ({
     }
   }, [showPopover])
 
-  // for memoization of the close function
+  // Cleanup debounce on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current)
+      }
+    }
+  }, [])
+
   const closePopover = useCallback(() => {
     setShowPopover(false)
   }, [])
 
-  //  a custom hook that listens for clicks outside the container
   useInteractOutside(containerRef, closePopover)
 
-  const handleInputChange = useCallback(
-    _.debounce((e: React.ChangeEvent<HTMLInputElement>) => {
-      setShowPopover(true)
-      // If the input is empty, Combobox will automatically setSelected
-      if (e.target.value) {
-        setSelected({
-          id: Date.now().toString(), // Generate a unique id for the selected item
-          name: e.target.value,
-        })
-        // if onChange prop available, notify parent
-        // @ts-ignore
-        typeof (arguments as any) !== 'undefined' && null
-      }
-    }, 300),
-    []
-  )
-  useEffect(() => {
-    return () => {
-      handleInputChange.cancel() // Hủy debounce khi component unmount
-    }
-  }, [handleInputChange])
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setInputValue(value)
+    setShowPopover(true)
 
-  const isShowInitSuggests = !selected?.id
-  const suggestsToShow = isShowInitSuggests ? initSuggests : searchingSuggests
+    // Clear previous debounce
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current)
+    }
+
+    // Debounce the API call
+    debounceRef.current = setTimeout(async () => {
+      if (value.length >= 2) {
+        setIsLoading(true)
+        const results = await searchLocations(value)
+        setSuggestions(results)
+        setIsLoading(false)
+      } else {
+        setSuggestions([])
+      }
+    }, 300)
+  }, [])
+
+  const handleSelectLocation = useCallback(
+    (location: LocationSuggestion | null) => {
+      setSelected(location)
+      setInputValue(location?.fullAddress || '')
+      setSuggestions([])
+
+      if (location?.id) {
+        setShowPopover(false)
+        setTimeout(() => {
+          inputRef.current?.blur()
+        }, 50)
+      }
+
+      // Notify parent component
+      onChange?.(location)
+    },
+    [onChange]
+  )
+
   return (
     <div
       className={`group relative z-10 flex ${className}`}
@@ -176,22 +186,7 @@ export const LocationInputField: FC<Props> = ({
     >
       <Headless.Combobox
         value={selected}
-        onChange={(value) => {
-          setSelected(value || { id: '', name: '' })
-          // notify parent if controlled
-          // @ts-ignore
-          if (typeof (value?.name) !== 'undefined' && typeof (props as any)?.onChange === 'function') {
-            // @ts-ignore
-            ;(props as any).onChange(value?.name || '')
-          }
-          // Close the popover when a value is selected
-          if (value?.id) {
-            setShowPopover(false)
-            setTimeout(() => {
-              inputRef.current?.blur()
-            }, 50)
-          }
-        }}
+        onChange={handleSelectLocation}
       >
         <div
           onMouseDown={() => setShowPopover(true)}
@@ -210,7 +205,8 @@ export const LocationInputField: FC<Props> = ({
               name={inputName}
               placeholder={placeholder}
               autoComplete="off"
-              displayValue={(item?: Suggest) => item?.name || ''}
+              value={inputValue}
+              displayValue={(item?: LocationSuggestion) => item?.fullAddress || inputValue}
               onChange={handleInputChange}
             />
             <div className="mt-0.5 text-start text-sm font-light text-neutral-400">
@@ -218,11 +214,14 @@ export const LocationInputField: FC<Props> = ({
             </div>
 
             <ClearDataButton
-              className={clsx(!selected?.id && 'sr-only')}
+              className={clsx(!selected?.id && !inputValue && 'sr-only')}
               onClick={() => {
-                setSelected({ id: '', name: '' })
+                setSelected(null)
+                setInputValue('')
+                setSuggestions([])
                 setShowPopover(false)
                 inputRef.current?.focus()
+                onChange?.(null)
               }}
             />
           </div>
@@ -230,24 +229,52 @@ export const LocationInputField: FC<Props> = ({
 
         <Headless.Transition show={showPopover} unmount={false}>
           <div className={clsx(styles.panel.base, styles.panel[fieldStyle])}>
-            {isShowInitSuggests && (
-              <p className="mt-2 mb-3 px-4 text-xs/6 font-normal text-neutral-600 sm:mt-0 sm:px-8 dark:text-neutral-400">
-                {T['HeroSearchForm']['Suggested locations']}
+            {isLoading && (
+              <p className="px-4 py-3 text-sm text-neutral-500 sm:px-8 dark:text-neutral-400">
+                Searching...
               </p>
             )}
-            {isShowInitSuggests && <Divider className="opacity-50" />}
+
+            {!isLoading && inputValue.length < 2 && (
+              <p className="px-4 py-3 text-sm text-neutral-500 sm:px-8 dark:text-neutral-400">
+                Type to search for locations
+              </p>
+            )}
+
+            {!isLoading && inputValue.length >= 2 && suggestions.length === 0 && (
+              <p className="px-4 py-3 text-sm text-neutral-500 sm:px-8 dark:text-neutral-400">
+                No locations found
+              </p>
+            )}
+
+            {suggestions.length > 0 && (
+              <>
+                <p className="mt-2 mb-3 px-4 text-xs/6 font-normal text-neutral-600 sm:mt-0 sm:px-8 dark:text-neutral-400">
+                  {T['HeroSearchForm']['Suggested locations']}
+                </p>
+                <Divider className="opacity-50" />
+              </>
+            )}
+
             <Headless.ComboboxOptions static unmount={false}>
-              {suggestsToShow.map((item) => (
+              {suggestions.map((item) => (
                 <Headless.ComboboxOption
                   key={item.id}
                   value={item}
-                  className="flex items-center gap-3 p-4 data-focus:bg-neutral-100 sm:gap-4.5 sm:px-8 dark:data-focus:bg-neutral-700"
+                  className="flex cursor-pointer items-center gap-3 p-4 data-focus:bg-neutral-100 sm:gap-4.5 sm:px-8 dark:data-focus:bg-neutral-700"
                 >
                   <HugeiconsIcon
-                    icon={item.icon || Location01Icon}
-                    className="size-4 text-neutral-400 sm:size-6 dark:text-neutral-500"
+                    icon={Location01Icon}
+                    className="size-4 shrink-0 text-neutral-400 sm:size-6 dark:text-neutral-500"
                   />
-                  <span className="block font-medium text-neutral-700 dark:text-neutral-200">{item.name}</span>
+                  <div className="min-w-0 flex-1">
+                    <span className="block truncate font-medium text-neutral-700 dark:text-neutral-200">
+                      {item.name}
+                    </span>
+                    <span className="block truncate text-sm text-neutral-500 dark:text-neutral-400">
+                      {item.fullAddress}
+                    </span>
+                  </div>
                 </Headless.ComboboxOption>
               ))}
             </Headless.ComboboxOptions>
