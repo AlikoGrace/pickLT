@@ -65,11 +65,13 @@ const CheckoutContent = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   
-  // Get route info from URL params (passed from instant-move page)
+  // Get route info and price from URL params (passed from instant-move page)
   const routeDistanceParam = searchParams.get('distance')
   const routeDurationParam = searchParams.get('duration')
+  const priceParam = searchParams.get('price')
   const routeDistance = routeDistanceParam ? parseFloat(routeDistanceParam) : undefined
   const routeDuration = routeDurationParam ? parseFloat(routeDurationParam) : undefined
+  const moverPrice = priceParam ? parseFloat(priceParam) : undefined
   
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('cash')
 
@@ -115,7 +117,11 @@ const CheckoutContent = () => {
   // Calculate prices based on move type
   const getBasePrice = () => {
     if (isInstantMove) {
-      // For instant moves, calculate based on distance
+      // Use the mover's price if passed from select-mover page
+      if (moverPrice) {
+        return moverPrice
+      }
+      // Fallback: calculate based on distance
       if (routeDistance) {
         const distanceKm = routeDistance / 1000
         // Base price: €30 + €2/km
@@ -132,9 +138,9 @@ const CheckoutContent = () => {
   const servicesPrice = isInstantMove ? 0 : additionalServices.length * 50
   const storagePrice = isInstantMove ? 0 : storageWeeks * 30
   
-  // Item-based pricing for instant moves
+  // Item-based pricing for instant moves - already included in moverPrice if available
   const inventoryCount = Object.values(inventory).reduce((sum, qty) => sum + qty, 0) + customItems.length
-  const itemsPrice = isInstantMove ? inventoryCount * 5 : 0 // €5 per item for instant move
+  const itemsPrice = isInstantMove && !moverPrice ? inventoryCount * 5 : 0 // Only add if no mover price
   
   const subtotal = basePrice + packingPrice + servicesPrice + storagePrice + itemsPrice
   const tax = Math.round(subtotal * 0.19) // 19% VAT
@@ -293,7 +299,7 @@ const CheckoutContent = () => {
         <DescriptionList>
           {isInstantMove ? (
             <>
-              <DescriptionTerm>Base fare</DescriptionTerm>
+              <DescriptionTerm>{moverPrice ? 'Mover fare' : 'Base fare'}</DescriptionTerm>
               <DescriptionDetails className="sm:text-right">€{basePrice.toFixed(2)}</DescriptionDetails>
               
               {itemsPrice > 0 && (

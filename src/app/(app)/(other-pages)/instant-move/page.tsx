@@ -12,30 +12,60 @@ import {
   DeliveryTruck01Icon,
   Message01Icon,
   StarIcon,
+  UserMultiple02Icon,
 } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 
-// Dummy mover data (will be replaced with real data from API later)
-const DUMMY_MOVER = {
+// Mover type from selection page
+interface SelectedMover {
+  id: string
+  name: string
+  photo: string
+  rating: number
+  totalMoves: number
+  vehicleType: string
+  vehicleName: string
+  vehiclePlate: string
+  crewSize: number
+  maxWeight: number
+  yearsExperience: number
+  languages: string[]
+  responseTime: number
+  baseRate: number
+  isVerified: boolean
+  price: number
+  estimatedArrival: number
+  distanceKm: number
+  routeDistance?: number
+  routeDuration?: number
+}
+
+// Fallback mover data if none selected
+const DEFAULT_MOVER: SelectedMover = {
   id: 'mover-001',
   name: 'Michael Schmidt',
   photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=faces',
   rating: 4.9,
   totalMoves: 1247,
-  vehicleType: 'Mercedes Sprinter',
+  vehicleType: 'medium_van',
+  vehicleName: 'Mercedes Sprinter',
   vehiclePlate: 'B-MS 4721',
   crewSize: 2,
-  crewMembers: ['Michael Schmidt', 'Thomas Weber'],
-  phone: '+49 170 1234567',
+  maxWeight: 1200,
   yearsExperience: 8,
   languages: ['German', 'English'],
-  specializations: ['Furniture', 'Fragile items', 'Piano'],
+  responseTime: 12,
+  baseRate: 2.20,
+  isVerified: true,
+  price: 89,
+  estimatedArrival: 12,
+  distanceKm: 2.4,
 }
 
-type SearchPhase = 'searching' | 'found' | 'arriving' | 'arrived'
+type MovePhase = 'mover_arriving' | 'mover_arrived' | 'loading' | 'in_transit' | 'arrived'
 
 // Helper functions for formatting
 const formatDistance = (meters: number): string => {
@@ -62,26 +92,46 @@ const InstantMovePage = () => {
     dropoffLocation,
     pickupCoordinates,
     dropoffCoordinates,
+    coverPhoto,
+    inventory,
+    customItems,
   } = useMoveSearch()
 
-  // Debug logging
+  // Load selected mover from sessionStorage
+  const [selectedMover, setSelectedMover] = useState<SelectedMover | null>(null)
+  
   useEffect(() => {
-    console.log('InstantMovePage - Context values:', {
-      pickupLocation,
-      dropoffLocation,
-      pickupCoordinates,
-      dropoffCoordinates,
-    })
-  }, [pickupLocation, dropoffLocation, pickupCoordinates, dropoffCoordinates])
+    const stored = sessionStorage.getItem('selectedMover')
+    if (stored) {
+      try {
+        setSelectedMover(JSON.parse(stored))
+      } catch {
+        setSelectedMover(DEFAULT_MOVER)
+      }
+    } else {
+      // Redirect back if no mover selected
+      router.push('/instant-move/select-mover')
+    }
+  }, [router])
 
-  const [phase, setPhase] = useState<SearchPhase>('searching')
-  const [searchProgress, setSearchProgress] = useState(0)
+  // Get the mover to display (selected or default)
+  const mover = selectedMover || DEFAULT_MOVER
+
+  const [phase, setPhase] = useState<MovePhase>('mover_arriving')
   const [routeInfo, setRouteInfo] = useState<RouteInfo | null>(null)
-  const [moverEtaMinutes, setMoverEtaMinutes] = useState(12) // Mover's ETA to pickup
-  const [moverDistanceKm, setMoverDistanceKm] = useState(2.4) // Mover's distance to pickup
+  const [moverEtaMinutes, setMoverEtaMinutes] = useState(12)
+  const [moverDistanceKm, setMoverDistanceKm] = useState(2.4)
 
   // Calculate mover starting position (offset from pickup)
   const [moverCoords, setMoverCoords] = useState<Coordinates | null>(null)
+
+  // Initialize mover position and ETA from selected mover data
+  useEffect(() => {
+    if (selectedMover) {
+      setMoverEtaMinutes(selectedMover.estimatedArrival)
+      setMoverDistanceKm(selectedMover.distanceKm || 2.4)
+    }
+  }, [selectedMover])
 
   // Initialize mover position when pickup coordinates are available
   useEffect(() => {
@@ -98,31 +148,14 @@ const InstantMovePage = () => {
     setRouteInfo(info)
   }, [])
 
-  // Simulate search progress
+  // Simulate mover approaching pickup
   useEffect(() => {
-    if (phase === 'searching') {
-      const interval = setInterval(() => {
-        setSearchProgress((prev) => {
-          if (prev >= 100) {
-            clearInterval(interval)
-            setPhase('found')
-            return 100
-          }
-          return prev + Math.random() * 15
-        })
-      }, 500)
-      return () => clearInterval(interval)
-    }
-  }, [phase])
-
-  // Simulate mover approaching
-  useEffect(() => {
-    if ((phase === 'found' || phase === 'arriving') && pickupCoordinates && moverCoords) {
+    if (phase === 'mover_arriving' && pickupCoordinates && moverCoords) {
       const interval = setInterval(() => {
         setMoverEtaMinutes((prev) => {
           if (prev <= 1) {
             clearInterval(interval)
-            setPhase('arrived')
+            setPhase('mover_arrived')
             return 0
           }
           return prev - 1
@@ -142,84 +175,29 @@ const InstantMovePage = () => {
     }
   }, [phase, pickupCoordinates, moverCoords])
 
-  // Auto transition to arriving phase
-  useEffect(() => {
-    if (phase === 'found') {
-      const timeout = setTimeout(() => setPhase('arriving'), 2000)
-      return () => clearTimeout(timeout)
-    }
-  }, [phase])
-
   // Set mover at pickup when arrived
   useEffect(() => {
-    if (phase === 'arrived' && pickupCoordinates) {
+    if (phase === 'mover_arrived' && pickupCoordinates) {
       setMoverCoords(pickupCoordinates)
     }
   }, [phase, pickupCoordinates])
 
   const handleCancel = () => {
+    sessionStorage.removeItem('selectedMover')
     router.push('/move-choice')
   }
 
   const handleCallMover = () => {
-    window.open(`tel:${DUMMY_MOVER.phone}`)
+    // In production, this would use the actual mover's phone
+    window.open('tel:+491701234567')
   }
 
   const handleMessageMover = () => {
     alert('Chat feature coming soon!')
   }
 
-  const renderSearchingOverlay = () => (
-    <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-      <div className="bg-white dark:bg-neutral-800 rounded-2xl p-8 mx-4 max-w-sm w-full shadow-xl">
-        {/* Logo */}
-        <div className="mb-6 flex justify-center">
-          <Logo className="w-20 sm:w-24" />
-        </div>
-
-        {/* Animated search indicator */}
-        <div className="relative w-16 h-16 mx-auto mb-6">
-          <div className="absolute inset-0 rounded-full border-2 border-neutral-200 dark:border-neutral-700" />
-          <div 
-            className="absolute inset-0 rounded-full border-2 border-neutral-900 border-t-transparent dark:border-white animate-spin"
-            style={{ animationDuration: '1s' }}
-          />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <HugeiconsIcon
-              icon={DeliveryTruck01Icon}
-              size={24}
-              strokeWidth={1.5}
-              className="text-neutral-700 dark:text-neutral-200"
-            />
-          </div>
-        </div>
-        
-        <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-1 text-center">
-          Finding your mover...
-        </h2>
-        <p className="text-neutral-500 dark:text-neutral-400 text-center text-sm mb-6">
-          Looking for available movers near you
-        </p>
-
-        {/* Progress bar */}
-        <div className="w-full mb-6">
-          <div className="h-1.5 bg-neutral-200 dark:bg-neutral-700 rounded-full overflow-hidden">
-            <div 
-              className="h-full bg-neutral-900 dark:bg-white transition-all duration-300 ease-out"
-              style={{ width: `${Math.min(searchProgress, 100)}%` }}
-            />
-          </div>
-          <p className="text-xs text-neutral-500 dark:text-neutral-400 text-center mt-2">
-            {Math.round(Math.min(searchProgress, 100))}%
-          </p>
-        </div>
-
-        <ButtonSecondary onClick={handleCancel} className="w-full">
-          Cancel search
-        </ButtonSecondary>
-      </div>
-    </div>
-  )
+  // Get the total items count
+  const inventoryCount = Object.values(inventory).reduce((sum, qty) => sum + qty, 0) + customItems.length
 
   const renderMoverCard = () => (
     <div className="rounded-2xl border border-neutral-200 bg-white/95 backdrop-blur-sm dark:border-neutral-700 dark:bg-neutral-800/95 overflow-hidden shadow-lg">
@@ -229,35 +207,45 @@ const InstantMovePage = () => {
           <div className="relative shrink-0">
             <div className="w-12 h-12 rounded-full bg-neutral-200 dark:bg-neutral-700 overflow-hidden">
               <Image
-                src={DUMMY_MOVER.photo}
-                alt={DUMMY_MOVER.name}
+                src={mover.photo}
+                alt={mover.name}
                 width={48}
                 height={48}
                 className="w-full h-full object-cover"
               />
             </div>
+            {mover.isVerified && (
+              <div className="absolute -bottom-0.5 -right-0.5 bg-white dark:bg-neutral-800 rounded-full p-0.5">
+                <HugeiconsIcon
+                  icon={CheckmarkCircle02Icon}
+                  size={14}
+                  strokeWidth={1.5}
+                  className="text-green-500"
+                />
+              </div>
+            )}
           </div>
           <div className="flex-1 min-w-0">
             <h3 className="text-sm font-semibold text-neutral-900 dark:text-white">
-              {DUMMY_MOVER.name}
+              {mover.name}
             </h3>
             <div className="flex items-center gap-1.5 mt-0.5">
               <HugeiconsIcon
                 icon={StarIcon}
                 size={12}
                 strokeWidth={1.5}
-                className="text-neutral-900 dark:text-white fill-current"
+                className="text-amber-500 fill-current"
               />
               <span className="text-xs font-medium text-neutral-900 dark:text-white">
-                {DUMMY_MOVER.rating}
+                {mover.rating}
               </span>
               <span className="text-xs text-neutral-500 dark:text-neutral-400">
-                · {DUMMY_MOVER.totalMoves} moves
+                · {mover.totalMoves} moves
               </span>
             </div>
           </div>
           {/* ETA Badge */}
-          {phase !== 'arrived' && (
+          {phase === 'mover_arriving' && (
             <div className="text-right shrink-0">
               <p className="text-lg font-semibold text-neutral-900 dark:text-white">
                 {moverEtaMinutes} min
@@ -267,29 +255,43 @@ const InstantMovePage = () => {
               </p>
             </div>
           )}
+          {/* Price Badge when arrived */}
+          {phase === 'mover_arrived' && (
+            <div className="text-right shrink-0">
+              <p className="text-lg font-semibold text-primary-600">
+                €{mover.price}
+              </p>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                Total price
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Arrived Banner */}
-      {phase === 'arrived' && (
+      {phase === 'mover_arrived' && (
         <div className="px-4 py-3 bg-neutral-50 dark:bg-neutral-800/50 border-b border-neutral-200 dark:border-neutral-700">
           <div className="flex items-center gap-2">
             <HugeiconsIcon
               icon={CheckmarkCircle02Icon}
               size={20}
               strokeWidth={1.5}
-              className="text-neutral-900 dark:text-white shrink-0"
+              className="text-green-500 shrink-0"
             />
             <div>
               <p className="text-sm font-semibold text-neutral-900 dark:text-white">
                 Your mover has arrived!
+              </p>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                Meet them at the pickup location
               </p>
             </div>
           </div>
         </div>
       )}
 
-      {/* Vehicle Info */}
+      {/* Vehicle & Crew Info */}
       <div className="p-4 flex items-center gap-3">
         <div className="w-9 h-9 rounded-lg bg-neutral-100 dark:bg-neutral-700 flex items-center justify-center shrink-0">
           <HugeiconsIcon
@@ -301,13 +303,36 @@ const InstantMovePage = () => {
         </div>
         <div className="min-w-0 flex-1">
           <p className="text-sm font-medium text-neutral-900 dark:text-white">
-            {DUMMY_MOVER.vehicleType}
+            {mover.vehicleName}
           </p>
           <p className="text-xs text-neutral-500 dark:text-neutral-400">
-            {DUMMY_MOVER.vehiclePlate} · {DUMMY_MOVER.crewSize} crew
+            {mover.vehiclePlate}
           </p>
         </div>
+        <div className="flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400">
+          <HugeiconsIcon icon={UserMultiple02Icon} size={14} strokeWidth={1.5} />
+          <span>{mover.crewSize} mover{mover.crewSize > 1 ? 's' : ''}</span>
+        </div>
       </div>
+
+      {/* Items Preview if cover photo exists */}
+      {coverPhoto && (
+        <div className="px-4 pb-3">
+          <div className="flex items-center gap-3 p-2 bg-neutral-50 dark:bg-neutral-700/50 rounded-xl">
+            <Image
+              src={coverPhoto}
+              alt="Items to move"
+              width={48}
+              height={48}
+              className="w-12 h-12 rounded-lg object-cover"
+            />
+            <div className="text-sm">
+              <p className="font-medium text-neutral-900 dark:text-white">{inventoryCount} items</p>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400">Ready for pickup</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Action Buttons */}
       <div className="px-4 pb-4 flex gap-2">
@@ -363,8 +388,20 @@ const InstantMovePage = () => {
   // Check if we have valid coordinates
   const hasValidCoordinates = pickupCoordinates && dropoffCoordinates
 
+  // Show loading state if mover not loaded yet
+  if (!selectedMover) {
+    return (
+      <div className="fixed inset-0 bg-white dark:bg-neutral-900 flex items-center justify-center p-4">
+        <div className="text-center">
+          <Logo className="w-24 mx-auto mb-6" />
+          <p className="text-neutral-500 dark:text-neutral-400">Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
   // Show error state if no coordinates are available
-  if (!hasValidCoordinates && phase !== 'searching') {
+  if (!hasValidCoordinates) {
     return (
       <div className="fixed inset-0 bg-white dark:bg-neutral-900 flex items-center justify-center p-4">
         <div className="text-center max-w-sm">
@@ -390,60 +427,53 @@ const InstantMovePage = () => {
         <MapboxMap
           pickupCoordinates={pickupCoordinates || undefined}
           dropoffCoordinates={dropoffCoordinates || undefined}
-          moverCoordinates={phase !== 'searching' ? moverCoords || undefined : undefined}
+          moverCoordinates={moverCoords || undefined}
           showRoute={true}
           onRouteCalculated={handleRouteCalculated}
           className="w-full h-full"
         />
       </div>
 
-      {/* Searching Overlay */}
-      {phase === 'searching' && renderSearchingOverlay()}
-
       {/* Top Bar - Location Summary & Close Button */}
-      {phase !== 'searching' && (
-        <div className="absolute top-0 left-0 right-0 z-10 p-4 pt-safe">
-          <div className="mx-auto max-w-lg flex items-start gap-3">
-            <div className="flex-1">
-              {renderLocationSummary()}
-            </div>
-            <button
-              onClick={handleCancel}
-              className="p-2.5 bg-white/95 dark:bg-neutral-800/95 backdrop-blur-sm hover:bg-white dark:hover:bg-neutral-800 rounded-full shadow-lg border border-neutral-200 dark:border-neutral-700 transition"
-            >
-              <HugeiconsIcon
-                icon={Cancel01Icon}
-                size={20}
-                strokeWidth={1.5}
-                className="text-neutral-700 dark:text-neutral-300"
-              />
-            </button>
+      <div className="absolute top-0 left-0 right-0 z-10 p-4 pt-safe">
+        <div className="mx-auto max-w-lg flex items-start gap-3">
+          <div className="flex-1">
+            {renderLocationSummary()}
           </div>
+          <button
+            onClick={handleCancel}
+            className="p-2.5 bg-white/95 dark:bg-neutral-800/95 backdrop-blur-sm hover:bg-white dark:hover:bg-neutral-800 rounded-full shadow-lg border border-neutral-200 dark:border-neutral-700 transition"
+          >
+            <HugeiconsIcon
+              icon={Cancel01Icon}
+              size={20}
+              strokeWidth={1.5}
+              className="text-neutral-700 dark:text-neutral-300"
+            />
+          </button>
         </div>
-      )}
+      </div>
 
       {/* Bottom Panel - Mover Card & Actions */}
-      {phase !== 'searching' && (
-        <div className="absolute bottom-0 left-0 right-0 z-10 p-4 pb-safe">
-          <div className="mx-auto max-w-lg space-y-3">
-            {renderMoverCard()}
-            
-            {/* Action Button */}
-            {phase !== 'arrived' ? (
-              <ButtonSecondary onClick={handleCancel} className="w-full shadow-lg">
-                Cancel move
-              </ButtonSecondary>
-            ) : (
-              <ButtonPrimary 
-                href={`/checkout${routeInfo ? `?distance=${routeInfo.distance}&duration=${routeInfo.duration}` : ''}`} 
-                className="w-full shadow-lg"
-              >
-                Proceed to checkout
-              </ButtonPrimary>
-            )}
-          </div>
+      <div className="absolute bottom-0 left-0 right-0 z-10 p-4 pb-safe">
+        <div className="mx-auto max-w-lg space-y-3">
+          {renderMoverCard()}
+          
+          {/* Action Button */}
+          {phase !== 'mover_arrived' ? (
+            <ButtonSecondary onClick={handleCancel} className="w-full shadow-lg">
+              Cancel move
+            </ButtonSecondary>
+          ) : (
+            <ButtonPrimary 
+              href={`/checkout?distance=${routeInfo?.distance || selectedMover.routeDistance || 15000}&duration=${routeInfo?.duration || selectedMover.routeDuration || 1800}&price=${mover.price}`} 
+              className="w-full shadow-lg"
+            >
+              Proceed to checkout · €{mover.price}
+            </ButtonPrimary>
+          )}
         </div>
-      )}
+      </div>
     </div>
   )
 }

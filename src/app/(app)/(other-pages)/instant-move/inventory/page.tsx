@@ -140,7 +140,8 @@ const InstantMoveInventoryPage = () => {
   }
 
   const handleFindMover = () => {
-    router.push('/instant-move')
+    // Go to photos page first, then mover selection
+    router.push('/instant-move/photos')
   }
 
   const handleBack = () => {
