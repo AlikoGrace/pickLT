@@ -142,9 +142,17 @@ export type CustomItem = {
   approxWeight: string
 }
 
+// Coordinates type for location
+export type Coordinates = {
+  latitude: number
+  longitude: number
+}
+
 type MoveSearchState = {
   pickupLocation: string
   dropoffLocation: string
+  pickupCoordinates: Coordinates | null
+  dropoffCoordinates: Coordinates | null
   moveDate: string | null // ISO date YYYY-MM-DD
   moveType: MoveTypeKey | null
   isInstantMove: boolean // true for instant move, false for scheduled
@@ -215,6 +223,8 @@ type MoveSearchState = {
 type MoveSearchActions = {
   setPickupLocation: (v: string) => void
   setDropoffLocation: (v: string) => void
+  setPickupCoordinates: (c: Coordinates | null) => void
+  setDropoffCoordinates: (c: Coordinates | null) => void
   setMoveDate: (d: string | null) => void
   setMoveType: (t: MoveTypeKey | null) => void
   setIsInstantMove: (b: boolean) => void
@@ -296,6 +306,8 @@ type MoveSearchActions = {
 const defaultState: MoveSearchState = {
   pickupLocation: '',
   dropoffLocation: '',
+  pickupCoordinates: null,
+  dropoffCoordinates: null,
   moveDate: null,
   moveType: null,
   isInstantMove: false,
@@ -376,6 +388,8 @@ const MoveSearchContext = createContext<MoveSearchState & MoveSearchActions>({
   ...defaultState,
   setPickupLocation: () => {},
   setDropoffLocation: () => {},
+  setPickupCoordinates: () => {},
+  setDropoffCoordinates: () => {},
   setMoveDate: () => {},
   setMoveType: () => {},
   setIsInstantMove: () => {},
@@ -453,6 +467,8 @@ const MoveSearchContext = createContext<MoveSearchState & MoveSearchActions>({
 export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) => {
   const [pickupLocation, setPickupLocation] = useState<string>(defaultState.pickupLocation)
   const [dropoffLocation, setDropoffLocation] = useState<string>(defaultState.dropoffLocation)
+  const [pickupCoordinates, setPickupCoordinates] = useState<Coordinates | null>(defaultState.pickupCoordinates)
+  const [dropoffCoordinates, setDropoffCoordinates] = useState<Coordinates | null>(defaultState.dropoffCoordinates)
   const [moveDate, setMoveDate] = useState<string | null>(defaultState.moveDate)
   const [moveType, setMoveType] = useState<MoveTypeKey | null>(defaultState.moveType)
   const [isInstantMove, setIsInstantMove] = useState<boolean>(defaultState.isInstantMove)
@@ -684,6 +700,8 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
       value={{
         pickupLocation,
         dropoffLocation,
+        pickupCoordinates,
+        dropoffCoordinates,
         moveDate,
         moveType,
         isInstantMove,
@@ -746,6 +764,8 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
 
         setPickupLocation,
         setDropoffLocation,
+        setPickupCoordinates,
+        setDropoffCoordinates,
         setMoveDate,
         setMoveType,
         setIsInstantMove,

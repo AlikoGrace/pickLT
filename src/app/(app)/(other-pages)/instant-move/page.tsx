@@ -1,18 +1,21 @@
 'use client'
 
+import MapboxMap, { MapCoordinates } from '@/components/MapboxMap'
 import { useMoveSearch } from '@/context/moveSearch'
 import ButtonPrimary from '@/shared/ButtonPrimary'
 import ButtonSecondary from '@/shared/ButtonSecondary'
+import Logo from '@/shared/Logo'
 import {
-  ChatBubbleLeftRightIcon,
-  CheckCircleIcon,
-  MapPinIcon,
-  PhoneIcon,
+  Call02Icon,
+  Cancel01Icon,
+  CheckmarkCircle02Icon,
+  DeliveryTruck01Icon,
+  Location01Icon,
+  Message01Icon,
   StarIcon,
-  TruckIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline'
-import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid'
+  Time01Icon,
+} from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -21,7 +24,7 @@ import { useEffect, useState } from 'react'
 const DUMMY_MOVER = {
   id: 'mover-001',
   name: 'Michael Schmidt',
-  photo: '/images/avatars/Image-1.png',
+  photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=faces',
   rating: 4.9,
   totalMoves: 1247,
   vehicleType: 'Mercedes Sprinter',
@@ -35,6 +38,10 @@ const DUMMY_MOVER = {
   specializations: ['Furniture', 'Fragile items', 'Piano'],
 }
 
+// Default coordinates for demo (Berlin area)
+const DEFAULT_PICKUP: MapCoordinates = { latitude: 52.52, longitude: 13.405 }
+const DEFAULT_DROPOFF: MapCoordinates = { latitude: 52.48, longitude: 13.45 }
+
 type SearchPhase = 'searching' | 'found' | 'arriving' | 'arrived'
 
 const InstantMovePage = () => {
@@ -42,13 +49,24 @@ const InstantMovePage = () => {
   const {
     pickupLocation,
     dropoffLocation,
-    moveType,
+    pickupCoordinates: contextPickupCoords,
+    dropoffCoordinates: contextDropoffCoords,
   } = useMoveSearch()
 
   const [phase, setPhase] = useState<SearchPhase>('searching')
   const [searchProgress, setSearchProgress] = useState(0)
   const [etaMinutes, setEtaMinutes] = useState(DUMMY_MOVER.etaMinutes)
-  const [moverDistance, setMoverDistance] = useState(2.4) // km
+  const [moverDistance, setMoverDistance] = useState(2.4)
+
+  // Use context coordinates or defaults
+  const pickupCoords = contextPickupCoords || DEFAULT_PICKUP
+  const dropoffCoords = contextDropoffCoords || DEFAULT_DROPOFF
+
+  // Calculate mover position based on progress (interpolate between a start point and pickup)
+  const [moverCoords, setMoverCoords] = useState<MapCoordinates>({
+    latitude: pickupCoords.latitude + 0.02,
+    longitude: pickupCoords.longitude - 0.03,
+  })
 
   // Simulate search progress
   useEffect(() => {
@@ -80,10 +98,16 @@ const InstantMovePage = () => {
           return prev - 1
         })
         setMoverDistance((prev) => Math.max(0, prev - 0.2))
+        
+        // Move the mover closer to pickup
+        setMoverCoords((prev) => ({
+          latitude: prev.latitude + (pickupCoords.latitude - prev.latitude) * 0.15,
+          longitude: prev.longitude + (pickupCoords.longitude - prev.longitude) * 0.15,
+        }))
       }, 3000)
       return () => clearInterval(interval)
     }
-  }, [phase])
+  }, [phase, pickupCoords])
 
   // Auto transition to arriving phase
   useEffect(() => {
@@ -92,6 +116,13 @@ const InstantMovePage = () => {
       return () => clearTimeout(timeout)
     }
   }, [phase])
+
+  // Set mover at pickup when arrived
+  useEffect(() => {
+    if (phase === 'arrived') {
+      setMoverCoords(pickupCoords)
+    }
+  }, [phase, pickupCoords])
 
   const handleCancel = () => {
     router.push('/move-choice')
@@ -102,40 +133,49 @@ const InstantMovePage = () => {
   }
 
   const handleMessageMover = () => {
-    // In a real app, this would open a chat
     alert('Chat feature coming soon!')
   }
 
   const renderSearchingPhase = () => (
-    <div className="flex flex-col items-center justify-center py-12">
+    <div className="flex flex-col items-center justify-center py-16">
+      {/* Logo */}
+      <div className="mb-8">
+        <Logo className="w-24 sm:w-28" />
+      </div>
+
       {/* Animated search indicator */}
-      <div className="relative w-32 h-32 mb-8">
-        <div className="absolute inset-0 rounded-full border-4 border-neutral-200 dark:border-neutral-700" />
+      <div className="relative w-20 h-20 mb-8">
+        <div className="absolute inset-0 rounded-full border-2 border-neutral-200 dark:border-neutral-700" />
         <div 
-          className="absolute inset-0 rounded-full border-4 border-primary-500 border-t-transparent animate-spin"
+          className="absolute inset-0 rounded-full border-2 border-neutral-900 border-t-transparent dark:border-white animate-spin"
           style={{ animationDuration: '1s' }}
         />
-        <div className="absolute inset-4 rounded-full bg-primary-50 dark:bg-primary-900/20 flex items-center justify-center">
-          <TruckIcon className="w-12 h-12 text-primary-600 dark:text-primary-400" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <HugeiconsIcon
+            icon={DeliveryTruck01Icon}
+            size={28}
+            strokeWidth={1.5}
+            className="text-neutral-700 dark:text-neutral-200"
+          />
         </div>
       </div>
       
-      <h2 className="text-xl font-bold text-neutral-900 dark:text-white mb-2">
+      <h2 className="text-xl font-semibold text-neutral-900 dark:text-white mb-2">
         Finding your mover...
       </h2>
-      <p className="text-neutral-500 dark:text-neutral-400 text-center mb-6">
+      <p className="text-neutral-500 dark:text-neutral-400 text-center mb-8">
         Looking for available movers near you
       </p>
 
       {/* Progress bar */}
       <div className="w-full max-w-xs mb-8">
-        <div className="h-2 bg-neutral-200 dark:bg-neutral-700 rounded-full overflow-hidden">
+        <div className="h-1.5 bg-neutral-200 dark:bg-neutral-700 rounded-full overflow-hidden">
           <div 
-            className="h-full bg-primary-500 transition-all duration-300 ease-out"
+            className="h-full bg-neutral-900 dark:bg-white transition-all duration-300 ease-out"
             style={{ width: `${Math.min(searchProgress, 100)}%` }}
           />
         </div>
-        <p className="text-sm text-neutral-500 dark:text-neutral-400 text-center mt-2">
+        <p className="text-sm text-neutral-500 dark:text-neutral-400 text-center mt-3">
           {Math.round(Math.min(searchProgress, 100))}%
         </p>
       </div>
@@ -147,38 +187,40 @@ const InstantMovePage = () => {
   )
 
   const renderMoverCard = () => (
-    <div className="bg-white dark:bg-neutral-800 rounded-2xl shadow-lg overflow-hidden">
+    <div className="rounded-2xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800 overflow-hidden">
       {/* Mover Header */}
-      <div className="p-6 border-b border-neutral-200 dark:border-neutral-700">
+      <div className="p-5 border-b border-neutral-200 dark:border-neutral-700">
         <div className="flex items-start gap-4">
-          <div className="relative">
-            <div className="w-16 h-16 rounded-full bg-neutral-200 dark:bg-neutral-700 overflow-hidden">
+          <div className="relative shrink-0">
+            <div className="w-14 h-14 rounded-full bg-neutral-200 dark:bg-neutral-700 overflow-hidden">
               <Image
                 src={DUMMY_MOVER.photo}
                 alt={DUMMY_MOVER.name}
-                width={64}
-                height={64}
+                width={56}
+                height={56}
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-white dark:border-neutral-800 flex items-center justify-center">
-              <CheckCircleIcon className="w-4 h-4 text-white" />
-            </div>
           </div>
-          <div className="flex-1">
-            <h3 className="text-lg font-bold text-neutral-900 dark:text-white">
+          <div className="flex-1 min-w-0">
+            <h3 className="text-base font-semibold text-neutral-900 dark:text-white">
               {DUMMY_MOVER.name}
             </h3>
-            <div className="flex items-center gap-1 mt-1">
-              <StarIconSolid className="w-4 h-4 text-amber-400" />
+            <div className="flex items-center gap-1.5 mt-1">
+              <HugeiconsIcon
+                icon={StarIcon}
+                size={14}
+                strokeWidth={1.5}
+                className="text-neutral-900 dark:text-white fill-current"
+              />
               <span className="text-sm font-medium text-neutral-900 dark:text-white">
                 {DUMMY_MOVER.rating}
               </span>
               <span className="text-sm text-neutral-500 dark:text-neutral-400">
-                ({DUMMY_MOVER.totalMoves} moves)
+                · {DUMMY_MOVER.totalMoves} moves
               </span>
             </div>
-            <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
+            <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">
               {DUMMY_MOVER.yearsExperience} years experience
             </p>
           </div>
@@ -187,19 +229,19 @@ const InstantMovePage = () => {
 
       {/* ETA Section */}
       {phase !== 'arrived' && (
-        <div className="px-6 py-4 bg-primary-50 dark:bg-primary-900/20">
+        <div className="px-5 py-4 bg-neutral-50 dark:bg-neutral-800/50 border-b border-neutral-200 dark:border-neutral-700">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-primary-600 dark:text-primary-400 font-medium">
+              <p className="text-xs text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                 {phase === 'found' ? 'Mover found!' : 'Arriving in'}
               </p>
-              <p className="text-3xl font-bold text-primary-700 dark:text-primary-300">
+              <p className="text-2xl font-semibold text-neutral-900 dark:text-white mt-0.5">
                 {etaMinutes} min
               </p>
             </div>
             <div className="text-right">
-              <p className="text-sm text-neutral-500 dark:text-neutral-400">Distance</p>
-              <p className="text-lg font-semibold text-neutral-900 dark:text-white">
+              <p className="text-xs text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Distance</p>
+              <p className="text-lg font-medium text-neutral-900 dark:text-white mt-0.5">
                 {moverDistance.toFixed(1)} km
               </p>
             </div>
@@ -209,14 +251,19 @@ const InstantMovePage = () => {
 
       {/* Arrived Banner */}
       {phase === 'arrived' && (
-        <div className="px-6 py-4 bg-green-50 dark:bg-green-900/20">
+        <div className="px-5 py-4 bg-neutral-50 dark:bg-neutral-800/50 border-b border-neutral-200 dark:border-neutral-700">
           <div className="flex items-center gap-3">
-            <CheckCircleIcon className="w-8 h-8 text-green-500" />
+            <HugeiconsIcon
+              icon={CheckmarkCircle02Icon}
+              size={24}
+              strokeWidth={1.5}
+              className="text-neutral-900 dark:text-white shrink-0"
+            />
             <div>
-              <p className="text-lg font-bold text-green-700 dark:text-green-300">
+              <p className="text-base font-semibold text-neutral-900 dark:text-white">
                 Your mover has arrived!
               </p>
-              <p className="text-sm text-green-600 dark:text-green-400">
+              <p className="text-sm text-neutral-500 dark:text-neutral-400">
                 They&apos;re waiting at your pickup location
               </p>
             </div>
@@ -225,12 +272,17 @@ const InstantMovePage = () => {
       )}
 
       {/* Vehicle & Crew Info */}
-      <div className="p-6 space-y-4">
+      <div className="p-5 space-y-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-neutral-100 dark:bg-neutral-700 flex items-center justify-center">
-            <TruckIcon className="w-5 h-5 text-neutral-600 dark:text-neutral-300" />
+          <div className="w-10 h-10 rounded-xl bg-neutral-100 dark:bg-neutral-700 flex items-center justify-center shrink-0">
+            <HugeiconsIcon
+              icon={DeliveryTruck01Icon}
+              size={20}
+              strokeWidth={1.5}
+              className="text-neutral-600 dark:text-neutral-300"
+            />
           </div>
-          <div>
+          <div className="min-w-0">
             <p className="text-sm font-medium text-neutral-900 dark:text-white">
               {DUMMY_MOVER.vehicleType}
             </p>
@@ -241,27 +293,27 @@ const InstantMovePage = () => {
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-neutral-100 dark:bg-neutral-700 flex items-center justify-center">
-            <span className="text-sm font-bold text-neutral-600 dark:text-neutral-300">
+          <div className="w-10 h-10 rounded-xl bg-neutral-100 dark:bg-neutral-700 flex items-center justify-center shrink-0">
+            <span className="text-sm font-semibold text-neutral-600 dark:text-neutral-300">
               {DUMMY_MOVER.crewSize}
             </span>
           </div>
-          <div>
+          <div className="min-w-0">
             <p className="text-sm font-medium text-neutral-900 dark:text-white">
               Crew members
             </p>
-            <p className="text-sm text-neutral-500 dark:text-neutral-400">
+            <p className="text-sm text-neutral-500 dark:text-neutral-400 truncate">
               {DUMMY_MOVER.crewMembers.join(', ')}
             </p>
           </div>
         </div>
 
         {/* Specializations */}
-        <div className="flex flex-wrap gap-2 pt-2">
+        <div className="flex flex-wrap gap-2 pt-1">
           {DUMMY_MOVER.specializations.map((spec) => (
             <span
               key={spec}
-              className="px-3 py-1 text-xs font-medium bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 rounded-full"
+              className="px-2.5 py-1 text-xs font-medium bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 rounded-full"
             >
               {spec}
             </span>
@@ -270,13 +322,13 @@ const InstantMovePage = () => {
       </div>
 
       {/* Action Buttons */}
-      <div className="p-6 pt-0 flex gap-3">
+      <div className="p-5 pt-0 flex gap-3">
         <ButtonSecondary onClick={handleCallMover} className="flex-1">
-          <PhoneIcon className="w-5 h-5 mr-2" />
+          <HugeiconsIcon icon={Call02Icon} size={18} strokeWidth={1.5} className="mr-2" />
           Call
         </ButtonSecondary>
         <ButtonSecondary onClick={handleMessageMover} className="flex-1">
-          <ChatBubbleLeftRightIcon className="w-5 h-5 mr-2" />
+          <HugeiconsIcon icon={Message01Icon} size={18} strokeWidth={1.5} className="mr-2" />
           Message
         </ButtonSecondary>
       </div>
@@ -284,110 +336,26 @@ const InstantMovePage = () => {
   )
 
   const renderMap = () => (
-    <div className="relative h-64 md:h-80 lg:h-96 bg-neutral-200 dark:bg-neutral-700 rounded-2xl overflow-hidden mb-6">
-      {/* Placeholder map - in production, use Google Maps or Mapbox */}
-      <div className="absolute inset-0 bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-700 dark:to-neutral-800">
-        {/* Simulated map grid */}
-        <div className="absolute inset-0 opacity-30">
-          {Array.from({ length: 10 }).map((_, i) => (
-            <div
-              key={`h-${i}`}
-              className="absolute w-full border-t border-neutral-400 dark:border-neutral-600"
-              style={{ top: `${i * 10}%` }}
-            />
-          ))}
-          {Array.from({ length: 10 }).map((_, i) => (
-            <div
-              key={`v-${i}`}
-              className="absolute h-full border-l border-neutral-400 dark:border-neutral-600"
-              style={{ left: `${i * 10}%` }}
-            />
-          ))}
-        </div>
-
-        {/* Route line */}
-        <svg className="absolute inset-0 w-full h-full">
-          <line
-            x1="30%"
-            y1="70%"
-            x2="70%"
-            y2="30%"
-            stroke="currentColor"
-            strokeWidth="3"
-            strokeDasharray="8 4"
-            className="text-primary-500"
-          />
-        </svg>
-
-        {/* Pickup marker */}
-        <div className="absolute left-[30%] top-[70%] -translate-x-1/2 -translate-y-full">
-          <div className="flex flex-col items-center">
-            <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
-              <MapPinIcon className="w-5 h-5 text-white" />
-            </div>
-            <div className="mt-1 px-2 py-0.5 bg-white dark:bg-neutral-800 rounded text-xs font-medium shadow">
-              Pickup
-            </div>
-          </div>
-        </div>
-
-        {/* Dropoff marker */}
-        <div className="absolute left-[70%] top-[30%] -translate-x-1/2 -translate-y-full">
-          <div className="flex flex-col items-center">
-            <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center shadow-lg">
-              <MapPinIcon className="w-5 h-5 text-white" />
-            </div>
-            <div className="mt-1 px-2 py-0.5 bg-white dark:bg-neutral-800 rounded text-xs font-medium shadow">
-              Drop-off
-            </div>
-          </div>
-        </div>
-
-        {/* Mover marker (animated) */}
-        {(phase === 'found' || phase === 'arriving') && (
-          <div 
-            className="absolute -translate-x-1/2 -translate-y-1/2 transition-all duration-1000"
-            style={{ 
-              left: `${30 + (100 - searchProgress) * 0.3}%`, 
-              top: `${70 - (100 - searchProgress) * 0.3}%` 
-            }}
-          >
-            <div className="relative">
-              <div className="w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center shadow-lg animate-pulse">
-                <TruckIcon className="w-6 h-6 text-white" />
-              </div>
-              {/* Pulse animation */}
-              <div className="absolute inset-0 bg-primary-500 rounded-full animate-ping opacity-30" />
-            </div>
-          </div>
-        )}
-
-        {/* Arrived state - mover at pickup */}
-        {phase === 'arrived' && (
-          <div className="absolute left-[30%] top-[70%] -translate-x-1/2 -translate-y-1/2">
-            <div className="relative">
-              <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
-                <TruckIcon className="w-6 h-6 text-white" />
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Map overlay gradient */}
-      <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white dark:from-neutral-900 to-transparent" />
+    <div className="relative h-64 sm:h-72 md:h-80 rounded-2xl overflow-hidden mb-5">
+      <MapboxMap
+        pickupCoordinates={pickupCoords}
+        dropoffCoordinates={dropoffCoords}
+        moverCoordinates={phase !== 'searching' ? moverCoords : undefined}
+        showRoute={true}
+        className="w-full h-full"
+      />
     </div>
   )
 
   const renderLocationSummary = () => (
-    <div className="bg-white dark:bg-neutral-800 rounded-2xl p-4 shadow-sm border border-neutral-200 dark:border-neutral-700 mb-6">
+    <div className="rounded-2xl border border-neutral-200 bg-white p-4 dark:border-neutral-700 dark:bg-neutral-800 mb-5">
       <div className="flex items-center gap-3">
         <div className="flex flex-col items-center">
-          <div className="w-3 h-3 rounded-full bg-green-500" />
-          <div className="w-0.5 h-8 bg-neutral-300 dark:bg-neutral-600" />
-          <div className="w-3 h-3 rounded-full bg-red-500" />
+          <div className="w-2.5 h-2.5 rounded-full bg-neutral-900 dark:bg-white" />
+          <div className="w-px h-8 bg-neutral-300 dark:bg-neutral-600" />
+          <div className="w-2.5 h-2.5 rounded-full border-2 border-neutral-900 dark:border-white" />
         </div>
-        <div className="flex-1 space-y-3">
+        <div className="flex-1 min-w-0 space-y-3">
           <div>
             <p className="text-xs text-neutral-500 dark:text-neutral-400">Pickup</p>
             <p className="text-sm font-medium text-neutral-900 dark:text-white truncate">
@@ -406,26 +374,31 @@ const InstantMovePage = () => {
   )
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
+    <div className="min-h-screen bg-white dark:bg-neutral-900">
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-white dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700">
+      <div className="sticky top-0 z-10 bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-700">
         <div className="mx-auto max-w-3xl px-4 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-lg font-bold text-neutral-900 dark:text-white">
+            <h1 className="text-base font-semibold text-neutral-900 dark:text-white">
               {phase === 'searching' ? 'Finding mover...' : 
                phase === 'arrived' ? 'Mover arrived!' : 'Your mover is on the way'}
             </h1>
             <button
               onClick={handleCancel}
-              className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-full transition"
+              className="p-2 -mr-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-full transition"
             >
-              <XMarkIcon className="w-6 h-6 text-neutral-500" />
+              <HugeiconsIcon
+                icon={Cancel01Icon}
+                size={20}
+                strokeWidth={1.5}
+                className="text-neutral-500"
+              />
             </button>
           </div>
         </div>
       </div>
 
-      <div className="mx-auto max-w-3xl px-4 py-6">
+      <div className="mx-auto max-w-3xl px-4 py-5">
         {phase === 'searching' ? (
           renderSearchingPhase()
         ) : (
@@ -435,13 +408,13 @@ const InstantMovePage = () => {
             {renderMoverCard()}
             
             {/* Cancel/Complete Actions */}
-            <div className="mt-6 flex gap-3">
+            <div className="mt-5">
               {phase !== 'arrived' ? (
-                <ButtonSecondary onClick={handleCancel} className="flex-1">
+                <ButtonSecondary onClick={handleCancel} className="w-full">
                   Cancel move
                 </ButtonSecondary>
               ) : (
-                <ButtonPrimary href="/checkout" className="flex-1">
+                <ButtonPrimary href="/checkout" className="w-full">
                   Proceed to checkout
                 </ButtonPrimary>
               )}

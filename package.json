@@ -30,6 +30,7 @@
     "eslint-config-next": "15.3.2",
     "framer-motion": "^12.10.4",
     "lodash": "^4.17.21",
+    "mapbox-gl": "^3.18.1",
     "next": "15.3.6",
     "rc-slider": "^11.1.8",
     "react": "19.1.0",
@@ -44,6 +45,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.5",
     "@types/lodash": "^4.17.13",
+    "@types/mapbox-gl": "^3.4.1",
     "postcss": "^8.4.31",
     "prettier": "^3.3.2",
     "prettier-plugin-organize-imports": "^4.0.0",

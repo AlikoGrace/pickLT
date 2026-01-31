@@ -1,10 +1,11 @@
 'use client'
 
+import { useMoveSearch } from '@/context/moveSearch'
 import clsx from 'clsx'
 import Form from 'next/form'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { ButtonSubmit, GuestNumberField, LocationInputField, VerticalDividerLine } from './ui'
+import { ButtonSubmit, GuestNumberField, LocationInputField, LocationSuggestion, VerticalDividerLine } from './ui'
 
 interface Props {
   className?: string
@@ -13,6 +14,13 @@ interface Props {
 
 export const StaySearchForm = ({ className, formStyle = 'default' }: Props) => {
   const router = useRouter()
+  const {
+    setPickupLocation,
+    setDropoffLocation,
+    setPickupCoordinates,
+    setDropoffCoordinates,
+    setMoveType: setContextMoveType,
+  } = useMoveSearch()
 
   // Prefetch the move choice page to improve performance
   useEffect(() => {
@@ -20,14 +28,53 @@ export const StaySearchForm = ({ className, formStyle = 'default' }: Props) => {
   }, [router])
 
   const [moveType, setMoveType] = useState<string | null>(null)
+  const [pickupData, setPickupData] = useState<LocationSuggestion | null>(null)
+  const [dropoffData, setDropoffData] = useState<LocationSuggestion | null>(null)
+
+  const handlePickupChange = (location: LocationSuggestion | null) => {
+    setPickupData(location)
+    if (location) {
+      setPickupLocation(location.fullAddress)
+      if (location.coordinates) {
+        setPickupCoordinates({
+          latitude: location.coordinates.latitude,
+          longitude: location.coordinates.longitude,
+        })
+      }
+    } else {
+      setPickupLocation('')
+      setPickupCoordinates(null)
+    }
+  }
+
+  const handleDropoffChange = (location: LocationSuggestion | null) => {
+    setDropoffData(location)
+    if (location) {
+      setDropoffLocation(location.fullAddress)
+      if (location.coordinates) {
+        setDropoffCoordinates({
+          latitude: location.coordinates.latitude,
+          longitude: location.coordinates.longitude,
+        })
+      }
+    } else {
+      setDropoffLocation('')
+      setDropoffCoordinates(null)
+    }
+  }
 
   const handleFormSubmit = (formData: FormData) => {
     const formDataEntries = Object.fromEntries(formData.entries())
     console.log('Form submitted', formDataEntries)
 
-    const pickupLocation = (formDataEntries['pickupLocation'] || '') as string
-    const dropoffLocation = (formDataEntries['dropoffLocation'] || '') as string
+    const pickupLocation = pickupData?.fullAddress || (formDataEntries['pickupLocation'] || '') as string
+    const dropoffLocation = dropoffData?.fullAddress || (formDataEntries['dropoffLocation'] || '') as string
     const mt = (formDataEntries['moveType'] || moveType || '') as string
+
+    // Update context with move type
+    if (mt) {
+      setContextMoveType(mt as any)
+    }
 
     let url = '/move-choice'
     const params = new URLSearchParams()
@@ -55,6 +102,7 @@ export const StaySearchForm = ({ className, formStyle = 'default' }: Props) => {
         placeholder="Where are you moving from?"
         description="Pickup location"
         inputName="pickupLocation"
+        onChange={handlePickupChange}
       />
       <VerticalDividerLine />
       <LocationInputField
@@ -63,6 +111,7 @@ export const StaySearchForm = ({ className, formStyle = 'default' }: Props) => {
         placeholder="Where are you moving to?"
         description="Drop-off location"
         inputName="dropoffLocation"
+        onChange={handleDropoffChange}
       />
       <VerticalDividerLine />
       <GuestNumberField
