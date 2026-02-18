@@ -9,5 +9,5 @@ export const metadata: Metadata = {
 }
 
 export default function Layout({ children, params }: { children: React.ReactNode; params: any }) {
-  return <ApplicationLayout>{children}</ApplicationLayout>
+  return <ApplicationLayout showMobileSearchForm={true}>{children}</ApplicationLayout>
 }

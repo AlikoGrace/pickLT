@@ -77,7 +77,7 @@ const CarSearchFormMobile = () => {
           imputName="pickup-location"
           defaultValue={locationInputPickUp}
           onChange={(value) => {
-            setLocationInputPickUp(value)
+            setLocationInputPickUp(value?.fullAddress || '')
             if (dropOffLocationType === 'different') {
               setFieldNameShow('locationDropoff')
             } else {
@@ -100,7 +100,7 @@ const CarSearchFormMobile = () => {
             imputName="dropoff-location"
             defaultValue={locationInputDropOff}
             onChange={(value) => {
-              setLocationInputDropOff(value)
+              setLocationInputDropOff(value?.fullAddress || '')
               setFieldNameShow('dates')
             }}
           />

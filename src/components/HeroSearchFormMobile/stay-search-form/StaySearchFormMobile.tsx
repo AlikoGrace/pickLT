@@ -1,11 +1,12 @@
 'use client'
 
+import { useMoveSearch } from '@/context/moveSearch'
 import T from '@/utils/getT'
 import Form from 'next/form'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import FieldPanelContainer from '../FieldPanelContainer'
-import LocationInput from '../LocationInput'
+import LocationInput, { LocationSuggestion } from '../LocationInput'
 import MoveTypeInput from '../MoveTypeInput'
 
 type MoveTypeKey = 'light' | 'regular' | 'premium'
@@ -18,24 +19,99 @@ const MOVE_TYPE_LABELS: Record<MoveTypeKey, string> = {
 
 const StaySearchFormMobile = () => {
   const [fieldNameShow, setFieldNameShow] = useState<'pickupLocation' | 'dropoffLocation' | 'moveType'>('pickupLocation')
-  const [pickupLocationInput, setPickupLocationInput] = useState('')
-  const [dropoffLocationInput, setDropoffLocationInput] = useState('')
-  const [moveType, setMoveType] = useState<MoveTypeKey | null>(null)
   const router = useRouter()
+  const {
+    pickupLocation,
+    dropoffLocation,
+    moveType: contextMoveType,
+    setPickupLocation,
+    setDropoffLocation,
+    setPickupCoordinates,
+    setDropoffCoordinates,
+    setMoveType: setContextMoveType,
+  } = useMoveSearch()
+
+  // Local state synced with context
+  const [pickupLocationInput, setPickupLocationInput] = useState(pickupLocation)
+  const [dropoffLocationInput, setDropoffLocationInput] = useState(dropoffLocation)
+  const [moveType, setMoveType] = useState<MoveTypeKey | null>(contextMoveType)
+
+  // Sync local state with context when context changes (e.g. desktop form updated it)
+  useEffect(() => {
+    setPickupLocationInput(pickupLocation)
+  }, [pickupLocation])
+
+  useEffect(() => {
+    setDropoffLocationInput(dropoffLocation)
+  }, [dropoffLocation])
+
+  useEffect(() => {
+    setMoveType(contextMoveType)
+  }, [contextMoveType])
+
+  // Prefetch the move choice page
+  useEffect(() => {
+    router.prefetch('/move-choice')
+  }, [router])
+
+  const handlePickupChange = (location: LocationSuggestion | null) => {
+    if (location) {
+      setPickupLocationInput(location.fullAddress)
+      setPickupLocation(location.fullAddress)
+      if (location.coordinates) {
+        setPickupCoordinates({
+          latitude: location.coordinates.latitude,
+          longitude: location.coordinates.longitude,
+        })
+      }
+      // Auto-advance to next field
+      setFieldNameShow('dropoffLocation')
+    } else {
+      setPickupLocationInput('')
+      setPickupLocation('')
+      setPickupCoordinates(null)
+    }
+  }
+
+  const handleDropoffChange = (location: LocationSuggestion | null) => {
+    if (location) {
+      setDropoffLocationInput(location.fullAddress)
+      setDropoffLocation(location.fullAddress)
+      if (location.coordinates) {
+        setDropoffCoordinates({
+          latitude: location.coordinates.latitude,
+          longitude: location.coordinates.longitude,
+        })
+      }
+      // Auto-advance to next field
+      setFieldNameShow('moveType')
+    } else {
+      setDropoffLocationInput('')
+      setDropoffLocation('')
+      setDropoffCoordinates(null)
+    }
+  }
+
+  const handleMoveTypeChange = (value: MoveTypeKey | null) => {
+    setMoveType(value)
+    if (value) {
+      setContextMoveType(value)
+    }
+  }
 
   const handleFormSubmit = (formData: FormData) => {
-    const formDataEntries = Object.fromEntries(formData.entries())
-    console.log('Form submitted', formDataEntries)
+    const pickup = pickupLocationInput || (formData.get('pickupLocation') as string) || ''
+    const dropoff = dropoffLocationInput || (formData.get('dropoffLocation') as string) || ''
+    const mt = moveType || (formData.get('moveType') as string) || ''
 
-    const pickup = (formDataEntries['pickupLocation'] || '') as string
-    const dropoff = (formDataEntries['dropoffLocation'] || '') as string
-    const type = (formDataEntries['moveType'] || '') as string
+    // Ensure context is up to date
+    if (mt) setContextMoveType(mt as MoveTypeKey)
 
     let url = '/move-choice'
     const params = new URLSearchParams()
     if (pickup) params.set('pickup', pickup)
     if (dropoff) params.set('dropoff', dropoff)
-    if (type) params.set('moveType', type)
+    if (mt) params.set('moveType', mt)
     const qs = params.toString()
     if (qs) url = url + `?${qs}`
     router.push(url)
@@ -54,10 +130,7 @@ const StaySearchFormMobile = () => {
           defaultValue={pickupLocationInput}
           headingText="Where are you moving from?"
           imputName="pickupLocation"
-          onChange={(value) => {
-            setPickupLocationInput(value)
-            setFieldNameShow('dropoffLocation')
-          }}
+          onChange={handlePickupChange}
         />
       </FieldPanelContainer>
 
@@ -72,10 +145,7 @@ const StaySearchFormMobile = () => {
           defaultValue={dropoffLocationInput}
           headingText="Where are you moving to?"
           imputName="dropoffLocation"
-          onChange={(value) => {
-            setDropoffLocationInput(value)
-            setFieldNameShow('moveType')
-          }}
+          onChange={handleDropoffChange}
         />
       </FieldPanelContainer>
 
@@ -88,9 +158,7 @@ const StaySearchFormMobile = () => {
       >
         <MoveTypeInput
           defaultValue={moveType}
-          onChange={(value) => {
-            setMoveType(value)
-          }}
+          onChange={handleMoveTypeChange}
         />
       </FieldPanelContainer>
     </Form>

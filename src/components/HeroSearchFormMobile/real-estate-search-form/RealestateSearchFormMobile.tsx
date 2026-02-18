@@ -76,7 +76,7 @@ const RealestateSearchFormMobile = () => {
           headingText={T['HeroSearchForm']['Where to find?']}
           defaultValue={locationInputTo}
           onChange={(value) => {
-            setLocationInputTo(value)
+            setLocationInputTo(value?.fullAddress || '')
             setFieldNameShow('propertyType')
           }}
         />

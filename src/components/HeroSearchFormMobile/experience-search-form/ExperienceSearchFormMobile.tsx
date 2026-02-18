@@ -61,7 +61,7 @@ const ExperienceSearchFormMobile = () => {
         <LocationInput
           defaultValue={locationInputTo}
           onChange={(value) => {
-            setLocationInputTo(value)
+            setLocationInputTo(value?.fullAddress || '')
             setFieldNameShow('dates')
           }}
         />

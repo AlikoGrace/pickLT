@@ -3,6 +3,7 @@
 import { ButtonCircle } from '@/shared/Button'
 import ButtonPrimary from '@/shared/ButtonPrimary'
 import ButtonThird from '@/shared/ButtonThird'
+import { useMoveSearch } from '@/context/moveSearch'
 import T from '@/utils/getT'
 import { CloseButton, Dialog, DialogPanel } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/solid'
@@ -17,8 +18,24 @@ import { useState } from 'react'
 import { useTimeoutFn } from 'react-use'
 import StaySearchFormMobile from './stay-search-form/StaySearchFormMobile'
 
+const MOVE_TYPE_LABELS: Record<string, string> = {
+  light: 'Light',
+  regular: 'Regular',
+  premium: 'Premium',
+}
+
 const HeroSearchFormMobile = ({ className }: { className?: string }) => {
   const [showModal, setShowModal] = useState(false)
+  const {
+    pickupLocation,
+    dropoffLocation,
+    moveType,
+    setPickupLocation,
+    setDropoffLocation,
+    setPickupCoordinates,
+    setDropoffCoordinates,
+    setMoveType,
+  } = useMoveSearch()
 
   // FOR RESET ALL DATA WHEN CLICK CLEAR BUTTON
   const [showDialog, setShowDialog] = useState(false)
@@ -32,6 +49,35 @@ const HeroSearchFormMobile = ({ className }: { className?: string }) => {
     setShowModal(true)
   }
 
+  // Truncate location to just city name for button display
+  const getShortLocation = (location: string) => {
+    if (!location) return ''
+    const parts = location.split(',')
+    return parts[0].trim()
+  }
+
+  // Build summary text from context
+  const getSummaryText = () => {
+    const parts: string[] = []
+    if (pickupLocation) parts.push(getShortLocation(pickupLocation))
+    else parts.push('From')
+    if (dropoffLocation) parts.push(getShortLocation(dropoffLocation))
+    else parts.push('To')
+    if (moveType) parts.push(MOVE_TYPE_LABELS[moveType] || 'Move type')
+    else parts.push('Move type')
+    return parts.join(' • ')
+  }
+
+  const handleClearAll = () => {
+    setPickupLocation('')
+    setDropoffLocation('')
+    setPickupCoordinates(null)
+    setDropoffCoordinates(null)
+    setMoveType(null)
+    setShowDialog(false)
+    resetIsShowingDialog()
+  }
+
   const renderButtonOpenModal = () => {
     return (
       <button
@@ -43,7 +89,7 @@ const HeroSearchFormMobile = ({ className }: { className?: string }) => {
         <div className="ms-3 flex-1 overflow-hidden text-start">
           <span className="block text-sm font-medium">Plan your move</span>
           <span className="mt-0.5 block text-xs font-light text-neutral-500 dark:text-neutral-400">
-            <span className="line-clamp-1">From • To • Move type</span>
+            <span className="line-clamp-1">{getSummaryText()}</span>
           </span>
         </div>
 
@@ -87,12 +133,7 @@ const HeroSearchFormMobile = ({ className }: { className?: string }) => {
                   </div>
 
                   <div className="flex justify-between border-t border-neutral-200 bg-white px-4 py-3 dark:border-neutral-700 dark:bg-neutral-900">
-                    <ButtonThird
-                      onClick={() => {
-                        setShowDialog(false)
-                        resetIsShowingDialog()
-                      }}
-                    >
+                    <ButtonThird onClick={handleClearAll}>
                       {T['HeroSearchForm']['Clear all']}
                     </ButtonThird>
                     <ButtonPrimary type="submit" form="form-hero-search-form-mobile">

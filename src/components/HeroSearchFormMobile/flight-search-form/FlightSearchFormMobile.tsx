@@ -69,7 +69,7 @@ const FlightSearchFormMobile = () => {
           imputName="locationPickup"
           defaultValue={locationInputPickUp}
           onChange={(value) => {
-            setLocationInputPickUp(value)
+            setLocationInputPickUp(value?.fullAddress || '')
             setFieldNameShow('dates')
           }}
         />
@@ -90,7 +90,7 @@ const FlightSearchFormMobile = () => {
           imputName="locationDropOff"
           defaultValue={locationInputDropOff}
           onChange={(value) => {
-            setLocationInputDropOff(value)
+            setLocationInputDropOff(value?.fullAddress || '')
             setFieldNameShow('dates')
           }}
         />

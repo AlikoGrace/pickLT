@@ -9,6 +9,7 @@ import {
   TruckIcon,
   UsersIcon,
   CurrencyEuroIcon,
+  ClipboardDocumentListIcon,
 } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 import Link from 'next/link'
@@ -18,12 +19,17 @@ import { useIntersection } from 'react-use'
 import { useAside } from './aside'
 import { useAuth } from '@/context/auth'
 
-// Client navigation items
+// Client navigation items — matches the client-side pages
 const CLIENT_NAV = [
   {
-    name: 'Explore',
+    name: 'Home',
     link: '/',
-    icon: MagnifyingGlassIcon,
+    icon: HomeIcon,
+  },
+  {
+    name: 'My Moves',
+    link: '/move-preview',
+    icon: ClipboardDocumentListIcon,
   },
   {
     name: 'Wishlists',
@@ -32,7 +38,7 @@ const CLIENT_NAV = [
   },
   {
     name: 'Account',
-    link: '/authors/john-doe',
+    link: '/account',
     icon: UserCircleIcon,
   },
   {

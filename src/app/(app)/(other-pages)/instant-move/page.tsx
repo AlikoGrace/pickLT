@@ -435,14 +435,14 @@ const InstantMovePage = () => {
       </div>
 
       {/* Top Bar - Location Summary & Close Button */}
-      <div className="absolute top-0 left-0 right-0 z-10 p-4 pt-safe">
+      <div className="absolute top-0 left-0 right-0 z-10 p-4 pt-safe pointer-events-none">
         <div className="mx-auto max-w-lg flex items-start gap-3">
-          <div className="flex-1">
+          <div className="flex-1 pointer-events-auto">
             {renderLocationSummary()}
           </div>
           <button
             onClick={handleCancel}
-            className="p-2.5 bg-white/95 dark:bg-neutral-800/95 backdrop-blur-sm hover:bg-white dark:hover:bg-neutral-800 rounded-full shadow-lg border border-neutral-200 dark:border-neutral-700 transition"
+            className="pointer-events-auto p-2.5 bg-white/95 dark:bg-neutral-800/95 backdrop-blur-sm hover:bg-white dark:hover:bg-neutral-800 rounded-full shadow-lg border border-neutral-200 dark:border-neutral-700 transition"
           >
             <HugeiconsIcon
               icon={Cancel01Icon}
@@ -455,8 +455,8 @@ const InstantMovePage = () => {
       </div>
 
       {/* Bottom Panel - Mover Card & Actions */}
-      <div className="absolute bottom-0 left-0 right-0 z-10 p-4 pb-safe">
-        <div className="mx-auto max-w-lg space-y-3">
+      <div className="absolute bottom-0 left-0 right-0 z-10 p-4 pb-safe pointer-events-none">
+        <div className="mx-auto max-w-lg space-y-3 pointer-events-auto">
           {renderMoverCard()}
           
           {/* Action Button */}
