@@ -1,35 +1,98 @@
-import { Client, Users } from 'node-appwrite';
+import { Client, Databases, ID, Query } from 'node-appwrite';
 
-// This Appwrite function will be executed every time your function is triggered
+const DATABASE_ID = '6990885c000627570048';
+const REVIEWS_COLLECTION = '69920b03000c5440c29e';
+const MOVER_PROFILES_COLLECTION = '6991dd5b0022477fb75f';
+const NOTIFICATIONS_COLLECTION = '69950bed001ecf9203b3';
+
 export default async ({ req, res, log, error }) => {
-  // You can use the Appwrite SDK to interact with other services
-  // For this example, we're using the Users service
   const client = new Client()
     .setEndpoint(process.env.APPWRITE_FUNCTION_API_ENDPOINT)
     .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID)
     .setKey(req.headers['x-appwrite-key'] ?? '');
-  const users = new Users(client);
+  const databases = new Databases(client);
+
+  if (req.method !== 'POST') {
+    return res.json({ error: 'Method not allowed' }, 405);
+  }
 
   try {
-    const response = await users.list();
-    // Log messages and errors to the Appwrite Console
-    // These logs won't be seen by your end users
-    log(`Total users: ${response.total}`);
-  } catch(err) {
-    error("Could not list users: " + err.message);
-  }
+    const body = JSON.parse(req.body || '{}');
+    const { moveId, reviewerId, moverProfileId, rating, comment } = body;
 
-  // The req object contains the request data
-  if (req.path === "/ping") {
-    // Use res object to respond with text(), json(), or binary()
-    // Don't forget to return a response!
-    return res.text("Pong");
-  }
+    if (!moveId || !reviewerId || !moverProfileId || !rating) {
+      return res.json({ error: 'moveId, reviewerId, moverProfileId, and rating are required' }, 400);
+    }
 
-  return res.json({
-    motto: "Build like a team of hundreds_",
-    learn: "https://appwrite.io/docs",
-    connect: "https://appwrite.io/discord",
-    getInspired: "https://builtwith.appwrite.io",
-  });
+    if (rating < 1 || rating > 5) {
+      return res.json({ error: 'Rating must be between 1 and 5' }, 400);
+    }
+
+    // Check if review already exists for this move
+    const existing = await databases.listDocuments(
+      DATABASE_ID,
+      REVIEWS_COLLECTION,
+      [Query.equal('moveId', moveId), Query.equal('reviewerId', reviewerId)]
+    );
+
+    if (existing.documents.length > 0) {
+      return res.json({ error: 'You have already reviewed this move' }, 400);
+    }
+
+    // Create review
+    const review = await databases.createDocument(
+      DATABASE_ID,
+      REVIEWS_COLLECTION,
+      ID.unique(),
+      {
+        moveId,
+        reviewerId,
+        moverProfileId,
+        rating,
+        comment: comment || null,
+      }
+    );
+
+    // Recalculate mover's average rating
+    const allReviews = await databases.listDocuments(
+      DATABASE_ID,
+      REVIEWS_COLLECTION,
+      [Query.equal('moverProfileId', moverProfileId), Query.limit(1000)]
+    );
+
+    const totalRating = allReviews.documents.reduce((sum, r) => sum + (r.rating || 0), 0);
+    const avgRating = Math.round((totalRating / allReviews.documents.length) * 10) / 10;
+
+    await databases.updateDocument(
+      DATABASE_ID,
+      MOVER_PROFILES_COLLECTION,
+      moverProfileId,
+      { rating: avgRating }
+    );
+
+    // Notify mover
+    const moverProfile = await databases.getDocument(DATABASE_ID, MOVER_PROFILES_COLLECTION, moverProfileId);
+    const moverUserId = typeof moverProfile.userId === 'string' ? moverProfile.userId : moverProfile.userId.$id;
+
+    await databases.createDocument(
+      DATABASE_ID,
+      NOTIFICATIONS_COLLECTION,
+      ID.unique(),
+      {
+        userId: moverUserId,
+        type: 'review',
+        title: 'New Review',
+        body: `You received a ${rating}-star review${comment ? `: "${comment.substring(0, 100)}"` : '.'}`,
+        data: JSON.stringify({ reviewId: review.$id, moveId, rating }),
+        isRead: false,
+      }
+    );
+
+    log(`Review submitted for mover ${moverProfileId}: ${rating} stars`);
+
+    return res.json({ success: true, review, newAverageRating: avgRating });
+  } catch (err) {
+    error(`Submit review failed: ${err.message}`);
+    return res.json({ error: err.message }, 500);
+  }
 };

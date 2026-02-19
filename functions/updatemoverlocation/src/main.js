@@ -1,35 +1,60 @@
-import { Client, Users } from 'node-appwrite';
+import { Client, Databases, ID } from 'node-appwrite';
 
-// This Appwrite function will be executed every time your function is triggered
+const DATABASE_ID = '6990885c000627570048';
+const MOVER_PROFILES_COLLECTION = '6991dd5b0022477fb75f';
+const MOVER_LOCATIONS_COLLECTION = '6991f733000aa69982ba';
+
 export default async ({ req, res, log, error }) => {
-  // You can use the Appwrite SDK to interact with other services
-  // For this example, we're using the Users service
   const client = new Client()
     .setEndpoint(process.env.APPWRITE_FUNCTION_API_ENDPOINT)
     .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID)
     .setKey(req.headers['x-appwrite-key'] ?? '');
-  const users = new Users(client);
+  const databases = new Databases(client);
+
+  if (req.method !== 'POST') {
+    return res.json({ error: 'Method not allowed' }, 405);
+  }
 
   try {
-    const response = await users.list();
-    // Log messages and errors to the Appwrite Console
-    // These logs won't be seen by your end users
-    log(`Total users: ${response.total}`);
-  } catch(err) {
-    error("Could not list users: " + err.message);
-  }
+    const body = JSON.parse(req.body || '{}');
+    const { moverProfileId, moveId, latitude, longitude, heading, speed } = body;
 
-  // The req object contains the request data
-  if (req.path === "/ping") {
-    // Use res object to respond with text(), json(), or binary()
-    // Don't forget to return a response!
-    return res.text("Pong");
-  }
+    if (!moverProfileId || !latitude || !longitude) {
+      return res.json({ error: 'moverProfileId, latitude, and longitude are required' }, 400);
+    }
 
-  return res.json({
-    motto: "Build like a team of hundreds_",
-    learn: "https://appwrite.io/docs",
-    connect: "https://appwrite.io/discord",
-    getInspired: "https://builtwith.appwrite.io",
-  });
+    const now = new Date().toISOString();
+
+    // Write location record (Appwrite Realtime will broadcast this)
+    await databases.createDocument(
+      DATABASE_ID,
+      MOVER_LOCATIONS_COLLECTION,
+      ID.unique(),
+      {
+        moverProfileId,
+        moveId: moveId || null,
+        latitude,
+        longitude,
+        heading: heading || null,
+        speed: speed || null,
+        timestamp: now,
+      }
+    );
+
+    // Update mover's current position on their profile
+    await databases.updateDocument(
+      DATABASE_ID,
+      MOVER_PROFILES_COLLECTION,
+      moverProfileId,
+      {
+        currentLatitude: latitude,
+        currentLongitude: longitude,
+      }
+    );
+
+    return res.json({ success: true });
+  } catch (err) {
+    error(`Update mover location failed: ${err.message}`);
+    return res.json({ error: err.message }, 500);
+  }
 };
