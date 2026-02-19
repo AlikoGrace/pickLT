@@ -1,9 +1,9 @@
 import { Client, Databases, ID, Query } from 'node-appwrite';
 
-const DATABASE_ID = '6990885c000627570048';
-const REVIEWS_COLLECTION = '69920b03000c5440c29e';
-const MOVER_PROFILES_COLLECTION = '6991dd5b0022477fb75f';
-const NOTIFICATIONS_COLLECTION = '69950bed001ecf9203b3';
+const DATABASE_ID = process.env.APPWRITE_DATABASE_ID;
+const REVIEWS_COLLECTION = process.env.APPWRITE_COLLECTION_REVIEWS;
+const MOVER_PROFILES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVER_PROFILES;
+const NOTIFICATIONS_COLLECTION = process.env.APPWRITE_COLLECTION_NOTIFICATIONS;
 
 export default async ({ req, res, log, error }) => {
   const client = new Client()

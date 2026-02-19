@@ -1,8 +1,8 @@
 import { Client, Databases, ID } from 'node-appwrite';
 
-const DATABASE_ID = '6990885c000627570048';
-const MOVER_PROFILES_COLLECTION = '6991dd5b0022477fb75f';
-const MOVER_LOCATIONS_COLLECTION = '6991f733000aa69982ba';
+const DATABASE_ID = process.env.APPWRITE_DATABASE_ID;
+const MOVER_PROFILES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVER_PROFILES;
+const MOVER_LOCATIONS_COLLECTION = process.env.APPWRITE_COLLECTION_MOVER_LOCATIONS;
 
 export default async ({ req, res, log, error }) => {
   const client = new Client()

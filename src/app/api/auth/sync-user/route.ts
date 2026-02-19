@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
 
     const { databases } = createAdminClient()
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line
     let userDoc: any
     let isNew = false
 

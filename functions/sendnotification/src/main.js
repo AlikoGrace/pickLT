@@ -1,7 +1,7 @@
 import { Client, Databases, ID } from 'node-appwrite';
 
-const DATABASE_ID = '6990885c000627570048';
-const NOTIFICATIONS_COLLECTION = '69950bed001ecf9203b3';
+const DATABASE_ID = process.env.APPWRITE_DATABASE_ID;
+const NOTIFICATIONS_COLLECTION = process.env.APPWRITE_COLLECTION_NOTIFICATIONS;
 
 export default async ({ req, res, log, error }) => {
   const client = new Client()

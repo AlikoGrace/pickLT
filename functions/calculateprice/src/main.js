@@ -1,8 +1,8 @@
 import { Client, Databases, Query } from 'node-appwrite';
 
-const DATABASE_ID = '6990885c000627570048';
-const MOVES_COLLECTION = '6991e46d001ab2a9f7d8';
-const INVENTORY_CATALOG_COLLECTION = '699511da003b87d1039d';
+const DATABASE_ID = process.env.APPWRITE_DATABASE_ID;
+const MOVES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVES;
+const INVENTORY_CATALOG_COLLECTION = process.env.APPWRITE_COLLECTION_INVENTORY_CATALOG;
 
 // Pricing constants
 const BASE_RATE_PER_KM = 1.50; // EUR per km
