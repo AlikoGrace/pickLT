@@ -1,6 +1,7 @@
 'use client'
 
 import { useMoveSearch } from '@/context/moveSearch'
+import { AuthGate } from '@/components/AuthGate'
 import Logo from '@/shared/Logo'
 import ButtonSecondary from '@/shared/ButtonSecondary'
 import {
@@ -247,9 +248,11 @@ const MoveChoiceContent = () => {
 
 const MoveChoicePage = () => {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
-      <MoveChoiceContent />
-    </Suspense>
+    <AuthGate redirectBack="/move-choice">
+      <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+        <MoveChoiceContent />
+      </Suspense>
+    </AuthGate>
   )
 }
 

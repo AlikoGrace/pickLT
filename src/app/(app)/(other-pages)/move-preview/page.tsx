@@ -1,5 +1,6 @@
 'use client'
 
+import { AuthGate } from '@/components/AuthGate'
 import { Calendar01Icon, UserSharingIcon } from '@/components/Icons'
 import { useMoveSearch } from '@/context/moveSearch'
 import ButtonPrimary from '@/shared/ButtonPrimary'
@@ -571,4 +572,10 @@ const Page = () => {
   )
 }
 
-export default Page
+const MovePreviewPage = () => (
+  <AuthGate redirectBack="/move-preview">
+    <Page />
+  </AuthGate>
+)
+
+export default MovePreviewPage

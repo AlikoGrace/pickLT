@@ -1,5 +1,6 @@
 'use client'
 
+import { AuthGate } from '@/components/AuthGate'
 import ButtonPrimary from '@/shared/ButtonPrimary'
 import ButtonSecondary from '@/shared/ButtonSecondary'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
@@ -7,6 +8,8 @@ import { usePathname } from 'next/navigation'
 import React from 'react'
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
+  const pathname = usePathname()
+
   React.useEffect(() => {
     document.documentElement.scrollTo({
       top: 0,
@@ -15,11 +18,13 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   }, [])
 
   return (
-    <div className="mx-auto max-w-3xl px-4 pt-10 pb-24 sm:pt-16 lg:pb-32">
-      <PageHeading />
-      <div className="mt-8 listingSection__wrap">{children}</div>
-      <Pagination />
-    </div>
+    <AuthGate redirectBack={pathname || '/add-listing/1'}>
+      <div className="mx-auto max-w-3xl px-4 pt-10 pb-24 sm:pt-16 lg:pb-32">
+        <PageHeading />
+        <div className="mt-8 listingSection__wrap">{children}</div>
+        <Pagination />
+      </div>
+    </AuthGate>
   )
 }
 

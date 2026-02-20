@@ -2,6 +2,7 @@
 
 import MapboxMap, { RouteInfo } from '@/components/MapboxMap'
 import { useMoveSearch, Coordinates } from '@/context/moveSearch'
+import { useMoverTracking } from '@/hooks/useMoverTracking'
 import ButtonPrimary from '@/shared/ButtonPrimary'
 import ButtonSecondary from '@/shared/ButtonSecondary'
 import Logo from '@/shared/Logo'
@@ -143,14 +144,45 @@ const InstantMovePage = () => {
     }
   }, [pickupCoordinates, moverCoords])
 
+  // ─── Real-time GPS Tracking via Appwrite Realtime ────────
+  const { lastLocation, isConnected: isTrackingConnected } = useMoverTracking({
+    moverProfileId: selectedMover?.id || null,
+    enabled: phase === 'mover_arriving' || phase === 'in_transit',
+    onLocationUpdate: useCallback((location: { latitude: number; longitude: number }) => {
+      // Update mover coordinates from real-time data
+      setMoverCoords({
+        latitude: location.latitude,
+        longitude: location.longitude,
+      })
+    }, []),
+  })
+
+  // Update ETA when real-time location changes
+  useEffect(() => {
+    if (lastLocation && pickupCoordinates && phase === 'mover_arriving') {
+      // Calculate approximate distance from mover to pickup
+      const dLat = pickupCoordinates.latitude - lastLocation.latitude
+      const dLng = pickupCoordinates.longitude - lastLocation.longitude
+      const approxKm = Math.sqrt(dLat * dLat + dLng * dLng) * 111 // rough km
+      setMoverDistanceKm(Math.max(0, approxKm))
+      // Estimate ETA: ~3 min per km in city
+      setMoverEtaMinutes(Math.max(1, Math.round(approxKm * 3)))
+
+      // If very close, mark as arrived
+      if (approxKm < 0.05) {
+        setPhase('mover_arrived')
+      }
+    }
+  }, [lastLocation, pickupCoordinates, phase])
+
   // Handle route calculation callback
   const handleRouteCalculated = useCallback((info: RouteInfo) => {
     setRouteInfo(info)
   }, [])
 
-  // Simulate mover approaching pickup
+  // Fallback: Simulate mover approaching pickup (only when real-time not connected)
   useEffect(() => {
-    if (phase === 'mover_arriving' && pickupCoordinates && moverCoords) {
+    if (phase === 'mover_arriving' && pickupCoordinates && moverCoords && !isTrackingConnected) {
       const interval = setInterval(() => {
         setMoverEtaMinutes((prev) => {
           if (prev <= 1) {
@@ -173,7 +205,7 @@ const InstantMovePage = () => {
       }, 3000)
       return () => clearInterval(interval)
     }
-  }, [phase, pickupCoordinates, moverCoords])
+  }, [phase, pickupCoordinates, moverCoords, isTrackingConnected])
 
   // Set mover at pickup when arrived
   useEffect(() => {

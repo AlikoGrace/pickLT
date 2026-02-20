@@ -1,5 +1,6 @@
 'use client'
 
+import { AuthGate } from '@/components/AuthGate'
 import { useMoveSearch, StoredMove } from '@/context/moveSearch'
 import { Badge } from '@/shared/Badge'
 import ButtonPrimary from '@/shared/ButtonPrimary'
@@ -275,9 +276,11 @@ const PayDoneContent = () => {
 
 const Page = () => {
   return (
-    <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh]">Loading...</div>}>
-      <PayDoneContent />
-    </Suspense>
+    <AuthGate redirectBack="/pay-done">
+      <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh]">Loading...</div>}>
+        <PayDoneContent />
+      </Suspense>
+    </AuthGate>
   )
 }
 

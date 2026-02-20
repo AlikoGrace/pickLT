@@ -1,6 +1,6 @@
 "use client"
 
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext, useState, useEffect } from 'react'
 
 export type MoveTypeKey = 'light' | 'regular' | 'premium'
 export type HomeTypeKey = 'apartment' | 'house' | 'office' | 'storage'
@@ -533,6 +533,54 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
 
   // Stored moves state
   const [storedMoves, setStoredMoves] = useState<StoredMove[]>(defaultState.storedMoves)
+
+  // ─── Restore saved state from sessionStorage after auth redirect ───
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem('picklt_move_state')
+      if (!raw) return
+      const saved = JSON.parse(raw) as Record<string, unknown>
+
+      // Restore all saved fields
+      if (saved.pickupLocation) setPickupLocation(saved.pickupLocation as string)
+      if (saved.dropoffLocation) setDropoffLocation(saved.dropoffLocation as string)
+      if (saved.pickupCoordinates) setPickupCoordinates(saved.pickupCoordinates as Coordinates)
+      if (saved.dropoffCoordinates) setDropoffCoordinates(saved.dropoffCoordinates as Coordinates)
+      if (saved.moveDate) setMoveDate(saved.moveDate as string)
+      if (saved.moveType) setMoveType(saved.moveType as MoveTypeKey)
+      if (saved.isInstantMove != null) setIsInstantMove(saved.isInstantMove as boolean)
+      if (saved.homeType) setHomeType(saved.homeType as HomeTypeKey)
+      if (saved.floorLevel) setFloorLevel(saved.floorLevel as FloorLevelKey)
+      if (saved.elevatorAvailable != null) setElevatorAvailable(saved.elevatorAvailable as boolean)
+      if (saved.parkingSituation) setParkingSituation(saved.parkingSituation as ParkingKey)
+      if (saved.pickupStreetAddress) setPickupStreetAddress(saved.pickupStreetAddress as string)
+      if (saved.pickupApartmentUnit) setPickupApartmentUnit(saved.pickupApartmentUnit as string)
+      if (saved.dropoffStreetAddress) setDropoffStreetAddress(saved.dropoffStreetAddress as string)
+      if (saved.dropoffApartmentUnit) setDropoffApartmentUnit(saved.dropoffApartmentUnit as string)
+      if (saved.dropoffFloorLevel) setDropoffFloorLevel(saved.dropoffFloorLevel as FloorLevelKey)
+      if (saved.dropoffElevatorAvailable != null) setDropoffElevatorAvailable(saved.dropoffElevatorAvailable as boolean)
+      if (saved.dropoffParkingSituation) setDropoffParkingSituation(saved.dropoffParkingSituation as DropoffParkingKey)
+      if (saved.inventory) setInventory(saved.inventory as Record<string, number>)
+      if (saved.customItems) setCustomItems(saved.customItems as CustomItem[])
+      if (saved.packingServiceLevel) setPackingServiceLevel(saved.packingServiceLevel as PackingServiceLevel)
+      if (saved.packingMaterials) setPackingMaterials(saved.packingMaterials as PackingMaterial[])
+      if (saved.arrivalWindow) setArrivalWindow(saved.arrivalWindow as ArrivalWindow)
+      if (saved.crewSize) setCrewSize(saved.crewSize as CrewSize)
+      if (saved.vehicleType) setVehicleType(saved.vehicleType as VehicleType)
+      if (saved.additionalServices) setAdditionalServices(saved.additionalServices as AdditionalService[])
+      if (saved.storageWeeks != null) setStorageWeeks(saved.storageWeeks as number)
+      if (saved.coverPhoto) setCoverPhoto(saved.coverPhoto as string)
+      if (saved.galleryPhotos) setGalleryPhotos(saved.galleryPhotos as string[])
+      if (saved.contactInfo) setContactInfo(saved.contactInfo as ContactInfo)
+
+      // Clear saved state after restore
+      sessionStorage.removeItem('picklt_move_state')
+      sessionStorage.removeItem('picklt_auth_redirect')
+    } catch {
+      // Ignore errors during restore
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const setInventoryItem = (itemId: string, quantity: number) => {
     setInventory((prev) => ({ ...prev, [itemId]: quantity }))

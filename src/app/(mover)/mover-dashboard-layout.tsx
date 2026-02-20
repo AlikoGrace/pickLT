@@ -1,6 +1,7 @@
 'use client'
 
 import { useAuth } from '@/context/auth'
+import MoveRequestPopup from '@/components/MoveRequestPopup'
 import Logo from '@/shared/Logo'
 import {
   Bars3Icon,
@@ -92,6 +93,9 @@ const MoverDashboardLayout = ({ children }: Props) => {
 
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
+      {/* Real-time Move Request Popup */}
+      <MoveRequestPopup moverProfileId={user?.moverDetails?.profileId || null} />
+
       {/* Desktop Sidebar */}
       <aside className="fixed left-0 top-0 z-40 hidden h-screen w-64 border-r border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800 lg:block">
         <div className="flex h-full flex-col">

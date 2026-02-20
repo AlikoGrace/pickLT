@@ -1,7 +1,8 @@
 'use client'
 
 import NcInputNumber from '@/components/NcInputNumber'
-import { useMoveSearch, type CustomItem } from '@/context/moveSearch'
+import { useMoveSearch, type CustomItem, type MoveTypeKey } from '@/context/moveSearch'
+import { classifyMove, DEFAULT_CLASSIFICATION_POINTS, type InventoryItemDef as ClassifyItemDef, type CustomItemInput } from '@/lib/classifyMove'
 import ButtonPrimary from '@/shared/ButtonPrimary'
 import ButtonSecondary from '@/shared/ButtonSecondary'
 import { Divider } from '@/shared/divider'
@@ -11,13 +12,15 @@ import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/re
 import {
   Add01Icon,
   ArrowLeft02Icon,
+  ArrowUp01Icon,
   Cancel01Icon,
+  AlertCircleIcon,
   DeliveryTruck01Icon,
   Location01Icon,
 } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 // Inventory item definitions with internal metadata for move estimation
 type InventoryItemDef = {
@@ -112,17 +115,67 @@ const InstantMoveInventoryPage = () => {
   const {
     pickupLocation,
     dropoffLocation,
+    moveType,
     inventory,
     customItems,
     setInventoryItem,
+    setMoveType,
     addCustomItem,
     removeCustomItem,
   } = useMoveSearch()
+
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false)
 
   // Prefetch the next step
   useEffect(() => {
     router.prefetch('/instant-move')
   }, [router])
+
+  // ─── Build classification catalog from INVENTORY_ITEMS ───
+  const itemCatalog: ClassifyItemDef[] = useMemo(() => {
+    return INVENTORY_ITEMS.map((item) => ({
+      id: item.id,
+      name: item.name,
+      category: item.category,
+      meta: item.meta,
+      classificationPoints: DEFAULT_CLASSIFICATION_POINTS[item.id] ?? 3,
+      moveTypeMinimum: (item.category === 'special' ? 'premium' : 'light') as 'light' | 'regular' | 'premium',
+    }))
+  }, [])
+
+  // ─── Real-time move classification ───
+  const classification = useMemo(() => {
+    const customItemInputs: CustomItemInput[] = customItems.map((ci) => ({
+      id: ci.id,
+      name: ci.name,
+      quantity: ci.quantity,
+      estimatedWeightKg: ci.approxWeight ? parseFloat(ci.approxWeight) || 20 : 20,
+    }))
+    return classifyMove(
+      inventory,
+      customItemInputs,
+      (moveType as 'light' | 'regular' | 'premium') || 'light',
+      itemCatalog
+    )
+  }, [inventory, customItems, moveType, itemCatalog])
+
+  // ─── Show upgrade modal when classification requires upgrade ───
+  useEffect(() => {
+    if (classification.requiresUpgrade && classification.upgradeTo) {
+      setShowUpgradeModal(true)
+    }
+  }, [classification.requiresUpgrade, classification.upgradeTo])
+
+  const handleAcceptUpgrade = () => {
+    if (classification.upgradeTo) {
+      setMoveType(classification.upgradeTo as MoveTypeKey)
+    }
+    setShowUpgradeModal(false)
+  }
+
+  const handleDismissUpgrade = () => {
+    setShowUpgradeModal(false)
+  }
 
   const handleAddCustomItem = () => {
     if (!customItemForm.name.trim()) return
@@ -225,6 +278,86 @@ const InstantMoveInventoryPage = () => {
             )}
           </div>
         </div>
+
+        {/* ─── Classification Bar ─── */}
+        {totalItems > 0 && (
+          <div className="rounded-2xl border border-neutral-200 bg-white p-4 dark:border-neutral-700 dark:bg-neutral-800 mb-4">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+                Move classification
+              </span>
+              <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                classification.recommendedType === 'premium'
+                  ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300'
+                  : classification.recommendedType === 'regular'
+                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
+                  : 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
+              }`}>
+                {classification.recommendedType === 'premium' ? 'Premium' : classification.recommendedType === 'regular' ? 'Regular' : 'Light'} Move
+              </span>
+            </div>
+            <div className="grid grid-cols-3 gap-3 text-center">
+              <div>
+                <p className="text-lg font-bold text-neutral-900 dark:text-white">{classification.totalItems}</p>
+                <p className="text-xs text-neutral-500">Items</p>
+              </div>
+              <div>
+                <p className="text-lg font-bold text-neutral-900 dark:text-white">{classification.totalWeightKg.toFixed(0)} kg</p>
+                <p className="text-xs text-neutral-500">Est. weight</p>
+              </div>
+              <div>
+                <p className="text-lg font-bold text-neutral-900 dark:text-white">{classification.totalPoints}</p>
+                <p className="text-xs text-neutral-500">Points</p>
+              </div>
+            </div>
+            {/* Progress bar */}
+            <div className="mt-3">
+              <div className="flex items-center justify-between text-xs text-neutral-500 mb-1">
+                <span>Light</span>
+                <span>Regular</span>
+                <span>Premium</span>
+              </div>
+              <div className="h-2 w-full rounded-full bg-neutral-100 dark:bg-neutral-700 overflow-hidden">
+                <div
+                  className={`h-full rounded-full transition-all duration-300 ${
+                    classification.recommendedType === 'premium'
+                      ? 'bg-purple-500'
+                      : classification.recommendedType === 'regular'
+                      ? 'bg-blue-500'
+                      : 'bg-green-500'
+                  }`}
+                  style={{ width: `${Math.min(100, (classification.totalPoints / 80) * 100)}%` }}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ─── Classification Warnings ─── */}
+        {classification.warnings.length > 0 && (
+          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-900/20 mb-4">
+            <div className="flex items-start gap-3">
+              <HugeiconsIcon
+                icon={AlertCircleIcon}
+                size={20}
+                strokeWidth={1.5}
+                className="text-amber-600 dark:text-amber-400 shrink-0 mt-0.5"
+              />
+              <div>
+                <p className="text-sm font-medium text-amber-800 dark:text-amber-200 mb-1">
+                  Move classification notice
+                </p>
+                <ul className="space-y-1">
+                  {classification.warnings.map((warning, i) => (
+                    <li key={i} className="text-sm text-amber-700 dark:text-amber-300">
+                      • {warning}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Category Tabs */}
         <div className="flex flex-wrap gap-2 mb-6">
@@ -427,6 +560,53 @@ const InstantMoveInventoryPage = () => {
               >
                 Add Item
               </button>
+            </div>
+          </DialogPanel>
+        </div>
+      </Dialog>
+
+      {/* ─── Move Type Upgrade Modal ─── */}
+      <Dialog open={showUpgradeModal} onClose={handleDismissUpgrade} className="relative z-50">
+        <DialogBackdrop className="fixed inset-0 bg-black/30" />
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <DialogPanel className="w-full max-w-sm bg-white dark:bg-neutral-900 rounded-2xl p-6 shadow-xl">
+            <div className="text-center">
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-900/30">
+                <HugeiconsIcon
+                  icon={ArrowUp01Icon}
+                  size={28}
+                  strokeWidth={1.5}
+                  className="text-primary-600 dark:text-primary-400"
+                />
+              </div>
+              <DialogTitle className="text-lg font-semibold text-neutral-900 dark:text-white mb-2">
+                Move type upgrade recommended
+              </DialogTitle>
+              <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">
+                Based on your selected items, we recommend upgrading from{' '}
+                <span className="font-semibold">{classification.upgradeFrom}</span> to{' '}
+                <span className="font-semibold">{classification.upgradeTo}</span>.
+              </p>
+              <p className="text-xs text-neutral-500 dark:text-neutral-500 mb-6">
+                {classification.totalItems} items · ~{classification.totalWeightKg.toFixed(0)} kg · {classification.totalPoints} points
+              </p>
+            </div>
+
+            <div className="flex gap-3">
+              <ButtonSecondary
+                type="button"
+                onClick={handleDismissUpgrade}
+                className="flex-1"
+              >
+                Keep current
+              </ButtonSecondary>
+              <ButtonPrimary
+                type="button"
+                onClick={handleAcceptUpgrade}
+                className="flex-1"
+              >
+                Upgrade to {classification.upgradeTo}
+              </ButtonPrimary>
             </div>
           </DialogPanel>
         </div>

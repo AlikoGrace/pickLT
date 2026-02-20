@@ -12,6 +12,7 @@ import {
   StarIcon,
   UserMultiple02Icon,
   WeightScale01Icon,
+  Alert02Icon,
 } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import Image from 'next/image'
@@ -19,115 +20,30 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState, useMemo } from 'react'
 
-// Mover types
+// Mover types - matches API response from /api/movers/nearby
 interface Mover {
-  id: string
-  name: string
-  photo: string
-  rating: number
-  totalMoves: number
-  vehicleType: 'small_van' | 'medium_van' | 'large_van' | 'truck'
-  vehicleName: string
-  vehiclePlate: string
-  crewSize: number
-  maxWeight: number // kg
-  yearsExperience: number
-  languages: string[]
-  responseTime: number // minutes
-  baseRate: number // per km
-  isVerified: boolean
-  isFavorite?: boolean
+  $id: string
+  userId: string
+  businessName?: string
+  fullName?: string
+  profilePhotoUrl?: string
+  rating?: number
+  totalCompletedMoves?: number
+  vehicleType?: string
+  vehicleMake?: string
+  vehicleModel?: string
+  vehiclePlateNumber?: string
+  crewSize?: number
+  maxCarryWeight?: number
+  yearsExperience?: number
+  languages?: string[]
+  isVerified?: boolean
+  verificationStatus?: string
+  currentLatitude?: number
+  currentLongitude?: number
+  distanceKm?: number
+  baseRatePerKm?: number
 }
-
-// Generate dummy movers - in production, this would come from an API
-const AVAILABLE_MOVERS: Mover[] = [
-  {
-    id: 'mover-001',
-    name: 'Michael Schmidt',
-    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=faces',
-    rating: 4.9,
-    totalMoves: 1247,
-    vehicleType: 'medium_van',
-    vehicleName: 'Mercedes Sprinter',
-    vehiclePlate: 'B-MS 4721',
-    crewSize: 2,
-    maxWeight: 1200,
-    yearsExperience: 8,
-    languages: ['German', 'English'],
-    responseTime: 12,
-    baseRate: 2.20,
-    isVerified: true,
-  },
-  {
-    id: 'mover-002',
-    name: 'Thomas Weber',
-    photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=faces',
-    rating: 4.7,
-    totalMoves: 892,
-    vehicleType: 'small_van',
-    vehicleName: 'VW Transporter',
-    vehiclePlate: 'B-TW 1523',
-    crewSize: 1,
-    maxWeight: 800,
-    yearsExperience: 5,
-    languages: ['German'],
-    responseTime: 8,
-    baseRate: 1.80,
-    isVerified: true,
-  },
-  {
-    id: 'mover-003',
-    name: 'Andreas Müller',
-    photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=faces',
-    rating: 4.8,
-    totalMoves: 2156,
-    vehicleType: 'large_van',
-    vehicleName: 'MAN TGE',
-    vehiclePlate: 'B-AM 8834',
-    crewSize: 2,
-    maxWeight: 1800,
-    yearsExperience: 12,
-    languages: ['German', 'English', 'Polish'],
-    responseTime: 18,
-    baseRate: 2.80,
-    isVerified: true,
-    isFavorite: true,
-  },
-  {
-    id: 'mover-004',
-    name: 'Stefan Becker',
-    photo: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&h=200&fit=crop&crop=faces',
-    rating: 4.6,
-    totalMoves: 534,
-    vehicleType: 'truck',
-    vehicleName: 'IVECO Daily',
-    vehiclePlate: 'B-SB 2290',
-    crewSize: 3,
-    maxWeight: 3500,
-    yearsExperience: 7,
-    languages: ['German', 'Turkish'],
-    responseTime: 25,
-    baseRate: 3.50,
-    isVerified: true,
-  },
-  {
-    id: 'mover-005',
-    name: 'Klaus Fischer',
-    photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=200&fit=crop&crop=faces',
-    rating: 4.5,
-    totalMoves: 321,
-    vehicleType: 'small_van',
-    vehicleName: 'Ford Transit Connect',
-    vehiclePlate: 'B-KF 6671',
-    crewSize: 1,
-    maxWeight: 600,
-    yearsExperience: 3,
-    languages: ['German', 'English'],
-    responseTime: 5,
-    baseRate: 1.50,
-    isVerified: false,
-  },
-]
 
 // Vehicle type labels
 const VEHICLE_LABELS: Record<string, string> = {
@@ -135,6 +51,7 @@ const VEHICLE_LABELS: Record<string, string> = {
   medium_van: 'Medium Van',
   large_van: 'Large Van',
   truck: 'Truck',
+  car: 'Car',
 }
 
 // Vehicle capacity descriptions
@@ -143,6 +60,7 @@ const VEHICLE_CAPACITY: Record<string, string> = {
   medium_van: '1-2 bedrooms',
   large_van: '2-3 bedrooms',
   truck: '3+ bedrooms',
+  car: 'Few small items',
 }
 
 // Helper functions
@@ -180,6 +98,8 @@ const SelectMoverPage = () => {
   const [selectedMover, setSelectedMover] = useState<string | null>(null)
   const [routeDistance, setRouteDistance] = useState<number | null>(null)
   const [routeDuration, setRouteDuration] = useState<number | null>(null)
+  const [apiMovers, setApiMovers] = useState<Mover[]>([])
+  const [fetchError, setFetchError] = useState<string | null>(null)
 
   const inventoryCount = Object.values(inventory).reduce((sum, qty) => sum + qty, 0) + customItems.length
   const photoCount = (coverPhoto ? 1 : 0) + galleryPhotos.length
@@ -188,10 +108,8 @@ const SelectMoverPage = () => {
   useEffect(() => {
     const calculateRoute = async () => {
       if (!pickupCoordinates || !dropoffCoordinates) {
-        // Use dummy distance if no coordinates
-        setRouteDistance(15000) // 15km
-        setRouteDuration(1800) // 30 min
-        setIsLoading(false)
+        setRouteDistance(15000) // 15km fallback
+        setRouteDuration(1800)
         return
       }
 
@@ -200,7 +118,6 @@ const SelectMoverPage = () => {
         if (!mapboxToken) {
           setRouteDistance(15000)
           setRouteDuration(1800)
-          setIsLoading(false)
           return
         }
 
@@ -220,51 +137,93 @@ const SelectMoverPage = () => {
         setRouteDistance(15000)
         setRouteDuration(1800)
       }
-
-      setIsLoading(false)
     }
 
-    // Simulate loading for better UX
-    const timer = setTimeout(calculateRoute, 1500)
-    return () => clearTimeout(timer)
+    calculateRoute()
   }, [pickupCoordinates, dropoffCoordinates])
+
+  // Fetch nearby movers from API
+  useEffect(() => {
+    const fetchMovers = async () => {
+      try {
+        setFetchError(null)
+        const lat = pickupCoordinates?.latitude || 52.52
+        const lng = pickupCoordinates?.longitude || 13.405
+
+        const res = await fetch(`/api/movers/nearby?lat=${lat}&lng=${lng}&radiusKm=25`)
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}))
+          throw new Error(errData.error || 'Failed to fetch movers')
+        }
+        const data = await res.json()
+        setApiMovers(data.movers || [])
+      } catch (err) {
+        console.error('Failed to fetch nearby movers:', err)
+        setFetchError(err instanceof Error ? err.message : 'Failed to find movers')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    // Small delay for better UX
+    const timer = setTimeout(fetchMovers, 1000)
+    return () => clearTimeout(timer)
+  }, [pickupCoordinates])
 
   // Calculate prices for each mover
   const moversWithPrices = useMemo(() => {
-    if (!routeDistance) return []
+    if (!routeDistance || apiMovers.length === 0) return []
 
     const distanceKm = routeDistance / 1000
 
-    return AVAILABLE_MOVERS.map((mover) => {
+    return apiMovers.map((mover) => {
+      const baseRate = mover.baseRatePerKm || 2.0
+      const crewSize = mover.crewSize || 1
+      const vehicleType = mover.vehicleType || 'small_van'
+
       // Base calculation: distance * rate
-      let price = distanceKm * mover.baseRate
+      let price = distanceKm * baseRate
 
       // Add base fee
       const baseFee = 25
 
       // Add crew surcharge (€10 per additional crew member)
-      const crewSurcharge = (mover.crewSize - 1) * 10
+      const crewSurcharge = (crewSize - 1) * 10
 
-      // Add item-based fee (larger vehicles handle more items more efficiently)
-      const itemFeePerItem = mover.vehicleType === 'truck' ? 2 : 
-                            mover.vehicleType === 'large_van' ? 2.5 :
-                            mover.vehicleType === 'medium_van' ? 3 : 3.5
+      // Add item-based fee
+      const itemFeePerItem = vehicleType === 'truck' ? 2 :
+                            vehicleType === 'large_van' ? 2.5 :
+                            vehicleType === 'medium_van' ? 3 : 3.5
       const itemsFee = inventoryCount * itemFeePerItem
 
       // Total price
       const totalPrice = Math.round(baseFee + price + crewSurcharge + itemsFee)
 
-      // Estimated arrival time
-      const estimatedArrival = mover.responseTime
+      // Estimated arrival from distance
+      const estimatedArrival = mover.distanceKm
+        ? Math.max(5, Math.round(mover.distanceKm * 3))
+        : 15
 
       return {
-        ...mover,
+        id: mover.$id,
+        name: mover.businessName || mover.fullName || 'Mover',
+        photo: mover.profilePhotoUrl || '',
+        rating: mover.rating || 0,
+        totalMoves: mover.totalCompletedMoves || 0,
+        vehicleType,
+        vehicleName: [mover.vehicleMake, mover.vehicleModel].filter(Boolean).join(' ') || VEHICLE_LABELS[vehicleType] || 'Vehicle',
+        vehiclePlate: mover.vehiclePlateNumber || '',
+        crewSize,
+        maxWeight: mover.maxCarryWeight || 500,
+        yearsExperience: mover.yearsExperience || 0,
+        languages: mover.languages || ['German'],
+        isVerified: mover.verificationStatus === 'verified',
         price: totalPrice,
         estimatedArrival,
-        distanceKm,
+        distanceKm: mover.distanceKm || distanceKm,
       }
-    }).sort((a, b) => a.price - b.price) // Sort by price (cheapest first)
-  }, [routeDistance, inventoryCount])
+    }).sort((a, b) => a.price - b.price) // Sort by price
+  }, [routeDistance, inventoryCount, apiMovers])
 
   const handleSelectMover = (moverId: string) => {
     setSelectedMover(moverId)
@@ -276,7 +235,7 @@ const SelectMoverPage = () => {
     const mover = moversWithPrices.find((m) => m.id === selectedMover)
     if (!mover) return
 
-    // Store selected mover in sessionStorage (or could add to context)
+    // Store selected mover in sessionStorage
     sessionStorage.setItem('selectedMover', JSON.stringify({
       ...mover,
       routeDistance,
@@ -300,8 +259,36 @@ const SelectMoverPage = () => {
           Finding available movers...
         </h2>
         <p className="text-neutral-500 dark:text-neutral-400 text-center max-w-sm">
-          We&apos;re calculating routes and finding the best movers for your move
+          We&apos;re searching for verified movers near your pickup location
         </p>
+      </div>
+    )
+  }
+
+  // Error or no movers found
+  if (fetchError || moversWithPrices.length === 0) {
+    return (
+      <div className="min-h-screen bg-white dark:bg-neutral-900 flex flex-col items-center justify-center p-6">
+        <HugeiconsIcon
+          icon={Alert02Icon}
+          size={48}
+          strokeWidth={1.5}
+          className="text-amber-500 mb-4"
+        />
+        <h2 className="text-xl font-semibold text-neutral-900 dark:text-white mb-2">
+          {fetchError ? 'Unable to find movers' : 'No movers available'}
+        </h2>
+        <p className="text-neutral-500 dark:text-neutral-400 text-center max-w-sm mb-6">
+          {fetchError || 'No verified movers are currently online near your location. Please try again in a few minutes.'}
+        </p>
+        <div className="flex gap-3">
+          <ButtonSecondary href="/instant-move/photos">
+            Go Back
+          </ButtonSecondary>
+          <ButtonPrimary onClick={() => window.location.reload()}>
+            Try Again
+          </ButtonPrimary>
+        </div>
       </div>
     )
   }
@@ -401,13 +388,21 @@ const SelectMoverPage = () => {
               <div className="flex items-start gap-4">
                 {/* Mover Photo */}
                 <div className="relative shrink-0">
-                  <Image
-                    src={mover.photo}
-                    alt={mover.name}
-                    width={64}
-                    height={64}
-                    className="rounded-full object-cover"
-                  />
+                  {mover.photo ? (
+                    <Image
+                      src={mover.photo}
+                      alt={mover.name}
+                      width={64}
+                      height={64}
+                      className="rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-16 h-16 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
+                      <span className="text-xl font-bold text-primary-600 dark:text-primary-400">
+                        {mover.name.charAt(0)}
+                      </span>
+                    </div>
+                  )}
                   {mover.isVerified && (
                     <div className="absolute -bottom-1 -right-1 bg-white dark:bg-neutral-800 rounded-full p-0.5">
                       <HugeiconsIcon
@@ -426,23 +421,26 @@ const SelectMoverPage = () => {
                     <h3 className="font-semibold text-neutral-900 dark:text-white">
                       {mover.name}
                     </h3>
-                    {mover.isFavorite && (
-                      <span className="text-xs bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 px-2 py-0.5 rounded-full">
-                        Popular
-                      </span>
-                    )}
                   </div>
                   
                   {/* Rating & Experience */}
                   <div className="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-2">
-                    <span className="flex items-center gap-1">
-                      <HugeiconsIcon icon={StarIcon} size={14} strokeWidth={1.5} className="text-amber-500" />
-                      {mover.rating}
-                    </span>
-                    <span>•</span>
-                    <span>{mover.totalMoves} moves</span>
-                    <span>•</span>
-                    <span>{mover.yearsExperience}y exp</span>
+                    {mover.rating > 0 && (
+                      <>
+                        <span className="flex items-center gap-1">
+                          <HugeiconsIcon icon={StarIcon} size={14} strokeWidth={1.5} className="text-amber-500" />
+                          {mover.rating.toFixed(1)}
+                        </span>
+                        <span>•</span>
+                      </>
+                    )}
+                    <span>{mover.totalMoves} move{mover.totalMoves !== 1 ? 's' : ''}</span>
+                    {mover.yearsExperience > 0 && (
+                      <>
+                        <span>•</span>
+                        <span>{mover.yearsExperience}y exp</span>
+                      </>
+                    )}
                   </div>
 
                   {/* Vehicle Info */}
@@ -457,7 +455,7 @@ const SelectMoverPage = () => {
                       {mover.vehicleName}
                     </span>
                     <span className="text-xs bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 px-2 py-0.5 rounded-full">
-                      {VEHICLE_LABELS[mover.vehicleType]}
+                      {VEHICLE_LABELS[mover.vehicleType] || mover.vehicleType}
                     </span>
                   </div>
 
@@ -472,7 +470,7 @@ const SelectMoverPage = () => {
                       {mover.crewSize} mover{mover.crewSize > 1 ? 's' : ''}
                     </span>
                     <span className="text-neutral-400">
-                      {VEHICLE_CAPACITY[mover.vehicleType]}
+                      {VEHICLE_CAPACITY[mover.vehicleType] || ''}
                     </span>
                   </div>
                 </div>

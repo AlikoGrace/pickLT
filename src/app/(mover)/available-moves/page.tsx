@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import {
   MapIcon,
   ListBulletIcon,
@@ -8,6 +8,8 @@ import {
   ClockIcon,
   TruckIcon,
   XMarkIcon,
+  ArrowPathIcon,
+  ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline'
 import MoverMapboxMap from '@/components/MoverMapboxMap'
 import ButtonPrimary from '@/shared/ButtonPrimary'
@@ -15,6 +17,7 @@ import { Badge } from '@/shared/Badge'
 
 interface AvailableMove {
   id: string
+  requestId: string
   pickup: string
   pickupAddress: string
   dropoff: string
@@ -39,151 +42,170 @@ interface AvailableMove {
   notes: string
 }
 
-const AVAILABLE_MOVES: AvailableMove[] = [
-  {
-    id: '1',
-    pickup: 'Berlin Mitte',
-    pickupAddress: 'Alexanderplatz 1, 10178 Berlin',
-    dropoff: 'Berlin Kreuzberg',
-    dropoffAddress: 'Oranienstraße 25, 10999 Berlin',
-    distance: '4.2 km',
-    estimatedTime: '45 min',
-    price: 85,
-    moveType: 'Light',
-    homeType: 'Apartment',
-    items: ['Sofa', 'Bed', 'Boxes (10)'],
-    itemCount: 15,
-    crewSize: '2',
-    requestedTime: 'Today, 14:30',
-    clientName: 'Max M.',
-    lat: 52.5219,
-    lng: 13.4132,
-    hasElevator: true,
-    dropoffHasElevator: true,
-    floor: '3',
-    dropoffFloor: '2',
-    additionalServices: [],
-    notes: '',
-  },
-  {
-    id: '2',
-    pickup: 'Berlin Prenzlauer Berg',
-    pickupAddress: 'Schönhauser Allee 80, 10439 Berlin',
-    dropoff: 'Berlin Charlottenburg',
-    dropoffAddress: 'Kantstraße 45, 10627 Berlin',
-    distance: '8.5 km',
-    estimatedTime: '1h 15min',
-    price: 150,
-    moveType: 'Regular',
-    homeType: 'House',
-    items: ['Full household', 'Piano'],
-    itemCount: 45,
-    crewSize: '3',
-    requestedTime: 'Today, 16:00',
-    clientName: 'Anna S.',
-    lat: 52.5389,
-    lng: 13.4113,
-    hasElevator: false,
-    dropoffHasElevator: true,
-    floor: '5',
-    dropoffFloor: '1',
-    additionalServices: ['Furniture disassembly'],
-    notes: 'Piano needs special care',
-  },
-  {
-    id: '3',
-    pickup: 'Berlin Wedding',
-    pickupAddress: 'Müllerstraße 120, 13353 Berlin',
-    dropoff: 'Berlin Tempelhof',
-    dropoffAddress: 'Tempelhofer Damm 70, 12101 Berlin',
-    distance: '10.2 km',
-    estimatedTime: '1h 30min',
-    price: 180,
-    moveType: 'Premium',
-    homeType: 'Office',
-    items: ['Desks (5)', 'Chairs (10)', 'Filing cabinets'],
-    itemCount: 80,
-    crewSize: '4+',
-    requestedTime: 'Tomorrow, 09:00',
-    clientName: 'Tech GmbH',
-    lat: 52.5503,
-    lng: 13.3591,
-    hasElevator: true,
-    dropoffHasElevator: true,
-    floor: '1',
-    dropoffFloor: 'Ground',
-    additionalServices: ['Furniture disassembly', 'Furniture assembly'],
-    notes: 'Reception will guide you',
-  },
-  {
-    id: '4',
-    pickup: 'Berlin Neukölln',
-    pickupAddress: 'Karl-Marx-Straße 100, 12043 Berlin',
-    dropoff: 'Berlin Friedrichshain',
-    dropoffAddress: 'Warschauer Straße 30, 10243 Berlin',
-    distance: '5.8 km',
-    estimatedTime: '50 min',
-    price: 95,
-    moveType: 'Light',
-    homeType: 'Apartment',
-    items: ['Large wardrobe'],
-    itemCount: 5,
-    crewSize: '1',
-    requestedTime: 'Today, 18:00',
-    clientName: 'Lisa K.',
-    lat: 52.4816,
-    lng: 13.4334,
-    hasElevator: false,
-    dropoffHasElevator: true,
-    floor: '4',
-    dropoffFloor: '2',
-    additionalServices: [],
-    notes: 'Large wardrobe, handle with care',
-  },
-  {
-    id: '5',
-    pickup: 'Berlin Schöneberg',
-    pickupAddress: 'Hauptstraße 50, 10827 Berlin',
-    dropoff: 'Berlin Spandau',
-    dropoffAddress: 'Falkenseer Damm 10, 13585 Berlin',
-    distance: '15.3 km',
-    estimatedTime: '2h',
-    price: 220,
-    moveType: 'Regular',
-    homeType: 'Apartment',
-    items: ['2-bedroom apartment contents'],
-    itemCount: 35,
-    crewSize: '2',
-    requestedTime: 'Tomorrow, 11:00',
-    clientName: 'Thomas W.',
-    lat: 52.4839,
-    lng: 13.3536,
-    hasElevator: true,
-    dropoffHasElevator: false,
-    floor: '2',
-    dropoffFloor: '3',
-    additionalServices: ['Furniture disassembly', 'Furniture assembly'],
-    notes: '',
-  },
-]
+// Helper: format distance
+const formatDistance = (meters: number | null): string => {
+  if (!meters) return '—'
+  if (meters >= 1000) return `${(meters / 1000).toFixed(1)} km`
+  return `${Math.round(meters)} m`
+}
+
+// Helper: format duration
+const formatDuration = (seconds: number | null): string => {
+  if (!seconds) return '—'
+  const hours = Math.floor(seconds / 3600)
+  const minutes = Math.ceil((seconds % 3600) / 60)
+  if (hours > 0) return `${hours}h ${minutes}min`
+  return `${minutes} min`
+}
+
+// Helper: format relative time
+const formatRelativeTime = (dateStr: string): string => {
+  const date = new Date(dateStr)
+  const now = new Date()
+  const diffMs = date.getTime() - now.getTime()
+  const diffHours = Math.abs(diffMs) / (1000 * 60 * 60)
+
+  if (diffHours < 1) return 'Just now'
+  if (diffHours < 24) {
+    const isToday = date.toDateString() === now.toDateString()
+    const time = date.toLocaleTimeString('en-DE', { hour: '2-digit', minute: '2-digit' })
+    return isToday ? `Today, ${time}` : `Tomorrow, ${time}`
+  }
+  return date.toLocaleDateString('en-DE', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+}
 
 const AvailableMovesPage = () => {
   const [viewMode, setViewMode] = useState<'map' | 'list'>('map')
   const [selectedMove, setSelectedMove] = useState<AvailableMove | null>(null)
   const [hoveredMoveId, setHoveredMoveId] = useState<string | null>(null)
+  const [moves, setMoves] = useState<AvailableMove[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [acceptingId, setAcceptingId] = useState<string | null>(null)
 
-  const handleAcceptMove = (move: AvailableMove) => {
-    console.log('Accepting move:', move)
-    alert(`Move accepted! You will pick up from ${move.pickup}`)
+  const fetchMoves = useCallback(async () => {
+    try {
+      setIsLoading(true)
+      setError(null)
+      const res = await fetch('/api/mover/available-moves')
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}))
+        throw new Error(errData.error || 'Failed to fetch moves')
+      }
+      const data = await res.json()
+
+      // Transform API response into the shape the UI expects
+      const transformed: AvailableMove[] = (data.moves || []).map((item: Record<string, unknown>) => {
+        const move = item.move as Record<string, unknown> | undefined
+        if (!move) return null
+
+        const pickupLoc = (move.pickupLocation as string) || ''
+        const dropoffLoc = (move.dropoffLocation as string) || ''
+        const pickupShort = pickupLoc.split(',')[0]?.trim() || 'Pickup'
+        const dropoffShort = dropoffLoc.split(',')[0]?.trim() || 'Dropoff'
+
+        return {
+          id: move.id as string,
+          requestId: item.requestId as string,
+          pickup: pickupShort,
+          pickupAddress: (move.pickupStreetAddress as string) || pickupLoc,
+          dropoff: dropoffShort,
+          dropoffAddress: (move.dropoffStreetAddress as string) || dropoffLoc,
+          distance: formatDistance(move.routeDistanceMeters as number | null),
+          estimatedTime: formatDuration(move.routeDurationSeconds as number | null),
+          price: (move.estimatedPrice as number) || 0,
+          moveType: (move.moveType as string) || 'Light',
+          homeType: (move.homeType as string) || 'Apartment',
+          items: ((move.additionalServices as string[]) || []),
+          itemCount: (move.totalItemCount as number) || 0,
+          crewSize: (move.crewSize as string) || '1',
+          requestedTime: formatRelativeTime((move.moveDate as string) || (move.createdAt as string) || new Date().toISOString()),
+          clientName: 'Client',
+          lat: (move.pickupLatitude as number) || 52.52,
+          lng: (move.pickupLongitude as number) || 13.405,
+          hasElevator: (move.pickupElevator as boolean) || false,
+          dropoffHasElevator: (move.dropoffElevator as boolean) || false,
+          floor: (move.pickupFloorLevel as string) || 'Ground',
+          dropoffFloor: (move.dropoffFloorLevel as string) || 'Ground',
+          additionalServices: (move.additionalServices as string[]) || [],
+          notes: (move.contactNotes as string) || '',
+        }
+      }).filter(Boolean) as AvailableMove[]
+
+      setMoves(transformed)
+    } catch (err) {
+      console.error('Failed to fetch available moves:', err)
+      setError(err instanceof Error ? err.message : 'Failed to load moves')
+    } finally {
+      setIsLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchMoves()
+    // Poll every 30 seconds for new moves
+    const interval = setInterval(fetchMoves, 30000)
+    return () => clearInterval(interval)
+  }, [fetchMoves])
+
+  const handleAcceptMove = async (move: AvailableMove) => {
+    try {
+      setAcceptingId(move.id)
+      // Call the updatemovestatus cloud function or a dedicated API route
+      const res = await fetch('/api/mover/accept-move', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ requestId: move.requestId, moveId: move.id }),
+      })
+      if (res.ok) {
+        // Remove from list and close modal
+        setMoves((prev) => prev.filter((m) => m.id !== move.id))
+        setSelectedMove(null)
+      } else {
+        const errData = await res.json().catch(() => ({}))
+        alert(errData.error || 'Failed to accept move. Please try again.')
+      }
+    } catch {
+      alert('Network error. Please try again.')
+    } finally {
+      setAcceptingId(null)
+    }
   }
 
-  const mapMarkers = AVAILABLE_MOVES.map((move) => ({
+  const mapMarkers = moves.map((move) => ({
     id: move.id,
     lat: move.lat,
     lng: move.lng,
     price: move.price,
     isSelected: selectedMove?.id === move.id,
   }))
+
+  // Loading state
+  if (isLoading && moves.length === 0) {
+    return (
+      <div className="h-[calc(100vh-64px)] lg:h-screen flex flex-col items-center justify-center">
+        <ArrowPathIcon className="w-8 h-8 text-primary-500 animate-spin mb-4" />
+        <p className="text-neutral-600 dark:text-neutral-400 font-medium">Finding available moves...</p>
+      </div>
+    )
+  }
+
+  // Error state
+  if (error && moves.length === 0) {
+    return (
+      <div className="h-[calc(100vh-64px)] lg:h-screen flex flex-col items-center justify-center p-6">
+        <ExclamationTriangleIcon className="w-12 h-12 text-amber-500 mb-4" />
+        <p className="text-neutral-900 dark:text-neutral-100 font-semibold mb-2">Unable to load moves</p>
+        <p className="text-neutral-500 dark:text-neutral-400 text-sm text-center mb-4">{error}</p>
+        <button
+          onClick={fetchMoves}
+          className="px-4 py-2 bg-primary-600 text-white rounded-full text-sm font-medium hover:bg-primary-700 transition-colors"
+        >
+          Try Again
+        </button>
+      </div>
+    )
+  }
 
   return (
     <div className="h-[calc(100vh-64px)] lg:h-screen flex flex-col">
@@ -195,10 +217,20 @@ const AvailableMovesPage = () => {
               Available Moves
             </h1>
             <p className="text-sm text-neutral-500 dark:text-neutral-400">
-              {AVAILABLE_MOVES.length} moves near you
+              {moves.length} move{moves.length !== 1 ? 's' : ''} near you
+              {isLoading && <ArrowPathIcon className="w-3 h-3 inline ml-1 animate-spin" />}
             </p>
           </div>
-          <div className="flex items-center bg-neutral-100 dark:bg-neutral-800 rounded-full p-1">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={fetchMoves}
+              disabled={isLoading}
+              className="p-2 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors disabled:opacity-50"
+              title="Refresh"
+            >
+              <ArrowPathIcon className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+            </button>
+            <div className="flex items-center bg-neutral-100 dark:bg-neutral-800 rounded-full p-1">
             <button
               onClick={() => setViewMode('map')}
               className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
@@ -221,11 +253,24 @@ const AvailableMovesPage = () => {
               <ListBulletIcon className="w-4 h-4" />
               List
             </button>
+            </div>
           </div>
         </div>
       </div>
 
+      {/* Empty state */}
+      {moves.length === 0 && !isLoading && (
+        <div className="flex-1 flex flex-col items-center justify-center p-6">
+          <TruckIcon className="w-16 h-16 text-neutral-300 dark:text-neutral-600 mb-4" />
+          <p className="text-neutral-900 dark:text-neutral-100 font-semibold mb-1">No moves available</p>
+          <p className="text-neutral-500 dark:text-neutral-400 text-sm text-center">
+            New move requests will appear here. We check for new moves automatically.
+          </p>
+        </div>
+      )}
+
       {/* Content */}
+      {moves.length > 0 && (
       <div className="flex-1 relative overflow-hidden">
         {viewMode === 'map' ? (
           <div className="h-full relative">
@@ -234,7 +279,7 @@ const AvailableMovesPage = () => {
               markers={mapMarkers}
               selectedMarkerId={selectedMove?.id}
               onMarkerClick={(id) => {
-                const move = AVAILABLE_MOVES.find((m) => m.id === id)
+                const move = moves.find((m) => m.id === id)
                 setSelectedMove(move || null)
               }}
               onMarkerHover={setHoveredMoveId}
@@ -245,7 +290,7 @@ const AvailableMovesPage = () => {
             {/* Move Cards Carousel at bottom */}
             <div className="absolute bottom-20 lg:bottom-4 left-0 right-0 px-4">
               <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide">
-                {AVAILABLE_MOVES.map((move) => (
+                {moves.map((move) => (
                   <div
                     key={move.id}
                     onClick={() => setSelectedMove(move)}
@@ -315,7 +360,7 @@ const AvailableMovesPage = () => {
         ) : (
           /* List View */
           <div className="h-full overflow-y-auto p-4 pb-24 lg:pb-4 space-y-4">
-            {AVAILABLE_MOVES.map((move) => (
+            {moves.map((move) => (
               <div
                 key={move.id}
                 className="bg-white dark:bg-neutral-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
@@ -408,9 +453,10 @@ const AvailableMovesPage = () => {
                     </div>
                     <button
                       onClick={() => handleAcceptMove(move)}
-                      className="px-5 py-2 bg-primary-600 text-white rounded-full text-sm font-medium hover:bg-primary-700 transition-colors"
+                      disabled={acceptingId === move.id}
+                      className="px-5 py-2 bg-primary-600 text-white rounded-full text-sm font-medium hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      Accept Move
+                      {acceptingId === move.id ? 'Accepting...' : 'Accept Move'}
                     </button>
                   </div>
                 </div>
@@ -419,6 +465,7 @@ const AvailableMovesPage = () => {
           </div>
         )}
       </div>
+      )}
 
       {/* Selected Move Detail Modal */}
       {selectedMove && viewMode === 'map' && (
@@ -565,8 +612,9 @@ const AvailableMovesPage = () => {
               <ButtonPrimary
                 onClick={() => handleAcceptMove(selectedMove)}
                 className="w-full"
+                disabled={acceptingId === selectedMove.id}
               >
-                Accept This Move
+                {acceptingId === selectedMove.id ? 'Accepting...' : 'Accept This Move'}
               </ButtonPrimary>
             </div>
           </div>

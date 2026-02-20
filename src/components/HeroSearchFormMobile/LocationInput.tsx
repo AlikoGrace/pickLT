@@ -28,14 +28,20 @@ async function searchLocations(query: string): Promise<LocationSuggestion[]> {
   }
 
   try {
+    const params: Record<string, string> = {
+      access_token: accessToken,
+      autocomplete: 'true',
+      types: 'address,poi,neighborhood,locality,place',
+      limit: '8',
+      language: 'en,de',
+      country: 'DE,AT,CH',
+    }
+    // Proximity bias toward Berlin for more relevant results
+    params.proximity = '13.405,52.52'
+
     const response = await fetch(
       `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?` +
-        new URLSearchParams({
-          access_token: accessToken,
-          autocomplete: 'true',
-          types: 'place,locality,neighborhood,address,poi',
-          limit: '6',
-        })
+        new URLSearchParams(params)
     )
 
     if (!response.ok) {
@@ -44,15 +50,22 @@ async function searchLocations(query: string): Promise<LocationSuggestion[]> {
 
     const data = await response.json()
 
-    return data.features.map((feature: any) => ({
-      id: feature.id,
-      name: feature.text,
-      fullAddress: feature.place_name,
-      coordinates: {
-        latitude: feature.center[1],
-        longitude: feature.center[0],
-      },
-    }))
+    return data.features.map((feature: any) => {
+      const isAddress = feature.place_type?.includes('address')
+      const displayName = isAddress
+        ? (feature.address ? `${feature.address} ${feature.text}` : feature.text)
+        : feature.text
+
+      return {
+        id: feature.id,
+        name: displayName,
+        fullAddress: feature.place_name,
+        coordinates: {
+          latitude: feature.center[1],
+          longitude: feature.center[0],
+        },
+      }
+    })
   } catch (error) {
     console.error('Error fetching locations:', error)
     return []

@@ -1,5 +1,7 @@
 'use client'
 
+import { AuthGate } from '@/components/AuthGate'
+import { useAuth } from '@/context/auth'
 import { StoredMove, useMoveSearch } from '@/context/moveSearch'
 import ButtonPrimary from '@/shared/ButtonPrimary'
 import { DescriptionDetails, DescriptionList, DescriptionTerm } from '@/shared/description-list'
@@ -64,6 +66,7 @@ const formatDuration = (seconds: number): string => {
 const CheckoutContent = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const { user } = useAuth()
   
   // Get route info and price from URL params (passed from instant-move page)
   const routeDistanceParam = searchParams.get('distance')
@@ -103,9 +106,22 @@ const CheckoutContent = () => {
     coverPhoto,
     galleryPhotos,
     contactInfo,
+    updateContactInfo,
     addStoredMove,
     reset,
   } = useMoveSearch()
+
+  // Auto-populate contact info from authenticated user
+  useEffect(() => {
+    if (user && !contactInfo.fullName && !contactInfo.email) {
+      updateContactInfo({
+        fullName: user.fullName || '',
+        email: user.email || '',
+        phoneNumber: user.phone || '',
+      })
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user])
 
   useEffect(() => {
     document.documentElement.scrollTo({
@@ -146,84 +162,179 @@ const CheckoutContent = () => {
   const tax = Math.round(subtotal * 0.19) // 19% VAT
   const totalPrice = subtotal + tax
 
-  // Generate unique booking code
-  const generateBookingCode = () => {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-    let code = '#'
-    for (let i = 0; i < 3; i++) {
-      code += chars.charAt(Math.floor(Math.random() * chars.length))
-    }
-    code += '-'
-    for (let i = 0; i < 3; i++) {
-      code += chars.charAt(Math.floor(Math.random() * chars.length))
-    }
-    code += '-'
-    for (let i = 0; i < 3; i++) {
-      code += chars.charAt(Math.floor(Math.random() * chars.length))
-    }
-    return code
-  }
-
-  // Generate unique handle for the move
-  const generateHandle = () => {
-    const timestamp = Date.now()
-    const random = Math.random().toString(36).substring(2, 8)
-    return `move-${timestamp}-${random}`
-  }
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSubmitForm = async (formData: FormData) => {
-    const formObject = Object.fromEntries(formData.entries())
-    console.log('Form submitted:', formObject)
+    if (isSubmitting) return
+    setIsSubmitting(true)
 
-    // Create the stored move
-    const newMove: StoredMove = {
-      id: `move-${Date.now()}`,
-      handle: generateHandle(),
-      status: isInstantMove ? 'in_progress' : 'pending',
-      createdAt: new Date().toISOString(),
-      paidAt: paymentMethod === 'cash' ? '' : new Date().toISOString(), // Cash payments are paid later
-      totalPrice: totalPrice,
-      bookingCode: generateBookingCode(),
-      // Core move details
-      moveType: isInstantMove ? 'light' : moveType, // Default to light for instant moves
-      moveDate: isInstantMove ? new Date().toISOString() : moveDate,
-      pickupLocation: pickupLocation || pickupStreetAddress,
-      pickupStreetAddress,
-      pickupApartmentUnit,
-      dropoffStreetAddress: dropoffStreetAddress || dropoffLocation,
-      dropoffApartmentUnit,
-      dropoffFloorLevel,
-      homeType,
-      floorLevel,
-      elevatorAvailable,
-      dropoffElevatorAvailable,
-      parkingSituation,
-      dropoffParkingSituation,
-      // Services
-      packingServiceLevel: isInstantMove ? null : packingServiceLevel,
-      additionalServices: isInstantMove ? [] : additionalServices,
-      storageWeeks: isInstantMove ? 0 : storageWeeks,
-      // Crew & vehicle
-      crewSize: isInstantMove ? '2' : crewSize,
-      vehicleType: isInstantMove ? 'small_van' : vehicleType,
-      arrivalWindow: isInstantMove ? 'now' : arrivalWindow,
-      // Items
-      inventoryCount,
-      // Contact
-      contactInfo,
-      // Photos
-      coverPhoto,
-      galleryPhotos,
+    try {
+      // Call the createMove cloud function via Appwrite
+      const { Functions } = await import('appwrite')
+      const { client } = await import('@/lib/appwrite')
+      const functions = new Functions(client)
+      const functionId = process.env.NEXT_PUBLIC_FUNCTION_CREATE_MOVE!
+
+      const payload = {
+        clientId: user?.appwriteId,
+        moveCategory: isInstantMove ? 'instant' : 'scheduled',
+        moveType: isInstantMove ? 'light' : moveType,
+        moveDate: isInstantMove ? new Date().toISOString() : moveDate,
+        // Pickup
+        pickupLocation: pickupLocation || pickupStreetAddress,
+        pickupLatitude: null,
+        pickupLongitude: null,
+        pickupStreetAddress,
+        pickupApartmentUnit,
+        pickupFloorLevel: floorLevel,
+        pickupElevator: elevatorAvailable,
+        pickupParking: parkingSituation,
+        // Dropoff
+        dropoffLocation: dropoffStreetAddress || dropoffLocation,
+        dropoffLatitude: null,
+        dropoffLongitude: null,
+        dropoffStreetAddress,
+        dropoffApartmentUnit,
+        dropoffFloorLevel,
+        dropoffElevator: dropoffElevatorAvailable,
+        dropoffParking: dropoffParkingSituation,
+        // Home
+        homeType,
+        // Inventory
+        inventoryItems: JSON.stringify(inventory),
+        customItems: customItems.map((i) => JSON.stringify(i)),
+        // Packing
+        packingServiceLevel: isInstantMove ? 'none' : packingServiceLevel,
+        packingMaterials: isInstantMove ? [] : [],
+        // Timing
+        arrivalWindow: isInstantMove ? 'now' : arrivalWindow,
+        flexibility: null,
+        // Crew
+        crewSize: isInstantMove ? '2' : crewSize,
+        vehicleType: isInstantMove ? 'small_van' : vehicleType,
+        // Services
+        additionalServices: isInstantMove ? [] : additionalServices,
+        storageWeeks: isInstantMove ? 0 : storageWeeks,
+        // Photos (IDs — for now pass null, actual upload would happen separately)
+        coverPhotoId: null,
+        galleryPhotoIds: [],
+        // Contact
+        contactFullName: contactInfo.fullName || user?.fullName || '',
+        contactPhone: contactInfo.phoneNumber || user?.phone || '',
+        contactEmail: contactInfo.email || user?.email || '',
+        contactNotes: contactInfo.notesForMovers,
+        isBusinessMove: contactInfo.isBusinessMove,
+        companyName: contactInfo.companyName,
+        vatId: contactInfo.vatId,
+        // Pricing
+        estimatedPrice: totalPrice,
+        routeDistanceMeters: routeDistance || null,
+        routeDurationSeconds: routeDuration || null,
+        // Legal
+        termsAccepted: true,
+        privacyAccepted: true,
+        // Payment
+        paymentMethod,
+      }
+
+      const execution = await functions.createExecution(
+        functionId,
+        JSON.stringify(payload),
+        false
+      )
+
+      let moveHandle = ''
+      let moveId = ''
+      try {
+        const responseData = JSON.parse(execution.responseBody)
+        moveHandle = responseData.handle || responseData.move?.handle || ''
+        moveId = responseData.moveId || responseData.move?.$id || ''
+      } catch {
+        // Fallback if parsing fails
+        moveHandle = `move-${Date.now()}`
+      }
+
+      // Also store locally for immediate display on pay-done page
+      const newMove: StoredMove = {
+        id: moveId || `move-${Date.now()}`,
+        handle: moveHandle || `move-${Date.now()}`,
+        status: isInstantMove ? 'in_progress' : 'pending',
+        createdAt: new Date().toISOString(),
+        paidAt: paymentMethod === 'cash' ? '' : new Date().toISOString(),
+        totalPrice: totalPrice,
+        bookingCode: moveHandle ? `#${moveHandle.slice(-9).toUpperCase()}` : '#PENDING',
+        moveType: isInstantMove ? 'light' : moveType,
+        moveDate: isInstantMove ? new Date().toISOString() : moveDate,
+        pickupLocation: pickupLocation || pickupStreetAddress,
+        pickupStreetAddress,
+        pickupApartmentUnit,
+        dropoffStreetAddress: dropoffStreetAddress || dropoffLocation,
+        dropoffApartmentUnit,
+        dropoffFloorLevel,
+        homeType,
+        floorLevel,
+        elevatorAvailable,
+        dropoffElevatorAvailable,
+        parkingSituation,
+        dropoffParkingSituation,
+        packingServiceLevel: isInstantMove ? null : packingServiceLevel,
+        additionalServices: isInstantMove ? [] : additionalServices,
+        storageWeeks: isInstantMove ? 0 : storageWeeks,
+        crewSize: isInstantMove ? '2' : crewSize,
+        vehicleType: isInstantMove ? 'small_van' : vehicleType,
+        arrivalWindow: isInstantMove ? 'now' : arrivalWindow,
+        inventoryCount,
+        contactInfo,
+        coverPhoto,
+        galleryPhotos,
+      }
+
+      addStoredMove(newMove)
+      reset()
+      router.push(`/pay-done?handle=${newMove.handle}&paymentMethod=${paymentMethod}`)
+    } catch (error) {
+      console.error('Failed to create move:', error)
+      // Still navigate with local-only data as fallback
+      const fallbackHandle = `move-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`
+      const newMove: StoredMove = {
+        id: fallbackHandle,
+        handle: fallbackHandle,
+        status: isInstantMove ? 'in_progress' : 'pending',
+        createdAt: new Date().toISOString(),
+        paidAt: paymentMethod === 'cash' ? '' : new Date().toISOString(),
+        totalPrice,
+        bookingCode: '#PENDING',
+        moveType: isInstantMove ? 'light' : moveType,
+        moveDate: isInstantMove ? new Date().toISOString() : moveDate,
+        pickupLocation: pickupLocation || pickupStreetAddress,
+        pickupStreetAddress,
+        pickupApartmentUnit,
+        dropoffStreetAddress: dropoffStreetAddress || dropoffLocation,
+        dropoffApartmentUnit,
+        dropoffFloorLevel,
+        homeType,
+        floorLevel,
+        elevatorAvailable,
+        dropoffElevatorAvailable,
+        parkingSituation,
+        dropoffParkingSituation,
+        packingServiceLevel: isInstantMove ? null : packingServiceLevel,
+        additionalServices: isInstantMove ? [] : additionalServices,
+        storageWeeks: isInstantMove ? 0 : storageWeeks,
+        crewSize: isInstantMove ? '2' : crewSize,
+        vehicleType: isInstantMove ? 'small_van' : vehicleType,
+        arrivalWindow: isInstantMove ? 'now' : arrivalWindow,
+        inventoryCount,
+        contactInfo,
+        coverPhoto,
+        galleryPhotos,
+      }
+      addStoredMove(newMove)
+      reset()
+      router.push(`/pay-done?handle=${newMove.handle}&paymentMethod=${paymentMethod}`)
+    } finally {
+      setIsSubmitting(false)
     }
-
-    // Add to stored moves
-    addStoredMove(newMove)
-
-    // Reset the form state for a new move
-    reset()
-
-    // Navigate to pay-done page with the move handle
-    router.push(`/pay-done?handle=${newMove.handle}&paymentMethod=${paymentMethod}`)
   }
 
   const renderSidebar = () => {
@@ -385,10 +496,12 @@ const CheckoutContent = () => {
           selectedMethod={paymentMethod}
         />
         <div>
-          <ButtonPrimary type="submit" className="mt-10 text-base/6!">
-            {paymentMethod === 'cash' 
-              ? `Confirm move · €${totalPrice.toFixed(2)}`
-              : `Confirm and pay €${totalPrice.toFixed(2)}`
+          <ButtonPrimary type="submit" className="mt-10 text-base/6!" disabled={isSubmitting}>
+            {isSubmitting
+              ? 'Processing...'
+              : paymentMethod === 'cash' 
+                ? `Confirm move · €${totalPrice.toFixed(2)}`
+                : `Confirm and pay €${totalPrice.toFixed(2)}`
             }
           </ButtonPrimary>
           {paymentMethod === 'cash' && (
@@ -412,9 +525,11 @@ const CheckoutContent = () => {
 
 const Page = () => {
   return (
-    <Suspense fallback={<div className="container mt-10 mb-24">Loading...</div>}>
-      <CheckoutContent />
-    </Suspense>
+    <AuthGate redirectBack="/checkout">
+      <Suspense fallback={<div className="container mt-10 mb-24">Loading...</div>}>
+        <CheckoutContent />
+      </Suspense>
+    </AuthGate>
   )
 }
 

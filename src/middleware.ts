@@ -1,6 +1,29 @@
-import { clerkMiddleware } from '@clerk/nextjs/server'
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 
-export default clerkMiddleware()
+/**
+ * Routes that require authentication.
+ * - Mover dashboard & management routes
+ * - Account/profile routes
+ * - Protected API routes (mover-specific)
+ */
+const isProtectedRoute = createRouteMatcher([
+  // Mover dashboard routes
+  '/dashboard(.*)',
+  '/available-moves(.*)',
+  '/earnings(.*)',
+  '/my-crew(.*)',
+  '/settings(.*)',
+  // Account routes
+  '/account(.*)',
+])
+
+export default clerkMiddleware(async (auth, req) => {
+  if (isProtectedRoute(req)) {
+    await auth.protect({
+      unauthenticatedUrl: new URL('/login?type=mover', req.url).toString(),
+    })
+  }
+})
 
 export const config = {
   matcher: [
