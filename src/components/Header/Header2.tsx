@@ -3,8 +3,8 @@ import { getCurrencies, getLanguages, getNavigation } from '@/data/navigation'
 import Logo from '@/shared/Logo'
 import clsx from 'clsx'
 import { FC } from 'react'
-import AvatarDropdown from './AvatarDropdown'
 import CurrLangDropdown from './CurrLangDropdown'
+import HeaderAuthDropdown from './HeaderAuthDropdown'
 import HamburgerBtnMenu from './HamburgerBtnMenu'
 import Navigation from './Navigation/Navigation'
 import NotifyDropdown from './NotifyDropdown'
@@ -45,7 +45,7 @@ const Header2: FC<Props> = async ({ hasBorder = true, className }) => {
           <div className="flex flex-1 items-center justify-end gap-x-2.5 sm:gap-x-6">
             <CurrLangDropdown currencies={currencies} languages={languages} className="hidden md:block" />
             <NotifyDropdown />
-            <AvatarDropdown />
+            <HeaderAuthDropdown />
           </div>
         </div>
       </div>

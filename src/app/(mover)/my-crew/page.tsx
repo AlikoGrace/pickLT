@@ -7,6 +7,7 @@ import {
   TrashIcon,
   PencilIcon,
   UserCircleIcon,
+  XMarkIcon,
 } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import { useState } from 'react'
@@ -15,6 +16,7 @@ const MyCrewPage = () => {
   const { crewMembers, addCrewMember, removeCrewMember, updateCrewMember } = useAuth()
   const [isAddingMember, setIsAddingMember] = useState(false)
   const [editingMember, setEditingMember] = useState<CrewMember | null>(null)
+  const [viewingMember, setViewingMember] = useState<CrewMember | null>(null)
   const [isSaving, setIsSaving] = useState(false)
   const [newMember, setNewMember] = useState<{
     name: string
@@ -271,7 +273,8 @@ const MyCrewPage = () => {
           crewMembers.map((member) => (
             <div
               key={member.id}
-              className="bg-white dark:bg-neutral-800 rounded-2xl p-4 shadow-sm"
+              className="bg-white dark:bg-neutral-800 rounded-2xl p-4 shadow-sm cursor-pointer hover:shadow-md transition-shadow"
+              onClick={() => setViewingMember(member)}
             >
               <div className="flex items-center gap-4">
                 <div className="relative w-14 h-14 rounded-full overflow-hidden bg-neutral-200 dark:bg-neutral-700 flex-shrink-0">
@@ -298,7 +301,7 @@ const MyCrewPage = () => {
                     <span>{member.phone}</span>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
                   <button
                     onClick={() => setEditingMember(member)}
                     className="p-2 text-neutral-500 hover:text-primary-600 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-full transition-colors"
@@ -334,6 +337,103 @@ const MyCrewPage = () => {
           </div>
         )}
       </div>
+
+      {/* Crew Member Detail Popup */}
+      {viewingMember && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white dark:bg-neutral-800 rounded-2xl w-full max-w-sm overflow-hidden relative">
+            {/* Close button */}
+            <button
+              onClick={() => setViewingMember(null)}
+              className="absolute top-4 right-4 p-1 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-700 z-10"
+            >
+              <XMarkIcon className="w-5 h-5 text-neutral-400" />
+            </button>
+
+            {/* Photo header */}
+            <div className="bg-gradient-to-b from-primary-500 to-primary-600 pt-8 pb-12 flex items-center justify-center relative">
+              <div className="w-24 h-24 rounded-full overflow-hidden bg-white/20 border-4 border-white shadow-lg">
+                {viewingMember.photo ? (
+                  <Image
+                    src={viewingMember.photo}
+                    alt={viewingMember.name}
+                    width={96}
+                    height={96}
+                    className="object-cover w-full h-full"
+                  />
+                ) : (
+                  <UserCircleIcon className="w-full h-full text-white/70" />
+                )}
+              </div>
+            </div>
+
+            {/* Info */}
+            <div className="p-6 -mt-4">
+              <div className="text-center mb-6">
+                <h3 className="text-xl font-bold text-neutral-900 dark:text-neutral-100">
+                  {viewingMember.name}
+                </h3>
+                <span className="inline-block mt-1 px-3 py-0.5 rounded-full text-xs font-medium capitalize bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300">
+                  {viewingMember.role}
+                </span>
+              </div>
+
+              <div className="space-y-4">
+                {/* Phone */}
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-neutral-100 dark:bg-neutral-700 flex items-center justify-center">
+                    <PhoneIcon className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400">Phone</p>
+                    <p className="font-medium text-neutral-900 dark:text-neutral-100">
+                      {viewingMember.phone}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Status */}
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-neutral-100 dark:bg-neutral-700 flex items-center justify-center">
+                    <span
+                      className={`w-3 h-3 rounded-full ${
+                        viewingMember.isActive ? 'bg-green-500' : 'bg-neutral-400'
+                      }`}
+                    />
+                  </div>
+                  <div>
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400">Status</p>
+                    <p className="font-medium text-neutral-900 dark:text-neutral-100">
+                      {viewingMember.isActive ? 'Active' : 'Inactive'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action buttons */}
+              <div className="flex gap-3 mt-6">
+                <a
+                  href={`tel:${viewingMember.phone}`}
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-full text-sm font-medium hover:bg-primary-700 transition-colors"
+                >
+                  <PhoneIcon className="w-4 h-4" />
+                  Call
+                </a>
+                <button
+                  onClick={() => {
+                    setViewingMember(null)
+                    setEditingMember(viewingMember)
+                  }}
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-full text-sm font-medium hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
+                >
+                  <PencilIcon className="w-4 h-4" />
+                  Edit
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

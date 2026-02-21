@@ -31,7 +31,10 @@ export async function GET() {
 
 /**
  * PATCH /api/user/profile
- * Update user profile fields
+ * Update user profile fields.
+ * - fullName: Updates both the Appwrite Auth account name AND the users collection.
+ * - profilePhoto: Updates the users collection.
+ * - email/phone: NOT allowed here. Use dedicated /api/user/change-email or /api/user/change-phone.
  */
 export async function PATCH(req: NextRequest) {
   try {
@@ -41,7 +44,8 @@ export async function PATCH(req: NextRequest) {
     }
 
     const body = await req.json()
-    const allowedFields = ['fullName', 'phone', 'profilePhoto', 'userType']
+    // Only allow safe fields — email/phone require verification flows
+    const allowedFields = ['fullName', 'profilePhoto']
     const updates: Record<string, unknown> = {}
 
     for (const field of allowedFields) {
@@ -54,7 +58,17 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ error: 'No valid fields to update' }, { status: 400 })
     }
 
-    const { databases } = createAdminClient()
+    const { databases, users } = createAdminClient()
+
+    // If fullName changed, also update the Appwrite Auth account name
+    // so that loadSession → account.get() picks up the new name
+    if (updates.fullName) {
+      try {
+        await users.updateName(userId, updates.fullName as string)
+      } catch (err) {
+        console.error('Failed to update Appwrite Auth name:', err)
+      }
+    }
 
     const updatedUser = await databases.updateDocument(
       APPWRITE.DATABASE_ID,

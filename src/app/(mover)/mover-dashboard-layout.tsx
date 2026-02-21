@@ -1,6 +1,7 @@
 'use client'
 
 import { useAuth } from '@/context/auth'
+import { useLocationBroadcast } from '@/hooks/useLocationBroadcast'
 import MoveRequestPopup from '@/components/MoveRequestPopup'
 import Logo from '@/shared/Logo'
 import {
@@ -83,13 +84,40 @@ interface Props {
 const MoverDashboardLayout = ({ children }: Props) => {
   const pathname = usePathname()
   const router = useRouter()
-  const { user, logout } = useAuth()
+  const { user, logout, isLoading } = useAuth()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  // Broadcast mover's GPS location while they're logged in
+  useLocationBroadcast({
+    enabled: !!user && user.userType === 'mover',
+  })
 
   const handleLogout = () => {
     logout()
     router.push('/')
   }
+
+  // While auth is still loading, show a full-screen spinner
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-neutral-50 dark:bg-neutral-900">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-600 border-t-transparent" />
+      </div>
+    )
+  }
+
+  // Profile gate: if the user is on the mover side but has no mover profile yet,
+  // redirect them to /complete-profile (unless they are already there).
+  const hasCompletedProfile = !!user?.moverDetails?.profileId
+  const isOnCompleteProfilePage = pathname === '/complete-profile'
+
+  if (!hasCompletedProfile && !isOnCompleteProfilePage) {
+    router.replace('/complete-profile')
+    return null
+  }
+
+  // If profile IS completed but user is manually visiting /complete-profile, let them through
+  // (they might want to view their submitted info)
 
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900">

@@ -51,9 +51,31 @@ export async function GET(req: NextRequest) {
       }))
       .sort((a, b) => a.distanceKm - b.distanceKm)
 
+    // Enrich with user info (profilePhoto, fullName) from users collection
+    const enrichedMovers = await Promise.all(
+      nearbyMovers.map(async (mover) => {
+        try {
+          const moverUserId = (mover as Record<string, unknown>).userId as string
+          if (!moverUserId) return mover
+          const userDoc = await databases.getDocument(
+            APPWRITE.DATABASE_ID,
+            APPWRITE.COLLECTIONS.USERS,
+            moverUserId
+          )
+          return {
+            ...mover,
+            fullName: userDoc.fullName || undefined,
+            profilePhotoUrl: userDoc.profilePhoto || undefined,
+          }
+        } catch {
+          return mover
+        }
+      })
+    )
+
     return NextResponse.json({
-      movers: nearbyMovers,
-      total: nearbyMovers.length,
+      movers: enrichedMovers,
+      total: enrichedMovers.length,
     })
   } catch (err) {
     console.error('GET /api/movers/nearby error:', err)

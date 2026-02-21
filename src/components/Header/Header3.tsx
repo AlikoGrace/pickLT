@@ -11,7 +11,7 @@ import { HugeiconsIcon } from '@hugeicons/react'
 import clsx from 'clsx'
 import { FC, useCallback, useEffect, useRef, useState } from 'react'
 import HeroSearchFormSmall from '../HeroSearchForm/HeroSearchFormSmall'
-import AvatarDropdown from './AvatarDropdown'
+import HeaderAuthDropdown from './HeaderAuthDropdown'
 import HamburgerBtnMenu from './HamburgerBtnMenu'
 import NotifyDropdown from './NotifyDropdown'
 
@@ -158,7 +158,7 @@ const Header3: FC<Header3Props> = ({ className, hasBorderBottom = true, initSear
               </div>
 
               <NotifyDropdown />
-              <AvatarDropdown />
+              <HeaderAuthDropdown />
               <HamburgerBtnMenu />
             </div>
           </div>

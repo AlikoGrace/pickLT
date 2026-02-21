@@ -8,7 +8,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 interface DashboardData {
-  activeMoves: number
+  activeMoves: string[]
   completedThisMonth: number
   earningsThisMonth: number
   crewCount: number
@@ -86,11 +86,10 @@ const DashboardPage = () => {
     itemCount: m.totalItems || 0,
     distance: m.routeDistanceMeters ? `${(m.routeDistanceMeters / 1000).toFixed(1)} km` : '—',
   }))
-
   const stats = [
     {
       name: 'Available Moves',
-      value: dashboard?.activeMoves ?? 0,
+      value: dashboard?.activeMoves.length ?? 0,
       icon: TruckIcon,
       href: '/available-moves',
       color: 'bg-blue-500',
@@ -149,7 +148,7 @@ const DashboardPage = () => {
   }
 
   return (
-    <div className="p-4 lg:p-6 pb-24 lg:pb-6">
+    <div className="p-4 lg:p-6 pb-24 lg:pb-6 max-w-3xl mx-auto">
       {/* Welcome Header */}
       <div className="mb-6">
         <div className="flex items-center gap-4">
@@ -179,7 +178,7 @@ const DashboardPage = () => {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 gap-4 mb-8">
         {stats.map((stat) => (
           <Link
             key={stat.name}

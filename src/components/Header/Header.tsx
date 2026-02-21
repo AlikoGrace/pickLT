@@ -4,9 +4,8 @@ import { Button } from '@/shared/Button'
 import Logo from '@/shared/Logo'
 import clsx from 'clsx'
 import { FC } from 'react'
-import AvatarDropdown from './AvatarDropdown'
-import CategoriesDropdown from './CategoriesDropdown'
 import CurrLangDropdown from './CurrLangDropdown'
+import HeaderAuthDropdown from './HeaderAuthDropdown'
 import HamburgerBtnMenu from './HamburgerBtnMenu'
 import MegaMenuPopover from './MegaMenuPopover'
 import NotifyDropdown from './NotifyDropdown'
@@ -47,10 +46,9 @@ const Header: FC<HeaderProps> = async ({ hasBorderBottom = true, className }) =>
               List your property
             </Button> */}
             <NotifyDropdown />
-             <div className="hidden md:block">
-              <CategoriesDropdown />
+            <div className="hidden md:block">
+              <HeaderAuthDropdown />
             </div>
-            {/* <AvatarDropdown /> */}
           </div>
         </div>
       </div>

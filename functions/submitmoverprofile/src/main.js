@@ -20,6 +20,8 @@ export default async ({ req, res, log, error }) => {
     const body = JSON.parse(req.body || '{}');
     const {
       userId,
+      fullName,
+      phone,
       driversLicense,
       vehicleBrand,
       vehicleModel,
@@ -62,10 +64,12 @@ export default async ({ req, res, log, error }) => {
       }
     );
 
-    // Update user type to 'mover'
-    await databases.updateDocument(DATABASE_ID, USERS_COLLECTION, userId, {
-      userType: 'mover',
-    });
+    // Build user updates — always set userType, optionally include personal info
+    const userUpdates = { userType: 'mover' };
+    if (fullName) userUpdates.fullName = fullName;
+    if (phone) userUpdates.phone = phone.startsWith('+') ? phone : `+${phone}`;
+
+    await databases.updateDocument(DATABASE_ID, USERS_COLLECTION, userId, userUpdates);
 
     // Notify user about pending verification
     await databases.createDocument(
