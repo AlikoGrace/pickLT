@@ -3,6 +3,8 @@
 import { Search01Icon } from '@/components/Icons'
 import T from '@/utils/getT'
 import { MapPinIcon } from '@heroicons/react/24/outline'
+import { Navigation03Icon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
 import clsx from 'clsx'
 import { FC, useCallback, useEffect, useRef, useState } from 'react'
 
@@ -17,36 +19,35 @@ export type LocationSuggestion = {
   }
 }
 
-// Mapbox Geocoding API function (same as desktop)
-async function searchLocations(query: string): Promise<LocationSuggestion[]> {
-  if (!query || query.length < 2) return []
+// ─── Mapbox helpers ──────────────────────────────────────────
+const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
 
-  const accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
-  if (!accessToken) {
-    console.error('Mapbox access token is not configured')
-    return []
-  }
+async function searchLocations(
+  query: string,
+  proximity?: { latitude: number; longitude: number } | null
+): Promise<LocationSuggestion[]> {
+  if (!query || query.length < 2) return []
+  if (!MAPBOX_TOKEN) return []
 
   try {
     const params: Record<string, string> = {
-      access_token: accessToken,
+      access_token: MAPBOX_TOKEN,
       autocomplete: 'true',
-      types: 'address,poi,neighborhood,locality,place',
-      limit: '8',
-      language: 'en,de',
-      country: 'DE,AT,CH',
+      fuzzyMatch: 'true',
+      types: 'address,poi,poi.landmark,postcode,neighborhood,locality,place,district,region,country',
+      limit: '10',
+      language: 'en',
     }
-    // Proximity bias toward Berlin for more relevant results
-    params.proximity = '13.405,52.52'
+
+    if (proximity) {
+      params.proximity = `${proximity.longitude},${proximity.latitude}`
+    }
 
     const response = await fetch(
       `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?` +
         new URLSearchParams(params)
     )
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch locations')
-    }
+    if (!response.ok) throw new Error('Failed to fetch locations')
 
     const data = await response.json()
 
@@ -72,6 +73,37 @@ async function searchLocations(query: string): Promise<LocationSuggestion[]> {
   }
 }
 
+/** Reverse-geocode coordinates → human-readable address */
+async function reverseGeocode(
+  lat: number,
+  lng: number
+): Promise<LocationSuggestion | null> {
+  if (!MAPBOX_TOKEN) return null
+  try {
+    const res = await fetch(
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?` +
+        new URLSearchParams({
+          access_token: MAPBOX_TOKEN,
+          types: 'address,poi,place',
+          limit: '1',
+          language: 'en',
+        })
+    )
+    if (!res.ok) return null
+    const data = await res.json()
+    const f = data.features?.[0]
+    if (!f) return null
+    return {
+      id: f.id,
+      name: f.text,
+      fullAddress: f.place_name,
+      coordinates: { latitude: lat, longitude: lng },
+    }
+  } catch {
+    return null
+  }
+}
+
 interface Props {
   onClick?: () => void
   onChange?: (location: LocationSuggestion | null) => void
@@ -94,6 +126,21 @@ const LocationInput: FC<Props> = ({
   const containerRef = useRef(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const debounceRef = useRef<NodeJS.Timeout | null>(null)
+
+  // ─── Geolocation state ───
+  const [userCoords, setUserCoords] = useState<{ latitude: number; longitude: number } | null>(null)
+  const [geoLoading, setGeoLoading] = useState(false)
+  const [geoError, setGeoError] = useState<string | null>(null)
+
+  // Silently request location on mount for proximity bias
+  useEffect(() => {
+    if (typeof navigator === 'undefined' || !navigator.geolocation) return
+    navigator.geolocation.getCurrentPosition(
+      (pos) => setUserCoords({ latitude: pos.coords.latitude, longitude: pos.coords.longitude }),
+      () => {},
+      { enableHighAccuracy: false, timeout: 8000, maximumAge: 300_000 }
+    )
+  }, [])
 
   useEffect(() => {
     setInputValue(defaultValue)
@@ -121,20 +168,56 @@ const LocationInput: FC<Props> = ({
     debounceRef.current = setTimeout(async () => {
       if (value.length >= 2) {
         setIsLoading(true)
-        const results = await searchLocations(value)
+        const results = await searchLocations(value, userCoords)
         setSuggestions(results)
         setIsLoading(false)
       } else {
         setSuggestions([])
       }
     }, 300)
-  }, [])
+  }, [userCoords])
 
   const handleSelectLocation = (location: LocationSuggestion) => {
     setInputValue(location.fullAddress)
     setSuggestions([])
     onChange && onChange(location)
   }
+
+  const handleUseCurrentLocation = useCallback(async () => {
+    if (!navigator.geolocation) {
+      setGeoError('Geolocation is not supported by your browser')
+      return
+    }
+
+    setGeoLoading(true)
+    setGeoError(null)
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const { latitude, longitude } = pos.coords
+        setUserCoords({ latitude, longitude })
+        setGeoLoading(false)
+        // Use exact GPS coordinates — no reverse geocoding
+        const location: LocationSuggestion = {
+          id: 'current-location',
+          name: 'My Location',
+          fullAddress: 'Current Location',
+          coordinates: { latitude, longitude },
+        }
+        handleSelectLocation(location)
+      },
+      (err) => {
+        setGeoLoading(false)
+        setGeoError(
+          err.code === 1
+            ? 'Location access denied. Please enable it in your browser settings.'
+            : 'Unable to get your location. Please try again.'
+        )
+      },
+      { enableHighAccuracy: true, timeout: 10_000, maximumAge: 60_000 }
+    )
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const renderSearchValues = ({ heading, items }: { heading: string; items: LocationSuggestion[] }) => {
     return (
@@ -185,6 +268,29 @@ const LocationInput: FC<Props> = ({
         </span>
       </div>
       <div className="mt-7">
+        {/* Use Current Location button */}
+        <button
+          type="button"
+          onClick={handleUseCurrentLocation}
+          disabled={geoLoading}
+          className="-mx-2 mb-3 flex w-[calc(100%+1rem)] cursor-pointer items-center gap-x-3 rounded-lg px-2 py-2.5 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+        >
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary-50 dark:bg-primary-900/30">
+            <HugeiconsIcon
+              icon={Navigation03Icon}
+              className={clsx('h-4 w-4 text-primary-600 dark:text-primary-400', geoLoading && 'animate-pulse')}
+            />
+          </span>
+          <div className="min-w-0 flex-1 text-start">
+            <span className="block text-sm font-medium text-primary-600 dark:text-primary-400">
+              {geoLoading ? 'Getting your location...' : 'Use my current location'}
+            </span>
+            {geoError && (
+              <span className="block text-xs text-red-500">{geoError}</span>
+            )}
+          </div>
+        </button>
+
         {isLoading && (
           <p className="text-sm text-neutral-500 dark:text-neutral-400">Searching...</p>
         )}

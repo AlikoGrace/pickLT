@@ -267,7 +267,7 @@ const InstantMovePhotosPage = () => {
 
       {/* Fixed Bottom Button */}
       <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-800 p-4">
-        <div className="container flex gap-3">
+        <div className="container max-w-3xl mx-auto flex gap-3">
           <ButtonSecondary
             href="/instant-move/inventory"
             className="flex-1"

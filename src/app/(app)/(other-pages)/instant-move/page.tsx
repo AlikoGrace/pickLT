@@ -1,11 +1,13 @@
 'use client'
 
 import MapboxMap, { RouteInfo } from '@/components/MapboxMap'
+import MapLocationPicker, { PickedLocation } from '@/components/MapLocationPicker'
 import { useMoveSearch, Coordinates } from '@/context/moveSearch'
 import { useMoverTracking } from '@/hooks/useMoverTracking'
 import ButtonPrimary from '@/shared/ButtonPrimary'
 import ButtonSecondary from '@/shared/ButtonSecondary'
 import Logo from '@/shared/Logo'
+import Avatar from '@/shared/Avatar'
 import {
   Call02Icon,
   Cancel01Icon,
@@ -24,7 +26,7 @@ import { useCallback, useEffect, useState } from 'react'
 interface SelectedMover {
   id: string
   name: string
-  photo: string
+  profilePhoto: string
   rating: number
   totalMoves: number
   vehicleType: string
@@ -40,6 +42,8 @@ interface SelectedMover {
   price: number
   estimatedArrival: number
   distanceKm: number
+  currentLatitude?: number | null
+  currentLongitude?: number | null
   routeDistance?: number
   routeDuration?: number
 }
@@ -48,7 +52,7 @@ interface SelectedMover {
 const DEFAULT_MOVER: SelectedMover = {
   id: 'mover-001',
   name: 'Michael Schmidt',
-  photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=faces',
+  profilePhoto: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=faces',
   rating: 4.9,
   totalMoves: 1247,
   vehicleType: 'medium_van',
@@ -96,11 +100,15 @@ const InstantMovePage = () => {
     coverPhoto,
     inventory,
     customItems,
+    reset,
+    setPickupLocation,
+    setDropoffLocation,
+    setPickupCoordinates,
+    setDropoffCoordinates,
   } = useMoveSearch()
 
   // Load selected mover from sessionStorage
   const [selectedMover, setSelectedMover] = useState<SelectedMover | null>(null)
-  
   useEffect(() => {
     const stored = sessionStorage.getItem('selectedMover')
     if (stored) {
@@ -118,6 +126,26 @@ const InstantMovePage = () => {
   // Get the mover to display (selected or default)
   const mover = selectedMover || DEFAULT_MOVER
 
+  // ─── Location picker state ────────────────────────────────
+  const [locationPickerOpen, setLocationPickerOpen] = useState(false)
+  const [editingLocationType, setEditingLocationType] = useState<'pickup' | 'dropoff'>('pickup')
+
+  const handleEditLocation = useCallback((type: 'pickup' | 'dropoff') => {
+    setEditingLocationType(type)
+    setLocationPickerOpen(true)
+  }, [])
+
+  const handleLocationPicked = useCallback((location: PickedLocation) => {
+    if (editingLocationType === 'pickup') {
+      setPickupLocation(location.fullAddress)
+      setPickupCoordinates(location.coordinates)
+    } else {
+      setDropoffLocation(location.fullAddress)
+      setDropoffCoordinates(location.coordinates)
+    }
+    setLocationPickerOpen(false)
+  }, [editingLocationType, setPickupLocation, setDropoffLocation, setPickupCoordinates, setDropoffCoordinates])
+
   const [phase, setPhase] = useState<MovePhase>('mover_arriving')
   const [routeInfo, setRouteInfo] = useState<RouteInfo | null>(null)
   const [moverEtaMinutes, setMoverEtaMinutes] = useState(12)
@@ -134,15 +162,22 @@ const InstantMovePage = () => {
     }
   }, [selectedMover])
 
-  // Initialize mover position when pickup coordinates are available
+  // Initialize mover position from the real DB coordinates (or fall back to offset)
   useEffect(() => {
-    if (pickupCoordinates && !moverCoords) {
+    if (moverCoords) return // already set (e.g. by realtime update)
+    if (selectedMover?.currentLatitude && selectedMover?.currentLongitude) {
+      setMoverCoords({
+        latitude: selectedMover.currentLatitude,
+        longitude: selectedMover.currentLongitude,
+      })
+    } else if (pickupCoordinates) {
+      // Fallback: offset from pickup so the marker is visible somewhere
       setMoverCoords({
         latitude: pickupCoordinates.latitude + 0.015,
         longitude: pickupCoordinates.longitude - 0.02,
       })
     }
-  }, [pickupCoordinates, moverCoords])
+  }, [selectedMover, pickupCoordinates, moverCoords])
 
   // ─── Real-time GPS Tracking via Appwrite Realtime ────────
   const { lastLocation, isConnected: isTrackingConnected } = useMoverTracking({
@@ -180,6 +215,17 @@ const InstantMovePage = () => {
     setRouteInfo(info)
   }, [])
 
+    // Compute initials from user's full name
+  const initials = mover?.name
+    ? mover.name
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2)
+    : '?'
+
+
   // Fallback: Simulate mover approaching pickup (only when real-time not connected)
   useEffect(() => {
     if (phase === 'mover_arriving' && pickupCoordinates && moverCoords && !isTrackingConnected) {
@@ -214,9 +260,15 @@ const InstantMovePage = () => {
     }
   }, [phase, pickupCoordinates])
 
+  // ─── Cancel confirmation ──────────────────────────────────
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false)
+
+  const confirmCancel = () => setShowCancelConfirm(true)
+
   const handleCancel = () => {
     sessionStorage.removeItem('selectedMover')
-    router.push('/move-choice')
+    reset()
+    router.push('/')
   }
 
   const handleCallMover = () => {
@@ -227,7 +279,6 @@ const InstantMovePage = () => {
   const handleMessageMover = () => {
     alert('Chat feature coming soon!')
   }
-
   // Get the total items count
   const inventoryCount = Object.values(inventory).reduce((sum, qty) => sum + qty, 0) + customItems.length
 
@@ -238,12 +289,10 @@ const InstantMovePage = () => {
         <div className="flex items-start gap-3">
           <div className="relative shrink-0">
             <div className="w-12 h-12 rounded-full bg-neutral-200 dark:bg-neutral-700 overflow-hidden">
-              <Image
-                src={mover.photo}
-                alt={mover.name}
-                width={48}
-                height={48}
-                className="w-full h-full object-cover"
+              <Avatar
+                src={mover?.profilePhoto || undefined}
+                initials={!mover?.profilePhoto ? initials : undefined}
+                className=" size-12 bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300"
               />
             </div>
             {mover.isVerified && (
@@ -389,18 +438,26 @@ const InstantMovePage = () => {
           <div className="w-2 h-2 rounded-full border-2 border-neutral-900 dark:border-white" />
         </div>
         <div className="flex-1 min-w-0 space-y-2">
-          <div>
+          <button
+            type="button"
+            onClick={() => handleEditLocation('pickup')}
+            className="block w-full text-left rounded-lg -mx-1.5 px-1.5 py-0.5 hover:bg-neutral-100 dark:hover:bg-neutral-700/60 transition"
+          >
             <p className="text-[10px] text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Pickup</p>
             <p className="text-xs font-medium text-neutral-900 dark:text-white truncate">
               {pickupLocation || 'Select pickup location'}
             </p>
-          </div>
-          <div>
+          </button>
+          <button
+            type="button"
+            onClick={() => handleEditLocation('dropoff')}
+            className="block w-full text-left rounded-lg -mx-1.5 px-1.5 py-0.5 hover:bg-neutral-100 dark:hover:bg-neutral-700/60 transition"
+          >
             <p className="text-[10px] text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Drop-off</p>
             <p className="text-xs font-medium text-neutral-900 dark:text-white truncate">
               {dropoffLocation || 'Select drop-off location'}
             </p>
-          </div>
+          </button>
         </div>
         {/* Route info badge */}
         {routeInfo && (
@@ -453,7 +510,7 @@ const InstantMovePage = () => {
   }
 
   return (
-    <div className="fixed inset-0 bg-neutral-100 dark:bg-neutral-900">
+    <div className="fixed inset-0 z-40 bg-neutral-100 dark:bg-neutral-900">
       {/* Full-screen Map */}
       <div className="absolute inset-0">
         <MapboxMap
@@ -467,13 +524,13 @@ const InstantMovePage = () => {
       </div>
 
       {/* Top Bar - Location Summary & Close Button */}
-      <div className="absolute top-0 left-0 right-0 z-10 p-4 pt-safe pointer-events-none">
+      <div className="absolute top-0 left-0 right-0 z-10 p-4 pt-4 pointer-events-none">
         <div className="mx-auto max-w-lg flex items-start gap-3">
           <div className="flex-1 pointer-events-auto">
             {renderLocationSummary()}
           </div>
           <button
-            onClick={handleCancel}
+            onClick={confirmCancel}
             className="pointer-events-auto p-2.5 bg-white/95 dark:bg-neutral-800/95 backdrop-blur-sm hover:bg-white dark:hover:bg-neutral-800 rounded-full shadow-lg border border-neutral-200 dark:border-neutral-700 transition"
           >
             <HugeiconsIcon
@@ -487,13 +544,13 @@ const InstantMovePage = () => {
       </div>
 
       {/* Bottom Panel - Mover Card & Actions */}
-      <div className="absolute bottom-0 left-0 right-0 z-10 p-4 pb-safe pointer-events-none">
-        <div className="mx-auto max-w-lg space-y-3 pointer-events-auto">
+      <div className="absolute bottom-0 left-0 right-0 z-10 p-4 pb-4 pointer-events-none">
+        <div className="mx-auto max-w-lg space-y-3 pb-2 pointer-events-auto">
           {renderMoverCard()}
           
           {/* Action Button */}
           {phase !== 'mover_arrived' ? (
-            <ButtonSecondary onClick={handleCancel} className="w-full shadow-lg">
+            <ButtonSecondary onClick={confirmCancel} className="w-full shadow-lg">
               Cancel move
             </ButtonSecondary>
           ) : (
@@ -506,6 +563,49 @@ const InstantMovePage = () => {
           )}
         </div>
       </div>
+
+      {/* Cancel Confirmation Modal */}
+      {showCancelConfirm && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="mx-4 w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl dark:bg-neutral-800">
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30">
+              <HugeiconsIcon icon={Cancel01Icon} size={24} strokeWidth={1.5} className="text-red-600 dark:text-red-400" />
+            </div>
+            <h3 className="text-lg font-semibold text-neutral-900 dark:text-white">
+              Cancel this move?
+            </h3>
+            <p className="mt-1.5 text-sm text-neutral-500 dark:text-neutral-400">
+              Your mover is already on the way. Are you sure you want to cancel? This action cannot be undone.
+            </p>
+            <div className="mt-6 flex gap-3">
+              <ButtonSecondary
+                onClick={() => setShowCancelConfirm(false)}
+                className="flex-1"
+              >
+                Keep move
+              </ButtonSecondary>
+              <button
+                type="button"
+                onClick={handleCancel}
+                className="flex-1 rounded-xl bg-red-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-red-700 active:scale-[.98]"
+              >
+                Yes, cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Location Picker Overlay */}
+      <MapLocationPicker
+        open={locationPickerOpen}
+        onClose={() => setLocationPickerOpen(false)}
+        onSelect={handleLocationPicked}
+        initialCoordinates={
+          editingLocationType === 'pickup' ? pickupCoordinates : dropoffCoordinates
+        }
+        label={editingLocationType === 'pickup' ? 'Edit pickup location' : 'Edit drop-off location'}
+      />
     </div>
   )
 }

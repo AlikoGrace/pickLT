@@ -2,6 +2,8 @@
 
 import { AuthGate } from '@/components/AuthGate'
 import { Calendar01Icon, UserSharingIcon } from '@/components/Icons'
+import MapboxMap, { RouteInfo } from '@/components/MapboxMap'
+import MapLocationPicker, { PickedLocation } from '@/components/MapLocationPicker'
 import { useMoveSearch } from '@/context/moveSearch'
 import ButtonPrimary from '@/shared/ButtonPrimary'
 import ButtonSecondary from '@/shared/ButtonSecondary'
@@ -20,7 +22,7 @@ import {
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Fragment } from 'react'
+import { Fragment, useCallback, useState } from 'react'
 import { SectionHeading, SectionSubheading } from '@/components/listings/SectionHeading'
 
 // Helper to format labels
@@ -60,6 +62,13 @@ const Page = () => {
   const {
     // Basic info
     pickupLocation,
+    dropoffLocation,
+    pickupCoordinates,
+    dropoffCoordinates,
+    setPickupLocation,
+    setDropoffLocation,
+    setPickupCoordinates,
+    setDropoffCoordinates,
     moveDate,
     moveType,
     // Step 1
@@ -115,6 +124,31 @@ const Page = () => {
 
   const inventoryCount = Object.values(inventory).reduce((sum, qty) => sum + qty, 0) + customItems.length
   const selectedHeavyItems = heavyItems.filter(item => item.selected)
+
+  // ─── Map & location picker state ──────────────────────────
+  const [routeInfo, setRouteInfo] = useState<RouteInfo | null>(null)
+  const [locationPickerOpen, setLocationPickerOpen] = useState(false)
+  const [editingLocationType, setEditingLocationType] = useState<'pickup' | 'dropoff'>('pickup')
+
+  const handleEditLocation = useCallback((type: 'pickup' | 'dropoff') => {
+    setEditingLocationType(type)
+    setLocationPickerOpen(true)
+  }, [])
+
+  const handleLocationPicked = useCallback((location: PickedLocation) => {
+    if (editingLocationType === 'pickup') {
+      setPickupLocation(location.fullAddress)
+      setPickupCoordinates(location.coordinates)
+    } else {
+      setDropoffLocation(location.fullAddress)
+      setDropoffCoordinates(location.coordinates)
+    }
+    setLocationPickerOpen(false)
+  }, [editingLocationType, setPickupLocation, setDropoffLocation, setPickupCoordinates, setDropoffCoordinates])
+
+  const handleRouteCalculated = useCallback((info: RouteInfo) => {
+    setRouteInfo(info)
+  }, [])
 
   // Calculate estimated price
   const basePrice = moveType === 'premium' ? 299 : moveType === 'regular' ? 199 : 99
@@ -547,6 +581,105 @@ const Page = () => {
       {/*  HEADER */}
       {renderHeaderGallery()}
 
+      {/* ROUTE MAP & EDITABLE LOCATIONS */}
+      {pickupCoordinates && dropoffCoordinates && (
+        <div className="mt-8 overflow-hidden rounded-2xl border border-neutral-200 dark:border-neutral-700">
+          {/* Map */}
+          <div className="relative h-56 sm:h-72">
+            <MapboxMap
+              pickupCoordinates={pickupCoordinates}
+              dropoffCoordinates={dropoffCoordinates}
+              showRoute={true}
+              onRouteCalculated={handleRouteCalculated}
+              className="w-full h-full !rounded-none"
+            />
+          </div>
+          {/* Editable location cards */}
+          <div className="bg-white dark:bg-neutral-800 p-4">
+            <div className="flex items-center gap-3">
+              <div className="flex flex-col items-center">
+                <div className="w-2.5 h-2.5 rounded-full bg-neutral-900 dark:bg-white" />
+                <div className="w-px h-8 bg-neutral-300 dark:bg-neutral-600" />
+                <div className="w-2.5 h-2.5 rounded-full border-2 border-neutral-900 dark:border-white" />
+              </div>
+              <div className="flex-1 min-w-0 space-y-3">
+                <button
+                  type="button"
+                  onClick={() => handleEditLocation('pickup')}
+                  className="block w-full text-left rounded-lg px-2 py-1.5 -mx-2 hover:bg-neutral-100 dark:hover:bg-neutral-700/60 transition"
+                >
+                  <p className="text-[10px] font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Pickup</p>
+                  <p className="text-sm font-medium text-neutral-900 dark:text-white truncate">
+                    {pickupLocation || 'Tap to select pickup'}
+                  </p>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleEditLocation('dropoff')}
+                  className="block w-full text-left rounded-lg px-2 py-1.5 -mx-2 hover:bg-neutral-100 dark:hover:bg-neutral-700/60 transition"
+                >
+                  <p className="text-[10px] font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Drop-off</p>
+                  <p className="text-sm font-medium text-neutral-900 dark:text-white truncate">
+                    {dropoffLocation || 'Tap to select drop-off'}
+                  </p>
+                </button>
+              </div>
+              {routeInfo && (
+                <div className="shrink-0 text-right">
+                  <p className="text-base font-semibold text-neutral-900 dark:text-white">
+                    {routeInfo.distance >= 1000
+                      ? `${(routeInfo.distance / 1000).toFixed(1)} km`
+                      : `${Math.round(routeInfo.distance)} m`}
+                  </p>
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                    {routeInfo.duration >= 3600
+                      ? `${Math.floor(routeInfo.duration / 3600)}h ${Math.ceil((routeInfo.duration % 3600) / 60)}min`
+                      : `${Math.ceil(routeInfo.duration / 60)} min`}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* If no coordinates, show editable location cards without map */}
+      {(!pickupCoordinates || !dropoffCoordinates) && (
+        <div className="mt-8 rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 p-4">
+          <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-3">Locations</p>
+          <div className="space-y-2">
+            <button
+              type="button"
+              onClick={() => handleEditLocation('pickup')}
+              className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left hover:bg-neutral-100 dark:hover:bg-neutral-700/60 transition"
+            >
+              <MapPinIcon className="h-5 w-5 shrink-0 text-neutral-400" />
+              <div className="min-w-0 flex-1">
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">Pickup</p>
+                <p className="text-sm font-medium text-neutral-900 dark:text-white truncate">
+                  {pickupLocation || 'Tap to select pickup location'}
+                </p>
+              </div>
+              <PencilSquareIcon className="h-4 w-4 shrink-0 text-neutral-400" />
+            </button>
+            <button
+              type="button"
+              onClick={() => handleEditLocation('dropoff')}
+              className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left hover:bg-neutral-100 dark:hover:bg-neutral-700/60 transition"
+            >
+              <MapPinIcon className="h-5 w-5 shrink-0 text-neutral-400" />
+              <div className="min-w-0 flex-1">
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">Drop-off</p>
+                <p className="text-sm font-medium text-neutral-900 dark:text-white truncate">
+                  {dropoffLocation || 'Tap to select drop-off location'}
+                </p>
+              </div>
+              <PencilSquareIcon className="h-4 w-4 shrink-0 text-neutral-400" />
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* MAIN */}
       <main className="relative z-[1] mt-10 flex flex-col gap-8 lg:flex-row xl:gap-10">
         {/* CONTENT */}
@@ -568,6 +701,17 @@ const Page = () => {
       <div className="mb-16">
         {renderSectionContact()}
       </div>
+
+      {/* Location Picker Overlay */}
+      <MapLocationPicker
+        open={locationPickerOpen}
+        onClose={() => setLocationPickerOpen(false)}
+        onSelect={handleLocationPicked}
+        initialCoordinates={
+          editingLocationType === 'pickup' ? pickupCoordinates : dropoffCoordinates
+        }
+        label={editingLocationType === 'pickup' ? 'Edit pickup location' : 'Edit drop-off location'}
+      />
     </div>
   )
 }

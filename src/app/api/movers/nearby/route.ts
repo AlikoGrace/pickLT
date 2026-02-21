@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createAdminClient } from '@/lib/appwrite-server'
+import { createAdminClient, withRetry } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
 import { Query } from 'node-appwrite'
 import { getSessionUserId } from '@/lib/auth-session'
@@ -27,18 +27,23 @@ export async function GET(req: NextRequest) {
 
     const { databases } = createAdminClient()
 
-    // Fetch verified & online movers
-    const movers = await databases.listDocuments(
-      APPWRITE.DATABASE_ID,
-      APPWRITE.COLLECTIONS.MOVER_PROFILES,
-      [
-        Query.equal('verificationStatus', 'verified'),
-        Query.equal('isOnline', true),
-        Query.limit(50),
-      ]
+    // Fetch online movers (accept verified + pending_verification during early rollout)
+    const movers = await withRetry(() =>
+      databases.listDocuments(
+        APPWRITE.DATABASE_ID,
+        APPWRITE.COLLECTIONS.MOVER_PROFILES,
+        [
+          Query.equal('verificationStatus', ['verified', 'pending_verification']),
+          Query.equal('isOnline', true),
+          Query.limit(50),
+        ]
+      )
     )
 
     // Filter by distance (Haversine approximation)
+    console.log(
+      `[nearby] Found ${movers.total} online mover(s), client coords: ${lat},${lng}, radius: ${radiusKm}km`
+    )
     const nearbyMovers = movers.documents
       .filter((mover) => {
         if (!mover.currentLatitude || !mover.currentLongitude) return false

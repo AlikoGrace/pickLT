@@ -1,6 +1,10 @@
 "use client"
 
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import React, { createContext, useContext, useState, useEffect, useRef, useCallback } from 'react'
+
+// ─── localStorage keys ───
+const DRAFT_KEY = 'picklt_move_draft'
+const STORED_MOVES_KEY = 'picklt_stored_moves'
 
 export type MoveTypeKey = 'light' | 'regular' | 'premium'
 export type HomeTypeKey = 'apartment' | 'house' | 'office' | 'storage'
@@ -534,53 +538,191 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
   // Stored moves state
   const [storedMoves, setStoredMoves] = useState<StoredMove[]>(defaultState.storedMoves)
 
-  // ─── Restore saved state from sessionStorage after auth redirect ───
+  // ─── Persistence helpers ───
+  const isHydrated = useRef(false)
+  const saveTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  /** Restore a saved object into all the individual state setters */
+  const hydrateFromSaved = useCallback((saved: Record<string, unknown>) => {
+    if (saved.pickupLocation) setPickupLocation(saved.pickupLocation as string)
+    if (saved.dropoffLocation) setDropoffLocation(saved.dropoffLocation as string)
+    if (saved.pickupCoordinates) setPickupCoordinates(saved.pickupCoordinates as Coordinates)
+    if (saved.dropoffCoordinates) setDropoffCoordinates(saved.dropoffCoordinates as Coordinates)
+    if (saved.moveDate) setMoveDate(saved.moveDate as string)
+    if (saved.moveType) setMoveType(saved.moveType as MoveTypeKey)
+    if (saved.isInstantMove != null) setIsInstantMove(saved.isInstantMove as boolean)
+    if (saved.homeType) setHomeType(saved.homeType as HomeTypeKey)
+    if (saved.floorLevel) setFloorLevel(saved.floorLevel as FloorLevelKey)
+    if (saved.elevatorAvailable != null) setElevatorAvailable(saved.elevatorAvailable as boolean)
+    if (saved.parkingSituation) setParkingSituation(saved.parkingSituation as ParkingKey)
+    if (saved.pickupStreetAddress) setPickupStreetAddress(saved.pickupStreetAddress as string)
+    if (saved.pickupApartmentUnit) setPickupApartmentUnit(saved.pickupApartmentUnit as string)
+    if (saved.pickupAccessNotes) setPickupAccessNotes(saved.pickupAccessNotes as string)
+    if (saved.pickupLoadingZoneRequired != null) setPickupLoadingZoneRequired(saved.pickupLoadingZoneRequired as boolean)
+    if (saved.pickupArrangeHaltverbot != null) setPickupArrangeHaltverbot(saved.pickupArrangeHaltverbot as boolean)
+    if (saved.dropoffStreetAddress) setDropoffStreetAddress(saved.dropoffStreetAddress as string)
+    if (saved.dropoffApartmentUnit) setDropoffApartmentUnit(saved.dropoffApartmentUnit as string)
+    if (saved.dropoffFloorLevel) setDropoffFloorLevel(saved.dropoffFloorLevel as FloorLevelKey)
+    if (saved.dropoffElevatorAvailable != null) setDropoffElevatorAvailable(saved.dropoffElevatorAvailable as boolean)
+    if (saved.dropoffParkingSituation) setDropoffParkingSituation(saved.dropoffParkingSituation as DropoffParkingKey)
+    if (saved.dropoffArrangeHaltverbot != null) setDropoffArrangeHaltverbot(saved.dropoffArrangeHaltverbot as boolean)
+    if (saved.inventory) setInventory(saved.inventory as Record<string, number>)
+    if (saved.customItems) setCustomItems(saved.customItems as CustomItem[])
+    if (saved.packingServiceLevel) setPackingServiceLevel(saved.packingServiceLevel as PackingServiceLevel)
+    if (saved.packingMaterials) setPackingMaterials(saved.packingMaterials as PackingMaterial[])
+    if (saved.customMaterials) setCustomMaterials(saved.customMaterials as CustomMaterial[])
+    if (saved.packingBoxQuantities) setPackingBoxQuantities(saved.packingBoxQuantities as Record<string, number>)
+    if (saved.packingNotes) setPackingNotes(saved.packingNotes as string)
+    if (saved.arrivalWindow) setArrivalWindow(saved.arrivalWindow as ArrivalWindow)
+    if (saved.flexibility) setFlexibility(saved.flexibility as FlexibilityOption)
+    if (saved.preferEarliestArrival != null) setPreferEarliestArrival(saved.preferEarliestArrival as boolean)
+    if (saved.avoidLunchBreak != null) setAvoidLunchBreak(saved.avoidLunchBreak as boolean)
+    if (saved.avoidEveningDelivery != null) setAvoidEveningDelivery(saved.avoidEveningDelivery as boolean)
+    if (saved.crewSize) setCrewSize(saved.crewSize as CrewSize)
+    if (saved.vehicleType) setVehicleType(saved.vehicleType as VehicleType)
+    if (saved.truckAccess) setTruckAccess(saved.truckAccess as TruckAccess)
+    if (saved.heavyItems) setHeavyItems(saved.heavyItems as HeavyItem[])
+    if (saved.customHeavyItems) setCustomHeavyItems(saved.customHeavyItems as HeavyItem[])
+    if (saved.additionalServices) setAdditionalServices(saved.additionalServices as AdditionalService[])
+    if (saved.storageWeeks != null) setStorageWeeks(saved.storageWeeks as number)
+    if (saved.disposalItems) setDisposalItems(saved.disposalItems as string)
+    if (saved.coverPhoto) setCoverPhoto(saved.coverPhoto as string)
+    if (saved.galleryPhotos) setGalleryPhotos(saved.galleryPhotos as string[])
+    if (saved.contactInfo) setContactInfo(saved.contactInfo as ContactInfo)
+    if (saved.legalConsent) setLegalConsent(saved.legalConsent as LegalConsent)
+  }, [])
+
+  // ─── 1. Restore draft from localStorage (+ one-shot sessionStorage for auth redirect) ───
   useEffect(() => {
     try {
-      const raw = sessionStorage.getItem('picklt_move_state')
-      if (!raw) return
-      const saved = JSON.parse(raw) as Record<string, unknown>
+      // Priority: sessionStorage auth-redirect state > localStorage draft
+      const authRaw = sessionStorage.getItem('picklt_move_state')
+      if (authRaw) {
+        const saved = JSON.parse(authRaw) as Record<string, unknown>
+        hydrateFromSaved(saved)
+        sessionStorage.removeItem('picklt_move_state')
+        sessionStorage.removeItem('picklt_auth_redirect')
+      } else {
+        const draftRaw = localStorage.getItem(DRAFT_KEY)
+        if (draftRaw) {
+          const saved = JSON.parse(draftRaw) as Record<string, unknown>
+          hydrateFromSaved(saved)
+        }
+      }
 
-      // Restore all saved fields
-      if (saved.pickupLocation) setPickupLocation(saved.pickupLocation as string)
-      if (saved.dropoffLocation) setDropoffLocation(saved.dropoffLocation as string)
-      if (saved.pickupCoordinates) setPickupCoordinates(saved.pickupCoordinates as Coordinates)
-      if (saved.dropoffCoordinates) setDropoffCoordinates(saved.dropoffCoordinates as Coordinates)
-      if (saved.moveDate) setMoveDate(saved.moveDate as string)
-      if (saved.moveType) setMoveType(saved.moveType as MoveTypeKey)
-      if (saved.isInstantMove != null) setIsInstantMove(saved.isInstantMove as boolean)
-      if (saved.homeType) setHomeType(saved.homeType as HomeTypeKey)
-      if (saved.floorLevel) setFloorLevel(saved.floorLevel as FloorLevelKey)
-      if (saved.elevatorAvailable != null) setElevatorAvailable(saved.elevatorAvailable as boolean)
-      if (saved.parkingSituation) setParkingSituation(saved.parkingSituation as ParkingKey)
-      if (saved.pickupStreetAddress) setPickupStreetAddress(saved.pickupStreetAddress as string)
-      if (saved.pickupApartmentUnit) setPickupApartmentUnit(saved.pickupApartmentUnit as string)
-      if (saved.dropoffStreetAddress) setDropoffStreetAddress(saved.dropoffStreetAddress as string)
-      if (saved.dropoffApartmentUnit) setDropoffApartmentUnit(saved.dropoffApartmentUnit as string)
-      if (saved.dropoffFloorLevel) setDropoffFloorLevel(saved.dropoffFloorLevel as FloorLevelKey)
-      if (saved.dropoffElevatorAvailable != null) setDropoffElevatorAvailable(saved.dropoffElevatorAvailable as boolean)
-      if (saved.dropoffParkingSituation) setDropoffParkingSituation(saved.dropoffParkingSituation as DropoffParkingKey)
-      if (saved.inventory) setInventory(saved.inventory as Record<string, number>)
-      if (saved.customItems) setCustomItems(saved.customItems as CustomItem[])
-      if (saved.packingServiceLevel) setPackingServiceLevel(saved.packingServiceLevel as PackingServiceLevel)
-      if (saved.packingMaterials) setPackingMaterials(saved.packingMaterials as PackingMaterial[])
-      if (saved.arrivalWindow) setArrivalWindow(saved.arrivalWindow as ArrivalWindow)
-      if (saved.crewSize) setCrewSize(saved.crewSize as CrewSize)
-      if (saved.vehicleType) setVehicleType(saved.vehicleType as VehicleType)
-      if (saved.additionalServices) setAdditionalServices(saved.additionalServices as AdditionalService[])
-      if (saved.storageWeeks != null) setStorageWeeks(saved.storageWeeks as number)
-      if (saved.coverPhoto) setCoverPhoto(saved.coverPhoto as string)
-      if (saved.galleryPhotos) setGalleryPhotos(saved.galleryPhotos as string[])
-      if (saved.contactInfo) setContactInfo(saved.contactInfo as ContactInfo)
-
-      // Clear saved state after restore
-      sessionStorage.removeItem('picklt_move_state')
-      sessionStorage.removeItem('picklt_auth_redirect')
+      // Restore stored moves from their own key
+      const movesRaw = localStorage.getItem(STORED_MOVES_KEY)
+      if (movesRaw) {
+        const moves = JSON.parse(movesRaw) as StoredMove[]
+        if (Array.isArray(moves)) setStoredMoves(moves)
+      }
     } catch {
       // Ignore errors during restore
+    } finally {
+      isHydrated.current = true
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // ─── 2. Auto-save draft to localStorage on state changes (debounced 500ms) ───
+  useEffect(() => {
+    if (!isHydrated.current) return
+
+    if (saveTimeout.current) clearTimeout(saveTimeout.current)
+    saveTimeout.current = setTimeout(() => {
+      const draft: Record<string, unknown> = {
+        pickupLocation,
+        dropoffLocation,
+        pickupCoordinates,
+        dropoffCoordinates,
+        moveDate,
+        moveType,
+        isInstantMove,
+        homeType,
+        floorLevel,
+        elevatorAvailable,
+        parkingSituation,
+        pickupStreetAddress,
+        pickupApartmentUnit,
+        pickupAccessNotes,
+        pickupLoadingZoneRequired,
+        pickupArrangeHaltverbot,
+        dropoffStreetAddress,
+        dropoffApartmentUnit,
+        dropoffFloorLevel,
+        dropoffElevatorAvailable,
+        dropoffParkingSituation,
+        dropoffArrangeHaltverbot,
+        inventory,
+        customItems,
+        packingServiceLevel,
+        packingMaterials,
+        customMaterials,
+        packingBoxQuantities,
+        packingNotes,
+        arrivalWindow,
+        flexibility,
+        preferEarliestArrival,
+        avoidLunchBreak,
+        avoidEveningDelivery,
+        crewSize,
+        vehicleType,
+        truckAccess,
+        heavyItems,
+        customHeavyItems,
+        additionalServices,
+        storageWeeks,
+        disposalItems,
+        coverPhoto,
+        galleryPhotos,
+        contactInfo,
+        legalConsent,
+      }
+
+      try {
+        localStorage.setItem(DRAFT_KEY, JSON.stringify(draft))
+      } catch {
+        // Quota exceeded — retry without photos (base64 can be large)
+        try {
+          localStorage.setItem(
+            DRAFT_KEY,
+            JSON.stringify({ ...draft, coverPhoto: null, galleryPhotos: [] })
+          )
+        } catch {
+          // Still too large — skip saving
+        }
+      }
+    }, 500)
+
+    return () => {
+      if (saveTimeout.current) clearTimeout(saveTimeout.current)
+    }
+  }, [
+    pickupLocation, dropoffLocation, pickupCoordinates, dropoffCoordinates,
+    moveDate, moveType, isInstantMove,
+    homeType, floorLevel, elevatorAvailable, parkingSituation,
+    pickupStreetAddress, pickupApartmentUnit, pickupAccessNotes,
+    pickupLoadingZoneRequired, pickupArrangeHaltverbot,
+    dropoffStreetAddress, dropoffApartmentUnit, dropoffFloorLevel,
+    dropoffElevatorAvailable, dropoffParkingSituation, dropoffArrangeHaltverbot,
+    inventory, customItems,
+    packingServiceLevel, packingMaterials, customMaterials, packingBoxQuantities, packingNotes,
+    arrivalWindow, flexibility, preferEarliestArrival, avoidLunchBreak, avoidEveningDelivery,
+    crewSize, vehicleType, truckAccess, heavyItems, customHeavyItems,
+    additionalServices, storageWeeks, disposalItems,
+    coverPhoto, galleryPhotos,
+    contactInfo, legalConsent,
+  ])
+
+  // ─── 3. Persist stored moves separately (they survive draft resets) ───
+  useEffect(() => {
+    if (!isHydrated.current) return
+    try {
+      localStorage.setItem(STORED_MOVES_KEY, JSON.stringify(storedMoves))
+    } catch {
+      // Quota exceeded — skip
+    }
+  }, [storedMoves])
 
   const setInventoryItem = (itemId: string, quantity: number) => {
     setInventory((prev) => ({ ...prev, [itemId]: quantity }))
@@ -695,8 +837,12 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
 
   const reset = () => {
     setPickupLocation(defaultState.pickupLocation)
+    setDropoffLocation(defaultState.dropoffLocation)
+    setPickupCoordinates(defaultState.pickupCoordinates)
+    setDropoffCoordinates(defaultState.dropoffCoordinates)
     setMoveDate(defaultState.moveDate)
     setMoveType(defaultState.moveType)
+    setIsInstantMove(defaultState.isInstantMove)
     setHomeType(defaultState.homeType)
     setFloorLevel(defaultState.floorLevel)
     setElevatorAvailable(defaultState.elevatorAvailable)
@@ -741,6 +887,8 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
     setContactInfo(defaultState.contactInfo)
     // Step 10
     setLegalConsent(defaultState.legalConsent)
+    // Clear persisted draft
+    try { localStorage.removeItem(DRAFT_KEY) } catch { /* ignore */ }
   }
 
   return (

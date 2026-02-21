@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createAdminClient } from '@/lib/appwrite-server'
+import { createAdminClient, withRetry } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
 import { Query } from 'node-appwrite'
 
@@ -36,10 +36,12 @@ export async function POST(req: NextRequest) {
 
     // Try to find existing user by authId (stored as document $id)
     try {
-      userDoc = await databases.getDocument(
-        APPWRITE.DATABASE_ID,
-        APPWRITE.COLLECTIONS.USERS,
-        authId
+      userDoc = await withRetry(() =>
+        databases.getDocument(
+          APPWRITE.DATABASE_ID,
+          APPWRITE.COLLECTIONS.USERS,
+          authId
+        )
       )
     } catch {
       // Document not found — create new
@@ -49,34 +51,38 @@ export async function POST(req: NextRequest) {
     if (isNew || !userDoc) {
       // Create new user document with authId as $id
       isNew = true
-      userDoc = await databases.createDocument(
-        APPWRITE.DATABASE_ID,
-        APPWRITE.COLLECTIONS.USERS,
-        authId,
-        {
-          email: email || '',
-          fullName: fullName || (email ? email.split('@')[0] : 'User'),
-          phone: phone || null,
-          profilePhoto: profilePhoto || null,
-          userType: 'client',
-          emailVerified: emailVerified ?? false,
-          phoneVerified: phoneVerified ?? false,
-        }
+      userDoc = await withRetry(() =>
+        databases.createDocument(
+          APPWRITE.DATABASE_ID,
+          APPWRITE.COLLECTIONS.USERS,
+          authId,
+          {
+            email: email || '',
+            fullName: fullName || (email ? email.split('@')[0] : 'User'),
+            phone: phone || null,
+            profilePhoto: profilePhoto || null,
+            userType: 'client',
+            emailVerified: emailVerified ?? false,
+            phoneVerified: phoneVerified ?? false,
+          }
+        )
       )
     } else {
       // Update existing user with latest auth data
-      userDoc = await databases.updateDocument(
-        APPWRITE.DATABASE_ID,
-        APPWRITE.COLLECTIONS.USERS,
-        authId,
-        {
-          email,
-          fullName: fullName || userDoc.fullName,
-          phone: phone || userDoc.phone,
-          profilePhoto: profilePhoto || userDoc.profilePhoto,
-          emailVerified: emailVerified ?? userDoc.emailVerified,
-          phoneVerified: phoneVerified ?? userDoc.phoneVerified,
-        }
+      userDoc = await withRetry(() =>
+        databases.updateDocument(
+          APPWRITE.DATABASE_ID,
+          APPWRITE.COLLECTIONS.USERS,
+          authId,
+          {
+            email,
+            fullName: fullName || userDoc.fullName,
+            phone: phone || userDoc.phone,
+            profilePhoto: profilePhoto || userDoc.profilePhoto,
+            emailVerified: emailVerified ?? userDoc.emailVerified,
+            phoneVerified: phoneVerified ?? userDoc.phoneVerified,
+          }
+        )
       )
     }
 

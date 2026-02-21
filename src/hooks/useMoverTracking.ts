@@ -1,6 +1,7 @@
-import { useEffect, useRef, useCallback, useState } from 'react'
-import { client } from '@/lib/appwrite'
+import { useEffect, useRef, useState } from 'react'
+import { client, databases } from '@/lib/appwrite'
 import type { RealtimeResponseEvent, Models } from 'appwrite'
+import { Query } from 'appwrite'
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || ''
 const MOVER_LOCATIONS_COLLECTION = process.env.NEXT_PUBLIC_COLLECTION_MOVER_LOCATIONS || ''
@@ -24,8 +25,8 @@ interface UseMoverTrackingOptions {
 
 /**
  * Hook that subscribes to Appwrite Realtime for live mover GPS updates.
- * Listens for changes to documents in the mover_locations collection
- * that match the given moverProfileId.
+ * Fetches the latest location document on mount, then subscribes for
+ * real-time updates in the mover_locations collection.
  */
 export function useMoverTracking({
   moverProfileId,
@@ -41,18 +42,57 @@ export function useMoverTracking({
     onLocationUpdateRef.current = onLocationUpdate
   }, [onLocationUpdate])
 
+  // ── Fetch the latest location document on mount ──────────
+  useEffect(() => {
+    if (!enabled || !moverProfileId || !DATABASE_ID || !MOVER_LOCATIONS_COLLECTION) return
+
+    let cancelled = false
+
+    ;(async () => {
+      try {
+        const res = await databases.listDocuments(
+          DATABASE_ID,
+          MOVER_LOCATIONS_COLLECTION,
+          [
+            Query.equal('moverProfileId', moverProfileId),
+            Query.orderDesc('$createdAt'),
+            Query.limit(1),
+          ]
+        )
+
+        if (cancelled || res.total === 0) return
+
+        const doc = res.documents[0] as Models.Document & Record<string, unknown>
+        const location: MoverLocationUpdate = {
+          latitude: doc.latitude as number,
+          longitude: doc.longitude as number,
+          heading: doc.heading as number | undefined,
+          speed: doc.speed as number | undefined,
+          timestamp: doc.$createdAt || (doc.timestamp as string) || new Date().toISOString(),
+        }
+
+        setLastLocation(location)
+        onLocationUpdateRef.current?.(location)
+      } catch (err) {
+        // Client SDK may lack permission — fall back silently to realtime
+        console.warn('[useMoverTracking] initial fetch failed:', err)
+      }
+    })()
+
+    return () => { cancelled = true }
+  }, [moverProfileId, enabled])
+
+  // ── Subscribe to realtime updates ────────────────────────
   useEffect(() => {
     if (!enabled || !moverProfileId || !DATABASE_ID || !MOVER_LOCATIONS_COLLECTION) {
       return
     }
 
-    // Subscribe to changes in the mover_locations collection
     const channel = `databases.${DATABASE_ID}.collections.${MOVER_LOCATIONS_COLLECTION}.documents`
 
     const unsubscribe = client.subscribe<Models.Document>(
       channel,
       (response: RealtimeResponseEvent<Models.Document>) => {
-        // Only process create/update events
         const events = response.events || []
         const isRelevant = events.some(
           (e) => e.includes('.create') || e.includes('.update')
@@ -62,7 +102,6 @@ export function useMoverTracking({
         const doc = response.payload as Models.Document & Record<string, unknown>
         if (!doc) return
 
-        // Filter by moverProfileId
         if (doc.moverProfileId !== moverProfileId) return
 
         const location: MoverLocationUpdate = {

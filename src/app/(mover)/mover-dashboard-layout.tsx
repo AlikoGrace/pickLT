@@ -1,6 +1,7 @@
 'use client'
 
 import { useAuth } from '@/context/auth'
+import Avatar from '@/shared/Avatar'
 import { useLocationBroadcast } from '@/hooks/useLocationBroadcast'
 import MoveRequestPopup from '@/components/MoveRequestPopup'
 import Logo from '@/shared/Logo'
@@ -116,6 +117,16 @@ const MoverDashboardLayout = ({ children }: Props) => {
     return null
   }
 
+    // Compute initials from user's full name
+  const initials = user?.fullName
+    ? user.fullName
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2)
+    : '?'
+
   // If profile IS completed but user is manually visiting /complete-profile, let them through
   // (they might want to view their submitted info)
 
@@ -138,17 +149,11 @@ const MoverDashboardLayout = ({ children }: Props) => {
           {/* User Info */}
           <div className="border-b border-neutral-200 px-4 py-4 dark:border-neutral-700">
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 overflow-hidden rounded-full bg-neutral-200 dark:bg-neutral-700">
-                {user?.profilePhoto ? (
-                  <img
-                    src={user.profilePhoto}
-                    alt={user.fullName}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <UserCircleIcon className="h-full w-full text-neutral-400" />
-                )}
-              </div>
+              <Avatar
+                src={user?.profilePhoto || undefined}
+                initials={!user?.profilePhoto ? initials : undefined}
+                className=" size-10 bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300"
+              />
               <div className="flex-1 min-w-0">
                 <p className="truncate text-sm font-medium text-neutral-900 dark:text-white">
                   {user?.fullName || 'Mover Name'}

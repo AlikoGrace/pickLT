@@ -26,6 +26,7 @@ interface Mover {
   userId: string
   businessName?: string
   fullName?: string
+  profilePhoto?: string
   profilePhotoUrl?: string
   rating?: number
   totalCompletedMoves?: number
@@ -207,7 +208,7 @@ const SelectMoverPage = () => {
       return {
         id: mover.$id,
         name: mover.businessName || mover.fullName || 'Mover',
-        photo: mover.profilePhotoUrl || '',
+        profilePhoto: mover.profilePhotoUrl || mover.profilePhoto || '',
         rating: mover.rating || 0,
         totalMoves: mover.totalCompletedMoves || 0,
         vehicleType,
@@ -221,6 +222,8 @@ const SelectMoverPage = () => {
         price: totalPrice,
         estimatedArrival,
         distanceKm: mover.distanceKm || distanceKm,
+        currentLatitude: mover.currentLatitude || null,
+        currentLongitude: mover.currentLongitude || null,
       }
     }).sort((a, b) => a.price - b.price) // Sort by price
   }, [routeDistance, inventoryCount, apiMovers])
@@ -388,9 +391,9 @@ const SelectMoverPage = () => {
               <div className="flex items-start gap-4">
                 {/* Mover Photo */}
                 <div className="relative shrink-0">
-                  {mover.photo ? (
+                  {mover.profilePhoto ? (
                     <Image
-                      src={mover.photo}
+                      src={mover.profilePhoto}
                       alt={mover.name}
                       width={64}
                       height={64}
@@ -515,7 +518,7 @@ const SelectMoverPage = () => {
 
       {/* Fixed Bottom Button */}
       <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-800 p-4">
-        <div className="container flex gap-3">
+        <div className="container max-w-3xl mx-auto flex gap-3">
           <ButtonSecondary
             href="/instant-move/photos"
             className="flex-1"

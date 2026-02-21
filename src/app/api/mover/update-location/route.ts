@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createAdminClient } from '@/lib/appwrite-server'
+import { createAdminClient, withRetry } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
 import { getSessionUserId } from '@/lib/auth-session'
 import { ID, Query } from 'node-appwrite'
@@ -29,10 +29,12 @@ export async function POST(req: NextRequest) {
     const { databases } = createAdminClient()
 
     // Look up the mover's profile by userId
-    const profiles = await databases.listDocuments(
-      APPWRITE.DATABASE_ID,
-      APPWRITE.COLLECTIONS.MOVER_PROFILES,
-      [Query.equal('userId', userId), Query.limit(1)]
+    const profiles = await withRetry(() =>
+      databases.listDocuments(
+        APPWRITE.DATABASE_ID,
+        APPWRITE.COLLECTIONS.MOVER_PROFILES,
+        [Query.equal('userId', userId), Query.limit(1)]
+      )
     )
 
     if (profiles.total === 0) {
@@ -42,30 +44,35 @@ export async function POST(req: NextRequest) {
     const moverProfileId = profiles.documents[0].$id
 
     // Create location record (Appwrite Realtime will broadcast this)
-    await databases.createDocument(
-      APPWRITE.DATABASE_ID,
-      APPWRITE.COLLECTIONS.MOVER_LOCATIONS,
-      ID.unique(),
-      {
-        moverProfileId,
-        moveId: moveId || null,
-        latitude,
-        longitude,
-        heading: heading ?? null,
-        speed: speed ?? null,
-        timestamp: new Date().toISOString(),
-      }
+    await withRetry(() =>
+      databases.createDocument(
+        APPWRITE.DATABASE_ID,
+        APPWRITE.COLLECTIONS.MOVER_LOCATIONS,
+        ID.unique(),
+        {
+          moverProfileId,
+          moveId: moveId || null,
+          latitude,
+          longitude,
+          heading: heading ?? null,
+          speed: speed ?? null,
+          timestamp: new Date().toISOString(),
+        }
+      )
     )
 
-    // Update current position on the mover profile
-    await databases.updateDocument(
-      APPWRITE.DATABASE_ID,
-      APPWRITE.COLLECTIONS.MOVER_PROFILES,
-      moverProfileId,
-      {
-        currentLatitude: latitude,
-        currentLongitude: longitude,
-      }
+    // Update current position on the mover profile and mark as online
+    await withRetry(() =>
+      databases.updateDocument(
+        APPWRITE.DATABASE_ID,
+        APPWRITE.COLLECTIONS.MOVER_PROFILES,
+        moverProfileId,
+        {
+          currentLatitude: latitude,
+          currentLongitude: longitude,
+          isOnline: true,
+        }
+      )
     )
 
     return NextResponse.json({ success: true })

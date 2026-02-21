@@ -6,13 +6,15 @@ import T from '@/utils/getT'
 import Form from 'next/form'
 import { useRouter } from 'next/navigation'
 import { useSearchParams } from 'next/navigation'
-import { useEffect, Suspense } from 'react'
+import { useEffect, Suspense, useCallback } from 'react'
 import FormItem from '../FormItem'
 import { useMoveSearch } from '@/context/moveSearch'
 import { useState } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { CalendarDaysIcon } from '@heroicons/react/24/outline'
+import { CalendarDaysIcon, PencilSquareIcon } from '@heroicons/react/24/outline'
+import MapLocationPicker, { PickedLocation } from '@/components/MapLocationPicker'
+import MapboxMap, { RouteInfo } from '@/components/MapboxMap'
 
 const PageContent = () => {
   const router = useRouter()
@@ -60,9 +62,34 @@ const PageContent = () => {
     setParkingSituation,
   } = useMoveSearch()
 
-  const { pickupLocation, dropoffLocation, setPickupLocation, setDropoffLocation, setMoveType } = useMoveSearch()
+  const { pickupLocation, dropoffLocation, setPickupLocation, setDropoffLocation, setMoveType, pickupCoordinates, dropoffCoordinates, setPickupCoordinates, setDropoffCoordinates } = useMoveSearch()
   const searchParams = useSearchParams()
   const [formErrors, setFormErrors] = useState<Record<string, string>>({})
+
+  // ─── Map & location picker state ──────────────────────────
+  const [routeInfo, setRouteInfo] = useState<RouteInfo | null>(null)
+  const [locationPickerOpen, setLocationPickerOpen] = useState(false)
+  const [editingLocationType, setEditingLocationType] = useState<'pickup' | 'dropoff'>('pickup')
+
+  const handleEditLocation = useCallback((type: 'pickup' | 'dropoff') => {
+    setEditingLocationType(type)
+    setLocationPickerOpen(true)
+  }, [])
+
+  const handleLocationPicked = useCallback((location: PickedLocation) => {
+    if (editingLocationType === 'pickup') {
+      setPickupLocation(location.fullAddress)
+      setPickupCoordinates(location.coordinates)
+    } else {
+      setDropoffLocation(location.fullAddress)
+      setDropoffCoordinates(location.coordinates)
+    }
+    setLocationPickerOpen(false)
+  }, [editingLocationType, setPickupLocation, setDropoffLocation, setPickupCoordinates, setDropoffCoordinates])
+
+  const handleRouteCalculated = useCallback((info: RouteInfo) => {
+    setRouteInfo(info)
+  }, [])
 
   // Read incoming query params and seed provider (if present)
   useEffect(() => {
@@ -92,29 +119,65 @@ const PageContent = () => {
       <h1 className="text-2xl font-semibold">STEP 1 — Move Details</h1>
       <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
 
-      {/* Location Summary */}
+      {/* Location Summary with Map */}
       {(pickupLocation || dropoffLocation) && (
-        <div className="bg-neutral-50 dark:bg-neutral-800 rounded-2xl p-4 border border-neutral-200 dark:border-neutral-700">
-          <h3 className="text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-3">Your move route</h3>
-          <div className="flex items-center gap-3">
-            <div className="flex flex-col items-center">
-              <div className="w-3 h-3 rounded-full bg-green-500" />
-              <div className="w-0.5 h-6 bg-neutral-300 dark:bg-neutral-600" />
-              <div className="w-3 h-3 rounded-full bg-red-500" />
+        <div className="overflow-hidden rounded-2xl border border-neutral-200 dark:border-neutral-700">
+          {/* Route map */}
+          {pickupCoordinates && dropoffCoordinates && (
+            <div className="relative h-44 sm:h-56">
+              <MapboxMap
+                pickupCoordinates={pickupCoordinates}
+                dropoffCoordinates={dropoffCoordinates}
+                showRoute={true}
+                onRouteCalculated={handleRouteCalculated}
+                className="w-full h-full !rounded-none"
+              />
             </div>
-            <div className="flex-1 space-y-2">
-              <div>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400">From</p>
-                <p className="text-sm font-medium text-neutral-900 dark:text-white">
-                  {pickupLocation || 'Not specified'}
-                </p>
+          )}
+          <div className="bg-neutral-50 dark:bg-neutral-800 p-4">
+            <h3 className="text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-3">Your move route</h3>
+            <div className="flex items-center gap-3">
+              <div className="flex flex-col items-center">
+                <div className="w-3 h-3 rounded-full bg-green-500" />
+                <div className="w-0.5 h-6 bg-neutral-300 dark:bg-neutral-600" />
+                <div className="w-3 h-3 rounded-full bg-red-500" />
               </div>
-              <div>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400">To</p>
-                <p className="text-sm font-medium text-neutral-900 dark:text-white">
-                  {dropoffLocation || 'Not specified'}
-                </p>
+              <div className="flex-1 space-y-2">
+                <button
+                  type="button"
+                  onClick={() => handleEditLocation('pickup')}
+                  className="block w-full text-left rounded-lg px-2 py-1 -mx-2 hover:bg-neutral-100 dark:hover:bg-neutral-700/60 transition"
+                >
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400">From</p>
+                  <p className="text-sm font-medium text-neutral-900 dark:text-white truncate">
+                    {pickupLocation || 'Tap to select pickup'}
+                  </p>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleEditLocation('dropoff')}
+                  className="block w-full text-left rounded-lg px-2 py-1 -mx-2 hover:bg-neutral-100 dark:hover:bg-neutral-700/60 transition"
+                >
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400">To</p>
+                  <p className="text-sm font-medium text-neutral-900 dark:text-white truncate">
+                    {dropoffLocation || 'Tap to select drop-off'}
+                  </p>
+                </button>
               </div>
+              {routeInfo && (
+                <div className="shrink-0 text-right">
+                  <p className="text-base font-semibold text-neutral-900 dark:text-white">
+                    {routeInfo.distance >= 1000
+                      ? `${(routeInfo.distance / 1000).toFixed(1)} km`
+                      : `${Math.round(routeInfo.distance)} m`}
+                  </p>
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                    {routeInfo.duration >= 3600
+                      ? `${Math.floor(routeInfo.duration / 3600)}h ${Math.ceil((routeInfo.duration % 3600) / 60)}min`
+                      : `${Math.ceil(routeInfo.duration / 60)} min`}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -215,6 +278,17 @@ const PageContent = () => {
         <input type="hidden" name="dropoffLocation" value={dropoffLocation || ''} />
         <input type="hidden" name="moveDate" value={moveDate || ''} />
       </Form>
+
+      {/* Location Picker Overlay */}
+      <MapLocationPicker
+        open={locationPickerOpen}
+        onClose={() => setLocationPickerOpen(false)}
+        onSelect={handleLocationPicked}
+        initialCoordinates={
+          editingLocationType === 'pickup' ? pickupCoordinates : dropoffCoordinates
+        }
+        label={editingLocationType === 'pickup' ? 'Edit pickup location' : 'Edit drop-off location'}
+      />
     </>
   )
 }

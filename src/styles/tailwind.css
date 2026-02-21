@@ -272,3 +272,13 @@
 @utility hero-search-form__field-before {
   @apply before:absolute before:-start-1 before:top-1/2 before:-z-10 before:hidden before:h-9 before:w-2 before:-translate-y-1/2 before:bg-(--form-bg) data-open:before:block;
 }
+
+/* Mapbox marker tooltip overrides */
+.mapbox-marker-tooltip .mapboxgl-popup-content {
+  padding: 0;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+.mapbox-marker-tooltip .mapboxgl-popup-tip {
+  border-top-color: #fff;
+}

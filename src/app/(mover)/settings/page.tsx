@@ -2,6 +2,7 @@
 
 import { useAuth } from '@/context/auth'
 import { account } from '@/lib/appwrite'
+import Avatar from '@/shared/Avatar'
 import {
   UserCircleIcon,
   TruckIcon,
@@ -143,6 +144,17 @@ const SettingsPage = () => {
       setIsSaving(false)
     }
   }
+
+    // Compute initials from user's full name
+  const initials = user?.fullName
+    ? user.fullName
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2)
+    : '?'
+
 
   const handleChangePhone = async () => {
     if (!newPhone.trim()) return
@@ -315,19 +327,11 @@ const SettingsPage = () => {
       <div className="bg-white dark:bg-neutral-800 rounded-2xl p-4 shadow-sm mb-6">
         <div className="flex items-center gap-4">
           <div className="relative">
-            <div className="w-16 h-16 rounded-full overflow-hidden bg-neutral-200 dark:bg-neutral-700">
-              {user?.profilePhoto ? (
-                <Image
-                  src={user.profilePhoto}
-                  alt={user.fullName}
-                  width={64}
-                  height={64}
-                  className="object-cover w-full h-full"
-                />
-              ) : (
-                <UserCircleIcon className="w-full h-full text-neutral-400" />
-              )}
-            </div>
+            <Avatar
+              src={user?.profilePhoto || undefined}
+              initials={!user?.profilePhoto ? initials : undefined}
+              className=" size-24 bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300"
+            />
             <button
               onClick={() => fileInputRef.current?.click()}
               disabled={isUploading}

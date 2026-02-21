@@ -9,16 +9,8 @@ const navigation = [
     href: '/account',
   },
   {
-    title: 'Saved listings',
+    title: 'My Moves',
     href: '/account-savelists',
-  },
-  {
-    title: 'Password',
-    href: '/account-password',
-  },
-  {
-    title: 'Payments & payouts',
-    href: '/account-billing',
   },
 ]
 

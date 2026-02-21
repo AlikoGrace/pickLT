@@ -6,6 +6,7 @@ import { Badge } from '@/shared/Badge'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import Avatar from '@/shared/Avatar'
 
 interface DashboardData {
   activeMoves: string[]
@@ -73,6 +74,17 @@ const DashboardPage = () => {
     return 'in_progress'
   }
 
+  // Compute initials from user's full name
+  const initials = user?.fullName
+    ? user.fullName
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2)
+    : '?'
+
+
   const recentMoves: RecentMove[] = (dashboard?.recentMoves || []).map((m) => ({
     id: m.$id,
     pickup: m.pickupLabel || 'Pickup',
@@ -92,28 +104,28 @@ const DashboardPage = () => {
       value: dashboard?.activeMoves.length ?? 0,
       icon: TruckIcon,
       href: '/available-moves',
-      color: 'bg-blue-500',
+      color: 'bg-neutral-500',
     },
     {
       name: 'Completed This Month',
       value: dashboard?.completedThisMonth ?? 0,
       icon: CalendarDaysIcon,
       href: '#',
-      color: 'bg-green-500',
+      color: 'bg-neutral-500',
     },
     {
       name: 'Crew Members',
       value: dashboard?.crewCount ?? crewMembers?.length ?? 0,
       icon: UsersIcon,
       href: '/my-crew',
-      color: 'bg-purple-500',
+      color: 'bg-neutral-500',
     },
     {
       name: 'Earnings This Month',
       value: `€${(dashboard?.earningsThisMonth ?? 0).toLocaleString()}`,
       icon: CurrencyEuroIcon,
       href: '/earnings',
-      color: 'bg-yellow-500',
+      color: 'bg-neutral-500',
     },
   ]
 
@@ -152,20 +164,11 @@ const DashboardPage = () => {
       {/* Welcome Header */}
       <div className="mb-6">
         <div className="flex items-center gap-4">
-          <div className="relative w-16 h-16 rounded-full overflow-hidden bg-neutral-200 dark:bg-neutral-700">
-            {user?.profilePhoto ? (
-              <Image
-                src={user.profilePhoto}
-                alt={user.fullName}
-                fill
-                className="object-cover"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-2xl font-semibold text-neutral-500">
-                {user?.fullName?.charAt(0) || 'M'}
-              </div>
-            )}
-          </div>
+          <Avatar
+            src={user?.profilePhoto || undefined}
+            initials={!user?.profilePhoto ? initials : undefined}
+            className=" size-20 bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300"
+          />
           <div>
             <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
               Welcome back, {user?.fullName?.split(' ')[0] || 'Mover'}!

@@ -85,7 +85,7 @@ const MoveCard: FC<MoveCardProps> = ({ size = 'default', className = '', data })
     galleryPhotos,
   } = data
 
-  const listingHref = `/stay-listings/${handle}`
+  const listingHref = `/move-details/${handle}`
 
   // Create gallery images array for slider
   const galleryImgs = coverPhoto 

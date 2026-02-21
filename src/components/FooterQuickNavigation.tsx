@@ -28,23 +28,18 @@ const CLIENT_NAV = [
   },
   {
     name: 'My Moves',
-    link: '/move-preview',
-    icon: ClipboardDocumentListIcon,
-  },
-  {
-    name: 'Wishlists',
     link: '/account-savelists',
-    icon: HeartIcon,
+    icon: ClipboardDocumentListIcon,
   },
   {
     name: 'Account',
     link: '/account',
     icon: UserCircleIcon,
   },
-  {
-    name: 'Menu',
-    icon: Bars3Icon,
-  },
+  // {
+  //   name: 'Menu',
+  //   icon: Bars3Icon,
+  // },
 ]
 
 // Mover navigation items
