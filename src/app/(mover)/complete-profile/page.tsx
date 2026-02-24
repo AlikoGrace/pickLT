@@ -1,8 +1,9 @@
 'use client'
 
 import { useAuth } from '@/context/auth'
+import { compressImage } from '@/utils/compressImage'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import {
   TruckIcon,
   IdentificationIcon,
@@ -10,6 +11,9 @@ import {
   CheckCircleIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  ShieldCheckIcon,
+  MapPinIcon,
+  CameraIcon,
 } from '@heroicons/react/24/outline'
 
 const VEHICLE_TYPES = [
@@ -31,10 +35,18 @@ const LANGUAGES_OPTIONS = [
   'Portuguese',
 ]
 
-type Step = 'personal' | 'vehicle' | 'experience' | 'review'
+const COUNTRIES = [
+  'Germany', 'Austria', 'Switzerland', 'Netherlands', 'Belgium',
+  'France', 'Luxembourg', 'Denmark', 'Poland', 'Czech Republic',
+  'United Kingdom', 'Ireland', 'Spain', 'Italy', 'Portugal',
+  'Sweden', 'Norway', 'Finland', 'United States', 'Canada',
+]
+
+type Step = 'personal' | 'verification' | 'vehicle' | 'experience' | 'review'
 
 const STEPS: { key: Step; label: string; icon: typeof TruckIcon }[] = [
   { key: 'personal', label: 'Personal Info', icon: IdentificationIcon },
+  { key: 'verification', label: 'Verification', icon: ShieldCheckIcon },
   { key: 'vehicle', label: 'Vehicle Details', icon: TruckIcon },
   { key: 'experience', label: 'Experience', icon: ClipboardDocumentCheckIcon },
   { key: 'review', label: 'Review & Submit', icon: CheckCircleIcon },
@@ -48,12 +60,19 @@ export default function CompleteProfilePage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
+  const licensePhotoRef = useRef<HTMLInputElement>(null)
 
   // Form state
   const [form, setForm] = useState({
     fullName: user?.fullName || '',
     phone: user?.phone || '',
     driversLicense: '',
+    driversLicensePhoto: null as File | null,
+    driversLicensePhotoPreview: '',
+    socialSecurityNumber: '',
+    taxNumber: '',
+    primaryCity: '',
+    primaryCountry: '',
     vehicleBrand: '',
     vehicleModel: '',
     vehicleYear: '',
@@ -75,6 +94,8 @@ export default function CompleteProfilePage() {
     switch (currentStep) {
       case 'personal':
         return form.fullName.trim() && form.phone.trim() && form.driversLicense.trim()
+      case 'verification':
+        return form.primaryCity.trim() && form.primaryCountry.trim()
       case 'vehicle':
         return (
           form.vehicleBrand.trim() &&
@@ -106,6 +127,23 @@ export default function CompleteProfilePage() {
     setIsSubmitting(true)
     setError('')
     try {
+      // Upload driver's license photo if provided
+      let driversLicensePhotoUrl = ''
+      if (form.driversLicensePhoto) {
+        const compressed = await compressImage(form.driversLicensePhoto)
+        const photoFormData = new FormData()
+        photoFormData.append('file', compressed)
+        photoFormData.append('bucket', 'PROFILE_PHOTOS')
+        const uploadRes = await fetch('/api/user/upload-photo', {
+          method: 'POST',
+          body: photoFormData,
+        })
+        if (uploadRes.ok) {
+          const uploadData = await uploadRes.json()
+          driversLicensePhotoUrl = uploadData.photoUrl
+        }
+      }
+
       // Submit mover profile (includes personal info)
       const res = await fetch('/api/mover/submit-profile', {
         method: 'POST',
@@ -114,6 +152,11 @@ export default function CompleteProfilePage() {
           fullName: form.fullName,
           phone: form.phone,
           driversLicense: form.driversLicense,
+          driversLicensePhoto: driversLicensePhotoUrl || undefined,
+          socialSecurityNumber: form.socialSecurityNumber || undefined,
+          taxNumber: form.taxNumber || undefined,
+          primaryCity: form.primaryCity,
+          primaryCountry: form.primaryCountry,
           vehicleBrand: form.vehicleBrand,
           vehicleModel: form.vehicleModel,
           vehicleYear: form.vehicleYear,
@@ -272,7 +315,139 @@ export default function CompleteProfilePage() {
           </div>
         )}
 
-        {/* Step 2: Vehicle Details */}
+        {/* Step 2: Verification & Location */}
+        {currentStep === 'verification' && (
+          <div className="space-y-5">
+            <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+              Verification & Work Location
+            </h2>
+            <p className="text-sm text-neutral-500 dark:text-neutral-400">
+              This information is required for identity verification and will be kept secure.
+            </p>
+
+            {/* Driver's License Photo */}
+            <div>
+              <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                Driver&apos;s License Photo
+              </label>
+              <input
+                ref={licensePhotoRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0]
+                  if (file) {
+                    updateForm({
+                      driversLicensePhoto: file,
+                      driversLicensePhotoPreview: URL.createObjectURL(file),
+                    })
+                  }
+                }}
+              />
+              {form.driversLicensePhotoPreview ? (
+                <div className="relative">
+                  <img
+                    src={form.driversLicensePhotoPreview}
+                    alt="License preview"
+                    className="h-40 w-full rounded-xl object-cover border border-neutral-200 dark:border-neutral-700"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => licensePhotoRef.current?.click()}
+                    className="absolute bottom-2 right-2 rounded-full bg-white/90 dark:bg-neutral-800/90 px-3 py-1.5 text-xs font-medium shadow transition hover:bg-white"
+                  >
+                    Change photo
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => licensePhotoRef.current?.click()}
+                  className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-neutral-300 py-8 text-sm text-neutral-500 transition hover:border-primary-400 hover:text-primary-600 dark:border-neutral-600 dark:hover:border-primary-500"
+                >
+                  <CameraIcon className="h-5 w-5" />
+                  Upload a photo of your driver&apos;s license
+                </button>
+              )}
+              <p className="mt-1 text-xs text-neutral-400">
+                A clear photo helps speed up verification
+              </p>
+            </div>
+
+            {/* SSN */}
+            <div>
+              <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                Social Security Number
+              </label>
+              <input
+                type="password"
+                value={form.socialSecurityNumber}
+                onChange={(e) => updateForm({ socialSecurityNumber: e.target.value })}
+                placeholder="Enter your SSN"
+                autoComplete="off"
+                className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
+              />
+              <p className="mt-1 text-xs text-neutral-400">
+                Optional — encrypted and only used for tax verification
+              </p>
+            </div>
+
+            {/* Tax Number */}
+            <div>
+              <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                Tax Identification Number
+              </label>
+              <input
+                type="text"
+                value={form.taxNumber}
+                onChange={(e) => updateForm({ taxNumber: e.target.value })}
+                placeholder="e.g. DE123456789"
+                className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
+              />
+              <p className="mt-1 text-xs text-neutral-400">
+                Optional — for invoice generation and tax reporting
+              </p>
+            </div>
+
+            {/* Country */}
+            <div>
+              <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                Country *
+              </label>
+              <select
+                value={form.primaryCountry}
+                onChange={(e) => updateForm({ primaryCountry: e.target.value })}
+                className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
+              >
+                <option value="">Select your country</option>
+                {COUNTRIES.map((c) => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* City */}
+            <div>
+              <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                City *
+              </label>
+              <input
+                type="text"
+                value={form.primaryCity}
+                onChange={(e) => updateForm({ primaryCity: e.target.value })}
+                placeholder="e.g. Berlin"
+                className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
+              />
+              <p className="mt-1 text-xs text-neutral-400">
+                The city where you primarily operate as a mover
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Step 3: Vehicle Details */}
+
         {currentStep === 'vehicle' && (
           <div className="space-y-5">
             <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
@@ -377,7 +552,7 @@ export default function CompleteProfilePage() {
           </div>
         )}
 
-        {/* Step 3: Experience */}
+        {/* Step 4: Experience */}
         {currentStep === 'experience' && (
           <div className="space-y-5">
             <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
@@ -447,7 +622,7 @@ export default function CompleteProfilePage() {
           </div>
         )}
 
-        {/* Step 4: Review */}
+        {/* Step 5: Review */}
         {currentStep === 'review' && (
           <div className="space-y-5">
             <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
@@ -464,6 +639,22 @@ export default function CompleteProfilePage() {
                   {form.fullName} &middot; {form.phone}
                 </p>
                 <p className="text-sm text-neutral-500">License: {form.driversLicense}</p>
+              </div>
+              <hr className="border-neutral-200 dark:border-neutral-600" />
+              <div>
+                <p className="text-xs font-medium uppercase text-neutral-400">Verification & Location</p>
+                <p className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">
+                  {form.primaryCity}, {form.primaryCountry}
+                </p>
+                {form.driversLicensePhotoPreview && (
+                  <p className="text-sm text-green-600 dark:text-green-400">✓ License photo uploaded</p>
+                )}
+                {form.socialSecurityNumber && (
+                  <p className="text-sm text-neutral-500">SSN: ••••{form.socialSecurityNumber.slice(-4)}</p>
+                )}
+                {form.taxNumber && (
+                  <p className="text-sm text-neutral-500">Tax ID: {form.taxNumber}</p>
+                )}
               </div>
               <hr className="border-neutral-200 dark:border-neutral-600" />
               <div>
