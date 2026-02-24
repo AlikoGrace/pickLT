@@ -484,7 +484,7 @@ const InstantMoveInventoryPage = () => {
               disabled={totalItems === 0}
               className="disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Find a mover
+              Add photos
             </ButtonPrimary>
           </div>
         </div>
