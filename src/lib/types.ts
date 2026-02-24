@@ -29,6 +29,11 @@ export type VerificationStatus = 'pending_verification' | 'verified' | 'suspende
 export interface MoverProfileDoc extends AppwriteDoc {
   userId: UserDoc | string
   driversLicense: string | null
+  driversLicensePhoto: string | null
+  socialSecurityNumber: string | null
+  taxNumber: string | null
+  primaryCity: string | null
+  primaryCountry: string | null
   vehicleBrand: string | null
   vehicleModel: string | null
   vehicleYear: string | null

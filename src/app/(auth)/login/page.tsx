@@ -41,6 +41,7 @@ function LoginContent() {
     isAuthenticated,
     user,
     isLoading,
+    logout,
   } = useAuth()
 
   const [step, setStep] = useState<Step>('choice')
@@ -60,6 +61,12 @@ function LoginContent() {
   // Redirect if authenticated AND phone is verified (useEffect avoids render-time setState)
   useEffect(() => {
     if (!isLoading && isAuthenticated && user?.phoneVerified) {
+      // Block client accounts from accessing the mover portal
+      if (isMover && user.userType === 'client') {
+        setError('Your account is registered as a client. Client accounts cannot access the mover portal. Please create a separate account to register as a mover.')
+        logout()
+        return
+      }
       router.replace(getRedirectUrl())
     }
   }, [isLoading, isAuthenticated, user?.phoneVerified]) // eslint-disable-line react-hooks/exhaustive-deps

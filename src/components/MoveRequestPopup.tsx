@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
 import { client } from '@/lib/appwrite'
 import type { RealtimeResponseEvent, Models } from 'appwrite'
 import {
@@ -30,17 +31,82 @@ interface MoveRequestPopupProps {
   moverProfileId: string | null
 }
 
+// ─── Alert sound generator ──────────────────────────────────
+// Creates a looping alert sound using the Web Audio API
+function createAlertSound(): { play: () => void; stop: () => void } {
+  let ctx: AudioContext | null = null
+  let oscillator: OscillatorNode | null = null
+  let gainNode: GainNode | null = null
+  let intervalId: NodeJS.Timeout | null = null
+
+  const play = () => {
+    try {
+      ctx = new AudioContext()
+      gainNode = ctx.createGain()
+      gainNode.connect(ctx.destination)
+      gainNode.gain.value = 0
+
+      // Play a repeating two-tone beep pattern
+      let isPlaying = true
+      const beep = (freq: number, duration: number) => {
+        if (!ctx || !gainNode || !isPlaying) return
+        const osc = ctx.createOscillator()
+        osc.type = 'sine'
+        osc.frequency.value = freq
+        osc.connect(gainNode)
+        gainNode.gain.setValueAtTime(0.5, ctx.currentTime)
+        osc.start()
+        setTimeout(() => {
+          gainNode?.gain.setValueAtTime(0, ctx!.currentTime)
+          osc.stop()
+          osc.disconnect()
+        }, duration)
+      }
+
+      // Two-tone alert: high-low pattern every 1.5 seconds
+      const playPattern = () => {
+        beep(880, 200)
+        setTimeout(() => beep(660, 200), 250)
+        setTimeout(() => beep(880, 200), 500)
+      }
+
+      playPattern()
+      intervalId = setInterval(playPattern, 1500)
+    } catch {
+      // Web Audio API not available
+    }
+  }
+
+  const stop = () => {
+    if (intervalId) {
+      clearInterval(intervalId)
+      intervalId = null
+    }
+    if (ctx) {
+      ctx.close().catch(() => {})
+      ctx = null
+    }
+  }
+
+  return { play, stop }
+}
+
 export default function MoveRequestPopup({ moverProfileId }: MoveRequestPopupProps) {
+  const router = useRouter()
   const [incoming, setIncoming] = useState<IncomingRequest | null>(null)
   const [isAccepting, setIsAccepting] = useState(false)
   const [isDeclining, setIsDeclining] = useState(false)
   const [countdown, setCountdown] = useState<number>(60)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
-  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const alertRef = useRef<{ play: () => void; stop: () => void } | null>(null)
 
-  // Countdown timer
+  // Countdown timer + alert sound
   useEffect(() => {
-    if (!incoming) return
+    if (!incoming) {
+      // Stop sound when there's no incoming request
+      alertRef.current?.stop()
+      return
+    }
 
     // Parse expiry to set countdown
     if (incoming.expiresAt) {
@@ -52,10 +118,15 @@ export default function MoveRequestPopup({ moverProfileId }: MoveRequestPopupPro
       setCountdown(60)
     }
 
+    // Start alert sound
+    alertRef.current = createAlertSound()
+    alertRef.current.play()
+
     timerRef.current = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
           // Auto-dismiss on timeout
+          alertRef.current?.stop()
           setIncoming(null)
           return 0
         }
@@ -65,6 +136,7 @@ export default function MoveRequestPopup({ moverProfileId }: MoveRequestPopupPro
 
     return () => {
       if (timerRef.current) clearInterval(timerRef.current)
+      alertRef.current?.stop()
     }
   }, [incoming])
 
@@ -101,14 +173,6 @@ export default function MoveRequestPopup({ moverProfileId }: MoveRequestPopupPro
         }
 
         setIncoming(request)
-
-        // Play notification sound
-        try {
-          if (!audioRef.current) {
-            audioRef.current = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQ==')
-          }
-          audioRef.current.play().catch(() => {})
-        } catch {}
       }
     )
 
@@ -119,6 +183,7 @@ export default function MoveRequestPopup({ moverProfileId }: MoveRequestPopupPro
     if (!incoming) return
     try {
       setIsAccepting(true)
+      alertRef.current?.stop()
       const res = await fetch('/api/mover/accept-move', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -129,7 +194,8 @@ export default function MoveRequestPopup({ moverProfileId }: MoveRequestPopupPro
       })
       if (res.ok) {
         setIncoming(null)
-        // Could redirect to the move or show success
+        // Redirect to active-move tracking page
+        router.push('/active-move')
       } else {
         const errData = await res.json().catch(() => ({}))
         alert(errData.error || 'Failed to accept move')
@@ -139,13 +205,19 @@ export default function MoveRequestPopup({ moverProfileId }: MoveRequestPopupPro
     } finally {
       setIsAccepting(false)
     }
-  }, [incoming])
+  }, [incoming, router])
 
   const handleDecline = useCallback(async () => {
     if (!incoming) return
     try {
       setIsDeclining(true)
-      // Just dismiss the popup — in production you could call an API to mark it declined
+      alertRef.current?.stop()
+      // Call decline API so the server can update the record
+      await fetch('/api/mover/decline-move', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ requestId: incoming.requestId }),
+      }).catch(() => {})
       setIncoming(null)
     } finally {
       setIsDeclining(false)

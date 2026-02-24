@@ -4,6 +4,8 @@ import MapboxMap, { RouteInfo } from '@/components/MapboxMap'
 import MapLocationPicker, { PickedLocation } from '@/components/MapLocationPicker'
 import { useMoveSearch, Coordinates } from '@/context/moveSearch'
 import { useMoverTracking } from '@/hooks/useMoverTracking'
+import { client } from '@/lib/appwrite'
+import type { RealtimeResponseEvent, Models } from 'appwrite'
 import ButtonPrimary from '@/shared/ButtonPrimary'
 import ButtonSecondary from '@/shared/ButtonSecondary'
 import Logo from '@/shared/Logo'
@@ -148,8 +150,8 @@ const InstantMovePage = () => {
 
   const [phase, setPhase] = useState<MovePhase>('mover_arriving')
   const [routeInfo, setRouteInfo] = useState<RouteInfo | null>(null)
-  const [moverEtaMinutes, setMoverEtaMinutes] = useState(12)
-  const [moverDistanceKm, setMoverDistanceKm] = useState(2.4)
+  const [moverEtaMinutes, setMoverEtaMinutes] = useState(0)
+  const [moverDistanceKm, setMoverDistanceKm] = useState(0)
 
   // Calculate mover starting position (offset from pickup)
   const [moverCoords, setMoverCoords] = useState<Coordinates | null>(null)
@@ -158,7 +160,7 @@ const InstantMovePage = () => {
   useEffect(() => {
     if (selectedMover) {
       setMoverEtaMinutes(selectedMover.estimatedArrival)
-      setMoverDistanceKm(selectedMover.distanceKm || 2.4)
+      setMoverDistanceKm(selectedMover.distanceKm)
     }
   }, [selectedMover])
 
@@ -214,6 +216,74 @@ const InstantMovePage = () => {
   const handleRouteCalculated = useCallback((info: RouteInfo) => {
     setRouteInfo(info)
   }, [])
+
+  // ─── Subscribe to move & move_request status changes (Appwrite Realtime) ─────
+  useEffect(() => {
+    const moveId = sessionStorage.getItem('activeMoveId')
+    const dbId = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID
+    const movesColl = process.env.NEXT_PUBLIC_COLLECTION_MOVES
+    const moveReqColl = process.env.NEXT_PUBLIC_COLLECTION_MOVE_REQUESTS
+
+    if (!moveId || !dbId) return
+
+    const channels: string[] = []
+    if (movesColl) channels.push(`databases.${dbId}.collections.${movesColl}.documents.${moveId}`)
+    if (moveReqColl) channels.push(`databases.${dbId}.collections.${moveReqColl}.documents`)
+
+    if (channels.length === 0) return
+
+    const unsubscribe = client.subscribe<Models.Document>(
+      channels,
+      (response: RealtimeResponseEvent<Models.Document>) => {
+        const doc = response.payload as Models.Document & Record<string, unknown>
+        if (!doc) return
+
+        // Move document update — map Appwrite status to MovePhase
+        if (doc.$collectionId === movesColl) {
+          const status = doc.status as string
+          switch (status) {
+            case 'mover_accepted':
+            case 'mover_en_route':
+              setPhase('mover_arriving')
+              break
+            case 'mover_arrived':
+              setPhase('mover_arrived')
+              break
+            case 'loading':
+              setPhase('loading')
+              break
+            case 'in_transit':
+              setPhase('in_transit')
+              break
+            case 'arrived_destination':
+            case 'unloading':
+            case 'completed':
+              setPhase('arrived')
+              break
+            case 'cancelled_by_mover':
+              // Mover cancelled — go back to select a new mover
+              alert('The mover has cancelled. Searching for another mover...')
+              router.push('/instant-move/select-mover')
+              break
+          }
+        }
+
+        // Move request update — watch for declined/expired
+        if (doc.$collectionId === moveReqColl && doc.moveId === moveId) {
+          const status = doc.status as string
+          if (status === 'declined' || status === 'expired') {
+            // The mover declined / timed out — redirect to pick another
+            alert('The mover declined your request. Searching for another mover...')
+            sessionStorage.removeItem('activeMoveId')
+            sessionStorage.removeItem('activeMoveRequestId')
+            router.push('/instant-move/select-mover')
+          }
+        }
+      }
+    )
+
+    return () => unsubscribe()
+  }, [router])
 
     // Compute initials from user's full name
   const initials = mover?.name

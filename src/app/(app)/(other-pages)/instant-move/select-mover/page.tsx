@@ -232,7 +232,7 @@ const SelectMoverPage = () => {
     setSelectedMover(moverId)
   }
 
-  const handleConfirmMover = () => {
+  const handleConfirmMover = async () => {
     if (!selectedMover) return
 
     const mover = moversWithPrices.find((m) => m.id === selectedMover)
@@ -244,6 +244,40 @@ const SelectMoverPage = () => {
       routeDistance,
       routeDuration,
     }))
+
+    // ── Create the move + move_request via API ──────────────
+    try {
+      const res = await fetch('/api/moves/create-instant', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          moverProfileId: mover.id,
+          pickupLocation: pickupLocation || null,
+          pickupLatitude: pickupCoordinates?.latitude ?? null,
+          pickupLongitude: pickupCoordinates?.longitude ?? null,
+          dropoffLocation: dropoffLocation || null,
+          dropoffLatitude: dropoffCoordinates?.latitude ?? null,
+          dropoffLongitude: dropoffCoordinates?.longitude ?? null,
+          moveType: 'regular',
+          inventoryItems: JSON.stringify(inventory),
+          customItems: customItems.map((c) => JSON.stringify(c)),
+          totalItemCount: inventoryCount,
+          estimatedPrice: mover.price,
+          routeDistanceMeters: routeDistance || null,
+          routeDurationSeconds: routeDuration || null,
+        }),
+      })
+
+      if (res.ok) {
+        const data = await res.json()
+        // Store moveId so the instant-move page can subscribe to updates
+        sessionStorage.setItem('activeMoveId', data.moveId)
+        sessionStorage.setItem('activeMoveRequestId', data.moveRequestId)
+      }
+    } catch (err) {
+      console.error('Failed to create move:', err)
+      // Continue anyway — the mover page will still work for UI
+    }
 
     // Navigate to the instant-move page with the map
     router.push('/instant-move')

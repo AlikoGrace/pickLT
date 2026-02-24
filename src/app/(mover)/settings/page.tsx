@@ -2,6 +2,7 @@
 
 import { useAuth } from '@/context/auth'
 import { account } from '@/lib/appwrite'
+import { compressImage } from '@/utils/compressImage'
 import Avatar from '@/shared/Avatar'
 import {
   UserCircleIcon,
@@ -64,8 +65,10 @@ const SettingsPage = () => {
     setIsUploading(true)
     setError('')
     try {
+      // Compress image before uploading
+      const compressed = await compressImage(file)
       const formData = new FormData()
-      formData.append('file', file)
+      formData.append('file', compressed)
 
       const res = await fetch('/api/user/upload-photo', {
         method: 'POST',

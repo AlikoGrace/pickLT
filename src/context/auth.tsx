@@ -24,6 +24,11 @@ export type User = {
   moverDetails?: {
     profileId: string
     driversLicense?: string
+    driversLicensePhoto?: string
+    socialSecurityNumber?: string
+    taxNumber?: string
+    primaryCity?: string
+    primaryCountry?: string
     vehicleBrand?: string
     vehicleModel?: string
     vehicleYear?: string
@@ -158,6 +163,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           moverDetails: {
             profileId: moverProfile.$id,
             driversLicense: moverProfile.driversLicense ?? undefined,
+            driversLicensePhoto: moverProfile.driversLicensePhoto ?? undefined,
+            socialSecurityNumber: moverProfile.socialSecurityNumber ?? undefined,
+            taxNumber: moverProfile.taxNumber ?? undefined,
+            primaryCity: moverProfile.primaryCity ?? undefined,
+            primaryCountry: moverProfile.primaryCountry ?? undefined,
             vehicleBrand: moverProfile.vehicleBrand ?? undefined,
             vehicleModel: moverProfile.vehicleModel ?? undefined,
             vehicleYear: moverProfile.vehicleYear ?? undefined,

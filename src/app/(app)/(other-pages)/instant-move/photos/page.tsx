@@ -1,6 +1,7 @@
 'use client'
 
 import { useMoveSearch } from '@/context/moveSearch'
+import { compressImage } from '@/utils/compressImage'
 import ButtonPrimary from '@/shared/ButtonPrimary'
 import ButtonSecondary from '@/shared/ButtonSecondary'
 import { Divider } from '@/shared/divider'
@@ -42,29 +43,31 @@ const InstantMovePhotosPage = () => {
     router.prefetch('/instant-move/select-mover')
   }, [router])
 
-  const handleCoverPhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCoverPhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
+      const compressed = await compressImage(file)
       const reader = new FileReader()
       reader.onloadend = () => {
         setCoverPhoto(reader.result as string)
         setShowError(false)
       }
-      reader.readAsDataURL(file)
+      reader.readAsDataURL(compressed)
     }
   }
 
-  const handleGalleryPhotosChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleGalleryPhotosChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
     if (files) {
-      Array.from(files).forEach((file) => {
+      for (const file of Array.from(files)) {
+        const compressed = await compressImage(file)
         const reader = new FileReader()
         reader.onloadend = () => {
           addGalleryPhoto(reader.result as string)
           setShowError(false)
         }
-        reader.readAsDataURL(file)
-      })
+        reader.readAsDataURL(compressed)
+      }
     }
   }
 

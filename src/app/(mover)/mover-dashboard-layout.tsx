@@ -29,6 +29,11 @@ const MOVER_NAV_ITEMS = [
     icon: HomeIcon,
   },
   {
+    name: 'Active Move',
+    href: '/active-move',
+    icon: TruckIcon,
+  },
+  {
     name: 'Available Moves',
     href: '/available-moves',
     icon: MapIcon,
@@ -55,6 +60,11 @@ const MOBILE_NAV_ITEMS = [
     name: 'Home',
     href: '/dashboard',
     icon: HomeIcon,
+  },
+  {
+    name: 'Active',
+    href: '/active-move',
+    icon: TruckIcon,
   },
   {
     name: 'Moves',
@@ -105,6 +115,12 @@ const MoverDashboardLayout = ({ children }: Props) => {
         <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-600 border-t-transparent" />
       </div>
     )
+  }
+
+  // Block client accounts from accessing the mover dashboard
+  if (user && user.userType === 'client') {
+    router.replace('/login?type=mover')
+    return null
   }
 
   // Profile gate: if the user is on the mover side but has no mover profile yet,
