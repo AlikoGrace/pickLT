@@ -31,7 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <AuthProvider>
               <MoveSearchProvider>{children}</MoveSearchProvider>
             </AuthProvider>
-            {/* <CustomizeControl /> */}
+            <CustomizeControl />
           </div>
         </ThemeProvider>
       </body>
