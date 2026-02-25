@@ -33,13 +33,18 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify request belongs to this mover
+    // Handle moverProfileId as string or relationship object
     const moveRequest = await databases.getDocument(
       APPWRITE.DATABASE_ID,
       APPWRITE.COLLECTIONS.MOVE_REQUESTS,
       requestId
     )
 
-    if (moveRequest.moverProfileId !== moverProfile.$id) {
+    const reqMoverProfileId = typeof moveRequest.moverProfileId === 'string'
+      ? moveRequest.moverProfileId
+      : (moveRequest.moverProfileId as Record<string, string>)?.$id || ''
+
+    if (reqMoverProfileId !== moverProfile.$id) {
       return NextResponse.json({ error: 'Request does not belong to this mover' }, { status: 403 })
     }
 
@@ -69,28 +74,42 @@ export async function POST(request: NextRequest) {
       }
     )
 
-    // Decline all other pending requests for this move
-    const otherRequests = await databases.listDocuments(
-      APPWRITE.DATABASE_ID,
-      APPWRITE.COLLECTIONS.MOVE_REQUESTS,
-      [
-        Query.equal('moveId', [moveId]),
-        Query.equal('status', ['pending']),
-        Query.notEqual('$id', requestId),
-        Query.limit(100),
-      ]
-    )
+    // Best-effort: Decline all other pending requests for this move.
+    // Wrapped in its own try-catch so a failure here doesn't return
+    // "Internal server error" when the accept itself already succeeded.
+    try {
+      const otherRequests = await databases.listDocuments(
+        APPWRITE.DATABASE_ID,
+        APPWRITE.COLLECTIONS.MOVE_REQUESTS,
+        [
+          Query.equal('status', ['pending']),
+          Query.limit(100),
+        ]
+      )
 
-    await Promise.all(
-      otherRequests.documents.map((req) =>
-        databases.updateDocument(
-          APPWRITE.DATABASE_ID,
-          APPWRITE.COLLECTIONS.MOVE_REQUESTS,
-          req.$id,
-          { status: 'declined', respondedAt: new Date().toISOString() }
+      // Filter in application code to avoid Query issues with relationship fields
+      const toDecline = otherRequests.documents.filter((req) => {
+        if (req.$id === requestId) return false
+        const reqMoveId = typeof req.moveId === 'string'
+          ? req.moveId
+          : (req.moveId as Record<string, string>)?.$id || ''
+        return reqMoveId === moveId
+      })
+
+      await Promise.all(
+        toDecline.map((req) =>
+          databases.updateDocument(
+            APPWRITE.DATABASE_ID,
+            APPWRITE.COLLECTIONS.MOVE_REQUESTS,
+            req.$id,
+            { status: 'declined', respondedAt: new Date().toISOString() }
+          ).catch((e) => console.warn('Failed to decline request', req.$id, e))
         )
       )
-    )
+    } catch (declineErr) {
+      // Non-fatal — the move was already accepted successfully
+      console.warn('Failed to decline other requests (non-fatal):', declineErr)
+    }
 
     return NextResponse.json({ success: true, moveId, requestId })
   } catch (error) {
