@@ -14,6 +14,16 @@ import {
 import MoverMapboxMap from '@/components/MoverMapboxMap'
 import ButtonPrimary from '@/shared/ButtonPrimary'
 import { Badge } from '@/shared/Badge'
+import Image from 'next/image'
+
+const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || ''
+const PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || ''
+const BUCKET_MOVE_PHOTOS = process.env.NEXT_PUBLIC_BUCKET_MOVE_PHOTOS || ''
+
+const getPhotoUrl = (fileId: string): string => {
+  if (!fileId || !APPWRITE_ENDPOINT || !PROJECT_ID || !BUCKET_MOVE_PHOTOS) return ''
+  return `${APPWRITE_ENDPOINT}/storage/buckets/${BUCKET_MOVE_PHOTOS}/files/${fileId}/view?project=${PROJECT_ID}`
+}
 
 interface AvailableMove {
   id: string
@@ -40,6 +50,8 @@ interface AvailableMove {
   dropoffFloor: string
   additionalServices: string[]
   notes: string
+  coverPhotoId: string | null
+  galleryPhotoIds: string[]
 }
 
 // Helper: format distance
@@ -82,6 +94,23 @@ const AvailableMovesPage = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [acceptingId, setAcceptingId] = useState<string | null>(null)
+  const [moverCoords, setMoverCoords] = useState<{ latitude: number; longitude: number } | null>(null)
+
+  // Track mover's own position
+  useEffect(() => {
+    if (!navigator.geolocation) return
+    const watchId = navigator.geolocation.watchPosition(
+      (pos) => {
+        setMoverCoords({
+          latitude: pos.coords.latitude,
+          longitude: pos.coords.longitude,
+        })
+      },
+      () => {},
+      { enableHighAccuracy: true, maximumAge: 5_000, timeout: 15_000 }
+    )
+    return () => navigator.geolocation.clearWatch(watchId)
+  }, [])
 
   const fetchMoves = useCallback(async () => {
     try {
@@ -129,6 +158,8 @@ const AvailableMovesPage = () => {
           dropoffFloor: (move.dropoffFloorLevel as string) || 'Ground',
           additionalServices: (move.additionalServices as string[]) || [],
           notes: (move.contactNotes as string) || '',
+          coverPhotoId: (move.coverPhotoId as string) || null,
+          galleryPhotoIds: (move.galleryPhotoIds as string[]) || [],
         }
       }).filter(Boolean) as AvailableMove[]
 
@@ -285,77 +316,8 @@ const AvailableMovesPage = () => {
               onMarkerHover={setHoveredMoveId}
               defaultCenter={{ lat: 52.52, lng: 13.405 }}
               defaultZoom={12}
+              moverCoordinates={moverCoords || undefined}
             />
-
-            {/* Move Cards Carousel at bottom */}
-            <div className="absolute bottom-20 lg:bottom-4 left-0 right-0 px-4">
-              <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide">
-                {moves.map((move) => (
-                  <div
-                    key={move.id}
-                    onClick={() => setSelectedMove(move)}
-                    onMouseEnter={() => setHoveredMoveId(move.id)}
-                    onMouseLeave={() => setHoveredMoveId(null)}
-                    className={`flex-shrink-0 w-80 bg-white dark:bg-neutral-800 rounded-2xl overflow-hidden shadow-lg snap-start cursor-pointer transition-all ${
-                      selectedMove?.id === move.id
-                        ? 'ring-2 ring-primary-500'
-                        : hoveredMoveId === move.id
-                        ? 'ring-2 ring-neutral-300 dark:ring-neutral-600'
-                        : ''
-                    }`}
-                  >
-                    {/* Card Header */}
-                    <div className="relative h-24 bg-gradient-to-br from-primary-50 to-primary-100 dark:from-neutral-700 dark:to-neutral-800 flex items-center justify-center">
-                      <TruckIcon className="h-12 w-12 text-primary-300 dark:text-neutral-600" />
-                      <Badge color="yellow" className="absolute top-2 left-2">
-                        {move.moveType} Move
-                      </Badge>
-                    </div>
-                    
-                    <div className="p-4">
-                      {/* Title and price */}
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                            {move.requestedTime}
-                          </p>
-                          <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 truncate">
-                            {move.pickup} → {move.dropoff}
-                          </h3>
-                        </div>
-                        <p className="text-xl font-bold text-neutral-900 dark:text-neutral-100 ml-2">
-                          €{move.price}
-                        </p>
-                      </div>
-                      
-                      {/* Route visualization */}
-                      <div className="space-y-1 mb-3">
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 rounded-full bg-green-500 shrink-0" />
-                          <span className="text-sm text-neutral-700 dark:text-neutral-300 truncate">
-                            {move.pickupAddress}
-                          </span>
-                        </div>
-                        <div className="w-px h-2 bg-neutral-300 dark:bg-neutral-600 ml-1" />
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 rounded-full bg-red-500 shrink-0" />
-                          <span className="text-sm text-neutral-700 dark:text-neutral-300 truncate">
-                            {move.dropoffAddress}
-                          </span>
-                        </div>
-                      </div>
-                      
-                      {/* Stats */}
-                      <div className="flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400 pt-2 border-t border-neutral-100 dark:border-neutral-700">
-                        <span>{move.itemCount} items</span>
-                        <span>{move.distance}</span>
-                        <span>{move.estimatedTime}</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
         ) : (
           /* List View */
@@ -366,9 +328,13 @@ const AvailableMovesPage = () => {
                 className="bg-white dark:bg-neutral-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
               >
                 {/* Card Header */}
-                <div className="relative h-32 bg-gradient-to-br from-primary-50 to-primary-100 dark:from-neutral-700 dark:to-neutral-800 flex items-center justify-center">
-                  <TruckIcon className="h-16 w-16 text-primary-200 dark:text-neutral-600" />
-                  <Badge color="yellow" className="absolute top-3 left-3">
+                <div className="relative h-32 bg-gradient-to-br from-primary-50 to-primary-100 dark:from-neutral-700 dark:to-neutral-800 flex items-center justify-center overflow-hidden">
+                  {move.coverPhotoId ? (
+                    <Image src={getPhotoUrl(move.coverPhotoId)} alt="Move" fill className="object-cover" />
+                  ) : (
+                    <TruckIcon className="h-16 w-16 text-primary-200 dark:text-neutral-600" />
+                  )}
+                  <Badge color="yellow" className="absolute top-3 left-3 z-10">
                     {move.homeType} · {move.moveType}
                   </Badge>
                 </div>
@@ -472,14 +438,23 @@ const AvailableMovesPage = () => {
         <div className="absolute inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-white dark:bg-neutral-800 rounded-2xl w-full max-w-md max-h-[90vh] overflow-hidden">
             {/* Modal Header */}
-            <div className="relative h-32 bg-gradient-to-br from-primary-50 to-primary-100 dark:from-neutral-700 dark:to-neutral-800 flex items-center justify-center">
-              <TruckIcon className="h-16 w-16 text-primary-200 dark:text-neutral-600" />
-              <Badge color="yellow" className="absolute top-3 left-3">
+            <div className="relative h-48 bg-gradient-to-br from-primary-50 to-primary-100 dark:from-neutral-700 dark:to-neutral-800 flex items-center justify-center overflow-hidden">
+              {selectedMove.coverPhotoId ? (
+                <Image src={getPhotoUrl(selectedMove.coverPhotoId)} alt="Move" fill className="object-cover" />
+              ) : (
+                <TruckIcon className="h-16 w-16 text-primary-200 dark:text-neutral-600" />
+              )}
+              <Badge color="yellow" className="absolute top-3 left-3 z-10">
                 {selectedMove.homeType} · {selectedMove.moveType}
               </Badge>
+              {selectedMove.galleryPhotoIds.length > 0 && (
+                <div className="absolute top-3 left-1/2 -translate-x-1/2 bg-black/50 backdrop-blur-sm text-white text-xs px-2 py-0.5 rounded-full z-10">
+                  {selectedMove.galleryPhotoIds.length + (selectedMove.coverPhotoId ? 1 : 0)} photos
+                </div>
+              )}
               <button
                 onClick={() => setSelectedMove(null)}
-                className="absolute top-3 right-3 p-2 bg-white/80 dark:bg-neutral-800/80 hover:bg-white dark:hover:bg-neutral-700 rounded-full transition-colors"
+                className="absolute top-3 right-3 p-2 bg-white/80 dark:bg-neutral-800/80 hover:bg-white dark:hover:bg-neutral-700 rounded-full transition-colors z-10"
               >
                 <XMarkIcon className="w-5 h-5 text-neutral-600 dark:text-neutral-300" />
               </button>
