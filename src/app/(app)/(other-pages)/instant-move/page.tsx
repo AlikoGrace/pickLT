@@ -22,7 +22,8 @@ import {
 import { HugeiconsIcon } from '@hugeicons/react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useCallback, useEffect, useState, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useState, useRef } from 'react'
+import { getMapboxDirections } from '@/utils/mapbox-directions'
 
 // ─── Types ──────────────────────────────────────────────
 interface MoverInfo {
@@ -111,6 +112,7 @@ const InstantMovePage = () => {
         const data = await res.json()
         setMoveData(data.move as MoveData)
         setMover(data.mover as MoverInfo)
+        console.log(data)
       } catch (err) {
         console.error('Failed to fetch move data:', err)
         setLoadError(err instanceof Error ? err.message : 'Failed to load move')
@@ -122,13 +124,21 @@ const InstantMovePage = () => {
     fetchMoveData()
   }, [router])
 
-  // Derive coordinates from the move data (from DB)
-  const pickupCoordinates: Coordinates | null = moveData?.pickupLatitude && moveData?.pickupLongitude
-    ? { latitude: moveData.pickupLatitude, longitude: moveData.pickupLongitude }
-    : null
-  const dropoffCoordinates: Coordinates | null = moveData?.dropoffLatitude && moveData?.dropoffLongitude
-    ? { latitude: moveData.dropoffLatitude, longitude: moveData.dropoffLongitude }
-    : null
+  // Derive coordinates from the move data (from DB) — memoized to prevent
+  // new object references from triggering MapboxMap re-renders
+  const pickupCoordinates = useMemo<Coordinates | null>(() => {
+    if (moveData?.pickupLatitude && moveData?.pickupLongitude) {
+      return { latitude: moveData.pickupLatitude, longitude: moveData.pickupLongitude }
+    }
+    return null
+  }, [moveData?.pickupLatitude, moveData?.pickupLongitude])
+
+  const dropoffCoordinates = useMemo<Coordinates | null>(() => {
+    if (moveData?.dropoffLatitude && moveData?.dropoffLongitude) {
+      return { latitude: moveData.dropoffLatitude, longitude: moveData.dropoffLongitude }
+    }
+    return null
+  }, [moveData?.dropoffLatitude, moveData?.dropoffLongitude])
 
   // ─── Location picker state ────────────────────────────
   const [locationPickerOpen, setLocationPickerOpen] = useState(false)
@@ -150,12 +160,32 @@ const InstantMovePage = () => {
   const [moverDistanceKm, setMoverDistanceKm] = useState(0)
   const [moverCoords, setMoverCoords] = useState<Coordinates | null>(null)
 
+  // ─── Waiting for mover acceptance ─────────────────────
+  const waitingForAcceptance = moveData
+    ? ['pending', 'mover_assigned'].includes(moveData.status)
+    : false
+
+  // Initialize mover position from their profile data (currentLatitude/currentLongitude)
+  // so the marker appears immediately while polling catches up
+  useEffect(() => {
+    if (mover?.currentLatitude && mover?.currentLongitude && !moverCoords) {
+      setMoverCoords({
+        latitude: mover.currentLatitude,
+        longitude: mover.currentLongitude,
+      })
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mover?.currentLatitude, mover?.currentLongitude])
+
   // Map initial status from DB move to phase
   useEffect(() => {
     if (!moveData) return
     const status = moveData.status
     switch (status) {
       case 'mover_assigned':
+      case 'pending':
+        // Still waiting - don't change phase
+        break
       case 'mover_accepted':
       case 'mover_en_route':
         setPhase('mover_arriving')
@@ -178,9 +208,10 @@ const InstantMovePage = () => {
   }, [moveData])
 
   // ─── Poll mover GPS every 3 seconds from DB ──────────
+  // Only poll once mover has accepted (not while waiting)
   const { lastLocation } = useMoverLocationPolling({
     moverProfileId: mover?.id || null,
-    enabled: !!mover && (phase === 'mover_arriving' || phase === 'in_transit'),
+    enabled: !!mover && !waitingForAcceptance,
     intervalMs: 3000,
     onLocationUpdate: useCallback((location: { latitude: number; longitude: number }) => {
       setMoverCoords({
@@ -190,19 +221,26 @@ const InstantMovePage = () => {
     }, []),
   })
 
-  // Update ETA when polled location changes
-  useEffect(() => {
-    if (lastLocation && pickupCoordinates && phase === 'mover_arriving') {
-      const dLat = pickupCoordinates.latitude - lastLocation.latitude
-      const dLng = pickupCoordinates.longitude - lastLocation.longitude
-      const approxKm = Math.sqrt(dLat * dLat + dLng * dLng) * 111
-      setMoverDistanceKm(Math.max(0, approxKm))
-      setMoverEtaMinutes(Math.max(1, Math.round(approxKm * 3)))
+  // ─── Real ETA via Mapbox Directions ───────────────────
+  const lastDirectionsCalc = useRef<number>(0)
 
-      if (approxKm < 0.05) {
-        setPhase('mover_arrived')
+  useEffect(() => {
+    if (!lastLocation || !pickupCoordinates || phase !== 'mover_arriving') return
+    const now = Date.now()
+    if (now - lastDirectionsCalc.current < 15_000) return // Throttle to 15 seconds
+    lastDirectionsCalc.current = now
+
+    getMapboxDirections(
+      lastLocation.latitude,
+      lastLocation.longitude,
+      pickupCoordinates.latitude,
+      pickupCoordinates.longitude
+    ).then((result) => {
+      if (result) {
+        setMoverDistanceKm(result.distanceMeters / 1000)
+        setMoverEtaMinutes(Math.max(1, Math.ceil(result.durationSeconds / 60)))
       }
-    }
+    })
   }, [lastLocation, pickupCoordinates, phase])
 
   const handleRouteCalculated = useCallback((info: RouteInfo) => {
@@ -237,6 +275,16 @@ const InstantMovePage = () => {
             case 'mover_accepted':
             case 'mover_en_route':
               setPhase('mover_arriving')
+              // Re-fetch move data to get mover details now that mover accepted
+              if (moveId) {
+                fetch(`/api/moves/${moveId}/full`)
+                  .then((res) => res.json())
+                  .then((data) => {
+                    if (data.mover) setMover(data.mover as MoverInfo)
+                    if (data.move) setMoveData(data.move as MoveData)
+                  })
+                  .catch(() => {})
+              }
               break
             case 'mover_arrived':
               setPhase('mover_arrived')
@@ -264,7 +312,17 @@ const InstantMovePage = () => {
           if (docMoveId === moveId) {
             const status = doc.status as string
             if (status === 'declined' || status === 'expired') {
-              alert('The mover declined your request. Searching for another mover...')
+              // Store the declined mover ID to exclude from future selections
+              const declinedMoverId = typeof doc.moverProfileId === 'string'
+                ? doc.moverProfileId
+                : (doc.moverProfileId as Record<string, string>)?.$id || ''
+              if (declinedMoverId) {
+                const existing = JSON.parse(sessionStorage.getItem('declinedMoverIds') || '[]') as string[]
+                if (!existing.includes(declinedMoverId)) {
+                  existing.push(declinedMoverId)
+                  sessionStorage.setItem('declinedMoverIds', JSON.stringify(existing))
+                }
+              }
               sessionStorage.removeItem('activeMoveId')
               sessionStorage.removeItem('activeMoveRequestId')
               router.push('/instant-move/select-mover')
@@ -318,6 +376,25 @@ const InstantMovePage = () => {
   const dropoffDisplay = moveData?.dropoffLocation || 'Drop-off location'
 
   const renderMoverCard = () => {
+    // Show waiting state while mover hasn't accepted yet
+    if (waitingForAcceptance) {
+      return (
+        <div className="rounded-2xl border border-neutral-200 bg-white/95 backdrop-blur-sm dark:border-neutral-700 dark:bg-neutral-800/95 overflow-hidden shadow-lg">
+          <div className="p-6 flex flex-col items-center text-center gap-3">
+            <div className="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
+              <div className="w-6 h-6 border-2 border-primary-600 border-t-transparent rounded-full animate-spin" />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-neutral-900 dark:text-white">Waiting for mover to accept</p>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                Your request has been sent. The mover will respond shortly.
+              </p>
+            </div>
+          </div>
+        </div>
+      )
+    }
+
     if (!mover) return null
     return (
       <div className="rounded-2xl border border-neutral-200 bg-white/95 backdrop-blur-sm dark:border-neutral-700 dark:bg-neutral-800/95 overflow-hidden shadow-lg">
