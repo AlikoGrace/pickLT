@@ -51,6 +51,9 @@ export async function GET() {
             moveId
           )
 
+          // Only include scheduled moves on the available-moves page
+          if (move.moveCategory !== 'scheduled') return null
+
           return {
             requestId: request.$id,
             requestStatus: request.status,
@@ -86,6 +89,8 @@ export async function GET() {
               arrivalWindow: move.arrivalWindow,
               routeDistanceMeters: move.routeDistanceMeters,
               routeDurationSeconds: move.routeDurationSeconds,
+              coverPhotoId: move.coverPhotoId || null,
+              galleryPhotoIds: move.galleryPhotoIds || [],
               createdAt: move.$createdAt,
             },
           }
