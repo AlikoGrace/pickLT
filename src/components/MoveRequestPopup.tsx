@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef, useState, useCallback, ReactNode } from 'react'
 import { useRouter } from 'next/navigation'
+import { useAuth } from '@/context/auth'
 import { client, databases } from '@/lib/appwrite'
 import { Query } from 'appwrite'
 import type { RealtimeResponseEvent, Models } from 'appwrite'
@@ -54,10 +55,6 @@ interface IncomingRequest {
   moveId: string
   expiresAt?: string
   move: MoveDetails | null
-}
-
-interface MoveRequestPopupProps {
-  moverProfileId: string | null
 }
 
 // ─── Helper functions ───────────────────────────────────
@@ -201,7 +198,9 @@ function createAlarmSound(): { play: () => void; stop: () => void } {
   return { play, stop }
 }
 
-export default function MoveRequestPopup({ moverProfileId }: MoveRequestPopupProps) {
+export default function MoveRequestPopup({ children }: { children: ReactNode }) {
+  const { user } = useAuth()
+  const moverProfileId = user?.moverDetails?.profileId || null
   const router = useRouter()
   const [incoming, setIncoming] = useState<IncomingRequest | null>(null)
   const [isAccepting, setIsAccepting] = useState(false)
@@ -210,6 +209,10 @@ export default function MoveRequestPopup({ moverProfileId }: MoveRequestPopupPro
   const [imageIndex, setImageIndex] = useState(0)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
   const alertRef = useRef<{ play: () => void; stop: () => void } | null>(null)
+  const incomingRef = useRef<IncomingRequest | null>(null)
+
+  // Keep incomingRef in sync
+  useEffect(() => { incomingRef.current = incoming }, [incoming])
 
   // Countdown timer + alarm sound
   useEffect(() => {
@@ -249,12 +252,18 @@ export default function MoveRequestPopup({ moverProfileId }: MoveRequestPopupPro
     }
   }, [incoming])
 
-  // Fetch full move details when we get a move request
+  // Fetch full move details via the SERVER API route (uses admin SDK, bypasses permissions)
   const fetchMoveDetails = useCallback(async (moveId: string): Promise<MoveDetails | null> => {
-    if (!DATABASE_ID || !MOVES_COLLECTION) return null
+    if (!moveId) return null
     try {
-      const doc = await databases.getDocument(DATABASE_ID, MOVES_COLLECTION, moveId)
-      return doc as unknown as MoveDetails
+      const res = await fetch(`/api/moves/${moveId}/full`)
+      if (!res.ok) {
+        console.warn('[MoveRequestPopup] API returned', res.status, 'for move', moveId)
+        return null
+      }
+      const data = await res.json()
+      // The API returns { move, mover }. We only need the move.
+      return (data.move as MoveDetails) || null
     } catch (err) {
       console.warn('[MoveRequestPopup] Failed to fetch move details:', err)
       return null
@@ -265,8 +274,27 @@ export default function MoveRequestPopup({ moverProfileId }: MoveRequestPopupPro
   useEffect(() => {
     if (!moverProfileId || !DATABASE_ID || !MOVE_REQUESTS_COLLECTION) return
 
-    // Also check for any existing pending requests on mount
-    const checkExisting = async () => {
+    // Helper: extract moverProfileId from a doc field (handles string or relationship object)
+    const extractMoverProfileId = (field: unknown): string => {
+      if (typeof field === 'string') return field
+      if (field && typeof field === 'object' && '$id' in (field as Record<string, unknown>)) {
+        return (field as Record<string, string>).$id || ''
+      }
+      return ''
+    }
+
+    // Helper: extract moveId from a doc field (handles string or relationship object)
+    const extractMoveId = (field: unknown): string => {
+      if (typeof field === 'string') return field
+      if (field && typeof field === 'object' && '$id' in (field as Record<string, unknown>)) {
+        return (field as Record<string, string>).$id || ''
+      }
+      return ''
+    }
+
+    // Check for existing pending requests on mount
+    const checkForPendingRequests = async () => {
+      if (incomingRef.current) return // Already showing
       try {
         const res = await databases.listDocuments(
           DATABASE_ID,
@@ -280,17 +308,18 @@ export default function MoveRequestPopup({ moverProfileId }: MoveRequestPopupPro
         )
         if (res.total > 0) {
           const doc = res.documents[0] as Models.Document & Record<string, unknown>
-          // Check if not expired
           const expiresAt = doc.expiresAt as string | undefined
           if (expiresAt && new Date(expiresAt).getTime() > Date.now()) {
-            const moveId = typeof doc.moveId === 'string' ? doc.moveId : (doc.moveId as Record<string, string>)?.$id || ''
-            const move = await fetchMoveDetails(moveId)
-            setIncoming({
-              requestId: doc.$id,
-              moveId,
-              expiresAt,
-              move,
-            })
+            const moveId = extractMoveId(doc.moveId)
+            if (moveId) {
+              const move = await fetchMoveDetails(moveId)
+              setIncoming({
+                requestId: doc.$id,
+                moveId,
+                expiresAt,
+                move,
+              })
+            }
           }
         }
       } catch (err) {
@@ -298,8 +327,13 @@ export default function MoveRequestPopup({ moverProfileId }: MoveRequestPopupPro
       }
     }
 
-    checkExisting()
+    // Check on mount
+    checkForPendingRequests()
 
+    // Poll every 5 seconds as a fallback in case Realtime misses events
+    const pollIntervalId = setInterval(checkForPendingRequests, 5000)
+
+    // Also subscribe to Realtime for instant notification
     const channel = `databases.${DATABASE_ID}.collections.${MOVE_REQUESTS_COLLECTION}.documents`
 
     const unsubscribe = client.subscribe<Models.Document>(
@@ -312,12 +346,14 @@ export default function MoveRequestPopup({ moverProfileId }: MoveRequestPopupPro
         const doc = response.payload as Models.Document & Record<string, unknown>
         if (!doc) return
 
-        if (doc.moverProfileId !== moverProfileId) return
+        // Compare moverProfileId — handle both string and relationship object
+        const docMoverProfileId = extractMoverProfileId(doc.moverProfileId)
+        if (docMoverProfileId !== moverProfileId) return
         if (doc.status !== 'pending') return
 
-        const moveId = typeof doc.moveId === 'string' ? doc.moveId : (doc.moveId as Record<string, string>)?.$id || ''
+        const moveId = extractMoveId(doc.moveId)
 
-        // Fetch the full move details
+        // Fetch the full move details via server API
         const move = await fetchMoveDetails(moveId)
 
         setIncoming({
@@ -329,7 +365,10 @@ export default function MoveRequestPopup({ moverProfileId }: MoveRequestPopupPro
       }
     )
 
-    return () => unsubscribe()
+    return () => {
+      clearInterval(pollIntervalId)
+      unsubscribe()
+    }
   }, [moverProfileId, fetchMoveDetails])
 
   const handleAccept = useCallback(async () => {
@@ -375,25 +414,26 @@ export default function MoveRequestPopup({ moverProfileId }: MoveRequestPopupPro
     }
   }, [incoming])
 
-  if (!incoming) return null
+  const renderPopup = () => {
+    if (!incoming) return null
 
-  const move = incoming.move
+    const move = incoming.move
 
-  // Build gallery images from the move
-  const galleryImages: string[] = []
-  if (move?.coverPhotoId) galleryImages.push(getPhotoUrl(move.coverPhotoId))
-  if (move?.galleryPhotoIds) {
-    move.galleryPhotoIds.forEach((id) => {
-      const url = getPhotoUrl(id)
-      if (url) galleryImages.push(url)
-    })
-  }
+    // Build gallery images from the move
+    const galleryImages: string[] = []
+    if (move?.coverPhotoId) galleryImages.push(getPhotoUrl(move.coverPhotoId))
+    if (move?.galleryPhotoIds) {
+      move.galleryPhotoIds.forEach((id) => {
+        const url = getPhotoUrl(id)
+        if (url) galleryImages.push(url)
+      })
+    }
 
-  const pickupDisplay = move?.pickupStreetAddress || move?.pickupLocation?.split(',')[0] || 'Pickup location'
-  const dropoffDisplay = move?.dropoffStreetAddress || move?.dropoffLocation?.split(',')[0] || 'Drop-off location'
+    const pickupDisplay = move?.pickupStreetAddress || move?.pickupLocation?.split(',')[0] || 'Pickup location'
+    const dropoffDisplay = move?.dropoffStreetAddress || move?.dropoffLocation?.split(',')[0] || 'Drop-off location'
 
-  return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
+    return (
+      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
       {/* Pulsing border effect for urgency */}
       <div className="w-full max-w-md animate-in zoom-in-95 duration-300">
         <div className="bg-white dark:bg-neutral-800 rounded-3xl overflow-hidden shadow-2xl ring-2 ring-red-500/50 animate-pulse-ring">
@@ -588,15 +628,23 @@ export default function MoveRequestPopup({ moverProfileId }: MoveRequestPopupPro
       </div>
 
       {/* CSS animation for the pulsing ring */}
-      <style jsx>{`
-        @keyframes pulse-ring {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
-          50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
-        }
-        .animate-pulse-ring {
-          animation: pulse-ring 2s ease-in-out infinite;
-        }
-      `}</style>
-    </div>
+        <style>{`
+          @keyframes pulse-ring {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+          }
+          .animate-pulse-ring {
+            animation: pulse-ring 2s ease-in-out infinite;
+          }
+        `}</style>
+      </div>
+    )
+  }
+
+  return (
+    <>
+      {children}
+      {renderPopup()}
+    </>
   )
 }
