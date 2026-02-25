@@ -11,9 +11,11 @@ import {
   TruckIcon,
   CheckCircleIcon,
   ArrowPathIcon,
+  ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState, useRef } from 'react'
+import { getMapboxDirections } from '@/utils/mapbox-directions'
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || ''
 const MOVES_COLLECTION = process.env.NEXT_PUBLIC_COLLECTION_MOVES || ''
@@ -49,10 +51,10 @@ export default function ActiveMovePage() {
 
   const moverProfileId = user?.moverDetails?.profileId || null
 
-  // Broadcast GPS at higher frequency during an active move (every 5 seconds)
+  // Broadcast GPS at higher frequency during an active move (every 3 seconds)
   useLocationBroadcast({
     enabled: !!moverProfileId && phase !== 'completed',
-    intervalMs: 5_000,
+    intervalMs: 3_000,
     moveId: (move?.$id as string) || undefined,
   })
 
@@ -202,6 +204,40 @@ export default function ActiveMovePage() {
     ? { latitude: move.dropoffLatitude as number, longitude: move.dropoffLongitude as number }
     : undefined
 
+  // ── 100m proximity detection for "Arrived at Pickup" ───
+  const distanceToPickup = useMemo(() => {
+    if (!moverCoords || !pickupCoords) return null
+    const dLat = pickupCoords.latitude - moverCoords.latitude
+    const dLng = pickupCoords.longitude - moverCoords.longitude
+    return Math.sqrt(dLat * dLat + dLng * dLng) * 111_000 // approx meters
+  }, [moverCoords, pickupCoords])
+
+  const isNearPickup = distanceToPickup !== null && distanceToPickup <= 100
+
+  // ── Real ETA via Mapbox Directions ─────────────────────
+  const [moverEtaMinutes, setMoverEtaMinutes] = useState(0)
+  const [moverDistanceKm, setMoverDistanceKm] = useState(0)
+  const lastDirectionsCalc = useRef<number>(0)
+
+  useEffect(() => {
+    if (!moverCoords || !pickupCoords || phase !== 'en_route') return
+    const now = Date.now()
+    if (now - lastDirectionsCalc.current < 15_000) return
+    lastDirectionsCalc.current = now
+
+    getMapboxDirections(
+      moverCoords.latitude,
+      moverCoords.longitude,
+      pickupCoords.latitude,
+      pickupCoords.longitude
+    ).then((result) => {
+      if (result) {
+        setMoverDistanceKm(result.distanceMeters / 1000)
+        setMoverEtaMinutes(Math.max(1, Math.ceil(result.durationSeconds / 60)))
+      }
+    })
+  }, [moverCoords, pickupCoords, phase])
+
   if (isLoading) {
     return (
       <div className="flex h-[60vh] items-center justify-center">
@@ -261,7 +297,19 @@ export default function ActiveMovePage() {
                   {PHASE_LABELS[phase].description}
                 </p>
               </div>
-              {routeInfo && phase !== 'completed' && (
+              {phase === 'en_route' && moverEtaMinutes > 0 && (
+                <div className="text-right shrink-0">
+                  <p className="text-sm font-semibold text-neutral-900 dark:text-white">
+                    {moverDistanceKm >= 1
+                      ? `${moverDistanceKm.toFixed(1)} km`
+                      : `${Math.round(moverDistanceKm * 1000)} m`}
+                  </p>
+                  <p className="text-[10px] text-neutral-500">
+                    ~{moverEtaMinutes} min to pickup
+                  </p>
+                </div>
+              )}
+              {routeInfo && phase !== 'completed' && phase !== 'en_route' && (
                 <div className="text-right shrink-0">
                   <p className="text-sm font-semibold text-neutral-900 dark:text-white">
                     {routeInfo.distance >= 1000
@@ -298,10 +346,19 @@ export default function ActiveMovePage() {
       {/* Bottom panel — Action button */}
       <div className="absolute bottom-0 left-0 right-0 z-10 p-4 pb-6 pointer-events-none">
         <div className="mx-auto max-w-lg pointer-events-auto space-y-3">
+          {/* Proximity hint when en_route and not yet near pickup */}
+          {phase === 'en_route' && !isNearPickup && distanceToPickup !== null && (
+            <div className="rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 p-3 flex items-center gap-2">
+              <ExclamationTriangleIcon className="h-5 w-5 text-amber-500 shrink-0" />
+              <p className="text-xs text-amber-700 dark:text-amber-300">
+                You must be within 100m of the pickup location to mark as arrived ({Math.round(distanceToPickup)}m away)
+              </p>
+            </div>
+          )}
           {phase !== 'completed' && nextPhaseLabel && (
             <ButtonPrimary
               onClick={advancePhase}
-              disabled={isUpdating}
+              disabled={isUpdating || (phase === 'en_route' && !isNearPickup)}
               className="w-full shadow-lg"
             >
               {isUpdating ? 'Updating...' : `Mark as: ${nextPhaseLabel}`}
