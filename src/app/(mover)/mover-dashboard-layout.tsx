@@ -232,8 +232,12 @@ const MoverDashboardLayout = ({ children }: Props) => {
                 className="h-full w-full object-cover"
               />
             ) : (
-              <UserCircleIcon className="h-full w-full text-neutral-400" />
-            )}
+              <Avatar
+                src={user?.profilePhoto || undefined}
+                initials={!user?.profilePhoto ? initials : undefined}
+                className=" size-10 bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300"
+              />            
+              )}
           </div>
         </div>
       </header>
