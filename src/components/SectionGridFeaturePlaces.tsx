@@ -8,64 +8,6 @@ import { FC, ReactNode, useCallback, useEffect, useState } from 'react'
 import MoveCard from './MoveCard'
 import SectionTabHeader from './SectionTabHeader'
 
-// ─── Map DB status → display MoveStatus (same as account-savelists) ──
-function mapDbStatus(dbStatus: string): MoveStatus {
-  if (['draft', 'pending_payment', 'paid', 'mover_assigned'].includes(dbStatus)) return 'pending'
-  if (
-    [
-      'mover_accepted',
-      'mover_en_route',
-      'mover_arrived',
-      'loading',
-      'in_transit',
-      'arrived_destination',
-      'unloading',
-      'awaiting_payment',
-    ].includes(dbStatus)
-  )
-    return 'in_progress'
-  if (dbStatus === 'completed') return 'completed'
-  if (['cancelled', 'cancelled_by_client', 'cancelled_by_mover', 'disputed'].includes(dbStatus))
-    return 'cancelled'
-  return 'pending'
-}
-
-function docToStoredMove(doc: any): StoredMove {
-  return {
-    id: doc.$id,
-    handle: doc.handle ?? '',
-    status: mapDbStatus(doc.status ?? ''),
-    createdAt: doc.$createdAt ?? '',
-    paidAt: doc.paidAt ?? doc.$createdAt ?? '',
-    totalPrice: doc.estimatedPrice ?? 0,
-    bookingCode: doc.handle ?? '',
-    moveType: doc.moveType ?? doc.systemMoveType ?? null,
-    moveDate: doc.moveDate ?? null,
-    pickupLocation: doc.pickupLocation ?? '',
-    pickupStreetAddress: doc.pickupLocation ?? '',
-    pickupApartmentUnit: doc.pickupApartmentUnit ?? '',
-    dropoffStreetAddress: doc.dropoffLocation ?? '',
-    dropoffApartmentUnit: doc.dropoffApartmentUnit ?? '',
-    dropoffFloorLevel: doc.dropoffFloorLevel ?? null,
-    homeType: doc.homeType ?? null,
-    floorLevel: doc.floorLevel ?? null,
-    elevatorAvailable: doc.elevatorAvailable ?? false,
-    dropoffElevatorAvailable: doc.dropoffElevatorAvailable ?? false,
-    parkingSituation: doc.parkingSituation ?? null,
-    dropoffParkingSituation: doc.dropoffParkingSituation ?? null,
-    packingServiceLevel: doc.packingServiceLevel ?? null,
-    additionalServices: doc.additionalServices ?? [],
-    storageWeeks: doc.storageWeeks ?? 0,
-    crewSize: doc.crewSize ?? null,
-    vehicleType: doc.vehicleType ?? null,
-    arrivalWindow: doc.arrivalWindow ?? null,
-    inventoryCount: doc.totalItemCount ?? 0,
-    contactInfo: doc.contactInfo ?? { fullName: '', phone: '', email: '' },
-    coverPhotoId: doc.coverPhotoId ?? null,
-    galleryPhotoIds: doc.galleryPhotoIds ?? [],
-  }
-}
-
 //
 interface SectionGridFeaturePlacesProps {
   gridClass?: string
