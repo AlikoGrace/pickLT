@@ -74,63 +74,100 @@ export default function ActiveMovePage() {
     return () => navigator.geolocation.clearWatch(watchId)
   }, [])
 
-  // ── Fetch the active move from API ────────────────────────
-  useEffect(() => {
-    if (!moverProfileId || !DATABASE_ID || !MOVES_COLLECTION) return
-
-    const fetchActiveMove = async () => {
-      try {
-        const res = await databases.listDocuments(
-          DATABASE_ID,
-          MOVES_COLLECTION,
-          [
-            Query.equal('moverProfileId', moverProfileId),
-            Query.notEqual('status', 'completed'),
-            Query.notEqual('status', 'cancelled_by_client'),
-            Query.notEqual('status', 'cancelled_by_mover'),
-            Query.orderDesc('$createdAt'),
-            Query.limit(1),
-          ]
-        )
-
-        if (res.total > 0) {
-          const doc = res.documents[0] as Models.Document & Record<string, unknown>
-          setMove(doc)
-          mapStatusToPhase(doc.status as string)
+  // ── Fetch the active move from server API ─────────────────
+  // Uses admin SDK to bypass permission issues with relationship fields
+  const fetchActiveMove = useCallback(async () => {
+    if (!moverProfileId) return
+    try {
+      const res = await fetch('/api/mover/active-move')
+      if (res.ok) {
+        const data = await res.json()
+        if (data.move) {
+          setMove(data.move)
+          mapStatusToPhase(data.move.status as string)
         }
-      } catch (err) {
-        console.error('Failed to fetch active move:', err)
-      } finally {
-        setIsLoading(false)
       }
+    } catch (err) {
+      console.error('Failed to fetch active move:', err)
+    } finally {
+      setIsLoading(false)
     }
-
-    fetchActiveMove()
   }, [moverProfileId])
 
-  // ── Subscribe to move updates ─────────────────────────────
+  useEffect(() => {
+    fetchActiveMove()
+  }, [fetchActiveMove])
+
+  // ── Auto-transition mover_accepted → mover_en_route ───────
+  // Per architecture, mover_accepted means mover accepted but hasn't started driving.
+  // When the mover opens the active-move page, it means they're ready to go — transition.
   useEffect(() => {
     const moveId = move?.$id as string | undefined
-    if (!moveId || !DATABASE_ID || !MOVES_COLLECTION) return
+    const status = move?.status as string | undefined
+    if (!moveId || status !== 'mover_accepted') return
 
-    const channel = `databases.${DATABASE_ID}.collections.${MOVES_COLLECTION}.documents.${moveId}`
+    fetch('/api/mover/update-move-status', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ moveId, status: 'mover_en_route' }),
+    }).catch((err) => console.warn('Auto-transition to mover_en_route failed:', err))
+  }, [move?.$id, move?.status])
+
+  // ── Subscribe to move updates ─────────────────────────────
+  // Subscribe to the specific move document if we have one,
+  // AND to the collection level to catch newly assigned moves
+  useEffect(() => {
+    if (!DATABASE_ID || !MOVES_COLLECTION) return
+
+    const channels: string[] = []
+
+    // Collection-level subscription catches new moves assigned to this mover
+    channels.push(`databases.${DATABASE_ID}.collections.${MOVES_COLLECTION}.documents`)
+
+    const moveId = move?.$id as string | undefined
+    // Document-level subscription updates existing move in real time
+    if (moveId) {
+      channels.push(`databases.${DATABASE_ID}.collections.${MOVES_COLLECTION}.documents.${moveId}`)
+    }
+
     const unsubscribe = client.subscribe<Models.Document>(
-      channel,
+      channels,
       (response: RealtimeResponseEvent<Models.Document>) => {
         const doc = response.payload as Models.Document & Record<string, unknown>
-        if (doc) {
+        if (!doc) return
+
+        // If we already have a move, only update if it's the same document
+        if (moveId && doc.$id === moveId) {
           setMove(doc)
           mapStatusToPhase(doc.status as string)
+          return
+        }
+
+        // If we don't have a move yet, check if this new/updated doc is assigned to us
+        if (!moveId) {
+          const docMoverProfileId = typeof doc.moverProfileId === 'string'
+            ? doc.moverProfileId
+            : (doc.moverProfileId as Record<string, string>)?.$id || ''
+          const status = doc.status as string
+          if (
+            docMoverProfileId === moverProfileId &&
+            !['completed', 'cancelled_by_client', 'cancelled_by_mover'].includes(status)
+          ) {
+            setMove(doc)
+            mapStatusToPhase(status)
+          }
         }
       }
     )
 
     return () => unsubscribe()
-  }, [move?.$id])
+  }, [move?.$id, moverProfileId])
 
   const mapStatusToPhase = (status: string) => {
     switch (status) {
+      case 'accepted':
       case 'mover_accepted':
+      case 'mover_assigned':
       case 'mover_en_route':
         setPhase('en_route')
         break

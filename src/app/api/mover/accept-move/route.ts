@@ -64,13 +64,14 @@ export async function POST(request: NextRequest) {
     )
 
     // Update the move to assign this mover
+    // Per architecture: move_requests.status = 'accepted', moves.status = 'mover_accepted'
     await databases.updateDocument(
       APPWRITE.DATABASE_ID,
       APPWRITE.COLLECTIONS.MOVES,
       moveId,
       {
         moverProfileId: moverProfile.$id,
-        status: 'accepted',
+        status: 'mover_accepted',
       }
     )
 

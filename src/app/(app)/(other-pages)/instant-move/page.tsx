@@ -186,6 +186,7 @@ const InstantMovePage = () => {
       case 'pending':
         // Still waiting - don't change phase
         break
+      case 'accepted':
       case 'mover_accepted':
       case 'mover_en_route':
         setPhase('mover_arriving')
@@ -272,6 +273,7 @@ const InstantMovePage = () => {
           setMoveData((prev) => prev ? { ...prev, ...doc, moverProfileId: prev.moverProfileId } as MoveData : prev)
           const status = doc.status as string
           switch (status) {
+            case 'accepted':
             case 'mover_accepted':
             case 'mover_en_route':
               setPhase('mover_arriving')
