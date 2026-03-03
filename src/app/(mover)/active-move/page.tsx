@@ -25,7 +25,7 @@ interface MoverCoordinates {
   longitude: number
 }
 
-type MovePhase = 'en_route' | 'arrived_pickup' | 'loading' | 'in_transit' | 'arrived_dropoff' | 'completed'
+type MovePhase = 'en_route' | 'arrived_pickup' | 'loading' | 'in_transit' | 'arrived_dropoff' | 'unloading' | 'completed'
 
 const PHASE_LABELS: Record<MovePhase, { label: string; description: string }> = {
   en_route: { label: 'En Route to Pickup', description: 'Head to the pickup location' },
@@ -33,10 +33,11 @@ const PHASE_LABELS: Record<MovePhase, { label: string; description: string }> = 
   loading: { label: 'Loading', description: 'Loading items onto your vehicle' },
   in_transit: { label: 'In Transit', description: 'Driving to the drop-off location' },
   arrived_dropoff: { label: 'At Drop-off', description: 'You have arrived at the destination' },
+  unloading: { label: 'Unloading', description: 'Unloading items at the destination' },
   completed: { label: 'Completed', description: 'Move completed successfully!' },
 }
 
-const PHASE_ORDER: MovePhase[] = ['en_route', 'arrived_pickup', 'loading', 'in_transit', 'arrived_dropoff', 'completed']
+const PHASE_ORDER: MovePhase[] = ['en_route', 'arrived_pickup', 'loading', 'in_transit', 'arrived_dropoff', 'unloading', 'completed']
 
 export default function ActiveMovePage() {
   const { user } = useAuth()
@@ -187,8 +188,10 @@ export default function ActiveMovePage() {
         setPhase('in_transit')
         break
       case 'arrived_destination':
-      case 'unloading':
         setPhase('arrived_dropoff')
+        break
+      case 'unloading':
+        setPhase('unloading')
         break
       case 'completed':
         setPhase('completed')
@@ -216,6 +219,7 @@ export default function ActiveMovePage() {
       loading: 'loading',
       in_transit: 'in_transit',
       arrived_dropoff: 'arrived_destination',
+      unloading: 'unloading',
       completed: 'completed',
     }
 

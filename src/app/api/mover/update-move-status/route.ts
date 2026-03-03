@@ -4,7 +4,7 @@ import { APPWRITE } from '@/lib/constants'
 import { Query } from 'node-appwrite'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Valid status transitions for moves
+// Valid status transitions for moves (per BACKEND_ARCHITECTURE.md)
 const VALID_TRANSITIONS: Record<string, string[]> = {
   accepted: ['mover_en_route'],
   mover_assigned: ['mover_en_route'],
@@ -13,7 +13,8 @@ const VALID_TRANSITIONS: Record<string, string[]> = {
   mover_arrived: ['loading'],
   loading: ['in_transit'],
   in_transit: ['arrived_destination'],
-  arrived_destination: ['completed'],
+  arrived_destination: ['unloading'],
+  unloading: ['completed'],
 }
 
 // POST /api/mover/update-move-status — Update the status of an active move
