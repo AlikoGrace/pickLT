@@ -147,7 +147,7 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
         </div>
       )}
       <div className="mt-16 flex items-center justify-center">
-        <ButtonPrimary href={'/(account)/account-savelists'}>
+        <ButtonPrimary href={'/account-savelists'}>
           {T['common']['Show me more']}
           <ArrowRightIcon className="h-5 w-5 rtl:rotate-180" />
         </ButtonPrimary>
