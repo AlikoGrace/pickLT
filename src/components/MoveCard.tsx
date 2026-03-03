@@ -85,7 +85,7 @@ const MoveCard: FC<MoveCardProps> = ({ size = 'default', className = '', data })
     galleryPhotoIds,
   } = data
 
-  const listingHref = `/move-details/${data.id}`
+  const listingHref = `/move-details/${handle}`
 
   // Create gallery images array for slider — strip mode=admin from Appwrite URLs
   const cleanUrl = (url: string) => url.replace(/[&?]mode=admin/g, '')
