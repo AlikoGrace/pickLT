@@ -348,12 +348,43 @@ const InstantMovePage = () => {
   const [showCancelConfirm, setShowCancelConfirm] = useState(false)
   const confirmCancel = () => setShowCancelConfirm(true)
 
-  const handleCancel = () => {
-    sessionStorage.removeItem('selectedMover')
-    sessionStorage.removeItem('activeMoveId')
-    sessionStorage.removeItem('activeMoveRequestId')
-    reset()
-    router.push('/')
+  const [isCancelling, setIsCancelling] = useState(false)
+
+  const handleCancel = async () => {
+    const moveId = moveIdRef.current || moveData?.$id
+    if (!moveId) {
+      // No move to cancel — just clean up and redirect
+      sessionStorage.removeItem('selectedMover')
+      sessionStorage.removeItem('activeMoveId')
+      sessionStorage.removeItem('activeMoveRequestId')
+      reset()
+      router.push('/')
+      return
+    }
+
+    setIsCancelling(true)
+    try {
+      const res = await fetch('/api/moves/cancel', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ moveId }),
+      })
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        console.error('Cancel move failed:', data.error)
+      }
+    } catch (err) {
+      console.error('Cancel move error:', err)
+    } finally {
+      sessionStorage.removeItem('selectedMover')
+      sessionStorage.removeItem('activeMoveId')
+      sessionStorage.removeItem('activeMoveRequestId')
+      setShowCancelConfirm(false)
+      setIsCancelling(false)
+      reset()
+      router.push('/')
+    }
   }
 
   const handleCallMover = () => {
@@ -612,13 +643,14 @@ const InstantMovePage = () => {
               Your mover is already on the way. Are you sure you want to cancel? This action cannot be undone.
             </p>
             <div className="mt-6 flex gap-3">
-              <ButtonSecondary onClick={() => setShowCancelConfirm(false)} className="flex-1">Keep move</ButtonSecondary>
+              <ButtonSecondary onClick={() => setShowCancelConfirm(false)} disabled={isCancelling} className="flex-1">Keep move</ButtonSecondary>
               <button
                 type="button"
                 onClick={handleCancel}
-                className="flex-1 rounded-xl bg-red-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-red-700 active:scale-[.98]"
+                disabled={isCancelling}
+                className="flex-1 rounded-xl bg-red-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-red-700 active:scale-[.98] disabled:opacity-60"
               >
-                Yes, cancel
+                {isCancelling ? 'Cancelling…' : 'Yes, cancel'}
               </button>
             </div>
           </div>
