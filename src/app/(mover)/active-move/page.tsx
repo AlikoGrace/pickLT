@@ -145,8 +145,8 @@ export default function ActiveMovePage() {
         // If we already have a move, only update if it's the same document
         if (moveId && doc.$id === moveId) {
           const status = doc.status as string
-          // If the client cancelled this move, clear it so the mover sees the empty state
-          if (status === 'cancelled_by_client' || status === 'cancelled_by_mover') {
+          // If the move was cancelled or disputed, clear it so the mover sees the empty state
+          if (['cancelled', 'cancelled_by_client', 'cancelled_by_mover', 'disputed'].includes(status)) {
             setMove(null)
             return
           }
@@ -163,7 +163,7 @@ export default function ActiveMovePage() {
           const status = doc.status as string
           if (
             docMoverProfileId === moverProfileId &&
-            !['completed', 'cancelled_by_client', 'cancelled_by_mover'].includes(status)
+            !['completed', 'cancelled', 'cancelled_by_client', 'cancelled_by_mover', 'disputed'].includes(status)
           ) {
             setMove(doc)
             mapStatusToPhase(status)

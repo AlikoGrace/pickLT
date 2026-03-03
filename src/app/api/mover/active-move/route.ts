@@ -36,8 +36,10 @@ export async function GET() {
       [
         Query.equal('moverProfileId', moverProfile.$id),
         Query.notEqual('status', 'completed'),
+        Query.notEqual('status', 'cancelled'),
         Query.notEqual('status', 'cancelled_by_client'),
         Query.notEqual('status', 'cancelled_by_mover'),
+        Query.notEqual('status', 'disputed'),
         Query.orderDesc('$createdAt'),
         Query.limit(1),
       ]
