@@ -25,7 +25,7 @@ interface MoverCoordinates {
   longitude: number
 }
 
-type MovePhase = 'en_route' | 'arrived_pickup' | 'loading' | 'in_transit' | 'arrived_dropoff' | 'unloading' | 'completed'
+type MovePhase = 'en_route' | 'arrived_pickup' | 'loading' | 'in_transit' | 'arrived_dropoff' | 'unloading' | 'awaiting_payment' | 'completed'
 
 const PHASE_LABELS: Record<MovePhase, { label: string; description: string }> = {
   en_route: { label: 'En Route to Pickup', description: 'Head to the pickup location' },
@@ -34,10 +34,11 @@ const PHASE_LABELS: Record<MovePhase, { label: string; description: string }> = 
   in_transit: { label: 'In Transit', description: 'Driving to the drop-off location' },
   arrived_dropoff: { label: 'At Drop-off', description: 'You have arrived at the destination' },
   unloading: { label: 'Unloading', description: 'Unloading items at the destination' },
+  awaiting_payment: { label: 'Awaiting Payment', description: 'Waiting for payment confirmation' },
   completed: { label: 'Completed', description: 'Move completed successfully!' },
 }
 
-const PHASE_ORDER: MovePhase[] = ['en_route', 'arrived_pickup', 'loading', 'in_transit', 'arrived_dropoff', 'unloading', 'completed']
+const PHASE_ORDER: MovePhase[] = ['en_route', 'arrived_pickup', 'loading', 'in_transit', 'arrived_dropoff', 'unloading', 'awaiting_payment', 'completed']
 
 export default function ActiveMovePage() {
   const { user } = useAuth()
@@ -49,6 +50,10 @@ export default function ActiveMovePage() {
   const [moverCoords, setMoverCoords] = useState<MoverCoordinates | null>(null)
   const [isUpdating, setIsUpdating] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [isConfirmingPayment, setIsConfirmingPayment] = useState(false)
+  const [paymentConfirmed, setPaymentConfirmed] = useState(false)
+  const [clientConfirmed, setClientConfirmed] = useState(false)
+  const [paymentAmount, setPaymentAmount] = useState<number | null>(null)
 
   const moverProfileId = user?.moverDetails?.profileId || null
 
@@ -193,6 +198,9 @@ export default function ActiveMovePage() {
       case 'unloading':
         setPhase('unloading')
         break
+      case 'awaiting_payment':
+        setPhase('awaiting_payment')
+        break
       case 'completed':
         setPhase('completed')
         break
@@ -220,6 +228,7 @@ export default function ActiveMovePage() {
       in_transit: 'in_transit',
       arrived_dropoff: 'arrived_destination',
       unloading: 'unloading',
+      awaiting_payment: 'awaiting_payment',
       completed: 'completed',
     }
 
@@ -237,6 +246,52 @@ export default function ActiveMovePage() {
       alert('Failed to update status')
     } finally {
       setIsUpdating(false)
+    }
+  }
+
+  // ── Poll payment status when awaiting payment ──────────
+  useEffect(() => {
+    if (phase !== 'awaiting_payment' || !move?.$id) return
+    let cancelled = false
+    const poll = async () => {
+      try {
+        const res = await fetch(`/api/moves/payment-status?moveId=${move.$id}`)
+        if (!res.ok) return
+        const data = await res.json()
+        if (!cancelled) {
+          setPaymentAmount(data.amount ?? (move.estimatedPrice as number) ?? null)
+          setClientConfirmed(!!data.clientConfirmedAt)
+          if (data.moverConfirmedAt) setPaymentConfirmed(true)
+          if (data.status === 'completed') setPhase('completed')
+        }
+      } catch { /* ignore */ }
+    }
+    poll()
+    const interval = setInterval(poll, 5_000)
+    return () => { cancelled = true; clearInterval(interval) }
+  }, [phase, move?.$id, move?.estimatedPrice])
+
+  const handleConfirmPayment = async () => {
+    if (!move?.$id) return
+    setIsConfirmingPayment(true)
+    try {
+      const res = await fetch('/api/mover/confirm-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ moveId: move.$id }),
+      })
+      if (!res.ok) {
+        const err = await res.json()
+        alert(err.error || 'Failed to confirm payment')
+        return
+      }
+      const data = await res.json()
+      setPaymentConfirmed(true)
+      if (data.moveCompleted) setPhase('completed')
+    } catch {
+      alert('Failed to confirm payment')
+    } finally {
+      setIsConfirmingPayment(false)
     }
   }
 
@@ -409,7 +464,8 @@ export default function ActiveMovePage() {
               </p>
             </div>
           )}
-          {phase !== 'completed' && nextPhaseLabel && (
+          {/* Normal phase advancement (NOT during awaiting_payment or completed) */}
+          {phase !== 'completed' && phase !== 'awaiting_payment' && nextPhaseLabel && (
             <ButtonPrimary
               onClick={advancePhase}
               disabled={isUpdating || (phase === 'en_route' && !isNearPickup)}
@@ -418,6 +474,62 @@ export default function ActiveMovePage() {
               {isUpdating ? 'Updating...' : `Mark as: ${nextPhaseLabel}`}
             </ButtonPrimary>
           )}
+
+          {/* Awaiting payment — mover confirms receipt */}
+          {phase === 'awaiting_payment' && (
+            <div className="rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 p-4 space-y-3 shadow-lg">
+              <div className="text-center space-y-1">
+                <p className="text-sm font-semibold text-neutral-900 dark:text-white">
+                  Payment Confirmation
+                </p>
+                {paymentAmount && (
+                  <p className="text-2xl font-bold text-primary-600">
+                    R{paymentAmount.toLocaleString()}
+                  </p>
+                )}
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                  Confirm once the client has paid you
+                </p>
+              </div>
+
+              {/* Status indicators */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-neutral-600 dark:text-neutral-300">Client confirmed</span>
+                  {clientConfirmed ? (
+                    <span className="flex items-center gap-1 text-green-600"><CheckCircleIcon className="h-4 w-4" /> Yes</span>
+                  ) : (
+                    <span className="flex items-center gap-1 text-amber-500"><ArrowPathIcon className="h-4 w-4 animate-spin" /> Waiting</span>
+                  )}
+                </div>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-neutral-600 dark:text-neutral-300">Your confirmation</span>
+                  {paymentConfirmed ? (
+                    <span className="flex items-center gap-1 text-green-600"><CheckCircleIcon className="h-4 w-4" /> Confirmed</span>
+                  ) : (
+                    <span className="text-neutral-400">Pending</span>
+                  )}
+                </div>
+              </div>
+
+              {!paymentConfirmed ? (
+                <ButtonPrimary
+                  onClick={handleConfirmPayment}
+                  disabled={isConfirmingPayment}
+                  className="w-full"
+                >
+                  {isConfirmingPayment ? 'Confirming…' : 'Confirm Payment Received'}
+                </ButtonPrimary>
+              ) : !clientConfirmed ? (
+                <div className="rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 p-3 text-center">
+                  <p className="text-xs text-amber-700 dark:text-amber-300">
+                    Waiting for client to confirm payment…
+                  </p>
+                </div>
+              ) : null}
+            </div>
+          )}
+
           {phase === 'completed' && (
             <ButtonPrimary href="/dashboard" className="w-full shadow-lg">
               Back to Dashboard
