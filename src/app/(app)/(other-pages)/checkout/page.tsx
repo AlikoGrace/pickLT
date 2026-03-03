@@ -103,8 +103,8 @@ const CheckoutContent = () => {
     vehicleType,
     inventory,
     customItems,
-    coverPhoto,
-    galleryPhotos,
+    coverPhotoId,
+    galleryPhotoIds,
     contactInfo,
     updateContactInfo,
     addStoredMove,
@@ -285,8 +285,8 @@ const CheckoutContent = () => {
         arrivalWindow: isInstantMove ? 'now' : arrivalWindow,
         inventoryCount,
         contactInfo,
-        coverPhoto,
-        galleryPhotos,
+        coverPhotoId,
+        galleryPhotoIds,
       }
 
       addStoredMove(newMove)
@@ -326,8 +326,8 @@ const CheckoutContent = () => {
         arrivalWindow: isInstantMove ? 'now' : arrivalWindow,
         inventoryCount,
         contactInfo,
-        coverPhoto,
-        galleryPhotos,
+        coverPhotoId,
+        galleryPhotoIds,
       }
       addStoredMove(newMove)
       reset()
@@ -343,12 +343,12 @@ const CheckoutContent = () => {
         <div className="flex flex-col sm:flex-row sm:items-center">
           <div className="w-full shrink-0 sm:w-40">
             <div className="aspect-w-4 overflow-hidden rounded-2xl aspect-h-3 sm:aspect-h-4 bg-neutral-100 dark:bg-neutral-800">
-              {coverPhoto ? (
+              {coverPhotoId ? (
                 <Image
                   alt="Move preview"
                   fill
                   sizes="200px"
-                  src={coverPhoto}
+                  src={coverPhotoId}
                   className="object-cover"
                 />
               ) : (

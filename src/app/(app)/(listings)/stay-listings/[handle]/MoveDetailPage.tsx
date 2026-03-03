@@ -117,8 +117,8 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
     arrivalWindow,
     inventoryCount,
     contactInfo,
-    coverPhoto,
-    galleryPhotos,
+    coverPhotoId,
+    galleryPhotoIds,
     totalPrice,
     bookingCode,
     paidAt,
@@ -126,10 +126,10 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
   } = move
 
   // Build gallery images
-  const galleryImgs = coverPhoto 
-    ? [coverPhoto, ...galleryPhotos] 
-    : galleryPhotos.length > 0 
-      ? galleryPhotos 
+  const galleryImgs = coverPhotoId 
+    ? [coverPhotoId, ...galleryPhotoIds] 
+    : galleryPhotoIds.length > 0 
+      ? galleryPhotoIds 
       : []
 
   const pickupDisplay = pickupStreetAddress || pickupLocation || 'Pickup location'

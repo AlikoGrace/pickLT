@@ -66,14 +66,14 @@ const Page = () => {
     additionalServices,
     storageWeeks,
     disposalItems,
-    coverPhoto,
-    galleryPhotos,
+    coverPhotoId,
+    galleryPhotoIds,
     toggleAdditionalService,
     setStorageWeeks,
     setDisposalItems,
-    setCoverPhoto,
-    addGalleryPhoto,
-    removeGalleryPhoto,
+    setCoverPhotoId,
+    addGalleryPhotoId,
+    removeGalleryPhotoId,
   } = useMoveSearch()
 
   // Prefetch the next step to improve performance
@@ -94,7 +94,7 @@ const Page = () => {
     if (file) {
       const reader = new FileReader()
       reader.onloadend = () => {
-        setCoverPhoto(reader.result as string)
+        setCoverPhotoId(reader.result as string)
       }
       reader.readAsDataURL(file)
     }
@@ -106,7 +106,7 @@ const Page = () => {
       Array.from(files).forEach((file) => {
         const reader = new FileReader()
         reader.onloadend = () => {
-          addGalleryPhoto(reader.result as string)
+          addGalleryPhotoId(reader.result as string)
         }
         reader.readAsDataURL(file)
       })
@@ -135,10 +135,10 @@ const Page = () => {
             Upload a main photo showing your items or space
           </span>
           <div className="mt-5">
-            {coverPhoto ? (
+            {coverPhotoId ? (
               <div className="relative rounded-2xl overflow-hidden">
                 <Image
-                  src={coverPhoto}
+                  src={coverPhotoId}
                   alt="Cover photo"
                   width={600}
                   height={400}
@@ -146,7 +146,7 @@ const Page = () => {
                 />
                 <button
                   type="button"
-                  onClick={() => setCoverPhoto(null)}
+                  onClick={() => setCoverPhotoId(null)}
                   className="absolute top-3 right-3 p-2 bg-black/50 rounded-full text-white hover:bg-black/70"
                 >
                   <XMarkIcon className="h-5 w-5" />
@@ -198,9 +198,9 @@ const Page = () => {
             Upload additional photos of furniture, rooms, or items
           </span>
           <div className="mt-5">
-            {galleryPhotos.length > 0 && (
+            {galleryPhotoIds.length > 0 && (
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-4">
-                {galleryPhotos.map((photo, index) => (
+                {galleryPhotoIds.map((photo, index) => (
                   <div key={index} className="relative rounded-xl overflow-hidden">
                     <Image
                       src={photo}
@@ -211,7 +211,7 @@ const Page = () => {
                     />
                     <button
                       type="button"
-                      onClick={() => removeGalleryPhoto(index)}
+                      onClick={() => removeGalleryPhotoId(index)}
                       className="absolute top-2 right-2 p-1.5 bg-black/50 rounded-full text-white hover:bg-black/70"
                     >
                       <XMarkIcon className="h-4 w-4" />
@@ -335,8 +335,8 @@ const Page = () => {
         <input type="hidden" name="additionalServices" value={JSON.stringify(additionalServices)} />
         <input type="hidden" name="storageWeeksValue" value={storageWeeks} />
         <input type="hidden" name="disposalItemsValue" value={disposalItems} />
-        <input type="hidden" name="coverPhoto" value={coverPhoto || ''} />
-        <input type="hidden" name="galleryPhotos" value={JSON.stringify(galleryPhotos)} />
+        <input type="hidden" name="coverPhoto" value={coverPhotoId || ''} />
+        <input type="hidden" name="galleryPhotos" value={JSON.stringify(galleryPhotoIds)} />
       </Form>
     </>
   )

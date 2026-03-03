@@ -59,8 +59,8 @@ function docToStoredMove(doc: any): StoredMove {
     arrivalWindow: doc.arrivalWindow ?? null,
     inventoryCount: doc.totalItemCount ?? 0,
     contactInfo: doc.contactInfo ?? { fullName: '', phone: '', email: '' },
-    coverPhoto: doc.coverPhotoId ?? null,
-    galleryPhotos: doc.galleryPhotoIds ?? [],
+    coverPhotoId: doc.coverPhotoId ?? null,
+    galleryPhotoIds: doc.galleryPhotoIds ?? [],
   }
 }
 

@@ -112,8 +112,8 @@ const Page = () => {
     additionalServices,
     storageWeeks,
     disposalItems,
-    coverPhoto,
-    galleryPhotos,
+    coverPhotoId,
+    galleryPhotoIds,
     // Step 9
     contactInfo,
     // Step 10
@@ -159,8 +159,8 @@ const Page = () => {
 
   // Build gallery images array for header
   const galleryImages = [
-    coverPhoto || '/images/placeholder-move.jpg',
-    ...galleryPhotos,
+    coverPhotoId || '/images/placeholder-move.jpg',
+    ...galleryPhotoIds,
   ].filter(Boolean).slice(0, 5)
 
   // If no photos, use placeholders

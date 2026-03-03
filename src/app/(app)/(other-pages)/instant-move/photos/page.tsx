@@ -24,11 +24,11 @@ const InstantMovePhotosPage = () => {
   const [showError, setShowError] = useState(false)
 
   const {
-    coverPhoto,
-    galleryPhotos,
-    setCoverPhoto,
-    addGalleryPhoto,
-    removeGalleryPhoto,
+    coverPhotoId,
+    galleryPhotoIds,
+    setCoverPhotoId,
+    addGalleryPhotoId,
+    removeGalleryPhotoId,
     inventory,
     customItems,
     pickupLocation,
@@ -36,7 +36,7 @@ const InstantMovePhotosPage = () => {
   } = useMoveSearch()
 
   const inventoryCount = Object.values(inventory).reduce((sum, qty) => sum + qty, 0) + customItems.length
-  const hasAtLeastOnePhoto = coverPhoto !== null || galleryPhotos.length > 0
+  const hasAtLeastOnePhoto = coverPhotoId !== null || galleryPhotoIds.length > 0
 
   // Prefetch the next step
   useEffect(() => {
@@ -49,7 +49,7 @@ const InstantMovePhotosPage = () => {
       const compressed = await compressImage(file)
       const reader = new FileReader()
       reader.onloadend = () => {
-        setCoverPhoto(reader.result as string)
+        setCoverPhotoId(reader.result as string)
         setShowError(false)
       }
       reader.readAsDataURL(compressed)
@@ -63,7 +63,7 @@ const InstantMovePhotosPage = () => {
         const compressed = await compressImage(file)
         const reader = new FileReader()
         reader.onloadend = () => {
-          addGalleryPhoto(reader.result as string)
+          addGalleryPhotoId(reader.result as string)
           setShowError(false)
         }
         reader.readAsDataURL(compressed)
@@ -154,10 +154,10 @@ const InstantMovePhotosPage = () => {
             Upload a main photo showing your items or the space
           </p>
           <div className="mt-4">
-            {coverPhoto ? (
+            {coverPhotoId ? (
               <div className="relative rounded-2xl overflow-hidden">
                 <Image
-                  src={coverPhoto}
+                  src={coverPhotoId}
                   alt="Cover photo"
                   width={600}
                   height={400}
@@ -165,7 +165,7 @@ const InstantMovePhotosPage = () => {
                 />
                 <button
                   type="button"
-                  onClick={() => setCoverPhoto(null)}
+                  onClick={() => setCoverPhotoId(null)}
                   className="absolute top-3 right-3 p-2 bg-black/50 rounded-full text-white hover:bg-black/70 transition-colors"
                 >
                   <HugeiconsIcon icon={Cancel01Icon} size={20} strokeWidth={1.5} />
@@ -211,9 +211,9 @@ const InstantMovePhotosPage = () => {
             Upload more photos of furniture, rooms, or specific items
           </p>
           <div className="mt-4">
-            {galleryPhotos.length > 0 && (
+            {galleryPhotoIds.length > 0 && (
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-4">
-                {galleryPhotos.map((photo, index) => (
+                {galleryPhotoIds.map((photo, index) => (
                   <div key={index} className="relative rounded-xl overflow-hidden aspect-square">
                     <Image
                       src={photo}
@@ -223,7 +223,7 @@ const InstantMovePhotosPage = () => {
                     />
                     <button
                       type="button"
-                      onClick={() => removeGalleryPhoto(index)}
+                      onClick={() => removeGalleryPhotoId(index)}
                       className="absolute top-2 right-2 p-1.5 bg-black/50 rounded-full text-white hover:bg-black/70 transition-colors"
                     >
                       <HugeiconsIcon icon={Cancel01Icon} size={16} strokeWidth={1.5} />
@@ -263,7 +263,7 @@ const InstantMovePhotosPage = () => {
         {/* Photo Count */}
         <div className="mt-6 text-center">
           <p className="text-sm text-neutral-500 dark:text-neutral-400">
-            {coverPhoto ? 1 : 0} main photo • {galleryPhotos.length} additional photo{galleryPhotos.length !== 1 ? 's' : ''}
+            {coverPhotoId ? 1 : 0} main photo • {galleryPhotoIds.length} additional photo{galleryPhotoIds.length !== 1 ? 's' : ''}
           </p>
         </div>
       </div>

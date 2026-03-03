@@ -91,8 +91,8 @@ const SelectMoverPage = () => {
     dropoffCoordinates,
     inventory,
     customItems,
-    coverPhoto,
-    galleryPhotos,
+    coverPhotoId,
+    galleryPhotoIds,
   } = useMoveSearch()
 
   const [isLoading, setIsLoading] = useState(true)
@@ -103,7 +103,7 @@ const SelectMoverPage = () => {
   const [fetchError, setFetchError] = useState<string | null>(null)
 
   const inventoryCount = Object.values(inventory).reduce((sum, qty) => sum + qty, 0) + customItems.length
-  const photoCount = (coverPhoto ? 1 : 0) + galleryPhotos.length
+  const photoCount = (coverPhotoId ? 1 : 0) + galleryPhotoIds.length
 
   // Calculate route distance using Mapbox Directions API
   useEffect(() => {
@@ -253,14 +253,14 @@ const SelectMoverPage = () => {
     let coverPhotoId: string | null = null
     let galleryPhotoIds: string[] = []
 
-    if (coverPhoto || galleryPhotos.length > 0) {
+    if (coverPhotoId || galleryPhotoIds.length > 0) {
       try {
         const photoRes = await fetch('/api/moves/upload-photos', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            coverPhoto: coverPhoto || null,
-            galleryPhotos: galleryPhotos.length > 0 ? galleryPhotos : [],
+            coverPhotoId: coverPhotoId || null,
+            galleryPhotoIds: galleryPhotoIds.length > 0 ? galleryPhotoIds : [],
           }),
         })
 

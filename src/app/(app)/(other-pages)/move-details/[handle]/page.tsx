@@ -140,17 +140,17 @@ export default function MoveDetailsPage() {
     contactInfo,
     totalPrice,
     bookingCode,
-    coverPhoto,
-    galleryPhotos,
+    coverPhotoId,
+    galleryPhotoIds,
     createdAt,
   } = move
 
   const pickupDisplay = pickupStreetAddress || pickupLocation || 'Pickup location'
   const dropoffDisplay = dropoffStreetAddress || 'Drop-off location'
 
-  const galleryImgs = coverPhoto
-    ? [coverPhoto, ...galleryPhotos]
-    : galleryPhotos
+  const galleryImgs = coverPhotoId
+    ? [coverPhotoId, ...galleryPhotoIds]
+    : galleryPhotoIds
 
   return (
     <div className="container pb-24 lg:pb-32 pt-8 lg:pt-12">

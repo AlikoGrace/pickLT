@@ -26,9 +26,9 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json()
-    const { coverPhoto, galleryPhotos } = body as {
-      coverPhoto?: string | null
-      galleryPhotos?: string[]
+    const { coverPhotoId, galleryPhotoIds } = body as {
+      coverPhotoId?: string | null
+      galleryPhotoIds?: string[]
     }
 
     const { storage } = createAdminClient()
@@ -63,13 +63,13 @@ export async function POST(req: NextRequest) {
     }
 
     // Upload cover photo
-    if (coverPhoto) {
-      coverPhotoUrl = await uploadBase64(coverPhoto, `cover-${userId}`)
+    if (coverPhotoId) {
+      coverPhotoUrl = await uploadBase64(coverPhotoId, `cover-${userId}`)
     }
 
     // Upload gallery photos (in parallel, max 10)
-    if (galleryPhotos && galleryPhotos.length > 0) {
-      const uploads = galleryPhotos.slice(0, 10).map((photo, idx) =>
+    if (galleryPhotoIds && galleryPhotoIds.length > 0) {
+      const uploads = galleryPhotoIds.slice(0, 10).map((photo, idx) =>
         uploadBase64(photo, `gallery-${userId}-${idx}`)
       )
       const results = await Promise.all(uploads)

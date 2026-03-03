@@ -117,8 +117,8 @@ export type StoredMove = {
   // Contact
   contactInfo: ContactInfo
   // Photos
-  coverPhoto: string | null
-  galleryPhotos: string[]
+  coverPhotoId: string | null
+  galleryPhotoIds: string[]
 }
 
 // Inventory item with metadata
@@ -211,8 +211,8 @@ type MoveSearchState = {
   additionalServices: AdditionalService[]
   storageWeeks: number
   disposalItems: string
-  coverPhoto: string | null // base64 or URL
-  galleryPhotos: string[] // array of base64 or URLs
+  coverPhotoId: string | null // base64 or URL
+  galleryPhotoIds: string[] // array of base64 or URLs
 
   // Step 9 - Contact Information
   contactInfo: ContactInfo
@@ -287,9 +287,9 @@ type MoveSearchActions = {
   toggleAdditionalService: (service: AdditionalService) => void
   setStorageWeeks: (weeks: number) => void
   setDisposalItems: (items: string) => void
-  setCoverPhoto: (photo: string | null) => void
-  addGalleryPhoto: (photo: string) => void
-  removeGalleryPhoto: (index: number) => void
+  setCoverPhotoId: (photo: string | null) => void
+  addGalleryPhotoId: (photo: string) => void
+  removeGalleryPhotoId: (index: number) => void
 
   // Step 9 actions
   updateContactInfo: (info: Partial<ContactInfo>) => void
@@ -364,8 +364,8 @@ const defaultState: MoveSearchState = {
   additionalServices: [],
   storageWeeks: 0,
   disposalItems: '',
-  coverPhoto: null,
-  galleryPhotos: [],
+  coverPhotoId: null,
+  galleryPhotoIds: [],
 
   // Step 9
   contactInfo: {
@@ -448,9 +448,9 @@ const MoveSearchContext = createContext<MoveSearchState & MoveSearchActions>({
   toggleAdditionalService: () => {},
   setStorageWeeks: () => {},
   setDisposalItems: () => {},
-  setCoverPhoto: () => {},
-  addGalleryPhoto: () => {},
-  removeGalleryPhoto: () => {},
+  setCoverPhotoId: () => {},
+  addGalleryPhotoId: () => {},
+  removeGalleryPhotoId: () => {},
 
   // Step 9
   updateContactInfo: () => {},
@@ -526,8 +526,8 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
   const [additionalServices, setAdditionalServices] = useState<AdditionalService[]>(defaultState.additionalServices)
   const [storageWeeks, setStorageWeeks] = useState<number>(defaultState.storageWeeks)
   const [disposalItems, setDisposalItems] = useState<string>(defaultState.disposalItems)
-  const [coverPhoto, setCoverPhoto] = useState<string | null>(defaultState.coverPhoto)
-  const [galleryPhotos, setGalleryPhotos] = useState<string[]>(defaultState.galleryPhotos)
+  const [coverPhotoId, setCoverPhotoId] = useState<string | null>(defaultState.coverPhotoId)
+  const [galleryPhotoIds, setGalleryPhotoIds] = useState<string[]>(defaultState.galleryPhotoIds)
 
   // Step 9 state
   const [contactInfo, setContactInfo] = useState<ContactInfo>(defaultState.contactInfo)
@@ -586,8 +586,8 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
     if (saved.additionalServices) setAdditionalServices(saved.additionalServices as AdditionalService[])
     if (saved.storageWeeks != null) setStorageWeeks(saved.storageWeeks as number)
     if (saved.disposalItems) setDisposalItems(saved.disposalItems as string)
-    if (saved.coverPhoto) setCoverPhoto(saved.coverPhoto as string)
-    if (saved.galleryPhotos) setGalleryPhotos(saved.galleryPhotos as string[])
+    if (saved.coverPhotoId) setCoverPhotoId(saved.coverPhotoId as string)
+    if (saved.galleryPhotoIds) setGalleryPhotoIds(saved.galleryPhotoIds as string[])
     if (saved.contactInfo) setContactInfo(saved.contactInfo as ContactInfo)
     if (saved.legalConsent) setLegalConsent(saved.legalConsent as LegalConsent)
   }, [])
@@ -673,8 +673,8 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
         additionalServices,
         storageWeeks,
         disposalItems,
-        coverPhoto,
-        galleryPhotos,
+        coverPhotoId,
+        galleryPhotoIds,
         contactInfo,
         legalConsent,
       }
@@ -710,7 +710,7 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
     arrivalWindow, flexibility, preferEarliestArrival, avoidLunchBreak, avoidEveningDelivery,
     crewSize, vehicleType, truckAccess, heavyItems, customHeavyItems,
     additionalServices, storageWeeks, disposalItems,
-    coverPhoto, galleryPhotos,
+    coverPhotoId, galleryPhotoIds,
     contactInfo, legalConsent,
   ])
 
@@ -793,12 +793,12 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
     )
   }
 
-  const addGalleryPhoto = (photo: string) => {
-    setGalleryPhotos((prev) => [...prev, photo])
+  const addGalleryPhotoId = (photo: string) => {
+    setGalleryPhotoIds((prev) => [...prev, photo])
   }
 
-  const removeGalleryPhoto = (index: number) => {
-    setGalleryPhotos((prev) => prev.filter((_, i) => i !== index))
+  const removeGalleryPhotoId = (index: number) => {
+    setGalleryPhotoIds((prev) => prev.filter((_, i) => i !== index))
   }
 
   // Step 9 actions
@@ -881,8 +881,8 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
     setAdditionalServices(defaultState.additionalServices)
     setStorageWeeks(defaultState.storageWeeks)
     setDisposalItems(defaultState.disposalItems)
-    setCoverPhoto(defaultState.coverPhoto)
-    setGalleryPhotos(defaultState.galleryPhotos)
+    setCoverPhotoId(defaultState.coverPhotoId)
+    setGalleryPhotoIds(defaultState.galleryPhotoIds)
     // Step 9
     setContactInfo(defaultState.contactInfo)
     // Step 10
@@ -946,8 +946,8 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
         additionalServices,
         storageWeeks,
         disposalItems,
-        coverPhoto,
-        galleryPhotos,
+        coverPhotoId,
+        galleryPhotoIds,
 
         // Step 9 state
         contactInfo,
@@ -1015,9 +1015,9 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
         toggleAdditionalService,
         setStorageWeeks,
         setDisposalItems,
-        setCoverPhoto,
-        addGalleryPhoto,
-        removeGalleryPhoto,
+        setCoverPhotoId,
+        addGalleryPhotoId,
+        removeGalleryPhotoId,
 
         // Step 9 actions
         updateContactInfo,

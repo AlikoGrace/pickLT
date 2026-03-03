@@ -154,12 +154,12 @@ const PayDoneContent = () => {
           <div className="mt-5 flex flex-col sm:flex-row sm:items-center">
             <div className="w-full shrink-0 sm:w-40">
               <div className="aspect-w-4 overflow-hidden rounded-2xl aspect-h-3 sm:aspect-h-4 bg-neutral-100 dark:bg-neutral-800">
-                {move?.coverPhoto ? (
+                {move?.coverPhotoId ? (
                   <Image
                     fill
                     alt="Move preview"
                     className="object-cover"
-                    src={move.coverPhoto}
+                    src={move.coverPhotoId}
                     sizes="200px"
                     priority
                   />

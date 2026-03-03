@@ -55,8 +55,8 @@ export function AuthGate({ children, redirectBack, fallback }: AuthGateProps) {
       vehicleType: moveSearch.vehicleType,
       additionalServices: moveSearch.additionalServices,
       storageWeeks: moveSearch.storageWeeks,
-      coverPhoto: moveSearch.coverPhoto,
-      galleryPhotos: moveSearch.galleryPhotos,
+      coverPhotoId: moveSearch.coverPhotoId,
+      galleryPhotoIds: moveSearch.galleryPhotoIds,
       contactInfo: moveSearch.contactInfo,
     }
 
