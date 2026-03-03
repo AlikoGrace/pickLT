@@ -75,7 +75,15 @@ export default function GallerySlider({
     trackMouse: true,
   })
 
-  let currentImage = images[index]
+  const rawImage = images[index]
+  // Resolve src from either string or object format
+  const currentImageSrc = typeof rawImage === 'string'
+    ? rawImage
+    : rawImage?.src || ''
+  // Strip mode=admin from Appwrite URLs — it requires admin auth
+  const cleanSrc = currentImageSrc.replace(/[&?]mode=admin/g, '')
+  // Use unoptimized for external Appwrite storage URLs (avoids Next.js proxy auth issues)
+  const isExternal = cleanSrc.startsWith('http')
 
   return (
     <MotionConfig
@@ -99,12 +107,13 @@ export default function GallerySlider({
                 className="absolute inset-0"
               >
                 <Image
-                  src={currentImage || ''}
+                  src={cleanSrc || '/placeholder.png'}
                   fill
                   alt="listing card gallery"
                   className={clsx(`rounded-xl object-cover`, imageClass)}
                   onLoad={() => setLoaded(true)}
                   sizes="(max-width: 1025px) 100vw, 25vw"
+                  unoptimized={isExternal}
                 />
               </motion.div>
             </AnimatePresence>
