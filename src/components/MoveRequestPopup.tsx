@@ -96,33 +96,92 @@ const formatDuration = (seconds: number | null): string => {
   return `${minutes} min`
 }
 
-const getPhotoUrl = (fileId: string): string => {
-  if (!fileId || !APPWRITE_ENDPOINT || !PROJECT_ID || !BUCKET_MOVE_PHOTOS) return ''
-  return `${APPWRITE_ENDPOINT}/storage/buckets/${BUCKET_MOVE_PHOTOS}/files/${fileId}/view?project=${PROJECT_ID}`
+const getPhotoUrl = (fileIdOrUrl: string): string => {
+  if (!fileIdOrUrl) return ''
+  // If already a full URL, return as-is
+  if (fileIdOrUrl.startsWith('http://') || fileIdOrUrl.startsWith('https://')) return fileIdOrUrl
+  // Otherwise construct from file ID
+  if (!APPWRITE_ENDPOINT || !PROJECT_ID || !BUCKET_MOVE_PHOTOS) return ''
+  return `${APPWRITE_ENDPOINT}/storage/buckets/${BUCKET_MOVE_PHOTOS}/files/${fileIdOrUrl}/view?project=${PROJECT_ID}`
 }
 
-// ─── Alarming sound generator ───────────────────────────
-// ─── Shared AudioContext (pre-warmed on user interaction) ──
-// Browsers block AudioContext creation without prior user gesture.
-// We create it lazily on the first click/tap anywhere on the page
-// and reuse it for all alarm playback.
-let _sharedAudioCtx: AudioContext | null = null
+// ─── Alarm sound using inline WAV (reliable across all browsers) ─────────
+// Generates a short, urgent two-tone siren WAV and plays it via <audio>.
+// Much more reliable than Web Audio API oscillators for autoplay.
 
-function getSharedAudioContext(): AudioContext {
-  if (!_sharedAudioCtx || _sharedAudioCtx.state === 'closed') {
-    _sharedAudioCtx = new AudioContext()
+let _alarmDataUrl: string | null = null
+
+/** Generate a ~2 s urgent two-tone siren as a WAV data-URL */
+function getAlarmDataUrl(): string {
+  if (_alarmDataUrl) return _alarmDataUrl
+
+  const sampleRate = 44100
+  const duration = 2.0
+  const samples = Math.floor(sampleRate * duration)
+  const buffer = new ArrayBuffer(44 + samples * 2)
+  const dv = new DataView(buffer)
+
+  // ── WAV header ──
+  const ws = (o: number, s: string) => {
+    for (let i = 0; i < s.length; i++) dv.setUint8(o + i, s.charCodeAt(i))
   }
-  // Resume in case it was suspended (autoplay policy)
-  if (_sharedAudioCtx.state === 'suspended') {
-    _sharedAudioCtx.resume().catch(() => {})
+  ws(0, 'RIFF')
+  dv.setUint32(4, 36 + samples * 2, true)
+  ws(8, 'WAVE')
+  ws(12, 'fmt ')
+  dv.setUint32(16, 16, true) // chunk size
+  dv.setUint16(20, 1, true) // PCM
+  dv.setUint16(22, 1, true) // mono
+  dv.setUint32(24, sampleRate, true)
+  dv.setUint32(28, sampleRate * 2, true) // byte rate
+  dv.setUint16(32, 2, true) // block align
+  dv.setUint16(34, 16, true) // bits per sample
+  ws(36, 'data')
+  dv.setUint32(40, samples * 2, true)
+
+  // ── Audio data: urgent two-tone siren (880 Hz ↔ 1320 Hz) ──
+  for (let i = 0; i < samples; i++) {
+    const t = i / sampleRate
+    // Alternate between 1320 Hz and 880 Hz every 0.15 s
+    const freq = t % 0.3 < 0.15 ? 1320 : 880
+    // Fade in/out envelope
+    const env = Math.min(1, Math.min(t * 15, (duration - t) * 15))
+    // Fundamental + harmonic for richer tone
+    const s1 = Math.sin(2 * Math.PI * freq * t) * 0.55
+    const s2 = Math.sin(2 * Math.PI * freq * 2 * t) * 0.15
+    // Slight pulse modulation for urgency
+    const pulse = 0.85 + 0.15 * Math.sin(2 * Math.PI * 8 * t)
+    const sample = (s1 + s2) * env * pulse
+    dv.setInt16(44 + i * 2, Math.max(-32768, Math.min(32767, sample * 32767)), true)
   }
-  return _sharedAudioCtx
+
+  // Convert to base64 data URL
+  const bytes = new Uint8Array(buffer)
+  let binary = ''
+  for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i])
+  _alarmDataUrl = 'data:audio/wav;base64,' + btoa(binary)
+  return _alarmDataUrl
 }
 
-// Pre-warm on first user interaction so later programmatic playback works
+let _alarmAudio: HTMLAudioElement | null = null
+
+function getAlarmAudio(): HTMLAudioElement {
+  if (!_alarmAudio) {
+    _alarmAudio = new Audio(getAlarmDataUrl())
+    _alarmAudio.loop = true
+    _alarmAudio.volume = 1.0
+  }
+  return _alarmAudio
+}
+
+// Pre-warm the Audio element on first user interaction so browser
+// allows programmatic playback later (Chrome autoplay policy).
 if (typeof window !== 'undefined') {
   const warmUp = () => {
-    getSharedAudioContext()
+    const audio = getAlarmAudio()
+    // Play + immediately pause to "unlock" the element
+    audio.play().then(() => audio.pause()).catch(() => {})
+    audio.currentTime = 0
     window.removeEventListener('click', warmUp)
     window.removeEventListener('touchstart', warmUp)
     window.removeEventListener('keydown', warmUp)
@@ -132,106 +191,24 @@ if (typeof window !== 'undefined') {
   window.addEventListener('keydown', warmUp, { once: true })
 }
 
-// Creates a loud, urgent, repeating alarm that demands attention.
-// Uses multiple oscillators for a siren-like effect.
 function createAlarmSound(): { play: () => void; stop: () => void } {
-  let intervalId: NodeJS.Timeout | null = null
-  let isPlaying = false
-
-  const play = () => {
-    if (isPlaying) return
-    isPlaying = true
-
-    try {
-      const ctx = getSharedAudioContext()
-
-      const playUrgentPattern = () => {
-        if (!isPlaying) return
-        // Ensure context is running
-        if (ctx.state === 'suspended') {
-          ctx.resume().catch(() => {})
-        }
-
-        const gainNode = ctx.createGain()
-        gainNode.connect(ctx.destination)
-
-        // Siren sweep: ascending then descending
-        const siren = ctx.createOscillator()
-        siren.type = 'sawtooth'
-        siren.connect(gainNode)
-
-        const now = ctx.currentTime
-        // Ascending sweep
-        siren.frequency.setValueAtTime(600, now)
-        siren.frequency.linearRampToValueAtTime(1200, now + 0.3)
-        // Descending sweep
-        siren.frequency.linearRampToValueAtTime(600, now + 0.6)
-
-        // Volume envelope with urgency
-        gainNode.gain.setValueAtTime(0, now)
-        gainNode.gain.linearRampToValueAtTime(0.6, now + 0.05)
-        gainNode.gain.setValueAtTime(0.6, now + 0.55)
-        gainNode.gain.linearRampToValueAtTime(0, now + 0.65)
-
-        siren.start(now)
-        siren.stop(now + 0.7)
-
-        // Second beep — higher pitch staccato
-        setTimeout(() => {
-          if (!isPlaying) return
-          const beepGain = ctx.createGain()
-          beepGain.connect(ctx.destination)
-          const beep = ctx.createOscillator()
-          beep.type = 'square'
-          beep.frequency.value = 1400
-          beep.connect(beepGain)
-
-          const t = ctx.currentTime
-          beepGain.gain.setValueAtTime(0.4, t)
-          beep.start(t)
-          beep.stop(t + 0.15)
-
-          setTimeout(() => {
-            if (!isPlaying) return
-            const beepGain2 = ctx.createGain()
-            beepGain2.connect(ctx.destination)
-            const beep2 = ctx.createOscillator()
-            beep2.type = 'square'
-            beep2.frequency.value = 1400
-            beep2.connect(beepGain2)
-
-            const t2 = ctx.currentTime
-            beepGain2.gain.setValueAtTime(0.4, t2)
-            beep2.start(t2)
-            beep2.stop(t2 + 0.15)
-          }, 200)
-        }, 750)
-      }
-
-      // Play immediately then loop
-      playUrgentPattern()
-      intervalId = setInterval(playUrgentPattern, 1800)
-    } catch {
-      // Web Audio API not available
-    }
+  return {
+    play: () => {
+      const audio = getAlarmAudio()
+      audio.currentTime = 0
+      audio.play().catch(() => {})
+    },
+    stop: () => {
+      const audio = getAlarmAudio()
+      audio.pause()
+      audio.currentTime = 0
+    },
   }
-
-  const stop = () => {
-    isPlaying = false
-    if (intervalId) {
-      clearInterval(intervalId)
-      intervalId = null
-    }
-    // Don't close the shared context — just stop the interval
-  }
-
-  return { play, stop }
 }
 
 export default function MoveRequestPopup({ children }: { children: ReactNode }) {
   const { user } = useAuth()
 
-  console.log(user)
   const moverProfileId = user?.moverDetails?.profileId
   const router = useRouter()
   const [incoming, setIncoming] = useState<IncomingRequest | null>(null)
