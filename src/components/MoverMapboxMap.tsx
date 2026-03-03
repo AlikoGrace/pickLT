@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
+import { Navigation03Icon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
 
 // Set the access token
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || ''
@@ -82,20 +84,17 @@ export const MoverMapboxMap = ({
       zoom: defaultZoom,
     })
 
-    map.current.addControl(new mapboxgl.NavigationControl(), 'top-right')
-
-    // Add geolocate control — provides a "My Location" button.
-    // showUserLocation is false because the mover's position is
-    // already represented by the truck marker.
-    const geolocate = new mapboxgl.GeolocateControl({
-      positionOptions: { enableHighAccuracy: true },
-      trackUserLocation: false,
-      showUserLocation: false,
-    })
-    map.current.addControl(geolocate, 'top-right')
+    map.current.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-right')
 
     map.current.on('load', () => {
       setMapLoaded(true)
+
+      // Reposition the default controls to vertical center-right
+      const topRight = map.current?.getContainer().querySelector('.mapboxgl-ctrl-top-right') as HTMLElement | null
+      if (topRight) {
+        topRight.style.top = '50%'
+        topRight.style.transform = 'translateY(-50%)'
+      }
     })
 
     return () => {
@@ -246,11 +245,36 @@ export const MoverMapboxMap = ({
     }
   }, [moverCoordinates, mapLoaded])
 
+  // ─── My Location handler ───────────────────────────────
+  const handleMyLocation = useCallback(() => {
+    if (!navigator.geolocation || !map.current) return
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        map.current?.flyTo({
+          center: [pos.coords.longitude, pos.coords.latitude],
+          zoom: 15,
+          duration: 800,
+        })
+      },
+      () => {},
+      { enableHighAccuracy: true, timeout: 10_000, maximumAge: 60_000 }
+    )
+  }, [])
+
   return (
-    <div 
-      ref={mapContainer} 
-      className={`w-full h-full ${className}`}
-    />
+    <div className={`w-full h-full ${className}`} style={{ position: 'relative' }}>
+      <div ref={mapContainer} style={{ position: 'absolute', inset: 0 }} />
+      {/* Custom My Location button */}
+      <button
+        type="button"
+        onClick={handleMyLocation}
+        className="absolute right-2.5 z-10 flex h-[30px] w-[30px] items-center justify-center rounded-lg bg-white shadow-md border border-neutral-200/80 hover:bg-neutral-50 active:scale-95 transition dark:bg-neutral-800 dark:border-neutral-700 dark:hover:bg-neutral-700"
+        style={{ top: 'calc(50% + 40px)' }}
+        title="My location"
+      >
+        <HugeiconsIcon icon={Navigation03Icon} size={16} strokeWidth={2} className="text-primary-600 dark:text-primary-400" />
+      </button>
+    </div>
   )
 }
 

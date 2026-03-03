@@ -150,7 +150,7 @@ const MapLocationPicker = ({ open, onClose, onSelect, initialCoordinates, label 
         zoom: 14,
       })
 
-      m.addControl(new mapboxgl.NavigationControl(), 'bottom-right')
+      m.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'bottom-right')
 
       m.on('load', () => {
         setMapReady(true)
@@ -160,6 +160,15 @@ const MapLocationPicker = ({ open, onClose, onSelect, initialCoordinates, label 
         // fully painted the flex layout yet
         setTimeout(() => m.resize(), 100)
         setTimeout(() => m.resize(), 400)
+
+        // Reposition the default controls to vertical center-right
+        const bottomRight = el.querySelector('.mapboxgl-ctrl-bottom-right') as HTMLElement | null
+        if (bottomRight) {
+          bottomRight.style.top = '50%'
+          bottomRight.style.bottom = 'auto'
+          bottomRight.style.transform = 'translateY(-50%)'
+        }
+      })
       })
 
       // Click to pick a location
