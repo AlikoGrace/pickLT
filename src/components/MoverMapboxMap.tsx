@@ -84,6 +84,16 @@ export const MoverMapboxMap = ({
 
     map.current.addControl(new mapboxgl.NavigationControl(), 'top-right')
 
+    // Add geolocate control — provides a "My Location" button.
+    // showUserLocation is false because the mover's position is
+    // already represented by the truck marker.
+    const geolocate = new mapboxgl.GeolocateControl({
+      positionOptions: { enableHighAccuracy: true },
+      trackUserLocation: false,
+      showUserLocation: false,
+    })
+    map.current.addControl(geolocate, 'top-right')
+
     map.current.on('load', () => {
       setMapLoaded(true)
     })

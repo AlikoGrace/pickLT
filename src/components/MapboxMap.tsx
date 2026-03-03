@@ -23,6 +23,7 @@ interface MapboxMapProps {
   dropoffCoordinates?: MapCoordinates
   moverCoordinates?: MapCoordinates
   showRoute?: boolean
+  showUserLocation?: boolean
   onMapLoad?: (map: mapboxgl.Map) => void
   onRouteCalculated?: (routeInfo: RouteInfo) => void
 }
@@ -33,6 +34,7 @@ export const MapboxMap = ({
   dropoffCoordinates,
   moverCoordinates,
   showRoute = true,
+  showUserLocation = true,
   onMapLoad,
   onRouteCalculated,
 }: MapboxMapProps) => {
@@ -73,9 +75,21 @@ export const MapboxMap = ({
 
     map.current.addControl(new mapboxgl.NavigationControl(), 'top-right')
 
+    // Add geolocate control — provides a "My Location" button
+    // and optionally shows the user's position as a blue puck
+    const geolocate = new mapboxgl.GeolocateControl({
+      positionOptions: { enableHighAccuracy: true },
+      trackUserLocation: true,
+      showUserLocation: showUserLocation,
+      showUserHeading: showUserLocation,
+    })
+    map.current.addControl(geolocate, 'top-right')
+
     map.current.on('load', () => {
       setMapLoaded(true)
       onMapLoad?.(map.current!)
+      // Auto-trigger geolocation after map loads so the puck appears immediately
+      try { geolocate.trigger() } catch {}
     })
 
     return () => {
@@ -314,6 +328,7 @@ export const MapboxMap = ({
     <div
       ref={mapContainer}
       className={`w-full h-full rounded-2xl overflow-hidden ${className}`}
+      style={{ position: 'relative' }}
     />
   )
 }

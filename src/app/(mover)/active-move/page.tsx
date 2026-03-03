@@ -138,8 +138,14 @@ export default function ActiveMovePage() {
 
         // If we already have a move, only update if it's the same document
         if (moveId && doc.$id === moveId) {
+          const status = doc.status as string
+          // If the client cancelled this move, clear it so the mover sees the empty state
+          if (status === 'cancelled_by_client' || status === 'cancelled_by_mover') {
+            setMove(null)
+            return
+          }
           setMove(doc)
-          mapStatusToPhase(doc.status as string)
+          mapStatusToPhase(status)
           return
         }
 
@@ -305,6 +311,7 @@ export default function ActiveMovePage() {
           dropoffCoordinates={dropoffCoords}
           moverCoordinates={moverCoords || undefined}
           showRoute={true}
+          showUserLocation={false}
           onRouteCalculated={handleRouteCalculated}
           className="w-full h-full !rounded-none"
         />
