@@ -54,6 +54,9 @@ export async function GET() {
           // Only include scheduled moves on the available-moves page
           if (move.moveCategory !== 'scheduled') return null
 
+          // Skip cancelled moves (client may have cancelled after request was sent)
+          if (move.status === 'cancelled_by_client' || move.status === 'cancelled_by_mover') return null
+
           return {
             requestId: request.$id,
             requestStatus: request.status,

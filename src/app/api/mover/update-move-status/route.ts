@@ -8,6 +8,7 @@ import { NextRequest, NextResponse } from 'next/server'
 const VALID_TRANSITIONS: Record<string, string[]> = {
   accepted: ['mover_en_route'],
   mover_assigned: ['mover_en_route'],
+  mover_accepted: ['mover_en_route'],
   mover_en_route: ['mover_arrived'],
   mover_arrived: ['loading'],
   loading: ['in_transit'],
