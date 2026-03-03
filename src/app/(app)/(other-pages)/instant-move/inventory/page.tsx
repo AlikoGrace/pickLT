@@ -27,72 +27,76 @@ type InventoryItemDef = {
   id: string
   name: string
   category: string
-  sizeVariant?: string
   meta: {
     widthCm: number
     heightCm: number
     depthCm: number
     weightKg: number
   }
+  /** Classification points from the DB (moveClassificationWeight). Falls back to DEFAULT_CLASSIFICATION_POINTS. */
+  classificationPoints?: number
+  /** Minimum move type from the DB (moveTypeMinimum). Falls back to category-based guess. */
+  moveTypeMinimum?: string
 }
 
-const INVENTORY_ITEMS: InventoryItemDef[] = [
+// Hardcoded fallback — used when the database collection is empty or unreachable
+const FALLBACK_INVENTORY_ITEMS: InventoryItemDef[] = [
   // Living Room
-  { id: 'sofa_2seater', name: 'Sofa (2-seater)', category: 'living_room', meta: { widthCm: 160, heightCm: 85, depthCm: 90, weightKg: 45 } },
-  { id: 'sofa_3seater', name: 'Sofa (3-seater)', category: 'living_room', meta: { widthCm: 220, heightCm: 85, depthCm: 90, weightKg: 65 } },
-  { id: 'coffee_table', name: 'Coffee table', category: 'living_room', meta: { widthCm: 120, heightCm: 45, depthCm: 60, weightKg: 20 } },
-  { id: 'tv', name: 'TV', category: 'living_room', meta: { widthCm: 120, heightCm: 70, depthCm: 10, weightKg: 15 } },
-  { id: 'tv_stand', name: 'TV stand', category: 'living_room', meta: { widthCm: 150, heightCm: 50, depthCm: 45, weightKg: 30 } },
-  { id: 'bookshelf_living', name: 'Bookshelf', category: 'living_room', meta: { widthCm: 80, heightCm: 180, depthCm: 30, weightKg: 40 } },
-  { id: 'armchair', name: 'Armchair', category: 'living_room', meta: { widthCm: 80, heightCm: 90, depthCm: 85, weightKg: 25 } },
+  { id: 'sofa_2seater', name: 'Sofa (2-seater)', category: 'living_room', meta: { widthCm: 160, heightCm: 85, depthCm: 90, weightKg: 45 }, classificationPoints: 8, moveTypeMinimum: 'regular' },
+  { id: 'sofa_3seater', name: 'Sofa (3-seater)', category: 'living_room', meta: { widthCm: 220, heightCm: 85, depthCm: 90, weightKg: 65 }, classificationPoints: 12, moveTypeMinimum: 'regular' },
+  { id: 'coffee_table', name: 'Coffee table', category: 'living_room', meta: { widthCm: 120, heightCm: 45, depthCm: 60, weightKg: 20 }, classificationPoints: 3, moveTypeMinimum: 'light' },
+  { id: 'tv', name: 'TV', category: 'living_room', meta: { widthCm: 120, heightCm: 70, depthCm: 10, weightKg: 15 }, classificationPoints: 2, moveTypeMinimum: 'light' },
+  { id: 'tv_stand', name: 'TV stand', category: 'living_room', meta: { widthCm: 150, heightCm: 50, depthCm: 45, weightKg: 30 }, classificationPoints: 4, moveTypeMinimum: 'regular' },
+  { id: 'bookshelf_living', name: 'Bookshelf', category: 'living_room', meta: { widthCm: 80, heightCm: 180, depthCm: 30, weightKg: 40 }, classificationPoints: 5, moveTypeMinimum: 'regular' },
+  { id: 'armchair', name: 'Armchair', category: 'living_room', meta: { widthCm: 80, heightCm: 90, depthCm: 85, weightKg: 25 }, classificationPoints: 4, moveTypeMinimum: 'regular' },
 
   // Bedroom
-  { id: 'bed_90', name: 'Bed (90 cm)', category: 'bedroom', meta: { widthCm: 90, heightCm: 50, depthCm: 200, weightKg: 35 } },
-  { id: 'bed_140', name: 'Bed (140 cm)', category: 'bedroom', meta: { widthCm: 140, heightCm: 50, depthCm: 200, weightKg: 50 } },
-  { id: 'bed_160', name: 'Bed (160 cm)', category: 'bedroom', meta: { widthCm: 160, heightCm: 50, depthCm: 200, weightKg: 60 } },
-  { id: 'mattress', name: 'Mattress', category: 'bedroom', meta: { widthCm: 160, heightCm: 25, depthCm: 200, weightKg: 30 } },
-  { id: 'wardrobe_small', name: 'Wardrobe (small)', category: 'bedroom', sizeVariant: 'small', meta: { widthCm: 100, heightCm: 200, depthCm: 60, weightKg: 60 } },
-  { id: 'wardrobe_medium', name: 'Wardrobe (medium)', category: 'bedroom', sizeVariant: 'medium', meta: { widthCm: 150, heightCm: 200, depthCm: 60, weightKg: 80 } },
-  { id: 'wardrobe_large', name: 'Wardrobe (large)', category: 'bedroom', sizeVariant: 'large', meta: { widthCm: 250, heightCm: 220, depthCm: 60, weightKg: 120 } },
-  { id: 'nightstand', name: 'Nightstand', category: 'bedroom', meta: { widthCm: 50, heightCm: 55, depthCm: 40, weightKg: 15 } },
+  { id: 'bed_90', name: 'Bed (90 cm)', category: 'bedroom', meta: { widthCm: 90, heightCm: 50, depthCm: 200, weightKg: 35 }, classificationPoints: 6, moveTypeMinimum: 'regular' },
+  { id: 'bed_140', name: 'Bed (140 cm)', category: 'bedroom', meta: { widthCm: 140, heightCm: 50, depthCm: 200, weightKg: 50 }, classificationPoints: 8, moveTypeMinimum: 'regular' },
+  { id: 'bed_160', name: 'Bed (160 cm)', category: 'bedroom', meta: { widthCm: 160, heightCm: 50, depthCm: 200, weightKg: 60 }, classificationPoints: 10, moveTypeMinimum: 'regular' },
+  { id: 'mattress', name: 'Mattress', category: 'bedroom', meta: { widthCm: 160, heightCm: 25, depthCm: 200, weightKg: 30 }, classificationPoints: 5, moveTypeMinimum: 'regular' },
+  { id: 'wardrobe_small', name: 'Wardrobe (small)', category: 'bedroom', meta: { widthCm: 100, heightCm: 200, depthCm: 60, weightKg: 60 }, classificationPoints: 8, moveTypeMinimum: 'regular' },
+  { id: 'wardrobe_medium', name: 'Wardrobe (medium)', category: 'bedroom', meta: { widthCm: 150, heightCm: 200, depthCm: 60, weightKg: 80 }, classificationPoints: 12, moveTypeMinimum: 'premium' },
+  { id: 'wardrobe_large', name: 'Wardrobe (large)', category: 'bedroom', meta: { widthCm: 250, heightCm: 220, depthCm: 60, weightKg: 120 }, classificationPoints: 18, moveTypeMinimum: 'premium' },
+  { id: 'nightstand', name: 'Nightstand', category: 'bedroom', meta: { widthCm: 50, heightCm: 55, depthCm: 40, weightKg: 15 }, classificationPoints: 2, moveTypeMinimum: 'light' },
 
   // Kitchen
-  { id: 'dining_table_small', name: 'Dining table (small)', category: 'kitchen', sizeVariant: 'small', meta: { widthCm: 120, heightCm: 75, depthCm: 80, weightKg: 30 } },
-  { id: 'dining_table_large', name: 'Dining table (large)', category: 'kitchen', sizeVariant: 'large', meta: { widthCm: 200, heightCm: 75, depthCm: 100, weightKg: 50 } },
-  { id: 'chairs', name: 'Chairs', category: 'kitchen', meta: { widthCm: 45, heightCm: 90, depthCm: 45, weightKg: 5 } },
-  { id: 'fridge_small', name: 'Fridge (small)', category: 'kitchen', sizeVariant: 'small', meta: { widthCm: 55, heightCm: 85, depthCm: 60, weightKg: 35 } },
-  { id: 'fridge_medium', name: 'Fridge (medium)', category: 'kitchen', sizeVariant: 'medium', meta: { widthCm: 60, heightCm: 145, depthCm: 65, weightKg: 55 } },
-  { id: 'fridge_large', name: 'Fridge (large)', category: 'kitchen', sizeVariant: 'large', meta: { widthCm: 90, heightCm: 180, depthCm: 70, weightKg: 90 } },
-  { id: 'dishwasher', name: 'Dishwasher', category: 'kitchen', meta: { widthCm: 60, heightCm: 85, depthCm: 60, weightKg: 45 } },
-  { id: 'microwave', name: 'Microwave', category: 'kitchen', meta: { widthCm: 50, heightCm: 30, depthCm: 40, weightKg: 15 } },
+  { id: 'dining_table_small', name: 'Dining table (small)', category: 'kitchen', meta: { widthCm: 120, heightCm: 75, depthCm: 80, weightKg: 30 }, classificationPoints: 5, moveTypeMinimum: 'regular' },
+  { id: 'dining_table_large', name: 'Dining table (large)', category: 'kitchen', meta: { widthCm: 200, heightCm: 75, depthCm: 100, weightKg: 50 }, classificationPoints: 8, moveTypeMinimum: 'regular' },
+  { id: 'chairs', name: 'Chairs', category: 'kitchen', meta: { widthCm: 45, heightCm: 90, depthCm: 45, weightKg: 5 }, classificationPoints: 1, moveTypeMinimum: 'light' },
+  { id: 'fridge_small', name: 'Fridge (small)', category: 'kitchen', meta: { widthCm: 55, heightCm: 85, depthCm: 60, weightKg: 35 }, classificationPoints: 4, moveTypeMinimum: 'regular' },
+  { id: 'fridge_medium', name: 'Fridge (medium)', category: 'kitchen', meta: { widthCm: 60, heightCm: 145, depthCm: 65, weightKg: 55 }, classificationPoints: 6, moveTypeMinimum: 'regular' },
+  { id: 'fridge_large', name: 'Fridge (large)', category: 'kitchen', meta: { widthCm: 90, heightCm: 180, depthCm: 70, weightKg: 90 }, classificationPoints: 10, moveTypeMinimum: 'premium' },
+  { id: 'dishwasher', name: 'Dishwasher', category: 'kitchen', meta: { widthCm: 60, heightCm: 85, depthCm: 60, weightKg: 45 }, classificationPoints: 5, moveTypeMinimum: 'regular' },
+  { id: 'microwave', name: 'Microwave', category: 'kitchen', meta: { widthCm: 50, heightCm: 30, depthCm: 40, weightKg: 15 }, classificationPoints: 2, moveTypeMinimum: 'light' },
 
   // Office
-  { id: 'office_desk', name: 'Office desk', category: 'office', meta: { widthCm: 140, heightCm: 75, depthCm: 70, weightKg: 35 } },
-  { id: 'office_chair', name: 'Office chair', category: 'office', meta: { widthCm: 65, heightCm: 120, depthCm: 65, weightKg: 15 } },
-  { id: 'bookshelf_office', name: 'Bookshelf', category: 'office', meta: { widthCm: 80, heightCm: 180, depthCm: 30, weightKg: 40 } },
-  { id: 'filing_cabinet', name: 'Filing cabinet', category: 'office', meta: { widthCm: 45, heightCm: 130, depthCm: 60, weightKg: 35 } },
+  { id: 'office_desk', name: 'Office desk', category: 'office', meta: { widthCm: 140, heightCm: 75, depthCm: 70, weightKg: 35 }, classificationPoints: 5, moveTypeMinimum: 'regular' },
+  { id: 'office_chair', name: 'Office chair', category: 'office', meta: { widthCm: 65, heightCm: 120, depthCm: 65, weightKg: 15 }, classificationPoints: 2, moveTypeMinimum: 'light' },
+  { id: 'bookshelf_office', name: 'Bookshelf', category: 'office', meta: { widthCm: 80, heightCm: 180, depthCm: 30, weightKg: 40 }, classificationPoints: 5, moveTypeMinimum: 'regular' },
+  { id: 'filing_cabinet', name: 'Filing cabinet', category: 'office', meta: { widthCm: 45, heightCm: 130, depthCm: 60, weightKg: 35 }, classificationPoints: 4, moveTypeMinimum: 'regular' },
 
   // Boxes
-  { id: 'cardboard_boxes', name: 'Cardboard boxes', category: 'boxes', meta: { widthCm: 60, heightCm: 40, depthCm: 40, weightKg: 20 } },
-  { id: 'suitcases', name: 'Suitcases', category: 'boxes', meta: { widthCm: 75, heightCm: 50, depthCm: 30, weightKg: 25 } },
+  { id: 'cardboard_boxes', name: 'Cardboard boxes', category: 'boxes', meta: { widthCm: 60, heightCm: 40, depthCm: 40, weightKg: 20 }, classificationPoints: 2, moveTypeMinimum: 'light' },
+  { id: 'suitcases', name: 'Suitcases', category: 'boxes', meta: { widthCm: 75, heightCm: 50, depthCm: 30, weightKg: 25 }, classificationPoints: 2, moveTypeMinimum: 'light' },
 
   // Miscellaneous
-  { id: 'bicycle', name: 'Bicycle', category: 'miscellaneous', meta: { widthCm: 180, heightCm: 100, depthCm: 60, weightKg: 15 } },
-  { id: 'lamp', name: 'Lamp', category: 'miscellaneous', meta: { widthCm: 40, heightCm: 160, depthCm: 40, weightKg: 8 } },
-  { id: 'mirror', name: 'Mirror', category: 'miscellaneous', meta: { widthCm: 80, heightCm: 180, depthCm: 5, weightKg: 20 } },
-  { id: 'rug', name: 'Rug', category: 'miscellaneous', meta: { widthCm: 200, heightCm: 5, depthCm: 300, weightKg: 15 } },
-  { id: 'plants', name: 'Plants', category: 'miscellaneous', meta: { widthCm: 40, heightCm: 100, depthCm: 40, weightKg: 10 } },
+  { id: 'bicycle', name: 'Bicycle', category: 'miscellaneous', meta: { widthCm: 180, heightCm: 100, depthCm: 60, weightKg: 15 }, classificationPoints: 3, moveTypeMinimum: 'light' },
+  { id: 'lamp', name: 'Lamp', category: 'miscellaneous', meta: { widthCm: 40, heightCm: 160, depthCm: 40, weightKg: 8 }, classificationPoints: 1, moveTypeMinimum: 'light' },
+  { id: 'mirror', name: 'Mirror', category: 'miscellaneous', meta: { widthCm: 80, heightCm: 180, depthCm: 5, weightKg: 20 }, classificationPoints: 2, moveTypeMinimum: 'light' },
+  { id: 'rug', name: 'Rug', category: 'miscellaneous', meta: { widthCm: 200, heightCm: 5, depthCm: 300, weightKg: 15 }, classificationPoints: 2, moveTypeMinimum: 'light' },
+  { id: 'plants', name: 'Plants', category: 'miscellaneous', meta: { widthCm: 40, heightCm: 100, depthCm: 40, weightKg: 10 }, classificationPoints: 1, moveTypeMinimum: 'light' },
 
   // Special Items
-  { id: 'piano', name: 'Piano', category: 'special', meta: { widthCm: 150, heightCm: 100, depthCm: 60, weightKg: 250 } },
-  { id: 'safe', name: 'Safe', category: 'special', meta: { widthCm: 50, heightCm: 60, depthCm: 50, weightKg: 150 } },
-  { id: 'treadmill', name: 'Treadmill', category: 'special', meta: { widthCm: 180, heightCm: 140, depthCm: 80, weightKg: 100 } },
-  { id: 'aquarium', name: 'Aquarium', category: 'special', meta: { widthCm: 120, heightCm: 60, depthCm: 50, weightKg: 80 } },
-  { id: 'glass_cabinet', name: 'Glass cabinet', category: 'special', meta: { widthCm: 100, heightCm: 180, depthCm: 40, weightKg: 60 } },
-  { id: 'artwork_fragile', name: 'Artwork / Fragile items', category: 'special', meta: { widthCm: 100, heightCm: 150, depthCm: 10, weightKg: 15 } },
+  { id: 'piano', name: 'Piano', category: 'special', meta: { widthCm: 150, heightCm: 100, depthCm: 60, weightKg: 250 }, classificationPoints: 25, moveTypeMinimum: 'premium' },
+  { id: 'safe', name: 'Safe', category: 'special', meta: { widthCm: 50, heightCm: 60, depthCm: 50, weightKg: 150 }, classificationPoints: 20, moveTypeMinimum: 'premium' },
+  { id: 'treadmill', name: 'Treadmill', category: 'special', meta: { widthCm: 180, heightCm: 140, depthCm: 80, weightKg: 100 }, classificationPoints: 15, moveTypeMinimum: 'premium' },
+  { id: 'aquarium', name: 'Aquarium', category: 'special', meta: { widthCm: 120, heightCm: 60, depthCm: 50, weightKg: 80 }, classificationPoints: 12, moveTypeMinimum: 'premium' },
+  { id: 'glass_cabinet', name: 'Glass cabinet', category: 'special', meta: { widthCm: 100, heightCm: 180, depthCm: 40, weightKg: 60 }, classificationPoints: 10, moveTypeMinimum: 'premium' },
+  { id: 'artwork_fragile', name: 'Artwork / Fragile items', category: 'special', meta: { widthCm: 100, heightCm: 150, depthCm: 10, weightKg: 15 }, classificationPoints: 5, moveTypeMinimum: 'regular' },
 ]
 
-const CATEGORIES = [
+const FALLBACK_CATEGORIES = [
   { id: 'living_room', name: 'Living Room' },
   { id: 'bedroom', name: 'Bedroom' },
   { id: 'kitchen', name: 'Kitchen' },
@@ -105,6 +109,7 @@ const InstantMoveInventoryPage = () => {
   const router = useRouter()
   const [activeCategory, setActiveCategory] = useState('living_room')
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [inventoryItems, setInventoryItems] = useState<InventoryItemDef[]>(FALLBACK_INVENTORY_ITEMS)
   const [customItemForm, setCustomItemForm] = useState({
     name: '',
     quantity: 1,
@@ -126,22 +131,60 @@ const InstantMoveInventoryPage = () => {
 
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
 
+  // ─── Fetch inventory catalog from database ───────────────
+  useEffect(() => {
+    const fetchCatalog = async () => {
+      try {
+        const res = await fetch('/api/inventory/catalog')
+        if (res.ok) {
+          const data = await res.json()
+          if (data.items && data.items.length > 0) {
+            setInventoryItems(data.items)
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch inventory catalog, using fallback:', err)
+      }
+    }
+    fetchCatalog()
+  }, [])
+
   // Prefetch the next step
   useEffect(() => {
     router.prefetch('/instant-move')
   }, [router])
 
-  // ─── Build classification catalog from INVENTORY_ITEMS ───
+  // ─── Derive categories from the (possibly fetched) items ─
+  const categories = useMemo(() => {
+    const seen = new Set<string>()
+    const cats: { id: string; name: string }[] = []
+    for (const item of inventoryItems) {
+      if (item.category !== 'special' && !seen.has(item.category)) {
+        seen.add(item.category)
+        // Convert slug to display name
+        const name = item.category
+          .split('_')
+          .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+          .join(' ')
+        cats.push({ id: item.category, name })
+      }
+    }
+    return cats.length > 0 ? cats : FALLBACK_CATEGORIES
+  }, [inventoryItems])
+
+  // ─── Build classification catalog from inventory items ───
+  // If items come from the DB they already have classificationPoints & moveTypeMinimum.
+  // For fallback items we also embed them now, but keep DEFAULT_CLASSIFICATION_POINTS as last resort.
   const itemCatalog: ClassifyItemDef[] = useMemo(() => {
-    return INVENTORY_ITEMS.map((item) => ({
+    return inventoryItems.map((item) => ({
       id: item.id,
       name: item.name,
       category: item.category,
       meta: item.meta,
-      classificationPoints: DEFAULT_CLASSIFICATION_POINTS[item.id] ?? 3,
-      moveTypeMinimum: (item.category === 'special' ? 'premium' : 'light') as 'light' | 'regular' | 'premium',
+      classificationPoints: item.classificationPoints ?? DEFAULT_CLASSIFICATION_POINTS[item.id] ?? 3,
+      moveTypeMinimum: (item.moveTypeMinimum ?? (item.category === 'special' ? 'premium' : 'light')) as 'light' | 'regular' | 'premium',
     }))
-  }, [])
+  }, [inventoryItems])
 
   // ─── Real-time move classification ───
   const classification = useMemo(() => {
@@ -205,8 +248,8 @@ const InstantMoveInventoryPage = () => {
   const totalItems = Object.values(inventory).reduce((sum, qty) => sum + qty, 0) + 
     customItems.reduce((sum, item) => sum + item.quantity, 0)
 
-  const filteredItems = INVENTORY_ITEMS.filter((item) => item.category === activeCategory)
-  const specialItems = INVENTORY_ITEMS.filter((item) => item.category === 'special')
+  const filteredItems = inventoryItems.filter((item) => item.category === activeCategory)
+  const specialItems = inventoryItems.filter((item) => item.category === 'special')
 
   return (
     <div className="min-h-screen bg-white dark:bg-neutral-900">
@@ -361,7 +404,7 @@ const InstantMoveInventoryPage = () => {
 
         {/* Category Tabs */}
         <div className="flex flex-wrap gap-2 mb-6">
-          {CATEGORIES.map((category) => (
+          {categories.map((category) => (
             <button
               key={category.id}
               type="button"
