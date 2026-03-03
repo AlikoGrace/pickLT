@@ -15,8 +15,8 @@ import { InputFile } from 'node-appwrite/file'
  *   galleryPhotos — array of base64 data-URL strings (optional)
  *
  * Returns:
- *   coverPhotoId  — file ID in storage (or null)
- *   galleryPhotoIds — array of file IDs
+ *   coverPhotoUrl  — full public URL for the cover photo (or null)
+ *   galleryPhotoUrls — array of full public URLs
  */
 export async function POST(req: NextRequest) {
   try {
@@ -33,11 +33,13 @@ export async function POST(req: NextRequest) {
 
     const { storage } = createAdminClient()
     const bucketId = APPWRITE.BUCKETS.MOVE_PHOTOS
+    const endpoint = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!
+    const projectId = APPWRITE.PROJECT_ID
 
-    let coverPhotoId: string | null = null
-    const galleryPhotoIds: string[] = []
+    let coverPhotoUrl: string | null = null
+    const galleryPhotoUrls: string[] = []
 
-    // Helper: convert a base64 data-URL to an InputFile
+    // Helper: convert a base64 data-URL to an InputFile, upload, return public URL
     const uploadBase64 = async (dataUrl: string, namePrefix: string): Promise<string> => {
       // data:image/jpeg;base64,/9j/4AAQ...
       const match = dataUrl.match(/^data:(image\/\w+);base64,(.+)$/)
@@ -55,12 +57,14 @@ export async function POST(req: NextRequest) {
         ID.unique(),
         InputFile.fromBuffer(uint8, fileName),
       )
-      return file.$id
+
+      // Return the full public URL for this file
+      return `${endpoint}/storage/buckets/${bucketId}/files/${file.$id}/view?project=${projectId}`
     }
 
     // Upload cover photo
     if (coverPhoto) {
-      coverPhotoId = await uploadBase64(coverPhoto, `cover-${userId}`)
+      coverPhotoUrl = await uploadBase64(coverPhoto, `cover-${userId}`)
     }
 
     // Upload gallery photos (in parallel, max 10)
@@ -69,10 +73,10 @@ export async function POST(req: NextRequest) {
         uploadBase64(photo, `gallery-${userId}-${idx}`)
       )
       const results = await Promise.all(uploads)
-      galleryPhotoIds.push(...results)
+      galleryPhotoUrls.push(...results)
     }
 
-    return NextResponse.json({ coverPhotoId, galleryPhotoIds })
+    return NextResponse.json({ coverPhotoId: coverPhotoUrl, galleryPhotoIds: galleryPhotoUrls })
   } catch (err) {
     console.error('POST /api/moves/upload-photos error:', err)
     return NextResponse.json(
