@@ -102,10 +102,39 @@ const getPhotoUrl = (fileId: string): string => {
 }
 
 // ─── Alarming sound generator ───────────────────────────
+// ─── Shared AudioContext (pre-warmed on user interaction) ──
+// Browsers block AudioContext creation without prior user gesture.
+// We create it lazily on the first click/tap anywhere on the page
+// and reuse it for all alarm playback.
+let _sharedAudioCtx: AudioContext | null = null
+
+function getSharedAudioContext(): AudioContext {
+  if (!_sharedAudioCtx || _sharedAudioCtx.state === 'closed') {
+    _sharedAudioCtx = new AudioContext()
+  }
+  // Resume in case it was suspended (autoplay policy)
+  if (_sharedAudioCtx.state === 'suspended') {
+    _sharedAudioCtx.resume().catch(() => {})
+  }
+  return _sharedAudioCtx
+}
+
+// Pre-warm on first user interaction so later programmatic playback works
+if (typeof window !== 'undefined') {
+  const warmUp = () => {
+    getSharedAudioContext()
+    window.removeEventListener('click', warmUp)
+    window.removeEventListener('touchstart', warmUp)
+    window.removeEventListener('keydown', warmUp)
+  }
+  window.addEventListener('click', warmUp, { once: true })
+  window.addEventListener('touchstart', warmUp, { once: true })
+  window.addEventListener('keydown', warmUp, { once: true })
+}
+
 // Creates a loud, urgent, repeating alarm that demands attention.
 // Uses multiple oscillators for a siren-like effect.
 function createAlarmSound(): { play: () => void; stop: () => void } {
-  let ctx: AudioContext | null = null
   let intervalId: NodeJS.Timeout | null = null
   let isPlaying = false
 
@@ -114,10 +143,14 @@ function createAlarmSound(): { play: () => void; stop: () => void } {
     isPlaying = true
 
     try {
-      ctx = new AudioContext()
+      const ctx = getSharedAudioContext()
 
       const playUrgentPattern = () => {
-        if (!ctx || !isPlaying) return
+        if (!isPlaying) return
+        // Ensure context is running
+        if (ctx.state === 'suspended') {
+          ctx.resume().catch(() => {})
+        }
 
         const gainNode = ctx.createGain()
         gainNode.connect(ctx.destination)
@@ -145,7 +178,7 @@ function createAlarmSound(): { play: () => void; stop: () => void } {
 
         // Second beep — higher pitch staccato
         setTimeout(() => {
-          if (!ctx || !isPlaying) return
+          if (!isPlaying) return
           const beepGain = ctx.createGain()
           beepGain.connect(ctx.destination)
           const beep = ctx.createOscillator()
@@ -159,7 +192,7 @@ function createAlarmSound(): { play: () => void; stop: () => void } {
           beep.stop(t + 0.15)
 
           setTimeout(() => {
-            if (!ctx || !isPlaying) return
+            if (!isPlaying) return
             const beepGain2 = ctx.createGain()
             beepGain2.connect(ctx.destination)
             const beep2 = ctx.createOscillator()
@@ -167,7 +200,7 @@ function createAlarmSound(): { play: () => void; stop: () => void } {
             beep2.frequency.value = 1400
             beep2.connect(beepGain2)
 
-            const t2 = ctx!.currentTime
+            const t2 = ctx.currentTime
             beepGain2.gain.setValueAtTime(0.4, t2)
             beep2.start(t2)
             beep2.stop(t2 + 0.15)
@@ -189,10 +222,7 @@ function createAlarmSound(): { play: () => void; stop: () => void } {
       clearInterval(intervalId)
       intervalId = null
     }
-    if (ctx) {
-      ctx.close().catch(() => {})
-      ctx = null
-    }
+    // Don't close the shared context — just stop the interval
   }
 
   return { play, stop }
@@ -200,7 +230,9 @@ function createAlarmSound(): { play: () => void; stop: () => void } {
 
 export default function MoveRequestPopup({ children }: { children: ReactNode }) {
   const { user } = useAuth()
-  const moverProfileId = user?.moverDetails?.profileId || null
+
+  console.log(user)
+  const moverProfileId = user?.moverDetails?.profileId
   const router = useRouter()
   const [incoming, setIncoming] = useState<IncomingRequest | null>(null)
   const [isAccepting, setIsAccepting] = useState(false)
@@ -272,6 +304,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
 
   // Subscribe to realtime move_requests
   useEffect(() => {
+    console.log('moverProfileId', moverProfileId, 'databaseId', DATABASE_ID, 'requestId', MOVE_REQUESTS_COLLECTION)
     if (!moverProfileId || !DATABASE_ID || !MOVE_REQUESTS_COLLECTION) return
 
     // Helper: extract moverProfileId from a doc field (handles string or relationship object)
