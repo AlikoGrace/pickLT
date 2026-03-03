@@ -169,7 +169,6 @@ const MapLocationPicker = ({ open, onClose, onSelect, initialCoordinates, label 
           bottomRight.style.transform = 'translateY(-50%)'
         }
       })
-      })
 
       // Click to pick a location
       m.on('click', async (e) => {
