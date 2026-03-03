@@ -91,7 +91,7 @@ function LoginContent() {
   }
 
   const handleGoogleLogin = () => {
-    loginWithGoogle(getRedirectUrl())
+    loginWithGoogle(getRedirectUrl(), isMover ? 'mover' : 'client')
   }
 
   const handleEmailLogin = async (e: React.FormEvent) => {

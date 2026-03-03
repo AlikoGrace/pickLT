@@ -85,7 +85,7 @@ function SignupContent() {
   }
 
   const handleGoogleSignup = () => {
-    loginWithGoogle(getRedirectUrl())
+    loginWithGoogle(getRedirectUrl(), isMover ? 'mover' : 'client')
   }
 
   const handleEmailSignup = async (e: React.FormEvent) => {
@@ -99,7 +99,7 @@ function SignupContent() {
 
     setIsSubmitting(true)
     try {
-      await signupWithEmail(email, password, name)
+      await signupWithEmail(email, password, name, isMover ? 'mover' : 'client')
       // After signup, auth context reloads. If phone not verified,
       // the useEffect will push to phone-enter step.
     } catch (err: unknown) {

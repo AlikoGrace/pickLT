@@ -70,9 +70,9 @@ type AuthActions = {
   addCrewMember: (member: CrewMember) => void
   updateCrewMember: (id: string, updates: Partial<CrewMember>) => void
   removeCrewMember: (id: string) => void
-  loginWithGoogle: (redirectTo?: string) => void
+  loginWithGoogle: (redirectTo?: string, intendedUserType?: UserType) => void
   loginWithEmail: (email: string, password: string) => Promise<void>
-  signupWithEmail: (email: string, password: string, name: string) => Promise<void>
+  signupWithEmail: (email: string, password: string, name: string, intendedUserType?: UserType) => Promise<void>
   // Phone verification (mandatory step after Google/Email auth)
   setPhoneForVerification: (phone: string) => Promise<void>
   sendPhoneVerification: () => Promise<void>
@@ -128,6 +128,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         console.warn('Failed to initialize server session cookie')
       }
 
+      // Check for pending user type from Google OAuth or email signup
+      const pendingUserType = typeof window !== 'undefined'
+        ? localStorage.getItem('picklt_pending_user_type') || undefined
+        : undefined
+
       // Sync with our users collection via API
       const res = await fetch('/api/auth/sync-user', {
         method: 'POST',
@@ -139,8 +144,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           phone: appwriteUser.phone || '',
           emailVerified: appwriteUser.emailVerification ?? false,
           phoneVerified: appwriteUser.phoneVerification ?? false,
+          userType: pendingUserType,
         }),
       })
+
+      // Clear the pending user type after sync
+      if (pendingUserType && typeof window !== 'undefined') {
+        localStorage.removeItem('picklt_pending_user_type')
+      }
 
       if (!res.ok) throw new Error('Failed to sync user')
 
@@ -216,7 +227,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // ─── Auth Methods ─────────────────────────────────────
 
-  const loginWithGoogle = (redirectTo?: string) => {
+  const loginWithGoogle = (redirectTo?: string, intendedUserType?: UserType) => {
+    // Store the intended user type so we can pick it up after OAuth redirect
+    if (intendedUserType && typeof window !== 'undefined') {
+      localStorage.setItem('picklt_pending_user_type', intendedUserType)
+    }
     const origin = typeof window !== 'undefined' ? window.location.origin : ''
     const successUrl = redirectTo ? `${origin}${redirectTo}` : `${origin}/`
     const failureUrl = `${origin}/login`
@@ -228,7 +243,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     await loadSession()
   }
 
-  const signupWithEmail = async (email: string, password: string, name: string) => {
+  const signupWithEmail = async (email: string, password: string, name: string, intendedUserType?: UserType) => {
+    // Store the intended user type so loadSession picks it up
+    if (intendedUserType && typeof window !== 'undefined') {
+      localStorage.setItem('picklt_pending_user_type', intendedUserType)
+    }
     await account.create('unique()', email, password, name)
     await account.createEmailPasswordSession(email, password)
     await loadSession()

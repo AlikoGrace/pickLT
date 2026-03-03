@@ -22,6 +22,7 @@ export async function POST(req: NextRequest) {
       profilePhoto,
       emailVerified,
       phoneVerified,
+      userType: requestedUserType,
     } = body
 
     if (!authId) {
@@ -61,7 +62,7 @@ export async function POST(req: NextRequest) {
             fullName: fullName || (email ? email.split('@')[0] : 'User'),
             phone: phone || null,
             profilePhoto: profilePhoto || null,
-            userType: 'client',
+            userType: requestedUserType === 'mover' ? 'mover' : 'client',
             emailVerified: emailVerified ?? false,
             phoneVerified: phoneVerified ?? false,
           }
