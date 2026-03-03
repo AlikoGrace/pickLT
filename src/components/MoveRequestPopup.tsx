@@ -6,7 +6,8 @@ import { useAuth } from '@/context/auth'
 import { client, databases } from '@/lib/appwrite'
 import { Query } from 'appwrite'
 import type { RealtimeResponseEvent, Models } from 'appwrite'
-import Image from 'next/image'
+import Link from 'next/link'
+import GallerySlider from '@/components/GallerySlider'
 import {
   MapPinIcon,
   ClockIcon,
@@ -15,6 +16,7 @@ import {
   CheckIcon,
   CubeIcon,
   UserGroupIcon,
+  EyeIcon,
 } from '@heroicons/react/24/outline'
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || ''
@@ -214,8 +216,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
   const [incoming, setIncoming] = useState<IncomingRequest | null>(null)
   const [isAccepting, setIsAccepting] = useState(false)
   const [isDeclining, setIsDeclining] = useState(false)
-  const [countdown, setCountdown] = useState<number>(60)
-  const [imageIndex, setImageIndex] = useState(0)
+  const [countdown, setCountdown] = useState<number>(180)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
   const alertRef = useRef<{ play: () => void; stop: () => void } | null>(null)
   const incomingRef = useRef<IncomingRequest | null>(null)
@@ -235,9 +236,9 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
       const expiresMs = new Date(incoming.expiresAt).getTime()
       const nowMs = Date.now()
       const remainingSec = Math.max(0, Math.floor((expiresMs - nowMs) / 1000))
-      setCountdown(remainingSec > 0 ? remainingSec : 60)
+      setCountdown(remainingSec > 0 ? remainingSec : 180)
     } else {
-      setCountdown(60)
+      setCountdown(180)
     }
 
     // Start alarm sound
@@ -480,38 +481,24 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
             <div className="mt-2 h-1.5 bg-white/30 rounded-full overflow-hidden">
               <div
                 className="h-full bg-white rounded-full transition-all duration-1000 ease-linear"
-                style={{ width: `${(countdown / 60) * 100}%` }}
+                style={{ width: `${(countdown / 180) * 100}%` }}
               />
             </div>
           </div>
 
-          {/* Gallery / Cover Photo — like MoveCard */}
+          {/* Gallery / Cover Photo — GallerySlider like MoveCard */}
           {galleryImages.length > 0 && (
             <div className="relative">
-              <div className="aspect-w-16 aspect-h-9 bg-neutral-100 dark:bg-neutral-900 overflow-hidden">
-                <Image
-                  src={galleryImages[imageIndex] || galleryImages[0]}
-                  alt="Move items"
-                  fill
-                  className="object-cover"
-                  onError={() => setImageIndex(0)}
-                />
-              </div>
-              {galleryImages.length > 1 && (
-                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
-                  {galleryImages.slice(0, 5).map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setImageIndex(i)}
-                      className={`w-1.5 h-1.5 rounded-full transition-colors ${
-                        i === imageIndex ? 'bg-white' : 'bg-white/50'
-                      }`}
-                    />
-                  ))}
-                </div>
-              )}
+              <GallerySlider
+                galleryImgs={galleryImages}
+                ratioClass="aspect-w-16 aspect-h-9"
+                href={move?.handle ? `/job-details/${move.handle}` : '#'}
+                imageClass="rounded-none"
+                galleryClass="rounded-none"
+                navigation={galleryImages.length > 1}
+              />
               {/* Photo count badge */}
-              <div className="absolute top-2 right-2 bg-black/50 backdrop-blur-sm text-white text-xs px-2 py-0.5 rounded-full">
+              <div className="absolute top-2 right-2 z-10 bg-black/50 backdrop-blur-sm text-white text-xs px-2 py-0.5 rounded-full">
                 {galleryImages.length} photo{galleryImages.length !== 1 ? 's' : ''}
               </div>
             </div>
@@ -611,7 +598,18 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
           </div>
 
           {/* Action Buttons */}
-          <div className="px-4 pb-4 flex gap-3">
+          <div className="px-4 pb-4 space-y-3">
+            {/* View Details link */}
+            {move?.handle && (
+              <Link
+                href={`/job-details/${move.handle}`}
+                className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-medium text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-xl transition-colors"
+              >
+                <EyeIcon className="w-4 h-4" />
+                View Full Details
+              </Link>
+            )}
+            <div className="flex gap-3">
             <button
               onClick={handleDecline}
               disabled={isDeclining}
@@ -633,6 +631,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                 </>
               )}
             </button>
+            </div>
           </div>
         </div>
       </div>
