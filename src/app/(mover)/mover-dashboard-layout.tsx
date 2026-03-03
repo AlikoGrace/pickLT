@@ -96,7 +96,7 @@ const MoverDashboardLayout = ({ children }: Props) => {
   const router = useRouter()
   const { user, logout, isLoading } = useAuth()
   const [sidebarOpen, setSidebarOpen] = useState(false)
-
+  console.log('user', user)
   // Broadcast mover's GPS location while they're logged in
   useLocationBroadcast({
     enabled: !!user && user.userType === 'mover',

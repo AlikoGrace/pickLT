@@ -338,7 +338,7 @@ export default function AccountPage() {
             <Avatar
               src={user?.profilePhoto || undefined}
               initials={!user?.profilePhoto ? initials : undefined}
-              className=" size-24 bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300"
+              className=" size-18 bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300"
             />
             <button
               onClick={() => fileInputRef.current?.click()}
