@@ -28,7 +28,6 @@ function mapDbStatus(dbStatus: string): MoveStatus {
   return 'pending'
 }
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 function docToStoredMove(doc: any): StoredMove {
   return {
     id: doc.$id,
@@ -64,7 +63,6 @@ function docToStoredMove(doc: any): StoredMove {
     galleryPhotos: doc.galleryPhotoIds ?? [],
   }
 }
-/* eslint-enable @typescript-eslint/no-explicit-any */
 
 const STATUS_TABS = [
   { label: 'All', value: undefined },

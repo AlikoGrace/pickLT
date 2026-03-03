@@ -244,12 +244,18 @@ export default function ActiveMovePage() {
     ? PHASE_LABELS[PHASE_ORDER[PHASE_ORDER.indexOf(phase) + 1]].label
     : null
 
-  const pickupCoords = move?.pickupLatitude && move?.pickupLongitude
-    ? { latitude: move.pickupLatitude as number, longitude: move.pickupLongitude as number }
-    : undefined
-  const dropoffCoords = move?.dropoffLatitude && move?.dropoffLongitude
-    ? { latitude: move.dropoffLatitude as number, longitude: move.dropoffLongitude as number }
-    : undefined
+  const pickupCoords = useMemo(
+    () => move?.pickupLatitude && move?.pickupLongitude
+      ? { latitude: move.pickupLatitude as number, longitude: move.pickupLongitude as number }
+      : undefined,
+    [move?.pickupLatitude, move?.pickupLongitude]
+  )
+  const dropoffCoords = useMemo(
+    () => move?.dropoffLatitude && move?.dropoffLongitude
+      ? { latitude: move.dropoffLatitude as number, longitude: move.dropoffLongitude as number }
+      : undefined,
+    [move?.dropoffLatitude, move?.dropoffLongitude]
+  )
 
   // ── 100m proximity detection for "Arrived at Pickup" ───
   const distanceToPickup = useMemo(() => {
