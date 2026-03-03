@@ -59,6 +59,7 @@ interface MoveData {
   dropoffLatitude: number | null
   dropoffLongitude: number | null
   estimatedPrice: number | null
+  finalPrice: number | null
   totalItemCount: number | null
   coverPhotoId: string | null
   galleryPhotoIds: string[]
@@ -67,7 +68,15 @@ interface MoveData {
   moverProfileId: string | null
 }
 
-type MovePhase = 'mover_arriving' | 'mover_arrived' | 'loading' | 'in_transit' | 'arrived'
+type MovePhase =
+  | 'mover_arriving'
+  | 'mover_arrived'
+  | 'loading'
+  | 'in_transit'
+  | 'arrived_destination'
+  | 'unloading'
+  | 'awaiting_payment'
+  | 'completed'
 
 // ─── Helpers ────────────────────────────────────────────
 const formatDistance = (meters: number): string => {
@@ -201,9 +210,16 @@ const InstantMovePage = () => {
         setPhase('in_transit')
         break
       case 'arrived_destination':
+        setPhase('arrived_destination')
+        break
       case 'unloading':
+        setPhase('unloading')
+        break
+      case 'awaiting_payment':
+        setPhase('awaiting_payment')
+        break
       case 'completed':
-        setPhase('arrived')
+        setPhase('completed')
         break
     }
   }, [moveData])
@@ -298,9 +314,16 @@ const InstantMovePage = () => {
               setPhase('in_transit')
               break
             case 'arrived_destination':
+              setPhase('arrived_destination')
+              break
             case 'unloading':
+              setPhase('unloading')
+              break
+            case 'awaiting_payment':
+              setPhase('awaiting_payment')
+              break
             case 'completed':
-              setPhase('arrived')
+              setPhase('completed')
               break
             case 'cancelled_by_mover':
               alert('The mover has cancelled. Searching for another mover...')
@@ -399,6 +422,94 @@ const InstantMovePage = () => {
     alert('Chat feature coming soon!')
   }
 
+  // ─── Payment confirmation state ───────────────────────
+  const [isConfirmingPayment, setIsConfirmingPayment] = useState(false)
+  const [paymentConfirmed, setPaymentConfirmed] = useState(false)
+  const [paymentAmount, setPaymentAmount] = useState(0)
+
+  // Fetch payment status when entering awaiting_payment phase
+  useEffect(() => {
+    if (phase !== 'awaiting_payment' || !moveData?.$id) return
+    fetch(`/api/moves/payment-status?moveId=${moveData.$id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.payment) {
+          setPaymentAmount(data.payment.amount || 0)
+          if (data.payment.clientConfirmedAt) setPaymentConfirmed(true)
+        }
+      })
+      .catch(() => {})
+  }, [phase, moveData?.$id])
+
+  const handleConfirmPayment = async () => {
+    if (!moveData?.$id) return
+    setIsConfirmingPayment(true)
+    try {
+      const res = await fetch('/api/moves/confirm-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ moveId: moveData.$id }),
+      })
+      const data = await res.json()
+      if (res.ok) {
+        setPaymentConfirmed(true)
+        if (data.moveStatus === 'completed') {
+          setPhase('completed')
+        }
+      } else {
+        alert(data.error || 'Failed to confirm payment')
+      }
+    } catch {
+      alert('Failed to confirm payment')
+    } finally {
+      setIsConfirmingPayment(false)
+    }
+  }
+
+  // ─── Review state ─────────────────────────────────────
+  const [reviewRating, setReviewRating] = useState(0)
+  const [reviewComment, setReviewComment] = useState('')
+  const [isSubmittingReview, setIsSubmittingReview] = useState(false)
+  const [reviewSubmitted, setReviewSubmitted] = useState(false)
+
+  const handleSubmitReview = async () => {
+    if (!moveData?.$id || reviewRating === 0) return
+    setIsSubmittingReview(true)
+    try {
+      const res = await fetch('/api/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          moveId: moveData.$id,
+          rating: reviewRating,
+          comment: reviewComment,
+        }),
+      })
+      if (res.ok) {
+        setReviewSubmitted(true)
+      } else {
+        const data = await res.json()
+        if (data.error === 'Review already submitted for this move') {
+          setReviewSubmitted(true)
+        } else {
+          alert(data.error || 'Failed to submit review')
+        }
+      }
+    } catch {
+      alert('Failed to submit review')
+    } finally {
+      setIsSubmittingReview(false)
+    }
+  }
+
+  const handleGoHome = () => {
+    sessionStorage.removeItem('selectedMover')
+    sessionStorage.removeItem('activeMoveId')
+    sessionStorage.removeItem('activeMoveRequestId')
+    reset()
+    router.push('/')
+  }
+
   const initials = mover?.name
     ? mover.name.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2)
     : '?'
@@ -464,7 +575,24 @@ const InstantMovePage = () => {
             {phase === 'mover_arrived' && (
               <div className="text-right shrink-0">
                 <p className="text-lg font-semibold text-primary-600">€{estimatedPrice}</p>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400">Total price</p>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">Estimated price</p>
+              </div>
+            )}
+            {phase === 'loading' && (
+              <div className="text-right shrink-0">
+                <div className="w-5 h-5 border-2 border-primary-600 border-t-transparent rounded-full animate-spin" />
+              </div>
+            )}
+            {phase === 'in_transit' && (
+              <div className="text-right shrink-0">
+                <p className="text-lg font-semibold text-primary-600">In transit</p>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">To destination</p>
+              </div>
+            )}
+            {(phase === 'arrived_destination' || phase === 'unloading' || phase === 'awaiting_payment') && (
+              <div className="text-right shrink-0">
+                <p className="text-lg font-semibold text-primary-600">€{moveData?.finalPrice || estimatedPrice}</p>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">Final price</p>
               </div>
             )}
           </div>
@@ -477,6 +605,66 @@ const InstantMovePage = () => {
               <div>
                 <p className="text-sm font-semibold text-neutral-900 dark:text-white">Your mover has arrived!</p>
                 <p className="text-xs text-neutral-500 dark:text-neutral-400">Meet them at the pickup location</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {phase === 'loading' && (
+          <div className="px-4 py-3 bg-blue-50 dark:bg-blue-900/20 border-b border-neutral-200 dark:border-neutral-700">
+            <div className="flex items-center gap-2">
+              <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin shrink-0" />
+              <div>
+                <p className="text-sm font-semibold text-neutral-900 dark:text-white">Loading your items</p>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">Your items are being loaded onto the vehicle</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {phase === 'in_transit' && (
+          <div className="px-4 py-3 bg-primary-50 dark:bg-primary-900/20 border-b border-neutral-200 dark:border-neutral-700">
+            <div className="flex items-center gap-2">
+              <HugeiconsIcon icon={DeliveryTruck01Icon} size={20} strokeWidth={1.5} className="text-primary-600 shrink-0" />
+              <div>
+                <p className="text-sm font-semibold text-neutral-900 dark:text-white">On the way to destination</p>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">Your items are being transported</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {phase === 'arrived_destination' && (
+          <div className="px-4 py-3 bg-green-50 dark:bg-green-900/20 border-b border-neutral-200 dark:border-neutral-700">
+            <div className="flex items-center gap-2">
+              <HugeiconsIcon icon={CheckmarkCircle02Icon} size={20} strokeWidth={1.5} className="text-green-500 shrink-0" />
+              <div>
+                <p className="text-sm font-semibold text-neutral-900 dark:text-white">Arrived at destination!</p>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">Your mover has reached the drop-off location</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {phase === 'unloading' && (
+          <div className="px-4 py-3 bg-amber-50 dark:bg-amber-900/20 border-b border-neutral-200 dark:border-neutral-700">
+            <div className="flex items-center gap-2">
+              <div className="w-5 h-5 border-2 border-amber-500 border-t-transparent rounded-full animate-spin shrink-0" />
+              <div>
+                <p className="text-sm font-semibold text-neutral-900 dark:text-white">Unloading your items</p>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">Your items are being unloaded at the destination</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {phase === 'awaiting_payment' && (
+          <div className="px-4 py-3 bg-green-50 dark:bg-green-900/20 border-b border-neutral-200 dark:border-neutral-700">
+            <div className="flex items-center gap-2">
+              <HugeiconsIcon icon={CheckmarkCircle02Icon} size={20} strokeWidth={1.5} className="text-green-500 shrink-0" />
+              <div>
+                <p className="text-sm font-semibold text-neutral-900 dark:text-white">Move completed — Payment required</p>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">Please pay the mover and confirm below</p>
               </div>
             </div>
           </div>
@@ -619,15 +807,148 @@ const InstantMovePage = () => {
       <div className="absolute bottom-0 left-0 right-0 z-10 p-4 pb-4 pointer-events-none">
         <div className="mx-auto max-w-lg space-y-3 pb-2 pointer-events-auto">
           {renderMoverCard()}
-          {phase !== 'mover_arrived' ? (
+
+          {/* Phase: mover_arriving — cancel allowed */}
+          {phase === 'mover_arriving' && (
             <ButtonSecondary onClick={confirmCancel} className="w-full shadow-lg">Cancel move</ButtonSecondary>
-          ) : (
-            <ButtonPrimary
-              href={`/checkout?moveId=${moveData.$id}&distance=${routeInfo?.distance || moveData.routeDistanceMeters || 15000}&duration=${routeInfo?.duration || moveData.routeDurationSeconds || 1800}&price=${estimatedPrice}`}
-              className="w-full shadow-lg"
-            >
-              Proceed to checkout · €{estimatedPrice}
-            </ButtonPrimary>
+          )}
+
+          {/* Phase: mover_arrived — wait for mover to start loading */}
+          {phase === 'mover_arrived' && (
+            <div className="rounded-xl bg-primary-50 dark:bg-primary-900/20 p-3 text-center">
+              <p className="text-sm text-primary-700 dark:text-primary-300">Your mover will begin loading soon</p>
+            </div>
+          )}
+
+          {/* Phase: loading — items being loaded */}
+          {phase === 'loading' && (
+            <div className="rounded-xl bg-blue-50 dark:bg-blue-900/20 p-3 text-center">
+              <p className="text-sm text-blue-700 dark:text-blue-300">Your items are being loaded…</p>
+            </div>
+          )}
+
+          {/* Phase: in_transit — driving to destination */}
+          {phase === 'in_transit' && (
+            <div className="rounded-xl bg-primary-50 dark:bg-primary-900/20 p-3 text-center">
+              <p className="text-sm text-primary-700 dark:text-primary-300">Driving to your destination…</p>
+            </div>
+          )}
+
+          {/* Phase: arrived_destination */}
+          {phase === 'arrived_destination' && (
+            <div className="rounded-xl bg-green-50 dark:bg-green-900/20 p-3 text-center">
+              <p className="text-sm text-green-700 dark:text-green-300">Arrived! Unloading will begin shortly.</p>
+            </div>
+          )}
+
+          {/* Phase: unloading */}
+          {phase === 'unloading' && (
+            <div className="rounded-xl bg-amber-50 dark:bg-amber-900/20 p-3 text-center">
+              <p className="text-sm text-amber-700 dark:text-amber-300">Your items are being unloaded…</p>
+            </div>
+          )}
+
+          {/* Phase: awaiting_payment — payment confirmation */}
+          {phase === 'awaiting_payment' && !paymentConfirmed && (
+            <div className="rounded-2xl border border-neutral-200 bg-white/95 backdrop-blur-sm dark:border-neutral-700 dark:bg-neutral-800/95 p-4 shadow-lg space-y-4">
+              <div className="text-center">
+                <p className="text-lg font-bold text-neutral-900 dark:text-white">
+                  €{paymentAmount || moveData?.finalPrice || estimatedPrice}
+                </p>
+                <p className="text-sm text-neutral-500 dark:text-neutral-400">Amount to pay</p>
+              </div>
+              <div className="rounded-xl bg-amber-50 dark:bg-amber-900/20 p-3">
+                <p className="text-xs text-amber-700 dark:text-amber-300 text-center">
+                  Please pay the mover directly (cash or transfer), then tap &quot;I Have Paid&quot; below.
+                  The mover must also confirm receipt before the move is marked complete.
+                </p>
+              </div>
+              <ButtonPrimary
+                onClick={handleConfirmPayment}
+                disabled={isConfirmingPayment}
+                className="w-full shadow-lg"
+              >
+                {isConfirmingPayment ? 'Confirming…' : 'I Have Paid'}
+              </ButtonPrimary>
+            </div>
+          )}
+
+          {/* Phase: awaiting_payment — client already confirmed, waiting for mover */}
+          {phase === 'awaiting_payment' && paymentConfirmed && (
+            <div className="rounded-2xl border border-neutral-200 bg-white/95 backdrop-blur-sm dark:border-neutral-700 dark:bg-neutral-800/95 p-4 shadow-lg">
+              <div className="flex items-center justify-center gap-2">
+                <HugeiconsIcon icon={CheckmarkCircle02Icon} size={20} strokeWidth={1.5} className="text-green-500" />
+                <p className="text-sm font-medium text-neutral-900 dark:text-white">
+                  Payment confirmed! Waiting for mover to confirm receipt…
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Phase: completed — review + go home */}
+          {phase === 'completed' && !reviewSubmitted && (
+            <div className="rounded-2xl border border-neutral-200 bg-white/95 backdrop-blur-sm dark:border-neutral-700 dark:bg-neutral-800/95 p-5 shadow-lg space-y-4">
+              <div className="text-center">
+                <div className="w-12 h-12 mx-auto mb-2 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                  <HugeiconsIcon icon={CheckmarkCircle02Icon} size={24} strokeWidth={1.5} className="text-green-500" />
+                </div>
+                <p className="text-lg font-bold text-neutral-900 dark:text-white">Move Completed!</p>
+                <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">How was your experience with {mover?.name || 'the mover'}?</p>
+              </div>
+              {/* Star rating */}
+              <div className="flex justify-center gap-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    onClick={() => setReviewRating(star)}
+                    className="transition-transform hover:scale-110"
+                  >
+                    <HugeiconsIcon
+                      icon={StarIcon}
+                      size={32}
+                      strokeWidth={1.5}
+                      className={star <= reviewRating ? 'text-amber-500 fill-current' : 'text-neutral-300 dark:text-neutral-600'}
+                    />
+                  </button>
+                ))}
+              </div>
+              {/* Comment */}
+              <textarea
+                value={reviewComment}
+                onChange={(e) => setReviewComment(e.target.value)}
+                placeholder="Add a comment (optional)"
+                className="w-full rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 p-3 text-sm text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
+                rows={3}
+              />
+              <div className="flex gap-3">
+                <ButtonSecondary onClick={handleGoHome} className="flex-1">
+                  Skip
+                </ButtonSecondary>
+                <ButtonPrimary
+                  onClick={handleSubmitReview}
+                  disabled={reviewRating === 0 || isSubmittingReview}
+                  className="flex-1"
+                >
+                  {isSubmittingReview ? 'Submitting…' : 'Submit Review'}
+                </ButtonPrimary>
+              </div>
+            </div>
+          )}
+
+          {/* Phase: completed — review submitted */}
+          {phase === 'completed' && reviewSubmitted && (
+            <div className="rounded-2xl border border-neutral-200 bg-white/95 backdrop-blur-sm dark:border-neutral-700 dark:bg-neutral-800/95 p-5 shadow-lg space-y-4">
+              <div className="text-center">
+                <div className="w-12 h-12 mx-auto mb-2 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                  <HugeiconsIcon icon={CheckmarkCircle02Icon} size={24} strokeWidth={1.5} className="text-green-500" />
+                </div>
+                <p className="text-lg font-bold text-neutral-900 dark:text-white">Thank you!</p>
+                <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">Your review has been submitted.</p>
+              </div>
+              <ButtonPrimary onClick={handleGoHome} className="w-full">
+                Back to Home
+              </ButtonPrimary>
+            </div>
           )}
         </div>
       </div>
