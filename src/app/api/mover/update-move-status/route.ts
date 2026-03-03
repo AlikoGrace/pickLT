@@ -1,7 +1,7 @@
 import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
-import { Query } from 'node-appwrite'
+import { Query, ID } from 'node-appwrite'
 import { NextRequest, NextResponse } from 'next/server'
 
 // Valid status transitions for moves (per BACKEND_ARCHITECTURE.md)
@@ -14,7 +14,8 @@ const VALID_TRANSITIONS: Record<string, string[]> = {
   loading: ['in_transit'],
   in_transit: ['arrived_destination'],
   arrived_destination: ['unloading'],
-  unloading: ['completed'],
+  unloading: ['awaiting_payment'],
+  // awaiting_payment → completed is handled by the payment confirmation flow
 }
 
 // POST /api/mover/update-move-status — Update the status of an active move
@@ -67,11 +68,37 @@ export async function POST(request: NextRequest) {
     }
 
     // Update the move status
+    const updateData: Record<string, unknown> = { status }
+
+    // If transitioning to awaiting_payment, create a payment record
+    if (status === 'awaiting_payment') {
+      const finalPrice = body.finalPrice || move.estimatedPrice || 0
+
+      // Update finalPrice on the move
+      updateData.finalPrice = finalPrice
+
+      // Create payment record
+      await databases.createDocument(
+        APPWRITE.DATABASE_ID,
+        APPWRITE.COLLECTIONS.PAYMENTS,
+        ID.unique(),
+        {
+          moveId: moveId,
+          clientId: typeof move.clientId === 'string' ? move.clientId : move.clientId?.$id,
+          amount: finalPrice,
+          currency: 'EUR',
+          status: 'pending',
+          paymentMethod: 'cash',
+          moverConfirmedAt: new Date().toISOString(),
+        }
+      )
+    }
+
     await databases.updateDocument(
       APPWRITE.DATABASE_ID,
       APPWRITE.COLLECTIONS.MOVES,
       moveId,
-      { status }
+      updateData
     )
 
     return NextResponse.json({ success: true, moveId, status })
