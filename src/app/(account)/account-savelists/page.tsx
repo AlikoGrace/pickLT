@@ -1,11 +1,70 @@
 'use client'
 
 import MoveCard from '@/components/MoveCard'
-import { MoveStatus, useMoveSearch } from '@/context/moveSearch'
+import { MoveStatus, StoredMove } from '@/context/moveSearch'
 import { Divider } from '@/shared/divider'
 import { TruckIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+
+/** Map database status → display‑level MoveStatus */
+function mapDbStatus(dbStatus: string): MoveStatus {
+  if (['draft', 'pending_payment', 'paid', 'mover_assigned'].includes(dbStatus)) return 'pending'
+  if (
+    [
+      'mover_accepted',
+      'mover_en_route',
+      'mover_arrived',
+      'loading',
+      'in_transit',
+      'arrived_destination',
+      'unloading',
+    ].includes(dbStatus)
+  )
+    return 'in_progress'
+  if (dbStatus === 'completed') return 'completed'
+  if (['cancelled', 'cancelled_by_client', 'cancelled_by_mover', 'disputed'].includes(dbStatus))
+    return 'cancelled'
+  return 'pending'
+}
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+function docToStoredMove(doc: any): StoredMove {
+  return {
+    id: doc.$id,
+    handle: doc.handle ?? '',
+    status: mapDbStatus(doc.status ?? ''),
+    createdAt: doc.$createdAt ?? '',
+    paidAt: doc.paidAt ?? doc.$createdAt ?? '',
+    totalPrice: doc.estimatedPrice ?? 0,
+    bookingCode: doc.handle ?? '',
+    moveType: doc.moveType ?? doc.systemMoveType ?? null,
+    moveDate: doc.moveDate ?? null,
+    pickupLocation: doc.pickupLocation ?? '',
+    pickupStreetAddress: doc.pickupLocation ?? '',
+    pickupApartmentUnit: doc.pickupApartmentUnit ?? '',
+    dropoffStreetAddress: doc.dropoffLocation ?? '',
+    dropoffApartmentUnit: doc.dropoffApartmentUnit ?? '',
+    dropoffFloorLevel: doc.dropoffFloorLevel ?? null,
+    homeType: doc.homeType ?? null,
+    floorLevel: doc.floorLevel ?? null,
+    elevatorAvailable: doc.elevatorAvailable ?? false,
+    dropoffElevatorAvailable: doc.dropoffElevatorAvailable ?? false,
+    parkingSituation: doc.parkingSituation ?? null,
+    dropoffParkingSituation: doc.dropoffParkingSituation ?? null,
+    packingServiceLevel: doc.packingServiceLevel ?? null,
+    additionalServices: doc.additionalServices ?? [],
+    storageWeeks: doc.storageWeeks ?? 0,
+    crewSize: doc.crewSize ?? null,
+    vehicleType: doc.vehicleType ?? null,
+    arrivalWindow: doc.arrivalWindow ?? null,
+    inventoryCount: doc.totalItemCount ?? 0,
+    contactInfo: doc.contactInfo ?? { fullName: '', phone: '', email: '' },
+    coverPhoto: doc.coverPhotoId ?? null,
+    galleryPhotos: doc.galleryPhotoIds ?? [],
+  }
+}
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 const STATUS_TABS = [
   { label: 'All', value: undefined },
@@ -16,10 +75,36 @@ const STATUS_TABS = [
 ]
 
 export default function MyMovesPage() {
-  const { storedMoves, getFilteredMoves } = useMoveSearch()
+  const [moves, setMoves] = useState<StoredMove[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<MoveStatus | undefined>(undefined)
 
-  const filteredMoves = activeTab ? getFilteredMoves(activeTab) : storedMoves
+  const fetchMoves = useCallback(async () => {
+    try {
+      setLoading(true)
+      setError(null)
+      const res = await fetch('/api/moves?limit=100')
+      if (!res.ok) throw new Error('Failed to fetch moves')
+      const data = await res.json()
+      const mapped = (data.documents ?? []).map(docToStoredMove)
+      setMoves(mapped)
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Something went wrong')
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchMoves()
+  }, [fetchMoves])
+
+  const filteredMoves = activeTab ? moves.filter((m) => m.status === activeTab) : moves
+
+  // Count per status for badge display
+  const counts: Record<string, number> = {}
+  for (const m of moves) counts[m.status] = (counts[m.status] ?? 0) + 1
 
   return (
     <div>
@@ -34,6 +119,7 @@ export default function MyMovesPage() {
       <div className="flex gap-2 overflow-x-auto pb-4 hidden-scrollbar">
         {STATUS_TABS.map((tab) => {
           const isActive = activeTab === tab.value
+          const count = tab.value ? counts[tab.value] ?? 0 : moves.length
           return (
             <button
               key={tab.label}
@@ -45,12 +131,35 @@ export default function MyMovesPage() {
               }`}
             >
               {tab.label}
+              {count > 0 && (
+                <span
+                  className={`ml-1.5 text-xs ${isActive ? 'text-white/80' : 'text-neutral-400'}`}
+                >
+                  ({count})
+                </span>
+              )}
             </button>
           )
         })}
       </div>
 
-      {filteredMoves.length > 0 ? (
+      {loading ? (
+        <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="animate-pulse rounded-2xl bg-neutral-100 dark:bg-neutral-800 h-64" />
+          ))}
+        </div>
+      ) : error ? (
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+          <p className="text-red-500 mb-4">{error}</p>
+          <button
+            onClick={fetchMoves}
+            className="px-6 py-2.5 bg-primary-600 text-white rounded-full text-sm font-medium hover:bg-primary-700 transition-colors"
+          >
+            Retry
+          </button>
+        </div>
+      ) : filteredMoves.length > 0 ? (
         <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 md:gap-x-8 md:gap-y-12 lg:grid-cols-3 xl:grid-cols-4">
           {filteredMoves.map((move) => (
             <MoveCard key={move.id} data={move} />
