@@ -232,11 +232,15 @@ const SelectMoverPage = () => {
     setSelectedMover(moverId)
   }
 
+  const [isConfirming, setIsConfirming] = useState(false)
+
   const handleConfirmMover = async () => {
-    if (!selectedMover) return
+    if (!selectedMover || isConfirming) return
 
     const mover = moversWithPrices.find((m) => m.id === selectedMover)
     if (!mover) return
+
+    setIsConfirming(true)
 
     // Store selected mover in sessionStorage
     sessionStorage.setItem('selectedMover', JSON.stringify({
@@ -244,6 +248,33 @@ const SelectMoverPage = () => {
       routeDistance,
       routeDuration,
     }))
+
+    // ── Upload photos to storage first ──────────────────────
+    let coverPhotoId: string | null = null
+    let galleryPhotoIds: string[] = []
+
+    if (coverPhoto || galleryPhotos.length > 0) {
+      try {
+        const photoRes = await fetch('/api/moves/upload-photos', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            coverPhoto: coverPhoto || null,
+            galleryPhotos: galleryPhotos.length > 0 ? galleryPhotos : [],
+          }),
+        })
+
+        if (photoRes.ok) {
+          const photoData = await photoRes.json()
+          coverPhotoId = photoData.coverPhotoId
+          galleryPhotoIds = photoData.galleryPhotoIds || []
+        } else {
+          console.error('Photo upload failed:', await photoRes.text())
+        }
+      } catch (err) {
+        console.error('Failed to upload photos:', err)
+      }
+    }
 
     // ── Create the move + move_request via API ──────────────
     try {
@@ -263,6 +294,8 @@ const SelectMoverPage = () => {
           customItems: customItems.map((c) => JSON.stringify(c)),
           totalItemCount: inventoryCount,
           estimatedPrice: mover.price,
+          coverPhotoId,
+          galleryPhotoIds,
           routeDistanceMeters: routeDistance || null,
           routeDurationSeconds: routeDuration || null,
         }),
@@ -279,6 +312,7 @@ const SelectMoverPage = () => {
       // Continue anyway — the mover page will still work for UI
     }
 
+    setIsConfirming(false)
     // Navigate to the instant-move page with the map
     router.push('/instant-move')
   }
@@ -562,9 +596,11 @@ const SelectMoverPage = () => {
           <ButtonPrimary
             onClick={handleConfirmMover}
             className="flex-1"
-            disabled={!selectedMover}
+            disabled={!selectedMover || isConfirming}
           >
-            {selectedMover 
+            {isConfirming
+              ? 'Creating move...'
+              : selectedMover 
               ? `Confirm · €${moversWithPrices.find(m => m.id === selectedMover)?.price || 0}`
               : 'Select a mover'
             }
