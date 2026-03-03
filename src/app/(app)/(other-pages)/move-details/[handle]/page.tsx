@@ -1,6 +1,6 @@
 'use client'
 
-import { useMoveSearch, StoredMove } from '@/context/moveSearch'
+import { useMoveSearch, StoredMove, MoveStatus } from '@/context/moveSearch'
 import { Badge } from '@/shared/Badge'
 import {
   MapPinIcon,
@@ -15,6 +15,7 @@ import {
 import Image from 'next/image'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
+import { useCallback, useEffect, useState } from 'react'
 
 const formatLabel = (value: string | null | undefined): string => {
   if (!value) return 'Not specified'
@@ -83,13 +84,104 @@ const InfoRow = ({ label, value, icon: Icon }: { label: string; value: React.Rea
   </div>
 )
 
+/** Map raw DB status → display MoveStatus */
+function mapDbStatus(dbStatus: string): MoveStatus {
+  if (['draft', 'pending_payment', 'paid', 'mover_assigned'].includes(dbStatus)) return 'pending'
+  if (
+    ['mover_accepted', 'mover_en_route', 'mover_arrived', 'loading', 'in_transit',
+     'arrived_destination', 'unloading', 'awaiting_payment'].includes(dbStatus)
+  ) return 'in_progress'
+  if (dbStatus === 'completed') return 'completed'
+  if (['cancelled', 'cancelled_by_client', 'cancelled_by_mover', 'disputed'].includes(dbStatus))
+    return 'cancelled'
+  return 'pending'
+}
+
+/** Convert raw DB doc → StoredMove shape */
+function docToStoredMove(doc: any): StoredMove {
+  return {
+    id: doc.$id,
+    handle: doc.handle ?? '',
+    status: mapDbStatus(doc.status ?? ''),
+    createdAt: doc.$createdAt ?? '',
+    paidAt: doc.paidAt ?? doc.$createdAt ?? '',
+    totalPrice: doc.estimatedPrice ?? 0,
+    bookingCode: doc.handle ?? '',
+    moveType: doc.moveType ?? doc.systemMoveType ?? null,
+    moveDate: doc.moveDate ?? null,
+    pickupLocation: doc.pickupLocation ?? '',
+    pickupStreetAddress: doc.pickupStreetAddress ?? doc.pickupLocation ?? '',
+    pickupApartmentUnit: doc.pickupApartmentUnit ?? '',
+    dropoffStreetAddress: doc.dropoffStreetAddress ?? doc.dropoffLocation ?? '',
+    dropoffApartmentUnit: doc.dropoffApartmentUnit ?? '',
+    dropoffFloorLevel: doc.dropoffFloorLevel ?? null,
+    homeType: doc.homeType ?? null,
+    floorLevel: doc.floorLevel ?? null,
+    elevatorAvailable: doc.elevatorAvailable ?? false,
+    dropoffElevatorAvailable: doc.dropoffElevatorAvailable ?? false,
+    parkingSituation: doc.parkingSituation ?? null,
+    dropoffParkingSituation: doc.dropoffParkingSituation ?? null,
+    packingServiceLevel: doc.packingServiceLevel ?? null,
+    additionalServices: doc.additionalServices ?? [],
+    storageWeeks: doc.storageWeeks ?? 0,
+    crewSize: doc.crewSize ?? null,
+    vehicleType: doc.vehicleType ?? null,
+    arrivalWindow: doc.arrivalWindow ?? null,
+    inventoryCount: doc.totalItemCount ?? 0,
+    contactInfo: doc.contactInfo ?? { fullName: '', phone: '', email: '' },
+    coverPhotoId: doc.coverPhotoId ?? null,
+    galleryPhotoIds: doc.galleryPhotoIds ?? [],
+  }
+}
+
 export default function MoveDetailsPage() {
   const params = useParams()
   const router = useRouter()
   const { getMoveByHandle } = useMoveSearch()
 
   const handle = params.handle as string
-  const move = getMoveByHandle(handle)
+
+  // Try context first
+  const contextMove = getMoveByHandle(handle)
+
+  // DB fetch state
+  const [dbMove, setDbMove] = useState<StoredMove | null>(null)
+  const [isLoading, setIsLoading] = useState(!contextMove)
+  const [error, setError] = useState<string | null>(null)
+
+  const fetchFromDb = useCallback(async () => {
+    try {
+      setIsLoading(true)
+      setError(null)
+      const res = await fetch(`/api/moves/by-handle/${encodeURIComponent(handle)}`)
+      if (!res.ok) {
+        if (res.status === 404) { setError('not_found'); return }
+        setError('fetch_error'); return
+      }
+      const data = await res.json()
+      if (data.move) setDbMove(docToStoredMove(data.move))
+      else setError('not_found')
+    } catch {
+      setError('fetch_error')
+    } finally {
+      setIsLoading(false)
+    }
+  }, [handle])
+
+  // Only fetch from DB if context doesn't have the move
+  useEffect(() => {
+    if (!contextMove) fetchFromDb()
+  }, [contextMove, fetchFromDb])
+
+  const move = contextMove || dbMove
+
+  if (isLoading) {
+    return (
+      <div className="container py-16 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600" />
+      </div>
+    )
+  }
 
   if (!move) {
     return (
@@ -197,6 +289,7 @@ export default function MoveDetailsPage() {
               src={galleryImgs[0]}
               alt="Move photo"
               fill
+              unoptimized
               className="object-cover"
             />
           </div>
@@ -206,6 +299,7 @@ export default function MoveDetailsPage() {
                 src={img}
                 alt={`Move photo ${i + 2}`}
                 fill
+                unoptimized
                 className="object-cover"
               />
             </div>
