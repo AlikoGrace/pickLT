@@ -557,7 +557,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
               {move?.crewSize && (
                 <span className="text-xs px-2 py-1 bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 rounded-full flex items-center gap-1">
                   <UserGroupIcon className="w-3 h-3" />
-                  {move.crewSize} movers
+                  {Number(move.crewSize) + 1} movers
                 </span>
               )}
               {move?.vehicleType && (
@@ -760,7 +760,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                 {move.crewSize && (
                   <div className="flex items-center gap-2 text-sm">
                     <UserGroupIcon className="w-4 h-4 text-neutral-400" />
-                    <span className="text-neutral-600 dark:text-neutral-300">{move.crewSize} movers</span>
+                    <span className="text-neutral-600 dark:text-neutral-300">{Number(move.crewSize) + 1} movers</span>
                   </div>
                 )}
                 {move.vehicleType && (

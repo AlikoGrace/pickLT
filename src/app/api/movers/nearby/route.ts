@@ -71,6 +71,9 @@ export async function GET(req: NextRequest) {
             ...mover,
             fullName: userDoc.fullName || undefined,
             profilePhotoUrl: userDoc.profilePhoto || undefined,
+            crewSize: (Array.isArray((mover as Record<string, unknown>).crew_members)
+              ? ((mover as Record<string, unknown>).crew_members as unknown[]).length
+              : 0) + 1,
           }
         } catch {
           return mover

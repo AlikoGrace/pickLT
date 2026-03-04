@@ -684,7 +684,7 @@ const InstantMovePage = () => {
           </div>
         </div>
 
-        {itemCount > 0 && (
+        {/* {itemCount > 0 && (
           <div className="px-4 pb-3">
             <div className="flex items-center gap-3 p-2 bg-neutral-50 dark:bg-neutral-700/50 rounded-xl">
               <div className="w-12 h-12 rounded-lg bg-neutral-200 dark:bg-neutral-600 flex items-center justify-center">
@@ -696,18 +696,20 @@ const InstantMovePage = () => {
               </div>
             </div>
           </div>
-        )}
+        )} */}
 
-        <div className="px-4 pb-4 flex gap-2">
-          <ButtonSecondary onClick={handleCallMover} className="flex-1 !py-2">
-            <HugeiconsIcon icon={Call02Icon} size={16} strokeWidth={1.5} className="mr-1.5" />
-            Call
-          </ButtonSecondary>
-          <ButtonSecondary onClick={handleMessageMover} className="flex-1 !py-2">
-            <HugeiconsIcon icon={Message01Icon} size={16} strokeWidth={1.5} className="mr-1.5" />
-            Message
-          </ButtonSecondary>
-        </div>
+        {phase !== 'in_transit' && (
+          <div className="px-4 pb-4 flex gap-2">
+            <ButtonSecondary onClick={handleCallMover} className="flex-1 !py-2">
+              <HugeiconsIcon icon={Call02Icon} size={16} strokeWidth={1.5} className="mr-1.5" />
+              Call
+            </ButtonSecondary>
+            <ButtonSecondary onClick={handleMessageMover} className="flex-1 !py-2">
+              <HugeiconsIcon icon={Message01Icon} size={16} strokeWidth={1.5} className="mr-1.5" />
+              Message
+            </ButtonSecondary>
+          </div>
+        )}
       </div>
     )
   }
@@ -808,8 +810,8 @@ const InstantMovePage = () => {
         <div className="mx-auto max-w-lg space-y-3 pb-2 pointer-events-auto">
           {renderMoverCard()}
 
-          {/* Phase: mover_arriving — cancel allowed */}
-          {phase === 'mover_arriving' && (
+          {/* Cancel allowed during mover_arriving, mover_arrived, and loading */}
+          {(phase === 'mover_arriving' || phase === 'mover_arrived' || phase === 'loading') && (
             <ButtonSecondary onClick={confirmCancel} className="w-full shadow-lg">Cancel move</ButtonSecondary>
           )}
 

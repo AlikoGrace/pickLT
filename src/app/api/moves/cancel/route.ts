@@ -12,6 +12,8 @@ const CANCELLABLE_STATUSES = [
   'mover_assigned',
   'mover_accepted',
   'mover_en_route',
+  'mover_arrived',
+  'loading',
 ]
 
 // POST /api/moves/cancel — Cancel a move on behalf of the client
