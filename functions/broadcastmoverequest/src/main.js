@@ -6,7 +6,7 @@ const MOVER_PROFILES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVER_PROFILES
 const MOVE_REQUESTS_COLLECTION = process.env.APPWRITE_COLLECTION_MOVE_REQUESTS;
 
 const MAX_MOVERS = 10;
-const REQUEST_TIMEOUT_SECONDS = 180;
+const REQUEST_TIMEOUT_SECONDS = 60;
 
 // Haversine distance in km
 function haversineKm(lat1, lon1, lat2, lon2) {

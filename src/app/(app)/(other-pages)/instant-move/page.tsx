@@ -680,7 +680,7 @@ const InstantMovePage = () => {
           </div>
           <div className="flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400">
             <HugeiconsIcon icon={UserMultiple02Icon} size={14} strokeWidth={1.5} />
-            <span>{mover.crewSize} mover{mover.crewSize > 1 ? 's' : ''}</span>
+            <span>{mover.crewSize + 1} mover{mover.crewSize > 0 ? 's' : ''}</span>
           </div>
         </div>
 

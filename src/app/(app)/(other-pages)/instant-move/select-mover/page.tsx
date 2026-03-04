@@ -538,7 +538,7 @@ const SelectMoverPage = () => {
                     </span>
                     <span className="flex items-center gap-1">
                       <HugeiconsIcon icon={UserMultiple02Icon} size={14} strokeWidth={1.5} />
-                      {mover.crewSize} mover{mover.crewSize > 1 ? 's' : ''}
+                      {mover.crewSize + 1} mover{mover.crewSize > 0 ? 's' : ''}
                     </span>
                     <span className="text-neutral-400">
                       {VEHICLE_CAPACITY[mover.vehicleType] || ''}
