@@ -177,17 +177,23 @@ export const LocationInputField: FC<Props> = ({
     setGeoError(null)
 
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
+      async (pos) => {
         const { latitude, longitude } = pos.coords
         setUserCoords({ latitude, longitude })
+
+        // Reverse-geocode to get a meaningful place name for the DB
+        const geocoded = await reverseGeocode(latitude, longitude)
+
+        const location: LocationSuggestion = geocoded
+          ? { ...geocoded, coordinates: { latitude, longitude } }
+          : {
+              id: 'current-location',
+              name: `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`,
+              fullAddress: `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`,
+              coordinates: { latitude, longitude },
+            }
+
         setGeoLoading(false)
-        // Use exact GPS coordinates — no reverse geocoding
-        const location: LocationSuggestion = {
-          id: 'current-location',
-          name: 'My Location',
-          fullAddress: 'Current Location',
-          coordinates: { latitude, longitude },
-        }
         handleSelectLocation(location)
       },
       (err) => {
