@@ -3,6 +3,7 @@
 import MapboxMap, { RouteInfo } from '@/components/MapboxMap'
 import { useAuth } from '@/context/auth'
 import { useLocationBroadcast } from '@/hooks/useLocationBroadcast'
+import { useMoverLocationPolling } from '@/hooks/useMoverLocationPolling'
 import { client, databases } from '@/lib/appwrite'
 import type { RealtimeResponseEvent, Models } from 'appwrite'
 import { Query } from 'appwrite'
@@ -64,21 +65,49 @@ export default function ActiveMovePage() {
     moveId: (move?.$id as string) || undefined,
   })
 
-  // Track own position for the map marker
+  // ── Track own position for the map marker ─────────────────
+  // Primary: browser geolocation API (direct, lowest latency)
+  const [geoError, setGeoError] = useState<string | null>(null)
+
   useEffect(() => {
-    if (!navigator.geolocation) return
+    if (typeof navigator === 'undefined' || !navigator.geolocation) {
+      console.warn('[ActiveMove] Geolocation API not available')
+      setGeoError('not_available')
+      return
+    }
+
     const watchId = navigator.geolocation.watchPosition(
       (pos) => {
+        setGeoError(null)
         setMoverCoords({
           latitude: pos.coords.latitude,
           longitude: pos.coords.longitude,
         })
       },
-      () => {},
+      (err) => {
+        console.warn('[ActiveMove] Geolocation error:', err.code, err.message)
+        setGeoError(err.message)
+      },
       { enableHighAccuracy: true, maximumAge: 5_000, timeout: 15_000 }
     )
+
     return () => navigator.geolocation.clearWatch(watchId)
   }, [])
+
+  // Fallback: poll own location from DB (what useLocationBroadcast writes)
+  // Only activates when direct geolocation fails or hasn't provided data yet
+  const { lastLocation: polledLocation } = useMoverLocationPolling({
+    moverProfileId: moverProfileId,
+    enabled: !!moverProfileId && !moverCoords && phase !== 'completed',
+    intervalMs: 3_000,
+    onLocationUpdate: useCallback((location: { latitude: number; longitude: number }) => {
+      // Only use polled location if direct geo hasn't set coords yet
+      setMoverCoords((prev) => {
+        if (prev) return prev // Direct geo already working — don't overwrite
+        return { latitude: location.latitude, longitude: location.longitude }
+      })
+    }, []),
+  })
 
   // ── Fetch the active move from server API ─────────────────
   // Uses admin SDK to bypass permission issues with relationship fields
