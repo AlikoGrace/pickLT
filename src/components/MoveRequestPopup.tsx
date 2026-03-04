@@ -6,7 +6,6 @@ import { useAuth } from '@/context/auth'
 import { client, databases } from '@/lib/appwrite'
 import { Query } from 'appwrite'
 import type { RealtimeResponseEvent, Models } from 'appwrite'
-import Link from 'next/link'
 import GallerySlider from '@/components/GallerySlider'
 import {
   MapPinIcon,
@@ -17,6 +16,10 @@ import {
   CubeIcon,
   UserGroupIcon,
   EyeIcon,
+  ArrowLeftIcon,
+  HomeIcon,
+  CalendarIcon,
+  CheckCircleIcon,
 } from '@heroicons/react/24/outline'
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || ''
@@ -217,6 +220,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
   const [isAccepting, setIsAccepting] = useState(false)
   const [isDeclining, setIsDeclining] = useState(false)
   const [countdown, setCountdown] = useState<number>(180)
+  const [showDetails, setShowDetails] = useState(false)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
   const alertRef = useRef<{ play: () => void; stop: () => void } | null>(null)
   const incomingRef = useRef<IncomingRequest | null>(null)
@@ -250,6 +254,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
         if (prev <= 1) {
           alertRef.current?.stop()
           setIncoming(null)
+          setShowDetails(false)
           return 0
         }
         return prev - 1
@@ -397,6 +402,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
       })
       if (res.ok) {
         setIncoming(null)
+        setShowDetails(false)
         router.push('/active-move')
       } else {
         const errData = await res.json().catch(() => ({}))
@@ -420,6 +426,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
         body: JSON.stringify({ requestId: incoming.requestId }),
       }).catch(() => {})
       setIncoming(null)
+      setShowDetails(false)
     } finally {
       setIsDeclining(false)
     }
@@ -492,7 +499,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
               <GallerySlider
                 galleryImgs={galleryImages}
                 ratioClass="aspect-w-16 aspect-h-9"
-                href={move?.handle ? `/job-details/${move.handle}` : '#'}
+                href="#"
                 imageClass="rounded-none"
                 galleryClass="rounded-none"
                 navigation={galleryImages.length > 1}
@@ -599,15 +606,15 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
 
           {/* Action Buttons */}
           <div className="px-4 pb-4 space-y-3">
-            {/* View Details link */}
-            {move?.handle && (
-              <Link
-                href={`/job-details/${move.handle}`}
+            {/* View Details button */}
+            {move && (
+              <button
+                onClick={() => setShowDetails(true)}
                 className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-medium text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-xl transition-colors"
               >
                 <EyeIcon className="w-4 h-4" />
                 View Full Details
-              </Link>
+              </button>
             )}
             <div className="flex gap-3">
             <button
@@ -635,6 +642,195 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
           </div>
         </div>
       </div>
+
+      {/* ── Full Details Overlay ─────────────────────────── */}
+      {showDetails && move && (
+        <div className="fixed inset-0 z-[101] flex flex-col bg-white dark:bg-neutral-900 animate-in slide-in-from-right duration-200">
+          {/* Sticky header */}
+          <div className="sticky top-0 z-10 flex items-center gap-3 border-b border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-4 py-3">
+            <button
+              onClick={() => setShowDetails(false)}
+              className="p-1.5 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+            >
+              <ArrowLeftIcon className="w-5 h-5 text-neutral-700 dark:text-neutral-300" />
+            </button>
+            <div className="flex-1 min-w-0">
+              <p className="font-semibold text-neutral-900 dark:text-white truncate">Move Details</p>
+              <p className="text-xs text-neutral-500">
+                Respond within <span className="font-bold text-red-500">{countdown}s</span>
+              </p>
+            </div>
+            <button
+              onClick={() => setShowDetails(false)}
+              className="p-1.5 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+            >
+              <XMarkIcon className="w-5 h-5 text-neutral-500" />
+            </button>
+          </div>
+
+          {/* Scrollable content */}
+          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-6">
+            {/* Price banner */}
+            {move.estimatedPrice != null && move.estimatedPrice > 0 && (
+              <div className="flex items-center justify-between p-4 bg-green-50 dark:bg-green-900/20 rounded-2xl border border-green-200 dark:border-green-800">
+                <span className="text-sm font-medium text-green-700 dark:text-green-300">Your earnings</span>
+                <span className="text-3xl font-bold text-green-700 dark:text-green-300">€{move.estimatedPrice}</span>
+              </div>
+            )}
+
+            {/* Move type & date */}
+            <div className="bg-neutral-50 dark:bg-neutral-800 rounded-2xl p-4 space-y-3">
+              <h3 className="text-sm font-semibold text-neutral-900 dark:text-white">Move Info</h3>
+              <div className="space-y-2">
+                <div className="flex items-center gap-3 text-sm">
+                  <TruckIcon className="w-4 h-4 text-neutral-400 shrink-0" />
+                  <span className="text-neutral-600 dark:text-neutral-300">{formatLabel(move.moveType)} · {move.moveCategory === 'instant' ? 'Instant' : 'Scheduled'}</span>
+                </div>
+                {move.moveDate && (
+                  <div className="flex items-center gap-3 text-sm">
+                    <CalendarIcon className="w-4 h-4 text-neutral-400 shrink-0" />
+                    <span className="text-neutral-600 dark:text-neutral-300">{formatDate(move.moveDate)}</span>
+                  </div>
+                )}
+                {move.homeType && (
+                  <div className="flex items-center gap-3 text-sm">
+                    <HomeIcon className="w-4 h-4 text-neutral-400 shrink-0" />
+                    <span className="text-neutral-600 dark:text-neutral-300">{formatLabel(move.homeType)}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Locations */}
+            <div className="bg-neutral-50 dark:bg-neutral-800 rounded-2xl p-4 space-y-4">
+              <h3 className="text-sm font-semibold text-neutral-900 dark:text-white">Locations</h3>
+              <div className="flex items-start gap-3">
+                <div className="mt-1 w-7 h-7 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center shrink-0">
+                  <MapPinIcon className="w-3.5 h-3.5 text-green-600" />
+                </div>
+                <div>
+                  <p className="text-[10px] font-medium uppercase tracking-wider text-neutral-400">Pickup</p>
+                  <p className="text-sm font-semibold text-neutral-900 dark:text-white">{pickupDisplay}</p>
+                </div>
+              </div>
+              <div className="ml-3 w-px h-3 bg-neutral-300 dark:bg-neutral-600" />
+              <div className="flex items-start gap-3">
+                <div className="mt-1 w-7 h-7 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center shrink-0">
+                  <MapPinIcon className="w-3.5 h-3.5 text-red-600" />
+                </div>
+                <div>
+                  <p className="text-[10px] font-medium uppercase tracking-wider text-neutral-400">Drop-off</p>
+                  <p className="text-sm font-semibold text-neutral-900 dark:text-white">{dropoffDisplay}</p>
+                </div>
+              </div>
+              {(move.routeDistanceMeters || move.routeDurationSeconds) && (
+                <div className="flex items-center gap-3 pt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                  {move.routeDistanceMeters && (
+                    <span className="flex items-center gap-1">
+                      <MapPinIcon className="w-3.5 h-3.5" />
+                      {formatDistance(move.routeDistanceMeters)}
+                    </span>
+                  )}
+                  {move.routeDurationSeconds && (
+                    <span className="flex items-center gap-1">
+                      <ClockIcon className="w-3.5 h-3.5" />
+                      ~{formatDuration(move.routeDurationSeconds)}
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Details grid */}
+            <div className="bg-neutral-50 dark:bg-neutral-800 rounded-2xl p-4 space-y-3">
+              <h3 className="text-sm font-semibold text-neutral-900 dark:text-white">Details</h3>
+              <div className="grid grid-cols-2 gap-3">
+                {move.totalItemCount != null && move.totalItemCount > 0 && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <CubeIcon className="w-4 h-4 text-neutral-400" />
+                    <span className="text-neutral-600 dark:text-neutral-300">{move.totalItemCount} items</span>
+                  </div>
+                )}
+                {move.totalWeightKg != null && move.totalWeightKg > 0 && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <CubeIcon className="w-4 h-4 text-neutral-400" />
+                    <span className="text-neutral-600 dark:text-neutral-300">{move.totalWeightKg} kg</span>
+                  </div>
+                )}
+                {move.crewSize && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <UserGroupIcon className="w-4 h-4 text-neutral-400" />
+                    <span className="text-neutral-600 dark:text-neutral-300">{move.crewSize} movers</span>
+                  </div>
+                )}
+                {move.vehicleType && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <TruckIcon className="w-4 h-4 text-neutral-400" />
+                    <span className="text-neutral-600 dark:text-neutral-300">{formatLabel(move.vehicleType)}</span>
+                  </div>
+                )}
+              </div>
+              {move.packingServiceLevel && (
+                <div className="flex items-center gap-2 text-sm pt-1">
+                  <CheckCircleIcon className="w-4 h-4 text-neutral-400" />
+                  <span className="text-neutral-600 dark:text-neutral-300">Packing: {formatLabel(move.packingServiceLevel)}</span>
+                </div>
+              )}
+              {move.additionalServices && move.additionalServices.length > 0 && (
+                <div className="pt-1">
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-1.5">Additional services</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {move.additionalServices.map((s, i) => (
+                      <span key={i} className="text-xs px-2 py-0.5 bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 rounded-full">
+                        {formatLabel(s)}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {move.contactFullName && (
+                <div className="pt-2 border-t border-neutral-200 dark:border-neutral-700">
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400">Client</p>
+                  <p className="text-sm font-medium text-neutral-900 dark:text-white">{move.contactFullName}</p>
+                </div>
+              )}
+            </div>
+
+            {/* Gallery */}
+            {galleryImages.length > 0 && (
+              <div className="space-y-2">
+                <h3 className="text-sm font-semibold text-neutral-900 dark:text-white">Photos</h3>
+                <div className="grid grid-cols-2 gap-2">
+                  {galleryImages.map((url, i) => (
+                    <div key={i} className="relative aspect-[4/3] rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-800">
+                      <img src={url} alt={`Photo ${i + 1}`} className="w-full h-full object-cover" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Sticky bottom action bar */}
+          <div className="sticky bottom-0 border-t border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-4 py-3 flex gap-3">
+            <button
+              onClick={() => { setShowDetails(false); handleDecline() }}
+              disabled={isDeclining}
+              className="flex-1 py-3 px-4 rounded-xl border-2 border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 font-semibold text-sm hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors disabled:opacity-50"
+            >
+              Decline
+            </button>
+            <button
+              onClick={() => { setShowDetails(false); handleAccept() }}
+              disabled={isAccepting}
+              className="flex-[2] py-3 px-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold text-sm transition-colors disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg shadow-green-600/30"
+            >
+              <CheckIcon className="w-5 h-5" />
+              Accept Move
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* CSS animation for the pulsing ring */}
         <style>{`
