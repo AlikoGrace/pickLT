@@ -65,6 +65,8 @@ async function verifySession(value: string | undefined): Promise<boolean> {
 const protectedRoutes = [
   '/dashboard',
   '/available-moves',
+  '/active-move',
+  '/job-details',
   '/earnings',
   '/my-crew',
   '/settings',
@@ -92,7 +94,7 @@ export default async function middleware(req: NextRequest) {
     const isValid = await verifySession(cookieValue)
     if (!isValid) {
       // Determine user type from path
-      const isMoverRoute = ['/dashboard', '/available-moves', '/earnings', '/my-crew', '/settings', '/complete-profile'].some(
+      const isMoverRoute = ['/dashboard', '/available-moves', '/active-move', '/job-details', '/earnings', '/my-crew', '/settings', '/complete-profile'].some(
         (r) => pathname === r || pathname.startsWith(`${r}/`)
       )
       const loginUrl = new URL('/login', req.url)

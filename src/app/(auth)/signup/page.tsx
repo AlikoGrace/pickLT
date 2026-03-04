@@ -61,6 +61,11 @@ function SignupContent() {
   // Redirect if authenticated AND phone is verified
   useEffect(() => {
     if (!isLoading && isAuthenticated && user?.phoneVerified) {
+      // Block client accounts from accessing the mover signup flow
+      if (isMover && user.userType === 'client') {
+        setError('Your account is registered as a client. Client accounts cannot access the mover portal. Please create a separate account to register as a mover.')
+        return
+      }
       router.replace(getRedirectUrl())
     }
   }, [isLoading, isAuthenticated, user?.phoneVerified]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -72,8 +77,8 @@ function SignupContent() {
     }
   }, [isLoading, isAuthenticated, user, step])
 
-  // Show redirecting state
-  if (!isLoading && isAuthenticated && user?.phoneVerified) {
+  // Show redirecting state (only if the user type matches the page type)
+  if (!isLoading && isAuthenticated && user?.phoneVerified && !(isMover && user.userType === 'client')) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center">
         <div className="text-center space-y-2">

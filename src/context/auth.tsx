@@ -233,8 +233,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       localStorage.setItem('picklt_pending_user_type', intendedUserType)
     }
     const origin = typeof window !== 'undefined' ? window.location.origin : ''
-    const successUrl = redirectTo ? `${origin}${redirectTo}` : `${origin}/`
-    const failureUrl = `${origin}/login`
+    // Build the OAuth success URL: land on /login so the session can be initialised
+    // and phone-verification can proceed before hitting protected routes.
+    const typeParam = intendedUserType ? `type=${intendedUserType}` : 'type=client'
+    const redirectParam = redirectTo ? `&redirect=${encodeURIComponent(redirectTo)}` : ''
+    const successUrl = `${origin}/login?${typeParam}${redirectParam}`
+    const failureUrl = `${origin}/login?${typeParam}${redirectParam}`
     account.createOAuth2Session(OAuthProvider.Google, successUrl, failureUrl)
   }
 

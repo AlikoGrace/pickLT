@@ -78,8 +78,8 @@ function LoginContent() {
     }
   }, [isLoading, isAuthenticated, user, step])
 
-  // Show redirecting state
-  if (!isLoading && isAuthenticated && user?.phoneVerified) {
+  // Show redirecting state (only if the user type matches the page type)
+  if (!isLoading && isAuthenticated && user?.phoneVerified && !(isMover && user.userType === 'client')) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center">
         <div className="text-center space-y-2">

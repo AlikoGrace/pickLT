@@ -14,10 +14,6 @@ import {
   ShieldCheckIcon,
   MapPinIcon,
   CameraIcon,
-  ClockIcon,
-  XCircleIcon,
-  ExclamationTriangleIcon,
-  ArrowPathIcon,
 } from '@heroicons/react/24/outline'
 
 const VEHICLE_TYPES = [
@@ -60,7 +56,6 @@ export default function CompleteProfilePage() {
   const { user, refreshProfile, updateUser } = useAuth()
   const router = useRouter()
 
-  // ─── Hooks (must be before any early returns) ───────────────
   const [currentStep, setCurrentStep] = useState<Step>('personal')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
@@ -91,109 +86,6 @@ export default function CompleteProfilePage() {
     baseRate: '',
     languages: [] as string[],
   })
-
-  // ─── Verification status gate ──────────────────────────────
-  // If profile already exists, show appropriate status screen
-  const verificationStatus = user?.moverDetails?.verificationStatus
-  const hasProfile = !!user?.moverDetails?.profileId
-
-  if (hasProfile && verificationStatus === 'pending_verification') {
-    return (
-      <div className="flex min-h-[70vh] items-center justify-center p-4">
-        <div className="max-w-md text-center">
-          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/30">
-            <ClockIcon className="h-10 w-10 text-amber-600 dark:text-amber-400" />
-          </div>
-          <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
-            Profile Under Review
-          </h2>
-          <p className="mt-3 text-neutral-500 dark:text-neutral-400">
-            Your mover profile has been submitted and is currently being reviewed by our team.
-            This usually takes 24–48 hours.
-          </p>
-          <div className="mt-6 rounded-xl bg-amber-50 dark:bg-amber-900/20 p-4">
-            <div className="flex items-start gap-3 text-left">
-              <ExclamationTriangleIcon className="h-5 w-5 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
-              <div className="text-sm">
-                <p className="font-medium text-amber-800 dark:text-amber-300">What happens next?</p>
-                <ul className="mt-1.5 space-y-1 text-amber-700 dark:text-amber-400">
-                  <li>• We verify your identity documents</li>
-                  <li>• We check your vehicle information</li>
-                  <li>• You&apos;ll receive a notification once approved</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div className="mt-6 flex flex-col gap-3">
-            <button
-              onClick={async () => {
-                await refreshProfile()
-                // If status changed to verified, the layout will handle redirect
-              }}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-primary-600 px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-700"
-            >
-              <ArrowPathIcon className="h-4 w-4" />
-              Check Status
-            </button>
-          </div>
-          <p className="mt-4 text-xs text-neutral-400 dark:text-neutral-500">
-            Have questions? Contact support at support@picklt.com
-          </p>
-        </div>
-      </div>
-    )
-  }
-
-  if (hasProfile && verificationStatus === 'rejected') {
-    return (
-      <div className="flex min-h-[70vh] items-center justify-center p-4">
-        <div className="max-w-md text-center">
-          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30">
-            <XCircleIcon className="h-10 w-10 text-red-600 dark:text-red-400" />
-          </div>
-          <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
-            Profile Rejected
-          </h2>
-          <p className="mt-3 text-neutral-500 dark:text-neutral-400">
-            Unfortunately, your mover profile application was not approved.
-            This may be due to incomplete or incorrect information.
-          </p>
-          <div className="mt-6 rounded-xl bg-red-50 dark:bg-red-900/20 p-4 text-left">
-            <p className="text-sm font-medium text-red-800 dark:text-red-300">Common reasons for rejection:</p>
-            <ul className="mt-1.5 space-y-1 text-sm text-red-700 dark:text-red-400">
-              <li>• Unclear or invalid identity documents</li>
-              <li>• Incomplete vehicle information</li>
-              <li>• Invalid driver&apos;s license</li>
-            </ul>
-          </div>
-          <p className="mt-4 text-sm text-neutral-500 dark:text-neutral-400">
-            Please contact support at <span className="font-medium text-primary-600">support@picklt.com</span> for more details or to reapply.
-          </p>
-        </div>
-      </div>
-    )
-  }
-
-  if (hasProfile && verificationStatus === 'suspended') {
-    return (
-      <div className="flex min-h-[70vh] items-center justify-center p-4">
-        <div className="max-w-md text-center">
-          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30">
-            <ShieldCheckIcon className="h-10 w-10 text-red-600 dark:text-red-400" />
-          </div>
-          <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
-            Account Suspended
-          </h2>
-          <p className="mt-3 text-neutral-500 dark:text-neutral-400">
-            Your mover account has been suspended. Please contact support for assistance.
-          </p>
-          <p className="mt-4 text-sm text-neutral-500 dark:text-neutral-400">
-            Email: <span className="font-medium text-primary-600">support@picklt.com</span>
-          </p>
-        </div>
-      </div>
-    )
-  }
 
   const updateForm = (updates: Partial<typeof form>) => {
     setForm((prev) => ({ ...prev, ...updates }))

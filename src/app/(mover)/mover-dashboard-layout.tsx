@@ -116,9 +116,15 @@ const MoverDashboardLayout = ({ children }: Props) => {
     )
   }
 
+  // Redirect unauthenticated users to mover login
+  if (!user) {
+    router.replace(`/login?type=mover&redirect=${encodeURIComponent(pathname)}`)
+    return null
+  }
+
   // Block client accounts from accessing the mover dashboard
-  if (user && user.userType === 'client') {
-    router.replace('/login?type=mover')
+  if (user.userType === 'client') {
+    router.replace(`/login?type=mover&redirect=${encodeURIComponent(pathname)}`)
     return null
   }
 
@@ -126,21 +132,8 @@ const MoverDashboardLayout = ({ children }: Props) => {
   // redirect them to /complete-profile (unless they are already there).
   const hasCompletedProfile = !!user?.moverDetails?.profileId
   const isOnCompleteProfilePage = pathname === '/complete-profile'
-  const verificationStatus = user?.moverDetails?.verificationStatus
 
-  // No profile at all → complete-profile wizard
   if (!hasCompletedProfile && !isOnCompleteProfilePage) {
-    router.replace('/complete-profile')
-    return null
-  }
-
-  // Profile exists but not verified → show pending/rejected/suspended screen
-  if (
-    hasCompletedProfile &&
-    verificationStatus &&
-    verificationStatus !== 'verified' &&
-    !isOnCompleteProfilePage
-  ) {
     router.replace('/complete-profile')
     return null
   }
