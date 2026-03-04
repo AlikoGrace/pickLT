@@ -292,11 +292,12 @@ export default function ActiveMovePage() {
         const res = await fetch(`/api/moves/payment-status?moveId=${move.$id}`)
         if (!res.ok) return
         const data = await res.json()
-        if (!cancelled) {
-          setPaymentAmount(data.amount ?? (move.estimatedPrice as number) ?? null)
-          setClientConfirmed(!!data.clientConfirmedAt)
-          if (data.moverConfirmedAt) setPaymentConfirmed(true)
-          if (data.status === 'completed') setPhase('completed')
+        const p = data.payment
+        if (!cancelled && p) {
+          setPaymentAmount(p.amount ?? (move.estimatedPrice as number) ?? null)
+          setClientConfirmed(!!p.clientConfirmedAt)
+          if (p.moverConfirmedAt) setPaymentConfirmed(true)
+          if (p.status === 'completed') setPhase('completed')
         }
       } catch { /* ignore */ }
     }

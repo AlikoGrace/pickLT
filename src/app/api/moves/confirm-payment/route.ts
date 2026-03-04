@@ -1,7 +1,7 @@
 import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
-import { Query } from 'node-appwrite'
+import { Query, ID } from 'node-appwrite'
 import { NextRequest, NextResponse } from 'next/server'
 
 /**
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Find the pending payment for this move
-    const payments = await databases.listDocuments(
+    let payments = await databases.listDocuments(
       APPWRITE.DATABASE_ID,
       APPWRITE.COLLECTIONS.PAYMENTS,
       [
@@ -58,11 +58,24 @@ export async function POST(request: NextRequest) {
       ]
     )
 
-    if (payments.documents.length === 0) {
-      return NextResponse.json({ error: 'No pending payment found' }, { status: 404 })
+    // If no pending payment exists, create one now
+    // (the payment record creation in update-move-status may have failed)
+    let payment = payments.documents[0]
+    if (!payment) {
+      const finalPrice = move.finalPrice || move.estimatedPrice || 0
+      payment = await databases.createDocument(
+        APPWRITE.DATABASE_ID,
+        APPWRITE.COLLECTIONS.PAYMENTS,
+        ID.unique(),
+        {
+          moveId: moveId,
+          amount: finalPrice,
+          currency: 'EUR',
+          status: 'pending',
+          paymentMethod: 'cash',
+        }
+      )
     }
-
-    const payment = payments.documents[0]
 
     // Update client confirmation
     await databases.updateDocument(
