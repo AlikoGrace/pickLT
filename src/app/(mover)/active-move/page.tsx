@@ -262,7 +262,7 @@ export default function ActiveMovePage() {
     }
 
     try {
-      await fetch('/api/mover/update-move-status', {
+      const res = await fetch('/api/mover/update-move-status', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -270,6 +270,11 @@ export default function ActiveMovePage() {
           status: phaseToStatus[nextPhase],
         }),
       })
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}))
+        alert(err.error || 'Failed to update status')
+        return
+      }
       setPhase(nextPhase)
     } catch {
       alert('Failed to update status')

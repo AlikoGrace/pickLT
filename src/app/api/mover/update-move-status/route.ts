@@ -77,21 +77,30 @@ export async function POST(request: NextRequest) {
       // Update finalPrice on the move
       updateData.finalPrice = finalPrice
 
-      // Create payment record
-      await databases.createDocument(
-        APPWRITE.DATABASE_ID,
-        APPWRITE.COLLECTIONS.PAYMENTS,
-        ID.unique(),
-        {
-          moveId: moveId,
-          clientId: typeof move.clientId === 'string' ? move.clientId : move.clientId?.$id,
-          amount: finalPrice,
-          currency: 'EUR',
-          status: 'pending',
-          paymentMethod: 'cash',
-          moverConfirmedAt: new Date().toISOString(),
-        }
-      )
+      // Resolve clientId from relationship (may be string or expanded object)
+      const resolvedClientId = typeof move.clientId === 'string'
+        ? move.clientId
+        : (move.clientId as Record<string, string>)?.$id || move.clientUserId || null
+
+      // Create payment record (non-blocking — don't let this fail the status update)
+      try {
+        await databases.createDocument(
+          APPWRITE.DATABASE_ID,
+          APPWRITE.COLLECTIONS.PAYMENTS,
+          ID.unique(),
+          {
+            moveId: moveId,
+            clientId: resolvedClientId,
+            amount: finalPrice,
+            currency: 'EUR',
+            status: 'pending',
+            paymentMethod: 'cash',
+            moverConfirmedAt: new Date().toISOString(),
+          }
+        )
+      } catch (paymentErr) {
+        console.error('Failed to create payment record:', paymentErr)
+      }
     }
 
     await databases.updateDocument(
