@@ -74,12 +74,64 @@ export async function GET(
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
+    // ── Enrich with mover profile + user info ────────────────
+    let moverProfile: Record<string, unknown> | null = null
+    let moverUserDoc: Record<string, unknown> | null = null
+
+    if (moverProfileId) {
+      try {
+        moverProfile = await databases.getDocument(
+          APPWRITE.DATABASE_ID,
+          APPWRITE.COLLECTIONS.MOVER_PROFILES,
+          moverProfileId
+        )
+      } catch {
+        // Profile may not exist
+      }
+    }
+
+    if (moverProfile) {
+      const moverUserId = typeof moverProfile.userId === 'string'
+        ? moverProfile.userId
+        : (moverProfile.userId as Record<string, string>)?.$id || null
+      if (moverUserId) {
+        try {
+          moverUserDoc = await databases.getDocument(
+            APPWRITE.DATABASE_ID,
+            APPWRITE.COLLECTIONS.USERS,
+            moverUserId
+          )
+        } catch {
+          // User doc may not exist
+        }
+      }
+    }
+
     return NextResponse.json({
       move: {
         ...move,
         moverProfileId,
         clientId,
       },
+      mover: moverProfile ? {
+        id: moverProfile.$id,
+        name: moverUserDoc?.fullName || 'Mover',
+        phone: moverUserDoc?.phone || null,
+        profilePhoto: moverUserDoc?.profilePhoto || null,
+        rating: moverProfile.rating || 0,
+        totalMoves: moverProfile.totalMoves || 0,
+        vehicleType: moverProfile.vehicleType || null,
+        vehicleBrand: moverProfile.vehicleBrand || '',
+        vehicleModel: moverProfile.vehicleModel || '',
+        vehicleName: [moverProfile.vehicleBrand, moverProfile.vehicleModel].filter(Boolean).join(' ') || 'Vehicle',
+        vehiclePlate: moverProfile.vehicleRegistration || '',
+        vehicleCapacity: moverProfile.vehicleCapacity || null,
+        crewSize: ((moverProfile.crew_members as unknown[])?.length ?? 0) + 1,
+        yearsExperience: moverProfile.yearsExperience || 0,
+        languages: moverProfile.languages || [],
+        isVerified: moverProfile.verificationStatus === 'verified',
+        baseRate: moverProfile.baseRate || 0,
+      } : null,
     })
   } catch (err) {
     console.error('GET /api/moves/by-handle/[handle] error:', err)

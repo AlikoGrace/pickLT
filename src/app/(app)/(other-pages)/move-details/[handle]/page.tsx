@@ -11,11 +11,38 @@ import {
   ArrowLeftIcon,
   HomeIcon,
   CheckCircleIcon,
+  StarIcon,
+  PhoneIcon,
+  LanguageIcon,
+  ShieldCheckIcon,
+  ClockIcon,
 } from '@heroicons/react/24/outline'
+import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
+
+// ─── Mover info shape from enriched API ──────────────────
+interface MoverInfo {
+  id: string
+  name: string
+  phone: string | null
+  profilePhoto: string | null
+  rating: number
+  totalMoves: number
+  vehicleType: string | null
+  vehicleBrand: string
+  vehicleModel: string
+  vehicleName: string
+  vehiclePlate: string
+  vehicleCapacity: string | null
+  crewSize: number
+  yearsExperience: number
+  languages: string[]
+  isVerified: boolean
+  baseRate: number
+}
 
 const formatLabel = (value: string | null | undefined): string => {
   if (!value) return 'Not specified'
@@ -146,6 +173,7 @@ export default function MoveDetailsPage() {
 
   // DB fetch state
   const [dbMove, setDbMove] = useState<StoredMove | null>(null)
+  const [moverInfo, setMoverInfo] = useState<MoverInfo | null>(null)
   const [isLoading, setIsLoading] = useState(!contextMove)
   const [error, setError] = useState<string | null>(null)
 
@@ -161,6 +189,7 @@ export default function MoveDetailsPage() {
       const data = await res.json()
       if (data.move) setDbMove(docToStoredMove(data.move))
       else setError('not_found')
+      if (data.mover) setMoverInfo(data.mover)
     } catch {
       setError('fetch_error')
     } finally {
@@ -441,6 +470,87 @@ export default function MoveDetailsPage() {
               </div>
             </div>
           </div>
+
+          {/* Assigned Mover */}
+          {moverInfo && (
+            <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm">
+              <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
+                Your Mover
+              </h3>
+              {/* Mover identity */}
+              <div className="flex items-center gap-3 mb-4">
+                <div className="relative w-12 h-12 rounded-full overflow-hidden bg-neutral-200 dark:bg-neutral-700 flex-shrink-0">
+                  {moverInfo.profilePhoto ? (
+                    <Image
+                      src={moverInfo.profilePhoto}
+                      alt={moverInfo.name}
+                      fill
+                      unoptimized
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-lg font-semibold text-neutral-500">
+                      {moverInfo.name.charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <p className="font-semibold text-neutral-900 dark:text-neutral-100 truncate">
+                      {moverInfo.name}
+                    </p>
+                    {moverInfo.isVerified && (
+                      <ShieldCheckIcon className="w-4 h-4 text-green-500 flex-shrink-0" title="Verified mover" />
+                    )}
+                  </div>
+                  <div className="flex items-center gap-1 text-sm text-neutral-500 dark:text-neutral-400">
+                    <StarIconSolid className="w-3.5 h-3.5 text-amber-400" />
+                    <span>{moverInfo.rating.toFixed(1)}</span>
+                    <span className="mx-1">&middot;</span>
+                    <span>{moverInfo.totalMoves} moves</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Vehicle info */}
+              {moverInfo.vehicleName && (
+                <InfoRow icon={TruckIcon} label="Vehicle" value={
+                  <>
+                    <span>{moverInfo.vehicleName}</span>
+                    {moverInfo.vehiclePlate && (
+                      <span className="ml-2 text-xs bg-neutral-100 dark:bg-neutral-700 px-2 py-0.5 rounded font-mono">
+                        {moverInfo.vehiclePlate}
+                      </span>
+                    )}
+                  </>
+                } />
+              )}
+              {moverInfo.vehicleType && (
+                <InfoRow label="Vehicle Type" value={formatLabel(moverInfo.vehicleType)} />
+              )}
+              {moverInfo.vehicleCapacity && (
+                <InfoRow label="Capacity" value={`${moverInfo.vehicleCapacity} kg`} />
+              )}
+
+              {/* Crew */}
+              <InfoRow icon={UsersIcon} label="Crew Size" value={`${moverInfo.crewSize} (incl. mover)`} />
+
+              {/* Experience */}
+              {moverInfo.yearsExperience > 0 && (
+                <InfoRow icon={ClockIcon} label="Experience" value={`${moverInfo.yearsExperience} year${moverInfo.yearsExperience !== 1 ? 's' : ''}`} />
+              )}
+
+              {/* Languages */}
+              {moverInfo.languages.length > 0 && (
+                <InfoRow icon={LanguageIcon} label="Languages" value={moverInfo.languages.join(', ')} />
+              )}
+
+              {/* Phone */}
+              {moverInfo.phone && (
+                <InfoRow icon={PhoneIcon} label="Phone" value={moverInfo.phone} />
+              )}
+            </div>
+          )}
 
           {/* Contact Info */}
           {contactInfo && (contactInfo.fullName || contactInfo.email || contactInfo.phoneNumber) && (
