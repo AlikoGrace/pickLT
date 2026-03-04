@@ -513,7 +513,7 @@ export default function ActiveMovePage() {
                 </p>
                 {paymentAmount && (
                   <p className="text-2xl font-bold text-primary-600">
-                    R{paymentAmount.toLocaleString()}
+                     €{paymentAmount.toLocaleString()}
                   </p>
                 )}
                 <p className="text-xs text-neutral-500 dark:text-neutral-400">
