@@ -3,7 +3,7 @@
 import { useAuth } from '@/context/auth'
 import { compressImage } from '@/utils/compressImage'
 import { useRouter } from 'next/navigation'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   TruckIcon,
   IdentificationIcon,
@@ -87,6 +87,25 @@ export default function CompleteProfilePage() {
     languages: [] as string[],
   })
 
+  // Sync form with user data once auth finishes loading
+  useEffect(() => {
+    if (user) {
+      setForm((prev) => ({
+        ...prev,
+        fullName: prev.fullName || user.fullName || '',
+        phone: prev.phone || user.phone || '',
+      }))
+    }
+  }, [user])
+
+  // Revoke blob URLs when previews change or component unmounts
+  useEffect(() => {
+    return () => {
+      if (form.driversLicensePhotoPreview) URL.revokeObjectURL(form.driversLicensePhotoPreview)
+      if (form.selfiePhotoPreview) URL.revokeObjectURL(form.selfiePhotoPreview)
+    }
+  }, [form.driversLicensePhotoPreview, form.selfiePhotoPreview])
+
   const updateForm = (updates: Partial<typeof form>) => {
     setForm((prev) => ({ ...prev, ...updates }))
   }
@@ -122,13 +141,17 @@ export default function CompleteProfilePage() {
 
   const goNext = () => {
     if (stepIdx < STEPS.length - 1) {
+      setError('')
       setCurrentStep(STEPS[stepIdx + 1].key)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }
 
   const goBack = () => {
     if (stepIdx > 0) {
+      setError('')
       setCurrentStep(STEPS[stepIdx - 1].key)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }
 
@@ -143,14 +166,17 @@ export default function CompleteProfilePage() {
         const photoFormData = new FormData()
         photoFormData.append('file', compressed)
         photoFormData.append('bucket', 'PROFILE_PHOTOS')
+        photoFormData.append('purpose', 'license')
         const uploadRes = await fetch('/api/user/upload-photo', {
           method: 'POST',
           body: photoFormData,
         })
-        if (uploadRes.ok) {
-          const uploadData = await uploadRes.json()
-          driversLicensePhotoUrl = uploadData.photoUrl
+        if (!uploadRes.ok) {
+          const uploadErr = await uploadRes.json().catch(() => ({}))
+          throw new Error(uploadErr.error || 'Failed to upload driver\'s license photo')
         }
+        const uploadData = await uploadRes.json()
+        driversLicensePhotoUrl = uploadData.photoUrl
       }
 
       // Upload selfie photo (required)
@@ -160,14 +186,19 @@ export default function CompleteProfilePage() {
         const selfieFormData = new FormData()
         selfieFormData.append('file', compressed)
         selfieFormData.append('bucket', 'PROFILE_PHOTOS')
+        selfieFormData.append('purpose', 'selfie')
         const selfieRes = await fetch('/api/user/upload-photo', {
           method: 'POST',
           body: selfieFormData,
         })
-        if (selfieRes.ok) {
-          const selfieData = await selfieRes.json()
-          selfiePhotoUrl = selfieData.photoUrl
+        if (!selfieRes.ok) {
+          const selfieErr = await selfieRes.json().catch(() => ({}))
+          throw new Error(selfieErr.error || 'Failed to upload selfie photo')
         }
+        const selfieData = await selfieRes.json()
+        selfiePhotoUrl = selfieData.photoUrl
+      } else {
+        throw new Error('Selfie photo is required for identity verification')
       }
 
       // Submit mover profile (includes personal info)
@@ -565,8 +596,12 @@ export default function CompleteProfilePage() {
                 <input
                   type="text"
                   value={form.vehicleYear}
-                  onChange={(e) => updateForm({ vehicleYear: e.target.value })}
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/\D/g, '').slice(0, 4)
+                    updateForm({ vehicleYear: val })
+                  }}
                   placeholder="e.g. 2022"
+                  inputMode="numeric"
                   maxLength={4}
                   className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
                 />
@@ -756,11 +791,13 @@ export default function CompleteProfilePage() {
               </div>
             </div>
 
-            {error && (
-              <div className="rounded-xl bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
-                {error}
-              </div>
-            )}
+          </div>
+        )}
+
+        {/* Error message — shown on all steps */}
+        {error && (
+          <div className="mt-4 rounded-xl bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
+            {error}
           </div>
         )}
 

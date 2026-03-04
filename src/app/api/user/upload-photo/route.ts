@@ -23,6 +23,7 @@ export async function POST(req: NextRequest) {
 
     const formData = await req.formData()
     const file = formData.get('file') as File | null
+    const purpose = (formData.get('purpose') as string) || 'selfie'
 
     if (!file) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 })
@@ -68,13 +69,15 @@ export async function POST(req: NextRequest) {
     // Build the public preview URL
     const photoUrl = `${APPWRITE_ENDPOINT}/storage/buckets/${APPWRITE.BUCKETS.PROFILE_PHOTOS}/files/${fileId}/view?project=${APPWRITE.PROJECT_ID}`
 
-    // Update user profile with the new photo URL
-    await databases.updateDocument(
-      APPWRITE.DATABASE_ID,
-      APPWRITE.COLLECTIONS.USERS,
-      userId,
-      { profilePhoto: photoUrl }
-    )
+    // Only update the user's profile photo for selfie uploads, not license/document uploads
+    if (purpose === 'selfie') {
+      await databases.updateDocument(
+        APPWRITE.DATABASE_ID,
+        APPWRITE.COLLECTIONS.USERS,
+        userId,
+        { profilePhoto: photoUrl }
+      )
+    }
 
     return NextResponse.json({ success: true, photoUrl })
   } catch (err) {

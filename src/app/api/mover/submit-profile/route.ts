@@ -26,6 +26,7 @@ export async function POST(req: NextRequest) {
       phone,
       driversLicense,
       driversLicensePhoto,
+      selfiePhoto,
       socialSecurityNumber,
       taxNumber,
       primaryCity,
@@ -72,6 +73,10 @@ export async function POST(req: NextRequest) {
       const formattedPhone = phone.startsWith('+') ? phone : `+${phone}`
       try { await users.updatePhone(userId, formattedPhone) } catch { /* may fail if phone already taken */ }
       userUpdates.phone = formattedPhone
+    }
+    // Set selfie photo as the user's profile photo if provided
+    if (selfiePhoto && typeof selfiePhoto === 'string') {
+      userUpdates.profilePhoto = selfiePhoto
     }
 
     // ── Check for an existing mover profile (handles re-login after partial setup) ──
