@@ -60,6 +60,38 @@ export default function CompleteProfilePage() {
   const { user, refreshProfile, updateUser } = useAuth()
   const router = useRouter()
 
+  // ─── Hooks (must be before any early returns) ───────────────
+  const [currentStep, setCurrentStep] = useState<Step>('personal')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState(false)
+  const licensePhotoRef = useRef<HTMLInputElement>(null)
+  const selfiePhotoRef = useRef<HTMLInputElement>(null)
+
+  // Form state
+  const [form, setForm] = useState({
+    fullName: user?.fullName || '',
+    phone: user?.phone || '',
+    driversLicense: '',
+    driversLicensePhoto: null as File | null,
+    driversLicensePhotoPreview: '',
+    selfiePhoto: null as File | null,
+    selfiePhotoPreview: '',
+    socialSecurityNumber: '',
+    taxNumber: '',
+    primaryCity: '',
+    primaryCountry: '',
+    vehicleBrand: '',
+    vehicleModel: '',
+    vehicleYear: '',
+    vehicleCapacity: '',
+    vehicleRegistration: '',
+    vehicleType: '' as string,
+    yearsExperience: '',
+    baseRate: '',
+    languages: [] as string[],
+  })
+
   // ─── Verification status gate ──────────────────────────────
   // If profile already exists, show appropriate status screen
   const verificationStatus = user?.moverDetails?.verificationStatus
@@ -162,37 +194,6 @@ export default function CompleteProfilePage() {
       </div>
     )
   }
-
-  const [currentStep, setCurrentStep] = useState<Step>('personal')
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState(false)
-  const licensePhotoRef = useRef<HTMLInputElement>(null)
-  const selfiePhotoRef = useRef<HTMLInputElement>(null)
-
-  // Form state
-  const [form, setForm] = useState({
-    fullName: user?.fullName || '',
-    phone: user?.phone || '',
-    driversLicense: '',
-    driversLicensePhoto: null as File | null,
-    driversLicensePhotoPreview: '',
-    selfiePhoto: null as File | null,
-    selfiePhotoPreview: '',
-    socialSecurityNumber: '',
-    taxNumber: '',
-    primaryCity: '',
-    primaryCountry: '',
-    vehicleBrand: '',
-    vehicleModel: '',
-    vehicleYear: '',
-    vehicleCapacity: '',
-    vehicleRegistration: '',
-    vehicleType: '' as string,
-    yearsExperience: '',
-    baseRate: '',
-    languages: [] as string[],
-  })
 
   const updateForm = (updates: Partial<typeof form>) => {
     setForm((prev) => ({ ...prev, ...updates }))
