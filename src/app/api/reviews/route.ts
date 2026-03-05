@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
       )
       const averageRating =
         allReviews.total > 0
-          ? Math.round((totalRating / allReviews.total) * 10) / 10
+          ? parseFloat((totalRating / allReviews.total).toFixed(1))
           : 0
 
       await databases.updateDocument(

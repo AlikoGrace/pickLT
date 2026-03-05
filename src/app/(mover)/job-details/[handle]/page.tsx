@@ -1,10 +1,6 @@
 'use client'
 
 import { Badge } from '@/shared/Badge'
-import GallerySlider from '@/components/GallerySlider'
-import { SectionHeading, SectionSubheading } from '@/components/listings/SectionHeading'
-import { Divider } from '@/shared/divider'
-import { DescriptionDetails, DescriptionList, DescriptionTerm } from '@/shared/description-list'
 import {
   MapPinIcon,
   CalendarIcon,
@@ -14,9 +10,6 @@ import {
   ArrowLeftIcon,
   HomeIcon,
   CheckCircleIcon,
-  ClockIcon,
-  PhoneIcon,
-  EnvelopeIcon,
 } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -268,249 +261,222 @@ export default function MoverMoveDetailsPage() {
   }
 
   return (
-    <div>
-      {/* GALLERY HEADER */}
-      {galleryImgs.length > 0 ? (
-        <div className="relative rounded-2xl overflow-hidden">
-          <GallerySlider
-            galleryImgs={galleryImgs}
-            ratioClass="aspect-w-16 aspect-h-9"
-            href="#"
-            imageClass="rounded-none"
-            galleryClass="rounded-none"
-            navigation={galleryImgs.length > 1}
-          />
-          <div className="absolute top-3 right-3 z-10 bg-black/50 backdrop-blur-sm text-white text-xs px-2.5 py-1 rounded-full">
-            {galleryImgs.length} photo{galleryImgs.length !== 1 ? 's' : ''}
-          </div>
-        </div>
-      ) : (
-        <div className="relative h-64 bg-neutral-100 dark:bg-neutral-800 rounded-2xl flex items-center justify-center">
-          <TruckIcon className="h-24 w-24 text-neutral-400" />
-        </div>
-      )}
-
+    <div className="pb-24 lg:pb-32 pt-4 lg:pt-8">
       {/* Back link */}
       <Link
         href="/dashboard"
-        className="inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 mt-6"
+        className="inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 mb-6"
       >
         <ArrowLeftIcon className="w-4 h-4" />
         Back to Dashboard
       </Link>
 
-      {/* MAIN */}
-      <main className="relative z-[1] mt-10 flex flex-col gap-8 lg:flex-row xl:gap-10">
-        {/* CONTENT */}
-        <div className="flex w-full flex-col gap-y-8 lg:w-3/5 xl:w-[64%] xl:gap-y-10">
-          {/* Header Section */}
-          <div className="listingSection__wrap">
-            <div className="flex items-center gap-x-3 mb-4">
-              <Badge color={getStatusBadgeColor(status)} className="text-sm">
-                {getStatusLabel(status)}
-              </Badge>
-              <span className="text-sm text-neutral-500">#{bookingCode}</span>
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-8">
+        <div className="flex-1">
+          <div className="flex items-center gap-3 mb-2">
+            <Badge color={getStatusBadgeColor(status)}>
+              {getStatusLabel(status)}
+            </Badge>
+            <span className="text-sm text-neutral-500 dark:text-neutral-400">
+              #{bookingCode}
+            </span>
+          </div>
+          <h1 className="text-2xl lg:text-3xl font-semibold text-neutral-900 dark:text-neutral-100">
+            {pickupDisplay.split(',')[0]} &rarr; {dropoffDisplay.split(',')[0]}
+          </h1>
+          <p className="text-neutral-500 dark:text-neutral-400 mt-1">
+            {formatLabel(moveType)} Move &middot; {formatDate(moveDate)}
+          </p>
+        </div>
+        <div className="text-right">
+          <p className="text-sm text-neutral-500 dark:text-neutral-400">Earnings</p>
+          <p className="text-3xl font-bold text-green-600 dark:text-green-400">
+            &euro;{totalPrice.toFixed(2)}
+          </p>
+        </div>
+      </div>
+
+      {/* Gallery */}
+      {galleryImgs.length > 0 && (
+        <div className="grid grid-cols-4 gap-2 rounded-2xl overflow-hidden mb-10">
+          <div className="col-span-4 sm:col-span-2 sm:row-span-2 relative aspect-[4/3]">
+            <Image
+              src={galleryImgs[0]}
+              alt="Move photo"
+              fill
+              unoptimized
+              className="object-cover"
+            />
+          </div>
+          {galleryImgs.slice(1, 5).map((img, i) => (
+            <div key={i} className="hidden sm:block relative aspect-[4/3]">
+              <Image
+                src={img}
+                alt={`Move photo ${i + 2}`}
+                fill
+                unoptimized
+                className="object-cover"
+              />
             </div>
-            <h1 className="text-2xl font-semibold sm:text-3xl lg:text-4xl">
-              {pickupDisplay.split(',')[0]} &rarr; {dropoffDisplay.split(',')[0]}
-            </h1>
-            <div className="mt-4 flex flex-wrap items-center gap-4 text-neutral-500 dark:text-neutral-400">
-              <div className="flex items-center gap-x-2">
-                <TruckIcon className="size-5" />
-                <span>{formatLabel(moveType)} Move</span>
+          ))}
+        </div>
+      )}
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Left column - Details */}
+        <div className="lg:col-span-2 space-y-8">
+          {/* Locations */}
+          <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm">
+            <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
+              Locations
+            </h2>
+            <div className="space-y-4">
+              <div className="flex items-start gap-3">
+                <div className="mt-1 w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center flex-shrink-0">
+                  <MapPinIcon className="w-4 h-4 text-green-600" />
+                </div>
+                <div>
+                  <p className="text-sm text-neutral-500 dark:text-neutral-400">Pickup</p>
+                  <p className="font-medium text-neutral-900 dark:text-neutral-100">
+                    {pickupDisplay}
+                  </p>
+                  {pickupApartmentUnit && (
+                    <p className="text-sm text-neutral-500">Apt/Unit: {pickupApartmentUnit}</p>
+                  )}
+                  {floorLevel && (
+                    <p className="text-sm text-neutral-500">Floor: {formatLabel(floorLevel)}</p>
+                  )}
+                  {elevatorAvailable && (
+                    <p className="text-sm text-green-600 flex items-center gap-1">
+                      <CheckCircleIcon className="w-3.5 h-3.5" /> Elevator available
+                    </p>
+                  )}
+                  {parkingSituation && (
+                    <p className="text-sm text-neutral-500">Parking: {formatLabel(parkingSituation)}</p>
+                  )}
+                </div>
               </div>
-              <div className="flex items-center gap-x-2">
-                <CalendarIcon className="size-5" />
-                <span>{formatDate(moveDate)}</span>
-              </div>
-              <div className="flex items-center gap-x-2">
-                <CubeIcon className="size-5" />
-                <span>{inventoryCount} items</span>
-              </div>
-              <div className="flex items-center gap-x-2">
-                <UsersIcon className="size-5" />
-                <span>{crewSize ? `${crewSize} movers` : 'Crew TBD'}</span>
+
+              <div className="ml-4 border-l-2 border-dashed border-neutral-200 dark:border-neutral-700 h-4" />
+
+              <div className="flex items-start gap-3">
+                <div className="mt-1 w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center flex-shrink-0">
+                  <MapPinIcon className="w-4 h-4 text-red-600" />
+                </div>
+                <div>
+                  <p className="text-sm text-neutral-500 dark:text-neutral-400">Drop-off</p>
+                  <p className="font-medium text-neutral-900 dark:text-neutral-100">
+                    {dropoffDisplay}
+                  </p>
+                  {dropoffApartmentUnit && (
+                    <p className="text-sm text-neutral-500">Apt/Unit: {dropoffApartmentUnit}</p>
+                  )}
+                  {dropoffFloorLevel && (
+                    <p className="text-sm text-neutral-500">Floor: {formatLabel(dropoffFloorLevel)}</p>
+                  )}
+                  {dropoffElevatorAvailable && (
+                    <p className="text-sm text-green-600 flex items-center gap-1">
+                      <CheckCircleIcon className="w-3.5 h-3.5" /> Elevator available
+                    </p>
+                  )}
+                  {dropoffParkingSituation && (
+                    <p className="text-sm text-neutral-500">Parking: {formatLabel(dropoffParkingSituation)}</p>
+                  )}
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Addresses Section */}
-          <div className="listingSection__wrap">
-            <SectionHeading>Move Addresses</SectionHeading>
-            <div className="grid gap-6 md:grid-cols-2">
-              {/* Pickup Address */}
-              <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-700">
-                <div className="flex items-center gap-x-2 mb-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-900/30">
-                    <HomeIcon className="h-5 w-5 text-primary-600" />
-                  </div>
-                  <span className="font-semibold">Pickup Location</span>
-                </div>
-                <p className="text-neutral-700 dark:text-neutral-300">{pickupDisplay}</p>
-                {pickupApartmentUnit && (
-                  <p className="text-sm text-neutral-500 mt-1">Unit: {pickupApartmentUnit}</p>
-                )}
-                <div className="mt-3 space-y-1 text-sm text-neutral-500">
-                  <p>Home type: {formatLabel(homeType)}</p>
-                  <p>Floor: {formatLabel(floorLevel)}</p>
-                  <p>Elevator: {elevatorAvailable ? 'Yes' : 'No'}</p>
-                  <p>Parking: {formatLabel(parkingSituation)}</p>
-                </div>
-              </div>
-
-              {/* Drop-off Address */}
-              <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-700">
-                <div className="flex items-center gap-x-2 mb-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
-                    <MapPinIcon className="h-5 w-5 text-green-600" />
-                  </div>
-                  <span className="font-semibold">Drop-off Location</span>
-                </div>
-                <p className="text-neutral-700 dark:text-neutral-300">{dropoffDisplay}</p>
-                {dropoffApartmentUnit && (
-                  <p className="text-sm text-neutral-500 mt-1">Unit: {dropoffApartmentUnit}</p>
-                )}
-                <div className="mt-3 space-y-1 text-sm text-neutral-500">
-                  <p>Floor: {formatLabel(dropoffFloorLevel)}</p>
-                  <p>Elevator: {dropoffElevatorAvailable ? 'Yes' : 'No'}</p>
-                  <p>Parking: {formatLabel(dropoffParkingSituation)}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Services & Details Section */}
-          <div className="listingSection__wrap">
-            <SectionHeading>Services &amp; Details</SectionHeading>
-            <SectionSubheading>What&apos;s included in this move</SectionSubheading>
-            <Divider className="w-14!" />
-
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              <div className="flex items-start gap-x-3">
-                <TruckIcon className="h-6 w-6 text-neutral-500 shrink-0" />
-                <div>
-                  <span className="font-medium">Vehicle</span>
-                  <p className="text-sm text-neutral-500">{formatLabel(vehicleType)}</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-x-3">
-                <UsersIcon className="h-6 w-6 text-neutral-500 shrink-0" />
-                <div>
-                  <span className="font-medium">Crew Size</span>
-                  <p className="text-sm text-neutral-500">{crewSize ? `${crewSize} movers` : 'Not specified'}</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-x-3">
-                <ClockIcon className="h-6 w-6 text-neutral-500 shrink-0" />
-                <div>
-                  <span className="font-medium">Arrival Window</span>
-                  <p className="text-sm text-neutral-500">{formatLabel(arrivalWindow)}</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-x-3">
-                <CubeIcon className="h-6 w-6 text-neutral-500 shrink-0" />
-                <div>
-                  <span className="font-medium">Packing Service</span>
-                  <p className="text-sm text-neutral-500">{formatLabel(packingServiceLevel)}</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-x-3">
-                <HomeIcon className="h-6 w-6 text-neutral-500 shrink-0" />
-                <div>
-                  <span className="font-medium">Home Type</span>
-                  <p className="text-sm text-neutral-500">{formatLabel(homeType)}</p>
-                </div>
-              </div>
-              {storageWeeks > 0 && (
-                <div className="flex items-start gap-x-3">
-                  <HomeIcon className="h-6 w-6 text-neutral-500 shrink-0" />
-                  <div>
-                    <span className="font-medium">Storage</span>
-                    <p className="text-sm text-neutral-500">{storageWeeks} weeks</p>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {additionalServices.length > 0 && (
-              <>
-                <Divider className="w-14!" />
-                <div>
-                  <span className="font-medium">Additional Services</span>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {additionalServices.map((service) => (
-                      <span
-                        key={service}
-                        className="inline-flex items-center gap-x-1 rounded-full bg-neutral-100 px-3 py-1 text-sm dark:bg-neutral-800"
-                      >
-                        <CheckCircleIcon className="h-4 w-4 text-green-500" />
-                        {formatLabel(service)}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </>
+          {/* Move Details */}
+          <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm">
+            <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
+              Move Details
+            </h2>
+            <InfoRow icon={TruckIcon} label="Move Type" value={formatLabel(moveType)} />
+            <InfoRow icon={CalendarIcon} label="Move Date" value={formatDate(moveDate)} />
+            <InfoRow icon={HomeIcon} label="Home Type" value={formatLabel(homeType)} />
+            <InfoRow icon={CubeIcon} label="Items" value={`${inventoryCount} items`} />
+            <InfoRow icon={TruckIcon} label="Vehicle" value={formatLabel(vehicleType)} />
+            <InfoRow icon={UsersIcon} label="Crew" value={crewSize ? `${crewSize} movers` : 'Standard'} />
+            {arrivalWindow && (
+              <InfoRow icon={CalendarIcon} label="Arrival Window" value={formatLabel(arrivalWindow)} />
             )}
           </div>
 
-          {/* Contact Section */}
-          {contactInfo && (contactInfo.fullName || contactInfo.email || contactInfo.phoneNumber) && (
-            <div className="listingSection__wrap">
-              <SectionHeading>Client Contact</SectionHeading>
-              <div className="space-y-4">
-                {contactInfo.fullName && (
-                  <div className="flex items-center gap-x-3">
-                    <UsersIcon className="h-5 w-5 text-neutral-500" />
-                    <span>{contactInfo.fullName}</span>
-                  </div>
-                )}
-                {contactInfo.phoneNumber && (
-                  <div className="flex items-center gap-x-3">
-                    <PhoneIcon className="h-5 w-5 text-neutral-500" />
-                    <span>{contactInfo.phoneNumber}</span>
-                  </div>
-                )}
-                {contactInfo.email && (
-                  <div className="flex items-center gap-x-3">
-                    <EnvelopeIcon className="h-5 w-5 text-neutral-500" />
-                    <span>{contactInfo.email}</span>
-                  </div>
-                )}
-              </div>
+          {/* Services */}
+          {(packingServiceLevel || additionalServices.length > 0 || storageWeeks > 0) && (
+            <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm">
+              <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
+                Services
+              </h2>
+              {packingServiceLevel && (
+                <InfoRow label="Packing Service" value={formatLabel(packingServiceLevel)} />
+              )}
+              {additionalServices.length > 0 && (
+                <InfoRow
+                  label="Additional Services"
+                  value={additionalServices.map(formatLabel).join(', ')}
+                />
+              )}
+              {storageWeeks > 0 && (
+                <InfoRow label="Storage" value={`${storageWeeks} weeks`} />
+              )}
             </div>
           )}
         </div>
 
-        {/* SIDEBAR */}
-        <div className="grow">
-          <div className="sticky top-5">
-            <div className="listingSection__wrap sm:shadow-xl">
-              {/* EARNINGS */}
-              <div className="flex flex-col gap-y-2">
-                <span className="text-sm text-neutral-500">Earnings</span>
-                <span className="text-3xl font-semibold text-green-600 dark:text-green-400">&euro;{totalPrice.toFixed(2)}</span>
+        {/* Right sidebar - Summary & Contact */}
+        <div className="space-y-6">
+          {/* Earnings Summary */}
+          <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm sticky top-24">
+            <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
+              Summary
+            </h3>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-neutral-500 dark:text-neutral-400">Booking Code</span>
+                <span className="font-medium text-neutral-900 dark:text-neutral-100">#{bookingCode}</span>
               </div>
-
-              <Divider />
-
-              <DescriptionList>
-                <DescriptionTerm>Booking Code</DescriptionTerm>
-                <DescriptionDetails className="sm:text-right font-mono">#{bookingCode}</DescriptionDetails>
-                <DescriptionTerm>Status</DescriptionTerm>
-                <DescriptionDetails className="sm:text-right">
-                  <Badge color={getStatusBadgeColor(status)}>{getStatusLabel(status)}</Badge>
-                </DescriptionDetails>
-                <DescriptionTerm>Created</DescriptionTerm>
-                <DescriptionDetails className="sm:text-right">
+              <div className="flex justify-between">
+                <span className="text-neutral-500 dark:text-neutral-400">Status</span>
+                <Badge color={getStatusBadgeColor(status)} className="text-xs">
+                  {getStatusLabel(status)}
+                </Badge>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-neutral-500 dark:text-neutral-400">Created</span>
+                <span className="font-medium text-neutral-900 dark:text-neutral-100">
                   {new Date(createdAt).toLocaleDateString('en-GB', { month: 'short', day: 'numeric', year: 'numeric' })}
-                </DescriptionDetails>
-                <DescriptionTerm>Move Date</DescriptionTerm>
-                <DescriptionDetails className="sm:text-right">{formatDate(moveDate)}</DescriptionDetails>
-              </DescriptionList>
+                </span>
+              </div>
+              <div className="my-4 border-t border-neutral-100 dark:border-neutral-700" />
+              <div className="flex justify-between text-base">
+                <span className="font-semibold text-neutral-900 dark:text-neutral-100">Earnings</span>
+                <span className="font-bold text-green-600 dark:text-green-400">&euro;{totalPrice.toFixed(2)}</span>
+              </div>
             </div>
           </div>
+
+          {/* Client Contact Info */}
+          {contactInfo && (contactInfo.fullName || contactInfo.email || contactInfo.phoneNumber) && (
+            <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm">
+              <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
+                Client Contact
+              </h3>
+              {contactInfo.fullName && (
+                <InfoRow label="Name" value={contactInfo.fullName} />
+              )}
+              {contactInfo.email && (
+                <InfoRow label="Email" value={contactInfo.email} />
+              )}
+              {contactInfo.phoneNumber && (
+                <InfoRow label="Phone" value={contactInfo.phoneNumber} />
+              )}
+            </div>
+          )}
         </div>
-      </main>
+      </div>
     </div>
   )
 }

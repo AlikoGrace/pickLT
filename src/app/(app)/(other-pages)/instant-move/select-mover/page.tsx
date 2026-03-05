@@ -29,7 +29,7 @@ interface Mover {
   profilePhoto?: string
   profilePhotoUrl?: string
   rating?: number
-  totalCompletedMoves?: number
+  totalMoves?: number
   vehicleType?: string
   vehicleMake?: string
   vehicleModel?: string
@@ -210,7 +210,7 @@ const SelectMoverPage = () => {
         name: mover.businessName || mover.fullName || 'Mover',
         profilePhoto: mover.profilePhotoUrl || mover.profilePhoto || '',
         rating: mover.rating || 0,
-        totalMoves: mover.totalCompletedMoves || 0,
+        totalMoves: mover.totalMoves || 0,
         vehicleType,
         vehicleName: [mover.vehicleMake, mover.vehicleModel].filter(Boolean).join(' ') || VEHICLE_LABELS[vehicleType] || 'Vehicle',
         vehiclePlate: mover.vehiclePlateNumber || '',
