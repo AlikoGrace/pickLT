@@ -250,8 +250,8 @@ const SelectMoverPage = () => {
     }))
 
     // ── Upload photos to storage first ──────────────────────
-    let coverPhotoId: string | null = null
-    let galleryPhotoIds: string[] = []
+    let uploadedCoverPhotoId: string | null = null
+    let uploadedGalleryPhotoIds: string[] = []
 
     if (coverPhotoId || galleryPhotoIds.length > 0) {
       try {
@@ -266,8 +266,8 @@ const SelectMoverPage = () => {
 
         if (photoRes.ok) {
           const photoData = await photoRes.json()
-          coverPhotoId = photoData.coverPhotoId
-          galleryPhotoIds = photoData.galleryPhotoIds || []
+          uploadedCoverPhotoId = photoData.coverPhotoId
+          uploadedGalleryPhotoIds = photoData.galleryPhotoIds || []
         } else {
           console.error('Photo upload failed:', await photoRes.text())
         }
@@ -294,8 +294,8 @@ const SelectMoverPage = () => {
           customItems: customItems.map((c) => JSON.stringify(c)),
           totalItemCount: inventoryCount,
           estimatedPrice: mover.price,
-          coverPhotoId,
-          galleryPhotoIds,
+          coverPhotoId: uploadedCoverPhotoId,
+          galleryPhotoIds: uploadedGalleryPhotoIds,
           routeDistanceMeters: routeDistance || null,
           routeDurationSeconds: routeDuration || null,
         }),

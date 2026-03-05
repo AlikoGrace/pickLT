@@ -686,7 +686,7 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
         try {
           localStorage.setItem(
             DRAFT_KEY,
-            JSON.stringify({ ...draft, coverPhoto: null, galleryPhotos: [] })
+            JSON.stringify({ ...draft, coverPhotoId: null, galleryPhotoIds: [] })
           )
         } catch {
           // Still too large — skip saving

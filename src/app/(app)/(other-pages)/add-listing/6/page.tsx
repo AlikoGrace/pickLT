@@ -335,8 +335,8 @@ const Page = () => {
         <input type="hidden" name="additionalServices" value={JSON.stringify(additionalServices)} />
         <input type="hidden" name="storageWeeksValue" value={storageWeeks} />
         <input type="hidden" name="disposalItemsValue" value={disposalItems} />
-        <input type="hidden" name="coverPhoto" value={coverPhotoId || ''} />
-        <input type="hidden" name="galleryPhotos" value={JSON.stringify(galleryPhotoIds)} />
+        <input type="hidden" name="coverPhotoId" value={coverPhotoId || ''} />
+        <input type="hidden" name="galleryPhotoIds" value={JSON.stringify(galleryPhotoIds)} />
       </Form>
     </>
   )
