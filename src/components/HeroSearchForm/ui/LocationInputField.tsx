@@ -61,40 +61,36 @@ async function searchLocations(
 
   try {
     const params: Record<string, string> = {
+      q: query,
       access_token: MAPBOX_TOKEN,
       autocomplete: 'true',
-      fuzzyMatch: 'true',
-      types: 'address,poi,poi.landmark,postcode,neighborhood,locality,place,district,region,country',
+      types: 'address,street,postcode,neighborhood,locality,place,district,region,country',
       limit: '10',
       language: 'en',
     }
 
-    // Proximity bias hugely improves POI / building relevance
+    // Proximity bias improves relevance for nearby results
     if (proximity) {
       params.proximity = `${proximity.longitude},${proximity.latitude}`
     }
 
     const response = await fetch(
-      `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?` +
+      `https://api.mapbox.com/search/geocode/v6/forward?` +
         new URLSearchParams(params)
     )
     if (!response.ok) throw new Error('Failed to fetch locations')
 
     const data = await response.json()
 
-    return data.features.map((feature: any) => {
-      const isAddress = feature.place_type?.includes('address')
-      const displayName = isAddress
-        ? (feature.address ? `${feature.address} ${feature.text}` : feature.text)
-        : feature.text
-
+    return (data.features || []).map((feature: any) => {
+      const props = feature.properties || {}
       return {
-        id: feature.id,
-        name: displayName,
-        fullAddress: feature.place_name,
+        id: props.mapbox_id || feature.id,
+        name: props.name_preferred || props.name || '',
+        fullAddress: props.full_address || props.place_formatted || props.name || '',
         coordinates: {
-          latitude: feature.center[1],
-          longitude: feature.center[0],
+          latitude: props.coordinates?.latitude ?? feature.geometry?.coordinates?.[1],
+          longitude: props.coordinates?.longitude ?? feature.geometry?.coordinates?.[0],
         },
       }
     })
@@ -112,11 +108,12 @@ async function reverseGeocode(
   if (!MAPBOX_TOKEN) return null
   try {
     const res = await fetch(
-      `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?` +
+      `https://api.mapbox.com/search/geocode/v6/reverse?` +
         new URLSearchParams({
+          longitude: String(lng),
+          latitude: String(lat),
           access_token: MAPBOX_TOKEN,
-          types: 'address,poi,place',
-          limit: '1',
+          types: 'address,street,place',
           language: 'en',
         })
     )
@@ -124,10 +121,11 @@ async function reverseGeocode(
     const data = await res.json()
     const f = data.features?.[0]
     if (!f) return null
+    const props = f.properties || {}
     return {
-      id: f.id,
-      name: f.text,
-      fullAddress: f.place_name,
+      id: props.mapbox_id || f.id,
+      name: props.name_preferred || props.name || '',
+      fullAddress: props.full_address || props.place_formatted || props.name || '',
       coordinates: { latitude: lat, longitude: lng },
     }
   } catch {

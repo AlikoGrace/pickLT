@@ -255,6 +255,9 @@ const SelectMoverPage = () => {
 
     if (coverPhotoId || galleryPhotoIds.length > 0) {
       try {
+        console.log(
+          `[select-mover] Uploading photos — cover: ${coverPhotoId ? 'yes' : 'no'}, gallery: ${galleryPhotoIds.length}`
+        )
         const photoRes = await fetch('/api/moves/upload-photos', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -266,39 +269,47 @@ const SelectMoverPage = () => {
 
         if (photoRes.ok) {
           const photoData = await photoRes.json()
-          uploadedCoverPhotoId = photoData.coverPhotoId
-          uploadedGalleryPhotoIds = photoData.galleryPhotoIds || []
+          uploadedCoverPhotoId = photoData.coverPhotoId ?? null
+          uploadedGalleryPhotoIds = photoData.galleryPhotoIds ?? []
+          console.log(
+            `[select-mover] Upload result — cover: ${uploadedCoverPhotoId ? 'URL ok' : 'null'}, gallery: ${uploadedGalleryPhotoIds.length} URLs`
+          )
         } else {
-          console.error('Photo upload failed:', await photoRes.text())
+          const errText = await photoRes.text()
+          console.error(`[select-mover] Photo upload failed (${photoRes.status}):`, errText)
         }
       } catch (err) {
-        console.error('Failed to upload photos:', err)
+        console.error('[select-mover] Failed to upload photos:', err)
       }
     }
 
     // ── Create the move + move_request via API ──────────────
     try {
+      const createBody = {
+        moverProfileId: mover.id,
+        pickupLocation: pickupLocation || null,
+        pickupLatitude: pickupCoordinates?.latitude ?? null,
+        pickupLongitude: pickupCoordinates?.longitude ?? null,
+        dropoffLocation: dropoffLocation || null,
+        dropoffLatitude: dropoffCoordinates?.latitude ?? null,
+        dropoffLongitude: dropoffCoordinates?.longitude ?? null,
+        moveType: 'regular',
+        inventoryItems: JSON.stringify(inventory),
+        customItems: customItems.map((c) => JSON.stringify(c)),
+        totalItemCount: inventoryCount,
+        estimatedPrice: mover.price,
+        coverPhotoId: uploadedCoverPhotoId,
+        galleryPhotoIds: uploadedGalleryPhotoIds,
+        routeDistanceMeters: routeDistance || null,
+        routeDurationSeconds: routeDuration || null,
+      }
+      console.log(
+        `[select-mover] Creating move — cover: ${createBody.coverPhotoId ? 'URL' : 'null'}, gallery: ${createBody.galleryPhotoIds.length}`
+      )
       const res = await fetch('/api/moves/create-instant', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          moverProfileId: mover.id,
-          pickupLocation: pickupLocation || null,
-          pickupLatitude: pickupCoordinates?.latitude ?? null,
-          pickupLongitude: pickupCoordinates?.longitude ?? null,
-          dropoffLocation: dropoffLocation || null,
-          dropoffLatitude: dropoffCoordinates?.latitude ?? null,
-          dropoffLongitude: dropoffCoordinates?.longitude ?? null,
-          moveType: 'regular',
-          inventoryItems: JSON.stringify(inventory),
-          customItems: customItems.map((c) => JSON.stringify(c)),
-          totalItemCount: inventoryCount,
-          estimatedPrice: mover.price,
-          coverPhotoId: uploadedCoverPhotoId,
-          galleryPhotoIds: uploadedGalleryPhotoIds,
-          routeDistanceMeters: routeDistance || null,
-          routeDurationSeconds: routeDuration || null,
-        }),
+        body: JSON.stringify(createBody),
       })
 
       if (res.ok) {

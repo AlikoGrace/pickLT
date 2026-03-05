@@ -47,6 +47,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'moverProfileId is required' }, { status: 400 })
     }
 
+    console.log(
+      `[create-instant] coverPhotoId=${coverPhotoId ? `"${coverPhotoId.substring(0, 60)}..."` : 'null'}, galleryPhotoIds=${JSON.stringify((galleryPhotoIds || []).map((u: string) => u?.substring(0, 60)))}`
+    )
+
     const { databases } = createAdminClient()
 
     // Generate a human-readable handle

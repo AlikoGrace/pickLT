@@ -38,28 +38,31 @@ async function forwardGeocode(
   if (!query || query.length < 2 || !MAPBOX_TOKEN) return []
   try {
     const params: Record<string, string> = {
+      q: query,
       access_token: MAPBOX_TOKEN,
       autocomplete: 'true',
-      fuzzyMatch: 'true',
-      types: 'address,poi,poi.landmark,postcode,neighborhood,locality,place,district,region,country',
+      types: 'address,street,postcode,neighborhood,locality,place,district,region,country',
       limit: '8',
       language: 'en',
     }
     if (proximity) params.proximity = `${proximity.longitude},${proximity.latitude}`
 
     const res = await fetch(
-      `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?` +
+      `https://api.mapbox.com/search/geocode/v6/forward?` +
         new URLSearchParams(params)
     )
     if (!res.ok) return []
     const data = await res.json()
     return (data.features || []).map((f: any) => {
-      const isAddr = f.place_type?.includes('address')
+      const props = f.properties || {}
       return {
-        id: f.id,
-        name: isAddr ? (f.address ? `${f.address} ${f.text}` : f.text) : f.text,
-        fullAddress: f.place_name,
-        coordinates: { latitude: f.center[1], longitude: f.center[0] },
+        id: props.mapbox_id || f.id,
+        name: props.name_preferred || props.name || '',
+        fullAddress: props.full_address || props.place_formatted || props.name || '',
+        coordinates: {
+          latitude: props.coordinates?.latitude ?? f.geometry?.coordinates?.[1],
+          longitude: props.coordinates?.longitude ?? f.geometry?.coordinates?.[0],
+        },
       }
     })
   } catch {
@@ -71,11 +74,12 @@ async function reverseGeocode(lat: number, lng: number): Promise<PickedLocation 
   if (!MAPBOX_TOKEN) return null
   try {
     const res = await fetch(
-      `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?` +
+      `https://api.mapbox.com/search/geocode/v6/reverse?` +
         new URLSearchParams({
+          longitude: String(lng),
+          latitude: String(lat),
           access_token: MAPBOX_TOKEN,
-          types: 'address,poi,place',
-          limit: '1',
+          types: 'address,street,place',
           language: 'en',
         })
     )
@@ -83,7 +87,13 @@ async function reverseGeocode(lat: number, lng: number): Promise<PickedLocation 
     const data = await res.json()
     const f = data.features?.[0]
     if (!f) return null
-    return { id: f.id, name: f.text, fullAddress: f.place_name, coordinates: { latitude: lat, longitude: lng } }
+    const props = f.properties || {}
+    return {
+      id: props.mapbox_id || f.id,
+      name: props.name_preferred || props.name || '',
+      fullAddress: props.full_address || props.place_formatted || props.name || '',
+      coordinates: { latitude: lat, longitude: lng },
+    }
   } catch {
     return null
   }
