@@ -110,6 +110,20 @@ const getPhotoUrl = (fileIdOrUrl: string): string => {
   return `${APPWRITE_ENDPOINT}/storage/buckets/${BUCKET_MOVE_PHOTOS}/files/${fileIdOrUrl}/view?project=${PROJECT_ID}`
 }
 
+const InfoRow = ({ label, value, icon: Icon }: { label: string; value: React.ReactNode; icon?: React.ComponentType<{ className?: string }> }) => (
+  <div className="flex items-start gap-3 py-3 border-b border-neutral-100 dark:border-neutral-700 last:border-0">
+    {Icon && (
+      <div className="mt-0.5 w-5 h-5 text-neutral-400 flex-shrink-0">
+        <Icon className="w-5 h-5" />
+      </div>
+    )}
+    <div className="flex-1">
+      <p className="text-sm text-neutral-500 dark:text-neutral-400">{label}</p>
+      <p className="font-medium text-neutral-900 dark:text-neutral-100">{value}</p>
+    </div>
+  </div>
+)
+
 // ─── Alarm sound using inline WAV (reliable across all browsers) ─────────
 // Generates a short, urgent two-tone siren WAV and plays it via <audio>.
 // Much more reliable than Web Audio API oscillators for autoplay.
@@ -645,7 +659,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
 
       {/* ── Full Details Overlay ─────────────────────────── */}
       {showDetails && move && (
-        <div className="fixed inset-0 z-[101] flex flex-col bg-white dark:bg-neutral-900 animate-in slide-in-from-right duration-200">
+        <div className="fixed inset-0 z-[101] flex flex-col bg-neutral-50 dark:bg-neutral-900 animate-in slide-in-from-right duration-200">
           {/* Sticky header */}
           <div className="sticky top-0 z-10 flex items-center gap-3 border-b border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-4 py-3">
             <button
@@ -669,146 +683,123 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
           </div>
 
           {/* Scrollable content */}
-          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-6">
-            {/* Price banner */}
-            {move.estimatedPrice != null && move.estimatedPrice > 0 && (
-              <div className="flex items-center justify-between p-4 bg-green-50 dark:bg-green-900/20 rounded-2xl border border-green-200 dark:border-green-800">
-                <span className="text-sm font-medium text-green-700 dark:text-green-300">Your earnings</span>
-                <span className="text-3xl font-bold text-green-700 dark:text-green-300">€{move.estimatedPrice}</span>
+          <div className="flex-1 overflow-y-auto">
+            {/* Gallery */}
+            {galleryImages.length > 0 && (
+              <div className="grid grid-cols-4 gap-1">
+                <div className="col-span-4 sm:col-span-2 sm:row-span-2 relative aspect-[4/3]">
+                  <img src={galleryImages[0]} alt="Move photo" className="w-full h-full object-cover" />
+                </div>
+                {galleryImages.slice(1, 5).map((img, i) => (
+                  <div key={i} className="hidden sm:block relative aspect-[4/3]">
+                    <img src={img} alt={`Photo ${i + 2}`} className="w-full h-full object-cover" />
+                  </div>
+                ))}
               </div>
             )}
 
-            {/* Move type & date */}
-            <div className="bg-neutral-50 dark:bg-neutral-800 rounded-2xl p-4 space-y-3">
-              <h3 className="text-sm font-semibold text-neutral-900 dark:text-white">Move Info</h3>
-              <div className="space-y-2">
-                <div className="flex items-center gap-3 text-sm">
-                  <TruckIcon className="w-4 h-4 text-neutral-400 shrink-0" />
-                  <span className="text-neutral-600 dark:text-neutral-300">{formatLabel(move.moveType)} · {move.moveCategory === 'instant' ? 'Instant' : 'Scheduled'}</span>
-                </div>
-                {move.moveDate && (
-                  <div className="flex items-center gap-3 text-sm">
-                    <CalendarIcon className="w-4 h-4 text-neutral-400 shrink-0" />
-                    <span className="text-neutral-600 dark:text-neutral-300">{formatDate(move.moveDate)}</span>
-                  </div>
-                )}
-                {move.homeType && (
-                  <div className="flex items-center gap-3 text-sm">
-                    <HomeIcon className="w-4 h-4 text-neutral-400 shrink-0" />
-                    <span className="text-neutral-600 dark:text-neutral-300">{formatLabel(move.homeType)}</span>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Locations */}
-            <div className="bg-neutral-50 dark:bg-neutral-800 rounded-2xl p-4 space-y-4">
-              <h3 className="text-sm font-semibold text-neutral-900 dark:text-white">Locations</h3>
-              <div className="flex items-start gap-3">
-                <div className="mt-1 w-7 h-7 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center shrink-0">
-                  <MapPinIcon className="w-3.5 h-3.5 text-green-600" />
-                </div>
-                <div>
-                  <p className="text-[10px] font-medium uppercase tracking-wider text-neutral-400">Pickup</p>
-                  <p className="text-sm font-semibold text-neutral-900 dark:text-white">{pickupDisplay}</p>
-                </div>
-              </div>
-              <div className="ml-3 w-px h-3 bg-neutral-300 dark:bg-neutral-600" />
-              <div className="flex items-start gap-3">
-                <div className="mt-1 w-7 h-7 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center shrink-0">
-                  <MapPinIcon className="w-3.5 h-3.5 text-red-600" />
-                </div>
-                <div>
-                  <p className="text-[10px] font-medium uppercase tracking-wider text-neutral-400">Drop-off</p>
-                  <p className="text-sm font-semibold text-neutral-900 dark:text-white">{dropoffDisplay}</p>
-                </div>
-              </div>
-              {(move.routeDistanceMeters || move.routeDurationSeconds) && (
-                <div className="flex items-center gap-3 pt-1 text-xs text-neutral-500 dark:text-neutral-400">
-                  {move.routeDistanceMeters && (
-                    <span className="flex items-center gap-1">
-                      <MapPinIcon className="w-3.5 h-3.5" />
-                      {formatDistance(move.routeDistanceMeters)}
-                    </span>
-                  )}
-                  {move.routeDurationSeconds && (
-                    <span className="flex items-center gap-1">
-                      <ClockIcon className="w-3.5 h-3.5" />
-                      ~{formatDuration(move.routeDurationSeconds)}
-                    </span>
-                  )}
+            <div className="px-4 py-6 space-y-5">
+              {/* Earnings banner */}
+              {move.estimatedPrice != null && move.estimatedPrice > 0 && (
+                <div className="flex items-center justify-between p-4 bg-green-50 dark:bg-green-900/20 rounded-2xl border border-green-200 dark:border-green-800">
+                  <span className="text-sm font-medium text-green-700 dark:text-green-300">Your earnings</span>
+                  <span className="text-3xl font-bold text-green-700 dark:text-green-300">€{move.estimatedPrice}</span>
                 </div>
               )}
-            </div>
 
-            {/* Details grid */}
-            <div className="bg-neutral-50 dark:bg-neutral-800 rounded-2xl p-4 space-y-3">
-              <h3 className="text-sm font-semibold text-neutral-900 dark:text-white">Details</h3>
-              <div className="grid grid-cols-2 gap-3">
-                {move.totalItemCount != null && move.totalItemCount > 0 && (
-                  <div className="flex items-center gap-2 text-sm">
-                    <CubeIcon className="w-4 h-4 text-neutral-400" />
-                    <span className="text-neutral-600 dark:text-neutral-300">{move.totalItemCount} items</span>
+              {/* Locations */}
+              <div className="bg-white dark:bg-neutral-800 rounded-2xl p-5 shadow-sm">
+                <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Locations</h2>
+                <div className="space-y-4">
+                  <div className="flex items-start gap-3">
+                    <div className="mt-1 w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center flex-shrink-0">
+                      <MapPinIcon className="w-4 h-4 text-green-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-neutral-500 dark:text-neutral-400">Pickup</p>
+                      <p className="font-medium text-neutral-900 dark:text-neutral-100">{pickupDisplay}</p>
+                    </div>
                   </div>
+                  <div className="ml-4 border-l-2 border-dashed border-neutral-200 dark:border-neutral-700 h-4" />
+                  <div className="flex items-start gap-3">
+                    <div className="mt-1 w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center flex-shrink-0">
+                      <MapPinIcon className="w-4 h-4 text-red-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-neutral-500 dark:text-neutral-400">Drop-off</p>
+                      <p className="font-medium text-neutral-900 dark:text-neutral-100">{dropoffDisplay}</p>
+                    </div>
+                  </div>
+                </div>
+                {(move.routeDistanceMeters || move.routeDurationSeconds) && (
+                  <div className="flex items-center gap-4 mt-4 pt-3 border-t border-neutral-100 dark:border-neutral-700 text-sm text-neutral-500 dark:text-neutral-400">
+                    {move.routeDistanceMeters && (
+                      <span className="flex items-center gap-1.5">
+                        <MapPinIcon className="w-4 h-4" />
+                        {formatDistance(move.routeDistanceMeters)}
+                      </span>
+                    )}
+                    {move.routeDurationSeconds && (
+                      <span className="flex items-center gap-1.5">
+                        <ClockIcon className="w-4 h-4" />
+                        ~{formatDuration(move.routeDurationSeconds)}
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Move Details */}
+              <div className="bg-white dark:bg-neutral-800 rounded-2xl p-5 shadow-sm">
+                <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Move Details</h2>
+                <InfoRow icon={TruckIcon} label="Move Type" value={`${formatLabel(move.moveType)} · ${move.moveCategory === 'instant' ? 'Instant' : 'Scheduled'}`} />
+                {move.moveDate && <InfoRow icon={CalendarIcon} label="Move Date" value={formatDate(move.moveDate)} />}
+                {move.homeType && <InfoRow icon={HomeIcon} label="Home Type" value={formatLabel(move.homeType)} />}
+                {move.totalItemCount != null && move.totalItemCount > 0 && (
+                  <InfoRow icon={CubeIcon} label="Items" value={`${move.totalItemCount} items`} />
                 )}
                 {move.totalWeightKg != null && move.totalWeightKg > 0 && (
-                  <div className="flex items-center gap-2 text-sm">
-                    <CubeIcon className="w-4 h-4 text-neutral-400" />
-                    <span className="text-neutral-600 dark:text-neutral-300">{move.totalWeightKg} kg</span>
-                  </div>
+                  <InfoRow icon={CubeIcon} label="Weight" value={`${move.totalWeightKg} kg`} />
                 )}
-                {move.crewSize && (
-                  <div className="flex items-center gap-2 text-sm">
-                    <UserGroupIcon className="w-4 h-4 text-neutral-400" />
-                    <span className="text-neutral-600 dark:text-neutral-300">{Number(move.crewSize) + 1} movers</span>
-                  </div>
-                )}
-                {move.vehicleType && (
-                  <div className="flex items-center gap-2 text-sm">
-                    <TruckIcon className="w-4 h-4 text-neutral-400" />
-                    <span className="text-neutral-600 dark:text-neutral-300">{formatLabel(move.vehicleType)}</span>
-                  </div>
-                )}
+                {move.vehicleType && <InfoRow icon={TruckIcon} label="Vehicle" value={formatLabel(move.vehicleType)} />}
+                {move.crewSize && <InfoRow icon={UserGroupIcon} label="Crew" value={`${Number(move.crewSize) + 1} movers`} />}
               </div>
-              {move.packingServiceLevel && (
-                <div className="flex items-center gap-2 text-sm pt-1">
-                  <CheckCircleIcon className="w-4 h-4 text-neutral-400" />
-                  <span className="text-neutral-600 dark:text-neutral-300">Packing: {formatLabel(move.packingServiceLevel)}</span>
+
+              {/* Services */}
+              {(move.packingServiceLevel || (move.additionalServices && move.additionalServices.length > 0)) && (
+                <div className="bg-white dark:bg-neutral-800 rounded-2xl p-5 shadow-sm">
+                  <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Services</h2>
+                  {move.packingServiceLevel && (
+                    <InfoRow icon={CheckCircleIcon} label="Packing Service" value={formatLabel(move.packingServiceLevel)} />
+                  )}
+                  {move.additionalServices && move.additionalServices.length > 0 && (
+                    <InfoRow label="Additional Services" value={move.additionalServices.map(formatLabel).join(', ')} />
+                  )}
                 </div>
               )}
-              {move.additionalServices && move.additionalServices.length > 0 && (
-                <div className="pt-1">
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-1.5">Additional services</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {move.additionalServices.map((s, i) => (
-                      <span key={i} className="text-xs px-2 py-0.5 bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 rounded-full">
-                        {formatLabel(s)}
-                      </span>
+
+              {/* Client Info */}
+              {move.contactFullName && (
+                <div className="bg-white dark:bg-neutral-800 rounded-2xl p-5 shadow-sm">
+                  <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Client</h2>
+                  <InfoRow label="Name" value={move.contactFullName} />
+                </div>
+              )}
+
+              {/* Photos grid (if more than shown in header gallery) */}
+              {galleryImages.length > 5 && (
+                <div className="bg-white dark:bg-neutral-800 rounded-2xl p-5 shadow-sm">
+                  <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">All Photos</h2>
+                  <div className="grid grid-cols-2 gap-2">
+                    {galleryImages.map((url, i) => (
+                      <div key={i} className="relative aspect-[4/3] rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-700">
+                        <img src={url} alt={`Photo ${i + 1}`} className="w-full h-full object-cover" />
+                      </div>
                     ))}
                   </div>
                 </div>
               )}
-              {move.contactFullName && (
-                <div className="pt-2 border-t border-neutral-200 dark:border-neutral-700">
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400">Client</p>
-                  <p className="text-sm font-medium text-neutral-900 dark:text-white">{move.contactFullName}</p>
-                </div>
-              )}
             </div>
-
-            {/* Gallery */}
-            {galleryImages.length > 0 && (
-              <div className="space-y-2">
-                <h3 className="text-sm font-semibold text-neutral-900 dark:text-white">Photos</h3>
-                <div className="grid grid-cols-2 gap-2">
-                  {galleryImages.map((url, i) => (
-                    <div key={i} className="relative aspect-[4/3] rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-800">
-                      <img src={url} alt={`Photo ${i + 1}`} className="w-full h-full object-cover" />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Sticky bottom action bar */}
