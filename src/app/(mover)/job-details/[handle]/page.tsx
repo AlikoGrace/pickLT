@@ -1,6 +1,7 @@
 'use client'
 
 import { Badge } from '@/shared/Badge'
+import GallerySlider from '@/components/GallerySlider'
 import {
   MapPinIcon,
   CalendarIcon,
@@ -15,6 +16,17 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
+
+const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || ''
+const PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || ''
+const BUCKET_MOVE_PHOTOS = process.env.NEXT_PUBLIC_BUCKET_MOVE_PHOTOS || ''
+
+const getPhotoUrl = (fileIdOrUrl: string): string => {
+  if (!fileIdOrUrl) return ''
+  if (fileIdOrUrl.startsWith('http://') || fileIdOrUrl.startsWith('https://')) return fileIdOrUrl
+  if (!APPWRITE_ENDPOINT || !PROJECT_ID || !BUCKET_MOVE_PHOTOS) return ''
+  return `${APPWRITE_ENDPOINT}/storage/buckets/${BUCKET_MOVE_PHOTOS}/files/${fileIdOrUrl}/view?project=${PROJECT_ID}`
+}
 
 type MoveStatus = 'pending' | 'in_progress' | 'completed' | 'cancelled'
 
@@ -200,7 +212,7 @@ export default function MoverMoveDetailsPage() {
   if (!move) {
     return (
       <div className="py-16">
-        <div className="flex flex-col items-center justify-center text-center space-y-4">
+        <div className="flex flex-col items-center justify-center text-center space-y-4 max-w-md mx-auto">
           <TruckIcon className="w-16 h-16 text-neutral-300" />
           <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
             Move not found
@@ -235,9 +247,17 @@ export default function MoverMoveDetailsPage() {
   const pickupDisplay = pickupStreetAddress || pickupLocation || 'Pickup location'
   const dropoffDisplay = dropoffStreetAddress || 'Drop-off location'
 
-  const galleryImgs = coverPhotoId
-    ? [coverPhotoId, ...galleryPhotoIds]
-    : galleryPhotoIds
+  const galleryImgs: string[] = []
+  if (coverPhotoId) {
+    const url = getPhotoUrl(coverPhotoId)
+    if (url) galleryImgs.push(url)
+  }
+  if (galleryPhotoIds.length > 0) {
+    galleryPhotoIds.forEach((id) => {
+      const url = getPhotoUrl(id)
+      if (url) galleryImgs.push(url)
+    })
+  }
 
   return (
     <div className="pb-24 lg:pb-32 pt-4 lg:pt-8">
@@ -278,27 +298,18 @@ export default function MoverMoveDetailsPage() {
 
       {/* Gallery */}
       {galleryImgs.length > 0 && (
-        <div className="grid grid-cols-4 gap-2 rounded-2xl overflow-hidden mb-10">
-          <div className="col-span-4 sm:col-span-2 sm:row-span-2 relative aspect-[4/3]">
-            <Image
-              src={galleryImgs[0]}
-              alt="Move photo"
-              fill
-              unoptimized
-              className="object-cover"
-            />
+        <div className="relative rounded-2xl overflow-hidden mb-10">
+          <GallerySlider
+            galleryImgs={galleryImgs}
+            ratioClass="aspect-w-16 aspect-h-9"
+            href="#"
+            imageClass="rounded-none"
+            galleryClass="rounded-none"
+            navigation={galleryImgs.length > 1}
+          />
+          <div className="absolute top-3 right-3 z-10 bg-black/50 backdrop-blur-sm text-white text-xs px-2.5 py-1 rounded-full">
+            {galleryImgs.length} photo{galleryImgs.length !== 1 ? 's' : ''}
           </div>
-          {galleryImgs.slice(1, 5).map((img, i) => (
-            <div key={i} className="hidden sm:block relative aspect-[4/3]">
-              <Image
-                src={img}
-                alt={`Move photo ${i + 2}`}
-                fill
-                unoptimized
-                className="object-cover"
-              />
-            </div>
-          ))}
         </div>
       )}
 

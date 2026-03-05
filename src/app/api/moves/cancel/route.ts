@@ -41,7 +41,8 @@ export async function POST(request: NextRequest) {
     )
 
     // Verify the requesting user owns this move
-    if (move.clientUserId !== userId) {
+    const clientId = typeof move.clientId === 'string' ? move.clientId : move.clientId?.$id
+    if (clientId !== userId) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 

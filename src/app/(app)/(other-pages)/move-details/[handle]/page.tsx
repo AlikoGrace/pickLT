@@ -23,6 +23,17 @@ import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 
+const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || ''
+const PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || ''
+const BUCKET_MOVE_PHOTOS = process.env.NEXT_PUBLIC_BUCKET_MOVE_PHOTOS || ''
+
+const getPhotoUrl = (fileIdOrUrl: string): string => {
+  if (!fileIdOrUrl) return ''
+  if (fileIdOrUrl.startsWith('http://') || fileIdOrUrl.startsWith('https://')) return fileIdOrUrl
+  if (!APPWRITE_ENDPOINT || !PROJECT_ID || !BUCKET_MOVE_PHOTOS) return ''
+  return `${APPWRITE_ENDPOINT}/storage/buckets/${BUCKET_MOVE_PHOTOS}/files/${fileIdOrUrl}/view?project=${PROJECT_ID}`
+}
+
 // ─── Mover info shape from enriched API ──────────────────
 interface MoverInfo {
   id: string
@@ -269,9 +280,17 @@ export default function MoveDetailsPage() {
   const pickupDisplay = pickupStreetAddress || pickupLocation || 'Pickup location'
   const dropoffDisplay = dropoffStreetAddress || 'Drop-off location'
 
-  const galleryImgs = coverPhotoId
-    ? [coverPhotoId, ...galleryPhotoIds]
-    : galleryPhotoIds
+  const galleryImgs: string[] = []
+  if (coverPhotoId) {
+    const url = getPhotoUrl(coverPhotoId)
+    if (url) galleryImgs.push(url)
+  }
+  if (galleryPhotoIds.length > 0) {
+    galleryPhotoIds.forEach((id) => {
+      const url = getPhotoUrl(id)
+      if (url) galleryImgs.push(url)
+    })
+  }
 
   return (
     <div className="container pb-24 lg:pb-32 pt-8 lg:pt-12">

@@ -265,25 +265,38 @@ const MapLocationPicker = ({ open, onClose, onSelect, initialCoordinates, label 
   )
 
   // ── use current location ───────────────────────────────────
+  const [geoLoading, setGeoLoading] = useState(false)
+
   const useCurrentLocation = useCallback(() => {
     if (!navigator.geolocation) return
+    setGeoLoading(true)
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
+      async (pos) => {
         const { latitude, longitude } = pos.coords
         setUserCoords({ latitude, longitude })
-        const loc: PickedLocation = {
-          id: 'current-location',
-          name: 'My Location',
-          fullAddress: 'Current Location',
-          coordinates: { latitude, longitude },
-        }
-        setPicked(loc)
-        setQuery('Current Location')
-        setResults([])
+
+        // Fly to the real GPS position and place pin immediately
         mapRef.current?.flyTo({ center: [longitude, latitude], zoom: 16, duration: 800 })
         placePin(latitude, longitude)
+
+        // Reverse-geocode to get a meaningful place name
+        const geocoded = await reverseGeocode(latitude, longitude)
+
+        const loc: PickedLocation = geocoded
+          ? { ...geocoded, coordinates: { latitude, longitude } }
+          : {
+              id: 'current-location',
+              name: `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`,
+              fullAddress: `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`,
+              coordinates: { latitude, longitude },
+            }
+
+        setPicked(loc)
+        setQuery(loc.fullAddress)
+        setResults([])
+        setGeoLoading(false)
       },
-      () => {},
+      () => { setGeoLoading(false) },
       { enableHighAccuracy: true, timeout: 10_000, maximumAge: 60_000 }
     )
   }, [placePin])
@@ -337,12 +350,15 @@ const MapLocationPicker = ({ open, onClose, onSelect, initialCoordinates, label 
         <button
           type="button"
           onClick={useCurrentLocation}
+          disabled={geoLoading}
           className="mt-2 flex w-full items-center gap-2.5 rounded-lg px-2 py-2 text-sm hover:bg-neutral-100 transition dark:hover:bg-neutral-800"
         >
           <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary-50 dark:bg-primary-900/30">
-            <HugeiconsIcon icon={Navigation03Icon} size={14} strokeWidth={1.5} className="text-primary-600 dark:text-primary-400" />
+            <HugeiconsIcon icon={Navigation03Icon} size={14} strokeWidth={1.5} className={clsx("text-primary-600 dark:text-primary-400", geoLoading && "animate-pulse")} />
           </span>
-          <span className="text-sm font-medium text-primary-600 dark:text-primary-400">Use my current location</span>
+          <span className="text-sm font-medium text-primary-600 dark:text-primary-400">
+            {geoLoading ? 'Getting your location...' : 'Use my current location'}
+          </span>
         </button>
 
         {/* Suggestions dropdown */}
