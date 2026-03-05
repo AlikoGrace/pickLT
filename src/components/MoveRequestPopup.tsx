@@ -661,164 +661,233 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
       {showDetails && move && (
         <div className="fixed inset-0 z-[101] flex flex-col bg-neutral-50 dark:bg-neutral-900 animate-in slide-in-from-right duration-200">
           {/* Sticky header */}
-          <div className="sticky top-0 z-10 flex items-center gap-3 border-b border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-4 py-3">
-            <button
-              onClick={() => setShowDetails(false)}
-              className="p-1.5 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
-            >
-              <ArrowLeftIcon className="w-5 h-5 text-neutral-700 dark:text-neutral-300" />
-            </button>
-            <div className="flex-1 min-w-0">
-              <p className="font-semibold text-neutral-900 dark:text-white truncate">Move Details</p>
-              <p className="text-xs text-neutral-500">
-                Respond within <span className="font-bold text-red-500">{countdown}s</span>
-              </p>
+          <div className="sticky top-0 z-10 border-b border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
+            <div className="max-w-6xl mx-auto px-4 lg:px-8 py-3 flex items-center gap-3">
+              <button
+                onClick={() => setShowDetails(false)}
+                className="p-1.5 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+              >
+                <ArrowLeftIcon className="w-5 h-5 text-neutral-700 dark:text-neutral-300" />
+              </button>
+              <div className="flex-1 min-w-0">
+                <p className="font-semibold text-neutral-900 dark:text-white truncate">Move Details</p>
+                <p className="text-xs text-neutral-500">
+                  Respond within <span className="font-bold text-red-500">{countdown}s</span>
+                </p>
+              </div>
+              <button
+                onClick={() => setShowDetails(false)}
+                className="p-1.5 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+              >
+                <XMarkIcon className="w-5 h-5 text-neutral-500" />
+              </button>
             </div>
-            <button
-              onClick={() => setShowDetails(false)}
-              className="p-1.5 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
-            >
-              <XMarkIcon className="w-5 h-5 text-neutral-500" />
-            </button>
           </div>
 
           {/* Scrollable content */}
           <div className="flex-1 overflow-y-auto">
-            {/* Gallery */}
-            {galleryImages.length > 0 && (
-              <div className="grid grid-cols-4 gap-1">
-                <div className="col-span-4 sm:col-span-2 sm:row-span-2 relative aspect-[4/3]">
-                  <img src={galleryImages[0]} alt="Move photo" className="w-full h-full object-cover" />
-                </div>
-                {galleryImages.slice(1, 5).map((img, i) => (
-                  <div key={i} className="hidden sm:block relative aspect-[4/3]">
-                    <img src={img} alt={`Photo ${i + 2}`} className="w-full h-full object-cover" />
-                  </div>
-                ))}
-              </div>
-            )}
+            <div className="max-w-6xl mx-auto px-4 lg:px-8 pb-24 lg:pb-32 pt-6 lg:pt-10">
 
-            <div className="px-4 py-6 space-y-5">
-              {/* Earnings banner */}
-              {move.estimatedPrice != null && move.estimatedPrice > 0 && (
-                <div className="flex items-center justify-between p-4 bg-green-50 dark:bg-green-900/20 rounded-2xl border border-green-200 dark:border-green-800">
-                  <span className="text-sm font-medium text-green-700 dark:text-green-300">Your earnings</span>
-                  <span className="text-3xl font-bold text-green-700 dark:text-green-300">€{move.estimatedPrice}</span>
+              {/* Header — route title + earnings */}
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-8">
+                <div className="flex-1">
+                  <h1 className="text-2xl lg:text-3xl font-semibold text-neutral-900 dark:text-neutral-100">
+                    {pickupDisplay.split(',')[0]} &rarr; {dropoffDisplay.split(',')[0]}
+                  </h1>
+                  <p className="text-neutral-500 dark:text-neutral-400 mt-1">
+                    {formatLabel(move.moveType)} Move{move.moveCategory === 'instant' ? ' · Instant' : ' · Scheduled'}
+                    {move.moveDate ? ` · ${formatDate(move.moveDate)}` : ''}
+                  </p>
                 </div>
-              )}
-
-              {/* Locations */}
-              <div className="bg-white dark:bg-neutral-800 rounded-2xl p-5 shadow-sm">
-                <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Locations</h2>
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <div className="mt-1 w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center flex-shrink-0">
-                      <MapPinIcon className="w-4 h-4 text-green-600" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-neutral-500 dark:text-neutral-400">Pickup</p>
-                      <p className="font-medium text-neutral-900 dark:text-neutral-100">{pickupDisplay}</p>
-                    </div>
-                  </div>
-                  <div className="ml-4 border-l-2 border-dashed border-neutral-200 dark:border-neutral-700 h-4" />
-                  <div className="flex items-start gap-3">
-                    <div className="mt-1 w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center flex-shrink-0">
-                      <MapPinIcon className="w-4 h-4 text-red-600" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-neutral-500 dark:text-neutral-400">Drop-off</p>
-                      <p className="font-medium text-neutral-900 dark:text-neutral-100">{dropoffDisplay}</p>
-                    </div>
-                  </div>
-                </div>
-                {(move.routeDistanceMeters || move.routeDurationSeconds) && (
-                  <div className="flex items-center gap-4 mt-4 pt-3 border-t border-neutral-100 dark:border-neutral-700 text-sm text-neutral-500 dark:text-neutral-400">
-                    {move.routeDistanceMeters && (
-                      <span className="flex items-center gap-1.5">
-                        <MapPinIcon className="w-4 h-4" />
-                        {formatDistance(move.routeDistanceMeters)}
-                      </span>
-                    )}
-                    {move.routeDurationSeconds && (
-                      <span className="flex items-center gap-1.5">
-                        <ClockIcon className="w-4 h-4" />
-                        ~{formatDuration(move.routeDurationSeconds)}
-                      </span>
-                    )}
+                {move.estimatedPrice != null && move.estimatedPrice > 0 && (
+                  <div className="text-right">
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">Earnings</p>
+                    <p className="text-3xl font-bold text-green-600 dark:text-green-400">
+                      €{move.estimatedPrice}
+                    </p>
                   </div>
                 )}
               </div>
 
-              {/* Move Details */}
-              <div className="bg-white dark:bg-neutral-800 rounded-2xl p-5 shadow-sm">
-                <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Move Details</h2>
-                <InfoRow icon={TruckIcon} label="Move Type" value={`${formatLabel(move.moveType)} · ${move.moveCategory === 'instant' ? 'Instant' : 'Scheduled'}`} />
-                {move.moveDate && <InfoRow icon={CalendarIcon} label="Move Date" value={formatDate(move.moveDate)} />}
-                {move.homeType && <InfoRow icon={HomeIcon} label="Home Type" value={formatLabel(move.homeType)} />}
-                {move.totalItemCount != null && move.totalItemCount > 0 && (
-                  <InfoRow icon={CubeIcon} label="Items" value={`${move.totalItemCount} items`} />
-                )}
-                {move.totalWeightKg != null && move.totalWeightKg > 0 && (
-                  <InfoRow icon={CubeIcon} label="Weight" value={`${move.totalWeightKg} kg`} />
-                )}
-                {move.vehicleType && <InfoRow icon={TruckIcon} label="Vehicle" value={formatLabel(move.vehicleType)} />}
-                {move.crewSize && <InfoRow icon={UserGroupIcon} label="Crew" value={`${Number(move.crewSize) + 1} movers`} />}
-              </div>
-
-              {/* Services */}
-              {(move.packingServiceLevel || (move.additionalServices && move.additionalServices.length > 0)) && (
-                <div className="bg-white dark:bg-neutral-800 rounded-2xl p-5 shadow-sm">
-                  <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Services</h2>
-                  {move.packingServiceLevel && (
-                    <InfoRow icon={CheckCircleIcon} label="Packing Service" value={formatLabel(move.packingServiceLevel)} />
-                  )}
-                  {move.additionalServices && move.additionalServices.length > 0 && (
-                    <InfoRow label="Additional Services" value={move.additionalServices.map(formatLabel).join(', ')} />
-                  )}
+              {/* Gallery */}
+              {galleryImages.length > 0 && (
+                <div className="grid grid-cols-4 gap-2 rounded-2xl overflow-hidden mb-10">
+                  <div className="col-span-4 sm:col-span-2 sm:row-span-2 relative aspect-[4/3]">
+                    <img src={galleryImages[0]} alt="Move photo" className="w-full h-full object-cover" />
+                  </div>
+                  {galleryImages.slice(1, 5).map((img, i) => (
+                    <div key={i} className="hidden sm:block relative aspect-[4/3]">
+                      <img src={img} alt={`Photo ${i + 2}`} className="w-full h-full object-cover" />
+                    </div>
+                  ))}
                 </div>
               )}
 
-              {/* Client Info */}
-              {move.contactFullName && (
-                <div className="bg-white dark:bg-neutral-800 rounded-2xl p-5 shadow-sm">
-                  <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Client</h2>
-                  <InfoRow label="Name" value={move.contactFullName} />
-                </div>
-              )}
-
-              {/* Photos grid (if more than shown in header gallery) */}
-              {galleryImages.length > 5 && (
-                <div className="bg-white dark:bg-neutral-800 rounded-2xl p-5 shadow-sm">
-                  <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">All Photos</h2>
-                  <div className="grid grid-cols-2 gap-2">
-                    {galleryImages.map((url, i) => (
-                      <div key={i} className="relative aspect-[4/3] rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-700">
-                        <img src={url} alt={`Photo ${i + 1}`} className="w-full h-full object-cover" />
+              {/* Main grid — 2/3 details + 1/3 sidebar on lg */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Left column - Details */}
+                <div className="lg:col-span-2 space-y-8">
+                  {/* Locations */}
+                  <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm">
+                    <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Locations</h2>
+                    <div className="space-y-4">
+                      <div className="flex items-start gap-3">
+                        <div className="mt-1 w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center flex-shrink-0">
+                          <MapPinIcon className="w-4 h-4 text-green-600" />
+                        </div>
+                        <div>
+                          <p className="text-sm text-neutral-500 dark:text-neutral-400">Pickup</p>
+                          <p className="font-medium text-neutral-900 dark:text-neutral-100">{pickupDisplay}</p>
+                        </div>
                       </div>
-                    ))}
+                      <div className="ml-4 border-l-2 border-dashed border-neutral-200 dark:border-neutral-700 h-4" />
+                      <div className="flex items-start gap-3">
+                        <div className="mt-1 w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center flex-shrink-0">
+                          <MapPinIcon className="w-4 h-4 text-red-600" />
+                        </div>
+                        <div>
+                          <p className="text-sm text-neutral-500 dark:text-neutral-400">Drop-off</p>
+                          <p className="font-medium text-neutral-900 dark:text-neutral-100">{dropoffDisplay}</p>
+                        </div>
+                      </div>
+                    </div>
+                    {(move.routeDistanceMeters || move.routeDurationSeconds) && (
+                      <div className="flex items-center gap-4 mt-4 pt-3 border-t border-neutral-100 dark:border-neutral-700 text-sm text-neutral-500 dark:text-neutral-400">
+                        {move.routeDistanceMeters && (
+                          <span className="flex items-center gap-1.5">
+                            <MapPinIcon className="w-4 h-4" />
+                            {formatDistance(move.routeDistanceMeters)}
+                          </span>
+                        )}
+                        {move.routeDurationSeconds && (
+                          <span className="flex items-center gap-1.5">
+                            <ClockIcon className="w-4 h-4" />
+                            ~{formatDuration(move.routeDurationSeconds)}
+                          </span>
+                        )}
+                      </div>
+                    )}
                   </div>
+
+                  {/* Move Details */}
+                  <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm">
+                    <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Move Details</h2>
+                    <InfoRow icon={TruckIcon} label="Move Type" value={`${formatLabel(move.moveType)} · ${move.moveCategory === 'instant' ? 'Instant' : 'Scheduled'}`} />
+                    {move.moveDate && <InfoRow icon={CalendarIcon} label="Move Date" value={formatDate(move.moveDate)} />}
+                    {move.homeType && <InfoRow icon={HomeIcon} label="Home Type" value={formatLabel(move.homeType)} />}
+                    {move.totalItemCount != null && move.totalItemCount > 0 && (
+                      <InfoRow icon={CubeIcon} label="Items" value={`${move.totalItemCount} items`} />
+                    )}
+                    {move.totalWeightKg != null && move.totalWeightKg > 0 && (
+                      <InfoRow icon={CubeIcon} label="Weight" value={`${move.totalWeightKg} kg`} />
+                    )}
+                    {move.vehicleType && <InfoRow icon={TruckIcon} label="Vehicle" value={formatLabel(move.vehicleType)} />}
+                    {move.crewSize && <InfoRow icon={UserGroupIcon} label="Crew" value={`${Number(move.crewSize) + 1} movers`} />}
+                  </div>
+
+                  {/* Services */}
+                  {(move.packingServiceLevel || (move.additionalServices && move.additionalServices.length > 0)) && (
+                    <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm">
+                      <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Services</h2>
+                      {move.packingServiceLevel && (
+                        <InfoRow icon={CheckCircleIcon} label="Packing Service" value={formatLabel(move.packingServiceLevel)} />
+                      )}
+                      {move.additionalServices && move.additionalServices.length > 0 && (
+                        <InfoRow label="Additional Services" value={move.additionalServices.map(formatLabel).join(', ')} />
+                      )}
+                    </div>
+                  )}
+
+                  {/* Photos grid (if more than shown in header gallery) */}
+                  {galleryImages.length > 5 && (
+                    <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm">
+                      <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">All Photos</h2>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                        {galleryImages.map((url, i) => (
+                          <div key={i} className="relative aspect-[4/3] rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-700">
+                            <img src={url} alt={`Photo ${i + 1}`} className="w-full h-full object-cover" />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
+
+                {/* Right sidebar — Earnings summary & Client */}
+                <div className="space-y-6">
+                  {/* Earnings Summary */}
+                  <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm sticky top-24">
+                    <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
+                      Summary
+                    </h3>
+                    <div className="space-y-2 text-sm">
+                      {move.moveDate && (
+                        <div className="flex justify-between">
+                          <span className="text-neutral-500 dark:text-neutral-400">Move Date</span>
+                          <span className="font-medium text-neutral-900 dark:text-neutral-100">{formatDate(move.moveDate)}</span>
+                        </div>
+                      )}
+                      <div className="flex justify-between">
+                        <span className="text-neutral-500 dark:text-neutral-400">Category</span>
+                        <span className="font-medium text-neutral-900 dark:text-neutral-100">{move.moveCategory === 'instant' ? 'Instant' : 'Scheduled'}</span>
+                      </div>
+                      {move.totalItemCount != null && move.totalItemCount > 0 && (
+                        <div className="flex justify-between">
+                          <span className="text-neutral-500 dark:text-neutral-400">Items</span>
+                          <span className="font-medium text-neutral-900 dark:text-neutral-100">{move.totalItemCount} items</span>
+                        </div>
+                      )}
+                      {(move.routeDistanceMeters || move.routeDurationSeconds) && (
+                        <div className="flex justify-between">
+                          <span className="text-neutral-500 dark:text-neutral-400">Distance</span>
+                          <span className="font-medium text-neutral-900 dark:text-neutral-100">
+                            {move.routeDistanceMeters ? formatDistance(move.routeDistanceMeters) : ''}
+                            {move.routeDistanceMeters && move.routeDurationSeconds ? ' · ' : ''}
+                            {move.routeDurationSeconds ? `~${formatDuration(move.routeDurationSeconds)}` : ''}
+                          </span>
+                        </div>
+                      )}
+                      <div className="my-4 border-t border-neutral-100 dark:border-neutral-700" />
+                      <div className="flex justify-between text-base">
+                        <span className="font-semibold text-neutral-900 dark:text-neutral-100">Earnings</span>
+                        <span className="font-bold text-green-600 dark:text-green-400">
+                          €{move.estimatedPrice ?? 0}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Client Info */}
+                  {move.contactFullName && (
+                    <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm">
+                      <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Client</h3>
+                      <InfoRow label="Name" value={move.contactFullName} />
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Sticky bottom action bar */}
-          <div className="sticky bottom-0 border-t border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-4 py-3 flex gap-3">
-            <button
-              onClick={() => { setShowDetails(false); handleDecline() }}
-              disabled={isDeclining}
-              className="flex-1 py-3 px-4 rounded-xl border-2 border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 font-semibold text-sm hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors disabled:opacity-50"
-            >
-              Decline
-            </button>
-            <button
-              onClick={() => { setShowDetails(false); handleAccept() }}
-              disabled={isAccepting}
-              className="flex-[2] py-3 px-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold text-sm transition-colors disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg shadow-green-600/30"
-            >
-              <CheckIcon className="w-5 h-5" />
-              Accept Move
-            </button>
+          <div className="sticky bottom-0 border-t border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
+            <div className="max-w-6xl mx-auto px-4 lg:px-8 py-3 flex gap-3">
+              <button
+                onClick={() => { setShowDetails(false); handleDecline() }}
+                disabled={isDeclining}
+                className="flex-1 py-3 px-4 rounded-xl border-2 border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 font-semibold text-sm hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors disabled:opacity-50"
+              >
+                Decline
+              </button>
+              <button
+                onClick={() => { setShowDetails(false); handleAccept() }}
+                disabled={isAccepting}
+                className="flex-[2] py-3 px-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold text-sm transition-colors disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg shadow-green-600/30"
+              >
+                <CheckIcon className="w-5 h-5" />
+                Accept Move
+              </button>
+            </div>
           </div>
         </div>
       )}
