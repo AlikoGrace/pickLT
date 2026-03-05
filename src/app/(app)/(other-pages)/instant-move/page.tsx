@@ -329,6 +329,14 @@ const InstantMovePage = () => {
               alert('The mover has cancelled. Searching for another mover...')
               router.push('/instant-move/select-mover')
               break
+            case 'cancelled_by_client':
+              // Our own cancel came back via realtime — clean up and go home
+              sessionStorage.removeItem('selectedMover')
+              sessionStorage.removeItem('activeMoveId')
+              sessionStorage.removeItem('activeMoveRequestId')
+              reset()
+              router.push('/')
+              break
           }
         }
 
@@ -797,12 +805,6 @@ const InstantMovePage = () => {
       <div className="absolute top-0 left-0 right-0 z-10 p-4 pt-4 pointer-events-none">
         <div className="mx-auto max-w-lg flex items-start gap-3">
           <div className="flex-1 pointer-events-auto">{renderLocationSummary()}</div>
-          {/* <button
-            onClick={confirmCancel}
-            className="pointer-events-auto p-2.5 bg-white/95 dark:bg-neutral-800/95 backdrop-blur-sm hover:bg-white dark:hover:bg-neutral-800 rounded-full shadow-lg border border-neutral-200 dark:border-neutral-700 transition"
-          >
-            <HugeiconsIcon icon={Cancel01Icon} size={20} strokeWidth={1.5} className="text-neutral-700 dark:text-neutral-300" />
-          </button> */}
         </div>
       </div>
 

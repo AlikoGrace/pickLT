@@ -56,6 +56,18 @@ export default function ActiveMovePage() {
   const [clientConfirmed, setClientConfirmed] = useState(false)
   const [paymentAmount, setPaymentAmount] = useState<number | null>(null)
 
+  // ── Client cancellation banner ────────────────────────────
+  const [cancelledByClient, setCancelledByClient] = useState(false)
+  const cancelledMoveRef = useRef<Record<string, unknown> | null>(null)
+  const cancelTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // Clean up cancel timer on unmount
+  useEffect(() => {
+    return () => {
+      if (cancelTimerRef.current) clearTimeout(cancelTimerRef.current)
+    }
+  }, [])
+
   const moverProfileId = user?.moverDetails?.profileId || null
 
   // Broadcast GPS at higher frequency during an active move (every 3 seconds)
@@ -174,8 +186,20 @@ export default function ActiveMovePage() {
         // If we already have a move, only update if it's the same document
         if (moveId && doc.$id === moveId) {
           const status = doc.status as string
-          // If the move was cancelled or disputed, clear it so the mover sees the empty state
-          if (['cancelled', 'cancelled_by_client', 'cancelled_by_mover', 'disputed'].includes(status)) {
+          // If the client cancelled, show a notice before clearing
+          if (status === 'cancelled_by_client') {
+            cancelledMoveRef.current = { ...doc }
+            setCancelledByClient(true)
+            setMove(null)
+            // Auto-dismiss after 6 seconds
+            cancelTimerRef.current = setTimeout(() => {
+              setCancelledByClient(false)
+              cancelledMoveRef.current = null
+            }, 6_000)
+            return
+          }
+          // Other cancellations / disputes — clear immediately
+          if (['cancelled', 'cancelled_by_mover', 'disputed'].includes(status)) {
             setMove(null)
             return
           }
@@ -392,12 +416,50 @@ export default function ActiveMovePage() {
   if (!move) {
     return (
       <div className="flex h-[60vh] flex-col items-center justify-center gap-4 p-4 text-center">
-        <TruckIcon className="h-12 w-12 text-neutral-400" />
-        <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">No active move</h2>
-        <p className="text-sm text-neutral-500 dark:text-neutral-400">
-          Accept a move request to start tracking here.
-        </p>
-        <ButtonPrimary href="/available-moves">Browse available moves</ButtonPrimary>
+        {/* Client-cancelled banner */}
+        {cancelledByClient && (
+          <div className="w-full max-w-md animate-in fade-in slide-in-from-top-4 duration-300">
+            <div className="rounded-2xl border border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20 p-5 shadow-lg space-y-3">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30">
+                <ExclamationTriangleIcon className="h-6 w-6 text-red-600 dark:text-red-400" />
+              </div>
+              <h2 className="text-lg font-semibold text-red-700 dark:text-red-300">Move Cancelled by Client</h2>
+              <p className="text-sm text-red-600 dark:text-red-400">
+                The client has cancelled this move.
+                {cancelledMoveRef.current?.pickupLocation ? (
+                  <>
+                    <br />
+                    <span className="text-xs text-red-500 dark:text-red-400">
+                      {String(cancelledMoveRef.current.pickupLocation).split(',')[0]} → {String(cancelledMoveRef.current.dropoffLocation ?? '').split(',')[0]}
+                    </span>
+                  </>
+                ) : null}
+              </p>
+              <button
+                onClick={() => {
+                  setCancelledByClient(false)
+                  cancelledMoveRef.current = null
+                  if (cancelTimerRef.current) clearTimeout(cancelTimerRef.current)
+                }}
+                className="mt-2 rounded-xl bg-red-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-700"
+              >
+                Dismiss
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Normal empty state (shown after dismiss or when no cancel happened) */}
+        {!cancelledByClient && (
+          <>
+            <TruckIcon className="h-12 w-12 text-neutral-400" />
+            <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">No active move</h2>
+            <p className="text-sm text-neutral-500 dark:text-neutral-400">
+              Accept a move request to start tracking here.
+            </p>
+            <ButtonPrimary href="/available-moves">Browse available moves</ButtonPrimary>
+          </>
+        )}
       </div>
     )
   }
