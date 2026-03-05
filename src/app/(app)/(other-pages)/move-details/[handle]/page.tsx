@@ -198,6 +198,7 @@ export default function MoveDetailsPage() {
         setError('fetch_error'); return
       }
       const data = await res.json()
+      console.log('Fetched move data:', data.move)
       if (data.move) setDbMove(docToStoredMove(data.move))
       else setError('not_found')
       if (data.mover) setMoverInfo(data.mover)

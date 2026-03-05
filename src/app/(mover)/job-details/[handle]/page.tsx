@@ -172,6 +172,7 @@ function docToMoveData(doc: any): MoveData {
   }
 }
 
+
 export default function MoverMoveDetailsPage() {
   const params = useParams()
   const handle = params.handle as string
@@ -190,6 +191,7 @@ export default function MoverMoveDetailsPage() {
         return
       }
       const data = await res.json()
+      console.log('Fetched move data:', data.move)
       if (data.move) setMove(docToMoveData(data.move))
       else setError('not_found')
     } catch {
