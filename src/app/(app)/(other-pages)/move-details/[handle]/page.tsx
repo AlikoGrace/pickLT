@@ -553,7 +553,7 @@ export default function MoveDetailsPage() {
               )}
 
               {/* Crew */}
-              <InfoRow icon={UsersIcon} label="Crew Size" value={`${moverInfo.crewSize} (incl. mover)`} />
+              <InfoRow icon={UsersIcon} label="Crew Size" value={`${moverInfo.crewSize + 1}`} />
 
               {/* Experience */}
               {moverInfo.yearsExperience > 0 && (
@@ -563,11 +563,6 @@ export default function MoveDetailsPage() {
               {/* Languages */}
               {moverInfo.languages.length > 0 && (
                 <InfoRow icon={LanguageIcon} label="Languages" value={moverInfo.languages.join(', ')} />
-              )}
-
-              {/* Phone */}
-              {moverInfo.phone && (
-                <InfoRow icon={PhoneIcon} label="Phone" value={moverInfo.phone} />
               )}
             </div>
           )}
