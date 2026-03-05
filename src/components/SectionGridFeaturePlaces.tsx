@@ -43,7 +43,7 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
   const fetchMoves = useCallback(async () => {
     try {
       setIsLoading(true)
-      const res = await fetch('/api/moves?limit=100')
+      const res = await fetch('/api/moves?limit=20')
       if (!res.ok) return
       const data = await res.json()
       const mapped: StoredMove[] = (data.documents ?? []).map((doc: any) => ({
@@ -108,7 +108,7 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
   }
 
   const status = getStatusFromTab(activeTab)
-  const filteredMoves = status ? moves.filter((m) => m.status === status) : moves
+  const filteredMoves = (status ? moves.filter((m) => m.status === status) : moves).slice(0, 4)
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab)
