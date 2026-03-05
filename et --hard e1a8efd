@@ -1,0 +1,127 @@
+[33m143551e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{0}: commit: switching from mapbox geocoding V6 to mapbox searchbox
+[33me1a8efd[m HEAD@{1}: commit: worked on move images and location input
+[33m92c5862[m HEAD@{2}: commit: fixing move images issue
+[33m771d912[m HEAD@{3}: commit: console logging move data
+[33mdc610e4[m HEAD@{4}: commit: fixing current location issue, job details images on mover side, cancel move issue on client side
+[33mfdd08e8[m HEAD@{5}: commit: fixing cancel move to show on both client and mover sides
+[33m031576c[m HEAD@{6}: commit: fixed mover profile wizard errors
+[33m7d58a1f[m HEAD@{7}: commit: fixed bugs in mover authentication process
+[33m7ad0936[m HEAD@{8}: commit: fixed some issues
+[33m939daa8[m HEAD@{9}: commit: fix: move hooks before early returns in CompleteProfilePage
+[33m8760d2b[m HEAD@{10}: commit: feat: pending approval screen for unverified movers
+[33ma8d5a26[m HEAD@{11}: commit: feat: show mover profile details on move-details page
+[33m2f6e81e[m HEAD@{12}: commit: fix: reverse-geocode 'Current Location' to meaningful address name
+[33m9813b79[m HEAD@{13}: commit: fix: robust dual-party payment confirmation flow
+[33me2c0300[m HEAD@{14}: commit: fix: awaiting_payment transition - check API response & robust payment creation
+[33m3d85094[m HEAD@{15}: commit: made correction to currency in payment for active move
+[33mb0cf57d[m HEAD@{16}: commit: feat: cancel until loading, crew+1 display, hide call/msg in transit
+[33m71c23fe[m HEAD@{17}: commit: fix: mover active-move map marker with robust GPS tracking
+[33mc31efe9[m HEAD@{18}: commit: fix: render move details as overlay inside MoveRequestPopup
+[33md3768d3[m HEAD@{19}: commit: fix: MoveCard links by handle instead of id for move-details URL
+[33m311a2f4[m HEAD@{20}: commit: feat: extend move request acceptance time from 60s to 3 minutes
+[33m0aeb377[m HEAD@{21}: commit: feat: create mover-side job-details page
+[33mc8553e7[m HEAD@{22}: commit: feat: redesign MoveRequestPopup with GallerySlider and view details link
+[33m460f62e[m HEAD@{23}: commit: feat: make move-details page dynamic with DB fetch by handle
+[33m257438f[m HEAD@{24}: commit: move details fix trial
+[33ma57c2dd[m HEAD@{25}: commit: fixed broken route
+[33md41fab0[m HEAD@{26}: commit: fix: repair broken fetchMoves mapper in SectionGridFeaturePlaces
+[33mc34fe33[m HEAD@{27}: commit (merge): Merge branch 'main' of https://github.com/AlikoGrace/pickLT
+[33m0a3267f[m HEAD@{28}: commit: fixed build issues
+[33mb877a3a[m HEAD@{29}: commit (amend): feat: SectionGridFeaturePlaces fetches moves from DB instead of context
+[33m70600e5[m HEAD@{30}: commit: feat: SectionGridFeaturePlaces fetches moves from DB instead of context
+[33mf420479[m HEAD@{31}: commit: fix: exclude all cancelled/disputed statuses from mover active-move (API + realtime)
+[33m9ca8412[m HEAD@{32}: commit: feat: mover active-move page — awaiting_payment phase, payment confirmation UI with dual-confirm status
+[33m4d36cad[m HEAD@{33}: commit: feat: complete client real-time tracking for all phases, payment confirmation UI, review submission UI
+[33mf3d2d10[m HEAD@{34}: commit: feat: add review submission API with mover rating recalculation
+[33mdc4c07e[m HEAD@{35}: commit: feat: implement dual-confirmation payment flow (awaiting_payment status, client + mover confirm APIs, payment status endpoint)
+[33m0865d64[m HEAD@{36}: commit: fix: strip mode=admin from Appwrite URLs, handle image src types, add unoptimized for external URLs
+[33m8197fca[m HEAD@{37}: commit: fixing move card images issue
+[33mf445400[m HEAD@{38}: commit: fix build issue
+[33me98a061[m HEAD@{39}: commit: fixed map picker error
+[33m007502a[m HEAD@{40}: commit: fix: replace Web Audio alarm with inline WAV for reliable playback
+[33m707e8b2[m HEAD@{41}: commit: feat: rewrite My Moves page to fetch from database
+[33mc0daf83[m HEAD@{42}: commit: feat: add unloading phase to active-move status progression
+[33m22b5c66[m HEAD@{43}: commit: feat: replace map controls with HugeIcons & center vertically
+[33m3d0c7d9[m HEAD@{44}: commit: feat: store photo URLs instead of file IDs in Appwrite storage
+[33m9ca53dd[m HEAD@{45}: commit: chore: remove debug console.log from mover dashboard layout
+[33md30c4d6[m HEAD@{46}: commit: fix: filter cancelled moves from available-moves and fix status transitions
+[33me954b39[m HEAD@{47}: commit: fix: cancel move button now updates database status
+[33m8b05650[m HEAD@{48}: commit: feat: add My Location button and client location puck to all maps
+[33m9e2dc71[m HEAD@{49}: commit: added correct profile reference to mover dashboard header on mobile devices
+[33m7884e72[m HEAD@{50}: commit: reduced profile image on client account page
+[33m5541116[m HEAD@{51}: commit: feat: inventory catalog from database with admin extensibility
+[33medb7e93[m HEAD@{52}: commit: fix: upload move photos to Appwrite storage before creating move
+[33me6f59d8[m HEAD@{53}: commit: feat: add /api/mover/active-move server API route
+[33m9bf3ef5[m HEAD@{54}: commit: fix: align move status enums with backend architecture
+[33m79c376a[m HEAD@{55}: commit: fix: alarm sound not playing on move request popup
+[33m43250bb[m HEAD@{56}: commit: fix: preserve userType on mover signup (Google OAuth + email)
+[33mb462d9f[m HEAD@{57}: commit: fix(api): handle relationship field types in accept-move, wrap decline-others in try-catch
+[33mb0629e1[m HEAD@{58}: commit: feat(instant-move): waiting spinner until mover accepts, real Mapbox ETA, track declined movers
+[33mf7cef83[m HEAD@{59}: commit: feat(active-move): 3s GPS broadcast, 100m proximity gate, real Mapbox Directions ETA
+[33mc694aab[m HEAD@{60}: commit: refactor(MapboxMap): use individual marker refs for smooth updates, deduplicate route fetches
+[33m46f2c0c[m HEAD@{61}: commit: feat(MoverMapboxMap): add moverCoordinates prop with animated truck marker
+[33mb7a9809[m HEAD@{62}: commit: feat(available-moves): remove carousel, show move photos, track mover location on map
+[33m93b0839[m HEAD@{63}: commit: feat(api): filter available-moves to scheduled only, include photo fields
+[33m2fd6bd6[m HEAD@{64}: commit: feat(utils): add Mapbox Directions API utility for real driving ETA
+[33m732acd2[m HEAD@{65}: commit: refactor(mover): rewrite MoveRequestPopup as children wrapper with internal useAuth
+[33m14a3210[m HEAD@{66}: commit: removed cancel button by location summary on instant move
+[33md567191[m HEAD@{67}: commit: DB-first data fetching (no more sessionStorage)
+[33m4c3b0ce[m HEAD@{68}: commit: Popup works across all mover pages
+[33m5e66f22[m HEAD@{69}: commit: Replaced find a mover button with add photos for easy reference and purpose
+[33m2108220[m HEAD@{70}: commit: moved signing up as mover to the top
+[33m89bb9a1[m HEAD@{71}: commit: light and dark mode reactivated
+[33m3399c6b[m HEAD@{72}: commit: fixed mover account issues and client issues
+[33m4550e16[m HEAD@{73}: commit: fixed complete profile page in mover account
+[33m54d3c8b[m HEAD@{74}: commit: added instant move page to mover account
+[33ma8bc504[m HEAD@{75}: commit: Images are compressed server-side (max 1920px, JPEG 80% quality) to save storage
+[33m9d9bd81[m HEAD@{76}: commit: Declines a move request. The move status stays as 'mover_assigned
+[33mbcab304[m HEAD@{77}: commit: Creates (or updates an existing) mover profile and sets the user's type to 'mover
+[33mea3ea19[m HEAD@{78}: commit: Update the status of an active move
+[33mb1819bc[m HEAD@{79}: commit: Creates an instant-move document and sends a move_request to the selected mover
+[33mcd89687[m HEAD@{80}: commit: added image compression utility
+[33mb2b76f6[m HEAD@{81}: commit: worked on image compression
+[33m5ab91c2[m HEAD@{82}: commit: working on move request by client and acceptance by mover
+[33m5759d97[m HEAD@{83}: commit: Profile name editing fixed, Email/phone verification flows, Cloud function + submit-profile updated, Settings page rewritten, Crew member detail popup, Profile images + nearby movers enrichment
+[33m18f3201[m HEAD@{84}: commit: worked on auth with appwrite google auth, otp verification with appwtite and twilio
+[33m564318c[m HEAD@{85}: commit: made clerk implementation the main auth. Implemented flow for client move booking and mover move acceptance
+[33m00c4a07[m HEAD@{86}: commit: attempt to fix cloud function issue
+[33ma42377a[m HEAD@{87}: commit: attempt to fix clerk/nextjs issue on clud functions
+[33m719054a[m HEAD@{88}: commit: added ssr and authentication with clerk
+[33m8c096d3[m HEAD@{89}: commit: added all implementations of the cloud functions
+[33madfe0a3[m HEAD@{90}: commit: added all functions initial folders
+[33mb504719[m HEAD@{91}: commit: added functions folder for cloud functions
+[33m996c06b[m HEAD@{92}: commit: added functions folder for cloud functions
+[33m47cdfe1[m HEAD@{93}: commit: made final huge frontend changes before starting backend addition
+[33m4ab62f1[m HEAD@{94}: commit: added new PickLT icon
+[33m678cfeb[m HEAD@{95}: commit: added new PickLT icon
+[33m3bf7e2c[m HEAD@{96}: commit: changed remainder of Chisfis appearancens to PickLT
+[33m7982712[m HEAD@{97}: commit: added move card changes to dashboard
+[33m367e987[m HEAD@{98}: commit: worked on maps and dashboard moves
+[33m2995260[m HEAD@{99}: commit: worked on login and sign up for mover
+[33mcc1ee47[m HEAD@{100}: commit: made few changes to instant move photos and selecting the mover
+[33m6184be1[m HEAD@{101}: commit: added mover list option and phots addition to instant move
+[33mea58c02[m HEAD@{102}: commit: worked on payment page adding cash
+[33m18f40f1[m HEAD@{103}: commit: worked on mapbox location range and time
+[33m53bfa47[m HEAD@{104}: commit: made changes to move choice page and replaced instant move maps with mapbox
+[33m9b424da[m HEAD@{105}: commit: replaced dummy data with mapbox integration
+[33md1c0db8[m HEAD@{106}: commit: worked on movers dashboard
+[33mc39117e[m HEAD@{107}: pull: Fast-forward
+[33m1581cd5[m HEAD@{108}: commit: added instant move and it's functionalities
+[33m2170cca[m HEAD@{109}: commit: remove manual crew and vehicle selection
+[33m8d3e855[m HEAD@{110}: commit: fixed time picker
+[33m88bbaa2[m HEAD@{111}: commit: worked on the hero form section for mobile phones
+[33m133f27c[m HEAD@{112}: commit: restructured login and sign up pages and added extra verification features
+[33m3be42e4[m HEAD@{113}: commit: commpleted payment screens and move cards on home page
+[33m91ffe38[m HEAD@{114}: commit: rectified build for vercel deployment
+[33m7e28437[m HEAD@{115}: commit: Worked on the move preview and payment screens
+[33m65b4dca[m HEAD@{116}: pull: Fast-forward
+[33mfefaadd[m HEAD@{117}: commit: worked some changes on step 8, 9, and 10
+[33m3278d2e[m HEAD@{118}: commit: worked on step 7, step 8 and step 9
+[33mce528e7[m HEAD@{119}: commit: worked on move step wizard from step 1 to step 7
+[33mf75621a[m HEAD@{120}: commit: made changes to logo
+[33m17a4031[m HEAD@{121}: pull: Fast-forward
+[33m91a353b[m HEAD@{122}: pull: Fast-forward
+[33m3cf2d74[m HEAD@{123}: pull: Fast-forward
+[33m3d75c86[m HEAD@{124}: commit: added logos and hero images
+[33mcb79888[m HEAD@{125}: pull: Fast-forward
+[33m8db56b6[m HEAD@{126}: clone: from https://github.com/AlikoGrace/pickLT.git

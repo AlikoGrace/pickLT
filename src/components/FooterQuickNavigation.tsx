@@ -71,6 +71,16 @@ const MOVER_NAV = [
 ]
 const SCROLL_THRESHOLD = 80
 
+// Routes where the bottom nav should be hidden (move booking flow)
+const HIDDEN_PATHS = [
+  '/move-choice',
+  '/add-listing',
+  '/instant-move',
+  '/move-preview',
+  '/checkout',
+  '/pay-done',
+]
+
 const FooterQuickNavigation = () => {
   const containerRef = useRef<HTMLDivElement>(null)
   const rafId = useRef<number | null>(null)
@@ -87,6 +97,9 @@ const FooterQuickNavigation = () => {
 
   // Determine which nav items to show based on user type
   const navItems = user?.userType === 'mover' ? MOVER_NAV : CLIENT_NAV
+
+  // Hide navigation on move booking flow pages
+  const isBookingFlow = HIDDEN_PATHS.some((path) => pathname.startsWith(path))
 
   useEffect(() => {
     // update the lastScrollY position when the showNav is shown/hidden
@@ -130,6 +143,8 @@ const FooterQuickNavigation = () => {
   }, [handleEventScroll])
 
   //
+
+  if (isBookingFlow) return null
 
   return (
     <div
