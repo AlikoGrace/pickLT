@@ -122,6 +122,7 @@ const StaySearchFormMobile = () => {
       {/* PICKUP LOCATION */}
       <FieldPanelContainer
         isActive={fieldNameShow === 'pickupLocation'}
+        headerMain="Pickup Location"
         headingOnClick={() => setFieldNameShow('pickupLocation')}
         headingTitle="From"
         headingValue={pickupLocationInput || 'Pickup location'}
@@ -137,6 +138,7 @@ const StaySearchFormMobile = () => {
       {/* DROP-OFF LOCATION */}
       <FieldPanelContainer
         isActive={fieldNameShow === 'dropoffLocation'}
+        headerMain="Drop-off Location"
         headingOnClick={() => setFieldNameShow('dropoffLocation')}
         headingTitle="To"
         headingValue={dropoffLocationInput || 'Drop-off location'}
@@ -152,6 +154,7 @@ const StaySearchFormMobile = () => {
       {/* MOVE TYPE */}
       <FieldPanelContainer
         isActive={fieldNameShow === 'moveType'}
+        headerMain="Select the type of move"
         headingOnClick={() => setFieldNameShow('moveType')}
         headingTitle="Move Type"
         headingValue={moveType ? MOVE_TYPE_LABELS[moveType] : 'Select type'}
