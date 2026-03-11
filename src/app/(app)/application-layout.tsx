@@ -3,6 +3,7 @@ import FooterQuickNavigation from '@/components/FooterQuickNavigation'
 import Header from '@/components/Header/Header'
 import MobileHeader from '@/components/Header/MobileHeader'
 import HeroSearchFormMobile from '@/components/HeroSearchFormMobile/HeroSearchFormMobile'
+import NotificationWrapper from '@/components/NotificationWrapper'
 import Aside from '@/components/aside'
 import AsideSidebarNavigation from '@/components/aside-sidebar-navigation'
 import 'rc-slider/assets/index.css'
@@ -16,7 +17,8 @@ interface Props {
 
 const ApplicationLayout: React.FC<Props> = ({ children, header, showMobileSearchForm = false }) => {
   return (
-    <Aside.Provider>
+    <NotificationWrapper role="client">
+      <Aside.Provider>
       {/* Desktop Header - Will be hidden on mobile devices  */}
       <div className="relative z-20 hidden lg:block">{header ? header : <Header />}</div>
       {/* Mobile: Show search form on home page, simple header on other pages */}
@@ -39,6 +41,7 @@ const ApplicationLayout: React.FC<Props> = ({ children, header, showMobileSearch
       {/*  */}
       <AsideSidebarNavigation />
     </Aside.Provider>
+    </NotificationWrapper>
   )
 }
 
