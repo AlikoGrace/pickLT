@@ -1,9 +1,11 @@
 'use client'
 
 import { MoveStatus, StoredMove } from '@/context/moveSearch'
+import { useAuth } from '@/context/auth'
 import ButtonPrimary from '@/shared/ButtonPrimary'
 import T from '@/utils/getT'
 import { ArrowRightIcon } from '@heroicons/react/24/solid'
+import { TruckIcon } from '@heroicons/react/24/outline'
 import { FC, ReactNode, useCallback, useEffect, useState } from 'react'
 import MoveCard from './MoveCard'
 import SectionTabHeader from './SectionTabHeader'
@@ -34,6 +36,7 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
   heading = 'Your Moves',
   subHeading = 'Track all your moves',
 }) => {
+  const { user, isAuthenticated, isLoading: authLoading } = useAuth()
   const tabs = ['All Moves', 'Pending', 'In Progress', 'Completed', 'Cancelled']
   const [activeTab, setActiveTab] = useState('All Moves')
 
@@ -41,6 +44,10 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
   const [isLoading, setIsLoading] = useState(true)
 
   const fetchMoves = useCallback(async () => {
+    if (!isAuthenticated) {
+      setIsLoading(false)
+      return
+    }
     try {
       setIsLoading(true)
       const res = await fetch('/api/moves?limit=20')
@@ -85,11 +92,13 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
     } finally {
       setIsLoading(false)
     }
-  }, [])
+  }, [isAuthenticated])
 
   useEffect(() => {
-    fetchMoves()
-  }, [fetchMoves])
+    if (!authLoading) {
+      fetchMoves()
+    }
+  }, [fetchMoves, authLoading])
 
   // Map tab to status filter
   const getStatusFromTab = (tab: string): MoveStatus | undefined => {
@@ -112,6 +121,29 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab)
+  }
+
+  // ─── Not logged in: show CTA ────────────────────────────
+  if (!authLoading && !isAuthenticated) {
+    return (
+      <div className="relative">
+        <div className="text-center py-16">
+          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary-50 dark:bg-primary-900/20">
+            <TruckIcon className="h-10 w-10 text-primary-600 dark:text-primary-400" />
+          </div>
+          <h2 className="text-2xl font-semibold text-neutral-900 dark:text-white mb-2">
+            Your moves will appear here
+          </h2>
+          <p className="text-neutral-500 dark:text-neutral-400 mb-8 max-w-md mx-auto">
+            Sign in to track your moves, view booking details, and manage your moving schedule.
+          </p>
+          <ButtonPrimary href="/login">
+            Sign in to get started
+            <ArrowRightIcon className="h-5 w-5 rtl:rotate-180" />
+          </ButtonPrimary>
+        </div>
+      </div>
+    )
   }
 
   return (
