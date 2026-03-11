@@ -1,12 +1,15 @@
 import MoverDashboardLayout from './mover-dashboard-layout'
 import { ReactNode } from 'react'
 import MoveRequestPopup from '@/components/MoveRequestPopup'
+import NotificationWrapper from '@/components/NotificationWrapper'
 
 const Layout = ({ children }: { children: ReactNode }) => {
   return (
-    <MoveRequestPopup>
-      <MoverDashboardLayout>{children}</MoverDashboardLayout>
-    </MoveRequestPopup>
+    <NotificationWrapper role="mover">
+      <MoveRequestPopup>
+        <MoverDashboardLayout>{children}</MoverDashboardLayout>
+      </MoveRequestPopup>
+    </NotificationWrapper>
   )
 }
 
