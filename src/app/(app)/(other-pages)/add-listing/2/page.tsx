@@ -14,6 +14,7 @@ const Page = () => {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({})
 
   const {
+    pickupLocation,
     pickupStreetAddress,
     pickupApartmentUnit,
     pickupAccessNotes,
@@ -25,6 +26,17 @@ const Page = () => {
     setPickupLoadingZoneRequired,
     setPickupArrangeHaltverbot,
   } = useMoveSearch()
+
+  // Auto-fill street address from the pickup location if not already set
+  useEffect(() => {
+    if (!pickupStreetAddress && pickupLocation) {
+      // Extract the street-level portion (first part before second comma)
+      const parts = pickupLocation.split(',')
+      const street = parts.length >= 1 ? parts[0].trim() : pickupLocation
+      setPickupStreetAddress(street)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // Prefetch the next step to improve performance
   useEffect(() => {
@@ -68,7 +80,7 @@ const Page = () => {
           <Input
             name="streetAddress"
             placeholder="e.g., Hauptstraße 45"
-            defaultValue={pickupStreetAddress}
+            value={pickupStreetAddress}
             onChange={(e) => setPickupStreetAddress(e.target.value)}
           />
           {formErrors.streetAddress && (
@@ -81,7 +93,7 @@ const Page = () => {
           <Input
             name="apartmentUnit"
             placeholder="e.g., 3rd floor, Apt 12"
-            defaultValue={pickupApartmentUnit}
+            value={pickupApartmentUnit}
             onChange={(e) => setPickupApartmentUnit(e.target.value)}
           />
         </FormItem>
@@ -91,7 +103,7 @@ const Page = () => {
           <Textarea
             name="accessNotes"
             placeholder="e.g., narrow corridor, steep stairs, construction at entrance"
-            defaultValue={pickupAccessNotes}
+            value={pickupAccessNotes}
             onChange={(e) => setPickupAccessNotes(e.target.value)}
           />
         </FormItem>
