@@ -3,7 +3,7 @@
 import MoveCard from '@/components/MoveCard'
 import { MoveStatus, StoredMove } from '@/context/moveSearch'
 import { Divider } from '@/shared/divider'
-import { TruckIcon } from '@heroicons/react/24/outline'
+import { ArrowLeftIcon, TruckIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 
@@ -106,6 +106,13 @@ export default function MyMovesPage() {
 
   return (
     <div>
+      <Link
+        href="/"
+        className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors"
+      >
+        <ArrowLeftIcon className="h-4 w-4" />
+        Back to home
+      </Link>
       <h1 className="text-3xl font-semibold">My Moves</h1>
       <p className="mt-2 text-neutral-500 dark:text-neutral-400">
         Track and manage all your moves in one place.
