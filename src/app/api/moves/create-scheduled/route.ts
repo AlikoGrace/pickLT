@@ -84,7 +84,7 @@ export async function POST(req: NextRequest) {
       {
         handle,
         clientId: userId,
-        status: 'pending',
+        status: 'draft',
         moveCategory: 'scheduled',
         moveType: moveType || 'regular',
         systemMoveType: moveType || 'regular',
