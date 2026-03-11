@@ -14,6 +14,7 @@ const Page = () => {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({})
 
   const {
+    dropoffLocation,
     dropoffStreetAddress,
     dropoffApartmentUnit,
     dropoffFloorLevel,
@@ -27,6 +28,16 @@ const Page = () => {
     setDropoffParkingSituation,
     setDropoffArrangeHaltverbot,
   } = useMoveSearch()
+
+  // Auto-fill street address from the dropoff location if not already set
+  useEffect(() => {
+    if (!dropoffStreetAddress && dropoffLocation) {
+      const parts = dropoffLocation.split(',')
+      const street = parts.length >= 1 ? parts[0].trim() : dropoffLocation
+      setDropoffStreetAddress(street)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // Prefetch the next step to improve performance
   useEffect(() => {
@@ -79,7 +90,7 @@ const Page = () => {
           <Input
             name="streetAddress"
             placeholder="e.g., Berliner Straße 12"
-            defaultValue={dropoffStreetAddress}
+            value={dropoffStreetAddress}
             onChange={(e) => setDropoffStreetAddress(e.target.value)}
           />
           {formErrors.streetAddress && (
@@ -92,7 +103,7 @@ const Page = () => {
           <Input
             name="apartmentUnit"
             placeholder="e.g., 2nd floor, Apt 5"
-            defaultValue={dropoffApartmentUnit}
+            value={dropoffApartmentUnit}
             onChange={(e) => setDropoffApartmentUnit(e.target.value)}
           />
         </FormItem>
