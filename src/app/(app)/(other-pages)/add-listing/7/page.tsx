@@ -40,11 +40,27 @@ const Page = () => {
     dropoffFloorLevel,
     dropoffElevatorAvailable,
     dropoffParkingSituation,
+    pickupLoadingZoneRequired,
+    pickupArrangeHaltverbot,
+    dropoffArrangeHaltverbot,
     inventory,
     customItems,
     additionalServices,
     storageWeeks,
     disposalItems,
+    heavyItems,
+    customHeavyItems,
+    packingServiceLevel,
+    packingMaterials,
+    packingNotes,
+    arrivalWindow,
+    flexibility,
+    crewSize,
+    vehicleType,
+    routeDistanceMeters,
+    routeDurationSeconds,
+    paymentMethod,
+    setPaymentMethod,
     coverPhotoId,
     galleryPhotoIds,
     reset,
@@ -112,7 +128,33 @@ const Page = () => {
         }
       }
 
-      // ── 2. Create the scheduled move in the database ──────
+      // ── 2. Calculate estimated price ─────────────────────
+      const BASE_RATE_PER_KM = 1.50
+      const MOVE_TYPE_MULTIPLIER: Record<string, number> = { light: 1.0, regular: 1.3, premium: 1.8 }
+      const FLOOR_SURCHARGE_NO_ELEVATOR = 15
+      const PACKING_RATES: Record<string, number> = { none: 0, partial: 50, full: 120, unpacking: 180 }
+      const CREW_RATES: Record<string, number> = { '1': 0, '2': 30, '3': 60, '4plus': 100 }
+      const MINIMUM_PRICE = 49
+
+      const distanceKm = (routeDistanceMeters || 0) / 1000
+      let basePrice = distanceKm * BASE_RATE_PER_KM
+      basePrice *= MOVE_TYPE_MULTIPLIER[moveType || 'regular'] || 1.0
+
+      let floorSurcharge = 0
+      const pFloor = parseInt(floorLevel || '0', 10)
+      const dFloor = parseInt(dropoffFloorLevel || '0', 10)
+      if (!elevatorAvailable && pFloor > 0) floorSurcharge += pFloor * FLOOR_SURCHARGE_NO_ELEVATOR
+      if (!dropoffElevatorAvailable && dFloor > 0) floorSurcharge += dFloor * FLOOR_SURCHARGE_NO_ELEVATOR
+
+      const packingSurcharge = PACKING_RATES[packingServiceLevel || 'none'] || 0
+      const crewSurcharge = CREW_RATES[crewSize || '1'] || 0
+      const storageSurcharge = (storageWeeks || 0) * 25
+
+      let calculatedPrice = basePrice + floorSurcharge + packingSurcharge + crewSurcharge + storageSurcharge
+      calculatedPrice = Math.max(calculatedPrice, MINIMUM_PRICE)
+      calculatedPrice = Math.round(calculatedPrice * 100) / 100
+
+      // ── 3. Create the scheduled move in the database ──────
       const inventoryCount =
         Object.values(inventory).reduce((sum, qty) => sum + qty, 0) +
         customItems.reduce((sum, item) => sum + item.quantity, 0)
@@ -138,12 +180,21 @@ const Page = () => {
           floorLevel,
           elevatorAvailable,
           parkingSituation,
+          pickupHaltverbot: pickupArrangeHaltverbot,
           dropoffFloorLevel,
           dropoffElevatorAvailable,
           dropoffParkingSituation,
+          dropoffHaltverbot: dropoffArrangeHaltverbot,
           inventoryItems: JSON.stringify(inventory),
           customItems: customItems.map((c) => JSON.stringify(c)),
           totalItemCount: inventoryCount,
+          packingServiceLevel,
+          packingMaterials: packingMaterials ? JSON.stringify(packingMaterials) : null,
+          packingNotes,
+          arrivalWindow,
+          flexibility,
+          crewSize,
+          vehicleType,
           additionalServices: JSON.stringify(additionalServices),
           storageWeeks,
           disposalItems,
@@ -156,6 +207,11 @@ const Page = () => {
           isBusinessMove: contactInfo.isBusinessMove,
           companyName: contactInfo.companyName,
           vatId: contactInfo.vatId,
+          routeDistanceMeters,
+          routeDurationSeconds,
+          estimatedPrice: calculatedPrice,
+          finalPrice: calculatedPrice,
+          paymentMethod,
         }),
       })
 
@@ -166,9 +222,9 @@ const Page = () => {
 
       const data = await res.json()
 
-      // ── 3. Clear the draft and redirect ───────────────────
+      // ── 4. Clear the draft and redirect ───────────────────
       reset()
-      router.push('/move-preview')
+      router.push(`/move-details/${data.handle}`)
     } catch (err) {
       console.error('Failed to create scheduled move:', err)
       setFormErrors({ submit: err instanceof Error ? err.message : 'Something went wrong. Please try again.' })
@@ -239,6 +295,38 @@ const Page = () => {
             onChange={(e) => updateContactInfo({ notesForMovers: e.target.value })}
             rows={3}
           />
+        </FormItem>
+
+        <Divider />
+
+        {/* Payment Method */}
+        <FormItem label="Preferred payment method" desccription="How would you like to pay for the move?">
+          <div className="flex flex-col gap-3">
+            {([
+              { value: 'cash', label: 'Cash' },
+              { value: 'bank_transfer', label: 'Bank transfer' },
+              { value: 'card', label: 'Card' },
+            ] as const).map((option) => (
+              <label
+                key={option.value}
+                className={`flex items-center gap-3 cursor-pointer rounded-xl border p-4 transition-colors ${
+                  paymentMethod === option.value
+                    ? 'border-primary-600 bg-primary-50 dark:bg-primary-900/20'
+                    : 'border-neutral-200 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600'
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value={option.value}
+                  checked={paymentMethod === option.value}
+                  onChange={() => setPaymentMethod(option.value)}
+                  className="accent-primary-600"
+                />
+                <span className="text-sm font-medium">{option.label}</span>
+              </label>
+            ))}
+          </div>
         </FormItem>
 
         <Divider />
