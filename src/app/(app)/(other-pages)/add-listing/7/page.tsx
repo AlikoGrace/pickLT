@@ -54,7 +54,7 @@ const Page = () => {
   useEffect(() => {
     if (!user) return
     const updates: Record<string, string> = {}
-    if (!contactInfo.fullName && user.name) updates.fullName = user.name
+    if (!contactInfo.fullName && user.fullName) updates.fullName = user.fullName
     if (!contactInfo.email && user.email) updates.email = user.email
     if (!contactInfo.phoneNumber && user.phone) updates.phoneNumber = user.phone
     if (Object.keys(updates).length > 0) {
