@@ -111,11 +111,11 @@ const PayDoneContent = () => {
   const getHeading = () => {
     if (isInstantMove) {
       return paymentMethod === 'cash' 
-        ? 'Your move is confirmed! 🚚'
-        : 'Move confirmed and paid! 🎉'
+        ? 'Your move is confirmed!'
+        : 'Move confirmed and paid!'
     }
     return paymentMethod === 'cash'
-      ? 'Booking confirmed! 📋'
+      ? 'Booking confirmed!'
       : `${T['common']['Congratulation']} 🎉`
   }
 
