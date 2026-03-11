@@ -116,6 +116,8 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
     vehicleType,
     arrivalWindow,
     inventoryCount,
+    inventoryItems,
+    customItems,
     contactInfo,
     coverPhotoId,
     galleryPhotoIds,
@@ -158,7 +160,12 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
           </div>
           <div className="flex items-center gap-x-2">
             <CubeIcon className="size-5" />
-            <span>{inventoryCount} items</span>
+            <span>{(() => {
+              let parsedInventory: Record<string, number> = {}
+              try { if (inventoryItems) parsedInventory = JSON.parse(inventoryItems) } catch {}
+              const entries = Object.entries(parsedInventory).filter(([, qty]) => qty > 0)
+              return entries.length > 0 ? `${entries.length} item types` : `${inventoryCount} items`
+            })()}</span>
           </div>
           <div className="flex items-center gap-x-2">
             <UsersIcon className="size-5" />
@@ -212,6 +219,38 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
               <p>Parking: {formatLabel(dropoffParkingSituation)}</p>
             </div>
           </div>
+        </div>
+      </div>
+    )
+  }
+
+  const renderSectionInventory = () => {
+    let parsedInventory: Record<string, number> = {}
+    try { if (inventoryItems) parsedInventory = JSON.parse(inventoryItems) } catch {}
+    const entries = Object.entries(parsedInventory).filter(([, qty]) => qty > 0)
+    let parsedCustom: { name: string; quantity: number }[] = []
+    try { parsedCustom = (customItems ?? []).map((c) => typeof c === 'string' ? JSON.parse(c) : c).filter((c: any) => c.name) } catch {}
+
+    if (entries.length === 0 && parsedCustom.length === 0) return null
+
+    return (
+      <div className="listingSection__wrap">
+        <SectionHeading>Inventory</SectionHeading>
+        <SectionSubheading>{inventoryCount} items total</SectionSubheading>
+        <Divider className="w-14!" />
+        <div className="grid gap-2 sm:grid-cols-2 text-sm">
+          {entries.map(([name, qty]) => (
+            <div key={name} className="flex items-center justify-between rounded-lg border border-neutral-100 px-3 py-2 dark:border-neutral-700">
+              <span className="text-neutral-700 dark:text-neutral-300">{formatLabel(name)}</span>
+              <span className="font-medium text-neutral-900 dark:text-neutral-100">&times; {qty}</span>
+            </div>
+          ))}
+          {parsedCustom.map((item, i) => (
+            <div key={`custom-${i}`} className="flex items-center justify-between rounded-lg border border-amber-100 px-3 py-2 dark:border-amber-900/30">
+              <span className="text-neutral-700 dark:text-neutral-300">{item.name} <span className="text-xs text-neutral-400">(custom)</span></span>
+              <span className="font-medium text-neutral-900 dark:text-neutral-100">&times; {item.quantity}</span>
+            </div>
+          ))}
         </div>
       </div>
     )
@@ -374,6 +413,7 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
         <div className="flex w-full flex-col gap-y-8 lg:w-3/5 xl:w-[64%] xl:gap-y-10">
           {renderSectionHeader()}
           {renderSectionAddresses()}
+          {renderSectionInventory()}
           {renderSectionServices()}
           {renderSectionContact()}
         </div>

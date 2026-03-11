@@ -477,7 +477,22 @@ const Page = () => {
         <DescriptionList>
           <Fragment>
             <DescriptionTerm>Inventory</DescriptionTerm>
-            <DescriptionDetails>{inventoryCount} items</DescriptionDetails>
+            <DescriptionDetails>
+              {(() => {
+                const entries = Object.entries(inventory).filter(([, qty]) => qty > 0)
+                if (entries.length === 0 && customItems.length === 0) return `${inventoryCount} items`
+                return (
+                  <ul className="list-disc list-inside text-sm space-y-0.5">
+                    {entries.map(([name, qty]) => (
+                      <li key={name}>{formatLabel(name)} &times; {qty}</li>
+                    ))}
+                    {customItems.map((item, i) => (
+                      <li key={`custom-${i}`}>{item.name} &times; {item.quantity}</li>
+                    ))}
+                  </ul>
+                )
+              })()}
+            </DescriptionDetails>
           </Fragment>
           <Fragment>
             <DescriptionTerm>Packing service</DescriptionTerm>

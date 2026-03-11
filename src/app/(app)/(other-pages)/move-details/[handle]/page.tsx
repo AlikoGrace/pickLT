@@ -305,6 +305,8 @@ export default function MoveDetailsPage() {
     arrivalWindow,
     flexibility,
     inventoryCount,
+    inventoryItems,
+    customItems,
     contactInfo,
     totalPrice,
     bookingCode,
@@ -481,7 +483,24 @@ export default function MoveDetailsPage() {
             <InfoRow icon={TruckIcon} label="Move Type" value={formatLabel(moveType)} />
             <InfoRow icon={CalendarIcon} label="Move Date" value={formatDate(moveDate)} />
             <InfoRow icon={HomeIcon} label="Home Type" value={formatLabel(homeType)} />
-            <InfoRow icon={CubeIcon} label="Items" value={`${inventoryCount} items`} />
+            <InfoRow icon={CubeIcon} label="Items" value={(() => {
+              let parsedInventory: Record<string, number> = {}
+              try { if (inventoryItems) parsedInventory = JSON.parse(inventoryItems) } catch {}
+              const entries = Object.entries(parsedInventory).filter(([, qty]) => qty > 0)
+              let parsedCustom: { name: string; quantity: number }[] = []
+              try { parsedCustom = (customItems ?? []).map((c) => typeof c === 'string' ? JSON.parse(c) : c).filter((c: any) => c.name) } catch {}
+              if (entries.length === 0 && parsedCustom.length === 0) return `${inventoryCount} items`
+              return (
+                <ul className="list-disc list-inside text-sm space-y-0.5">
+                  {entries.map(([name, qty]) => (
+                    <li key={name}>{formatLabel(name)} &times; {qty}</li>
+                  ))}
+                  {parsedCustom.map((item, i) => (
+                    <li key={`custom-${i}`}>{item.name} &times; {item.quantity}</li>
+                  ))}
+                </ul>
+              )
+            })()} />
             <InfoRow icon={TruckIcon} label="Vehicle" value={formatLabel(vehicleType)} />
             <InfoRow icon={UsersIcon} label="Crew" value={crewSize ? `${crewSize} movers` : 'Standard'} />
             {arrivalWindow && (
