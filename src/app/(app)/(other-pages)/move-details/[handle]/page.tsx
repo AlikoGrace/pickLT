@@ -145,30 +145,57 @@ function docToStoredMove(doc: any): StoredMove {
     paidAt: doc.paidAt ?? doc.$createdAt ?? '',
     totalPrice: doc.estimatedPrice ?? 0,
     bookingCode: doc.handle ?? '',
+    moveCategory: doc.moveCategory ?? null,
     moveType: doc.moveType ?? doc.systemMoveType ?? null,
     moveDate: doc.moveDate ?? null,
     pickupLocation: doc.pickupLocation ?? '',
     pickupStreetAddress: doc.pickupStreetAddress ?? doc.pickupLocation ?? '',
     pickupApartmentUnit: doc.pickupApartmentUnit ?? '',
+    pickupAccessNotes: doc.pickupAccessNotes ?? '',
+    dropoffLocation: doc.dropoffLocation ?? '',
     dropoffStreetAddress: doc.dropoffStreetAddress ?? doc.dropoffLocation ?? '',
     dropoffApartmentUnit: doc.dropoffApartmentUnit ?? '',
     dropoffFloorLevel: doc.dropoffFloorLevel ?? null,
     homeType: doc.homeType ?? null,
-    floorLevel: doc.floorLevel ?? null,
-    elevatorAvailable: doc.elevatorAvailable ?? false,
-    dropoffElevatorAvailable: doc.dropoffElevatorAvailable ?? false,
-    parkingSituation: doc.parkingSituation ?? null,
-    dropoffParkingSituation: doc.dropoffParkingSituation ?? null,
+    floorLevel: doc.pickupFloorLevel ?? null,
+    elevatorAvailable: doc.pickupElevator ?? false,
+    dropoffElevatorAvailable: doc.dropoffElevator ?? false,
+    parkingSituation: doc.pickupParking ?? null,
+    dropoffParkingSituation: doc.dropoffParking ?? null,
+    pickupHaltverbot: doc.pickupHaltverbot ?? false,
+    dropoffHaltverbot: doc.dropoffHaltverbot ?? false,
     packingServiceLevel: doc.packingServiceLevel ?? null,
+    packingMaterials: doc.packingMaterials ?? [],
+    packingNotes: doc.packingNotes ?? '',
     additionalServices: doc.additionalServices ?? [],
     storageWeeks: doc.storageWeeks ?? 0,
+    disposalItems: doc.disposalItems ?? '',
     crewSize: doc.crewSize ?? null,
     vehicleType: doc.vehicleType ?? null,
     arrivalWindow: doc.arrivalWindow ?? null,
+    flexibility: doc.flexibility ?? null,
     inventoryCount: doc.totalItemCount ?? 0,
-    contactInfo: doc.contactInfo ?? { fullName: '', phone: '', email: '' },
+    inventoryItems: doc.inventoryItems ?? null,
+    customItems: doc.customItems ?? [],
+    contactInfo: {
+      fullName: doc.contactFullName ?? '',
+      phoneNumber: doc.contactPhone ?? '',
+      email: doc.contactEmail ?? '',
+      notesForMovers: doc.contactNotes ?? '',
+      isBusinessMove: doc.isBusinessMove ?? false,
+      companyName: doc.companyName ?? '',
+      vatId: doc.vatId ?? '',
+    },
     coverPhotoId: doc.coverPhotoId ?? null,
     galleryPhotoIds: doc.galleryPhotoIds ?? [],
+    routeDistanceMeters: doc.routeDistanceMeters ?? null,
+    routeDurationSeconds: doc.routeDurationSeconds ?? null,
+    paymentMethod: doc.paymentMethod ?? null,
+    isBusinessMove: doc.isBusinessMove ?? false,
+    companyName: doc.companyName ?? '',
+    vatId: doc.vatId ?? '',
+    estimatedPrice: doc.estimatedPrice ?? null,
+    finalPrice: doc.finalPrice ?? null,
   }
 }
 
@@ -254,9 +281,13 @@ export default function MoveDetailsPage() {
     pickupStreetAddress,
     pickupLocation,
     pickupApartmentUnit,
+    pickupAccessNotes,
+    pickupHaltverbot,
     dropoffStreetAddress,
     dropoffApartmentUnit,
     dropoffFloorLevel,
+    dropoffHaltverbot,
+    dropoffLocation,
     homeType,
     floorLevel,
     elevatorAvailable,
@@ -264,11 +295,15 @@ export default function MoveDetailsPage() {
     parkingSituation,
     dropoffParkingSituation,
     packingServiceLevel,
+    packingMaterials,
+    packingNotes,
     additionalServices,
     storageWeeks,
+    disposalItems,
     crewSize,
     vehicleType,
     arrivalWindow,
+    flexibility,
     inventoryCount,
     contactInfo,
     totalPrice,
@@ -276,6 +311,14 @@ export default function MoveDetailsPage() {
     coverPhotoId,
     galleryPhotoIds,
     createdAt,
+    routeDistanceMeters,
+    routeDurationSeconds,
+    paymentMethod,
+    isBusinessMove,
+    companyName,
+    vatId,
+    estimatedPrice,
+    finalPrice,
   } = move
 
   const pickupDisplay = pickupStreetAddress || pickupLocation || 'Pickup location'
@@ -388,6 +431,12 @@ export default function MoveDetailsPage() {
                   {parkingSituation && (
                     <p className="text-sm text-neutral-500">Parking: {formatLabel(parkingSituation)}</p>
                   )}
+                  {pickupAccessNotes && (
+                    <p className="text-sm text-neutral-500">Access notes: {pickupAccessNotes}</p>
+                  )}
+                  {pickupHaltverbot && (
+                    <p className="text-sm text-amber-600 dark:text-amber-400">Haltverbot (no-parking zone) requested</p>
+                  )}
                 </div>
               </div>
 
@@ -416,6 +465,9 @@ export default function MoveDetailsPage() {
                   {dropoffParkingSituation && (
                     <p className="text-sm text-neutral-500">Parking: {formatLabel(dropoffParkingSituation)}</p>
                   )}
+                  {dropoffHaltverbot && (
+                    <p className="text-sm text-amber-600 dark:text-amber-400">Haltverbot (no-parking zone) requested</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -435,16 +487,31 @@ export default function MoveDetailsPage() {
             {arrivalWindow && (
               <InfoRow icon={CalendarIcon} label="Arrival Window" value={formatLabel(arrivalWindow)} />
             )}
+            {flexibility && (
+              <InfoRow icon={ClockIcon} label="Flexibility" value={formatLabel(flexibility)} />
+            )}
+            {routeDistanceMeters != null && routeDistanceMeters > 0 && (
+              <InfoRow icon={MapPinIcon} label="Distance" value={`${(routeDistanceMeters / 1000).toFixed(1)} km`} />
+            )}
+            {routeDurationSeconds != null && routeDurationSeconds > 0 && (
+              <InfoRow icon={ClockIcon} label="Est. Duration" value={`${Math.round(routeDurationSeconds / 60)} min`} />
+            )}
           </div>
 
           {/* Services */}
-          {(packingServiceLevel || additionalServices.length > 0 || storageWeeks > 0) && (
+          {(packingServiceLevel || additionalServices.length > 0 || storageWeeks > 0 || disposalItems) && (
             <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm">
               <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
                 Services
               </h2>
               {packingServiceLevel && (
                 <InfoRow label="Packing Service" value={formatLabel(packingServiceLevel)} />
+              )}
+              {packingMaterials && packingMaterials.length > 0 && (
+                <InfoRow label="Packing Materials" value={packingMaterials.map(formatLabel).join(', ')} />
+              )}
+              {packingNotes && (
+                <InfoRow label="Packing Notes" value={packingNotes} />
               )}
               {additionalServices.length > 0 && (
                 <InfoRow
@@ -454,6 +521,9 @@ export default function MoveDetailsPage() {
               )}
               {storageWeeks > 0 && (
                 <InfoRow label="Storage" value={`${storageWeeks} weeks`} />
+              )}
+              {disposalItems && (
+                <InfoRow label="Disposal Items" value={disposalItems} />
               )}
             </div>
           )}
@@ -488,8 +558,25 @@ export default function MoveDetailsPage() {
                 <span className="font-semibold text-neutral-900 dark:text-neutral-100">Total</span>
                 <span className="font-bold text-neutral-900 dark:text-neutral-100">&euro;{totalPrice.toFixed(2)}</span>
               </div>
+              {paymentMethod && (
+                <div className="flex justify-between mt-2">
+                  <span className="text-neutral-500 dark:text-neutral-400">Payment</span>
+                  <span className="font-medium text-neutral-900 dark:text-neutral-100">{formatLabel(paymentMethod)}</span>
+                </div>
+              )}
             </div>
           </div>
+
+          {/* Business Info */}
+          {isBusinessMove && (
+            <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm">
+              <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
+                Business Details
+              </h3>
+              {companyName && <InfoRow label="Company" value={companyName} />}
+              {vatId && <InfoRow label="VAT ID" value={vatId} />}
+            </div>
+          )}
 
           {/* Assigned Mover */}
           {moverInfo && (
@@ -581,6 +668,9 @@ export default function MoveDetailsPage() {
               )}
               {contactInfo.phoneNumber && (
                 <InfoRow label="Phone" value={contactInfo.phoneNumber} />
+              )}
+              {contactInfo.notesForMovers && (
+                <InfoRow label="Notes for Movers" value={contactInfo.notesForMovers} />
               )}
             </div>
           )}
