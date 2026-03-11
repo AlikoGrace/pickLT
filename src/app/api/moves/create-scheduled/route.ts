@@ -45,13 +45,25 @@ export async function POST(req: NextRequest) {
       floorLevel,
       elevatorAvailable,
       parkingSituation,
+      pickupHaltverbot,
       dropoffFloorLevel,
       dropoffElevatorAvailable,
       dropoffParkingSituation,
+      dropoffHaltverbot,
       // Inventory
       inventoryItems,
       customItems,
       totalItemCount,
+      // Packing
+      packingServiceLevel,
+      packingMaterials,
+      packingNotes,
+      // Timing
+      arrivalWindow,
+      flexibility,
+      // Crew & Vehicle
+      crewSize,
+      vehicleType,
       // Services
       additionalServices,
       storageWeeks,
@@ -70,6 +82,11 @@ export async function POST(req: NextRequest) {
       // Route
       routeDistanceMeters,
       routeDurationSeconds,
+      // Pricing
+      estimatedPrice,
+      finalPrice,
+      // Payment
+      paymentMethod,
     } = body
 
     const { databases } = createAdminClient()
@@ -90,23 +107,78 @@ export async function POST(req: NextRequest) {
         systemMoveType: moveType || 'regular',
         moveDate: moveDate || null,
 
+        // Pickup
         pickupLocation: pickupLocation || null,
         pickupLatitude: pickupLatitude ?? null,
         pickupLongitude: pickupLongitude ?? null,
+        pickupStreetAddress: pickupStreetAddress || null,
+        pickupApartmentUnit: pickupApartmentUnit || null,
+        pickupFloorLevel: floorLevel || null,
+        pickupElevator: elevatorAvailable ?? false,
+        pickupParking: parkingSituation || null,
+        pickupHaltverbot: pickupHaltverbot ?? false,
+
+        // Dropoff
         dropoffLocation: dropoffLocation || null,
         dropoffLatitude: dropoffLatitude ?? null,
         dropoffLongitude: dropoffLongitude ?? null,
+        dropoffStreetAddress: dropoffStreetAddress || null,
+        dropoffApartmentUnit: dropoffApartmentUnit || null,
+        dropoffFloorLevel: dropoffFloorLevel || null,
+        dropoffElevator: dropoffElevatorAvailable ?? false,
+        dropoffParking: dropoffParkingSituation || null,
+        dropoffHaltverbot: dropoffHaltverbot ?? false,
 
+        // Home/Property
+        homeType: homeType || null,
+
+        // Inventory
         inventoryItems: inventoryItems || null,
         customItems: customItems || [],
         totalItemCount: totalItemCount ?? 0,
 
+        // Packing
+        packingServiceLevel: packingServiceLevel || null,
+        packingMaterials: packingMaterials || [],
+        packingNotes: packingNotes || null,
+
+        // Timing
+        arrivalWindow: arrivalWindow || null,
+        flexibility: flexibility || null,
+
+        // Crew & Vehicle
+        crewSize: crewSize || null,
+        vehicleType: vehicleType || null,
+
+        // Services
+        additionalServices: additionalServices || [],
+        storageWeeks: storageWeeks ?? 0,
+
+        // Photos
         coverPhotoId: coverPhotoId || null,
         galleryPhotoIds: galleryPhotoIds || [],
 
+        // Contact
+        contactFullName: contactName || null,
+        contactPhone: contactPhone || null,
+        contactEmail: contactEmail || null,
+        contactNotes: contactNotes || null,
+        isBusinessMove: isBusinessMove ?? false,
+        companyName: companyName || null,
+        vatId: vatId || null,
+
+        // Route
         routeDistanceMeters: routeDistanceMeters ?? null,
         routeDurationSeconds: routeDurationSeconds ?? null,
 
+        // Pricing
+        estimatedPrice: estimatedPrice ?? null,
+        finalPrice: finalPrice ?? null,
+
+        // Payment
+        paymentMethod: paymentMethod || null,
+
+        // Legal
         termsAccepted: true,
         privacyAccepted: true,
       }
