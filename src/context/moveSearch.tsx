@@ -71,6 +71,9 @@ export type ContactInfo = {
   isBusinessMove: boolean
 }
 
+// Payment method types
+export type PaymentMethod = 'cash' | 'bank_transfer' | 'card'
+
 // Step 10 types - Confirmation
 export type LegalConsent = {
   termsAccepted: boolean
@@ -89,12 +92,15 @@ export type StoredMove = {
   paidAt: string
   totalPrice: number
   bookingCode: string
+  moveCategory?: 'instant' | 'scheduled'
   // Core move details
   moveType: MoveTypeKey | null
   moveDate: string | null
   pickupLocation: string
   pickupStreetAddress: string
   pickupApartmentUnit: string
+  pickupAccessNotes?: string
+  dropoffLocation?: string
   dropoffStreetAddress: string
   dropoffApartmentUnit: string
   dropoffFloorLevel: FloorLevelKey | null
@@ -104,21 +110,41 @@ export type StoredMove = {
   dropoffElevatorAvailable: boolean
   parkingSituation: ParkingKey | null
   dropoffParkingSituation: DropoffParkingKey | null
+  pickupHaltverbot?: boolean
+  dropoffHaltverbot?: boolean
   // Services
   packingServiceLevel: PackingServiceLevel | null
+  packingMaterials?: string[]
+  packingNotes?: string
   additionalServices: AdditionalService[]
   storageWeeks: number
+  disposalItems?: string
   // Crew & vehicle
   crewSize: CrewSize | null
   vehicleType: VehicleType | null
   arrivalWindow: ArrivalWindow | null
+  flexibility?: FlexibilityOption | null
   // Items
   inventoryCount: number
+  inventoryItems?: string
+  customItems?: string[]
   // Contact
   contactInfo: ContactInfo
   // Photos
   coverPhotoId: string | null
   galleryPhotoIds: string[]
+  // Route
+  routeDistanceMeters?: number | null
+  routeDurationSeconds?: number | null
+  // Payment
+  paymentMethod?: PaymentMethod | null
+  // Business
+  isBusinessMove?: boolean
+  companyName?: string
+  vatId?: string
+  // Pricing
+  estimatedPrice?: number | null
+  finalPrice?: number | null
 }
 
 // Inventory item with metadata
@@ -217,6 +243,13 @@ type MoveSearchState = {
   // Step 9 - Contact Information
   contactInfo: ContactInfo
 
+  // Route info (calculated by map)
+  routeDistanceMeters: number | null
+  routeDurationSeconds: number | null
+
+  // Payment method
+  paymentMethod: PaymentMethod | null
+
   // Step 10 - Legal Consent
   legalConsent: LegalConsent
 
@@ -293,6 +326,13 @@ type MoveSearchActions = {
 
   // Step 9 actions
   updateContactInfo: (info: Partial<ContactInfo>) => void
+
+  // Route info actions
+  setRouteDistanceMeters: (d: number | null) => void
+  setRouteDurationSeconds: (d: number | null) => void
+
+  // Payment method actions
+  setPaymentMethod: (m: PaymentMethod | null) => void
 
   // Step 10 actions
   setTermsAccepted: (accepted: boolean) => void
@@ -378,6 +418,13 @@ const defaultState: MoveSearchState = {
     isBusinessMove: false,
   },
 
+  // Route info
+  routeDistanceMeters: null,
+  routeDurationSeconds: null,
+
+  // Payment method
+  paymentMethod: null,
+
   // Step 10
   legalConsent: {
     termsAccepted: false,
@@ -454,6 +501,13 @@ const MoveSearchContext = createContext<MoveSearchState & MoveSearchActions>({
 
   // Step 9
   updateContactInfo: () => {},
+
+  // Route info
+  setRouteDistanceMeters: () => {},
+  setRouteDurationSeconds: () => {},
+
+  // Payment method
+  setPaymentMethod: () => {},
 
   // Step 10
   setTermsAccepted: () => {},
@@ -532,6 +586,13 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
   // Step 9 state
   const [contactInfo, setContactInfo] = useState<ContactInfo>(defaultState.contactInfo)
 
+  // Route info state
+  const [routeDistanceMeters, setRouteDistanceMeters] = useState<number | null>(defaultState.routeDistanceMeters)
+  const [routeDurationSeconds, setRouteDurationSeconds] = useState<number | null>(defaultState.routeDurationSeconds)
+
+  // Payment method state
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | null>(defaultState.paymentMethod)
+
   // Step 10 state
   const [legalConsent, setLegalConsent] = useState<LegalConsent>(defaultState.legalConsent)
 
@@ -590,6 +651,9 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
     if (saved.galleryPhotoIds) setGalleryPhotoIds(saved.galleryPhotoIds as string[])
     if (saved.contactInfo) setContactInfo(saved.contactInfo as ContactInfo)
     if (saved.legalConsent) setLegalConsent(saved.legalConsent as LegalConsent)
+    if (saved.routeDistanceMeters != null) setRouteDistanceMeters(saved.routeDistanceMeters as number)
+    if (saved.routeDurationSeconds != null) setRouteDurationSeconds(saved.routeDurationSeconds as number)
+    if (saved.paymentMethod) setPaymentMethod(saved.paymentMethod as PaymentMethod)
   }, [])
 
   // ─── 1. Restore draft from localStorage (+ one-shot sessionStorage for auth redirect) ───
@@ -677,6 +741,9 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
         galleryPhotoIds,
         contactInfo,
         legalConsent,
+        routeDistanceMeters,
+        routeDurationSeconds,
+        paymentMethod,
       }
 
       try {
@@ -712,6 +779,7 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
     additionalServices, storageWeeks, disposalItems,
     coverPhotoId, galleryPhotoIds,
     contactInfo, legalConsent,
+    routeDistanceMeters, routeDurationSeconds, paymentMethod,
   ])
 
   // ─── 3. Persist stored moves separately (they survive draft resets) ───
@@ -887,6 +955,10 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
     setContactInfo(defaultState.contactInfo)
     // Step 10
     setLegalConsent(defaultState.legalConsent)
+    // Route info + payment
+    setRouteDistanceMeters(defaultState.routeDistanceMeters)
+    setRouteDurationSeconds(defaultState.routeDurationSeconds)
+    setPaymentMethod(defaultState.paymentMethod)
     // Clear persisted draft
     try { localStorage.removeItem(DRAFT_KEY) } catch { /* ignore */ }
   }
@@ -955,6 +1027,13 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
         // Step 10 state
         legalConsent,
 
+        // Route info
+        routeDistanceMeters,
+        routeDurationSeconds,
+
+        // Payment method
+        paymentMethod,
+
         // Stored moves
         storedMoves,
 
@@ -1021,6 +1100,13 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
 
         // Step 9 actions
         updateContactInfo,
+
+        // Route info actions
+        setRouteDistanceMeters,
+        setRouteDurationSeconds,
+
+        // Payment method actions
+        setPaymentMethod,
 
         // Step 10 actions
         setTermsAccepted,
