@@ -28,6 +28,8 @@ interface MapboxMapProps {
   showUserLocation?: boolean
   onMapLoad?: (map: mapboxgl.Map) => void
   onRouteCalculated?: (routeInfo: RouteInfo) => void
+  onPickupMarkerClick?: () => void
+  onDropoffMarkerClick?: () => void
 }
 
 export const MapboxMap = ({
@@ -39,6 +41,8 @@ export const MapboxMap = ({
   showUserLocation = true,
   onMapLoad,
   onRouteCalculated,
+  onPickupMarkerClick,
+  onDropoffMarkerClick,
 }: MapboxMapProps) => {
   const mapContainer = useRef<HTMLDivElement>(null)
   const map = useRef<mapboxgl.Map | null>(null)
@@ -59,6 +63,12 @@ export const MapboxMap = ({
   const onRouteCalculatedRef = useRef(onRouteCalculated)
   useEffect(() => { onRouteCalculatedRef.current = onRouteCalculated }, [onRouteCalculated])
 
+  // Keep marker click handlers in refs
+  const onPickupMarkerClickRef = useRef(onPickupMarkerClick)
+  useEffect(() => { onPickupMarkerClickRef.current = onPickupMarkerClick }, [onPickupMarkerClick])
+  const onDropoffMarkerClickRef = useRef(onDropoffMarkerClick)
+  useEffect(() => { onDropoffMarkerClickRef.current = onDropoffMarkerClick }, [onDropoffMarkerClick])
+
   // ─── Initialize map (once) ────────────────────────────
   useEffect(() => {
     if (!mapContainer.current || map.current) return
@@ -76,6 +86,20 @@ export const MapboxMap = ({
     })
 
     map.current.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-right')
+
+    // Add geolocation control to show user's location puck
+    if (showUserLocation) {
+      const geolocate = new mapboxgl.GeolocateControl({
+        positionOptions: { enableHighAccuracy: true },
+        trackUserLocation: true,
+        showUserHeading: true,
+      })
+      map.current.addControl(geolocate, 'top-right')
+      // Auto-trigger geolocation after map loads
+      map.current.on('load', () => {
+        geolocate.trigger()
+      })
+    }
 
     map.current.on('load', () => {
       setMapLoaded(true)
@@ -182,6 +206,7 @@ export const MapboxMap = ({
         pickupMarkerRef.current.setLngLat([pickupCoordinates.longitude, pickupCoordinates.latitude])
       } else {
         const el = createPickupMarkerElement()
+        el.addEventListener('click', () => onPickupMarkerClickRef.current?.())
         pickupMarkerRef.current = new mapboxgl.Marker({ element: el, anchor: 'bottom' })
           .setLngLat([pickupCoordinates.longitude, pickupCoordinates.latitude])
           .addTo(map.current)
@@ -197,6 +222,7 @@ export const MapboxMap = ({
         dropoffMarkerRef.current.setLngLat([dropoffCoordinates.longitude, dropoffCoordinates.latitude])
       } else {
         const el = createDropoffMarkerElement()
+        el.addEventListener('click', () => onDropoffMarkerClickRef.current?.())
         dropoffMarkerRef.current = new mapboxgl.Marker({ element: el, anchor: 'bottom' })
           .setLngLat([dropoffCoordinates.longitude, dropoffCoordinates.latitude])
           .addTo(map.current)

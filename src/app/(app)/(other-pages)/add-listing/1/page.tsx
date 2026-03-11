@@ -129,7 +129,10 @@ const PageContent = () => {
                 pickupCoordinates={pickupCoordinates}
                 dropoffCoordinates={dropoffCoordinates}
                 showRoute={true}
+                showUserLocation={true}
                 onRouteCalculated={handleRouteCalculated}
+                onPickupMarkerClick={() => handleEditLocation('pickup')}
+                onDropoffMarkerClick={() => handleEditLocation('dropoff')}
                 className="w-full h-full !rounded-none"
               />
             </div>
