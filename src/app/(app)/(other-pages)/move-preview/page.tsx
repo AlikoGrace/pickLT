@@ -120,6 +120,11 @@ const Page = () => {
     legalConsent,
     setTermsAccepted,
     setPrivacyAccepted,
+    // Route
+    routeDistanceMeters,
+    routeDurationSeconds,
+    // Payment
+    paymentMethod,
   } = useMoveSearch()
 
   const inventoryCount = Object.values(inventory).reduce((sum, qty) => sum + qty, 0) + customItems.length
@@ -150,12 +155,31 @@ const Page = () => {
     setRouteInfo(info)
   }, [])
 
-  // Calculate estimated price
-  const basePrice = moveType === 'premium' ? 299 : moveType === 'regular' ? 199 : 99
-  const packingPrice = packingServiceLevel === 'full' ? 250 : packingServiceLevel === 'unpacking' ? 350 : packingServiceLevel === 'partial' ? 150 : 0
+  // Calculate estimated price using the same formula as calculateprice cloud function
+  const BASE_RATE_PER_KM = 1.50
+  const MOVE_TYPE_MULTIPLIER: Record<string, number> = { light: 1.0, regular: 1.3, premium: 1.8 }
+  const FLOOR_SURCHARGE_NO_ELEVATOR = 15
+  const PACKING_RATES: Record<string, number> = { none: 0, partial: 50, full: 120, unpacking: 180 }
+  const CREW_RATES: Record<string, number> = { '1': 0, '2': 30, '3': 60, '4plus': 100 }
+  const MINIMUM_PRICE = 49
+
+  const distanceKm = ((routeInfo?.distance ?? routeDistanceMeters) || 0) / 1000
+  let basePrice = distanceKm * BASE_RATE_PER_KM * (MOVE_TYPE_MULTIPLIER[moveType || 'regular'] || 1.0)
+
+  let floorSurcharge = 0
+  const pFloor = parseInt(floorLevel || '0', 10)
+  const dFloor = parseInt(dropoffFloorLevel || '0', 10)
+  if (!elevatorAvailable && pFloor > 0) floorSurcharge += pFloor * FLOOR_SURCHARGE_NO_ELEVATOR
+  if (!dropoffElevatorAvailable && dFloor > 0) floorSurcharge += dFloor * FLOOR_SURCHARGE_NO_ELEVATOR
+
+  const packingPrice = PACKING_RATES[packingServiceLevel || 'none'] || 0
+  const crewPrice = CREW_RATES[crewSize || '1'] || 0
+  const storagePrice = (storageWeeks || 0) * 25
   const servicesPrice = additionalServices.length * 50
-  const storagePrice = storageWeeks * 30
-  const totalPrice = basePrice + packingPrice + servicesPrice + storagePrice
+
+  let totalPrice = basePrice + floorSurcharge + packingPrice + crewPrice + storagePrice + servicesPrice
+  totalPrice = Math.max(totalPrice, MINIMUM_PRICE)
+  totalPrice = Math.round(totalPrice * 100) / 100
 
   // Build gallery images array for header
   const galleryImages = [
@@ -504,29 +528,51 @@ const Page = () => {
 
         {/* Price breakdown */}
         <DescriptionList>
-          <DescriptionTerm>Base rate ({formatLabel(moveType)})</DescriptionTerm>
-          <DescriptionDetails className="sm:text-right">€{basePrice}</DescriptionDetails>
+          <DescriptionTerm>Base rate ({formatLabel(moveType)}, {distanceKm.toFixed(1)} km)</DescriptionTerm>
+          <DescriptionDetails className="sm:text-right">€{basePrice.toFixed(2)}</DescriptionDetails>
+          {floorSurcharge > 0 && (
+            <>
+              <DescriptionTerm>Floor surcharge</DescriptionTerm>
+              <DescriptionDetails className="sm:text-right">€{floorSurcharge.toFixed(2)}</DescriptionDetails>
+            </>
+          )}
           {packingPrice > 0 && (
             <>
               <DescriptionTerm>Packing service</DescriptionTerm>
-              <DescriptionDetails className="sm:text-right">€{packingPrice}</DescriptionDetails>
+              <DescriptionDetails className="sm:text-right">€{packingPrice.toFixed(2)}</DescriptionDetails>
+            </>
+          )}
+          {crewPrice > 0 && (
+            <>
+              <DescriptionTerm>Crew ({crewSize} movers)</DescriptionTerm>
+              <DescriptionDetails className="sm:text-right">€{crewPrice.toFixed(2)}</DescriptionDetails>
             </>
           )}
           {servicesPrice > 0 && (
             <>
               <DescriptionTerm>Additional services ({additionalServices.length})</DescriptionTerm>
-              <DescriptionDetails className="sm:text-right">€{servicesPrice}</DescriptionDetails>
+              <DescriptionDetails className="sm:text-right">€{servicesPrice.toFixed(2)}</DescriptionDetails>
             </>
           )}
           {storagePrice > 0 && (
             <>
               <DescriptionTerm>Storage ({storageWeeks} weeks)</DescriptionTerm>
-              <DescriptionDetails className="sm:text-right">€{storagePrice}</DescriptionDetails>
+              <DescriptionDetails className="sm:text-right">€{storagePrice.toFixed(2)}</DescriptionDetails>
             </>
           )}
           <DescriptionTerm className="font-semibold text-neutral-900 dark:text-white">Total</DescriptionTerm>
-          <DescriptionDetails className="font-semibold sm:text-right">€{totalPrice}</DescriptionDetails>
+          <DescriptionDetails className="font-semibold sm:text-right">€{totalPrice.toFixed(2)}</DescriptionDetails>
         </DescriptionList>
+
+        {paymentMethod && (
+          <>
+            <Divider />
+            <div className="flex justify-between text-sm">
+              <span className="text-neutral-500 dark:text-neutral-400">Payment method</span>
+              <span className="font-medium text-neutral-900 dark:text-neutral-100">{formatLabel(paymentMethod)}</span>
+            </div>
+          </>
+        )}
 
         <Divider />
 
