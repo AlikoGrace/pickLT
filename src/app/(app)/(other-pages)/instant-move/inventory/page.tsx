@@ -1,5 +1,7 @@
 'use client'
 
+import MapboxMap, { RouteInfo } from '@/components/MapboxMap'
+import MapLocationPicker, { PickedLocation } from '@/components/MapLocationPicker'
 import NcInputNumber from '@/components/NcInputNumber'
 import { useMoveSearch, type CustomItem, type MoveTypeKey } from '@/context/moveSearch'
 import { classifyMove, DEFAULT_CLASSIFICATION_POINTS, type InventoryItemDef as ClassifyItemDef, type CustomItemInput } from '@/lib/classifyMove'
@@ -16,11 +18,10 @@ import {
   Cancel01Icon,
   AlertCircleIcon,
   DeliveryTruck01Icon,
-  Location01Icon,
 } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { useRouter } from 'next/navigation'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 // Inventory item definitions with internal metadata for move estimation
 type InventoryItemDef = {
@@ -120,6 +121,12 @@ const InstantMoveInventoryPage = () => {
   const {
     pickupLocation,
     dropoffLocation,
+    pickupCoordinates,
+    dropoffCoordinates,
+    setPickupLocation,
+    setDropoffLocation,
+    setPickupCoordinates,
+    setDropoffCoordinates,
     moveType,
     inventory,
     customItems,
@@ -130,6 +137,31 @@ const InstantMoveInventoryPage = () => {
   } = useMoveSearch()
 
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
+
+  // ─── Map & location picker state ──────────────────────────
+  const [routeInfo, setRouteInfo] = useState<RouteInfo | null>(null)
+  const [locationPickerOpen, setLocationPickerOpen] = useState(false)
+  const [editingLocationType, setEditingLocationType] = useState<'pickup' | 'dropoff'>('pickup')
+
+  const handleEditLocation = useCallback((type: 'pickup' | 'dropoff') => {
+    setEditingLocationType(type)
+    setLocationPickerOpen(true)
+  }, [])
+
+  const handleLocationPicked = useCallback((location: PickedLocation) => {
+    if (editingLocationType === 'pickup') {
+      setPickupLocation(location.fullAddress)
+      setPickupCoordinates(location.coordinates)
+    } else {
+      setDropoffLocation(location.fullAddress)
+      setDropoffCoordinates(location.coordinates)
+    }
+    setLocationPickerOpen(false)
+  }, [editingLocationType, setPickupLocation, setDropoffLocation, setPickupCoordinates, setDropoffCoordinates])
+
+  const handleRouteCalculated = useCallback((info: RouteInfo) => {
+    setRouteInfo(info)
+  }, [])
 
   // ─── Fetch inventory catalog from database ───────────────
   useEffect(() => {
@@ -269,58 +301,83 @@ const InstantMoveInventoryPage = () => {
           </p>
         </div>
 
-        {/* Move Summary Card */}
-        <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-5 dark:border-neutral-700 dark:bg-neutral-800/50 mb-8">
-          <p className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-4">
-            Your move details
-          </p>
-          <div className="space-y-3">
-            <div className="flex items-start gap-3">
-              <HugeiconsIcon
-                icon={Location01Icon}
-                size={20}
-                strokeWidth={1.5}
-                className="mt-0.5 shrink-0 text-neutral-400 dark:text-neutral-500"
-              />
-              <div className="min-w-0 flex-1">
-                <p className="text-xs text-neutral-500 dark:text-neutral-400">Pickup</p>
-                <p className="truncate text-sm font-medium text-neutral-900 dark:text-white">
-                  {pickupLocation || 'Not specified'}
-                </p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <HugeiconsIcon
-                icon={Location01Icon}
-                size={20}
-                strokeWidth={1.5}
-                className="mt-0.5 shrink-0 text-neutral-400 dark:text-neutral-500"
-              />
-              <div className="min-w-0 flex-1">
-                <p className="text-xs text-neutral-500 dark:text-neutral-400">Drop-off</p>
-                <p className="truncate text-sm font-medium text-neutral-900 dark:text-white">
-                  {dropoffLocation || 'Not specified'}
-                </p>
-              </div>
-            </div>
-            {totalItems > 0 && (
-              <div className="flex items-start gap-3">
-                <HugeiconsIcon
-                  icon={DeliveryTruck01Icon}
-                  size={20}
-                  strokeWidth={1.5}
-                  className="mt-0.5 shrink-0 text-neutral-400 dark:text-neutral-500"
+        {/* Location Summary with Map */}
+        {(pickupLocation || dropoffLocation) && (
+          <div className="overflow-hidden rounded-2xl border border-neutral-200 dark:border-neutral-700 mb-8">
+            {/* Route map */}
+            {pickupCoordinates && dropoffCoordinates && (
+              <div className="relative h-44 sm:h-56">
+                <MapboxMap
+                  pickupCoordinates={pickupCoordinates}
+                  dropoffCoordinates={dropoffCoordinates}
+                  showRoute={true}
+                  onRouteCalculated={handleRouteCalculated}
+                  onPickupMarkerClick={() => handleEditLocation('pickup')}
+                  onDropoffMarkerClick={() => handleEditLocation('dropoff')}
+                  className="w-full h-full !rounded-none"
                 />
-                <div className="min-w-0 flex-1">
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400">Items selected</p>
-                  <p className="text-sm font-medium text-neutral-900 dark:text-white">
-                    {totalItems} item{totalItems !== 1 ? 's' : ''}
-                  </p>
-                </div>
               </div>
             )}
+            <div className="bg-neutral-50 dark:bg-neutral-800 p-4">
+              <div className="flex items-center gap-3">
+                <div className="flex flex-col items-center">
+                  <div className="w-3 h-3 rounded-full bg-green-500" />
+                  <div className="w-0.5 h-6 bg-neutral-300 dark:bg-neutral-600" />
+                  <div className="w-3 h-3 rounded-full bg-red-500" />
+                </div>
+                <div className="flex-1 min-w-0 space-y-2">
+                  <button
+                    type="button"
+                    onClick={() => handleEditLocation('pickup')}
+                    className="block w-full text-left rounded-lg px-2 py-1 -mx-2 hover:bg-neutral-100 dark:hover:bg-neutral-700/60 transition"
+                  >
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400">From</p>
+                    <p className="text-sm font-medium text-neutral-900 dark:text-white truncate">
+                      {pickupLocation || 'Tap to select pickup'}
+                    </p>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleEditLocation('dropoff')}
+                    className="block w-full text-left rounded-lg px-2 py-1 -mx-2 hover:bg-neutral-100 dark:hover:bg-neutral-700/60 transition"
+                  >
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400">To</p>
+                    <p className="text-sm font-medium text-neutral-900 dark:text-white truncate">
+                      {dropoffLocation || 'Tap to select drop-off'}
+                    </p>
+                  </button>
+                </div>
+                {routeInfo && (
+                  <div className="shrink-0 text-right">
+                    <p className="text-base font-semibold text-neutral-900 dark:text-white">
+                      {routeInfo.distance >= 1000
+                        ? `${(routeInfo.distance / 1000).toFixed(1)} km`
+                        : `${Math.round(routeInfo.distance)} m`}
+                    </p>
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                      {routeInfo.duration >= 3600
+                        ? `${Math.floor(routeInfo.duration / 3600)}h ${Math.ceil((routeInfo.duration % 3600) / 60)}min`
+                        : `${Math.ceil(routeInfo.duration / 60)} min`}
+                    </p>
+                  </div>
+                )}
+              </div>
+              {totalItems > 0 && (
+                <div className="mt-3 pt-3 border-t border-neutral-200 dark:border-neutral-700 flex items-center gap-2">
+                  <HugeiconsIcon
+                    icon={DeliveryTruck01Icon}
+                    size={18}
+                    strokeWidth={1.5}
+                    className="shrink-0 text-neutral-400 dark:text-neutral-500"
+                  />
+                  <span className="text-sm text-neutral-600 dark:text-neutral-300">
+                    {totalItems} item{totalItems !== 1 ? 's' : ''} selected
+                  </span>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* ─── Classification Bar ─── */}
         {totalItems > 0 && (
@@ -654,6 +711,17 @@ const InstantMoveInventoryPage = () => {
           </DialogPanel>
         </div>
       </Dialog>
+
+      {/* Location Picker Overlay */}
+      <MapLocationPicker
+        open={locationPickerOpen}
+        onClose={() => setLocationPickerOpen(false)}
+        onSelect={handleLocationPicked}
+        initialCoordinates={
+          editingLocationType === 'pickup' ? pickupCoordinates : dropoffCoordinates
+        }
+        label={editingLocationType === 'pickup' ? 'Edit pickup location' : 'Edit drop-off location'}
+      />
     </div>
   )
 }
