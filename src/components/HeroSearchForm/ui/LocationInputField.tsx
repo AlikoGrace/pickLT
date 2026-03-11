@@ -47,6 +47,7 @@ interface Props {
   inputName?: string
   fieldStyle: 'default' | 'small'
   onChange?: (location: LocationSuggestion | null) => void
+  defaultValue?: string
 }
 
 // ─── Mapbox Geocoding helpers ────────────────────────────────
@@ -140,15 +141,25 @@ export const LocationInputField: FC<Props> = ({
   inputName = 'location',
   fieldStyle = 'default',
   onChange,
+  defaultValue,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const [showPopover, setShowPopover] = useState(false)
   const [selected, setSelected] = useState<LocationSuggestion | null>(null)
-  const [inputValue, setInputValue] = useState('')
+  const [inputValue, setInputValue] = useState(defaultValue || '')
   const [suggestions, setSuggestions] = useState<LocationSuggestion[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const debounceRef = useRef<NodeJS.Timeout | null>(null)
+  const defaultAppliedRef = useRef(false)
+
+  // Sync defaultValue into input when it changes (e.g. context hydration)
+  useEffect(() => {
+    if (defaultValue && !defaultAppliedRef.current && !selected) {
+      setInputValue(defaultValue)
+      defaultAppliedRef.current = true
+    }
+  }, [defaultValue, selected])
 
   // ─── Geolocation state ───
   const [userCoords, setUserCoords] = useState<{ latitude: number; longitude: number } | null>(null)

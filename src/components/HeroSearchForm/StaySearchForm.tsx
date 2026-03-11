@@ -15,6 +15,9 @@ interface Props {
 export const StaySearchForm = ({ className, formStyle = 'default' }: Props) => {
   const router = useRouter()
   const {
+    pickupLocation: contextPickup,
+    dropoffLocation: contextDropoff,
+    moveType: contextMoveType,
     setPickupLocation,
     setDropoffLocation,
     setPickupCoordinates,
@@ -27,7 +30,7 @@ export const StaySearchForm = ({ className, formStyle = 'default' }: Props) => {
     router.prefetch('/move-choice')
   }, [router])
 
-  const [moveType, setMoveType] = useState<string | null>(null)
+  const [moveType, setMoveType] = useState<string | null>(contextMoveType || null)
   const [pickupData, setPickupData] = useState<LocationSuggestion | null>(null)
   const [dropoffData, setDropoffData] = useState<LocationSuggestion | null>(null)
 
@@ -107,6 +110,7 @@ export const StaySearchForm = ({ className, formStyle = 'default' }: Props) => {
         description="Pickup location"
         inputName="pickupLocation"
         onChange={handlePickupChange}
+        defaultValue={contextPickup}
       />
       <VerticalDividerLine />
       <LocationInputField
@@ -116,12 +120,14 @@ export const StaySearchForm = ({ className, formStyle = 'default' }: Props) => {
         description="Drop-off location"
         inputName="dropoffLocation"
         onChange={handleDropoffChange}
+        defaultValue={contextDropoff}
       />
       <VerticalDividerLine />
       <GuestNumberField
         className="hero-search-form__field-before flex-4/12"
         clearDataButtonClassName={clsx(formStyle === 'small' && 'sm:end-18', formStyle === 'default' && 'sm:end-22')}
         fieldStyle={formStyle}
+        value={moveType as any}
         onChange={(val) => setMoveType(val)}
       />
       {/* hidden input to include moveType in form submission */}
