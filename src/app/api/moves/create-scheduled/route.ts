@@ -11,11 +11,11 @@ export const maxDuration = 60
  * POST /api/moves/create-scheduled
  *
  * Creates a scheduled-move document in the MOVES collection.
- * Called at the end of the add-listing flow (step 7) after the user fills contact info.
+ * Called from the move-preview page when the user clicks "Proceed to payment".
  * Unlike instant moves, scheduled moves don't have a moverProfileId yet —
  * movers will bid or be assigned later.
  *
- * Body: all the move data collected across steps 1–7.
+ * Body: all the move data collected across steps 1–7 and the preview page.
  */
 export async function POST(req: NextRequest) {
   try {
@@ -134,12 +134,12 @@ export async function POST(req: NextRequest) {
 
         // Inventory
         inventoryItems: inventoryItems || null,
-        customItems: customItems || [],
+        customItems: Array.isArray(customItems) ? customItems : [],
         totalItemCount: totalItemCount ?? 0,
 
         // Packing
         packingServiceLevel: packingServiceLevel || null,
-        packingMaterials: packingMaterials || [],
+        packingMaterials: Array.isArray(packingMaterials) ? packingMaterials : [],
         packingNotes: packingNotes || null,
 
         // Timing
@@ -151,12 +151,12 @@ export async function POST(req: NextRequest) {
         vehicleType: vehicleType || null,
 
         // Services
-        additionalServices: additionalServices || [],
+        additionalServices: Array.isArray(additionalServices) ? additionalServices : [],
         storageWeeks: storageWeeks ?? 0,
 
         // Photos
         coverPhotoId: coverPhotoId || null,
-        galleryPhotoIds: galleryPhotoIds || [],
+        galleryPhotoIds: Array.isArray(galleryPhotoIds) ? galleryPhotoIds : [],
 
         // Contact
         contactFullName: contactName || null,

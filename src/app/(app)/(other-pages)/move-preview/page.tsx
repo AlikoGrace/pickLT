@@ -125,10 +125,16 @@ const Page = () => {
     routeDurationSeconds,
     // Payment
     paymentMethod,
+    // Reset
+    reset,
   } = useMoveSearch()
 
   const inventoryCount = Object.values(inventory).reduce((sum, qty) => sum + qty, 0) + customItems.length
   const selectedHeavyItems = heavyItems.filter(item => item.selected)
+
+  // ─── Submission state ─────────────────────────────────────
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
 
   // ─── Map & location picker state ──────────────────────────
   const [routeInfo, setRouteInfo] = useState<RouteInfo | null>(null)
@@ -180,6 +186,127 @@ const Page = () => {
   let totalPrice = basePrice + floorSurcharge + packingPrice + crewPrice + storagePrice + servicesPrice
   totalPrice = Math.max(totalPrice, MINIMUM_PRICE)
   totalPrice = Math.round(totalPrice * 100) / 100
+
+  // ─── Create scheduled move handler ────────────────────────
+  const handleCreateMove = useCallback(async () => {
+    if (isSubmitting) return
+    setIsSubmitting(true)
+    setSubmitError(null)
+
+    try {
+      // 1. Upload photos
+      let uploadedCoverPhotoId: string | null = null
+      let uploadedGalleryPhotoIds: string[] = []
+
+      if (coverPhotoId || galleryPhotoIds.length > 0) {
+        try {
+          const photoRes = await fetch('/api/moves/upload-photos', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              coverPhotoId: coverPhotoId || null,
+              galleryPhotoIds: galleryPhotoIds.length > 0 ? galleryPhotoIds : [],
+            }),
+          })
+          if (photoRes.ok) {
+            const photoData = await photoRes.json()
+            uploadedCoverPhotoId = photoData.coverPhotoId ?? null
+            uploadedGalleryPhotoIds = photoData.galleryPhotoIds ?? []
+          }
+        } catch (err) {
+          console.error('Failed to upload photos:', err)
+        }
+      }
+
+      // 2. Build inventory count
+      const totalItemCount =
+        Object.values(inventory).reduce((sum, qty) => sum + qty, 0) +
+        customItems.reduce((sum, item) => sum + item.quantity, 0)
+
+      // 3. Create the scheduled move
+      const res = await fetch('/api/moves/create-scheduled', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          pickupLocation: pickupLocation || null,
+          pickupLatitude: pickupCoordinates?.latitude ?? null,
+          pickupLongitude: pickupCoordinates?.longitude ?? null,
+          pickupStreetAddress,
+          pickupApartmentUnit,
+          pickupAccessNotes,
+          dropoffLocation: dropoffLocation || null,
+          dropoffLatitude: dropoffCoordinates?.latitude ?? null,
+          dropoffLongitude: dropoffCoordinates?.longitude ?? null,
+          dropoffStreetAddress,
+          dropoffApartmentUnit,
+          moveDate,
+          moveType: moveType || 'regular',
+          homeType,
+          floorLevel,
+          elevatorAvailable,
+          parkingSituation,
+          pickupHaltverbot: pickupArrangeHaltverbot,
+          dropoffFloorLevel,
+          dropoffElevatorAvailable,
+          dropoffParkingSituation,
+          dropoffHaltverbot: dropoffArrangeHaltverbot,
+          inventoryItems: JSON.stringify(inventory),
+          customItems: customItems.map((c) => JSON.stringify(c)),
+          totalItemCount,
+          packingServiceLevel,
+          packingMaterials: Array.isArray(packingMaterials) ? packingMaterials : [],
+          packingNotes,
+          arrivalWindow,
+          flexibility,
+          crewSize,
+          vehicleType,
+          additionalServices: Array.isArray(additionalServices) ? additionalServices : [],
+          storageWeeks,
+          disposalItems,
+          coverPhotoId: uploadedCoverPhotoId,
+          galleryPhotoIds: uploadedGalleryPhotoIds,
+          contactName: contactInfo.fullName,
+          contactEmail: contactInfo.email,
+          contactPhone: contactInfo.phoneNumber,
+          contactNotes: contactInfo.notesForMovers,
+          isBusinessMove: contactInfo.isBusinessMove,
+          companyName: contactInfo.companyName,
+          vatId: contactInfo.vatId,
+          routeDistanceMeters: routeInfo?.distance ?? routeDistanceMeters,
+          routeDurationSeconds: routeInfo?.duration ?? routeDurationSeconds,
+          estimatedPrice: totalPrice,
+          finalPrice: totalPrice,
+          paymentMethod,
+        }),
+      })
+
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({ error: 'Unknown error' }))
+        throw new Error(errData.error || 'Failed to create move')
+      }
+
+      const data = await res.json()
+
+      // 4. Clear the draft and redirect to move details
+      reset()
+      router.push(`/move-details/${data.handle}`)
+    } catch (err) {
+      console.error('Failed to create scheduled move:', err)
+      setSubmitError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }, [
+    isSubmitting, coverPhotoId, galleryPhotoIds, inventory, customItems,
+    pickupLocation, pickupCoordinates, pickupStreetAddress, pickupApartmentUnit,
+    pickupAccessNotes, dropoffLocation, dropoffCoordinates, dropoffStreetAddress,
+    dropoffApartmentUnit, moveDate, moveType, homeType, floorLevel, elevatorAvailable,
+    parkingSituation, pickupArrangeHaltverbot, dropoffFloorLevel, dropoffElevatorAvailable,
+    dropoffParkingSituation, dropoffArrangeHaltverbot, packingServiceLevel, packingMaterials,
+    packingNotes, arrivalWindow, flexibility, crewSize, vehicleType, additionalServices,
+    storageWeeks, disposalItems, contactInfo, routeInfo, routeDistanceMeters,
+    routeDurationSeconds, totalPrice, paymentMethod, reset, router,
+  ])
 
   // Build gallery images array for header
   const galleryImages = [
@@ -606,12 +733,18 @@ const Page = () => {
 
         {/* SUBMIT */}
         <ButtonPrimary
-          href="/checkout"
           className="w-full"
-          disabled={!canProceed}
+          disabled={!canProceed || isSubmitting}
+          onClick={handleCreateMove}
         >
-          Proceed to payment
+          {isSubmitting ? 'Creating your move...' : 'Proceed to payment'}
         </ButtonPrimary>
+
+        {submitError && (
+          <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-300">
+            {submitError}
+          </div>
+        )}
 
         {!canProceed && (
           <p className="text-center text-xs text-amber-600 dark:text-amber-400">
