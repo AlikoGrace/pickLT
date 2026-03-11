@@ -2,6 +2,7 @@
 
 import NcInputNumber from '@/components/NcInputNumber'
 import { useMoveSearch, type AdditionalService } from '@/context/moveSearch'
+import { compressImage } from '@/utils/compressImage'
 import { Checkbox, CheckboxField, CheckboxGroup } from '@/shared/Checkbox'
 import { Divider } from '@/shared/divider'
 import { Fieldset, Label } from '@/shared/fieldset'
@@ -89,27 +90,29 @@ const Page = () => {
     router.push('/add-listing/7')
   }
 
-  const handleCoverPhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCoverPhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
+      const compressed = await compressImage(file)
       const reader = new FileReader()
       reader.onloadend = () => {
         setCoverPhotoId(reader.result as string)
       }
-      reader.readAsDataURL(file)
+      reader.readAsDataURL(compressed)
     }
   }
 
-  const handleGalleryPhotosChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleGalleryPhotosChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
     if (files) {
-      Array.from(files).forEach((file) => {
+      for (const file of Array.from(files)) {
+        const compressed = await compressImage(file)
         const reader = new FileReader()
         reader.onloadend = () => {
           addGalleryPhotoId(reader.result as string)
         }
-        reader.readAsDataURL(file)
-      })
+        reader.readAsDataURL(compressed)
+      }
     }
   }
 
