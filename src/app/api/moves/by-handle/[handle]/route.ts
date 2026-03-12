@@ -53,6 +53,7 @@ export async function GET(
 
     // Check if user is the assigned mover
     let isMover = false
+    let moverProfileDocForUser: Record<string, unknown> | null = null
     if (moverProfileId) {
       try {
         const moverProfile = await databases.getDocument(
@@ -70,7 +71,30 @@ export async function GET(
       }
     }
 
-    if (!isOwner && !isMover) {
+    // Check if the requesting user is a mover (even if not assigned to this move)
+    let isUserAMover = isMover
+    if (!isUserAMover) {
+      try {
+        const profiles = await databases.listDocuments(
+          APPWRITE.DATABASE_ID,
+          APPWRITE.COLLECTIONS.MOVER_PROFILES,
+          [Query.equal('userId', [userId]), Query.limit(1)]
+        )
+        if (profiles.documents.length > 0) {
+          isUserAMover = true
+          moverProfileDocForUser = profiles.documents[0]
+        }
+      } catch {
+        // ignore
+      }
+    }
+
+    // Allow access if:
+    // 1. User is the move owner (client), OR
+    // 2. User is the assigned mover, OR
+    // 3. Move is a scheduled move with no mover assigned and user is a mover
+    const isUnassignedScheduled = move.moveCategory === 'scheduled' && !moverProfileId
+    if (!isOwner && !isMover && !(isUnassignedScheduled && isUserAMover)) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
@@ -112,7 +136,13 @@ export async function GET(
         ...move,
         moverProfileId,
         clientId,
+        rawStatus: move.status,
+        moveCategory: move.moveCategory ?? null,
       },
+      isAssignedMover: isMover,
+      viewerMoverProfileId: isMover
+        ? moverProfileId
+        : (moverProfileDocForUser?.$id as string) ?? null,
       mover: moverProfile ? {
         id: moverProfile.$id,
         name: moverUserDoc?.fullName || 'Mover',
