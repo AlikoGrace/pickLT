@@ -473,7 +473,7 @@ export default function MoverMoveDetailsPage() {
   }
 
   return (
-    <div className="p-32">
+    <div className="p-8 lg:p-24">
       {/* Back link */}
       <Link
         href="/dashboard"
