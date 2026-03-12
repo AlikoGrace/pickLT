@@ -11,11 +11,15 @@ import {
   HomeIcon,
   CheckCircleIcon,
   ClockIcon,
+  XCircleIcon,
+  PlayIcon,
 } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { useParams, useRouter } from 'next/navigation'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { useAuth } from '@/context/auth'
+import { client } from '@/lib/appwrite'
 
 const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || ''
 const PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || ''
@@ -26,6 +30,23 @@ const getPhotoUrl = (fileIdOrUrl: string): string => {
   if (fileIdOrUrl.startsWith('http://') || fileIdOrUrl.startsWith('https://')) return fileIdOrUrl
   if (!APPWRITE_ENDPOINT || !PROJECT_ID || !BUCKET_MOVE_PHOTOS) return ''
   return `${APPWRITE_ENDPOINT}/storage/buckets/${BUCKET_MOVE_PHOTOS}/files/${fileIdOrUrl}/view?project=${PROJECT_ID}`
+}
+
+const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || ''
+const MOVES_COLLECTION = process.env.NEXT_PUBLIC_COLLECTION_MOVES || ''
+
+// ─── Browser notification helpers ────────────────────────
+function showBrowserNotification(title: string, body: string) {
+  if (typeof window === 'undefined' || !('Notification' in window)) return
+  if (Notification.permission !== 'granted') return
+  try {
+    new Notification(title, {
+      body,
+      icon: '/favicon.ico',
+      tag: 'picklt-job-details',
+      renotify: true,
+    } as NotificationOptions)
+  } catch { /* mobile fallback */ }
 }
 
 type MoveStatus = 'pending' | 'in_progress' | 'completed' | 'cancelled'
@@ -208,11 +229,25 @@ function docToMoveData(doc: any): MoveData {
 
 export default function MoverMoveDetailsPage() {
   const params = useParams()
+  const router = useRouter()
+  const { user } = useAuth()
   const handle = params.handle as string
 
   const [move, setMove] = useState<MoveData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+
+  // Scheduled-move action state
+  const [rawStatus, setRawStatus] = useState<string>('')
+  const [moveCategory, setMoveCategory] = useState<string | null>(null)
+  const [isAssignedMover, setIsAssignedMover] = useState(false)
+  const [moveDocId, setMoveDocId] = useState<string | null>(null)
+  const [moverProfileId, setMoverProfileId] = useState<string | null>(null)
+  const [isAccepting, setIsAccepting] = useState(false)
+  const [isWithdrawing, setIsWithdrawing] = useState(false)
+  const [isStartingRoute, setIsStartingRoute] = useState(false)
+  const [showWithdrawConfirm, setShowWithdrawConfirm] = useState(false)
+  const processedEvents = useRef<Set<string>>(new Set())
 
   const fetchMove = useCallback(async () => {
     try {
@@ -224,9 +259,16 @@ export default function MoverMoveDetailsPage() {
         return
       }
       const data = await res.json()
-      console.log('Fetched move data:', data.move)
-      if (data.move) setMove(docToMoveData(data.move))
-      else setError('not_found')
+      if (data.move) {
+        setMove(docToMoveData(data.move))
+        setRawStatus(data.move.rawStatus ?? data.move.status ?? '')
+        setMoveCategory(data.move.moveCategory ?? null)
+        setIsAssignedMover(data.isAssignedMover ?? false)
+        setMoveDocId(data.move.$id ?? data.move.id ?? null)
+        setMoverProfileId(data.move.moverProfileId ?? null)
+      } else {
+        setError('not_found')
+      }
     } catch {
       setError('fetch_error')
     } finally {
@@ -235,6 +277,136 @@ export default function MoverMoveDetailsPage() {
   }, [handle])
 
   useEffect(() => { fetchMove() }, [fetchMove])
+
+  // ── Request browser notification permission ───────────────
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission()
+    }
+  }, [])
+
+  // ── Realtime subscription for move document updates ───────
+  useEffect(() => {
+    if (!DATABASE_ID || !MOVES_COLLECTION || !moveDocId) return
+
+    const channel = `databases.${DATABASE_ID}.collections.${MOVES_COLLECTION}.documents.${moveDocId}`
+    const unsubscribe = client.subscribe(channel, (event) => {
+      const payload = event.payload as Record<string, unknown>
+      if (!payload) return
+
+      const eventKey = `${payload.$id}-${payload.status}`
+      if (processedEvents.current.has(eventKey)) return
+      processedEvents.current.add(eventKey)
+
+      const newStatus = payload.status as string
+      setRawStatus(newStatus)
+      setMove((prev) => prev ? { ...prev, status: mapDbStatus(newStatus) } : prev)
+
+      // Check if another mover got assigned (or we got unassigned)
+      const newMoverProfileId =
+        typeof payload.moverProfileId === 'string'
+          ? payload.moverProfileId
+          : (payload.moverProfileId as Record<string, string>)?.$id || null
+      setMoverProfileId(newMoverProfileId)
+
+      const myProfileId = user?.moverDetails?.profileId || null
+      setIsAssignedMover(!!newMoverProfileId && newMoverProfileId === myProfileId)
+
+      // Notify on key status changes
+      if (newStatus === 'cancelled_by_client') {
+        showBrowserNotification('Move Cancelled', 'The client has cancelled this move.')
+      } else if (newStatus === 'draft' && !newMoverProfileId) {
+        showBrowserNotification('Mover Withdrawn', 'The assigned mover has withdrawn from this move.')
+      }
+    })
+
+    return () => unsubscribe()
+  }, [moveDocId, user?.moverDetails?.profileId])
+
+  // ── Accept scheduled move ─────────────────────────────────
+  const handleAccept = async () => {
+    if (!moveDocId) return
+    setIsAccepting(true)
+    try {
+      const res = await fetch('/api/mover/accept-scheduled-move', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ moveId: moveDocId }),
+      })
+      if (!res.ok) {
+        const data = await res.json()
+        alert(data.error || 'Failed to accept move')
+        return
+      }
+      setIsAssignedMover(true)
+      setRawStatus('mover_accepted')
+      setMoverProfileId(user?.moverDetails?.profileId || null)
+      setMove((prev) => prev ? { ...prev, status: mapDbStatus('mover_accepted') } : prev)
+    } catch {
+      alert('Failed to accept move. Please try again.')
+    } finally {
+      setIsAccepting(false)
+    }
+  }
+
+  // ── Withdraw from scheduled move ──────────────────────────
+  const handleWithdraw = async () => {
+    if (!moveDocId) return
+    setIsWithdrawing(true)
+    try {
+      const res = await fetch('/api/mover/withdraw-scheduled-move', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ moveId: moveDocId }),
+      })
+      if (!res.ok) {
+        const data = await res.json()
+        alert(data.error || 'Failed to withdraw from move')
+        return
+      }
+      setIsAssignedMover(false)
+      setRawStatus('draft')
+      setMoverProfileId(null)
+      setShowWithdrawConfirm(false)
+      setMove((prev) => prev ? { ...prev, status: mapDbStatus('draft') } : prev)
+    } catch {
+      alert('Failed to withdraw. Please try again.')
+    } finally {
+      setIsWithdrawing(false)
+    }
+  }
+
+  // ── Start route (mover_accepted → mover_en_route) ────────
+  const handleStartRoute = async () => {
+    if (!moveDocId) return
+    setIsStartingRoute(true)
+    try {
+      const res = await fetch('/api/mover/update-move-status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ moveId: moveDocId, status: 'mover_en_route' }),
+      })
+      if (!res.ok) {
+        const data = await res.json()
+        alert(data.error || 'Failed to start route')
+        return
+      }
+      // Navigate to active-move page — the move is now active
+      router.push('/active-move')
+    } catch {
+      alert('Failed to start route. Please try again.')
+    } finally {
+      setIsStartingRoute(false)
+    }
+  }
+
+  // ── Derive action button state ────────────────────────────
+  const isScheduled = moveCategory === 'scheduled'
+  const isUnassigned = !moverProfileId
+  const canAccept = isScheduled && isUnassigned && ['draft', 'paid', 'pending_payment'].includes(rawStatus)
+  const canWithdraw = isScheduled && isAssignedMover && ['mover_accepted', 'mover_assigned'].includes(rawStatus)
+  const canStartRoute = isScheduled && isAssignedMover && rawStatus === 'mover_accepted'
+  const isActivePhase = ['mover_en_route', 'mover_arrived', 'loading', 'in_transit', 'arrived_destination', 'unloading', 'awaiting_payment'].includes(rawStatus)
 
   if (isLoading) {
     return (
@@ -546,6 +718,91 @@ export default function MoverMoveDetailsPage() {
                 </div>
               )}
             </div>
+
+            {/* ── Action Buttons ─────────────────────────────── */}
+            {isScheduled && (
+              <div className="mt-6 space-y-3">
+                {/* Accept Move */}
+                {canAccept && (
+                  <button
+                    onClick={handleAccept}
+                    disabled={isAccepting}
+                    className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-semibold py-3 px-4 rounded-xl transition-colors"
+                  >
+                    <CheckCircleIcon className="w-5 h-5" />
+                    {isAccepting ? 'Accepting...' : 'Accept This Move'}
+                  </button>
+                )}
+
+                {/* Start Route (mover_accepted → mover_en_route) */}
+                {canStartRoute && (
+                  <button
+                    onClick={handleStartRoute}
+                    disabled={isStartingRoute}
+                    className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3 px-4 rounded-xl transition-colors"
+                  >
+                    <PlayIcon className="w-5 h-5" />
+                    {isStartingRoute ? 'Starting...' : 'Start Route — I\'m On My Way'}
+                  </button>
+                )}
+
+                {/* Go to Active Move */}
+                {isAssignedMover && isActivePhase && (
+                  <button
+                    onClick={() => router.push('/active-move')}
+                    className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition-colors"
+                  >
+                    <TruckIcon className="w-5 h-5" />
+                    Go to Active Move
+                  </button>
+                )}
+
+                {/* Withdraw */}
+                {canWithdraw && (
+                  <>
+                    {!showWithdrawConfirm ? (
+                      <button
+                        onClick={() => setShowWithdrawConfirm(true)}
+                        className="w-full flex items-center justify-center gap-2 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 font-semibold py-3 px-4 rounded-xl transition-colors border border-red-200 dark:border-red-800"
+                      >
+                        <XCircleIcon className="w-5 h-5" />
+                        Withdraw from Move
+                      </button>
+                    ) : (
+                      <div className="bg-red-50 dark:bg-red-900/20 rounded-xl p-4 border border-red-200 dark:border-red-800">
+                        <p className="text-sm text-red-700 dark:text-red-300 mb-3">
+                          Are you sure? The move will become available for other movers.
+                        </p>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={handleWithdraw}
+                            disabled={isWithdrawing}
+                            className="flex-1 bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white font-semibold py-2 px-3 rounded-lg text-sm transition-colors"
+                          >
+                            {isWithdrawing ? 'Withdrawing...' : 'Yes, Withdraw'}
+                          </button>
+                          <button
+                            onClick={() => setShowWithdrawConfirm(false)}
+                            className="flex-1 bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-700 dark:hover:bg-neutral-600 text-neutral-700 dark:text-neutral-200 font-semibold py-2 px-3 rounded-lg text-sm transition-colors"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                )}
+
+                {/* Status info when assigned but waiting */}
+                {isAssignedMover && rawStatus === 'mover_accepted' && (
+                  <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 border border-blue-200 dark:border-blue-800">
+                    <p className="text-sm text-blue-700 dark:text-blue-300 font-medium">
+                      You&apos;ve accepted this move. When you&apos;re ready, tap &quot;Start Route&quot; to let the client know you&apos;re on your way.
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Client Contact Info */}
