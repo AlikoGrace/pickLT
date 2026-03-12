@@ -80,11 +80,11 @@ const MOBILE_NAV_ITEMS = [
     href: '/earnings',
     icon: CalendarDaysIcon,
   },
-  {
-    name: 'Profile',
-    href: '/settings',
-    icon: UserCircleIcon,
-  },
+  // {
+  //   name: 'Profile',
+  //   href: '/settings',
+  //   icon: UserCircleIcon,
+  // },
 ]
 
 interface Props {
@@ -231,6 +231,7 @@ const MoverDashboardLayout = ({ children }: Props) => {
             <BellIcon className="h-6 w-6 text-neutral-600 dark:text-neutral-300" />
           </button>
           <div className="h-8 w-8 overflow-hidden rounded-full bg-neutral-200 dark:bg-neutral-700">
+            <Link href="/settings">
             {user?.profilePhoto ? (
               <img
                 src={user.profilePhoto}
@@ -244,6 +245,7 @@ const MoverDashboardLayout = ({ children }: Props) => {
                 className=" size-8 bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300"
               />            
               )}
+            </Link>
           </div>
         </div>
       </header>
