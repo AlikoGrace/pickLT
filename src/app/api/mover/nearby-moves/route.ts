@@ -33,47 +33,75 @@ export async function GET(req: NextRequest) {
     }
 
     const { searchParams } = req.nextUrl
-    const lat = parseFloat(searchParams.get('lat') || '')
-    const lng = parseFloat(searchParams.get('lng') || '')
-
-    if (Number.isNaN(lat) || Number.isNaN(lng)) {
-      return NextResponse.json(
-        { error: 'Missing or invalid lat/lng query parameters' },
-        { status: 400 }
-      )
-    }
+    let lat = parseFloat(searchParams.get('lat') || '')
+    let lng = parseFloat(searchParams.get('lng') || '')
 
     const { databases } = createAdminClient()
 
-    // Bounding box for ~30 km
+    // If no valid coordinates provided, fall back to the mover's stored profile location
+    if (Number.isNaN(lat) || Number.isNaN(lng)) {
+      const profiles = await databases.listDocuments(
+        APPWRITE.DATABASE_ID,
+        APPWRITE.COLLECTIONS.MOVER_PROFILES,
+        [Query.equal('userId', userId), Query.limit(1)]
+      )
+      if (profiles.total > 0) {
+        const profile = profiles.documents[0]
+        lat = profile.currentLatitude as number
+        lng = profile.currentLongitude as number
+      }
+      if (!lat || !lng || Number.isNaN(lat) || Number.isNaN(lng)) {
+        return NextResponse.json(
+          { error: 'No location available. Please enable location services or update your location.' },
+          { status: 400 }
+        )
+      }
+    }
+
+    // Bounding box for ~30 km (applied in JS since no DB indexes for range queries)
     const dLat = RADIUS_KM * DEG_PER_KM_LAT
     const dLng = RADIUS_KM * DEG_PER_KM_LNG(lat)
 
+    // Fetch all draft scheduled moves — geographic filtering done in JS
     const docs = await databases.listDocuments(
       APPWRITE.DATABASE_ID,
       APPWRITE.COLLECTIONS.MOVES,
       [
-        Query.equal('moveCategory', ['scheduled']),
-        Query.equal('status', ['draft']),
-        Query.greaterThanEqual('pickupLatitude', lat - dLat),
-        Query.lessThanEqual('pickupLatitude', lat + dLat),
-        Query.greaterThanEqual('pickupLongitude', lng - dLng),
-        Query.lessThanEqual('pickupLongitude', lng + dLng),
+        Query.equal('moveCategory', 'scheduled'),
+        Query.equal('status', 'draft'),
         Query.orderDesc('$createdAt'),
-        Query.limit(100),
+        Query.limit(200),
       ]
     )
 
-    // Refine with exact haversine distance and exclude mover's own moves
+    console.log(
+      `[nearby-moves] mover coords: ${lat.toFixed(4)},${lng.toFixed(4)} | total draft scheduled: ${docs.total}`
+    )
+
+    // Refine with bounding box, exact haversine distance, and exclude mover's own moves
     const moves = docs.documents
       .filter((doc) => {
-        if (doc.clientId === userId) return false
         const pLat = doc.pickupLatitude as number
         const pLng = doc.pickupLongitude as number
         if (pLat == null || pLng == null) return false
+        // Quick bounding-box pre-filter
+        if (pLat < lat - dLat || pLat > lat + dLat) return false
+        if (pLng < lng - dLng || pLng > lng + dLng) return false
+        // Exclude mover's own moves
+        const docClientId =
+          typeof doc.clientId === 'string'
+            ? doc.clientId
+            : (doc.clientId as Record<string, string>)?.$id || null
+        if (docClientId === userId) return false
+        // Exact distance check
         return haversineKm(lat, lng, pLat, pLng) <= RADIUS_KM
       })
-      .map((doc) => ({
+
+    console.log(
+      `[nearby-moves] after filtering: ${moves.length} moves within ${RADIUS_KM}km`
+    )
+
+    const result = moves.map((doc) => ({
         id: doc.$id,
         handle: doc.handle,
         moveType: doc.moveType,
@@ -117,7 +145,7 @@ export async function GET(req: NextRequest) {
         ),
       }))
 
-    return NextResponse.json({ moves, total: moves.length })
+    return NextResponse.json({ moves: result, total: result.length })
   } catch (error) {
     console.error('Error fetching nearby moves:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })

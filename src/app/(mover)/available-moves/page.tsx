@@ -92,27 +92,52 @@ const AvailableMovesPage = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [moverCoords, setMoverCoords] = useState<{ latitude: number; longitude: number } | null>(null)
-  const [geoError, setGeoError] = useState(false)
+  const [hasBrowserGeo, setHasBrowserGeo] = useState(false)
+  const [profileCoordsLoaded, setProfileCoordsLoaded] = useState(false)
 
-  // Track mover's own position
+  // 1. Fetch the mover's stored profile coordinates as an immediate fallback
   useEffect(() => {
-    if (!navigator.geolocation) {
-      setGeoError(true)
-      setIsLoading(false)
-      return
-    }
+    let cancelled = false
+    ;(async () => {
+      try {
+        const res = await fetch('/api/mover/dashboard')
+        if (!res.ok) return
+        const data = await res.json()
+        const profile = data.moverProfile
+        if (
+          !cancelled &&
+          profile?.currentLatitude &&
+          profile?.currentLongitude
+        ) {
+          setMoverCoords((prev) =>
+            prev ? prev : { latitude: profile.currentLatitude, longitude: profile.currentLongitude }
+          )
+        }
+      } catch {
+        // Silently fail — browser geo may still succeed
+      } finally {
+        if (!cancelled) setProfileCoordsLoaded(true)
+      }
+    })()
+    return () => { cancelled = true }
+  }, [])
+
+  // 2. Also try browser geolocation for fresher position
+  useEffect(() => {
+    if (typeof navigator === 'undefined' || !navigator.geolocation) return
+
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         setMoverCoords({
           latitude: pos.coords.latitude,
           longitude: pos.coords.longitude,
         })
+        setHasBrowserGeo(true)
       },
       () => {
-        setGeoError(true)
-        setIsLoading(false)
+        // Browser geo failed — we'll rely on profile coords
       },
-      { enableHighAccuracy: true, maximumAge: 30_000, timeout: 15_000 }
+      { enableHighAccuracy: true, maximumAge: 30_000, timeout: 10_000 }
     )
 
     const watchId = navigator.geolocation.watchPosition(
@@ -121,6 +146,7 @@ const AvailableMovesPage = () => {
           latitude: pos.coords.latitude,
           longitude: pos.coords.longitude,
         })
+        setHasBrowserGeo(true)
       },
       () => {},
       { enableHighAccuracy: true, maximumAge: 5_000, timeout: 15_000 }
@@ -129,13 +155,14 @@ const AvailableMovesPage = () => {
   }, [])
 
   const fetchMoves = useCallback(async () => {
-    if (!moverCoords) return
     try {
       setIsLoading(true)
       setError(null)
-      const res = await fetch(
-        `/api/mover/nearby-moves?lat=${moverCoords.latitude}&lng=${moverCoords.longitude}`
-      )
+      // Pass coords if we have them; the API will fall back to profile coords if missing
+      const params = moverCoords
+        ? `?lat=${moverCoords.latitude}&lng=${moverCoords.longitude}`
+        : ''
+      const res = await fetch(`/api/mover/nearby-moves${params}`)
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}))
         throw new Error(errData.error || 'Failed to fetch moves')
@@ -150,13 +177,13 @@ const AvailableMovesPage = () => {
     }
   }, [moverCoords])
 
-  // Fetch on mount and when coords change, poll every 30s
+  // Fetch once profile coords are loaded or browser geo arrives, then poll every 30s
   useEffect(() => {
-    if (!moverCoords) return
+    if (!profileCoordsLoaded && !hasBrowserGeo) return
     fetchMoves()
     const interval = setInterval(fetchMoves, 30_000)
     return () => clearInterval(interval)
-  }, [fetchMoves, moverCoords])
+  }, [fetchMoves, profileCoordsLoaded, hasBrowserGeo])
 
   const mapMarkers = moves
     .filter((m) => m.pickupLatitude != null && m.pickupLongitude != null)
@@ -172,21 +199,6 @@ const AvailableMovesPage = () => {
     m.pickupStreetAddress || m.pickupLocation || 'Pickup'
   const dropoffDisplay = (m: NearbyMove) =>
     m.dropoffStreetAddress || m.dropoffLocation || 'Drop-off'
-
-  // Geo error state
-  if (geoError) {
-    return (
-      <div className="h-[calc(100vh-64px)] lg:h-screen flex flex-col items-center justify-center p-6">
-        <MapPinIcon className="w-12 h-12 text-amber-500 mb-4" />
-        <p className="text-neutral-900 dark:text-neutral-100 font-semibold mb-2">
-          Location access required
-        </p>
-        <p className="text-neutral-500 dark:text-neutral-400 text-sm text-center mb-4">
-          Please enable location services to see available moves near you.
-        </p>
-      </div>
-    )
-  }
 
   // Loading state
   if (isLoading && moves.length === 0) {
