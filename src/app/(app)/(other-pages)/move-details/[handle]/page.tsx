@@ -21,7 +21,8 @@ import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { client } from '@/lib/appwrite'
 
 const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || ''
 const PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || ''
@@ -199,6 +200,23 @@ function docToStoredMove(doc: any): StoredMove {
   }
 }
 
+const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || ''
+const MOVES_COLLECTION = process.env.NEXT_PUBLIC_COLLECTION_MOVES || ''
+
+// ─── Browser notification helpers ────────────────────────
+function showBrowserNotification(title: string, body: string) {
+  if (typeof window === 'undefined' || !('Notification' in window)) return
+  if (Notification.permission !== 'granted') return
+  try {
+    new Notification(title, {
+      body,
+      icon: '/favicon.ico',
+      tag: 'picklt-move-details',
+      renotify: true,
+    } as NotificationOptions)
+  } catch { /* mobile fallback */ }
+}
+
 export default function MoveDetailsPage() {
   const params = useParams()
   const router = useRouter()
@@ -215,6 +233,12 @@ export default function MoveDetailsPage() {
   const [isLoading, setIsLoading] = useState(!contextMove)
   const [error, setError] = useState<string | null>(null)
 
+  // Scheduled move tracking state
+  const [rawStatus, setRawStatus] = useState<string>('')
+  const [moveDocId, setMoveDocId] = useState<string | null>(null)
+  const [moveCategory, setMoveCategory] = useState<string | null>(null)
+  const processedEvents = useRef<Set<string>>(new Set())
+
   const fetchFromDb = useCallback(async () => {
     try {
       setIsLoading(true)
@@ -225,9 +249,14 @@ export default function MoveDetailsPage() {
         setError('fetch_error'); return
       }
       const data = await res.json()
-      console.log('Fetched move data:', data.move)
-      if (data.move) setDbMove(docToStoredMove(data.move))
-      else setError('not_found')
+      if (data.move) {
+        setDbMove(docToStoredMove(data.move))
+        setRawStatus(data.move.rawStatus ?? data.move.status ?? '')
+        setMoveDocId(data.move.$id ?? data.move.id ?? null)
+        setMoveCategory(data.move.moveCategory ?? null)
+      } else {
+        setError('not_found')
+      }
       if (data.mover) setMoverInfo(data.mover)
     } catch {
       setError('fetch_error')
@@ -241,7 +270,98 @@ export default function MoveDetailsPage() {
     if (!contextMove) fetchFromDb()
   }, [contextMove, fetchFromDb])
 
+  // ── Request browser notification permission ───────────────
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission()
+    }
+  }, [])
+
+  // ── Realtime subscription for move status changes ─────────
+  useEffect(() => {
+    if (!DATABASE_ID || !MOVES_COLLECTION || !moveDocId) return
+
+    const channel = `databases.${DATABASE_ID}.collections.${MOVES_COLLECTION}.documents.${moveDocId}`
+    const unsubscribe = client.subscribe(channel, (event) => {
+      const payload = event.payload as Record<string, unknown>
+      if (!payload) return
+
+      const eventKey = `${payload.$id}-${payload.status}`
+      if (processedEvents.current.has(eventKey)) return
+      processedEvents.current.add(eventKey)
+
+      const newStatus = payload.status as string
+      setRawStatus(newStatus)
+      setDbMove((prev) => prev ? { ...prev, status: mapDbStatus(newStatus) } : prev)
+
+      // Check if a mover got assigned
+      const newMoverProfileId =
+        typeof payload.moverProfileId === 'string'
+          ? payload.moverProfileId
+          : (payload.moverProfileId as Record<string, string>)?.$id || null
+
+      // Notify client of key status changes
+      if (newStatus === 'mover_accepted' && newMoverProfileId) {
+        showBrowserNotification(
+          'Mover Accepted Your Move! ✅',
+          'A mover has accepted your scheduled move. They will start the route soon.',
+        )
+        // Re-fetch to get mover info
+        fetchFromDb()
+      } else if (newStatus === 'mover_en_route') {
+        showBrowserNotification(
+          'Mover is On the Way! 🚚',
+          'Your mover is heading to the pickup location.',
+        )
+      } else if (newStatus === 'mover_arrived') {
+        showBrowserNotification(
+          'Mover Has Arrived! 🚛',
+          'Your mover has arrived at the pickup location. Please meet them.',
+        )
+      } else if (newStatus === 'loading') {
+        showBrowserNotification(
+          'Loading Started 📦',
+          'Your mover has started loading your items.',
+        )
+      } else if (newStatus === 'in_transit') {
+        showBrowserNotification(
+          'On the Move! 🛣️',
+          'Your items are being transported to the destination.',
+        )
+      } else if (newStatus === 'arrived_destination') {
+        showBrowserNotification(
+          'Arrived at Destination! 🏠',
+          'Your mover has arrived at the drop-off location.',
+        )
+      } else if (newStatus === 'completed') {
+        showBrowserNotification(
+          'Move Completed! ✅',
+          'Your move has been completed successfully.',
+        )
+      } else if (newStatus === 'draft' && !newMoverProfileId) {
+        showBrowserNotification(
+          'Mover Withdrawn',
+          'The mover has withdrawn from your move. It is now available for other movers.',
+        )
+        setMoverInfo(null)
+      }
+    })
+
+    return () => unsubscribe()
+  }, [moveDocId, fetchFromDb])
+
   const move = contextMove || dbMove
+
+  // Determine if the move is in an active phase (trackable)
+  const activeStatuses = ['mover_en_route', 'mover_arrived', 'loading', 'in_transit', 'arrived_destination', 'unloading', 'awaiting_payment']
+  const isActiveMove = activeStatuses.includes(rawStatus)
+  const hasMoverAssigned = !!moverInfo
+
+  const handleTrackLiveMove = () => {
+    if (!moveDocId) return
+    sessionStorage.setItem('activeMoveId', moveDocId)
+    router.push('/instant-move')
+  }
 
   if (isLoading) {
     return (
@@ -584,6 +704,40 @@ export default function MoveDetailsPage() {
                 </div>
               )}
             </div>
+
+            {/* ── Live Tracking / Status Actions ─────────────── */}
+            {isActiveMove && hasMoverAssigned && (
+              <div className="mt-6">
+                <button
+                  onClick={handleTrackLiveMove}
+                  className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition-colors"
+                >
+                  <TruckIcon className="w-5 h-5" />
+                  Track Live Move
+                </button>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400 text-center mt-2">
+                  Your mover is active — track progress in real time
+                </p>
+              </div>
+            )}
+
+            {/* Mover accepted but not yet en_route */}
+            {rawStatus === 'mover_accepted' && hasMoverAssigned && (
+              <div className="mt-6 bg-green-50 dark:bg-green-900/20 rounded-xl p-4 border border-green-200 dark:border-green-800">
+                <p className="text-sm text-green-700 dark:text-green-300 font-medium">
+                  A mover has accepted your move! They will start the route soon.
+                </p>
+              </div>
+            )}
+
+            {/* Waiting for mover assignment */}
+            {moveCategory === 'scheduled' && !hasMoverAssigned && ['draft', 'paid'].includes(rawStatus) && (
+              <div className="mt-6 bg-amber-50 dark:bg-amber-900/20 rounded-xl p-4 border border-amber-200 dark:border-amber-800">
+                <p className="text-sm text-amber-700 dark:text-amber-300 font-medium">
+                  Waiting for a mover to accept your move...
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Business Info */}
