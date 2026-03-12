@@ -181,7 +181,13 @@ export default function NotificationWrapper({ children, role }: NotificationWrap
       if (processedEvents.current.has(eventKey)) return
       processedEvents.current.add(eventKey)
 
-      if (payload.status === 'mover_arrived') {
+      if (payload.status === 'mover_accepted') {
+        playChime(5000)
+        showBrowserNotification(
+          'Mover accepted your move! ✅',
+          'A mover has accepted your scheduled move. They will start the route soon.',
+        )
+      } else if (payload.status === 'mover_arrived') {
         playChime(5000)
         showBrowserNotification(
           'Your mover has arrived! 🚛',
@@ -220,7 +226,7 @@ export default function NotificationWrapper({ children, role }: NotificationWrap
   }, [user, role])
 
   // ─── Mover-side: listen for new move_requests ──────────
-  const handleMoverNotification = useCallback(() => {
+  const handleMoverRequestNotification = useCallback(() => {
     if (!user || role !== 'mover' || !DATABASE_ID || !MOVE_REQUESTS_COLLECTION) return
     if (!user.moverDetails?.profileId) return
 
@@ -248,15 +254,56 @@ export default function NotificationWrapper({ children, role }: NotificationWrap
     return unsubscribe
   }, [user, role])
 
+  // ─── Mover-side: listen for move status changes (scheduled moves) ──
+  const handleMoverMoveNotification = useCallback(() => {
+    if (!user || role !== 'mover' || !DATABASE_ID || !MOVES_COLLECTION) return
+    if (!user.moverDetails?.profileId) return
+
+    const channel = `databases.${DATABASE_ID}.collections.${MOVES_COLLECTION}.documents`
+    const unsubscribe = client.subscribe(channel, (event) => {
+      const payload = event.payload as Record<string, any>
+      if (!payload) return
+
+      // Only react to moves assigned to this mover
+      const moveMoverProfileId =
+        typeof payload.moverProfileId === 'string'
+          ? payload.moverProfileId
+          : payload.moverProfileId?.$id || null
+      if (moveMoverProfileId !== user.moverDetails?.profileId) return
+
+      const eventKey = `${payload.$id}-${payload.status}`
+      if (processedEvents.current.has(eventKey)) return
+      processedEvents.current.add(eventKey)
+
+      if (payload.status === 'cancelled_by_client') {
+        playChime(5000)
+        showBrowserNotification(
+          'Move Cancelled by Client ❌',
+          'The client has cancelled this move.',
+        )
+      }
+    })
+
+    return unsubscribe
+  }, [user, role])
+
   useEffect(() => {
-    const unsubscribe = role === 'client'
-      ? handleClientNotification()
-      : handleMoverNotification()
+    const unsubs: (() => void)[] = []
+
+    if (role === 'client') {
+      const u = handleClientNotification()
+      if (u) unsubs.push(u)
+    } else {
+      const u1 = handleMoverRequestNotification()
+      if (u1) unsubs.push(u1)
+      const u2 = handleMoverMoveNotification()
+      if (u2) unsubs.push(u2)
+    }
 
     return () => {
-      if (unsubscribe) unsubscribe()
+      unsubs.forEach((u) => u())
     }
-  }, [role, handleClientNotification, handleMoverNotification])
+  }, [role, handleClientNotification, handleMoverRequestNotification, handleMoverMoveNotification])
 
   return <>{children}</>
 }
