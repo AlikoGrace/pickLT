@@ -54,7 +54,11 @@ export async function POST(request: NextRequest) {
     )
 
     // Verify this mover is assigned to the move
-    if (move.moverProfileId !== moverProfile.$id) {
+    const moveMoverProfileId =
+      typeof move.moverProfileId === 'string'
+        ? move.moverProfileId
+        : (move.moverProfileId as Record<string, string>)?.$id || null
+    if (moveMoverProfileId !== moverProfile.$id) {
       return NextResponse.json({ error: 'Not assigned to this move' }, { status: 403 })
     }
 
