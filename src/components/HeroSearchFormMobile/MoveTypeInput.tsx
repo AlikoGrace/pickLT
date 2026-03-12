@@ -7,9 +7,9 @@ import { FC, useEffect, useState } from 'react'
 type MoveTypeKey = 'light' | 'regular' | 'premium'
 
 const MOVE_TYPES: { key: MoveTypeKey; label: string; description: string }[] = [
-  { key: 'light', label: 'Light Move', description: 'Small load — few items or studio apartment' },
-  { key: 'regular', label: 'Regular Move', description: 'Standard household move — 2–3 bedroom' },
-  { key: 'premium', label: 'Premium Move', description: 'Full-service move with packing & unpacking' },
+  { key: 'light', label: 'Light Move', description: 'Small load — few items' },
+  { key: 'regular', label: 'Regular Move', description: 'Standard household move' },
+  { key: 'premium', label: 'Premium Move', description: 'Full-service move' },
 ]
 
 interface Props {

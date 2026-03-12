@@ -324,7 +324,7 @@ const MapLocationPicker = ({ open, onClose, onSelect, initialCoordinates, label 
   return (
     <div
       className={clsx(
-        'fixed inset-0 z-[70] flex flex-col bg-white transition-transform duration-200 dark:bg-neutral-900',
+        'fixed inset-0 z-[70] flex flex-col bg-white transition-transform duration-200 dark:bg-neutral-900 max-w-3xl mx-auto rounded-tl-xl rounded-tr-xl shadow-lg',
         open ? 'translate-y-0' : 'translate-y-full pointer-events-none'
       )}
     >
