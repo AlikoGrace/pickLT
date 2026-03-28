@@ -15,6 +15,7 @@ import {
   ArrowRightOnRectangleIcon,
   BellIcon,
   TruckIcon,
+  BanknotesIcon,
 } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 import Link from 'next/link'
@@ -38,6 +39,11 @@ const MOVER_NAV_ITEMS = [
     icon: MapIcon,
   },
   {
+    name: 'Scheduled Moves',
+    href: '/scheduled-moves',
+    icon: CalendarDaysIcon,
+  },
+  {
     name: 'My Crew',
     href: '/my-crew',
     icon: UserGroupIcon,
@@ -45,7 +51,7 @@ const MOVER_NAV_ITEMS = [
   {
     name: 'Earnings',
     href: '/earnings',
-    icon: CalendarDaysIcon,
+    icon: BanknotesIcon,
   },
   {
     name: 'Settings',
@@ -78,7 +84,7 @@ const MOBILE_NAV_ITEMS = [
   {
     name: 'Earnings',
     href: '/earnings',
-    icon: CalendarDaysIcon,
+    icon: BanknotesIcon,
   },
   // {
   //   name: 'Profile',
