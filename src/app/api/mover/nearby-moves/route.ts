@@ -68,7 +68,7 @@ export async function GET(req: NextRequest) {
       APPWRITE.COLLECTIONS.MOVES,
       [
         Query.equal('moveCategory', 'scheduled'),
-        Query.equal('status', 'draft'),
+        Query.equal('status', ['draft', 'booked']),
         Query.orderDesc('$createdAt'),
         Query.limit(200),
       ]
@@ -78,7 +78,8 @@ export async function GET(req: NextRequest) {
       `[nearby-moves] mover coords: ${lat.toFixed(4)},${lng.toFixed(4)} | total draft scheduled: ${docs.total}`
     )
 
-    // Refine with bounding box, exact haversine distance, and exclude mover's own moves
+    // Refine with bounding box, exact haversine distance, exclude mover's own moves, and filter out past moves
+    const nowIso = new Date().toISOString()
     const moves = docs.documents
       .filter((doc) => {
         const pLat = doc.pickupLatitude as number
@@ -93,6 +94,8 @@ export async function GET(req: NextRequest) {
             ? doc.clientId
             : (doc.clientId as Record<string, string>)?.$id || null
         if (docClientId === userId) return false
+        // Filter out moves with a past moveDate
+        if (doc.moveDate && doc.moveDate < nowIso) return false
         // Exact distance check
         return haversineKm(lat, lng, pLat, pLng) <= RADIUS_KM
       })
