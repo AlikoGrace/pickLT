@@ -7,13 +7,11 @@ import { NextRequest, NextResponse } from 'next/server'
 // Statuses from which the client is allowed to cancel
 const CANCELLABLE_STATUSES = [
   'draft',
+  'booked',
   'pending_payment',
   'paid',
   'mover_assigned',
   'mover_accepted',
-  'mover_en_route',
-  'mover_arrived',
-  'loading',
 ]
 
 // POST /api/moves/cancel — Cancel a move on behalf of the client
