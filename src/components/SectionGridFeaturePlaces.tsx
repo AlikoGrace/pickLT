@@ -11,7 +11,7 @@ import MoveCard from './MoveCard'
 import SectionTabHeader from './SectionTabHeader'
 
 function mapDbStatus(dbStatus: string): MoveStatus {
-  if (['draft', 'pending_payment', 'paid', 'mover_assigned'].includes(dbStatus)) return 'pending'
+  if (['draft', 'booked', 'pending_payment', 'paid', 'mover_assigned'].includes(dbStatus)) return 'pending'
   if (
     ['mover_accepted', 'mover_en_route', 'mover_arrived', 'loading', 'in_transit',
      'arrived_destination', 'unloading', 'awaiting_payment'].includes(dbStatus)
@@ -37,7 +37,7 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
   subHeading = 'Track all your moves',
 }) => {
   const { user, isAuthenticated, isLoading: authLoading } = useAuth()
-  const tabs = ['All Moves', 'Pending', 'In Progress', 'Completed', 'Cancelled']
+  const tabs = ['All Moves', 'Scheduled', 'Pending', 'In Progress', 'Completed', 'Cancelled']
   const [activeTab, setActiveTab] = useState('All Moves')
 
   const [moves, setMoves] = useState<StoredMove[]>([])
@@ -85,6 +85,7 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
         contactInfo: doc.contactInfo ?? { fullName: '', phone: '', email: '' },
         coverPhotoId: doc.coverPhotoId ?? null,
         galleryPhotoIds: doc.galleryPhotoIds ?? [],
+        moveCategory: doc.moveCategory ?? null,
       }))
       setMoves(mapped)
     } catch {
@@ -101,8 +102,10 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
   }, [fetchMoves, authLoading])
 
   // Map tab to status filter
-  const getStatusFromTab = (tab: string): MoveStatus | undefined => {
+  const getStatusFromTab = (tab: string): MoveStatus | 'scheduled' | undefined => {
     switch (tab) {
+      case 'Scheduled':
+        return 'scheduled'
       case 'Pending':
         return 'pending'
       case 'In Progress':
@@ -117,7 +120,13 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
   }
 
   const status = getStatusFromTab(activeTab)
-  const filteredMoves = (status ? moves.filter((m) => m.status === status) : moves).slice(0, 4)
+  const filteredMoves = (
+    status === 'scheduled'
+      ? moves.filter((m) => m.moveCategory === 'scheduled' && m.status !== 'completed')
+      : status
+        ? moves.filter((m) => m.status === status)
+        : moves
+  ).slice(0, 4)
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab)
@@ -172,9 +181,11 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
       ) : (
         <div className="mt-8 flex flex-col items-center justify-center py-16 text-center">
           <p className="text-lg text-neutral-500 dark:text-neutral-400 mb-6">
-            {activeTab === 'All Moves' 
+            {activeTab === 'All Moves'
               ? 'No moves yet. Start by booking your first move!'
-              : `No ${activeTab.toLowerCase()} moves found.`}
+              : activeTab === 'Scheduled'
+                ? 'No scheduled moves found.'
+                : `No ${activeTab.toLowerCase()} moves found.`}
           </p>
         </div>
       )}
