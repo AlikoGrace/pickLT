@@ -70,6 +70,7 @@ export interface CrewMemberDoc extends AppwriteDoc {
 // ─── Moves ─────────────────────────────────────────────
 export type MoveStatusEnum =
   | 'draft'
+  | 'booked'
   | 'pending_payment'
   | 'paid'
   | 'mover_assigned'
