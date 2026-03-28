@@ -5,7 +5,7 @@ import { MoveStatus, StoredMove } from '@/context/moveSearch'
 import { Divider } from '@/shared/divider'
 import { ArrowLeftIcon, TruckIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { client } from '@/lib/appwrite'
 
@@ -80,6 +80,14 @@ const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || ''
 const MOVES_COLLECTION = process.env.NEXT_PUBLIC_COLLECTION_MOVES || ''
 
 export default function MyMovesPage() {
+  return (
+    <Suspense fallback={<div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">{[...Array(4)].map((_, i) => (<div key={i} className="animate-pulse rounded-2xl bg-neutral-100 dark:bg-neutral-800 h-64" />))}</div>}>
+      <MyMovesContent />
+    </Suspense>
+  )
+}
+
+function MyMovesContent() {
   const searchParams = useSearchParams()
   const [moves, setMoves] = useState<StoredMove[]>([])
   const [loading, setLoading] = useState(true)
