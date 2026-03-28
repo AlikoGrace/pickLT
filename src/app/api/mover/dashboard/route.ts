@@ -97,9 +97,25 @@ export async function GET() {
       0
     )
 
+    // Active moves count: moves assigned to this mover that are actively being worked on
+    const activePhaseStatuses = [
+      'mover_accepted', 'mover_en_route', 'mover_arrived',
+      'loading', 'in_transit', 'arrived_destination', 'unloading',
+    ]
+    const activeMovesCount = activeMoves.documents.filter(
+      (m) => activePhaseStatuses.includes(m.status as string)
+    ).length
+
+    // Scheduled moves count: moves assigned to this mover with moveCategory=scheduled and status=mover_assigned
+    const scheduledMovesCount = activeMoves.documents.filter(
+      (m) => m.moveCategory === 'scheduled' && m.status === 'mover_assigned'
+    ).length
+
     return NextResponse.json({
       moverProfile,
       activeMoves: activeMoves.documents,
+      activeMovesCount,
+      scheduledMovesCount,
       completedThisMonth: completedMoves.total,
       pendingRequests: moveRequests.documents,
       crewMembers: crew.documents,
