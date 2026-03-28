@@ -14,6 +14,8 @@ interface DashboardData {
   earningsThisMonth: number
   crewCount: number
   pendingRequests: number
+  activeMovesCount: number
+  scheduledMovesCount: number
   recentMoves: RecentMoveFromApi[]
 }
 
@@ -70,7 +72,7 @@ const DashboardPage = () => {
   const mapApiMoveStatus = (status: string): RecentMove['status'] => {
     if (status === 'completed') return 'completed'
     if (status === 'cancelled_by_client' || status === 'cancelled_by_mover') return 'cancelled'
-    if (status === 'draft' || status === 'pending_payment') return 'pending'
+    if (status === 'draft' || status === 'booked' || status === 'pending_payment') return 'pending'
     return 'in_progress'
   }
 
@@ -105,6 +107,20 @@ const DashboardPage = () => {
       icon: TruckIcon,
       href: '/available-moves',
       color: 'bg-neutral-500',
+    },
+    {
+      name: 'Active Moves',
+      value: dashboard?.activeMovesCount ?? 0,
+      icon: ClockIcon,
+      href: '/active-move',
+      color: 'bg-blue-500',
+    },
+    {
+      name: 'Scheduled Moves',
+      value: dashboard?.scheduledMovesCount ?? 0,
+      icon: CalendarDaysIcon,
+      href: '/scheduled-moves',
+      color: 'bg-indigo-500',
     },
     {
       name: 'Completed This Month',
@@ -181,7 +197,7 @@ const DashboardPage = () => {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 gap-4 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
         {stats.map((stat) => (
           <Link
             key={stat.name}
