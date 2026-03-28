@@ -6,10 +6,12 @@ import { Divider } from '@/shared/divider'
 import { ArrowLeftIcon, TruckIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { client } from '@/lib/appwrite'
 
 /** Map database status → display‑level MoveStatus */
 function mapDbStatus(dbStatus: string): MoveStatus {
-  if (['draft', 'pending_payment', 'paid', 'mover_assigned'].includes(dbStatus)) return 'pending'
+  if (['draft', 'booked', 'pending_payment', 'paid', 'mover_assigned'].includes(dbStatus)) return 'pending'
   if (
     [
       'mover_accepted',
@@ -61,22 +63,32 @@ function docToStoredMove(doc: any): StoredMove {
     contactInfo: doc.contactInfo ?? { fullName: '', phone: '', email: '' },
     coverPhotoId: doc.coverPhotoId ?? null,
     galleryPhotoIds: doc.galleryPhotoIds ?? [],
+    moveCategory: doc.moveCategory ?? null,
   }
 }
 
 const STATUS_TABS = [
-  { label: 'All', value: undefined },
-  { label: 'Pending', value: 'pending' as MoveStatus },
-  { label: 'In Progress', value: 'in_progress' as MoveStatus },
-  { label: 'Completed', value: 'completed' as MoveStatus },
-  { label: 'Cancelled', value: 'cancelled' as MoveStatus },
+  { label: 'All', value: undefined as MoveStatus | 'scheduled' | undefined },
+  { label: 'Scheduled', value: 'scheduled' as MoveStatus | 'scheduled' },
+  { label: 'Pending', value: 'pending' as MoveStatus | 'scheduled' },
+  { label: 'In Progress', value: 'in_progress' as MoveStatus | 'scheduled' },
+  { label: 'Completed', value: 'completed' as MoveStatus | 'scheduled' },
+  { label: 'Cancelled', value: 'cancelled' as MoveStatus | 'scheduled' },
 ]
 
+const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || ''
+const MOVES_COLLECTION = process.env.NEXT_PUBLIC_COLLECTION_MOVES || ''
+
 export default function MyMovesPage() {
+  const searchParams = useSearchParams()
   const [moves, setMoves] = useState<StoredMove[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [activeTab, setActiveTab] = useState<MoveStatus | undefined>(undefined)
+  const [activeTab, setActiveTab] = useState<MoveStatus | 'scheduled' | undefined>(() => {
+    const tab = searchParams.get('tab')
+    if (tab === 'scheduled') return 'scheduled'
+    return undefined
+  })
 
   const fetchMoves = useCallback(async () => {
     try {
@@ -98,7 +110,21 @@ export default function MyMovesPage() {
     fetchMoves()
   }, [fetchMoves])
 
-  const filteredMoves = activeTab ? moves.filter((m) => m.status === activeTab) : moves
+  // Appwrite realtime subscription — re-fetch moves on any update
+  useEffect(() => {
+    if (!DATABASE_ID || !MOVES_COLLECTION) return
+    const channel = `databases.${DATABASE_ID}.collections.${MOVES_COLLECTION}.documents`
+    const unsubscribe = client.subscribe(channel, () => {
+      fetchMoves()
+    })
+    return () => unsubscribe()
+  }, [fetchMoves])
+
+  const filteredMoves = activeTab === 'scheduled'
+    ? moves.filter((m) => m.moveCategory === 'scheduled' && m.status !== 'completed')
+    : activeTab
+      ? moves.filter((m) => m.status === activeTab)
+      : moves
 
   // Count per status for badge display
   const counts: Record<string, number> = {}
