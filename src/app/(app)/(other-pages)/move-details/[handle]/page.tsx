@@ -125,7 +125,7 @@ const InfoRow = ({ label, value, icon: Icon }: { label: string; value: React.Rea
 
 /** Map raw DB status → display MoveStatus */
 function mapDbStatus(dbStatus: string): MoveStatus {
-  if (['draft', 'pending_payment', 'paid', 'mover_assigned'].includes(dbStatus)) return 'pending'
+  if (['draft', 'booked', 'pending_payment', 'paid', 'mover_assigned'].includes(dbStatus)) return 'pending'
   if (
     ['mover_accepted', 'mover_en_route', 'mover_arrived', 'loading', 'in_transit',
      'arrived_destination', 'unloading', 'awaiting_payment'].includes(dbStatus)
@@ -239,6 +239,14 @@ export default function MoveDetailsPage() {
   const [moveCategory, setMoveCategory] = useState<string | null>(null)
   const processedEvents = useRef<Set<string>>(new Set())
 
+  // Reschedule / Cancel state
+  const [showReschedule, setShowReschedule] = useState(false)
+  const [rescheduleDate, setRescheduleDate] = useState('')
+  const [rescheduleWindow, setRescheduleWindow] = useState('')
+  const [rescheduleLoading, setRescheduleLoading] = useState(false)
+  const [cancelLoading, setCancelLoading] = useState(false)
+  const [actionError, setActionError] = useState<string | null>(null)
+
   const fetchFromDb = useCallback(async () => {
     try {
       setIsLoading(true)
@@ -338,7 +346,7 @@ export default function MoveDetailsPage() {
           'Move Completed! ✅',
           'Your move has been completed successfully.',
         )
-      } else if (newStatus === 'draft' && !newMoverProfileId) {
+      } else if ((newStatus === 'draft' || newStatus === 'booked') && !newMoverProfileId) {
         showBrowserNotification(
           'Mover Withdrawn',
           'The mover has withdrawn from your move. It is now available for other movers.',
@@ -361,6 +369,63 @@ export default function MoveDetailsPage() {
     if (!moveDocId) return
     sessionStorage.setItem('activeMoveId', moveDocId)
     router.push('/instant-move')
+  }
+
+  const canReschedule = ['draft', 'booked'].includes(rawStatus)
+  const canCancel = ['draft', 'booked', 'pending_payment', 'paid', 'mover_assigned', 'mover_accepted'].includes(rawStatus)
+
+  const handleReschedule = async () => {
+    if (!moveDocId || !rescheduleDate) return
+    setRescheduleLoading(true)
+    setActionError(null)
+    try {
+      const res = await fetch('/api/moves/reschedule', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          moveId: moveDocId,
+          moveDate: rescheduleDate,
+          arrivalWindow: rescheduleWindow || undefined,
+        }),
+      })
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        setActionError(data.error || 'Failed to reschedule')
+        return
+      }
+      setShowReschedule(false)
+      setRescheduleDate('')
+      setRescheduleWindow('')
+      fetchFromDb()
+    } catch {
+      setActionError('Failed to reschedule. Please try again.')
+    } finally {
+      setRescheduleLoading(false)
+    }
+  }
+
+  const handleCancel = async () => {
+    if (!moveDocId) return
+    if (!window.confirm('Are you sure you want to cancel this move? This cannot be undone.')) return
+    setCancelLoading(true)
+    setActionError(null)
+    try {
+      const res = await fetch('/api/moves/cancel', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ moveId: moveDocId }),
+      })
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        setActionError(data.error || 'Failed to cancel')
+        return
+      }
+      fetchFromDb()
+    } catch {
+      setActionError('Failed to cancel. Please try again.')
+    } finally {
+      setCancelLoading(false)
+    }
   }
 
   if (isLoading) {
@@ -731,11 +796,85 @@ export default function MoveDetailsPage() {
             )}
 
             {/* Waiting for mover assignment */}
-            {moveCategory === 'scheduled' && !hasMoverAssigned && ['draft', 'paid'].includes(rawStatus) && (
+            {moveCategory === 'scheduled' && !hasMoverAssigned && ['draft', 'booked', 'paid'].includes(rawStatus) && (
               <div className="mt-6 bg-amber-50 dark:bg-amber-900/20 rounded-xl p-4 border border-amber-200 dark:border-amber-800">
                 <p className="text-sm text-amber-700 dark:text-amber-300 font-medium">
                   Waiting for a mover to accept your move...
                 </p>
+              </div>
+            )}
+
+            {/* ── Reschedule / Cancel Actions ─────────────── */}
+            {(canReschedule || canCancel) && (
+              <div className="mt-6 space-y-3">
+                {actionError && (
+                  <div className="bg-red-50 dark:bg-red-900/20 rounded-xl p-3 border border-red-200 dark:border-red-800">
+                    <p className="text-sm text-red-700 dark:text-red-300">{actionError}</p>
+                  </div>
+                )}
+
+                {canReschedule && !showReschedule && (
+                  <button
+                    onClick={() => setShowReschedule(true)}
+                    className="w-full flex items-center justify-center gap-2 bg-neutral-100 dark:bg-neutral-700 hover:bg-neutral-200 dark:hover:bg-neutral-600 text-neutral-900 dark:text-neutral-100 font-semibold py-3 px-4 rounded-xl transition-colors"
+                  >
+                    <CalendarIcon className="w-5 h-5" />
+                    Reschedule Move
+                  </button>
+                )}
+
+                {showReschedule && (
+                  <div className="bg-neutral-50 dark:bg-neutral-900 rounded-xl p-4 border border-neutral-200 dark:border-neutral-700 space-y-3">
+                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                      New Date &amp; Time
+                      <input
+                        type="datetime-local"
+                        value={rescheduleDate}
+                        onChange={(e) => setRescheduleDate(e.target.value)}
+                        min={new Date().toISOString().slice(0, 16)}
+                        className="mt-1 block w-full rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-3 py-2 text-sm"
+                      />
+                    </label>
+                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                      Arrival Window (optional)
+                      <select
+                        value={rescheduleWindow}
+                        onChange={(e) => setRescheduleWindow(e.target.value)}
+                        className="mt-1 block w-full rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-3 py-2 text-sm"
+                      >
+                        <option value="">Keep current</option>
+                        <option value="morning">Morning (8am-12pm)</option>
+                        <option value="afternoon">Afternoon (12pm-5pm)</option>
+                        <option value="evening">Evening (5pm-9pm)</option>
+                      </select>
+                    </label>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={handleReschedule}
+                        disabled={rescheduleLoading || !rescheduleDate}
+                        className="flex-1 bg-primary-600 hover:bg-primary-700 disabled:opacity-50 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm"
+                      >
+                        {rescheduleLoading ? 'Saving...' : 'Confirm'}
+                      </button>
+                      <button
+                        onClick={() => { setShowReschedule(false); setActionError(null) }}
+                        className="flex-1 bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-600 text-neutral-900 dark:text-neutral-100 font-semibold py-2 px-4 rounded-lg transition-colors text-sm"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {canCancel && (
+                  <button
+                    onClick={handleCancel}
+                    disabled={cancelLoading}
+                    className="w-full flex items-center justify-center gap-2 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 text-red-600 dark:text-red-400 font-semibold py-3 px-4 rounded-xl transition-colors border border-red-200 dark:border-red-800"
+                  >
+                    {cancelLoading ? 'Cancelling...' : 'Cancel Move'}
+                  </button>
+                )}
               </div>
             )}
           </div>
