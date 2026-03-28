@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Only allow withdrawal before en_route phase begins
-    const withdrawableStatuses = ['mover_accepted', 'mover_assigned', 'draft', 'paid', 'pending_payment']
+    const withdrawableStatuses = ['mover_accepted', 'mover_assigned', 'draft', 'booked', 'paid', 'pending_payment']
     if (!withdrawableStatuses.includes(move.status as string)) {
       return NextResponse.json(
         { error: 'Cannot withdraw after the move has started (en_route or later)' },
@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
       moveId,
       {
         moverProfileId: null,
-        status: 'draft',
+        status: 'booked',
       }
     )
 

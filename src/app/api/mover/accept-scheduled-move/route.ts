@@ -61,8 +61,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'This move already has a mover assigned' }, { status: 409 })
     }
 
-    // Verify the move is in a state that can be accepted (draft or paid)
-    if (!['draft', 'paid', 'pending_payment'].includes(move.status as string)) {
+    // Verify the move is in a state that can be accepted (draft, booked, or paid)
+    if (!['draft', 'booked', 'paid', 'pending_payment'].includes(move.status as string)) {
       return NextResponse.json({ error: 'This move is not available for acceptance' }, { status: 409 })
     }
 
