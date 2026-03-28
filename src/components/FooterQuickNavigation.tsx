@@ -10,6 +10,7 @@ import {
   UsersIcon,
   CurrencyEuroIcon,
   ClipboardDocumentListIcon,
+  CalendarDaysIcon,
 } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 import Link from 'next/link'
@@ -27,6 +28,11 @@ const CLIENT_NAV = [
     icon: HomeIcon,
   },
   {
+    name: 'Scheduled',
+    link: '/account-savelists?tab=scheduled',
+    icon: CalendarDaysIcon,
+  },
+  {
     name: 'My Moves',
     link: '/account-savelists',
     icon: ClipboardDocumentListIcon,
@@ -36,10 +42,6 @@ const CLIENT_NAV = [
     link: '/account',
     icon: UserCircleIcon,
   },
-  // {
-  //   name: 'Menu',
-  //   icon: Bars3Icon,
-  // },
 ]
 
 // Mover navigation items
@@ -154,7 +156,10 @@ const FooterQuickNavigation = () => {
       <div className="mx-auto flex w-full max-w-lg justify-around text-center">
         {/* MENU */}
         {navItems.map((item) => {
-          const isActive = pathname === item.link
+          const linkPath = item.link?.split('?')[0]
+          const isActive = item.link?.includes('?')
+            ? pathname === linkPath && item.link === `${pathname}${typeof window !== 'undefined' ? window.location.search : ''}`
+            : pathname === item.link
           return item.link ? (
             <Link
               key={item.name}
