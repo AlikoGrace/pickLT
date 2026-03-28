@@ -101,7 +101,7 @@ export async function POST(req: NextRequest) {
       {
         handle,
         clientId: userId,
-        status: 'draft',
+        status: 'booked',
         moveCategory: 'scheduled',
         moveType: moveType || 'regular',
         systemMoveType: moveType || 'regular',
