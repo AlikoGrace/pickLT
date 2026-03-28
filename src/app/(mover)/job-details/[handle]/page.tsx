@@ -159,7 +159,7 @@ const InfoRow = ({ label, value, icon: Icon }: { label: string; value: React.Rea
 )
 
 function mapDbStatus(dbStatus: string): MoveStatus {
-  if (['draft', 'pending_payment', 'paid', 'mover_assigned'].includes(dbStatus)) return 'pending'
+  if (['draft', 'booked', 'pending_payment', 'paid', 'mover_assigned'].includes(dbStatus)) return 'pending'
   if (
     ['mover_accepted', 'mover_en_route', 'mover_arrived', 'loading', 'in_transit',
      'arrived_destination', 'unloading', 'awaiting_payment'].includes(dbStatus)
@@ -315,7 +315,7 @@ export default function MoverMoveDetailsPage() {
       // Notify on key status changes
       if (newStatus === 'cancelled_by_client') {
         showBrowserNotification('Move Cancelled', 'The client has cancelled this move.')
-      } else if (newStatus === 'draft' && !newMoverProfileId) {
+      } else if ((newStatus === 'draft' || newStatus === 'booked') && !newMoverProfileId) {
         showBrowserNotification('Mover Withdrawn', 'The assigned mover has withdrawn from this move.')
       }
     })
@@ -403,7 +403,7 @@ export default function MoverMoveDetailsPage() {
   // ── Derive action button state ────────────────────────────
   const isScheduled = moveCategory === 'scheduled'
   const isUnassigned = !moverProfileId
-  const canAccept = isScheduled && isUnassigned && ['draft', 'paid', 'pending_payment'].includes(rawStatus)
+  const canAccept = isScheduled && isUnassigned && ['draft', 'booked', 'paid', 'pending_payment'].includes(rawStatus)
   const canWithdraw = isScheduled && isAssignedMover && ['mover_accepted', 'mover_assigned'].includes(rawStatus)
   const canStartRoute = isScheduled && isAssignedMover && rawStatus === 'mover_accepted'
   const isActivePhase = ['mover_en_route', 'mover_arrived', 'loading', 'in_transit', 'arrived_destination', 'unloading', 'awaiting_payment'].includes(rawStatus)
