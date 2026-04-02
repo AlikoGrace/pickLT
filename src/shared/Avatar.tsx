@@ -7,8 +7,6 @@ import { Link } from './link'
 type AvatarProps = {
   src?: string | null
   square?: boolean
-  width?: number | string
-  height?: number | string
   initials?: string
   alt?: string
   className?: string
@@ -17,8 +15,6 @@ type AvatarProps = {
 export default function Avatar({
   src = null,
   square = false,
-  width,
-  height,
   initials,
   alt = '',
   className,
@@ -30,8 +26,8 @@ export default function Avatar({
       {...props}
       className={clsx(
         className,
-        // Basic layout
-        'inline-grid shrink-0 align-middle [--avatar-radius:20%] *:col-start-1 *:row-start-1',
+        // Basic layout — overflow-hidden is required for rounded clipping to work
+        'inline-grid shrink-0 overflow-hidden align-middle [--avatar-radius:20%] *:col-start-1 *:row-start-1',
         'outline -outline-offset-1 outline-black/10 dark:outline-white/10',
         // Border radius
         square ? 'rounded-(--avatar-radius) *:rounded-(--avatar-radius)' : 'rounded-full *:rounded-full'
@@ -49,7 +45,7 @@ export default function Avatar({
           </text>
         </svg>
       )}
-      {src && <img className={`size-full w-[${width}px] h-[${height}px] object-cover`} src={src} alt={alt} width={width} height={height} />}
+      {src && <img className="size-full object-cover" src={src} alt={alt} />}
     </span>
   )
 }
