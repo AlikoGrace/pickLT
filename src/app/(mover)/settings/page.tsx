@@ -402,10 +402,8 @@ const SettingsPage = () => {
           <div className="relative">
             <Avatar
               src={user?.profilePhoto || undefined}
-              width={96}
-              height={96}
               initials={!user?.profilePhoto ? initials : undefined}
-              className=" size-24 bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300"
+              className="size-24 bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300"
             />
             <button
               onClick={() => fileInputRef.current?.click()}
