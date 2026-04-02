@@ -45,7 +45,7 @@ export default function Avatar({
           </text>
         </svg>
       )}
-      {src && <img className="size-full w-[20px] h-[20px] object-cover" src={src} alt={alt} width={20} height={20} />}
+      {src && <img className="size-full w-[90px] h-[90px] object-cover" src={src} alt={alt} width={90} height={90} />}
     </span>
   )
 }
