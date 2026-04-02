@@ -52,6 +52,8 @@ const DashboardPage = () => {
   const [dashboard, setDashboard] = useState<DashboardData | null>(null)
   const [loading, setLoading] = useState(true)
 
+  const isVerified = user?.moverDetails?.verificationStatus === 'verified'
+
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
@@ -223,20 +225,35 @@ const DashboardPage = () => {
           Quick Actions
         </h2>
         <div className="flex flex-wrap gap-3">
-          <Link
-            href="/available-moves"
-            className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-full text-sm font-medium hover:bg-primary-700 transition-colors"
-          >
-            <TruckIcon className="w-4 h-4" />
-            Find Moves
-          </Link>
-          <Link
-            href="/my-crew"
-            className="flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 rounded-full text-sm font-medium hover:bg-neutral-200 dark:hover:bg-neutral-600 transition-colors"
-          >
-            <UsersIcon className="w-4 h-4" />
-            Manage Crew
-          </Link>
+          {isVerified ? (
+            <>
+              <Link
+                href="/available-moves"
+                className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-full text-sm font-medium hover:bg-primary-700 transition-colors"
+              >
+                <TruckIcon className="w-4 h-4" />
+                Find Moves
+              </Link>
+              <Link
+                href="/my-crew"
+                className="flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 rounded-full text-sm font-medium hover:bg-neutral-200 dark:hover:bg-neutral-600 transition-colors"
+              >
+                <UsersIcon className="w-4 h-4" />
+                Manage Crew
+              </Link>
+            </>
+          ) : (
+            <>
+              <div className="flex items-center gap-2 px-4 py-2 bg-neutral-200 dark:bg-neutral-700 text-neutral-400 dark:text-neutral-500 rounded-full text-sm font-medium cursor-not-allowed">
+                <TruckIcon className="w-4 h-4" />
+                Find Moves
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 bg-neutral-200 dark:bg-neutral-700 text-neutral-400 dark:text-neutral-500 rounded-full text-sm font-medium cursor-not-allowed">
+                <UsersIcon className="w-4 h-4" />
+                Manage Crew
+              </div>
+            </>
+          )}
         </div>
       </div>
 
