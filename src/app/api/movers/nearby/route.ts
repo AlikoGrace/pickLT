@@ -27,13 +27,13 @@ export async function GET(req: NextRequest) {
 
     const { databases } = createAdminClient()
 
-    // Fetch online movers (accept verified + pending_verification during early rollout)
+    // Fetch online, verified movers
     const movers = await withRetry(() =>
       databases.listDocuments(
         APPWRITE.DATABASE_ID,
         APPWRITE.COLLECTIONS.MOVER_PROFILES,
         [
-          Query.equal('verificationStatus', ['verified', 'pending_verification']),
+          Query.equal('verificationStatus', ['verified']),
           Query.equal('isOnline', true),
           Query.limit(50),
         ]
