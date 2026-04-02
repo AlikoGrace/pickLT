@@ -49,8 +49,6 @@ export default function AvatarDropdown({ className }: Props) {
         <PopoverButton className="-m-1.5 flex cursor-pointer items-center justify-center rounded-full p-1.5 hover:bg-neutral-100 focus-visible:outline-hidden dark:hover:bg-neutral-800">
           <Avatar
             src={user?.profilePhoto || undefined}
-            width={32}
-            height={32}
             initials={!user?.profilePhoto ? initials : undefined}
             className="size-8 bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300"
           />
@@ -70,9 +68,7 @@ export default function AvatarDropdown({ className }: Props) {
               <Avatar
                 src={user?.profilePhoto || undefined}
                 initials={!user?.profilePhoto ? initials : undefined}
-                width={48}
-                height={48}
-                className="bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300"
+                className="size-12 bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300"
               />
               <div className="min-w-0 grow">
                 <h4 className="truncate font-semibold">{user?.fullName || 'User'}</h4>
