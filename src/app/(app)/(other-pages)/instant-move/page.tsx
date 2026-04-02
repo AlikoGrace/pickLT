@@ -556,8 +556,6 @@ const InstantMovePage = () => {
               <div className="w-12 h-12 rounded-full bg-neutral-200 dark:bg-neutral-700 overflow-hidden">
                 <Avatar
                   src={mover.profilePhoto || undefined}
-                  width={48}
-                  height={48}
                   initials={!mover.profilePhoto ? initials : undefined}
                   className="size-12 bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300"
                 />
