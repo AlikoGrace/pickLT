@@ -184,8 +184,8 @@ const DashboardPage = () => {
         <div className="flex items-center gap-4">
           <Avatar
             src={user?.profilePhoto || undefined}
-            width={80}
-            height={80}
+            width={50}
+            height={50}
             initials={!user?.profilePhoto ? initials : undefined}
             className=" size-20 bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300"
           />
