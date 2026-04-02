@@ -229,6 +229,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
   const { user } = useAuth()
 
   const moverProfileId = user?.moverDetails?.profileId
+  const isVerifiedMover = user?.moverDetails?.verificationStatus === 'verified'
   const router = useRouter()
   const [incoming, setIncoming] = useState<IncomingRequest | null>(null)
   const [isAccepting, setIsAccepting] = useState(false)
@@ -302,7 +303,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
   // Subscribe to realtime move_requests
   useEffect(() => {
     console.log('moverProfileId', moverProfileId, 'databaseId', DATABASE_ID, 'requestId', MOVE_REQUESTS_COLLECTION)
-    if (!moverProfileId || !DATABASE_ID || !MOVE_REQUESTS_COLLECTION) return
+    if (!moverProfileId || !DATABASE_ID || !MOVE_REQUESTS_COLLECTION || !isVerifiedMover) return
 
     // Helper: extract moverProfileId from a doc field (handles string or relationship object)
     const extractMoverProfileId = (field: unknown): string => {
@@ -399,7 +400,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
       clearInterval(pollIntervalId)
       unsubscribe()
     }
-  }, [moverProfileId, fetchMoveDetails])
+  }, [moverProfileId, isVerifiedMover, fetchMoveDetails])
 
   const handleAccept = useCallback(async () => {
     if (!incoming) return
