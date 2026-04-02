@@ -7,6 +7,8 @@ import { Link } from './link'
 type AvatarProps = {
   src?: string | null
   square?: boolean
+  width?: number | string
+  height?: number | string
   initials?: string
   alt?: string
   className?: string
@@ -15,6 +17,8 @@ type AvatarProps = {
 export default function Avatar({
   src = null,
   square = false,
+  width,
+  height,
   initials,
   alt = '',
   className,
@@ -45,7 +49,7 @@ export default function Avatar({
           </text>
         </svg>
       )}
-      {src && <img className="size-full w-[50px] h-[50px] object-cover" src={src} alt={alt} width={90} height={90} />}
+      {src && <img className={`size-full w-[${width}px] h-[${height}px] object-cover`} src={src} alt={alt} width={width} height={height} />}
     </span>
   )
 }

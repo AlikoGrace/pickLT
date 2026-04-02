@@ -209,6 +209,8 @@ const MoverDashboardLayout = ({ children }: Props) => {
             <div className="flex items-center gap-3">
               <Avatar
                 src={user?.profilePhoto || undefined}
+                width={40}
+                height={40}
                 initials={!user?.profilePhoto ? initials : undefined}
                 className=" size-10 bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300"
               />
@@ -296,6 +298,8 @@ const MoverDashboardLayout = ({ children }: Props) => {
             ) : (
               <Avatar
                 src={user?.profilePhoto || undefined}
+                width={32}
+                height={32}
                 initials={!user?.profilePhoto ? initials : undefined}
                 className=" size-8 bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300"
               />            
