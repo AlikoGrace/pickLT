@@ -39,6 +39,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Mover profile not found' }, { status: 404 })
     }
 
+    // Require verified mover to accept scheduled moves
+    if (moverProfile.verificationStatus !== 'verified') {
+      return NextResponse.json(
+        { error: 'Your mover profile has not been verified yet' },
+        { status: 403 }
+      )
+    }
+
     // Fetch the move
     const move = await databases.getDocument(
       APPWRITE.DATABASE_ID,
