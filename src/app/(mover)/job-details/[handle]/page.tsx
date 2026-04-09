@@ -405,7 +405,18 @@ export default function MoverMoveDetailsPage() {
   const isUnassigned = !moverProfileId
   const canAccept = isScheduled && isUnassigned && ['draft', 'booked', 'paid', 'pending_payment'].includes(rawStatus)
   const canWithdraw = isScheduled && isAssignedMover && ['mover_accepted', 'mover_assigned'].includes(rawStatus)
-  const canStartRoute = isScheduled && isAssignedMover && rawStatus === 'mover_accepted'
+
+  const isMoveStartable = (dateStr: string | null | undefined): boolean => {
+    if (!dateStr) return true // no date set — allow (graceful degradation)
+    const today = new Date()
+    const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate())
+    const moveDay = new Date(dateStr)
+    const moveDayOnly = new Date(moveDay.getFullYear(), moveDay.getMonth(), moveDay.getDate())
+    return moveDayOnly <= todayOnly
+  }
+
+  const canStartRoute = isScheduled && isAssignedMover && rawStatus === 'mover_accepted' && isMoveStartable(move?.moveDate as string | undefined)
+  const isFutureDateMove = isScheduled && isAssignedMover && rawStatus === 'mover_accepted' && !isMoveStartable(move?.moveDate as string | undefined)
   const isActivePhase = ['mover_en_route', 'mover_arrived', 'loading', 'in_transit', 'arrived_destination', 'unloading', 'awaiting_payment'].includes(rawStatus)
 
   if (isLoading) {
@@ -744,6 +755,23 @@ export default function MoverMoveDetailsPage() {
                     <PlayIcon className="w-5 h-5" />
                     {isStartingRoute ? 'Starting...' : 'Start Route — I\'m On My Way'}
                   </button>
+                )}
+
+                {/* Future-dated move — Start Route not available yet */}
+                {isFutureDateMove && (
+                  <div className="w-full rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 px-4 py-3 text-sm text-amber-800 dark:text-amber-300">
+                    <span className="font-semibold">Move not startable yet.</span>{' '}
+                    You can start this route on{' '}
+                    <span className="font-semibold">
+                      {new Date(move?.moveDate as string).toLocaleDateString('en-GB', {
+                        weekday: 'short',
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                      })}
+                    </span>
+                    .
+                  </div>
                 )}
 
                 {/* Go to Active Move */}
