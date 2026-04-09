@@ -79,6 +79,20 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Prevent starting a route before the scheduled move date
+    if (move.status === 'mover_accepted' && status === 'mover_en_route' && move.moveDate) {
+      const today = new Date()
+      const todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate())
+      const moveDateObj = new Date(move.moveDate as string)
+      const moveDateOnly = new Date(moveDateObj.getFullYear(), moveDateObj.getMonth(), moveDateObj.getDate())
+      if (moveDateOnly > todayDate) {
+        return NextResponse.json(
+          { error: 'This move cannot be started before its scheduled date.' },
+          { status: 400 }
+        )
+      }
+    }
+
     // Update the move status
     const updateData: Record<string, unknown> = { status }
 
