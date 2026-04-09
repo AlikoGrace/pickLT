@@ -148,17 +148,28 @@ export default function ActiveMovePage() {
   // ── Auto-transition mover_accepted → mover_en_route ───────
   // Per architecture, mover_accepted means mover accepted but hasn't started driving.
   // When the mover opens the active-move page, it means they're ready to go — transition.
+  // Guard: only trigger on or after the scheduled move date.
   useEffect(() => {
     const moveId = move?.$id as string | undefined
     const status = move?.status as string | undefined
     if (!moveId || status !== 'mover_accepted') return
+
+    // Date guard — do not auto-transition before the scheduled move date
+    const moveDate = move?.moveDate as string | undefined
+    if (moveDate) {
+      const today = new Date()
+      const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate())
+      const moveDay = new Date(moveDate)
+      const moveDayOnly = new Date(moveDay.getFullYear(), moveDay.getMonth(), moveDay.getDate())
+      if (moveDayOnly > todayOnly) return
+    }
 
     fetch('/api/mover/update-move-status', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ moveId, status: 'mover_en_route' }),
     }).catch((err) => console.warn('Auto-transition to mover_en_route failed:', err))
-  }, [move?.$id, move?.status])
+  }, [move?.$id, move?.status, move?.moveDate])
 
   // ── Subscribe to move updates ─────────────────────────────
   // Subscribe to the specific move document if we have one,
