@@ -4,6 +4,7 @@ import { useAuth } from '@/context/auth'
 import Avatar from '@/shared/Avatar'
 import { useLocationBroadcast } from '@/hooks/useLocationBroadcast'
 import Logo from '@/shared/Logo'
+import SwitchDarkMode from '@/shared/SwitchDarkMode'
 import {
   Bars3Icon,
   CalendarDaysIcon,
@@ -282,6 +283,7 @@ const MoverDashboardLayout = ({ children }: Props) => {
           </span>
         </div>
         <div className="flex items-center gap-2">
+          <SwitchDarkMode className="!h-9 !w-9 !text-xl" />
           <button className="rounded-full p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700">
             <BellIcon className="h-6 w-6 text-neutral-600 dark:text-neutral-300" />
           </button>
