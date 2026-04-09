@@ -1,5 +1,6 @@
 import BackgroundSection from '@/components/BackgroundSection'
 import BgGlassmorphism from '@/components/BgGlassmorphism'
+import HomeAuthBanner from '@/components/HomeAuthBanner'
 import HeroSectionWithSearchForm1 from '@/components/hero-sections/HeroSectionWithSearchForm1'
 import HeroSearchForm from '@/components/HeroSearchForm/HeroSearchForm'
 import SectionBecomeAnAuthor from '@/components/SectionBecomeAnAuthor'
@@ -38,6 +39,7 @@ async function Page() {
           image={heroImage}
           imageAlt="hero"
           searchForm={<HeroSearchForm initTab="Stays" />}
+          banner={<HomeAuthBanner />}
           description={
             <>
               <p className="max-w-xl text-base text-neutral-500 sm:text-xl dark:text-neutral-400">
