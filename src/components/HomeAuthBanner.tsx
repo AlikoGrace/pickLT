@@ -3,9 +3,19 @@
 import { useAuth } from '@/context/auth'
 import Avatar from '@/shared/Avatar'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
 const HomeAuthBanner = () => {
   const { user, isAuthenticated, isLoading } = useAuth()
+  const router = useRouter()
+
+  // Movers have no business on the client home page — send them to their dashboard
+  useEffect(() => {
+    if (!isLoading && isAuthenticated && user?.userType === 'mover') {
+      router.replace('/dashboard')
+    }
+  }, [isLoading, isAuthenticated, user, router])
 
   if (isLoading) {
     return (
