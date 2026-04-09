@@ -38,8 +38,8 @@ export async function GET() {
       [
         Query.equal('moverProfileId', moverProfile.$id),
         Query.equal('moveCategory', 'scheduled'),
-        Query.equal('status', 'mover_assigned'),
-        Query.orderDesc('$createdAt'),
+        Query.equal('status', 'mover_accepted'),
+        Query.orderAsc('moveDate'),
         Query.limit(100),
       ],
     )
