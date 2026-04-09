@@ -29,18 +29,25 @@ export async function GET() {
       return NextResponse.json({ error: 'Mover profile not found' }, { status: 404 })
     }
 
-    // Fetch active moves for this mover
+    // Fetch active moves for this mover — only statuses in the physical execution pipeline.
+    // mover_accepted is intentionally excluded: it means accepted but not yet started,
+    // and lives in scheduled-moves until the mover hits Start Route on the move day.
+    const ACTIVE_PIPELINE_STATUSES = [
+      'mover_en_route',
+      'mover_arrived',
+      'loading',
+      'in_transit',
+      'arrived_destination',
+      'unloading',
+      'awaiting_payment',
+    ]
     const moves = await databases.listDocuments(
       APPWRITE.DATABASE_ID,
       APPWRITE.COLLECTIONS.MOVES,
       [
         Query.equal('moverProfileId', moverProfile.$id),
-        Query.notEqual('status', 'completed'),
-        Query.notEqual('status', 'cancelled'),
-        Query.notEqual('status', 'cancelled_by_client'),
-        Query.notEqual('status', 'cancelled_by_mover'),
-        Query.notEqual('status', 'disputed'),
-        Query.orderDesc('$createdAt'),
+        Query.equal('status', ACTIVE_PIPELINE_STATUSES),
+        Query.orderDesc('$updatedAt'),
         Query.limit(1),
       ]
     )
