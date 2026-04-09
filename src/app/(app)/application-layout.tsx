@@ -3,9 +3,11 @@ import FooterQuickNavigation from '@/components/FooterQuickNavigation'
 import Header from '@/components/Header/Header'
 import MobileHeader from '@/components/Header/MobileHeader'
 import HeroSearchFormMobile from '@/components/HeroSearchFormMobile/HeroSearchFormMobile'
+import MobileAuthIndicator from '@/components/MobileAuthIndicator'
 import NotificationWrapper from '@/components/NotificationWrapper'
 import Aside from '@/components/aside'
 import AsideSidebarNavigation from '@/components/aside-sidebar-navigation'
+import SwitchDarkMode from '@/shared/SwitchDarkMode'
 import 'rc-slider/assets/index.css'
 import React, { ReactNode } from 'react'
 
@@ -24,8 +26,10 @@ const ApplicationLayout: React.FC<Props> = ({ children, header, showMobileSearch
       {/* Mobile: Show search form on home page, simple header on other pages */}
       {showMobileSearchForm ? (
         <div className="sticky top-0 z-20 bg-white shadow-xs lg:hidden dark:bg-neutral-900">
-          <div className="container flex h-20 items-center justify-center">
-            <HeroSearchFormMobile />
+          <div className="container flex h-20 items-center gap-3">
+            <MobileAuthIndicator />
+            <HeroSearchFormMobile className="flex-1" />
+            <SwitchDarkMode className="!h-9 !w-9 shrink-0 !text-xl" />
           </div>
         </div>
       ) : (
