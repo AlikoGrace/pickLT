@@ -115,6 +115,9 @@ interface Props {
   children: ReactNode
 }
 
+// Full-screen map pages — hide mobile header to maximise visible map area
+const MAP_PAGES = ['/available-moves', '/active-move']
+
 const MoverDashboardLayout = ({ children }: Props) => {
   const pathname = usePathname()
   const router = useRouter()
@@ -124,6 +127,9 @@ const MoverDashboardLayout = ({ children }: Props) => {
   // Verification state
   const verificationStatus = user?.moverDetails?.verificationStatus
   const isVerified = verificationStatus === 'verified'
+
+  // Hide the mobile header and its offset on full-screen map pages
+  const isMapPage = MAP_PAGES.some((p) => pathname === p || pathname.startsWith(p + '/'))
 
   // Broadcast mover's GPS location only when verified
   useLocationBroadcast({
@@ -274,8 +280,11 @@ const MoverDashboardLayout = ({ children }: Props) => {
         </div>
       </aside>
 
-      {/* Mobile Header */}
-      <header className="fixed left-0 right-0 top-0 z-30 flex h-16 items-center justify-between border-b border-neutral-200 bg-white px-4 dark:border-neutral-700 dark:bg-neutral-800 lg:hidden">
+      {/* Mobile Header — hidden on full-screen map pages */}
+      <header className={clsx(
+        'fixed left-0 right-0 top-0 z-30 flex h-16 items-center justify-between border-b border-neutral-200 bg-white px-4 dark:border-neutral-700 dark:bg-neutral-800',
+        isMapPage ? 'hidden' : 'lg:hidden',
+      )}>
         <div className="flex items-center gap-2">
           <Logo className="w-20" />
           <span className="rounded-full bg-primary-100 px-2 py-0.5 text-xs font-medium text-primary-700 dark:bg-primary-900/30 dark:text-primary-400">
@@ -308,7 +317,10 @@ const MoverDashboardLayout = ({ children }: Props) => {
       </header>
 
       {/* Main Content */}
-      <main className="pt-16 pb-20 lg:ml-64 lg:pt-0 lg:pb-0">
+      <main className={clsx(
+        'lg:ml-64 lg:pt-0 lg:pb-0',
+        !isMapPage && 'pt-16 pb-20',
+      )}>
         {/* Verification Status Banner */}
         {hasCompletedProfile && !isVerified && !isOnCompleteProfilePage && (
           <div className={clsx(
