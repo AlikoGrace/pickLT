@@ -29,7 +29,7 @@ const CLIENT_NAV = [
   },
   {
     name: 'Scheduled',
-    link: '/scheduled-moves',
+    link: '/my-scheduled-moves',
     icon: CalendarDaysIcon,
   },
   {
