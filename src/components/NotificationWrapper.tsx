@@ -174,8 +174,13 @@ export default function NotificationWrapper({ children, role }: NotificationWrap
       const payload = event.payload as Record<string, any>
       if (!payload) return
 
+      // clientId may be a plain string or an Appwrite relationship object { $id: '...' }
+      const moveClientId =
+        typeof payload.clientId === 'string'
+          ? payload.clientId
+          : (payload.clientId as Record<string, string>)?.$id || null
       // Only react to moves belonging to this client
-      if (payload.clientId !== user.authId && payload.clientId !== user.appwriteId) return
+      if (!moveClientId || (moveClientId !== user.authId && moveClientId !== user.appwriteId)) return
 
       const eventKey = `${payload.$id}-${payload.status}`
       if (processedEvents.current.has(eventKey)) return
