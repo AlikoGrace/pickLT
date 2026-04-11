@@ -273,9 +273,18 @@ const InstantMovePage = () => {
 
     if (!moveId || !dbId) return
 
+    // Keep explicit channel strings so we can match them in the callback — Appwrite may
+    // not populate $collectionId on the realtime payload depending on server version.
+    const moveDocChannel = movesColl
+      ? `databases.${dbId}.collections.${movesColl}.documents.${moveId}`
+      : null
+    const moveReqChannel = moveReqColl
+      ? `databases.${dbId}.collections.${moveReqColl}.documents`
+      : null
+
     const channels: string[] = []
-    if (movesColl) channels.push(`databases.${dbId}.collections.${movesColl}.documents.${moveId}`)
-    if (moveReqColl) channels.push(`databases.${dbId}.collections.${moveReqColl}.documents`)
+    if (moveDocChannel) channels.push(moveDocChannel)
+    if (moveReqChannel) channels.push(moveReqChannel)
 
     if (channels.length === 0) return
 
@@ -285,15 +294,60 @@ const InstantMovePage = () => {
         const doc = response.payload as Models.Document & Record<string, unknown>
         if (!doc) return
 
-        if (doc.$collectionId === movesColl) {
-          setMoveData((prev) => prev ? { ...prev, ...doc, moverProfileId: prev.moverProfileId } as MoveData : prev)
+        // Determine source using $collectionId (may be absent on some Appwrite server
+        // versions) with response.channels as a reliable fallback.
+        const isMoveDoc =
+          doc.$collectionId === movesColl ||
+          (moveDocChannel != null && response.channels.includes(moveDocChannel))
+        const isMoveRequestDoc =
+          doc.$collectionId === moveReqColl ||
+          (moveReqChannel != null && response.channels.includes(moveReqChannel))
+
+        if (isMoveDoc) {
+          // Extract moverProfileId — may arrive as a string or a relationship object
+          const newMoverProfileId =
+            typeof doc.moverProfileId === 'string'
+              ? doc.moverProfileId
+              : (doc.moverProfileId as Record<string, string>)?.$id ?? null
+
+          setMoveData((prev) => {
+            if (!prev) {
+              // Initial fetch still in flight when this event fired — bootstrap from the
+              // realtime doc so the acceptance is never silently dropped.
+              return {
+                $id: doc.$id,
+                handle: (doc.handle as string) ?? null,
+                status: (doc.status as string) ?? '',
+                pickupLocation: (doc.pickupLocation as string) ?? null,
+                pickupLatitude: (doc.pickupLatitude as number) ?? null,
+                pickupLongitude: (doc.pickupLongitude as number) ?? null,
+                dropoffLocation: (doc.dropoffLocation as string) ?? null,
+                dropoffLatitude: (doc.dropoffLatitude as number) ?? null,
+                dropoffLongitude: (doc.dropoffLongitude as number) ?? null,
+                estimatedPrice: (doc.estimatedPrice as number) ?? null,
+                finalPrice: (doc.finalPrice as number) ?? null,
+                totalItemCount: (doc.totalItemCount as number) ?? null,
+                coverPhotoId: (doc.coverPhotoId as string) ?? null,
+                galleryPhotoIds: (doc.galleryPhotoIds as string[]) ?? [],
+                routeDistanceMeters: (doc.routeDistanceMeters as number) ?? null,
+                routeDurationSeconds: (doc.routeDurationSeconds as number) ?? null,
+                moverProfileId: newMoverProfileId,
+              }
+            }
+            return {
+              ...prev,
+              ...doc,
+              moverProfileId: newMoverProfileId ?? prev.moverProfileId,
+            } as MoveData
+          })
+
           const status = doc.status as string
           switch (status) {
             case 'accepted':
             case 'mover_accepted':
             case 'mover_en_route':
               setPhase('mover_arriving')
-              // Re-fetch move data to get mover details now that mover accepted
+              // Re-fetch to get full mover profile now that a mover has accepted
               if (moveId) {
                 fetch(`/api/moves/${moveId}/full`)
                   .then((res) => res.json())
@@ -340,7 +394,7 @@ const InstantMovePage = () => {
           }
         }
 
-        if (doc.$collectionId === moveReqColl) {
+        if (isMoveRequestDoc) {
           const docMoveId = typeof doc.moveId === 'string' ? doc.moveId : (doc.moveId as Record<string, string>)?.$id
           if (docMoveId === moveId) {
             const status = doc.status as string
@@ -366,7 +420,7 @@ const InstantMovePage = () => {
     )
 
     return () => unsubscribe()
-  }, [router])
+  }, [router, reset])
 
   // Set mover at pickup when arrived
   useEffect(() => {
