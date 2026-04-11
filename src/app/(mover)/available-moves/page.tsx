@@ -203,7 +203,7 @@ const AvailableMovesPage = () => {
   // Loading state
   if (isLoading && moves.length === 0) {
     return (
-      <div className="h-[calc(100vh-64px)] lg:h-screen flex flex-col items-center justify-center">
+      <div className="h-screen flex flex-col items-center justify-center">
         <ArrowPathIcon className="w-8 h-8 text-primary-500 animate-spin mb-4" />
         <p className="text-neutral-600 dark:text-neutral-400 font-medium">
           Finding available moves near you...
@@ -215,7 +215,7 @@ const AvailableMovesPage = () => {
   // Error state
   if (error && moves.length === 0) {
     return (
-      <div className="h-[calc(100vh-64px)] lg:h-screen flex flex-col items-center justify-center p-6">
+      <div className="h-screen flex flex-col items-center justify-center p-6">
         <ExclamationTriangleIcon className="w-12 h-12 text-amber-500 mb-4" />
         <p className="text-neutral-900 dark:text-neutral-100 font-semibold mb-2">
           Unable to load moves
@@ -234,7 +234,7 @@ const AvailableMovesPage = () => {
   }
 
   return (
-    <div className="h-[calc(100vh-64px)] lg:h-screen flex flex-col">
+    <div className="h-screen flex flex-col">
       {/* Header */}
       <div className="p-4 bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-700">
         <div className="flex items-center justify-between">
@@ -326,7 +326,7 @@ const AvailableMovesPage = () => {
 
               {/* Floating MoveCard tooltip when a marker is tapped */}
               {selectedMove && (
-                <div className="absolute bottom-4 left-4 right-4 z-20 max-w-md mx-auto">
+                <div className="absolute bottom-4 left-4 right-4 z-40 max-w-md mx-auto">
                   <Link
                     href={`/job-details/${selectedMove.handle}`}
                     className="block bg-white dark:bg-neutral-800 rounded-2xl shadow-xl overflow-hidden border border-neutral-200 dark:border-neutral-700 hover:shadow-2xl transition-shadow"
