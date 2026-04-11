@@ -476,7 +476,7 @@ export default function ActiveMovePage() {
   }
 
   return (
-    <div className="relative h-[calc(100vh-64px)] lg:h-[calc(100vh-0px)]">
+    <div className="relative h-screen">
       {/* Full-screen Map with pickup, dropoff & mover markers */}
       <div className="absolute inset-0">
         <MapboxMap
@@ -491,7 +491,7 @@ export default function ActiveMovePage() {
       </div>
 
       {/* Top bar — Phase indicator */}
-      <div className="absolute top-0 left-0 right-0 z-10 p-4 pointer-events-none">
+      <div className="absolute top-0 left-0 right-0 z-40 p-4 pointer-events-none">
         <div className="mx-auto max-w-lg pointer-events-auto">
           <div className="rounded-2xl bg-white/95 backdrop-blur-sm border border-neutral-200 dark:border-neutral-700 dark:bg-neutral-800/95 shadow-lg p-4">
             <div className="flex items-center gap-3">
@@ -561,7 +561,7 @@ export default function ActiveMovePage() {
       </div>
 
       {/* Bottom panel — Action button */}
-      <div className="absolute bottom-0 left-0 right-0 z-10 p-4 pb-6 pointer-events-none">
+      <div className="absolute bottom-0 left-0 right-0 z-40 p-4 pb-6 pointer-events-none">
         <div className="mx-auto max-w-lg pointer-events-auto space-y-3">
           {/* Proximity hint when en_route and not yet near pickup */}
           {phase === 'en_route' && !isNearPickup && distanceToPickup !== null && (
