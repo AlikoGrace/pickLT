@@ -30,9 +30,11 @@ export async function GET() {
     }
 
     // Fetch active moves for this mover — only statuses in the physical execution pipeline.
-    // mover_accepted is intentionally excluded: it means accepted but not yet started,
-    // and lives in scheduled-moves until the mover hits Start Route on the move day.
-    const ACTIVE_PIPELINE_STATUSES = [
+    // mover_accepted is excluded for SCHEDULED moves: accepted-but-future-dated moves live
+    // in scheduled-moves until the mover hits Start Route on the day of the move.
+    // INSTANT moves are different — mover_accepted means the mover is about to drive right
+    // now, so a fallback query includes them explicitly by category.
+    const EXECUTING_STATUSES = [
       'mover_en_route',
       'mover_arrived',
       'loading',
@@ -41,16 +43,36 @@ export async function GET() {
       'unloading',
       'awaiting_payment',
     ]
-    const moves = await databases.listDocuments(
+
+    // Primary: any move physically in progress (all categories)
+    let result = await databases.listDocuments(
       APPWRITE.DATABASE_ID,
       APPWRITE.COLLECTIONS.MOVES,
       [
         Query.equal('moverProfileId', moverProfile.$id),
-        Query.equal('status', ACTIVE_PIPELINE_STATUSES),
+        Query.equal('status', EXECUTING_STATUSES),
         Query.orderDesc('$updatedAt'),
         Query.limit(1),
       ]
     )
+
+    // Fallback: instant move just accepted — show it immediately so the active-move page
+    // can auto-transition it to mover_en_route. Scheduled mover_accepted stays excluded.
+    if (result.documents.length === 0) {
+      result = await databases.listDocuments(
+        APPWRITE.DATABASE_ID,
+        APPWRITE.COLLECTIONS.MOVES,
+        [
+          Query.equal('moverProfileId', moverProfile.$id),
+          Query.equal('status', 'mover_accepted'),
+          Query.equal('moveCategory', 'instant'),
+          Query.orderDesc('$updatedAt'),
+          Query.limit(1),
+        ]
+      )
+    }
+
+    const moves = result
 
     if (moves.documents.length === 0) {
       return NextResponse.json({ move: null })
