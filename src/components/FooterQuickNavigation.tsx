@@ -29,7 +29,7 @@ const CLIENT_NAV = [
   },
   {
     name: 'Scheduled',
-    link: '/account-savelists?tab=scheduled',
+    link: '/scheduled-moves',
     icon: CalendarDaysIcon,
   },
   {

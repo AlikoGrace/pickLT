@@ -1,10 +1,11 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import { Navigation03Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
+import { ThemeContext } from '@/app/theme-provider'
 
 // Set the access token
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || ''
@@ -44,6 +45,8 @@ export const MapboxMap = ({
   onPickupMarkerClick,
   onDropoffMarkerClick,
 }: MapboxMapProps) => {
+  const isDarkMode = useContext(ThemeContext)?.isDarkMode ?? false
+
   const mapContainer = useRef<HTMLDivElement>(null)
   const map = useRef<mapboxgl.Map | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
@@ -80,7 +83,7 @@ export const MapboxMap = ({
 
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/light-v11',
+      style: isDarkMode ? 'mapbox://styles/mapbox/dark-v11' : 'mapbox://styles/mapbox/light-v11',
       center: initialCenter,
       zoom: 12,
     })
@@ -125,6 +128,24 @@ export const MapboxMap = ({
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // ─── Reactive style switch on theme change ─────────────
+  const styleInitialMountRef = useRef(true)
+  useEffect(() => {
+    if (styleInitialMountRef.current) {
+      styleInitialMountRef.current = false
+      return
+    }
+    if (!map.current) return
+    const newStyle = isDarkMode
+      ? 'mapbox://styles/mapbox/dark-v11'
+      : 'mapbox://styles/mapbox/light-v11'
+    setMapLoaded(false)
+    // Reset route key so the route effect re-draws after the new style loads
+    routeCoordsKeyRef.current = ''
+    map.current.setStyle(newStyle)
+    map.current.once('style.load', () => setMapLoaded(true))
+  }, [isDarkMode])
 
   // ─── Marker Creation Helpers ──────────────────────────
 

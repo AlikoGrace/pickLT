@@ -3,7 +3,7 @@
 import MoveCard from '@/components/MoveCard'
 import { MoveStatus, StoredMove } from '@/context/moveSearch'
 import { Divider } from '@/shared/divider'
-import { ArrowLeftIcon, TruckIcon } from '@heroicons/react/24/outline'
+import { ArrowLeftIcon, CalendarDaysIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { useCallback, useEffect, useState, Suspense } from 'react'
 import { client } from '@/lib/appwrite'
@@ -77,15 +77,15 @@ const STATUS_TABS = [
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || ''
 const MOVES_COLLECTION = process.env.NEXT_PUBLIC_COLLECTION_MOVES || ''
 
-export default function MyMovesPage() {
+export default function ScheduledMovesPage() {
   return (
     <Suspense fallback={<div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">{[...Array(4)].map((_, i) => (<div key={i} className="animate-pulse rounded-2xl bg-neutral-100 dark:bg-neutral-800 h-64" />))}</div>}>
-      <MyMovesContent />
+      <ScheduledMovesContent />
     </Suspense>
   )
 }
 
-function MyMovesContent() {
+function ScheduledMovesContent() {
   const [moves, setMoves] = useState<StoredMove[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -111,7 +111,7 @@ function MyMovesContent() {
     fetchMoves()
   }, [fetchMoves])
 
-  // Appwrite realtime subscription — re-fetch moves on any update
+  // Appwrite realtime subscription — re-fetch on any update
   useEffect(() => {
     if (!DATABASE_ID || !MOVES_COLLECTION) return
     const channel = `databases.${DATABASE_ID}.collections.${MOVES_COLLECTION}.documents`
@@ -121,13 +121,16 @@ function MyMovesContent() {
     return () => unsubscribe()
   }, [fetchMoves])
 
-  const filteredMoves = activeTab
-    ? moves.filter((m) => m.status === activeTab)
-    : moves
+  // Pre-filter: only scheduled moves
+  const scheduledMoves = moves.filter((m) => m.moveCategory === 'scheduled')
 
-  // Count per status for badge display
+  const filteredMoves = activeTab
+    ? scheduledMoves.filter((m) => m.status === activeTab)
+    : scheduledMoves
+
+  // Count per status for badge display (from scheduled subset only)
   const counts: Record<string, number> = {}
-  for (const m of moves) counts[m.status] = (counts[m.status] ?? 0) + 1
+  for (const m of scheduledMoves) counts[m.status] = (counts[m.status] ?? 0) + 1
 
   return (
     <div>
@@ -138,9 +141,9 @@ function MyMovesContent() {
         <ArrowLeftIcon className="h-4 w-4" />
         Back to home
       </Link>
-      <h1 className="text-3xl font-semibold">My Moves</h1>
+      <h1 className="text-3xl font-semibold">Scheduled Moves</h1>
       <p className="mt-2 text-neutral-500 dark:text-neutral-400">
-        Track and manage all your moves in one place.
+        All your upcoming and past scheduled moves.
       </p>
 
       <Divider className="my-8 w-14!" />
@@ -149,7 +152,7 @@ function MyMovesContent() {
       <div className="flex gap-2 overflow-x-auto pb-4 hidden-scrollbar">
         {STATUS_TABS.map((tab) => {
           const isActive = activeTab === tab.value
-          const count = tab.value ? counts[tab.value] ?? 0 : moves.length
+          const count = tab.value ? counts[tab.value] ?? 0 : scheduledMoves.length
           return (
             <button
               key={tab.label}
@@ -162,9 +165,7 @@ function MyMovesContent() {
             >
               {tab.label}
               {count > 0 && (
-                <span
-                  className={`ml-1.5 text-xs ${isActive ? 'text-white/80' : 'text-neutral-400'}`}
-                >
+                <span className={`ml-1.5 text-xs ${isActive ? 'text-white/80' : 'text-neutral-400'}`}>
                   ({count})
                 </span>
               )}
@@ -197,21 +198,21 @@ function MyMovesContent() {
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center py-20 text-center">
-          <TruckIcon className="w-16 h-16 text-neutral-300 dark:text-neutral-600 mb-4" />
+          <CalendarDaysIcon className="w-16 h-16 text-neutral-300 dark:text-neutral-600 mb-4" />
           <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-2">
-            {activeTab ? `No ${activeTab.replace('_', ' ')} moves` : 'No moves yet'}
+            {activeTab ? `No ${activeTab.replace('_', ' ')} scheduled moves` : 'No scheduled moves yet'}
           </h3>
           <p className="text-neutral-500 dark:text-neutral-400 mb-6 max-w-sm">
             {activeTab
               ? 'Try selecting a different filter.'
-              : 'Book your first move and it will show up here.'}
+              : 'Book a scheduled move and it will appear here.'}
           </p>
           {!activeTab && (
             <Link
               href="/"
               className="px-6 py-2.5 bg-primary-600 text-white rounded-full text-sm font-medium hover:bg-primary-700 transition-colors"
             >
-              Book a Move
+              Book a Scheduled Move
             </Link>
           )}
         </div>
