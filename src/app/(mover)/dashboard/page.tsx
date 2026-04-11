@@ -16,7 +16,7 @@ interface DashboardData {
   pendingRequests: number
   activeMovesCount: number
   scheduledMovesCount: number
-  recentMoves: RecentMoveFromApi[]
+  recentMoves: RecentMoveFromApi[] // now returned by API
 }
 
 interface RecentMoveFromApi {
@@ -50,6 +50,7 @@ interface RecentMove {
 const DashboardPage = () => {
   const { user, crewMembers } = useAuth()
   const [dashboard, setDashboard] = useState<DashboardData | null>(null)
+  const [availableMovesCount, setAvailableMovesCount] = useState(0)
   const [loading, setLoading] = useState(true)
 
   const isVerified = user?.moverDetails?.verificationStatus === 'verified'
@@ -57,10 +58,17 @@ const DashboardPage = () => {
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
-        const res = await fetch('/api/mover/dashboard')
-        if (res.ok) {
-          const data = await res.json()
+        const [dashRes, nearbyRes] = await Promise.all([
+          fetch('/api/mover/dashboard'),
+          fetch('/api/mover/nearby-moves'),
+        ])
+        if (dashRes.ok) {
+          const data = await dashRes.json()
           setDashboard(data)
+        }
+        if (nearbyRes.ok) {
+          const nearbyData = await nearbyRes.json()
+          setAvailableMovesCount(nearbyData.total ?? 0)
         }
       } catch (err) {
         console.error('Failed to fetch dashboard data:', err)
@@ -105,7 +113,7 @@ const DashboardPage = () => {
   const stats = [
     {
       name: 'Available Moves',
-      value: dashboard?.activeMoves.length ?? 0,
+      value: availableMovesCount,
       icon: TruckIcon,
       href: '/available-moves',
       color: 'bg-neutral-500',
