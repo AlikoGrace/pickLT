@@ -97,19 +97,37 @@ export async function GET() {
       0
     )
 
-    // Active moves count: moves assigned to this mover that are actively being worked on
+    // Active moves count: moves physically in progress (driving or on-site).
+    // mover_accepted is intentionally excluded — it means accepted but not yet started;
+    // those moves belong in the Scheduled count until the mover hits Start Route.
     const activePhaseStatuses = [
-      'mover_accepted', 'mover_en_route', 'mover_arrived',
+      'mover_en_route', 'mover_arrived',
       'loading', 'in_transit', 'arrived_destination', 'unloading',
     ]
     const activeMovesCount = activeMoves.documents.filter(
       (m) => activePhaseStatuses.includes(m.status as string)
     ).length
 
-    // Scheduled moves count: moves assigned to this mover with moveCategory=scheduled and status=mover_assigned
+    // Scheduled moves count: accepted-but-not-started scheduled moves.
+    // accept-scheduled-move sets status = 'mover_accepted' (never 'mover_assigned').
     const scheduledMovesCount = activeMoves.documents.filter(
-      (m) => m.moveCategory === 'scheduled' && m.status === 'mover_assigned'
+      (m) => m.moveCategory === 'scheduled' && m.status === 'mover_accepted'
     ).length
+
+    // Shape activeMoves into the RecentMoveFromApi field names the dashboard page expects
+    const recentMoves = activeMoves.documents.map((doc) => ({
+      $id: doc.$id,
+      pickupLabel: doc.pickupLocation || '',
+      pickupAddress: doc.pickupStreetAddress || '',
+      dropoffLabel: doc.dropoffLocation || '',
+      dropoffAddress: doc.dropoffStreetAddress || '',
+      scheduledDate: doc.moveDate || null,
+      status: doc.status,
+      estimatedPrice: doc.estimatedPrice || 0,
+      moveCategory: doc.moveCategory,
+      totalItems: doc.totalItemCount || 0,
+      routeDistanceMeters: doc.routeDistanceMeters || null,
+    }))
 
     return NextResponse.json({
       moverProfile,
@@ -120,6 +138,7 @@ export async function GET() {
       pendingRequests: moveRequests.documents,
       crewMembers: crew.documents,
       earningsThisMonth,
+      recentMoves,
     })
   } catch (err) {
     console.error('GET /api/mover/dashboard error:', err)
