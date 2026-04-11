@@ -561,7 +561,7 @@ export default function ActiveMovePage() {
       </div>
 
       {/* Bottom panel — Action button */}
-      <div className="absolute bottom-32 lg:bottom-0 left-0 right-0 z-40 p-4 pb-6 pointer-events-none">
+      <div className="absolute bottom-24 lg:bottom-0 left-0 right-0 z-40 p-4 pb-6 pointer-events-none">
         <div className="mx-auto max-w-lg pointer-events-auto space-y-3">
           {/* Proximity hint when en_route and not yet near pickup */}
           {phase === 'en_route' && !isNearPickup && distanceToPickup !== null && (
