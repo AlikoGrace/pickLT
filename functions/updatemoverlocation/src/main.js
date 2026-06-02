@@ -1,4 +1,4 @@
-import { Client, Databases, ID } from 'node-appwrite';
+import { Client, Databases, ID, Query } from 'node-appwrite';
 
 const DATABASE_ID = process.env.APPWRITE_DATABASE_ID;
 const MOVER_PROFILES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVER_PROFILES;
@@ -17,40 +17,40 @@ export default async ({ req, res, log, error }) => {
 
   try {
     const body = JSON.parse(req.body || '{}');
-    const { moverProfileId, moveId, latitude, longitude, heading, speed } = body;
+    const { moveId, latitude, longitude, heading, speed } = body;
+    const authId = req.headers['x-appwrite-user-id'] ?? null;
 
-    if (!moverProfileId || !latitude || !longitude) {
-      return res.json({ error: 'moverProfileId, latitude, and longitude are required' }, 400);
+    if (!authId) return res.json({ error: 'Unauthenticated' }, 401);
+    if (latitude == null || longitude == null) {
+      return res.json({ error: 'latitude and longitude are required' }, 400);
     }
+
+    // Resolve the caller's own profile — never trust a body-supplied id.
+    const profiles = await databases.listDocuments(DATABASE_ID, MOVER_PROFILES_COLLECTION, [
+      Query.equal('userId', authId),
+      Query.limit(1),
+    ]);
+    if (profiles.documents.length === 0) return res.json({ error: 'Not a mover' }, 403);
+    const moverProfileId = profiles.documents[0].$id;
 
     const now = new Date().toISOString();
 
-    // Write location record (Appwrite Realtime will broadcast this)
-    await databases.createDocument(
-      DATABASE_ID,
-      MOVER_LOCATIONS_COLLECTION,
-      ID.unique(),
-      {
-        moverProfileId,
-        moveId: moveId || null,
-        latitude,
-        longitude,
-        heading: heading || null,
-        speed: speed || null,
-        timestamp: now,
-      }
-    );
-
-    // Update mover's current position on their profile
-    await databases.updateDocument(
-      DATABASE_ID,
-      MOVER_PROFILES_COLLECTION,
+    // Write location record (Appwrite Realtime broadcasts this).
+    await databases.createDocument(DATABASE_ID, MOVER_LOCATIONS_COLLECTION, ID.unique(), {
       moverProfileId,
-      {
-        currentLatitude: latitude,
-        currentLongitude: longitude,
-      }
-    );
+      moveId: moveId || null,
+      latitude,
+      longitude,
+      heading: heading ?? null,
+      speed: speed ?? null,
+      timestamp: now,
+    });
+
+    // Update the mover's current position on their profile.
+    await databases.updateDocument(DATABASE_ID, MOVER_PROFILES_COLLECTION, moverProfileId, {
+      currentLatitude: latitude,
+      currentLongitude: longitude,
+    });
 
     return res.json({ success: true });
   } catch (err) {
