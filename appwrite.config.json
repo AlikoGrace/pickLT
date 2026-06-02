@@ -564,6 +564,64 @@
                     "twoWayKey": "69951421001339522e84",
                     "onDelete": "setNull",
                     "side": "parent"
+                },
+                {
+                    "key": "driversLicensePhoto",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "socialSecurityNumber",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "taxNumber",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "primaryCity",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "primaryCountry",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "crewSize",
+                    "type": "integer",
+                    "required": false,
+                    "array": false,
+                    "default": 2,
+                    "min": 1,
+                    "max": 10
+                },
+                {
+                    "key": "expoPushToken",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 255,
+                    "default": null,
+                    "encrypt": false
                 }
             ],
             "indexes": []
@@ -696,7 +754,9 @@
                         "completed",
                         "cancelled_by_client",
                         "cancelled_by_mover",
-                        "disputed"
+                        "disputed",
+                        "awaiting_payment",
+                        "booked"
                     ]
                 },
                 {
@@ -1189,6 +1249,14 @@
                     "twoWayKey": "699514ce00342141d5a8",
                     "onDelete": "setNull",
                     "side": "parent"
+                },
+                {
+                    "key": "paymentMethod",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "default": null,
+                    "encrypt": false
                 }
             ],
             "indexes": []
@@ -1236,7 +1304,8 @@
                         "pending",
                         "accepted",
                         "declined",
-                        "expired"
+                        "expired",
+                        "cancelled"
                     ]
                 },
                 {
@@ -1485,6 +1554,22 @@
                 },
                 {
                     "key": "transactionId",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "clientConfirmedAt",
+                    "type": "datetime",
+                    "required": false,
+                    "array": false,
+                    "default": null,
+                    "format": ""
+                },
+                {
+                    "key": "moverConfirmedAt",
                     "type": "text",
                     "required": false,
                     "array": false,
