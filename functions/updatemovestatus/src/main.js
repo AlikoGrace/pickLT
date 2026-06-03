@@ -5,17 +5,17 @@ const MOVES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVES;
 const MOVER_PROFILES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVER_PROFILES;
 const MOVE_STATUS_HISTORY_COLLECTION = process.env.APPWRITE_COLLECTION_MOVE_STATUS_HISTORY;
 const NOTIFICATIONS_COLLECTION = process.env.APPWRITE_COLLECTION_NOTIFICATIONS;
-const PAYMENTS_COLLECTION = process.env.APPWRITE_COLLECTION_PAYMENTS;
 
-// Valid status transitions. Extended for the mover app's cash-payment flow:
-// unloading → awaiting_payment → completed (completion itself is driven by the
-// confirmpaymentmover dual-handshake, but the transition is permitted here so a
-// card-paid move can also go unloading → completed directly).
+// Valid status transitions. Extended for the mover app's cash flow:
+// unloading → awaiting_payment → (processpayment sets 'paid') → completed.
+// 'paid → completed' lets the mover close the job after the existing
+// processpayment function records the cash payment. A card-paid / already-paid
+// move can also go unloading → completed directly.
 const VALID_TRANSITIONS = {
   draft: ['pending_payment', 'booked', 'cancelled_by_client'],
   booked: ['paid', 'pending_payment', 'mover_assigned', 'mover_accepted', 'cancelled_by_client'],
   pending_payment: ['paid', 'cancelled_by_client'],
-  paid: ['mover_assigned', 'mover_accepted', 'cancelled_by_client'],
+  paid: ['mover_assigned', 'mover_accepted', 'completed', 'cancelled_by_client'],
   mover_assigned: ['mover_accepted', 'cancelled_by_mover'],
   mover_accepted: ['mover_en_route', 'cancelled_by_mover', 'cancelled_by_client'],
   mover_en_route: ['mover_arrived', 'cancelled_by_mover'],
@@ -24,7 +24,7 @@ const VALID_TRANSITIONS = {
   in_transit: ['arrived_destination'],
   arrived_destination: ['unloading'],
   unloading: ['awaiting_payment', 'completed'],
-  awaiting_payment: ['completed', 'cancelled_by_client', 'cancelled_by_mover'],
+  awaiting_payment: ['paid', 'completed', 'cancelled_by_client', 'cancelled_by_mover'],
   completed: ['disputed'],
   cancelled_by_client: [],
   cancelled_by_mover: [],
@@ -99,41 +99,12 @@ export default async ({ req, res, log, error }) => {
       );
     }
 
-    // Update move status (+ timestamps).
+    // Update move status (+ timestamps). Payment rows are owned by the
+    // processpayment function — not created here.
     const updates = { status: newStatus };
     const nowIso = new Date().toISOString();
     if (newStatus === 'completed') updates.completedAt = nowIso;
     if (newStatus === 'paid') updates.paidAt = nowIso;
-
-    // On entering awaiting_payment (cash flow), make sure a pending payment row
-    // exists so the dual-handshake (confirmpaymentmover / client confirm) has a
-    // record to confirm. Idempotent — skip if one already exists.
-    if (newStatus === 'awaiting_payment' && PAYMENTS_COLLECTION) {
-      const amount =
-        (typeof move.finalPrice === 'number' && move.finalPrice) ||
-        (typeof move.estimatedPrice === 'number' && move.estimatedPrice) ||
-        0;
-      if (move.finalPrice == null && amount) updates.finalPrice = amount;
-      const existing = await databases.listDocuments(DATABASE_ID, PAYMENTS_COLLECTION, [
-        Query.equal('moveId', moveId),
-        Query.limit(1),
-      ]);
-      if (existing.documents.length === 0) {
-        await databases
-          .createDocument(DATABASE_ID, PAYMENTS_COLLECTION, ID.unique(), {
-            moveId,
-            users: relId(move.clientId),
-            amount,
-            currency: 'EUR',
-            status: 'pending',
-            paymentMethod: move.paymentMethod || 'cash',
-            transactionId: null,
-            clientConfirmedAt: null,
-            moverConfirmedAt: null,
-          })
-          .catch((e) => error(`payment row create failed: ${e.message}`));
-      }
-    }
 
     await databases.updateDocument(DATABASE_ID, MOVES_COLLECTION, moveId, updates);
 
