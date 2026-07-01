@@ -1,6 +1,7 @@
 import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
+import { relId, writeNotification } from '@/lib/notify'
 import { Query } from 'node-appwrite'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -73,7 +74,7 @@ export async function POST(request: NextRequest) {
 
     // Update the move to assign this mover
     // Per architecture: move_requests.status = 'accepted', moves.status = 'mover_accepted'
-    await databases.updateDocument(
+    const move = await databases.updateDocument(
       APPWRITE.DATABASE_ID,
       APPWRITE.COLLECTIONS.MOVES,
       moveId,
@@ -82,6 +83,18 @@ export async function POST(request: NextRequest) {
         status: 'mover_accepted',
       }
     )
+
+    // Notify the client that a mover accepted their move.
+    const clientId = relId(move.clientId)
+    if (clientId) {
+      await writeNotification({
+        userId: clientId,
+        type: 'move_accepted',
+        title: 'Mover Accepted',
+        body: 'A mover has accepted your move request!',
+        data: { moveId, handle: move.handle, status: 'mover_accepted' },
+      })
+    }
 
     // Best-effort: Decline all other pending requests for this move.
     // Wrapped in its own try-catch so a failure here doesn't return

@@ -1,6 +1,7 @@
 import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
+import { relId, writeNotification, STATUS_NOTIFICATION } from '@/lib/notify'
 import { Query, ID } from 'node-appwrite'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -129,6 +130,20 @@ export async function POST(request: NextRequest) {
       moveId,
       updateData
     )
+
+    // Notify the client of the status change (pushable statuses fan out an OS
+    // push via sendpush; granular in-progress steps stay silent).
+    const clientId = relId(move.clientId)
+    const notif = STATUS_NOTIFICATION[status as string]
+    if (clientId && notif) {
+      await writeNotification({
+        userId: clientId,
+        type: notif.type,
+        title: notif.title,
+        body: notif.body,
+        data: { moveId, handle: move.handle, status },
+      })
+    }
 
     return NextResponse.json({ success: true, moveId, status })
   } catch (error) {

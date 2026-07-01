@@ -1,6 +1,7 @@
 import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
+import { relId, writeNotification } from '@/lib/notify'
 import { Query } from 'node-appwrite'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -84,6 +85,18 @@ export async function POST(request: NextRequest) {
         status: 'booked',
       }
     )
+
+    // Notify the client their mover withdrew (move goes back to the pool).
+    const clientId = relId(move.clientId)
+    if (clientId) {
+      await writeNotification({
+        userId: clientId,
+        type: 'move_cancelled',
+        title: 'Mover Withdrew',
+        body: 'Your mover withdrew. We are finding you another mover.',
+        data: { moveId, handle: move.handle, status: 'booked' },
+      })
+    }
 
     return NextResponse.json({ success: true, moveId })
   } catch (error) {

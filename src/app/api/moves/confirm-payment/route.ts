@@ -1,6 +1,7 @@
 import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
+import { writeNotification } from '@/lib/notify'
 import { Query, ID } from 'node-appwrite'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -129,6 +130,17 @@ export async function POST(request: NextRequest) {
         } catch {
           // Non-critical — don't fail the request
         }
+      }
+
+      // Notify the client their move is complete.
+      if (clientId) {
+        await writeNotification({
+          userId: clientId,
+          type: 'move_completed',
+          title: 'Move Completed',
+          body: 'Your move has been completed! Please leave a review.',
+          data: { moveId, handle: move.handle, status: 'completed' },
+        })
       }
 
       return NextResponse.json({

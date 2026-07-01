@@ -1,6 +1,7 @@
 import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
+import { moverUserIdFromProfile, writeNotification } from '@/lib/notify'
 import { Query, ID } from 'node-appwrite'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -116,6 +117,18 @@ export async function POST(request: NextRequest) {
     } catch (err) {
       console.error('Failed to update mover rating:', err)
       // Non-critical — review is still created
+    }
+
+    // Notify the mover of the new review.
+    const moverUserId = await moverUserIdFromProfile(moverProfileId)
+    if (moverUserId) {
+      await writeNotification({
+        userId: moverUserId,
+        type: 'review',
+        title: 'New Review',
+        body: `You received a ${Math.round(rating)}-star review.`,
+        data: { moveId, handle: move.handle },
+      })
     }
 
     return NextResponse.json({
