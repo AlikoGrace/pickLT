@@ -1677,7 +1677,8 @@
                         "move_completed",
                         "payment",
                         "review",
-                        "system"
+                        "system",
+                        "verification"
                     ]
                 },
                 {

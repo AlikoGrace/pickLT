@@ -51,7 +51,9 @@ export default async ({ req, res, log, error }) => {
       ID.unique(),
       {
         userId,
-        type: 'system',
+        // `verification` is pushable so the mover is alerted the moment an admin
+        // verifies/rejects/suspends them (verification unlocks accepting jobs).
+        type: 'verification',
         title: `Profile ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)}`,
         body: statusMessages[newStatus],
         data: JSON.stringify({ moverProfileId, newStatus }),
