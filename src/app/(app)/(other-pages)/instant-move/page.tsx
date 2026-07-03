@@ -434,6 +434,7 @@ const InstantMovePage = () => {
   const confirmCancel = () => setShowCancelConfirm(true)
 
   const [isCancelling, setIsCancelling] = useState(false)
+  const [cancelError, setCancelError] = useState<string | null>(null)
 
   const handleCancel = async () => {
     const moveId = moveIdRef.current || moveData?.$id
@@ -448,6 +449,7 @@ const InstantMovePage = () => {
     }
 
     setIsCancelling(true)
+    setCancelError(null)
     try {
       const res = await fetch('/api/moves/cancel', {
         method: 'POST',
@@ -456,19 +458,25 @@ const InstantMovePage = () => {
       })
 
       if (!res.ok) {
+        // Backend refused (e.g. items already in transit). Surface the reason
+        // and keep the user on the tracking screen — never fake a cancel.
         const data = await res.json().catch(() => ({}))
-        console.error('Cancel move failed:', data.error)
+        setCancelError(data.error || 'Couldn’t cancel this move. Please try again.')
+        return
       }
-    } catch (err) {
-      console.error('Cancel move error:', err)
-    } finally {
+
+      // Real success — tear down local state and head home.
       sessionStorage.removeItem('selectedMover')
       sessionStorage.removeItem('activeMoveId')
       sessionStorage.removeItem('activeMoveRequestId')
       setShowCancelConfirm(false)
-      setIsCancelling(false)
       reset()
       router.push('/')
+    } catch (err) {
+      console.error('Cancel move error:', err)
+      setCancelError('Couldn’t reach the server. Check your connection and try again.')
+    } finally {
+      setIsCancelling(false)
     }
   }
 
@@ -1021,8 +1029,13 @@ const InstantMovePage = () => {
             <p className="mt-1.5 text-sm text-neutral-500 dark:text-neutral-400">
               Your mover is already on the way. Are you sure you want to cancel? This action cannot be undone.
             </p>
+            {cancelError && (
+              <p className="mt-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
+                {cancelError}
+              </p>
+            )}
             <div className="mt-6 flex gap-3">
-              <ButtonSecondary onClick={() => setShowCancelConfirm(false)} disabled={isCancelling} className="flex-1">Keep move</ButtonSecondary>
+              <ButtonSecondary onClick={() => { setShowCancelConfirm(false); setCancelError(null) }} disabled={isCancelling} className="flex-1">Keep move</ButtonSecondary>
               <button
                 type="button"
                 onClick={handleCancel}
