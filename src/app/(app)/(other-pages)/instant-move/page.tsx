@@ -167,7 +167,7 @@ const InstantMovePage = () => {
   const [routeInfo, setRouteInfo] = useState<RouteInfo | null>(null)
   const [moverEtaMinutes, setMoverEtaMinutes] = useState(0)
   const [moverDistanceKm, setMoverDistanceKm] = useState(0)
-  const [moverCoords, setMoverCoords] = useState<Coordinates | null>(null)
+  const [moverCoords, setMoverCoords] = useState<{ latitude: number; longitude: number; heading?: number } | null>(null)
 
   // ─── Waiting for mover acceptance ─────────────────────
   const waitingForAcceptance = moveData
@@ -230,10 +230,11 @@ const InstantMovePage = () => {
     moverProfileId: mover?.id || null,
     enabled: !!mover && !waitingForAcceptance,
     intervalMs: 3000,
-    onLocationUpdate: useCallback((location: { latitude: number; longitude: number }) => {
+    onLocationUpdate: useCallback((location: { latitude: number; longitude: number; heading?: number }) => {
       setMoverCoords({
         latitude: location.latitude,
         longitude: location.longitude,
+        heading: location.heading,
       })
     }, []),
   })

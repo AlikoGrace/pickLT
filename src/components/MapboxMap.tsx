@@ -13,6 +13,9 @@ mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || ''
 export interface MapCoordinates {
   latitude: number
   longitude: number
+  /** Compass heading in degrees clockwise from north (0=N, 90=E). Optional —
+   *  only the live mover marker uses it, to rotate the truck to face travel. */
+  heading?: number
 }
 
 export interface RouteInfo {
@@ -286,22 +289,32 @@ export const MapboxMap = ({
     if (!map.current || !mapLoaded) return
 
     if (moverCoordinates) {
+      // Face the truck along its travel heading. GPS omits heading when the
+      // vehicle is stationary, so treat a missing/invalid value as "keep the
+      // last rotation" rather than snapping back to north.
+      const heading =
+        typeof moverCoordinates.heading === 'number' && Number.isFinite(moverCoordinates.heading)
+          ? moverCoordinates.heading
+          : null
       if (moverMarkerRef.current) {
         // Just update position, no destroy/recreate
         moverMarkerRef.current.setLngLat([moverCoordinates.longitude, moverCoordinates.latitude])
+        if (heading !== null) moverMarkerRef.current.setRotation(heading)
       } else {
-        // Create mover marker for the first time
+        // Create mover marker for the first time. rotationAlignment 'map' keeps
+        // the truck oriented to real streets as the map rotates/tilts.
         const el = createMoverMarkerElement()
-        moverMarkerRef.current = new mapboxgl.Marker({ element: el, anchor: 'center' })
+        moverMarkerRef.current = new mapboxgl.Marker({ element: el, anchor: 'center', rotationAlignment: 'map' })
           .setLngLat([moverCoordinates.longitude, moverCoordinates.latitude])
           .addTo(map.current)
+        if (heading !== null) moverMarkerRef.current.setRotation(heading)
       }
     } else if (moverMarkerRef.current) {
       moverMarkerRef.current.remove()
       moverMarkerRef.current = null
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [moverCoordinates?.latitude, moverCoordinates?.longitude, mapLoaded])
+  }, [moverCoordinates?.latitude, moverCoordinates?.longitude, moverCoordinates?.heading, mapLoaded])
 
   // ─── Draw route between pickup and dropoff ────────────
   // Only fetches from Directions API when coordinates actually change by value.

@@ -26,7 +26,7 @@ interface MoverMapboxMapProps {
   onMarkerHover?: (markerId: string | null) => void
   defaultCenter?: { lat: number; lng: number }
   defaultZoom?: number
-  moverCoordinates?: { latitude: number; longitude: number }
+  moverCoordinates?: { latitude: number; longitude: number; heading?: number }
 }
 
 export const MoverMapboxMap = ({
@@ -222,8 +222,16 @@ export const MoverMapboxMap = ({
       return
     }
 
+    // Face the truck along its travel heading. GPS omits heading when the
+    // vehicle is stationary, so a missing value keeps the last rotation.
+    const heading =
+      typeof moverCoordinates.heading === 'number' && Number.isFinite(moverCoordinates.heading)
+        ? moverCoordinates.heading
+        : null
+
     if (moverMarkerRef.current) {
       moverMarkerRef.current.setLngLat([moverCoordinates.longitude, moverCoordinates.latitude])
+      if (heading !== null) moverMarkerRef.current.setRotation(heading)
     } else {
       const el = document.createElement('div')
       el.style.cssText = 'display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer'
@@ -266,9 +274,10 @@ export const MoverMapboxMap = ({
         </div>
       `
 
-      moverMarkerRef.current = new mapboxgl.Marker({ element: el })
+      moverMarkerRef.current = new mapboxgl.Marker({ element: el, rotationAlignment: 'map' })
         .setLngLat([moverCoordinates.longitude, moverCoordinates.latitude])
         .addTo(map.current!)
+      if (heading !== null) moverMarkerRef.current.setRotation(heading)
     }
   }, [moverCoordinates, mapLoaded])
 

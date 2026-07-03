@@ -91,7 +91,7 @@ const AvailableMovesPage = () => {
   const [moves, setMoves] = useState<NearbyMove[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [moverCoords, setMoverCoords] = useState<{ latitude: number; longitude: number } | null>(null)
+  const [moverCoords, setMoverCoords] = useState<{ latitude: number; longitude: number; heading?: number } | null>(null)
   const [hasBrowserGeo, setHasBrowserGeo] = useState(false)
   const [profileCoordsLoaded, setProfileCoordsLoaded] = useState(false)
 
@@ -145,6 +145,8 @@ const AvailableMovesPage = () => {
         setMoverCoords({
           latitude: pos.coords.latitude,
           longitude: pos.coords.longitude,
+          // null when stationary / unavailable.
+          heading: pos.coords.heading ?? undefined,
         })
         setHasBrowserGeo(true)
       },

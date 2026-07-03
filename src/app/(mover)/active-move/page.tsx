@@ -24,6 +24,7 @@ const MOVES_COLLECTION = process.env.NEXT_PUBLIC_COLLECTION_MOVES || ''
 interface MoverCoordinates {
   latitude: number
   longitude: number
+  heading?: number
 }
 
 type MovePhase = 'en_route' | 'arrived_pickup' | 'loading' | 'in_transit' | 'arrived_dropoff' | 'unloading' | 'awaiting_payment' | 'completed'
@@ -94,6 +95,8 @@ export default function ActiveMovePage() {
         setMoverCoords({
           latitude: pos.coords.latitude,
           longitude: pos.coords.longitude,
+          // Geolocation heading is null when stationary / unavailable.
+          heading: pos.coords.heading ?? undefined,
         })
       },
       (err) => {
@@ -112,11 +115,11 @@ export default function ActiveMovePage() {
     moverProfileId: moverProfileId,
     enabled: !!moverProfileId && !moverCoords && phase !== 'completed',
     intervalMs: 3_000,
-    onLocationUpdate: useCallback((location: { latitude: number; longitude: number }) => {
+    onLocationUpdate: useCallback((location: { latitude: number; longitude: number; heading?: number }) => {
       // Only use polled location if direct geo hasn't set coords yet
       setMoverCoords((prev) => {
         if (prev) return prev // Direct geo already working — don't overwrite
-        return { latitude: location.latitude, longitude: location.longitude }
+        return { latitude: location.latitude, longitude: location.longitude, heading: location.heading }
       })
     }, []),
   })
