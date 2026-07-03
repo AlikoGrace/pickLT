@@ -17,7 +17,7 @@ export default async ({ req, res, log, error }) => {
   }
 
   try {
-    const body = JSON.parse(req.body || '{}');
+    const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
     // Identity comes from the authenticated session, never the body.
     const userId = req.headers['x-appwrite-user-id'] ?? null;
     if (!userId) return res.json({ error: 'Unauthenticated' }, 401);
