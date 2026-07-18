@@ -147,6 +147,16 @@ export default async ({ req, res, log, error }) => {
         vatId: moveData.vatId || null,
         routeDistanceMeters: moveData.routeDistanceMeters || null,
         routeDurationSeconds: moveData.routeDurationSeconds || null,
+        // Pricing + payment — the client computes the quoted price and passes
+        // it in as estimatedPrice (and paymentMethod). These were previously
+        // dropped here, so every move persisted with estimatedPrice at its
+        // schema default and paymentMethod null, surfacing as €0 on the client,
+        // the mover, and in the moves row.
+        estimatedPrice:
+          typeof moveData.estimatedPrice === 'number' ? moveData.estimatedPrice : null,
+        finalPrice:
+          typeof moveData.finalPrice === 'number' ? moveData.finalPrice : null,
+        paymentMethod: moveData.paymentMethod || null,
         termsAccepted: moveData.termsAccepted ?? null,
         privacyAccepted: moveData.privacyAccepted ?? null,
       }
