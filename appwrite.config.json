@@ -44,13 +44,17 @@
             "$id": "69959dce001b20e1acfe",
             "name": "createmove",
             "runtime": "node-22",
-            "specification": "s-2vcpu-4gb",
+            "specification": "s-0.5vcpu-512mb",
+            "buildSpecification": "s-2vcpu-2gb",
+            "runtimeSpecification": "s-0.5vcpu-512mb",
+            "deploymentRetention": 0,
             "execute": [
-                "any"
+                "users"
             ],
             "events": [],
             "scopes": [
-                "users.read"
+                "documents.read",
+                "documents.write"
             ],
             "schedule": "",
             "timeout": 15,
