@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
 import { getSessionUserId } from '@/lib/auth-session'
+import { asText, asTextArray } from '@/lib/move-normalizers'
 import { ID, Query } from 'node-appwrite'
 
 /**
@@ -79,16 +80,16 @@ export async function POST(req: NextRequest) {
         dropoffLatitude: dropoffLatitude ?? null,
         dropoffLongitude: dropoffLongitude ?? null,
 
-        inventoryItems: inventoryItems || null,
-        customItems: customItems || [],
+        inventoryItems: asText(inventoryItems),
+        customItems: asTextArray(customItems),
         totalItemCount: totalItemCount ?? 0,
 
         estimatedPrice: estimatedPrice ?? null,
         routeDistanceMeters: routeDistanceMeters ?? null,
         routeDurationSeconds: routeDurationSeconds ?? null,
 
-        coverPhotoId: coverPhotoId || null,
-        galleryPhotoIds: galleryPhotoIds || [],
+        coverPhotoId: asText(coverPhotoId),
+        galleryPhotoIds: asTextArray(galleryPhotoIds),
 
         termsAccepted: true,
         privacyAccepted: true,

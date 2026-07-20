@@ -45,6 +45,34 @@ function generateHandle() {
   return `MV-${year}-${random}`;
 }
 
+// ── Value normalizers ────────────────────────────────────────────────────
+// Several `moves` attributes are text or text[] columns. When a caller sends a
+// raw object/array where Appwrite expects a string, the value is coerced to
+// "[object Object]" and the whole write is rejected with:
+//   `"[object Object]" is not valid`
+// Callers historically disagree on whether they pre-stringify their custom
+// items / inventory (the mobile apps stringify; some web paths pass raw
+// objects). This function is the shared server chokepoint every mobile caller
+// funnels through, so we normalize here rather than trusting each client.
+
+// Coerce a value destined for a single text/JSON column to a plain string.
+// null/undefined pass through unchanged; objects/arrays are JSON-encoded.
+function asText(value) {
+  if (value === null || value === undefined) return null;
+  return typeof value === 'string' ? value : JSON.stringify(value);
+}
+
+// Coerce a value destined for a text[] column to an array of plain strings.
+// Object elements are JSON-encoded so none ever reaches Appwrite as
+// "[object Object]".
+function asTextArray(value) {
+  if (value === null || value === undefined) return [];
+  const arr = Array.isArray(value) ? value : [value];
+  return arr
+    .filter((v) => v !== null && v !== undefined)
+    .map((v) => (typeof v === 'string' ? v : JSON.stringify(v)));
+}
+
 export default async ({ req, res, log, error }) => {
   const client = new Client()
     .setEndpoint(process.env.APPWRITE_FUNCTION_API_ENDPOINT)
@@ -56,8 +84,9 @@ export default async ({ req, res, log, error }) => {
     return res.json({ error: 'Method not allowed' }, 405);
   }
 
+  let body = {};
   try {
-    const body = JSON.parse(req.body || '{}');
+    body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
     const { clientId, moveCategory, moveType, moveDate, ...moveData } = body;
 
     if (!clientId) {
@@ -101,50 +130,48 @@ export default async ({ req, res, log, error }) => {
         totalItemCount,
         totalWeightKg,
         totalVolumeCm3,
-        inventoryItems: typeof moveData.inventoryItems === 'object'
-          ? JSON.stringify(moveData.inventoryItems)
-          : moveData.inventoryItems || null,
+        inventoryItems: asText(moveData.inventoryItems),
         // Pickup
-        pickupLocation: moveData.pickupLocation || null,
+        pickupLocation: asText(moveData.pickupLocation),
         pickupLatitude: moveData.pickupLatitude || null,
         pickupLongitude: moveData.pickupLongitude || null,
-        pickupStreetAddress: moveData.pickupStreetAddress || null,
-        pickupApartmentUnit: moveData.pickupApartmentUnit || null,
-        pickupFloorLevel: moveData.pickupFloorLevel || null,
+        pickupStreetAddress: asText(moveData.pickupStreetAddress),
+        pickupApartmentUnit: asText(moveData.pickupApartmentUnit),
+        pickupFloorLevel: asText(moveData.pickupFloorLevel),
         pickupElevator: moveData.pickupElevator ?? null,
-        pickupParking: moveData.pickupParking || null,
+        pickupParking: asText(moveData.pickupParking),
         pickupHaltverbot: moveData.pickupHaltverbot ?? null,
         // Dropoff
-        dropoffLocation: moveData.dropoffLocation || null,
+        dropoffLocation: asText(moveData.dropoffLocation),
         dropoffLatitude: moveData.dropoffLatitude || null,
         dropoffLongitude: moveData.dropoffLongitude || null,
-        dropoffStreetAddress: moveData.dropoffStreetAddress || null,
-        dropoffApartmentUnit: moveData.dropoffApartmentUnit || null,
-        dropoffFloorLevel: moveData.dropoffFloorLevel || null,
+        dropoffStreetAddress: asText(moveData.dropoffStreetAddress),
+        dropoffApartmentUnit: asText(moveData.dropoffApartmentUnit),
+        dropoffFloorLevel: asText(moveData.dropoffFloorLevel),
         dropoffElevator: moveData.dropoffElevator ?? null,
-        dropoffParking: moveData.dropoffParking || null,
+        dropoffParking: asText(moveData.dropoffParking),
         dropoffHaltverbot: moveData.dropoffHaltverbot ?? null,
         // Other
         homeType: moveData.homeType || null,
-        customItems: moveData.customItems || [],
+        customItems: asTextArray(moveData.customItems),
         packingServiceLevel: moveData.packingServiceLevel || null,
-        packingMaterials: moveData.packingMaterials || [],
-        packingNotes: moveData.packingNotes || null,
-        arrivalWindow: moveData.arrivalWindow || null,
+        packingMaterials: asTextArray(moveData.packingMaterials),
+        packingNotes: asText(moveData.packingNotes),
+        arrivalWindow: asText(moveData.arrivalWindow),
         flexibility: moveData.flexibility || null,
-        crewSize: moveData.crewSize || null,
-        vehicleType: moveData.vehicleType || null,
-        additionalServices: moveData.additionalServices || [],
+        crewSize: asText(moveData.crewSize),
+        vehicleType: asText(moveData.vehicleType),
+        additionalServices: asTextArray(moveData.additionalServices),
         storageWeeks: moveData.storageWeeks || 0,
-        coverPhotoId: moveData.coverPhotoId || null,
-        galleryPhotoIds: moveData.galleryPhotoIds || [],
-        contactFullName: moveData.contactFullName || null,
-        contactPhone: moveData.contactPhone || null,
-        contactEmail: moveData.contactEmail || null,
-        contactNotes: moveData.contactNotes || null,
+        coverPhotoId: asText(moveData.coverPhotoId),
+        galleryPhotoIds: asTextArray(moveData.galleryPhotoIds),
+        contactFullName: asText(moveData.contactFullName),
+        contactPhone: asText(moveData.contactPhone),
+        contactEmail: asText(moveData.contactEmail),
+        contactNotes: asText(moveData.contactNotes),
         isBusinessMove: moveData.isBusinessMove ?? null,
-        companyName: moveData.companyName || null,
-        vatId: moveData.vatId || null,
+        companyName: asText(moveData.companyName),
+        vatId: asText(moveData.vatId),
         routeDistanceMeters: moveData.routeDistanceMeters || null,
         routeDurationSeconds: moveData.routeDurationSeconds || null,
         // Pricing + payment — the client computes the quoted price and passes
@@ -156,7 +183,7 @@ export default async ({ req, res, log, error }) => {
           typeof moveData.estimatedPrice === 'number' ? moveData.estimatedPrice : null,
         finalPrice:
           typeof moveData.finalPrice === 'number' ? moveData.finalPrice : null,
-        paymentMethod: moveData.paymentMethod || null,
+        paymentMethod: asText(moveData.paymentMethod),
         termsAccepted: moveData.termsAccepted ?? null,
         privacyAccepted: moveData.privacyAccepted ?? null,
       }
@@ -186,6 +213,16 @@ export default async ({ req, res, log, error }) => {
     });
   } catch (err) {
     error(`Create move failed: ${err.message}`);
+    // Surface which attributes carried non-scalar values so an
+    // "[object Object]" style rejection can be traced to its field.
+    try {
+      const suspect = Object.entries(body || {})
+        .filter(([, v]) => v !== null && typeof v === 'object' && !Array.isArray(v))
+        .map(([k]) => k);
+      if (suspect.length) error(`Create move object-valued fields: ${suspect.join(', ')}`);
+    } catch {
+      /* diagnostics only — never mask the original error */
+    }
     return res.json({ error: err.message }, 500);
   }
 };

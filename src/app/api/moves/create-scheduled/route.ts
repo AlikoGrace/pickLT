@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
 import { getSessionUserId } from '@/lib/auth-session'
+import { asText, asTextArray } from '@/lib/move-normalizers'
 import { ID } from 'node-appwrite'
 
 export const runtime = 'nodejs'
@@ -133,13 +134,13 @@ export async function POST(req: NextRequest) {
         homeType: homeType || null,
 
         // Inventory
-        inventoryItems: inventoryItems || null,
-        customItems: Array.isArray(customItems) ? customItems : [],
+        inventoryItems: asText(inventoryItems),
+        customItems: asTextArray(customItems),
         totalItemCount: totalItemCount ?? 0,
 
         // Packing
         packingServiceLevel: packingServiceLevel || null,
-        packingMaterials: Array.isArray(packingMaterials) ? packingMaterials : [],
+        packingMaterials: asTextArray(packingMaterials),
         packingNotes: packingNotes || null,
 
         // Timing
@@ -151,12 +152,12 @@ export async function POST(req: NextRequest) {
         vehicleType: vehicleType || null,
 
         // Services
-        additionalServices: Array.isArray(additionalServices) ? additionalServices : [],
+        additionalServices: asTextArray(additionalServices),
         storageWeeks: storageWeeks ?? 0,
 
         // Photos
-        coverPhotoId: coverPhotoId || null,
-        galleryPhotoIds: Array.isArray(galleryPhotoIds) ? galleryPhotoIds : [],
+        coverPhotoId: asText(coverPhotoId),
+        galleryPhotoIds: asTextArray(galleryPhotoIds),
 
         // Contact
         contactFullName: contactName || null,
