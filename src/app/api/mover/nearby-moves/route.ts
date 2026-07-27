@@ -69,6 +69,10 @@ export async function GET(req: NextRequest) {
       [
         Query.equal('moveCategory', 'scheduled'),
         Query.equal('status', ['draft', 'booked']),
+        // Exclude in-progress mobile booking wizards (see lib/draft-move in the
+        // client app) — they are scheduled + draft and would otherwise be
+        // offered to movers as real jobs.
+        Query.notEqual('wizardDraft', true),
         Query.orderDesc('$createdAt'),
         Query.limit(200),
       ]

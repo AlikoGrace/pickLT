@@ -1261,6 +1261,13 @@
                     "array": false,
                     "default": null,
                     "encrypt": false
+                },
+                {
+                    "key": "wizardDraft",
+                    "type": "boolean",
+                    "required": false,
+                    "array": false,
+                    "default": false
                 }
             ],
             "indexes": []

@@ -25,6 +25,11 @@ export async function GET(req: NextRequest) {
 
     const queries = [
       Query.equal('clientId', userId),
+      // The mobile app creates a `moves` row when its booking wizard opens and
+      // patches it per step (`wizardDraft: true` until submit). An unfinished
+      // booking is not a move, so it must not appear in the user's move list.
+      // `notEqual` so rows predating the attribute still match.
+      Query.notEqual('wizardDraft', true),
       Query.limit(limit),
       Query.offset(offset),
       Query.orderDesc('$createdAt'),
