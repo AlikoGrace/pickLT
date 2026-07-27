@@ -20,7 +20,9 @@ export async function GET() {
     const result = await databases.listDocuments(
       APPWRITE.DATABASE_ID,
       APPWRITE.COLLECTIONS.INVENTORY_CATALOG,
-      [Query.limit(200), Query.orderAsc('category')],
+      // 500, not 200: the admin platform owns this catalog, and silently
+      // truncating it would hide items an admin added.
+      [Query.limit(500), Query.orderAsc('category')],
     )
 
     // Map Appwrite documents to the shape the frontend expects
