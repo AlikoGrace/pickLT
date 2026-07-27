@@ -4,19 +4,68 @@ const DATABASE_ID = process.env.APPWRITE_DATABASE_ID;
 const MOVES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVES;
 const INVENTORY_CATALOG_COLLECTION = process.env.APPWRITE_COLLECTION_INVENTORY_CATALOG;
 
-// Pricing constants
-const BASE_RATE_PER_KM = 1.50; // EUR per km
-const MOVE_TYPE_MULTIPLIER = { light: 1.0, regular: 1.3, premium: 1.8 };
-const FLOOR_SURCHARGE_NO_ELEVATOR = 15; // EUR per floor
-const PACKING_RATES = { none: 0, partial: 50, full: 120, unpacking: 180 };
-const CREW_RATES = { '1': 0, '2': 30, '3': 60, '4plus': 100 };
-const MINIMUM_PRICE = 49;
+const PRICING_CONFIG_COLLECTION = process.env.APPWRITE_COLLECTION_PRICING_CONFIG || 'pricing_config';
+
+// Compiled defaults. Rates are admin-editable via the `pricing_config`
+// collection, but a config that fails to load must never yield a €0 quote — so
+// the DB is an override layer over these, never a replacement. Keys mirror
+// pickltmobile/lib/pricing-config.ts.
+const DEFAULTS = {
+  'instant.baseRatePerKm': 1.50,
+  'instant.multiplier.light': 1.0,
+  'instant.multiplier.regular': 1.3,
+  'instant.multiplier.premium': 1.8,
+  'instant.floorSurchargeNoElevator': 15,
+  'instant.packing.none': 0,
+  'instant.packing.partial': 50,
+  'instant.packing.full': 120,
+  'instant.packing.unpacking': 180,
+  'instant.crew.1': 0,
+  'instant.crew.2': 30,
+  'instant.crew.3': 60,
+  'instant.crew.4plus': 100,
+  'instant.storagePerWeek': 25,
+  'instant.minimumPrice': 49,
+};
+
+/** Rate lookup: finite DB override when present, else the compiled default. */
+function rateFrom(overrides, key) {
+  const v = overrides[key];
+  return typeof v === 'number' && Number.isFinite(v) ? v : DEFAULTS[key];
+}
+
+/**
+ * Read admin rate overrides. Never throws and never blocks a quote: on any
+ * failure the caller proceeds on DEFAULTS, pricing exactly as before.
+ */
+async function loadOverrides(databases, error) {
+  try {
+    const res = await databases.listDocuments(DATABASE_ID, PRICING_CONFIG_COLLECTION, [
+      Query.limit(200),
+    ]);
+    const out = {};
+    for (const row of res.documents) {
+      if (typeof row.key !== 'string' || !(row.key in DEFAULTS)) continue;
+      const v = typeof row.value === 'number' ? row.value : Number(row.value);
+      if (Number.isFinite(v)) out[row.key] = v;
+    }
+    return out;
+  } catch (e) {
+    error(`[calculateprice] pricing config unavailable, using defaults: ${e.message}`);
+    return {};
+  }
+}
 
 export default async ({ req, res, log, error }) => {
   const client = new Client()
     .setEndpoint(process.env.APPWRITE_FUNCTION_API_ENDPOINT)
     .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID)
-    .setKey(req.headers['x-appwrite-key'] ?? '');
+    // Prefer an explicitly configured API key over the per-execution dynamic key.
+    // This function was created console-side with `scopes: ['users.read']`, so the
+    // dynamic key alone cannot read collections — it has an APPWRITE_API_KEY
+    // variable for exactly that reason. Falling back to the dynamic key keeps this
+    // source portable to the scoped, config-deployed functions.
+    .setKey(process.env.APPWRITE_API_KEY || req.headers['x-appwrite-key'] || '');
   const databases = new Databases(client);
 
   if (req.method !== 'POST') {
@@ -24,42 +73,53 @@ export default async ({ req, res, log, error }) => {
   }
 
   try {
-    const body = JSON.parse(req.body || '{}');
+    // Appwrite Node 22 functions runtime auto-parses JSON bodies when
+    // content-type is application/json, so req.body is already an object.
+    // Older runtimes deliver it as a raw string. Handle both.
+    let body;
+    try {
+      body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
+    } catch {
+      return res.json({ error: 'Invalid JSON body' }, 400);
+    }
     const { moveId, routeDistanceMeters, routeDurationSeconds, moveType, packingServiceLevel, crewSize, pickupFloorLevel, pickupElevator, dropoffFloorLevel, dropoffElevator, storageWeeks } = body;
+
+    const overrides = await loadOverrides(databases, error);
 
     const distanceKm = (routeDistanceMeters || 0) / 1000;
 
     // Base price from distance
-    let basePrice = distanceKm * BASE_RATE_PER_KM;
+    let basePrice = distanceKm * rateFrom(overrides, 'instant.baseRatePerKm');
 
     // Move type multiplier
     const effectiveType = moveType || 'light';
-    const multiplier = MOVE_TYPE_MULTIPLIER[effectiveType] || 1.0;
+    const multiplier = rateFrom(overrides, `instant.multiplier.${effectiveType}`) ?? 1.0;
     basePrice *= multiplier;
 
     // Floor surcharges (no elevator)
     let floorSurcharge = 0;
     const pickupFloor = parseInt(pickupFloorLevel || '0', 10);
     const dropoffFloor = parseInt(dropoffFloorLevel || '0', 10);
+    const floorRate = rateFrom(overrides, 'instant.floorSurchargeNoElevator');
     if (!pickupElevator && pickupFloor > 0) {
-      floorSurcharge += pickupFloor * FLOOR_SURCHARGE_NO_ELEVATOR;
+      floorSurcharge += pickupFloor * floorRate;
     }
     if (!dropoffElevator && dropoffFloor > 0) {
-      floorSurcharge += dropoffFloor * FLOOR_SURCHARGE_NO_ELEVATOR;
+      floorSurcharge += dropoffFloor * floorRate;
     }
 
     // Packing surcharge
-    const packingSurcharge = PACKING_RATES[packingServiceLevel] || 0;
+    const packingSurcharge = rateFrom(overrides, `instant.packing.${packingServiceLevel}`) ?? 0;
 
     // Crew surcharge
-    const crewSurcharge = CREW_RATES[crewSize] || 0;
+    const crewSurcharge = rateFrom(overrides, `instant.crew.${crewSize}`) ?? 0;
 
     // Storage surcharge
-    const storageSurcharge = (storageWeeks || 0) * 25; // €25 per week
+    const storageSurcharge = (storageWeeks || 0) * rateFrom(overrides, 'instant.storagePerWeek');
 
     // Total
     let estimatedPrice = basePrice + floorSurcharge + packingSurcharge + crewSurcharge + storageSurcharge;
-    estimatedPrice = Math.max(estimatedPrice, MINIMUM_PRICE);
+    estimatedPrice = Math.max(estimatedPrice, rateFrom(overrides, 'instant.minimumPrice'));
     estimatedPrice = Math.round(estimatedPrice * 100) / 100;
 
     const breakdown = {

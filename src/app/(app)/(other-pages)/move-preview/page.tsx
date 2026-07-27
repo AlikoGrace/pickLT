@@ -22,7 +22,7 @@ import {
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Fragment, useCallback, useState } from 'react'
+import { Fragment, useCallback, useEffect, useState } from 'react'
 import { SectionHeading, SectionSubheading } from '@/components/listings/SectionHeading'
 
 // Helper to format labels
@@ -138,6 +138,24 @@ const Page = () => {
 
   // ─── Map & location picker state ──────────────────────────
   const [routeInfo, setRouteInfo] = useState<RouteInfo | null>(null)
+  // Admin-editable rates; empty until loaded, and every lookup has a default, so
+  // the preview shows a correct price immediately and sharpens if a rate differs.
+  const [pricingRates, setPricingRates] = useState<Record<string, number>>({})
+
+  useEffect(() => {
+    let cancelled = false
+    fetch('/api/pricing/config')
+      .then((res) => (res.ok ? res.json() : { rates: {} }))
+      .then((data) => {
+        if (!cancelled && data?.rates) setPricingRates(data.rates)
+      })
+      .catch(() => {
+        // Defaults already cover this.
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
   const [locationPickerOpen, setLocationPickerOpen] = useState(false)
   const [editingLocationType, setEditingLocationType] = useState<'pickup' | 'dropoff'>('pickup')
 
@@ -162,12 +180,33 @@ const Page = () => {
   }, [])
 
   // Calculate estimated price using the same formula as calculateprice cloud function
-  const BASE_RATE_PER_KM = 1.50
-  const MOVE_TYPE_MULTIPLIER: Record<string, number> = { light: 1.0, regular: 1.3, premium: 1.8 }
-  const FLOOR_SURCHARGE_NO_ELEVATOR = 15
-  const PACKING_RATES: Record<string, number> = { none: 0, partial: 50, full: 120, unpacking: 180 }
-  const CREW_RATES: Record<string, number> = { '1': 0, '2': 30, '3': 60, '4plus': 100 }
-  const MINIMUM_PRICE = 49
+  // Rates are admin-editable (`pricing_config`); these literals are the defaults
+  // the calculateprice function also compiles in, so a config outage previews the
+  // same price the server will charge rather than nothing at all.
+  const r = (key: string, fallback: number) => {
+    const v = pricingRates[key]
+    return typeof v === 'number' && Number.isFinite(v) ? v : fallback
+  }
+  const BASE_RATE_PER_KM = r('instant.baseRatePerKm', 1.50)
+  const MOVE_TYPE_MULTIPLIER: Record<string, number> = {
+    light: r('instant.multiplier.light', 1.0),
+    regular: r('instant.multiplier.regular', 1.3),
+    premium: r('instant.multiplier.premium', 1.8),
+  }
+  const FLOOR_SURCHARGE_NO_ELEVATOR = r('instant.floorSurchargeNoElevator', 15)
+  const PACKING_RATES: Record<string, number> = {
+    none: r('instant.packing.none', 0),
+    partial: r('instant.packing.partial', 50),
+    full: r('instant.packing.full', 120),
+    unpacking: r('instant.packing.unpacking', 180),
+  }
+  const CREW_RATES: Record<string, number> = {
+    '1': r('instant.crew.1', 0),
+    '2': r('instant.crew.2', 30),
+    '3': r('instant.crew.3', 60),
+    '4plus': r('instant.crew.4plus', 100),
+  }
+  const MINIMUM_PRICE = r('instant.minimumPrice', 49)
 
   const distanceKm = ((routeInfo?.distance ?? routeDistanceMeters) || 0) / 1000
   let basePrice = distanceKm * BASE_RATE_PER_KM * (MOVE_TYPE_MULTIPLIER[moveType || 'regular'] || 1.0)
@@ -180,8 +219,8 @@ const Page = () => {
 
   const packingPrice = PACKING_RATES[packingServiceLevel || 'none'] || 0
   const crewPrice = CREW_RATES[crewSize || '1'] || 0
-  const storagePrice = (storageWeeks || 0) * 25
-  const servicesPrice = additionalServices.length * 50
+  const storagePrice = (storageWeeks || 0) * r('instant.storagePerWeek', 25)
+  const servicesPrice = additionalServices.length * r('scheduled.serviceFlatFee', 50)
 
   let totalPrice = basePrice + floorSurcharge + packingPrice + crewPrice + storagePrice + servicesPrice
   totalPrice = Math.max(totalPrice, MINIMUM_PRICE)
