@@ -25,11 +25,12 @@ export async function GET(req: NextRequest) {
 
     const queries = [
       Query.equal('clientId', userId),
-      // The mobile app creates a `moves` row when its booking wizard opens and
-      // patches it per step (`wizardDraft: true` until submit). An unfinished
-      // booking is not a move, so it must not appear in the user's move list.
-      // `notEqual` so rows predating the attribute still match.
-      Query.notEqual('wizardDraft', true),
+      // Exclude in-progress mobile booking wizards (`wizardDraft: true` until
+      // submit). The isNull branch matters: adding `wizardDraft` with
+      // `default: false` did NOT backfill existing rows, and `null != true` is
+      // null in SQL, so a bare notEqual dropped every pre-existing move.
+      // Those rows were backfilled 2026-07-27; the branch stays as insurance.
+      Query.or([Query.notEqual('wizardDraft', true), Query.isNull('wizardDraft')]),
       Query.limit(limit),
       Query.offset(offset),
       Query.orderDesc('$createdAt'),

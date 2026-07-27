@@ -69,10 +69,12 @@ export async function GET(req: NextRequest) {
       [
         Query.equal('moveCategory', 'scheduled'),
         Query.equal('status', ['draft', 'booked']),
-        // Exclude in-progress mobile booking wizards (see lib/draft-move in the
-        // client app) — they are scheduled + draft and would otherwise be
-        // offered to movers as real jobs.
-        Query.notEqual('wizardDraft', true),
+        // Exclude in-progress mobile booking wizards (`wizardDraft: true` until
+        // submit). The isNull branch matters: adding `wizardDraft` with
+        // `default: false` did NOT backfill existing rows, and `null != true` is
+        // null in SQL, so a bare notEqual dropped every pre-existing move.
+        // Those rows were backfilled 2026-07-27; the branch stays as insurance.
+        Query.or([Query.notEqual('wizardDraft', true), Query.isNull('wizardDraft')]),
         Query.orderDesc('$createdAt'),
         Query.limit(200),
       ]
