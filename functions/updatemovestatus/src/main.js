@@ -6,11 +6,17 @@ const MOVER_PROFILES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVER_PROFILES
 const MOVE_STATUS_HISTORY_COLLECTION = process.env.APPWRITE_COLLECTION_MOVE_STATUS_HISTORY;
 const NOTIFICATIONS_COLLECTION = process.env.APPWRITE_COLLECTION_NOTIFICATIONS;
 
-// Valid status transitions. Extended for the mover app's cash flow:
-// unloading → awaiting_payment → (processpayment sets 'paid') → completed.
-// 'paid → completed' lets the mover close the job after the existing
-// processpayment function records the cash payment. A card-paid / already-paid
-// move can also go unloading → completed directly.
+// Valid status transitions.
+//
+// Cash flow: unloading → awaiting_payment → (BOTH parties confirm via the
+// `confirmpayment` function) → completed. `awaiting_payment` deliberately has
+// NO path to `completed` or `paid` here: only `confirmpayment` may close a
+// move out of it, and only once the client and the mover have each stamped
+// their column on the payment row. Allowing the mover to drive
+// awaiting_payment → completed let one side finish a move on its own say-so.
+//
+// Card flow: the client pays through Stripe (chargemove sets `paid`), then the
+// mover closes the job — which is why `paid → completed` stays.
 const VALID_TRANSITIONS = {
   draft: ['pending_payment', 'booked', 'cancelled_by_client'],
   booked: ['paid', 'pending_payment', 'mover_assigned', 'mover_accepted', 'cancelled_by_client'],
@@ -23,8 +29,8 @@ const VALID_TRANSITIONS = {
   loading: ['in_transit'],
   in_transit: ['arrived_destination'],
   arrived_destination: ['unloading'],
-  unloading: ['awaiting_payment', 'completed'],
-  awaiting_payment: ['paid', 'completed', 'cancelled_by_client', 'cancelled_by_mover'],
+  unloading: ['awaiting_payment'],
+  awaiting_payment: ['cancelled_by_client', 'cancelled_by_mover'],
   completed: ['disputed'],
   cancelled_by_client: [],
   cancelled_by_mover: [],
