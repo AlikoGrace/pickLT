@@ -55,7 +55,33 @@ function relId(v) {
   return typeof v === 'string' ? v : (v.$id ?? null);
 }
 
+// Status → pushable notification type. Anything not listed pushes as `system`
+// (silent). Keep the pushable values in step with sendpush PUSHABLE_TYPES and
+// the notifications.type enum.
+const STATUS_PUSH_TYPE = {
+  mover_accepted: 'move_accepted',
+  mover_en_route: 'mover_en_route',
+  mover_arrived: 'mover_arrived',
+  // The four below are NOT yet in the notifications.type enum. The write below
+  // falls back to `system` until they are added, so this is safe to ship first.
+  loading: 'loading',
+  in_transit: 'in_transit',
+  arrived_destination: 'arrived_destination',
+  unloading: 'unloading',
+  awaiting_payment: 'payment',
+  paid: 'payment',
+  completed: 'move_completed',
+  cancelled_by_mover: 'move_cancelled',
+};
+
 export default async ({ req, res, log, error }) => {
+  // Keep-warm ping (scheduled trigger): short-circuit before any work so the
+  // container stays hot. Every phase advance is a tap the mover waits on in
+  // real time, so a cold start here is felt directly.
+  if (req.headers['x-appwrite-trigger'] === 'schedule') {
+    return res.json({ ok: true, warm: true });
+  }
+
   const client = new Client()
     .setEndpoint(process.env.APPWRITE_FUNCTION_API_ENDPOINT)
     .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID)
@@ -67,7 +93,7 @@ export default async ({ req, res, log, error }) => {
   }
 
   try {
-    const body = JSON.parse(req.body || '{}');
+    const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
     const { moveId, newStatus, note } = body;
     const authId = req.headers['x-appwrite-user-id'] ?? null;
 
@@ -124,21 +150,49 @@ export default async ({ req, res, log, error }) => {
       note: note || null,
     });
 
-    // Notify the client.
+    // Notify the client. Every transition the client cares about now maps to a
+    // pushable type — the granular steps used to fall through to `system`
+    // (silent), so a client got nothing for loading / in_transit /
+    // arrived_destination / unloading.
+    //
+    // `notifications.type` is an ENUM. Until the four new values are added to
+    // it, writing them would throw and the client would lose the in-app row as
+    // well as the push — strictly worse than silence. So: attempt the precise
+    // type, and on rejection fall back to `system`, which is always valid. That
+    // makes this self-healing — the moment the enum is widened these start
+    // pushing with no redeploy. See PROGRESS.md for the operator step.
     const notif = NOTIFICATION_MESSAGES[newStatus];
     if (notif && NOTIFICATIONS_COLLECTION) {
       const clientId = relId(move.clientId);
       if (clientId) {
-        await databases
-          .createDocument(DATABASE_ID, NOTIFICATIONS_COLLECTION, ID.unique(), {
-            userId: clientId,
-            type: newStatus === 'completed' ? 'move_completed' : 'system',
-            title: notif.title,
-            body: notif.body,
-            data: JSON.stringify({ moveId, handle: move.handle, status: newStatus }),
-            isRead: false,
-          })
-          .catch((e) => error(`notification failed: ${e.message}`));
+        const row = {
+          userId: clientId,
+          title: notif.title,
+          body: notif.body,
+          data: JSON.stringify({ moveId, handle: move.handle, status: newStatus }),
+          isRead: false,
+        };
+        const preferredType = STATUS_PUSH_TYPE[newStatus] ?? 'system';
+        try {
+          await databases.createDocument(DATABASE_ID, NOTIFICATIONS_COLLECTION, ID.unique(), {
+            ...row,
+            type: preferredType,
+          });
+        } catch (e) {
+          if (preferredType === 'system') {
+            error(`notification failed: ${e.message}`);
+          } else {
+            error(
+              `notification type '${preferredType}' rejected (enum not widened yet): ${e.message} — retrying as system`,
+            );
+            await databases
+              .createDocument(DATABASE_ID, NOTIFICATIONS_COLLECTION, ID.unique(), {
+                ...row,
+                type: 'system',
+              })
+              .catch((e2) => error(`notification fallback failed: ${e2.message}`));
+          }
+        }
       }
     }
 
