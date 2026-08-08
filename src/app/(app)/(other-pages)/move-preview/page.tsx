@@ -24,6 +24,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Fragment, useCallback, useEffect, useState } from 'react'
 import { SectionHeading, SectionSubheading } from '@/components/listings/SectionHeading'
+import { formatInventoryLabel, useInventoryNames } from '@/lib/inventory-labels'
 
 // Helper to format labels
 const formatLabel = (value: string | null | undefined): string => {
@@ -134,6 +135,8 @@ const Page = () => {
 
   // ─── Submission state ─────────────────────────────────────
   const [isSubmitting, setIsSubmitting] = useState(false)
+  // Admin catalog names, so the preview matches the inventory step's wording.
+  const inventoryNames = useInventoryNames()
   const [submitError, setSubmitError] = useState<string | null>(null)
 
   // ─── Map & location picker state ──────────────────────────
@@ -518,12 +521,14 @@ const Page = () => {
             <DescriptionTerm>Inventory</DescriptionTerm>
             <DescriptionDetails>
               {(() => {
+                // Labels come from the admin catalog so this preview shows the
+                // same wording the inventory step did.
                 const entries = Object.entries(inventory).filter(([, qty]) => qty > 0)
                 if (entries.length === 0 && customItems.length === 0) return `${inventoryCount} items`
                 return (
                   <ul className="list-disc list-inside text-sm space-y-0.5">
-                    {entries.map(([name, qty]) => (
-                      <li key={name}>{formatLabel(name)} &times; {qty}</li>
+                    {entries.map(([id, qty]) => (
+                      <li key={id}>{formatInventoryLabel(id, inventoryNames)} &times; {qty}</li>
                     ))}
                     {customItems.map((item, i) => (
                       <li key={`custom-${i}`}>{item.name} &times; {item.quantity}</li>

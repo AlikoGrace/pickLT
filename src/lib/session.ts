@@ -20,10 +20,29 @@ import crypto from 'crypto'
 export const COOKIE_NAME = 'picklt_session'
 export const MAX_AGE = 30 * 24 * 60 * 60 // 30 days in seconds
 
+/**
+ * Signing key for session cookies.
+ *
+ * This is deliberately NOT the Appwrite API key. Reusing that key here meant a
+ * single value both signed sessions and granted full database/user admin — a
+ * leak in either direction compromised the other, and rotating the Appwrite key
+ * silently invalidated every session.
+ *
+ * Set SESSION_SECRET to 32+ random bytes, e.g.
+ *   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+ */
 function getSecret(): string {
-  const key = process.env.APPWRITE_API_KEY
-  if (!key) throw new Error('APPWRITE_API_KEY is required for session management')
-  return key
+  const secret = process.env.SESSION_SECRET
+  if (!secret) {
+    throw new Error(
+      'SESSION_SECRET is required for session management. Generate one with: ' +
+        'node -e "console.log(require(\'crypto\').randomBytes(32).toString(\'hex\'))"'
+    )
+  }
+  if (secret === process.env.APPWRITE_API_KEY) {
+    throw new Error('SESSION_SECRET must not be the same value as APPWRITE_API_KEY')
+  }
+  return secret
 }
 
 /**

@@ -1,5 +1,6 @@
 import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
+import { getMoveAccess } from '@/lib/move-access'
 import { APPWRITE } from '@/lib/constants'
 import { Query } from 'node-appwrite'
 import { NextRequest, NextResponse } from 'next/server'
@@ -18,6 +19,14 @@ export async function GET(request: NextRequest) {
     const moveId = request.nextUrl.searchParams.get('moveId')
     if (!moveId) {
       return NextResponse.json({ error: 'moveId is required' }, { status: 400 })
+    }
+
+    // Payment amounts and confirmation state are only visible to the two
+    // parties on the move. Without this, any session could walk move ids and
+    // read the platform's transaction ledger.
+    const access = await getMoveAccess(moveId, userId)
+    if (!access) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
     const { databases } = createAdminClient()

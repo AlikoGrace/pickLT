@@ -20,6 +20,11 @@ import { useParams, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAuth } from '@/context/auth'
 import { client } from '@/lib/appwrite'
+import {
+  formatRequestedAt,
+  parseInventoryLines,
+  useInventoryNames,
+} from '@/lib/inventory-labels'
 
 const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || ''
 const PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || ''
@@ -240,6 +245,8 @@ export default function MoverMoveDetailsPage() {
   // Scheduled-move action state
   const [rawStatus, setRawStatus] = useState<string>('')
   const [moveCategory, setMoveCategory] = useState<string | null>(null)
+  // Admin catalog names, so persisted items render the wording the client saw.
+  const inventoryNames = useInventoryNames()
   const [isAssignedMover, setIsAssignedMover] = useState(false)
   const [moveDocId, setMoveDocId] = useState<string | null>(null)
   const [moverProfileId, setMoverProfileId] = useState<string | null>(null)
@@ -402,6 +409,9 @@ export default function MoverMoveDetailsPage() {
 
   // ── Derive action button state ────────────────────────────
   const isScheduled = moveCategory === 'scheduled'
+  // Instant only when explicitly so — rows predating `moveCategory` are all
+  // scheduled, and treating them as instant would hide fields they do carry.
+  const isInstant = moveCategory === 'instant'
   const isUnassigned = !moverProfileId
   const canAccept = isScheduled && isUnassigned && ['draft', 'booked', 'paid', 'pending_payment'].includes(rawStatus)
   const canWithdraw = isScheduled && isAssignedMover && ['mover_accepted', 'mover_assigned'].includes(rawStatus)
@@ -467,6 +477,10 @@ export default function MoverMoveDetailsPage() {
     routeDistanceMeters, routeDurationSeconds, paymentMethod,
     isBusinessMove, companyName, vatId,
   } = move
+
+  // Item labels come from the admin catalog, not from humanising the id — the
+  // client picked "Sofa (2-seater)", not "Sofa 2seater".
+  const inventoryLines = parseInventoryLines(inventoryItems, customItems, inventoryNames)
 
   const pickupDisplay = pickupStreetAddress || pickupLocation || 'Pickup location'
   const dropoffDisplay = dropoffStreetAddress || 'Drop-off location'
@@ -626,28 +640,36 @@ export default function MoverMoveDetailsPage() {
               Move Details
             </h2>
             <InfoRow icon={TruckIcon} label="Move Type" value={formatLabel(moveType)} />
-            <InfoRow icon={CalendarIcon} label="Move Date" value={formatDate(moveDate)} />
-            <InfoRow icon={HomeIcon} label="Home Type" value={formatLabel(homeType)} />
+            {/* Instant starts immediately and carries no moveDate — when the job
+                was requested is what a mover actually needs to judge it. */}
+            {isInstant ? (
+              <InfoRow icon={CalendarIcon} label="Requested" value={formatRequestedAt(createdAt) ?? '—'} />
+            ) : (
+              <InfoRow icon={CalendarIcon} label="Move Date" value={formatDate(moveDate)} />
+            )}
+            {/* Home type, vehicle and crew are scheduled-wizard questions — the
+                instant client is never asked, so there is nothing to report. */}
+            {!isInstant && (
+              <InfoRow icon={HomeIcon} label="Home Type" value={formatLabel(homeType)} />
+            )}
             <InfoRow icon={CubeIcon} label="Items" value={(() => {
-              let parsedInventory: Record<string, number> = {}
-              try { if (inventoryItems) parsedInventory = JSON.parse(inventoryItems) } catch {}
-              const entries = Object.entries(parsedInventory).filter(([, qty]) => qty > 0)
-              let parsedCustom: { name: string; quantity: number }[] = []
-              try { parsedCustom = customItems.map((c) => JSON.parse(c)).filter((c) => c.name) } catch {}
-              if (entries.length === 0 && parsedCustom.length === 0) return `${inventoryCount} items`
+              if (inventoryLines.length === 0) return `${inventoryCount} items`
               return (
                 <ul className="list-disc list-inside text-sm space-y-0.5">
-                  {entries.map(([name, qty]) => (
-                    <li key={name}>{formatLabel(name)} &times; {qty}</li>
-                  ))}
-                  {parsedCustom.map((item, i) => (
-                    <li key={`custom-${i}`}>{item.name} &times; {item.quantity}</li>
+                  {inventoryLines.map((line, i) => (
+                    <li key={`${line.custom ? 'custom' : 'item'}-${i}-${line.label}`}>
+                      {line.label} &times; {line.quantity}
+                    </li>
                   ))}
                 </ul>
               )
             })()} />
-            <InfoRow icon={TruckIcon} label="Vehicle" value={formatLabel(vehicleType)} />
-            <InfoRow icon={UsersIcon} label="Crew" value={crewSize ? `${crewSize} movers` : 'Standard'} />
+            {!isInstant && (
+              <InfoRow icon={TruckIcon} label="Vehicle" value={formatLabel(vehicleType)} />
+            )}
+            {!isInstant && (
+              <InfoRow icon={UsersIcon} label="Crew" value={crewSize ? `${crewSize} movers` : 'Standard'} />
+            )}
             {arrivalWindow && (
               <InfoRow icon={CalendarIcon} label="Arrival Window" value={formatLabel(arrivalWindow)} />
             )}

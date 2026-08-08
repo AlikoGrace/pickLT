@@ -35,7 +35,8 @@ async function verifySession(value: string | undefined): Promise<boolean> {
     const [userId, timestamp, signature] = parts
     if (!userId || !timestamp || !signature) return false
 
-    const secret = process.env.APPWRITE_API_KEY
+    // Must match getSecret() in src/lib/session.ts.
+    const secret = process.env.SESSION_SECRET
     if (!secret) return false
 
     // HMAC-SHA256 via Web Crypto API (Edge Runtime compatible)
@@ -50,7 +51,13 @@ async function verifySession(value: string | undefined): Promise<boolean> {
     const mac = await crypto.subtle.sign('HMAC', key, encoder.encode(`${userId}:${timestamp}`))
     const expected = bytesToHex(new Uint8Array(mac))
 
-    if (signature !== expected) return false
+    // Constant-time compare, matching verifySessionCookie() in lib/session.ts.
+    if (signature.length !== expected.length) return false
+    let diff = 0
+    for (let i = 0; i < signature.length; i++) {
+      diff |= signature.charCodeAt(i) ^ expected.charCodeAt(i)
+    }
+    if (diff !== 0) return false
 
     // Check expiry
     const age = Date.now() - parseInt(timestamp)

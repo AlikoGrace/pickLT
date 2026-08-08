@@ -39,7 +39,6 @@ export async function POST(req: NextRequest) {
       vehicleType,
       languages,
       yearsExperience,
-      baseRate,
     } = body
 
     const { databases, users } = createAdminClient()
@@ -101,7 +100,6 @@ export async function POST(req: NextRequest) {
       vehicleType: vehicleType || null,
       languages: languages || [],
       yearsExperience: yearsExperience ? Number(yearsExperience) : 0,
-      baseRate: baseRate ? Number(baseRate) : 0,
     }
 
     let profile

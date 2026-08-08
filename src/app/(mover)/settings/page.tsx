@@ -258,7 +258,6 @@ const SettingsPage = () => {
           vehicleType: vehicleForm.vehicleType,
           languages: user?.moverDetails?.languages || [],
           yearsExperience: user?.moverDetails?.yearsExperience || 0,
-          baseRate: user?.moverDetails?.baseRate || 1.5,
         }),
       })
       if (!res.ok) {

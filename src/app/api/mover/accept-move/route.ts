@@ -5,6 +5,16 @@ import { relId, writeNotification } from '@/lib/notify'
 import { Query } from 'node-appwrite'
 import { NextRequest, NextResponse } from 'next/server'
 
+// A move is assignable when it sits in a pre-assignment status.
+// Mirrors functions/acceptmove/src/main.js and pickltmover/lib/move-requests.ts.
+const ASSIGNABLE_STATUSES = new Set([
+  'draft',
+  'pending_payment',
+  'paid',
+  'booked',
+  'mover_assigned',
+])
+
 // POST /api/mover/accept-move — Accept a move request
 export async function POST(request: NextRequest) {
   try {
@@ -59,6 +69,33 @@ export async function POST(request: NextRequest) {
 
     if (moveRequest.status !== 'pending') {
       return NextResponse.json({ error: 'Request is no longer pending' }, { status: 409 })
+    }
+
+    // The request authorises exactly one move. Without this check a mover
+    // holding any pending request could accept an arbitrary moveId and take
+    // over a job assigned to someone else — including one already in transit.
+    if (relId(moveRequest.moveId) !== moveId) {
+      return NextResponse.json(
+        { error: 'Request does not correspond to this move' },
+        { status: 403 }
+      )
+    }
+
+    // Refuse a move that is already claimed or past the assignable stage.
+    const targetMove = await databases.getDocument(
+      APPWRITE.DATABASE_ID,
+      APPWRITE.COLLECTIONS.MOVES,
+      moveId
+    )
+    const existingMover = relId(targetMove.moverProfileId)
+    if (existingMover && existingMover !== moverProfile.$id) {
+      return NextResponse.json({ error: 'Move is already assigned' }, { status: 409 })
+    }
+    if (!ASSIGNABLE_STATUSES.has(targetMove.status)) {
+      return NextResponse.json(
+        { error: `Move cannot be accepted while it is ${targetMove.status}` },
+        { status: 409 }
+      )
     }
 
     // Accept the request

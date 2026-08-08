@@ -27,9 +27,13 @@ export const APPWRITE = {
     BROADCAST_MOVE_REQUEST: process.env.NEXT_PUBLIC_FUNCTION_BROADCAST_MOVE_REQUEST!,
     UPDATE_MOVER_LOCATION: process.env.NEXT_PUBLIC_FUNCTION_UPDATE_MOVER_LOCATION!,
     UPDATE_MOVE_STATUS: process.env.NEXT_PUBLIC_FUNCTION_UPDATE_MOVE_STATUS!,
-    PROCESS_PAYMENT: process.env.NEXT_PUBLIC_FUNCTION_PROCESS_PAYMENT!,
     SUBMIT_REVIEW: process.env.NEXT_PUBLIC_FUNCTION_SUBMIT_REVIEW!,
-    SEND_NOTIFICATION: process.env.NEXT_PUBLIC_FUNCTION_SEND_NOTIFICATION!,
+    // PROCESS_PAYMENT and SEND_NOTIFICATION are intentionally absent.
+    // processpayment marked moves paid with no authentication and no payment
+    // provider; sendnotification wrote a notification to any userId with no
+    // caller check. Both were unreferenced, and both are decommissioned.
+    // Payments settle via chargemove (card) or confirmpayment (cash);
+    // notifications are written server-side by lib/notify.ts.
   },
 
   // Storage Buckets

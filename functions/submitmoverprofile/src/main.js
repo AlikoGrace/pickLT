@@ -40,7 +40,6 @@ export default async ({ req, res, log, error }) => {
       vehicleType,
       languages,
       yearsExperience,
-      baseRate,
     } = body;
 
     // Profile fields written on both create and re-submit. A re-submit returns
@@ -61,7 +60,6 @@ export default async ({ req, res, log, error }) => {
       vehicleType: vehicleType || null,
       languages: languages || [],
       yearsExperience: yearsExperience || 0,
-      baseRate: baseRate || 0,
       verificationStatus: 'pending_verification',
     };
 

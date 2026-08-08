@@ -1,0 +1,1944 @@
+{
+  "_note": "Shared pricing fixtures. Committed to pickltmobile and pickLT; both must reproduce these exactly. A diff here is a deliberate pricing change — never re-baseline to make a test pass. instantRouteBase expectations were captured from the deployed calculateprice function.",
+  "_generated": "2026-08-08",
+  "priceForMover": [
+    {
+      "routeBaseEur": 49,
+      "mover": {
+        "vehicleType": "small_van",
+        "crewSize": 1
+      },
+      "totalItems": 0,
+      "expected": 49
+    },
+    {
+      "routeBaseEur": 195,
+      "mover": {
+        "vehicleType": "small_van",
+        "crewSize": 1
+      },
+      "totalItems": 0,
+      "expected": 195
+    },
+    {
+      "routeBaseEur": 585.33,
+      "mover": {
+        "vehicleType": "small_van",
+        "crewSize": 1
+      },
+      "totalItems": 0,
+      "expected": 585
+    },
+    {
+      "routeBaseEur": 49,
+      "mover": {
+        "vehicleType": "small_van",
+        "crewSize": 1
+      },
+      "totalItems": 7,
+      "expected": 60
+    },
+    {
+      "routeBaseEur": 195,
+      "mover": {
+        "vehicleType": "small_van",
+        "crewSize": 1
+      },
+      "totalItems": 7,
+      "expected": 206
+    },
+    {
+      "routeBaseEur": 585.33,
+      "mover": {
+        "vehicleType": "small_van",
+        "crewSize": 1
+      },
+      "totalItems": 7,
+      "expected": 596
+    },
+    {
+      "routeBaseEur": 49,
+      "mover": {
+        "vehicleType": "small_van",
+        "crewSize": 1
+      },
+      "totalItems": 23,
+      "expected": 84
+    },
+    {
+      "routeBaseEur": 195,
+      "mover": {
+        "vehicleType": "small_van",
+        "crewSize": 1
+      },
+      "totalItems": 23,
+      "expected": 230
+    },
+    {
+      "routeBaseEur": 585.33,
+      "mover": {
+        "vehicleType": "small_van",
+        "crewSize": 1
+      },
+      "totalItems": 23,
+      "expected": 620
+    },
+    {
+      "routeBaseEur": 49,
+      "mover": {
+        "vehicleType": "small_van",
+        "crewSize": 2
+      },
+      "totalItems": 0,
+      "expected": 59
+    },
+    {
+      "routeBaseEur": 195,
+      "mover": {
+        "vehicleType": "small_van",
+        "crewSize": 2
+      },
+      "totalItems": 0,
+      "expected": 205
+    },
+    {
+      "routeBaseEur": 585.33,
+      "mover": {
+        "vehicleType": "small_van",
+        "crewSize": 2
+      },
+      "totalItems": 0,
+      "expected": 595
+    },
+    {
+      "routeBaseEur": 49,
+      "mover": {
+        "vehicleType": "small_van",
+        "crewSize": 2
+      },
+      "totalItems": 7,
+      "expected": 70
+    },
+    {
+      "routeBaseEur": 195,
+      "mover": {
+        "vehicleType": "small_van",
+        "crewSize": 2
+      },
+      "totalItems": 7,
+      "expected": 216
+    },
+    {
+      "routeBaseEur": 585.33,
+      "mover": {
+        "vehicleType": "small_van",
+        "crewSize": 2
+      },
+      "totalItems": 7,
+      "expected": 606
+    },
+    {
+      "routeBaseEur": 49,
+      "mover": {
+        "vehicleType": "small_van",
+        "crewSize": 2
+      },
+      "totalItems": 23,
+      "expected": 94
+    },
+    {
+      "routeBaseEur": 195,
+      "mover": {
+        "vehicleType": "small_van",
+        "crewSize": 2
+      },
+      "totalItems": 23,
+      "expected": 240
+    },
+    {
+      "routeBaseEur": 585.33,
+      "mover": {
+        "vehicleType": "small_van",
+        "crewSize": 2
+      },
+      "totalItems": 23,
+      "expected": 630
+    },
+    {
+      "routeBaseEur": 49,
+      "mover": {
+        "vehicleType": "small_van",
+        "crewSize": 4
+      },
+      "totalItems": 0,
+      "expected": 79
+    },
+    {
+      "routeBaseEur": 195,
+      "mover": {
+        "vehicleType": "small_van",
+        "crewSize": 4
+      },
+      "totalItems": 0,
+      "expected": 225
+    },
+    {
+      "routeBaseEur": 585.33,
+      "mover": {
+        "vehicleType": "small_van",
+        "crewSize": 4
+      },
+      "totalItems": 0,
+      "expected": 615
+    },
+    {
+      "routeBaseEur": 49,
+      "mover": {
+        "vehicleType": "small_van",
+        "crewSize": 4
+      },
+      "totalItems": 7,
+      "expected": 90
+    },
+    {
+      "routeBaseEur": 195,
+      "mover": {
+        "vehicleType": "small_van",
+        "crewSize": 4
+      },
+      "totalItems": 7,
+      "expected": 236
+    },
+    {
+      "routeBaseEur": 585.33,
+      "mover": {
+        "vehicleType": "small_van",
+        "crewSize": 4
+      },
+      "totalItems": 7,
+      "expected": 626
+    },
+    {
+      "routeBaseEur": 49,
+      "mover": {
+        "vehicleType": "small_van",
+        "crewSize": 4
+      },
+      "totalItems": 23,
+      "expected": 114
+    },
+    {
+      "routeBaseEur": 195,
+      "mover": {
+        "vehicleType": "small_van",
+        "crewSize": 4
+      },
+      "totalItems": 23,
+      "expected": 260
+    },
+    {
+      "routeBaseEur": 585.33,
+      "mover": {
+        "vehicleType": "small_van",
+        "crewSize": 4
+      },
+      "totalItems": 23,
+      "expected": 650
+    },
+    {
+      "routeBaseEur": 49,
+      "mover": {
+        "vehicleType": "medium_truck",
+        "crewSize": 1
+      },
+      "totalItems": 0,
+      "expected": 59
+    },
+    {
+      "routeBaseEur": 195,
+      "mover": {
+        "vehicleType": "medium_truck",
+        "crewSize": 1
+      },
+      "totalItems": 0,
+      "expected": 205
+    },
+    {
+      "routeBaseEur": 585.33,
+      "mover": {
+        "vehicleType": "medium_truck",
+        "crewSize": 1
+      },
+      "totalItems": 0,
+      "expected": 595
+    },
+    {
+      "routeBaseEur": 49,
+      "mover": {
+        "vehicleType": "medium_truck",
+        "crewSize": 1
+      },
+      "totalItems": 7,
+      "expected": 70
+    },
+    {
+      "routeBaseEur": 195,
+      "mover": {
+        "vehicleType": "medium_truck",
+        "crewSize": 1
+      },
+      "totalItems": 7,
+      "expected": 216
+    },
+    {
+      "routeBaseEur": 585.33,
+      "mover": {
+        "vehicleType": "medium_truck",
+        "crewSize": 1
+      },
+      "totalItems": 7,
+      "expected": 606
+    },
+    {
+      "routeBaseEur": 49,
+      "mover": {
+        "vehicleType": "medium_truck",
+        "crewSize": 1
+      },
+      "totalItems": 23,
+      "expected": 94
+    },
+    {
+      "routeBaseEur": 195,
+      "mover": {
+        "vehicleType": "medium_truck",
+        "crewSize": 1
+      },
+      "totalItems": 23,
+      "expected": 240
+    },
+    {
+      "routeBaseEur": 585.33,
+      "mover": {
+        "vehicleType": "medium_truck",
+        "crewSize": 1
+      },
+      "totalItems": 23,
+      "expected": 630
+    },
+    {
+      "routeBaseEur": 49,
+      "mover": {
+        "vehicleType": "medium_truck",
+        "crewSize": 2
+      },
+      "totalItems": 0,
+      "expected": 69
+    },
+    {
+      "routeBaseEur": 195,
+      "mover": {
+        "vehicleType": "medium_truck",
+        "crewSize": 2
+      },
+      "totalItems": 0,
+      "expected": 215
+    },
+    {
+      "routeBaseEur": 585.33,
+      "mover": {
+        "vehicleType": "medium_truck",
+        "crewSize": 2
+      },
+      "totalItems": 0,
+      "expected": 605
+    },
+    {
+      "routeBaseEur": 49,
+      "mover": {
+        "vehicleType": "medium_truck",
+        "crewSize": 2
+      },
+      "totalItems": 7,
+      "expected": 80
+    },
+    {
+      "routeBaseEur": 195,
+      "mover": {
+        "vehicleType": "medium_truck",
+        "crewSize": 2
+      },
+      "totalItems": 7,
+      "expected": 226
+    },
+    {
+      "routeBaseEur": 585.33,
+      "mover": {
+        "vehicleType": "medium_truck",
+        "crewSize": 2
+      },
+      "totalItems": 7,
+      "expected": 616
+    },
+    {
+      "routeBaseEur": 49,
+      "mover": {
+        "vehicleType": "medium_truck",
+        "crewSize": 2
+      },
+      "totalItems": 23,
+      "expected": 104
+    },
+    {
+      "routeBaseEur": 195,
+      "mover": {
+        "vehicleType": "medium_truck",
+        "crewSize": 2
+      },
+      "totalItems": 23,
+      "expected": 250
+    },
+    {
+      "routeBaseEur": 585.33,
+      "mover": {
+        "vehicleType": "medium_truck",
+        "crewSize": 2
+      },
+      "totalItems": 23,
+      "expected": 640
+    },
+    {
+      "routeBaseEur": 49,
+      "mover": {
+        "vehicleType": "medium_truck",
+        "crewSize": 4
+      },
+      "totalItems": 0,
+      "expected": 89
+    },
+    {
+      "routeBaseEur": 195,
+      "mover": {
+        "vehicleType": "medium_truck",
+        "crewSize": 4
+      },
+      "totalItems": 0,
+      "expected": 235
+    },
+    {
+      "routeBaseEur": 585.33,
+      "mover": {
+        "vehicleType": "medium_truck",
+        "crewSize": 4
+      },
+      "totalItems": 0,
+      "expected": 625
+    },
+    {
+      "routeBaseEur": 49,
+      "mover": {
+        "vehicleType": "medium_truck",
+        "crewSize": 4
+      },
+      "totalItems": 7,
+      "expected": 100
+    },
+    {
+      "routeBaseEur": 195,
+      "mover": {
+        "vehicleType": "medium_truck",
+        "crewSize": 4
+      },
+      "totalItems": 7,
+      "expected": 246
+    },
+    {
+      "routeBaseEur": 585.33,
+      "mover": {
+        "vehicleType": "medium_truck",
+        "crewSize": 4
+      },
+      "totalItems": 7,
+      "expected": 636
+    },
+    {
+      "routeBaseEur": 49,
+      "mover": {
+        "vehicleType": "medium_truck",
+        "crewSize": 4
+      },
+      "totalItems": 23,
+      "expected": 124
+    },
+    {
+      "routeBaseEur": 195,
+      "mover": {
+        "vehicleType": "medium_truck",
+        "crewSize": 4
+      },
+      "totalItems": 23,
+      "expected": 270
+    },
+    {
+      "routeBaseEur": 585.33,
+      "mover": {
+        "vehicleType": "medium_truck",
+        "crewSize": 4
+      },
+      "totalItems": 23,
+      "expected": 660
+    },
+    {
+      "routeBaseEur": 49,
+      "mover": {
+        "vehicleType": "large_truck",
+        "crewSize": 1
+      },
+      "totalItems": 0,
+      "expected": 74
+    },
+    {
+      "routeBaseEur": 195,
+      "mover": {
+        "vehicleType": "large_truck",
+        "crewSize": 1
+      },
+      "totalItems": 0,
+      "expected": 220
+    },
+    {
+      "routeBaseEur": 585.33,
+      "mover": {
+        "vehicleType": "large_truck",
+        "crewSize": 1
+      },
+      "totalItems": 0,
+      "expected": 610
+    },
+    {
+      "routeBaseEur": 49,
+      "mover": {
+        "vehicleType": "large_truck",
+        "crewSize": 1
+      },
+      "totalItems": 7,
+      "expected": 85
+    },
+    {
+      "routeBaseEur": 195,
+      "mover": {
+        "vehicleType": "large_truck",
+        "crewSize": 1
+      },
+      "totalItems": 7,
+      "expected": 231
+    },
+    {
+      "routeBaseEur": 585.33,
+      "mover": {
+        "vehicleType": "large_truck",
+        "crewSize": 1
+      },
+      "totalItems": 7,
+      "expected": 621
+    },
+    {
+      "routeBaseEur": 49,
+      "mover": {
+        "vehicleType": "large_truck",
+        "crewSize": 1
+      },
+      "totalItems": 23,
+      "expected": 109
+    },
+    {
+      "routeBaseEur": 195,
+      "mover": {
+        "vehicleType": "large_truck",
+        "crewSize": 1
+      },
+      "totalItems": 23,
+      "expected": 255
+    },
+    {
+      "routeBaseEur": 585.33,
+      "mover": {
+        "vehicleType": "large_truck",
+        "crewSize": 1
+      },
+      "totalItems": 23,
+      "expected": 645
+    },
+    {
+      "routeBaseEur": 49,
+      "mover": {
+        "vehicleType": "large_truck",
+        "crewSize": 2
+      },
+      "totalItems": 0,
+      "expected": 84
+    },
+    {
+      "routeBaseEur": 195,
+      "mover": {
+        "vehicleType": "large_truck",
+        "crewSize": 2
+      },
+      "totalItems": 0,
+      "expected": 230
+    },
+    {
+      "routeBaseEur": 585.33,
+      "mover": {
+        "vehicleType": "large_truck",
+        "crewSize": 2
+      },
+      "totalItems": 0,
+      "expected": 620
+    },
+    {
+      "routeBaseEur": 49,
+      "mover": {
+        "vehicleType": "large_truck",
+        "crewSize": 2
+      },
+      "totalItems": 7,
+      "expected": 95
+    },
+    {
+      "routeBaseEur": 195,
+      "mover": {
+        "vehicleType": "large_truck",
+        "crewSize": 2
+      },
+      "totalItems": 7,
+      "expected": 241
+    },
+    {
+      "routeBaseEur": 585.33,
+      "mover": {
+        "vehicleType": "large_truck",
+        "crewSize": 2
+      },
+      "totalItems": 7,
+      "expected": 631
+    },
+    {
+      "routeBaseEur": 49,
+      "mover": {
+        "vehicleType": "large_truck",
+        "crewSize": 2
+      },
+      "totalItems": 23,
+      "expected": 119
+    },
+    {
+      "routeBaseEur": 195,
+      "mover": {
+        "vehicleType": "large_truck",
+        "crewSize": 2
+      },
+      "totalItems": 23,
+      "expected": 265
+    },
+    {
+      "routeBaseEur": 585.33,
+      "mover": {
+        "vehicleType": "large_truck",
+        "crewSize": 2
+      },
+      "totalItems": 23,
+      "expected": 655
+    },
+    {
+      "routeBaseEur": 49,
+      "mover": {
+        "vehicleType": "large_truck",
+        "crewSize": 4
+      },
+      "totalItems": 0,
+      "expected": 104
+    },
+    {
+      "routeBaseEur": 195,
+      "mover": {
+        "vehicleType": "large_truck",
+        "crewSize": 4
+      },
+      "totalItems": 0,
+      "expected": 250
+    },
+    {
+      "routeBaseEur": 585.33,
+      "mover": {
+        "vehicleType": "large_truck",
+        "crewSize": 4
+      },
+      "totalItems": 0,
+      "expected": 640
+    },
+    {
+      "routeBaseEur": 49,
+      "mover": {
+        "vehicleType": "large_truck",
+        "crewSize": 4
+      },
+      "totalItems": 7,
+      "expected": 115
+    },
+    {
+      "routeBaseEur": 195,
+      "mover": {
+        "vehicleType": "large_truck",
+        "crewSize": 4
+      },
+      "totalItems": 7,
+      "expected": 261
+    },
+    {
+      "routeBaseEur": 585.33,
+      "mover": {
+        "vehicleType": "large_truck",
+        "crewSize": 4
+      },
+      "totalItems": 7,
+      "expected": 651
+    },
+    {
+      "routeBaseEur": 49,
+      "mover": {
+        "vehicleType": "large_truck",
+        "crewSize": 4
+      },
+      "totalItems": 23,
+      "expected": 139
+    },
+    {
+      "routeBaseEur": 195,
+      "mover": {
+        "vehicleType": "large_truck",
+        "crewSize": 4
+      },
+      "totalItems": 23,
+      "expected": 285
+    },
+    {
+      "routeBaseEur": 585.33,
+      "mover": {
+        "vehicleType": "large_truck",
+        "crewSize": 4
+      },
+      "totalItems": 23,
+      "expected": 675
+    }
+  ],
+  "instantRouteBase": [
+    {
+      "input": {
+        "routeDistanceMeters": 10000,
+        "moveType": "regular"
+      },
+      "expected": {
+        "basePrice": 19.5,
+        "distanceKm": 10,
+        "moveTypeMultiplier": 1.3,
+        "floorSurcharge": 0,
+        "packingSurcharge": 0,
+        "crewSurcharge": 0,
+        "storageSurcharge": 0,
+        "estimatedPrice": 49
+      }
+    },
+    {
+      "input": {
+        "routeDistanceMeters": 300000,
+        "moveType": "premium",
+        "packingServiceLevel": "full"
+      },
+      "expected": {
+        "basePrice": 810,
+        "distanceKm": 300,
+        "moveTypeMultiplier": 1.8,
+        "floorSurcharge": 0,
+        "packingSurcharge": 120,
+        "crewSurcharge": 0,
+        "storageSurcharge": 0,
+        "estimatedPrice": 930
+      }
+    },
+    {
+      "input": {
+        "routeDistanceMeters": 5000,
+        "moveType": "light"
+      },
+      "expected": {
+        "basePrice": 7.5,
+        "distanceKm": 5,
+        "moveTypeMultiplier": 1,
+        "floorSurcharge": 0,
+        "packingSurcharge": 0,
+        "crewSurcharge": 0,
+        "storageSurcharge": 0,
+        "estimatedPrice": 49
+      }
+    },
+    {
+      "input": {
+        "routeDistanceMeters": 120000,
+        "moveType": "regular",
+        "crewSize": 3,
+        "storageWeeks": 2
+      },
+      "expected": {
+        "basePrice": 234,
+        "distanceKm": 120,
+        "moveTypeMultiplier": 1.3,
+        "floorSurcharge": 0,
+        "packingSurcharge": 0,
+        "crewSurcharge": 60,
+        "storageSurcharge": 50,
+        "estimatedPrice": 344
+      }
+    },
+    {
+      "input": {
+        "routeDistanceMeters": 45000,
+        "moveType": "regular",
+        "pickupFloorLevel": "3",
+        "pickupElevator": false
+      },
+      "expected": {
+        "basePrice": 87.75,
+        "distanceKm": 45,
+        "moveTypeMultiplier": 1.3,
+        "floorSurcharge": 45,
+        "packingSurcharge": 0,
+        "crewSurcharge": 0,
+        "storageSurcharge": 0,
+        "estimatedPrice": 132.75
+      }
+    }
+  ],
+  "quoteMove": [
+    {
+      "input": {
+        "volumeM3": 8,
+        "distanceKm": 8,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": null,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "local",
+        "volumeM3": 8,
+        "distanceKm": 8,
+        "billableHours": 2,
+        "hourlyRate": 75,
+        "labourCost": 150,
+        "distanceCost": 6.8,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 156.8,
+        "leadTimeFactor": 1.25,
+        "leadTimeAdjustment": 39.2,
+        "total": 196
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 8,
+        "distanceKm": 8,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 12,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "local",
+        "volumeM3": 8,
+        "distanceKm": 8,
+        "billableHours": 2,
+        "hourlyRate": 75,
+        "labourCost": 150,
+        "distanceCost": 6.8,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 156.8,
+        "leadTimeFactor": 1.15,
+        "leadTimeAdjustment": 23.52,
+        "total": 180.32
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 8,
+        "distanceKm": 8,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 48,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "local",
+        "volumeM3": 8,
+        "distanceKm": 8,
+        "billableHours": 2,
+        "hourlyRate": 75,
+        "labourCost": 150,
+        "distanceCost": 6.8,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 156.8,
+        "leadTimeFactor": 1,
+        "leadTimeAdjustment": 0,
+        "total": 156.8
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 8,
+        "distanceKm": 8,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 96,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "local",
+        "volumeM3": 8,
+        "distanceKm": 8,
+        "billableHours": 2,
+        "hourlyRate": 75,
+        "labourCost": 150,
+        "distanceCost": 6.8,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 156.8,
+        "leadTimeFactor": 0.92,
+        "leadTimeAdjustment": -12.54,
+        "total": 144.26
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 8,
+        "distanceKm": 8,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 336,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "local",
+        "volumeM3": 8,
+        "distanceKm": 8,
+        "billableHours": 2,
+        "hourlyRate": 75,
+        "labourCost": 150,
+        "distanceCost": 6.8,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 156.8,
+        "leadTimeFactor": 0.85,
+        "leadTimeAdjustment": -23.52,
+        "total": 133.28
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 18,
+        "distanceKm": 15,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": null,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "local",
+        "volumeM3": 18,
+        "distanceKm": 15,
+        "billableHours": 2,
+        "hourlyRate": 75,
+        "labourCost": 150,
+        "distanceCost": 12.75,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 162.75,
+        "leadTimeFactor": 1.25,
+        "leadTimeAdjustment": 40.69,
+        "total": 203.44
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 18,
+        "distanceKm": 15,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 12,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "local",
+        "volumeM3": 18,
+        "distanceKm": 15,
+        "billableHours": 2,
+        "hourlyRate": 75,
+        "labourCost": 150,
+        "distanceCost": 12.75,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 162.75,
+        "leadTimeFactor": 1.15,
+        "leadTimeAdjustment": 24.41,
+        "total": 187.16
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 18,
+        "distanceKm": 15,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 48,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "local",
+        "volumeM3": 18,
+        "distanceKm": 15,
+        "billableHours": 2,
+        "hourlyRate": 75,
+        "labourCost": 150,
+        "distanceCost": 12.75,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 162.75,
+        "leadTimeFactor": 1,
+        "leadTimeAdjustment": 0,
+        "total": 162.75
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 18,
+        "distanceKm": 15,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 96,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "local",
+        "volumeM3": 18,
+        "distanceKm": 15,
+        "billableHours": 2,
+        "hourlyRate": 75,
+        "labourCost": 150,
+        "distanceCost": 12.75,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 162.75,
+        "leadTimeFactor": 0.92,
+        "leadTimeAdjustment": -13.02,
+        "total": 149.73
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 18,
+        "distanceKm": 15,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 336,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "local",
+        "volumeM3": 18,
+        "distanceKm": 15,
+        "billableHours": 2,
+        "hourlyRate": 75,
+        "labourCost": 150,
+        "distanceCost": 12.75,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 162.75,
+        "leadTimeFactor": 0.85,
+        "leadTimeAdjustment": -24.41,
+        "total": 138.34
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 28,
+        "distanceKm": 25,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": null,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "local",
+        "volumeM3": 28,
+        "distanceKm": 25,
+        "billableHours": 2.8,
+        "hourlyRate": 75,
+        "labourCost": 210,
+        "distanceCost": 21.25,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 231.25,
+        "leadTimeFactor": 1.25,
+        "leadTimeAdjustment": 57.81,
+        "total": 289.06
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 28,
+        "distanceKm": 25,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 12,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "local",
+        "volumeM3": 28,
+        "distanceKm": 25,
+        "billableHours": 2.8,
+        "hourlyRate": 75,
+        "labourCost": 210,
+        "distanceCost": 21.25,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 231.25,
+        "leadTimeFactor": 1.15,
+        "leadTimeAdjustment": 34.69,
+        "total": 265.94
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 28,
+        "distanceKm": 25,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 48,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "local",
+        "volumeM3": 28,
+        "distanceKm": 25,
+        "billableHours": 2.8,
+        "hourlyRate": 75,
+        "labourCost": 210,
+        "distanceCost": 21.25,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 231.25,
+        "leadTimeFactor": 1,
+        "leadTimeAdjustment": 0,
+        "total": 231.25
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 28,
+        "distanceKm": 25,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 96,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "local",
+        "volumeM3": 28,
+        "distanceKm": 25,
+        "billableHours": 2.8,
+        "hourlyRate": 75,
+        "labourCost": 210,
+        "distanceCost": 21.25,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 231.25,
+        "leadTimeFactor": 0.92,
+        "leadTimeAdjustment": -18.5,
+        "total": 212.75
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 28,
+        "distanceKm": 25,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 336,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "local",
+        "volumeM3": 28,
+        "distanceKm": 25,
+        "billableHours": 2.8,
+        "hourlyRate": 75,
+        "labourCost": 210,
+        "distanceCost": 21.25,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 231.25,
+        "leadTimeFactor": 0.85,
+        "leadTimeAdjustment": -34.69,
+        "total": 196.56
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 40,
+        "distanceKm": 40,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": null,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "local",
+        "volumeM3": 40,
+        "distanceKm": 40,
+        "billableHours": 4,
+        "hourlyRate": 75,
+        "labourCost": 300,
+        "distanceCost": 34,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 334,
+        "leadTimeFactor": 1.25,
+        "leadTimeAdjustment": 83.5,
+        "total": 417.5
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 40,
+        "distanceKm": 40,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 12,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "local",
+        "volumeM3": 40,
+        "distanceKm": 40,
+        "billableHours": 4,
+        "hourlyRate": 75,
+        "labourCost": 300,
+        "distanceCost": 34,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 334,
+        "leadTimeFactor": 1.15,
+        "leadTimeAdjustment": 50.1,
+        "total": 384.1
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 40,
+        "distanceKm": 40,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 48,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "local",
+        "volumeM3": 40,
+        "distanceKm": 40,
+        "billableHours": 4,
+        "hourlyRate": 75,
+        "labourCost": 300,
+        "distanceCost": 34,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 334,
+        "leadTimeFactor": 1,
+        "leadTimeAdjustment": 0,
+        "total": 334
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 40,
+        "distanceKm": 40,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 96,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "local",
+        "volumeM3": 40,
+        "distanceKm": 40,
+        "billableHours": 4,
+        "hourlyRate": 75,
+        "labourCost": 300,
+        "distanceCost": 34,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 334,
+        "leadTimeFactor": 0.92,
+        "leadTimeAdjustment": -26.72,
+        "total": 307.28
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 40,
+        "distanceKm": 40,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 336,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "local",
+        "volumeM3": 40,
+        "distanceKm": 40,
+        "billableHours": 4,
+        "hourlyRate": 75,
+        "labourCost": 300,
+        "distanceCost": 34,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 334,
+        "leadTimeFactor": 0.85,
+        "leadTimeAdjustment": -50.1,
+        "total": 283.9
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 18,
+        "distanceKm": 120,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": null,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "long_distance",
+        "volumeM3": 18,
+        "distanceKm": 120,
+        "billableHours": 1.8,
+        "hourlyRate": 75,
+        "labourCost": 135,
+        "distanceCost": 25.92,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 160.92,
+        "leadTimeFactor": 1.25,
+        "leadTimeAdjustment": 40.23,
+        "total": 201.15
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 18,
+        "distanceKm": 120,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 12,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "long_distance",
+        "volumeM3": 18,
+        "distanceKm": 120,
+        "billableHours": 1.8,
+        "hourlyRate": 75,
+        "labourCost": 135,
+        "distanceCost": 25.92,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 160.92,
+        "leadTimeFactor": 1.15,
+        "leadTimeAdjustment": 24.14,
+        "total": 185.06
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 18,
+        "distanceKm": 120,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 48,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "long_distance",
+        "volumeM3": 18,
+        "distanceKm": 120,
+        "billableHours": 1.8,
+        "hourlyRate": 75,
+        "labourCost": 135,
+        "distanceCost": 25.92,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 160.92,
+        "leadTimeFactor": 1,
+        "leadTimeAdjustment": 0,
+        "total": 160.92
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 18,
+        "distanceKm": 120,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 96,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "long_distance",
+        "volumeM3": 18,
+        "distanceKm": 120,
+        "billableHours": 1.8,
+        "hourlyRate": 75,
+        "labourCost": 135,
+        "distanceCost": 25.92,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 160.92,
+        "leadTimeFactor": 0.92,
+        "leadTimeAdjustment": -12.87,
+        "total": 148.05
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 18,
+        "distanceKm": 120,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 336,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "long_distance",
+        "volumeM3": 18,
+        "distanceKm": 120,
+        "billableHours": 1.8,
+        "hourlyRate": 75,
+        "labourCost": 135,
+        "distanceCost": 25.92,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 160.92,
+        "leadTimeFactor": 0.85,
+        "leadTimeAdjustment": -24.14,
+        "total": 136.78
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 40,
+        "distanceKm": 300,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": null,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "long_distance",
+        "volumeM3": 40,
+        "distanceKm": 300,
+        "billableHours": 4,
+        "hourlyRate": 75,
+        "labourCost": 300,
+        "distanceCost": 144,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 444,
+        "leadTimeFactor": 1.25,
+        "leadTimeAdjustment": 111,
+        "total": 555
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 40,
+        "distanceKm": 300,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 12,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "long_distance",
+        "volumeM3": 40,
+        "distanceKm": 300,
+        "billableHours": 4,
+        "hourlyRate": 75,
+        "labourCost": 300,
+        "distanceCost": 144,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 444,
+        "leadTimeFactor": 1.15,
+        "leadTimeAdjustment": 66.6,
+        "total": 510.6
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 40,
+        "distanceKm": 300,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 48,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "long_distance",
+        "volumeM3": 40,
+        "distanceKm": 300,
+        "billableHours": 4,
+        "hourlyRate": 75,
+        "labourCost": 300,
+        "distanceCost": 144,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 444,
+        "leadTimeFactor": 1,
+        "leadTimeAdjustment": 0,
+        "total": 444
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 40,
+        "distanceKm": 300,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 96,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "long_distance",
+        "volumeM3": 40,
+        "distanceKm": 300,
+        "billableHours": 4,
+        "hourlyRate": 75,
+        "labourCost": 300,
+        "distanceCost": 144,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 444,
+        "leadTimeFactor": 0.92,
+        "leadTimeAdjustment": -35.52,
+        "total": 408.48
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 40,
+        "distanceKm": 300,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 336,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "long_distance",
+        "volumeM3": 40,
+        "distanceKm": 300,
+        "billableHours": 4,
+        "hourlyRate": 75,
+        "labourCost": 300,
+        "distanceCost": 144,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 444,
+        "leadTimeFactor": 0.85,
+        "leadTimeAdjustment": -66.6,
+        "total": 377.4
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 40,
+        "distanceKm": 500,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": null,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "long_distance",
+        "volumeM3": 40,
+        "distanceKm": 500,
+        "billableHours": 4,
+        "hourlyRate": 75,
+        "labourCost": 300,
+        "distanceCost": 240,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 540,
+        "leadTimeFactor": 1.25,
+        "leadTimeAdjustment": 135,
+        "total": 675
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 40,
+        "distanceKm": 500,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 12,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "long_distance",
+        "volumeM3": 40,
+        "distanceKm": 500,
+        "billableHours": 4,
+        "hourlyRate": 75,
+        "labourCost": 300,
+        "distanceCost": 240,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 540,
+        "leadTimeFactor": 1.15,
+        "leadTimeAdjustment": 81,
+        "total": 621
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 40,
+        "distanceKm": 500,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 48,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "long_distance",
+        "volumeM3": 40,
+        "distanceKm": 500,
+        "billableHours": 4,
+        "hourlyRate": 75,
+        "labourCost": 300,
+        "distanceCost": 240,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 540,
+        "leadTimeFactor": 1,
+        "leadTimeAdjustment": 0,
+        "total": 540
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 40,
+        "distanceKm": 500,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 96,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "long_distance",
+        "volumeM3": 40,
+        "distanceKm": 500,
+        "billableHours": 4,
+        "hourlyRate": 75,
+        "labourCost": 300,
+        "distanceCost": 240,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 540,
+        "leadTimeFactor": 0.92,
+        "leadTimeAdjustment": -43.2,
+        "total": 496.8
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 40,
+        "distanceKm": 500,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 336,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "long_distance",
+        "volumeM3": 40,
+        "distanceKm": 500,
+        "billableHours": 4,
+        "hourlyRate": 75,
+        "labourCost": 300,
+        "distanceCost": 240,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 540,
+        "leadTimeFactor": 0.85,
+        "leadTimeAdjustment": -81,
+        "total": 459
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 0,
+        "distanceKm": 0,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": null,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "local",
+        "volumeM3": 0,
+        "distanceKm": 0,
+        "billableHours": 2,
+        "hourlyRate": 75,
+        "labourCost": 150,
+        "distanceCost": 0,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 150,
+        "leadTimeFactor": 1.25,
+        "leadTimeAdjustment": 37.5,
+        "total": 187.5
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 0,
+        "distanceKm": 0,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 12,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "local",
+        "volumeM3": 0,
+        "distanceKm": 0,
+        "billableHours": 2,
+        "hourlyRate": 75,
+        "labourCost": 150,
+        "distanceCost": 0,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 150,
+        "leadTimeFactor": 1.15,
+        "leadTimeAdjustment": 22.5,
+        "total": 172.5
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 0,
+        "distanceKm": 0,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 48,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "local",
+        "volumeM3": 0,
+        "distanceKm": 0,
+        "billableHours": 2,
+        "hourlyRate": 75,
+        "labourCost": 150,
+        "distanceCost": 0,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 150,
+        "leadTimeFactor": 1,
+        "leadTimeAdjustment": 0,
+        "total": 150
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 0,
+        "distanceKm": 0,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 96,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "local",
+        "volumeM3": 0,
+        "distanceKm": 0,
+        "billableHours": 2,
+        "hourlyRate": 75,
+        "labourCost": 150,
+        "distanceCost": 0,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 150,
+        "leadTimeFactor": 0.92,
+        "leadTimeAdjustment": -12,
+        "total": 138
+      }
+    },
+    {
+      "input": {
+        "volumeM3": 0,
+        "distanceKm": 0,
+        "vehicleType": "medium_truck",
+        "crewSize": 2,
+        "leadTimeHours": 336,
+        "floorsNoLift": 0,
+        "packingServiceLevel": "none",
+        "storageWeeks": 0
+      },
+      "expected": {
+        "model": "local",
+        "volumeM3": 0,
+        "distanceKm": 0,
+        "billableHours": 2,
+        "hourlyRate": 75,
+        "labourCost": 150,
+        "distanceCost": 0,
+        "accessSurcharge": 0,
+        "packingSurcharge": 0,
+        "storageSurcharge": 0,
+        "subtotal": 150,
+        "leadTimeFactor": 0.85,
+        "leadTimeAdjustment": -22.5,
+        "total": 127.5
+      }
+    }
+  ]
+}

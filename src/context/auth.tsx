@@ -40,7 +40,6 @@ export type User = {
     yearsExperience?: number
     verificationStatus?: string
     isOnline?: boolean
-    baseRate?: number
     languages?: string[]
   }
 }
@@ -190,7 +189,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             yearsExperience: moverProfile.yearsExperience ?? undefined,
             verificationStatus: moverProfile.verificationStatus ?? undefined,
             isOnline: moverProfile.isOnline ?? undefined,
-            baseRate: moverProfile.baseRate ?? undefined,
             languages: moverProfile.languages ?? undefined,
           },
         }),

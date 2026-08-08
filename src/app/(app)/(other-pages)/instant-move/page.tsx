@@ -43,7 +43,6 @@ interface MoverInfo {
   yearsExperience: number
   languages: string[]
   isVerified: boolean
-  baseRate: number
   currentLatitude: number | null
   currentLongitude: number | null
 }

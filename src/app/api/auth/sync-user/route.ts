@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient, withRetry } from '@/lib/appwrite-server'
+import { getSessionUserId } from '@/lib/auth-session'
 import { APPWRITE } from '@/lib/constants'
 import { Query } from 'node-appwrite'
 
@@ -10,26 +11,33 @@ import { Query } from 'node-appwrite'
  * - If user exists (by authId stored as $id) → update
  * - If user doesn't exist → create
  * - Also returns mover_profiles + crew_members if user is a mover
+ *
+ * Identity and the verification flags come from the session and the Appwrite
+ * Auth record, never from the request body: the body is attacker-controlled and
+ * this route writes with the admin key. `userType` is the one caller-supplied
+ * field, and it is honoured only when creating the document.
  */
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json()
-    const {
-      authId,
-      email,
-      fullName,
-      phone,
-      profilePhoto,
-      emailVerified,
-      phoneVerified,
-      userType: requestedUserType,
-    } = body
-
+    const authId = await getSessionUserId()
     if (!authId) {
-      return NextResponse.json({ error: 'Missing authId' }, { status: 400 })
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { databases } = createAdminClient()
+    const body = await req.json().catch(() => ({}))
+    const { profilePhoto, userType: requestedUserType } = body
+
+    const { databases, users } = createAdminClient()
+
+    // Authoritative identity — read from Appwrite Auth rather than the body so
+    // a caller cannot self-assert a verified email/phone or overwrite these
+    // fields with values that were never verified.
+    const authUser = await withRetry(() => users.get(authId))
+    const email = authUser.email || ''
+    const fullName = authUser.name || ''
+    const phone = authUser.phone || ''
+    const emailVerified = authUser.emailVerification ?? false
+    const phoneVerified = authUser.phoneVerification ?? false
 
     // eslint-disable-next-line
     let userDoc: any
@@ -80,8 +88,8 @@ export async function POST(req: NextRequest) {
             fullName: fullName || userDoc.fullName,
             phone: phone || userDoc.phone,
             profilePhoto: profilePhoto || userDoc.profilePhoto,
-            emailVerified: emailVerified ?? userDoc.emailVerified,
-            phoneVerified: phoneVerified ?? userDoc.phoneVerified,
+            emailVerified,
+            phoneVerified,
           }
         )
       )
