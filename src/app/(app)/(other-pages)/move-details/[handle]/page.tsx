@@ -23,6 +23,12 @@ import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { client } from '@/lib/appwrite'
+import {
+  formatRequestedAt,
+  isInstantMove,
+  parseInventoryLines,
+  useInventoryNames,
+} from '@/lib/inventory-labels'
 
 const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || ''
 const PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || ''
@@ -53,7 +59,6 @@ interface MoverInfo {
   yearsExperience: number
   languages: string[]
   isVerified: boolean
-  baseRate: number
 }
 
 const formatLabel = (value: string | null | undefined): string => {
@@ -238,6 +243,8 @@ export default function MoveDetailsPage() {
   const [moveDocId, setMoveDocId] = useState<string | null>(null)
   const [moveCategory, setMoveCategory] = useState<string | null>(null)
   const processedEvents = useRef<Set<string>>(new Set())
+  // Admin catalog names, so persisted items render the wording the client saw.
+  const inventoryNames = useInventoryNames()
 
   // Reschedule / Cancel state
   const [showReschedule, setShowReschedule] = useState(false)
@@ -509,7 +516,12 @@ export default function MoveDetailsPage() {
   } = move
 
   const pickupDisplay = pickupStreetAddress || pickupLocation || 'Pickup location'
-  const dropoffDisplay = dropoffStreetAddress || 'Drop-off location'
+  const dropoffDisplay = dropoffStreetAddress || dropoffLocation || 'Drop-off location'
+
+  const isInstant = isInstantMove({ moveCategory })
+  // Item labels come from the admin catalog, not from humanising the id — the
+  // client picked "Sofa (2-seater)", not "Sofa 2seater".
+  const inventoryLines = parseInventoryLines(inventoryItems, customItems, inventoryNames)
 
   const galleryImgs: string[] = []
   if (coverPhotoId) {
@@ -666,28 +678,37 @@ export default function MoveDetailsPage() {
               Move Details
             </h2>
             <InfoRow icon={TruckIcon} label="Move Type" value={formatLabel(moveType)} />
-            <InfoRow icon={CalendarIcon} label="Move Date" value={formatDate(moveDate)} />
-            <InfoRow icon={HomeIcon} label="Home Type" value={formatLabel(homeType)} />
+            {/* Instant starts immediately and carries no moveDate — show when it
+                was requested instead. */}
+            {isInstant ? (
+              <InfoRow icon={CalendarIcon} label="Requested" value={formatRequestedAt(createdAt) ?? '—'} />
+            ) : (
+              <InfoRow icon={CalendarIcon} label="Move Date" value={formatDate(moveDate)} />
+            )}
+            {/* Home type, vehicle and crew are scheduled-wizard questions. An
+                instant client is never asked, so "Not specified" would be a
+                statement about data we never sought. */}
+            {!isInstant && (
+              <InfoRow icon={HomeIcon} label="Home Type" value={formatLabel(homeType)} />
+            )}
             <InfoRow icon={CubeIcon} label="Items" value={(() => {
-              let parsedInventory: Record<string, number> = {}
-              try { if (inventoryItems) parsedInventory = JSON.parse(inventoryItems) } catch {}
-              const entries = Object.entries(parsedInventory).filter(([, qty]) => qty > 0)
-              let parsedCustom: { name: string; quantity: number }[] = []
-              try { parsedCustom = (customItems ?? []).map((c) => typeof c === 'string' ? JSON.parse(c) : c).filter((c: any) => c.name) } catch {}
-              if (entries.length === 0 && parsedCustom.length === 0) return `${inventoryCount} items`
+              if (inventoryLines.length === 0) return `${inventoryCount} items`
               return (
                 <ul className="list-disc list-inside text-sm space-y-0.5">
-                  {entries.map(([name, qty]) => (
-                    <li key={name}>{formatLabel(name)} &times; {qty}</li>
-                  ))}
-                  {parsedCustom.map((item, i) => (
-                    <li key={`custom-${i}`}>{item.name} &times; {item.quantity}</li>
+                  {inventoryLines.map((line, i) => (
+                    <li key={`${line.custom ? 'custom' : 'item'}-${i}-${line.label}`}>
+                      {line.label} &times; {line.quantity}
+                    </li>
                   ))}
                 </ul>
               )
             })()} />
-            <InfoRow icon={TruckIcon} label="Vehicle" value={formatLabel(vehicleType)} />
-            <InfoRow icon={UsersIcon} label="Crew" value={crewSize ? `${crewSize} movers` : 'Standard'} />
+            {!isInstant && (
+              <InfoRow icon={TruckIcon} label="Vehicle" value={formatLabel(vehicleType)} />
+            )}
+            {!isInstant && (
+              <InfoRow icon={UsersIcon} label="Crew" value={crewSize ? `${crewSize} movers` : 'Standard'} />
+            )}
             {arrivalWindow && (
               <InfoRow icon={CalendarIcon} label="Arrival Window" value={formatLabel(arrivalWindow)} />
             )}
@@ -948,7 +969,8 @@ export default function MoveDetailsPage() {
                 <InfoRow label="Vehicle Type" value={formatLabel(moverInfo.vehicleType)} />
               )}
               {moverInfo.vehicleCapacity && (
-                <InfoRow label="Capacity" value={`${moverInfo.vehicleCapacity} kg`} />
+                /* m³, not kg — movers are asked for "Capacity in m³" at onboarding. */
+                <InfoRow label="Capacity" value={`${moverInfo.vehicleCapacity} m³`} />
               )}
 
               {/* Crew */}

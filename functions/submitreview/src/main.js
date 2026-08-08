@@ -4,6 +4,12 @@ const DATABASE_ID = process.env.APPWRITE_DATABASE_ID;
 const REVIEWS_COLLECTION = process.env.APPWRITE_COLLECTION_REVIEWS;
 const MOVER_PROFILES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVER_PROFILES;
 const NOTIFICATIONS_COLLECTION = process.env.APPWRITE_COLLECTION_NOTIFICATIONS;
+const MOVES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVES;
+
+const MAX_COMMENT_LENGTH = 1000;
+
+/** Relationship attributes arrive as either a bare id or a hydrated doc. */
+const relId = (v) => (typeof v === 'string' ? v : v?.$id ?? null);
 
 export default async ({ req, res, log, error }) => {
   const client = new Client()
@@ -17,15 +23,59 @@ export default async ({ req, res, log, error }) => {
   }
 
   try {
-    const body = JSON.parse(req.body || '{}');
-    const { moveId, reviewerId, moverProfileId, rating, comment } = body;
+    let body;
+    try {
+      body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
+    } catch {
+      return res.json({ error: 'Invalid JSON body' }, 400);
+    }
+    const { moveId, rating, comment } = body;
 
-    if (!moveId || !reviewerId || !moverProfileId || !rating) {
-      return res.json({ error: 'moveId, reviewerId, moverProfileId, and rating are required' }, 400);
+    // Identity comes from the platform-injected header, never the body.
+    // reviewerId and moverProfileId used to be caller-supplied, which made the
+    // duplicate check meaningless (both halves of its key were attacker-
+    // controlled) and let anyone inflate their own or wreck a rival's rating.
+    const reviewerId = req.headers['x-appwrite-user-id'];
+    if (!reviewerId) {
+      return res.json({ error: 'Authentication required' }, 401);
     }
 
-    if (rating < 1 || rating > 5) {
-      return res.json({ error: 'Rating must be between 1 and 5' }, 400);
+    if (!moveId || rating === undefined || rating === null) {
+      return res.json({ error: 'moveId and rating are required' }, 400);
+    }
+
+    // Coerce before comparing. A string "5" passed the old numeric range check
+    // and then made the average concatenate instead of add, permanently
+    // poisoning mover_profiles.rating with NaN.
+    const ratingValue = Number(rating);
+    if (!Number.isInteger(ratingValue) || ratingValue < 1 || ratingValue > 5) {
+      return res.json({ error: 'Rating must be an integer between 1 and 5' }, 400);
+    }
+
+    if (comment != null && typeof comment !== 'string') {
+      return res.json({ error: 'Comment must be a string' }, 400);
+    }
+    const commentValue = comment ? String(comment).slice(0, MAX_COMMENT_LENGTH) : null;
+
+    // The move decides who may review it and who is being reviewed.
+    let move;
+    try {
+      move = await databases.getDocument(DATABASE_ID, MOVES_COLLECTION, moveId);
+    } catch {
+      return res.json({ error: 'Move not found' }, 404);
+    }
+
+    if (relId(move.clientId) !== reviewerId) {
+      return res.json({ error: 'Only the move\'s client may review it' }, 403);
+    }
+
+    if (move.status !== 'completed') {
+      return res.json({ error: 'You can only review a completed move' }, 400);
+    }
+
+    const moverProfileId = relId(move.moverProfileId);
+    if (!moverProfileId) {
+      return res.json({ error: 'This move has no assigned mover to review' }, 400);
     }
 
     // Check if review already exists for this move
@@ -48,8 +98,8 @@ export default async ({ req, res, log, error }) => {
         moveId,
         reviewerId,
         moverProfileId,
-        rating,
-        comment: comment || null,
+        rating: ratingValue,
+        comment: commentValue,
       }
     );
 
@@ -60,8 +110,14 @@ export default async ({ req, res, log, error }) => {
       [Query.equal('moverProfileId', moverProfileId), Query.limit(1000)]
     );
 
-    const totalRating = allReviews.documents.reduce((sum, r) => sum + (r.rating || 0), 0);
-    const avgRating = Math.round((totalRating / allReviews.documents.length) * 10) / 10;
+    // Number() guards against any legacy string ratings already in the table.
+    const totalRating = allReviews.documents.reduce(
+      (sum, r) => sum + (Number(r.rating) || 0),
+      0
+    );
+    const avgRating = allReviews.documents.length
+      ? Math.round((totalRating / allReviews.documents.length) * 10) / 10
+      : 0;
 
     await databases.updateDocument(
       DATABASE_ID,

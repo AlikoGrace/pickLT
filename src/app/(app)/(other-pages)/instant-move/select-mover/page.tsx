@@ -1,6 +1,15 @@
 'use client'
 
 import { useMoveSearch, Coordinates } from '@/context/moveSearch'
+import { moverCapacityM3 } from '@/lib/moveVolume'
+import {
+  asVehicleType,
+  instantRouteBase,
+  priceForMover,
+  VEHICLE_CAPACITY,
+  VEHICLE_LABELS,
+  type PricingRates,
+} from '@/lib/pricing'
 import ButtonPrimary from '@/shared/ButtonPrimary'
 import ButtonSecondary from '@/shared/ButtonSecondary'
 import {
@@ -35,7 +44,14 @@ interface Mover {
   vehicleModel?: string
   vehiclePlateNumber?: string
   crewSize?: number
-  maxCarryWeight?: number
+  /**
+   * Declared load capacity in m³ (free text on the schema).
+   *
+   * This used to be `maxCarryWeight`, which is not a column on mover_profiles
+   * and is not returned by /api/movers/nearby — so `mover.maxCarryWeight || 500`
+   * rendered a hardcoded "500kg max" against every mover on the platform.
+   */
+  vehicleCapacity?: string | number | null
   yearsExperience?: number
   languages?: string[]
   isVerified?: boolean
@@ -43,26 +59,17 @@ interface Mover {
   currentLatitude?: number
   currentLongitude?: number
   distanceKm?: number
-  baseRatePerKm?: number
+  // `baseRatePerKm` used to be declared here and read by the pricing block.
+  // No such field exists on mover_profiles (the column is `baseRate`, and it is
+  // read by no quoting code in any app), so the read always fell through to a
+  // hardcoded fallback. Price now comes from declared capability — crewSize and
+  // vehicleType — via `@/lib/pricing`.
 }
 
-// Vehicle type labels
-const VEHICLE_LABELS: Record<string, string> = {
-  small_van: 'Small Van',
-  medium_van: 'Medium Van',
-  large_van: 'Large Van',
-  truck: 'Truck',
-  car: 'Car',
-}
-
-// Vehicle capacity descriptions
-const VEHICLE_CAPACITY: Record<string, string> = {
-  small_van: 'Studio / 1 room',
-  medium_van: '1-2 bedrooms',
-  large_van: '2-3 bedrooms',
-  truck: '3+ bedrooms',
-  car: 'Few small items',
-}
+// Vehicle labels and capacity blurbs come from `@/lib/pricing`, keyed on the
+// real `mover_profiles.vehicleType` enum. The maps that used to live here keyed
+// on `medium_van` / `large_van` / `truck` / `car` — none of which the schema can
+// hold — so every mover rendered the fallback label and blurb.
 
 // Helper functions
 const formatDistance = (meters: number): string => {
@@ -93,6 +100,9 @@ const SelectMoverPage = () => {
     customItems,
     coverPhotoId,
     galleryPhotoIds,
+    // The tier the user picked drives the route-base multiplier. The page used
+    // to ignore it entirely and quote every move at the light-tier rate.
+    moveType,
   } = useMoveSearch()
 
   const [isLoading, setIsLoading] = useState(true)
@@ -101,6 +111,25 @@ const SelectMoverPage = () => {
   const [routeDuration, setRouteDuration] = useState<number | null>(null)
   const [apiMovers, setApiMovers] = useState<Mover[]>([])
   const [fetchError, setFetchError] = useState<string | null>(null)
+  // Admin rate overrides. `{}` until the fetch lands (and if it fails), which
+  // means the compiled defaults apply — a config outage must show the previous
+  // price, never a blank or a zero.
+  const [pricingRates, setPricingRates] = useState<PricingRates>({})
+
+  useEffect(() => {
+    let cancelled = false
+    fetch('/api/pricing/config')
+      .then((r) => r.json())
+      .then((d) => {
+        if (!cancelled && d?.rates) setPricingRates(d.rates)
+      })
+      .catch(() => {
+        /* keep defaults */
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   const inventoryCount = Object.values(inventory).reduce((sum, qty) => sum + qty, 0) + customItems.length
   const photoCount = (coverPhotoId ? 1 : 0) + galleryPhotoIds.length
@@ -172,33 +201,33 @@ const SelectMoverPage = () => {
   }, [pickupCoordinates])
 
   // Calculate prices for each mover
+  //
+  // This used to run its own formula — a €25 hardcoded base fee, a per-km rate
+  // read off `mover.baseRatePerKm` (a field that does not exist on
+  // mover_profiles, so it always fell through to a hardcoded 2.0 against the
+  // platform's 1.50), and a per-item fee keyed on vehicle types that are not in
+  // the schema enum, so every real mover hit its default arm. None of it read
+  // `pricing_config`, so admin rate edits never reached this page and the
+  // number shown here was not the number the backend would charge.
+  //
+  // It now shares `instantRouteBase` (a port of the calculateprice function)
+  // and `priceForMover` (parity with the mobile client) from `@/lib/pricing`.
   const moversWithPrices = useMemo(() => {
     if (!routeDistance || apiMovers.length === 0) return []
 
     const distanceKm = routeDistance / 1000
 
+    // The route base is mover-independent, so compute it once rather than per row.
+    const { estimatedPrice: routeBaseEur } = instantRouteBase(
+      { routeDistanceMeters: routeDistance, moveType },
+      pricingRates
+    )
+
     return apiMovers.map((mover) => {
-      const baseRate = mover.baseRatePerKm || 2.0
       const crewSize = mover.crewSize || 1
-      const vehicleType = mover.vehicleType || 'small_van'
+      const vehicleType = asVehicleType(mover.vehicleType)
 
-      // Base calculation: distance * rate
-      let price = distanceKm * baseRate
-
-      // Add base fee
-      const baseFee = 25
-
-      // Add crew surcharge (€10 per additional crew member)
-      const crewSurcharge = (crewSize - 1) * 10
-
-      // Add item-based fee
-      const itemFeePerItem = vehicleType === 'truck' ? 2 :
-                            vehicleType === 'large_van' ? 2.5 :
-                            vehicleType === 'medium_van' ? 3 : 3.5
-      const itemsFee = inventoryCount * itemFeePerItem
-
-      // Total price
-      const totalPrice = Math.round(baseFee + price + crewSurcharge + itemsFee)
+      const totalPrice = priceForMover(routeBaseEur, { vehicleType, crewSize }, inventoryCount, pricingRates)
 
       // Estimated arrival from distance
       const estimatedArrival = mover.distanceKm
@@ -215,7 +244,7 @@ const SelectMoverPage = () => {
         vehicleName: [mover.vehicleMake, mover.vehicleModel].filter(Boolean).join(' ') || VEHICLE_LABELS[vehicleType] || 'Vehicle',
         vehiclePlate: mover.vehiclePlateNumber || '',
         crewSize,
-        maxWeight: mover.maxCarryWeight || 500,
+        capacityM3: moverCapacityM3({ vehicleType, vehicleCapacity: mover.vehicleCapacity }, pricingRates),
         yearsExperience: mover.yearsExperience || 0,
         languages: mover.languages || ['German'],
         isVerified: mover.verificationStatus === 'verified',
@@ -226,7 +255,7 @@ const SelectMoverPage = () => {
         currentLongitude: mover.currentLongitude || null,
       }
     }).sort((a, b) => a.price - b.price) // Sort by price
-  }, [routeDistance, inventoryCount, apiMovers])
+  }, [routeDistance, inventoryCount, apiMovers, pricingRates, moveType])
 
   const handleSelectMover = (moverId: string) => {
     setSelectedMover(moverId)
@@ -537,7 +566,7 @@ const SelectMoverPage = () => {
                       {mover.vehicleName}
                     </span>
                     <span className="text-xs bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 px-2 py-0.5 rounded-full">
-                      {VEHICLE_LABELS[mover.vehicleType] || mover.vehicleType}
+                      {VEHICLE_LABELS[mover.vehicleType]}
                     </span>
                   </div>
 
@@ -545,14 +574,14 @@ const SelectMoverPage = () => {
                   <div className="flex items-center gap-4 mt-2 text-xs text-neutral-500 dark:text-neutral-400">
                     <span className="flex items-center gap-1">
                       <HugeiconsIcon icon={WeightScale01Icon} size={14} strokeWidth={1.5} />
-                      {mover.maxWeight}kg max
+                      {mover.capacityM3} m³ capacity
                     </span>
                     <span className="flex items-center gap-1">
                       <HugeiconsIcon icon={UserMultiple02Icon} size={14} strokeWidth={1.5} />
                       {mover.crewSize + 1} mover{mover.crewSize > 0 ? 's' : ''}
                     </span>
                     <span className="text-neutral-400">
-                      {VEHICLE_CAPACITY[mover.vehicleType] || ''}
+                      {VEHICLE_CAPACITY[mover.vehicleType]}
                     </span>
                   </div>
                 </div>

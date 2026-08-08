@@ -48,7 +48,6 @@ export interface MoverProfileDoc extends AppwriteDoc {
   currentLatitude: number | null
   currentLongitude: number | null
   languages: string[]
-  baseRate: number | null
   // Relationships
   crew_members: CrewMemberDoc[]
   moves: MoveDoc[]

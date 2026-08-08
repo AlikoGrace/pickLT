@@ -1,10 +1,18 @@
-import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
+import { requireVerifiedMover, isErrorResponse } from '@/lib/mover-auth'
 import { APPWRITE } from '@/lib/constants'
 import { Query } from 'node-appwrite'
 import { NextRequest, NextResponse } from 'next/server'
 
 const RADIUS_KM = 30
+
+// ~1.1 km of precision — enough to place an approximate pin and judge
+// distance, not enough to identify a specific building before the job is won.
+const COARSE_DP = 2
+const coarsen = (v: unknown): number | null =>
+  typeof v === 'number' && Number.isFinite(v)
+    ? Number(v.toFixed(COARSE_DP))
+    : null
 const DEG_PER_KM_LAT = 1 / 111.32
 const DEG_PER_KM_LNG = (lat: number) => 1 / (111.32 * Math.cos((lat * Math.PI) / 180))
 
@@ -27,10 +35,12 @@ function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number): nu
  */
 export async function GET(req: NextRequest) {
   try {
-    const userId = await getSessionUserId()
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    // This is a pre-acceptance marketplace feed over other people's homes.
+    // A bare session check let any account sweep a coordinate grid and harvest
+    // addresses, dates and contents, so it requires a verified mover.
+    const auth = await requireVerifiedMover()
+    if (isErrorResponse(auth)) return auth
+    const { userId } = auth
 
     const { searchParams } = req.nextUrl
     let lat = parseFloat(searchParams.get('lat') || '')
@@ -110,6 +120,11 @@ export async function GET(req: NextRequest) {
       `[nearby-moves] after filtering: ${moves.length} moves within ${RADIUS_KM}km`
     )
 
+    // Pre-acceptance projection. Street addresses, exact coordinates and the
+    // client's free-text notes are deliberately withheld until a mover is
+    // assigned — the mover needs enough to price and accept the job, not
+    // enough to identify the household. The full record is served by
+    // /api/moves/[id]/full, which checks assignment.
     const result = moves.map((doc) => ({
         id: doc.$id,
         handle: doc.handle,
@@ -117,15 +132,13 @@ export async function GET(req: NextRequest) {
         moveCategory: doc.moveCategory,
         status: doc.status,
         pickupLocation: doc.pickupLocation,
-        pickupStreetAddress: doc.pickupStreetAddress,
-        pickupLatitude: doc.pickupLatitude,
-        pickupLongitude: doc.pickupLongitude,
+        pickupLatitude: coarsen(doc.pickupLatitude),
+        pickupLongitude: coarsen(doc.pickupLongitude),
         pickupFloorLevel: doc.pickupFloorLevel,
         pickupElevator: doc.pickupElevator,
         dropoffLocation: doc.dropoffLocation,
-        dropoffStreetAddress: doc.dropoffStreetAddress,
-        dropoffLatitude: doc.dropoffLatitude,
-        dropoffLongitude: doc.dropoffLongitude,
+        dropoffLatitude: coarsen(doc.dropoffLatitude),
+        dropoffLongitude: coarsen(doc.dropoffLongitude),
         dropoffFloorLevel: doc.dropoffFloorLevel,
         dropoffElevator: doc.dropoffElevator,
         homeType: doc.homeType,
@@ -134,7 +147,6 @@ export async function GET(req: NextRequest) {
         customItems: doc.customItems,
         estimatedPrice: doc.estimatedPrice,
         additionalServices: doc.additionalServices || [],
-        contactNotes: doc.contactNotes,
         crewSize: doc.crewSize,
         vehicleType: doc.vehicleType,
         moveDate: doc.moveDate,

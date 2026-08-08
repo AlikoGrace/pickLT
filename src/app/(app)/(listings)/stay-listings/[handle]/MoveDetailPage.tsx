@@ -21,6 +21,7 @@ import {
 } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import { FC, Fragment, useEffect, useState } from 'react'
+import { parseInventoryLines, useInventoryNames } from '@/lib/inventory-labels'
 
 interface MoveDetailPageProps {
   handle: string
@@ -83,6 +84,8 @@ const getStatusLabel = (status: StoredMove['status']): string => {
 const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
   const { getMoveByHandle, updateMoveStatus } = useMoveSearch()
   const [move, setMove] = useState<StoredMove | undefined>(undefined)
+  // Admin catalog names, so persisted items render the wording the client saw.
+  const inventoryNames = useInventoryNames()
 
   useEffect(() => {
     const foundMove = getMoveByHandle(handle)
@@ -225,13 +228,13 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
   }
 
   const renderSectionInventory = () => {
-    let parsedInventory: Record<string, number> = {}
-    try { if (inventoryItems) parsedInventory = JSON.parse(inventoryItems) } catch {}
-    const entries = Object.entries(parsedInventory).filter(([, qty]) => qty > 0)
-    let parsedCustom: { name: string; quantity: number }[] = []
-    try { parsedCustom = (customItems ?? []).map((c) => typeof c === 'string' ? JSON.parse(c) : c).filter((c: any) => c.name) } catch {}
+    // Labels come from the admin catalog, not from humanising the id — the
+    // client picked "Sofa (2-seater)", not "Sofa 2seater".
+    const lines = parseInventoryLines(inventoryItems, customItems, inventoryNames)
+    const entries = lines.filter((l) => !l.custom)
+    const parsedCustom = lines.filter((l) => l.custom)
 
-    if (entries.length === 0 && parsedCustom.length === 0) return null
+    if (lines.length === 0) return null
 
     return (
       <div className="listingSection__wrap">
@@ -239,15 +242,15 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
         <SectionSubheading>{inventoryCount} items total</SectionSubheading>
         <Divider className="w-14!" />
         <div className="grid gap-2 sm:grid-cols-2 text-sm">
-          {entries.map(([name, qty]) => (
-            <div key={name} className="flex items-center justify-between rounded-lg border border-neutral-100 px-3 py-2 dark:border-neutral-700">
-              <span className="text-neutral-700 dark:text-neutral-300">{formatLabel(name)}</span>
-              <span className="font-medium text-neutral-900 dark:text-neutral-100">&times; {qty}</span>
+          {entries.map((line, i) => (
+            <div key={`item-${i}-${line.label}`} className="flex items-center justify-between rounded-lg border border-neutral-100 px-3 py-2 dark:border-neutral-700">
+              <span className="text-neutral-700 dark:text-neutral-300">{line.label}</span>
+              <span className="font-medium text-neutral-900 dark:text-neutral-100">&times; {line.quantity}</span>
             </div>
           ))}
           {parsedCustom.map((item, i) => (
             <div key={`custom-${i}`} className="flex items-center justify-between rounded-lg border border-amber-100 px-3 py-2 dark:border-amber-900/30">
-              <span className="text-neutral-700 dark:text-neutral-300">{item.name} <span className="text-xs text-neutral-400">(custom)</span></span>
+              <span className="text-neutral-700 dark:text-neutral-300">{item.label} <span className="text-xs text-neutral-400">(custom)</span></span>
               <span className="font-medium text-neutral-900 dark:text-neutral-100">&times; {item.quantity}</span>
             </div>
           ))}

@@ -2,6 +2,45 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
 import { getSessionUserId } from '@/lib/auth-session'
+import { relId } from '@/lib/notify'
+import { Query } from 'node-appwrite'
+
+/**
+ * Confirm the crew row belongs to the caller's own mover profile.
+ *
+ * These handlers write with the admin key, so a session check alone is not
+ * authorisation — without this, any logged-in account could edit or delete
+ * another mover's crew by id. Crew ids are disclosed to clients through the
+ * move detail endpoints, so they are not secret.
+ */
+async function assertOwnsCrew(id: string, userId: string): Promise<string | null> {
+  const { databases } = createAdminClient()
+
+  const profiles = await databases.listDocuments(
+    APPWRITE.DATABASE_ID,
+    APPWRITE.COLLECTIONS.MOVER_PROFILES,
+    [Query.equal('userId', [userId])]
+  )
+  const moverProfile = profiles.documents[0]
+  if (!moverProfile) return 'Mover profile not found'
+
+  let crew
+  try {
+    crew = await databases.getDocument(
+      APPWRITE.DATABASE_ID,
+      APPWRITE.COLLECTIONS.CREW_MEMBERS,
+      id
+    )
+  } catch {
+    return 'Crew member not found'
+  }
+
+  if (relId(crew.moverProfileId) !== moverProfile.$id) {
+    return 'Crew member not found'
+  }
+
+  return null
+}
 
 // PATCH - update a crew member
 export async function PATCH(
@@ -16,6 +55,10 @@ export async function PATCH(
   try {
     const { databases } = createAdminClient()
     const { id } = await params
+
+    const denied = await assertOwnsCrew(id, userId)
+    if (denied) return NextResponse.json({ error: denied }, { status: 404 })
+
     const body = await req.json()
     const { name, phone, role, isActive } = body
 
@@ -52,6 +95,9 @@ export async function DELETE(
   try {
     const { databases } = createAdminClient()
     const { id } = await params
+
+    const denied = await assertOwnsCrew(id, userId)
+    if (denied) return NextResponse.json({ error: denied }, { status: 404 })
 
     await databases.deleteDocument(
       APPWRITE.DATABASE_ID,

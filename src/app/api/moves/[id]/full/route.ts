@@ -100,7 +100,6 @@ export async function GET(
         yearsExperience: moverProfile.yearsExperience || 0,
         languages: moverProfile.languages || [],
         isVerified: moverProfile.verificationStatus === 'verified',
-        baseRate: moverProfile.baseRate || 0,
         currentLatitude: moverProfile.currentLatitude,
         currentLongitude: moverProfile.currentLongitude,
       } : null,

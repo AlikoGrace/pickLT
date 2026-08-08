@@ -83,7 +83,6 @@ export default function CompleteProfilePage() {
     vehicleRegistration: '',
     vehicleType: '' as string,
     yearsExperience: '',
-    baseRate: '',
     languages: [] as string[],
   })
 
@@ -133,7 +132,7 @@ export default function CompleteProfilePage() {
           form.vehicleType
         )
       case 'experience':
-        return form.yearsExperience && form.baseRate && form.languages.length > 0
+        return form.yearsExperience && form.languages.length > 0
       default:
         return true
     }
@@ -223,7 +222,6 @@ export default function CompleteProfilePage() {
           vehicleType: form.vehicleType,
           languages: form.languages,
           yearsExperience: Number(form.yearsExperience),
-          baseRate: Number(form.baseRate),
         }),
       })
 
@@ -685,23 +683,14 @@ export default function CompleteProfilePage() {
                 className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
               />
             </div>
-            <div>
-              <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                Base Rate (€ per km) *
-              </label>
-              <input
-                type="number"
-                min="0"
-                step="0.1"
-                value={form.baseRate}
-                onChange={(e) => updateForm({ baseRate: e.target.value })}
-                placeholder="e.g. 1.50"
-                className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
-              />
-              <p className="mt-1 text-xs text-neutral-400">
-                System base rate is €1.50/km. Your rate will be used for custom quotes.
-              </p>
-            </div>
+            {/* The "Base Rate (€ per km)" input was here, with the note "Your
+                rate will be used for custom quotes." That was not true: no
+                quoting code in any app ever read mover_profiles.baseRate.
+                Prices come from a platform rate card keyed on declared
+                capability — vehicle class, crew size and load volume — so the
+                field asked movers to set a number that changed nothing while
+                telling them it set their earnings. See
+                `.agent/plans/capability-pricing-design.md` §4.3. */}
             <div>
               <label className="mb-2 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
                 Languages Spoken *
@@ -783,7 +772,7 @@ export default function CompleteProfilePage() {
               <div>
                 <p className="text-xs font-medium uppercase text-neutral-400">Experience</p>
                 <p className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">
-                  {form.yearsExperience} years &middot; €{form.baseRate}/km
+                  {form.yearsExperience} years
                 </p>
                 <p className="text-sm text-neutral-500">
                   Languages: {form.languages.join(', ')}

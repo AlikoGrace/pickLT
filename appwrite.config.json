@@ -96,7 +96,9 @@
             ],
             "events": [],
             "scopes": [
-                "users.read"
+                "users.read",
+                "documents.read",
+                "documents.write"
             ],
             "schedule": "",
             "timeout": 15,
@@ -138,7 +140,9 @@
             ],
             "events": [],
             "scopes": [
-                "users.read"
+                "users.read",
+                "documents.read",
+                "documents.write"
             ],
             "schedule": "",
             "timeout": 15,
@@ -218,13 +222,15 @@
             "runtime": "node-22",
             "specification": "s-2vcpu-2gb",
             "execute": [
-                "any"
+                "users"
             ],
             "events": [],
             "scopes": [
-                "users.read"
+                "users.read",
+                "documents.read",
+                "documents.write"
             ],
-            "schedule": "",
+            "schedule": "* * * * *",
             "timeout": 15,
             "enabled": true,
             "logging": true,
