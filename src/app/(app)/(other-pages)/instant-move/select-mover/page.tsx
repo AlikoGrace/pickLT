@@ -262,6 +262,9 @@ const SelectMoverPage = () => {
   }
 
   const [isConfirming, setIsConfirming] = useState(false)
+  // T7 parity: both methods settle at completion — cash in person, card via
+  // the mobile app's Stripe flow. Nothing is charged at booking.
+  const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card'>('cash')
 
   const handleConfirmMover = async () => {
     if (!selectedMover || isConfirming) return
@@ -331,6 +334,7 @@ const SelectMoverPage = () => {
         galleryPhotoIds: uploadedGalleryPhotoIds,
         routeDistanceMeters: routeDistance || null,
         routeDurationSeconds: routeDuration || null,
+        paymentMethod,
       }
       console.log(
         `[select-mover] Creating move — cover: ${createBody.coverPhotoId ? 'URL' : 'null'}, gallery: ${createBody.galleryPhotoIds.length}`
@@ -620,6 +624,34 @@ const SelectMoverPage = () => {
             <strong>How pricing works:</strong> Prices include base fee, distance ({routeDistance ? formatDistance(routeDistance) : '—'}), 
             crew size, vehicle capacity, and handling for {inventoryCount} items. 
             Final price may vary based on actual conditions.
+          </p>
+        </div>
+      </div>
+
+      {/* Payment method — settled at completion, never charged at booking */}
+      <div className="container max-w-3xl mx-auto px-4 pb-28">
+        <div className="rounded-2xl border border-neutral-200 dark:border-neutral-700 p-4">
+          <p className="font-semibold text-neutral-900 dark:text-neutral-100 mb-3">Payment</p>
+          <div className="flex gap-3">
+            {(['cash', 'card'] as const).map((method) => (
+              <button
+                key={method}
+                type="button"
+                onClick={() => setPaymentMethod(method)}
+                className={`flex-1 rounded-xl border px-4 py-3 text-sm font-semibold transition-colors ${
+                  paymentMethod === method
+                    ? 'bg-primary-6000 border-primary-6000 text-white'
+                    : 'border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300'
+                }`}
+              >
+                {method === 'cash' ? 'Pay Cash' : 'Pay by Card'}
+              </button>
+            ))}
+          </div>
+          <p className="mt-3 text-xs text-neutral-500 dark:text-neutral-400">
+            {paymentMethod === 'card'
+              ? 'Your card is charged when the move is completed. Nothing is charged now.'
+              : 'Pay the mover on arrival in cash. No card charge.'}
           </p>
         </div>
       </div>

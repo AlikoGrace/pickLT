@@ -38,6 +38,7 @@ export async function POST(req: NextRequest) {
       customItems,
       totalItemCount,
       estimatedPrice,
+      paymentMethod,
       coverPhotoId,
       galleryPhotoIds,
       routeDistanceMeters,
@@ -85,6 +86,8 @@ export async function POST(req: NextRequest) {
         totalItemCount: totalItemCount ?? 0,
 
         estimatedPrice: estimatedPrice ?? null,
+        // Settled at completion; card charges run through the app's Stripe flow.
+        paymentMethod: paymentMethod === 'card' ? 'card' : 'cash',
         routeDistanceMeters: routeDistanceMeters ?? null,
         routeDurationSeconds: routeDurationSeconds ?? null,
 

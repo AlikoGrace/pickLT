@@ -16,6 +16,11 @@ export type NotifyType =
   | 'move_cancelled'
   | 'payment'
   | 'review'
+  // T6/T8 pipeline types (written by remindscheduledmoves / generatetaxstatements —
+  // listed here so web display code can label them once a notifications UI exists).
+  | 'move_reminder'
+  | 'move_starting'
+  | 'tax_statement'
   | 'system'
 
 /**

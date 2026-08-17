@@ -74,6 +74,9 @@ export default function CompleteProfilePage() {
     selfiePhotoPreview: '',
     socialSecurityNumber: '',
     taxNumber: '',
+    vatId: '',
+    businessStreet: '',
+    businessPostcode: '',
     primaryCity: '',
     primaryCountry: '',
     vehicleBrand: '',
@@ -212,6 +215,9 @@ export default function CompleteProfilePage() {
           selfiePhoto: selfiePhotoUrl || undefined,
           socialSecurityNumber: form.socialSecurityNumber,
           taxNumber: form.taxNumber,
+          vatId: form.vatId,
+          businessStreet: form.businessStreet,
+          businessPostcode: form.businessPostcode,
           primaryCity: form.primaryCity,
           primaryCountry: form.primaryCountry,
           vehicleBrand: form.vehicleBrand,
@@ -464,6 +470,50 @@ export default function CompleteProfilePage() {
               <p className="mt-1 text-xs text-neutral-400">
                 Required for invoice generation and tax reporting
               </p>
+            </div>
+
+            {/* VAT ID + business address — feed the monthly tax statement header (T8) */}
+            <div>
+              <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                VAT ID (USt-IdNr., optional)
+              </label>
+              <input
+                type="text"
+                value={form.vatId}
+                onChange={(e) => updateForm({ vatId: e.target.value })}
+                placeholder="e.g. DE123456789"
+                className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
+              />
+              <p className="mt-1 text-xs text-neutral-400">
+                Leave empty if you are a Kleinunternehmer without a VAT ID
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div>
+                <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                  Business street address (optional)
+                </label>
+                <input
+                  type="text"
+                  value={form.businessStreet}
+                  onChange={(e) => updateForm({ businessStreet: e.target.value })}
+                  placeholder="Street and number"
+                  className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                  Postcode (optional)
+                </label>
+                <input
+                  type="text"
+                  value={form.businessPostcode}
+                  onChange={(e) => updateForm({ businessPostcode: e.target.value })}
+                  placeholder="e.g. 10115"
+                  className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
+                />
+              </div>
             </div>
 
             {/* Selfie Upload */}

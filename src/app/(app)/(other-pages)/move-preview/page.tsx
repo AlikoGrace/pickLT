@@ -401,7 +401,7 @@ const Page = () => {
 
           <button
             className="absolute bottom-3 left-3 z-10 hidden rounded-xl bg-neutral-100 px-4 py-2 text-neutral-500 hover:bg-neutral-200 md:flex md:items-center md:justify-center dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700"
-            onClick={() => router.push('/add-listing/8')}
+            onClick={() => router.push('/add-listing/6')}
           >
             <PencilSquareIcon className="h-5 w-5" />
             <span className="ml-2 text-sm font-medium text-neutral-800 dark:text-neutral-200">
@@ -583,7 +583,7 @@ const Page = () => {
             <SectionHeading>Additional services</SectionHeading>
             <SectionSubheading>Extra services you&apos;ve selected</SectionSubheading>
           </div>
-          <Link href="/add-listing/8" className="text-sm text-primary-600 hover:underline flex items-center gap-1">
+          <Link href="/add-listing/6" className="text-sm text-primary-600 hover:underline flex items-center gap-1">
             <PencilSquareIcon className="h-4 w-4" />
             Edit
           </Link>
@@ -796,7 +796,7 @@ const Page = () => {
           disabled={!canProceed || isSubmitting}
           onClick={handleCreateMove}
         >
-          {isSubmitting ? 'Creating your move...' : 'Proceed to payment'}
+          {isSubmitting ? 'Creating your move...' : 'Complete Move'}
         </ButtonPrimary>
 
         {submitError && (

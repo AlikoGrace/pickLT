@@ -219,6 +219,17 @@ export default function NotificationWrapper({ children, role }: NotificationWrap
           'Arrived at destination! 🏠',
           'Your mover has arrived at the drop-off location.',
         )
+      } else if (payload.status === 'unloading') {
+        showBrowserNotification(
+          'Unloading your items 📦',
+          'Your items are being unloaded at the destination.',
+        )
+      } else if (payload.status === 'awaiting_payment') {
+        playChime(5000)
+        showBrowserNotification(
+          'Payment due 💶',
+          'Your move is finishing up — please complete the payment.',
+        )
       } else if (payload.status === 'completed') {
         showBrowserNotification(
           'Move completed! ✅',

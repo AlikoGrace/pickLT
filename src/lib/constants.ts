@@ -16,6 +16,8 @@ export const APPWRITE = {
     REVIEWS: process.env.APPWRITE_COLLECTION_REVIEWS!,
     NOTIFICATIONS: process.env.APPWRITE_COLLECTION_NOTIFICATIONS!,
     INVENTORY_CATALOG: process.env.APPWRITE_COLLECTION_INVENTORY_CATALOG!,
+    // T8 tax statements — custom ids are stable across environments.
+    TAX_STATEMENTS: process.env.APPWRITE_COLLECTION_TAX_STATEMENTS || 'tax_statements',
   },
 
   // Cloud Functions
@@ -40,6 +42,7 @@ export const APPWRITE = {
   BUCKETS: {
     PROFILE_PHOTOS: process.env.NEXT_PUBLIC_BUCKET_PROFILE_PHOTOS!,
     MOVE_PHOTOS: process.env.NEXT_PUBLIC_BUCKET_MOVE_PHOTOS!,
+    TAX_STATEMENTS: process.env.BUCKET_TAX_STATEMENTS || 'tax-statements',
   },
 }
 

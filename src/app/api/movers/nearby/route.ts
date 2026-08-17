@@ -5,7 +5,6 @@ import { Query } from 'node-appwrite'
 import { getSessionUserId } from '@/lib/auth-session'
 
 /** Appwrite rows are schemaless at the SDK boundary. */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyDoc = Record<string, any>
 
 const MAX_RADIUS_KM = 50

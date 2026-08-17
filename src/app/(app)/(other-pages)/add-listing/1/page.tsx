@@ -30,6 +30,10 @@ const PageContent = () => {
 
     // basic validation
     const errors: Record<string, string> = {}
+    // Pickup/dropoff come from the location picker, not the form — without
+    // this check the wizard advanced (and submitted) with no addresses at all.
+    if (!pickupLocation) errors.pickupLocation = 'Please select a pickup location'
+    if (!dropoffLocation) errors.dropoffLocation = 'Please select a drop-off location'
     if (!moveDate) errors.moveDate = 'Please select a move date'
     if (!formObject['homeType']) errors.homeType = 'Please select a home type'
     if (!formObject['floorLevel']) errors.floorLevel = 'Please select a floor level'
@@ -118,6 +122,12 @@ const PageContent = () => {
     <>
       <h1 className="text-2xl font-semibold">STEP 1 — Move Details</h1>
       <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
+
+      {(formErrors.pickupLocation || formErrors.dropoffLocation) && (
+        <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-300">
+          {formErrors.pickupLocation || formErrors.dropoffLocation}
+        </div>
+      )}
 
       {/* Location Summary with Map */}
       {(pickupLocation || dropoffLocation) && (

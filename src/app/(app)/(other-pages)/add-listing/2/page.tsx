@@ -2,6 +2,7 @@
 
 import { useMoveSearch } from '@/context/moveSearch'
 import { Divider } from '@/shared/divider'
+import AddressAutocompleteInput from '@/components/AddressAutocompleteInput'
 import Input from '@/shared/Input'
 import Textarea from '@/shared/Textarea'
 import Form from 'next/form'
@@ -25,6 +26,7 @@ const Page = () => {
     setPickupAccessNotes,
     setPickupLoadingZoneRequired,
     setPickupArrangeHaltverbot,
+    pickupCoordinates,
   } = useMoveSearch()
 
   // Auto-fill street address from the pickup location if not already set
@@ -77,11 +79,12 @@ const Page = () => {
       <Form id="add-listing-form" action={handleSubmitForm} className="flex flex-col gap-y-8">
         {/* Street Address */}
         <FormItem label="Street address" desccription="Enter the full pickup street address">
-          <Input
+          <AddressAutocompleteInput
             name="streetAddress"
             placeholder="e.g., Hauptstraße 45"
             value={pickupStreetAddress}
-            onChange={(e) => setPickupStreetAddress(e.target.value)}
+            onChangeText={setPickupStreetAddress}
+            proximity={pickupCoordinates}
           />
           {formErrors.streetAddress && (
             <div className="text-sm text-red-600 mt-2">{formErrors.streetAddress}</div>

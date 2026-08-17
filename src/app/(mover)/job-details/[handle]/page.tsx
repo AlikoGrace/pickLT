@@ -1,6 +1,7 @@
 'use client'
 
 import { Badge } from '@/shared/Badge'
+import { isMoveStartable } from '@/lib/schedule-timing'
 import {
   MapPinIcon,
   CalendarIcon,
@@ -416,17 +417,19 @@ export default function MoverMoveDetailsPage() {
   const canAccept = isScheduled && isUnassigned && ['draft', 'booked', 'paid', 'pending_payment'].includes(rawStatus)
   const canWithdraw = isScheduled && isAssignedMover && ['mover_accepted', 'mover_assigned'].includes(rawStatus)
 
-  const isMoveStartable = (dateStr: string | null | undefined): boolean => {
-    if (!dateStr) return true // no date set — allow (graceful degradation)
-    const today = new Date()
-    const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate())
-    const moveDay = new Date(dateStr)
-    const moveDayOnly = new Date(moveDay.getFullYear(), moveDay.getMonth(), moveDay.getDate())
-    return moveDayOnly <= todayOnly
-  }
+  // T-5-minute window on moveDate + arrivalWindow (shared with the mobile
+  // apps and the active-move auto-transition; T6 parity). Never-block: missing
+  // timing data keeps the move startable.
+  const startable = isMoveStartable(
+    {
+      moveDate: move?.moveDate as string | undefined,
+      arrivalWindow: move?.arrivalWindow as string | undefined,
+    },
+    Date.now(),
+  )
 
-  const canStartRoute = isScheduled && isAssignedMover && rawStatus === 'mover_accepted' && isMoveStartable(move?.moveDate as string | undefined)
-  const isFutureDateMove = isScheduled && isAssignedMover && rawStatus === 'mover_accepted' && !isMoveStartable(move?.moveDate as string | undefined)
+  const canStartRoute = isScheduled && isAssignedMover && rawStatus === 'mover_accepted' && startable
+  const isFutureDateMove = isScheduled && isAssignedMover && rawStatus === 'mover_accepted' && !startable
   const isActivePhase = ['mover_en_route', 'mover_arrived', 'loading', 'in_transit', 'arrived_destination', 'unloading', 'awaiting_payment'].includes(rawStatus)
 
   if (isLoading) {
@@ -791,8 +794,9 @@ export default function MoverMoveDetailsPage() {
                         month: 'short',
                         year: 'numeric',
                       })}
-                    </span>
-                    .
+                      {move?.arrivalWindow ? ` · ${move.arrivalWindow}` : ''}
+                    </span>{' '}
+                    (Start Route unlocks 5 minutes before).
                   </div>
                 )}
 

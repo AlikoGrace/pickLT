@@ -150,7 +150,17 @@ const Page = () => {
     setShowUpgradeModal(false)
   }
 
+  const [inventoryError, setInventoryError] = useState<string | null>(null)
+
   const handleSubmitForm = async () => {
+    const totalItems =
+      Object.values(inventory).reduce((a, n) => a + (n || 0), 0) +
+      customItems.reduce((a, c) => a + (c.quantity || 0), 0)
+    if (totalItems === 0) {
+      setInventoryError('Please add at least one item to your inventory before continuing.')
+      return
+    }
+    setInventoryError(null)
     router.push('/add-listing/5')
   }
 
@@ -260,6 +270,11 @@ const Page = () => {
 
       {/* FORM */}
       <Form id="add-listing-form" action={handleSubmitForm} className="flex flex-col gap-y-8">
+        {inventoryError && (
+          <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-300">
+            {inventoryError}
+          </div>
+        )}
         {catalogState === 'loading' && (
           <div className="mb-4 h-24 animate-pulse rounded-lg bg-neutral-100 dark:bg-neutral-800" />
         )}

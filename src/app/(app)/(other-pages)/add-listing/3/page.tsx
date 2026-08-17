@@ -2,6 +2,7 @@
 
 import { useMoveSearch, type FloorLevelKey, type DropoffParkingKey } from '@/context/moveSearch'
 import { Divider } from '@/shared/divider'
+import AddressAutocompleteInput from '@/components/AddressAutocompleteInput'
 import Input from '@/shared/Input'
 import Select from '@/shared/Select'
 import Form from 'next/form'
@@ -27,6 +28,7 @@ const Page = () => {
     setDropoffElevatorAvailable,
     setDropoffParkingSituation,
     setDropoffArrangeHaltverbot,
+    dropoffCoordinates,
   } = useMoveSearch()
 
   // Auto-fill street address from the dropoff location if not already set
@@ -87,11 +89,12 @@ const Page = () => {
       <Form id="add-listing-form" action={handleSubmitForm} className="flex flex-col gap-y-8">
         {/* Street Address */}
         <FormItem label="Street address" desccription="Enter the full delivery street address">
-          <Input
+          <AddressAutocompleteInput
             name="streetAddress"
             placeholder="e.g., Berliner Straße 12"
             value={dropoffStreetAddress}
-            onChange={(e) => setDropoffStreetAddress(e.target.value)}
+            onChangeText={setDropoffStreetAddress}
+            proximity={dropoffCoordinates}
           />
           {formErrors.streetAddress && (
             <div className="text-sm text-red-600 mt-2">{formErrors.streetAddress}</div>

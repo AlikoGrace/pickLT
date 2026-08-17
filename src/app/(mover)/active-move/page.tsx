@@ -5,6 +5,7 @@ import { useAuth } from '@/context/auth'
 import { useLocationBroadcast } from '@/hooks/useLocationBroadcast'
 import { useMoverLocationPolling } from '@/hooks/useMoverLocationPolling'
 import { client, databases } from '@/lib/appwrite'
+import { isMoveStartable } from '@/lib/schedule-timing'
 import type { RealtimeResponseEvent, Models } from 'appwrite'
 import { Query } from 'appwrite'
 import ButtonPrimary from '@/shared/ButtonPrimary'
@@ -148,31 +149,34 @@ export default function ActiveMovePage() {
     fetchActiveMove()
   }, [fetchActiveMove])
 
-  // ── Auto-transition mover_accepted → mover_en_route ───────
-  // Per architecture, mover_accepted means mover accepted but hasn't started driving.
-  // When the mover opens the active-move page, it means they're ready to go — transition.
-  // Guard: only trigger on or after the scheduled move date.
+  // ── Auto-transition mover_accepted → mover_en_route (INSTANT only) ───────
+  // For an instant dispatch, opening this page means "I'm on my way". A
+  // scheduled move must NEVER auto-start — it waits on its Scheduled page and
+  // the mover presses Start Route explicitly once the T-5 window opens
+  // (T6 / Problems.docx #6-II; gating shared with job-details via
+  // lib/schedule-timing).
   useEffect(() => {
     const moveId = move?.$id as string | undefined
     const status = move?.status as string | undefined
     if (!moveId || status !== 'mover_accepted') return
-
-    // Date guard — do not auto-transition before the scheduled move date
-    const moveDate = move?.moveDate as string | undefined
-    if (moveDate) {
-      const today = new Date()
-      const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate())
-      const moveDay = new Date(moveDate)
-      const moveDayOnly = new Date(moveDay.getFullYear(), moveDay.getMonth(), moveDay.getDate())
-      if (moveDayOnly > todayOnly) return
-    }
+    if ((move?.moveCategory as string | undefined) === 'scheduled') return
+    if (
+      !isMoveStartable(
+        {
+          moveDate: move?.moveDate as string | undefined,
+          arrivalWindow: move?.arrivalWindow as string | undefined,
+        },
+        Date.now(),
+      )
+    )
+      return
 
     fetch('/api/mover/update-move-status', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ moveId, status: 'mover_en_route' }),
     }).catch((err) => console.warn('Auto-transition to mover_en_route failed:', err))
-  }, [move?.$id, move?.status, move?.moveDate])
+  }, [move?.$id, move?.status, move?.moveDate, move?.moveCategory, move?.arrivalWindow])
 
   // ── Subscribe to move updates ─────────────────────────────
   // Subscribe to the specific move document if we have one,

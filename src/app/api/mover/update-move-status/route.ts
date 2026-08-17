@@ -116,7 +116,8 @@ export async function POST(request: NextRequest) {
             amount: finalPrice,
             currency: 'EUR',
             status: 'pending',
-            paymentMethod: 'cash',
+            // Record how the move actually settles — card moves were being logged as cash (T7 parity fix).
+            paymentMethod: (move.paymentMethod as string) || 'cash',
           }
         )
       } catch (paymentErr) {

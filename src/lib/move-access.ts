@@ -3,7 +3,6 @@ import { APPWRITE } from '@/lib/constants'
 import { relId } from '@/lib/notify'
 
 /** Appwrite rows are schemaless at the SDK boundary. */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyDoc = Record<string, any>
 
 export type MoveAccess = {

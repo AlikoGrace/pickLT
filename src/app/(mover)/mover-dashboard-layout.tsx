@@ -17,6 +17,7 @@ import {
   BellIcon,
   TruckIcon,
   BanknotesIcon,
+  DocumentTextIcon,
   LockClosedIcon,
   ShieldExclamationIcon,
   ClockIcon,
@@ -63,6 +64,12 @@ const MOVER_NAV_ITEMS = [
     name: 'Earnings',
     href: '/earnings',
     icon: BanknotesIcon,
+    requiresVerification: true,
+  },
+  {
+    name: 'Tax Documents',
+    href: '/tax-documents',
+    icon: DocumentTextIcon,
     requiresVerification: true,
   },
   {

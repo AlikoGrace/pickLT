@@ -58,6 +58,7 @@ interface MoveData {
   dropoffLatitude: number | null
   dropoffLongitude: number | null
   estimatedPrice: number | null
+  paymentMethod?: string | null
   finalPrice: number | null
   totalItemCount: number | null
   coverPhotoId: string | null
@@ -325,6 +326,7 @@ const InstantMovePage = () => {
                 dropoffLatitude: (doc.dropoffLatitude as number) ?? null,
                 dropoffLongitude: (doc.dropoffLongitude as number) ?? null,
                 estimatedPrice: (doc.estimatedPrice as number) ?? null,
+                paymentMethod: (doc.paymentMethod as string) ?? null,
                 finalPrice: (doc.finalPrice as number) ?? null,
                 totalItemCount: (doc.totalItemCount as number) ?? null,
                 coverPhotoId: (doc.coverPhotoId as string) ?? null,
@@ -914,8 +916,26 @@ const InstantMovePage = () => {
             </div>
           )}
 
-          {/* Phase: awaiting_payment — payment confirmation */}
-          {phase === 'awaiting_payment' && !paymentConfirmed && (
+          {/* Phase: awaiting_payment — payment confirmation. Card moves are
+              charged via Stripe in the PickLT app (web has no card charging),
+              so the cash handshake only renders for cash (T7 parity). */}
+          {phase === 'awaiting_payment' && !paymentConfirmed && moveData?.paymentMethod === 'card' && (
+            <div className="rounded-2xl border border-neutral-200 bg-white/95 backdrop-blur-sm dark:border-neutral-700 dark:bg-neutral-800/95 p-4 shadow-lg space-y-3">
+              <div className="text-center">
+                <p className="text-lg font-bold text-neutral-900 dark:text-white">
+                  €{paymentAmount || moveData?.finalPrice || estimatedPrice}
+                </p>
+                <p className="text-sm text-neutral-500 dark:text-neutral-400">Amount to pay by card</p>
+              </div>
+              <div className="rounded-xl bg-blue-50 dark:bg-blue-900/20 p-3">
+                <p className="text-xs text-blue-700 dark:text-blue-300 text-center">
+                  This move is paid by card. Open the PickLT app to complete the payment —
+                  your saved card is charged there, nothing is due in cash.
+                </p>
+              </div>
+            </div>
+          )}
+          {phase === 'awaiting_payment' && !paymentConfirmed && moveData?.paymentMethod !== 'card' && (
             <div className="rounded-2xl border border-neutral-200 bg-white/95 backdrop-blur-sm dark:border-neutral-700 dark:bg-neutral-800/95 p-4 shadow-lg space-y-4">
               <div className="text-center">
                 <p className="text-lg font-bold text-neutral-900 dark:text-white">
