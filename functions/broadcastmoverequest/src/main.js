@@ -161,6 +161,35 @@ export default async ({ req, res, log, error }) => {
       return res.json({ error: 'Move has no pickup coordinates' }, 400);
     }
 
+    // Idempotency gate. The caller is the client's track screen, whose view of
+    // "has a mover accepted yet" comes from a realtime socket that can silently
+    // die — so it will happily ask us to broadcast a move that was accepted
+    // seconds ago. Re-broadcasting then offers an assigned job to other movers,
+    // and a second mover can accept a move that already has one.
+    // The move row is the only trustworthy source here, so gate on it.
+    const relId = (v) => (!v ? null : typeof v === 'string' ? v : v.$id ?? null);
+    const NON_BROADCASTABLE = new Set([
+      'mover_accepted', 'mover_en_route', 'mover_arrived', 'loading', 'in_transit',
+      'arrived_destination', 'unloading', 'awaiting_payment', 'paid', 'completed',
+      'cancelled_by_client', 'cancelled_by_mover', 'disputed',
+    ]);
+    if (relId(move.moverProfileId) || NON_BROADCASTABLE.has(move.status)) {
+      log(`[broadcast] skipped ${moveId}: already assigned/closed (status=${move.status})`);
+      return res.json({ ok: true, skipped: 'already_assigned', broadcast: 0 });
+    }
+
+    // A still-pending priority request means the exclusive window has not run
+    // out; broadcasting now would undercut it.
+    const openAccepted = await databases.listDocuments(
+      DATABASE_ID,
+      MOVE_REQUESTS_COLLECTION,
+      [Query.equal('moveId', moveId), Query.equal('status', 'accepted'), Query.limit(1)]
+    );
+    if (openAccepted.total > 0) {
+      log(`[broadcast] skipped ${moveId}: an accepted request already exists`);
+      return res.json({ ok: true, skipped: 'already_accepted', broadcast: 0 });
+    }
+
     // Fetch online, verified movers
     const movers = await databases.listDocuments(
       DATABASE_ID,
