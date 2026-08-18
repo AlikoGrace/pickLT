@@ -26,9 +26,15 @@ describe('parseArrivalWindowMinutes', () => {
 })
 
 describe('scheduledStartAt', () => {
-  it('combines a date-only moveDate with the arrival window', () => {
+  it('combines a date-only moveDate with the arrival window in platform time', () => {
+    // 03:00 PM Europe/Berlin on 2026-09-01 (CEST, UTC+2) = 13:00 UTC.
     expect(scheduledStartAt({ moveDate: '2026-09-01', arrivalWindow: '03:00 PM' })).toBe(
-      Date.parse('2026-09-01T00:00:00Z') + 15 * 60 * 60_000,
+      Date.parse('2026-09-01T13:00:00Z'),
+    )
+  })
+  it('resolves winter dates on the CET side of the DST boundary', () => {
+    expect(scheduledStartAt({ moveDate: '2026-12-01', arrivalWindow: '03:00 PM' })).toBe(
+      Date.parse('2026-12-01T14:00:00Z'),
     )
   })
   it('keeps a datetime moveDate and degrades on bad windows', () => {
@@ -53,7 +59,8 @@ describe('withinStartWindow / isMoveStartable', () => {
   it('isMoveStartable gates a scheduled move until the window', () => {
     const move = { moveDate: '2026-09-01', arrivalWindow: '03:00 PM' }
     expect(isMoveStartable(move, Date.parse('2026-09-01T10:00:00Z'))).toBe(false)
-    expect(isMoveStartable(move, Date.parse('2026-09-01T14:56:00Z'))).toBe(true)
+    // Start = 13:00 UTC (03:00 PM Berlin, CEST); gate opens at T-5.
+    expect(isMoveStartable(move, Date.parse('2026-09-01T12:56:00Z'))).toBe(true)
     expect(isMoveStartable({ moveDate: null }, 0)).toBe(true)
   })
 })

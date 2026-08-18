@@ -10,6 +10,44 @@
 
 export const START_WINDOW_BEFORE_MS = 5 * 60 * 1000 // Start Route unlocks at T-5 min
 
+/**
+ * Arrival windows are wall-clock times where the move happens, not UTC —
+ * resolving them in UTC put the start gate off by the UTC offset (1–2 h in
+ * Germany).
+ */
+export const PLATFORM_TZ = 'Europe/Berlin'
+
+function tzOffsetMs(tz: string, utcMs: number): number {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: tz,
+    hour12: false,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  }).formatToParts(new Date(utcMs))
+  const get = (type: string) => Number(parts.find((p) => p.type === type)?.value)
+  const asUtc = Date.UTC(get('year'), get('month') - 1, get('day'), get('hour') % 24, get('minute'), get('second'))
+  return asUtc - utcMs
+}
+
+/**
+ * Epoch ms of Y-M-D + minutes-since-midnight as wall-clock time in `tz`.
+ * Two-pass offset lookup for DST correctness; UTC fallback if Intl lacks tz data.
+ */
+export function zonedEpoch(year: number, month: number, day: number, minutes: number, tz: string = PLATFORM_TZ): number {
+  const wallAsUtc = Date.UTC(year, month - 1, day, 0, minutes)
+  try {
+    const first = tzOffsetMs(tz, wallAsUtc)
+    const second = tzOffsetMs(tz, wallAsUtc - first)
+    return wallAsUtc - second
+  } catch {
+    return wallAsUtc
+  }
+}
+
 /** "03:00 PM" → minutes since midnight, or null when unparseable. */
 export function parseArrivalWindowMinutes(window: string | null | undefined): number | null {
   if (!window) return null
@@ -34,10 +72,13 @@ export function parseArrivalWindowMinutes(window: string | null | undefined): nu
  * Unparseable windows degrade to the date alone — timing data must never make
  * a move unstartable.
  */
-export function scheduledStartAt(move: {
-  moveDate?: string | null
-  arrivalWindow?: string | null
-}): number | null {
+export function scheduledStartAt(
+  move: {
+    moveDate?: string | null
+    arrivalWindow?: string | null
+  },
+  tz: string = PLATFORM_TZ,
+): number | null {
   if (!move.moveDate) return null
   const base = new Date(move.moveDate)
   if (isNaN(base.getTime())) return null
@@ -45,7 +86,9 @@ export function scheduledStartAt(move: {
   if (minutes !== null) {
     const isMidnight =
       base.getUTCHours() === 0 && base.getUTCMinutes() === 0 && base.getUTCSeconds() === 0
-    if (isMidnight) return base.getTime() + minutes * 60_000
+    if (isMidnight) {
+      return zonedEpoch(base.getUTCFullYear(), base.getUTCMonth() + 1, base.getUTCDate(), minutes, tz)
+    }
   }
   return base.getTime()
 }
