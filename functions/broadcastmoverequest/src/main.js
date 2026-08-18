@@ -172,9 +172,25 @@ export default async ({ req, res, log, error }) => {
       ]
     );
 
+    // T2 staleness gate: a mover whose position hasn't been stamped in the
+    // last 10 min is a ghost (app killed with isOnline stuck true, or long
+    // offline gap). The idle heartbeat stamps every ≤60 s while the app is
+    // open — including a stationary-liveness re-ping — so real movers stay
+    // far inside the window. Missing stamp = never pinged since the feature
+    // shipped = not discoverable until their next ping (≤60 s after opening).
+    const LOCATION_STALE_MS = 10 * 60 * 1000;
+    const isFresh = (iso) => {
+      const t = iso ? Date.parse(iso) : NaN;
+      return Number.isFinite(t) && Date.now() - t <= LOCATION_STALE_MS;
+    };
+    const located = movers.documents.filter(m => m.currentLatitude && m.currentLongitude);
+    const fresh = located.filter(m => isFresh(m.locationUpdatedAt));
+    if (fresh.length < located.length) {
+      log(`staleness gate: ${located.length - fresh.length}/${located.length} online movers dropped (no ping in 10 min)`);
+    }
+
     // Calculate distances and sort by proximity
-    const inRange = movers.documents
-      .filter(m => m.currentLatitude && m.currentLongitude)
+    const inRange = fresh
       .map(m => ({
         ...m,
         distanceKm: haversineKm(

@@ -98,10 +98,13 @@ export default async ({ req, res, log, error }) => {
     }
 
     // Mirror the position onto the profile — the client seeds its marker from
-    // here before the first realtime event lands.
+    // here before the first realtime event lands. `locationUpdatedAt` is the
+    // freshness stamp discovery filters on (T2: a killed app leaves isOnline
+    // stuck true with frozen coords; staleness is how ghosts are excluded).
     await databases.updateDocument(DATABASE_ID, MOVER_PROFILES_COLLECTION, moverProfileId, {
       currentLatitude: latitude,
       currentLongitude: longitude,
+      locationUpdatedAt: payload.timestamp,
     });
 
     return res.json({ success: true, locationId: rowId });
