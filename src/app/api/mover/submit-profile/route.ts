@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
 import { getSessionUserId } from '@/lib/auth-session'
+import { sanctionedCountryRejection } from '@/lib/sanctions'
 import { ID, Query } from 'node-appwrite'
 
 /**
@@ -45,6 +46,12 @@ export async function POST(req: NextRequest) {
     } = body
 
     const { databases, users } = createAdminClient()
+
+    // ── T9 sanctions gate (mirrors functions/submitmoverprofile) ──────────
+    const sanctionsRejection = await sanctionedCountryRejection(databases, primaryCountry)
+    if (sanctionsRejection) {
+      return NextResponse.json({ error: sanctionsRejection }, { status: 403 })
+    }
 
     // ── Block clients from becoming movers ─────────────────
     let userDoc: Record<string, unknown> | null = null
