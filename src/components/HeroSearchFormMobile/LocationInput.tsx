@@ -1,5 +1,7 @@
 'use client'
 
+import { reverseGeocodeBest } from '@/lib/reverse-geocode'
+import { composeAddressLabel } from '@/lib/address-label'
 import { Search01Icon } from '@/components/Icons'
 import T from '@/utils/getT'
 import { MapPinIcon } from '@heroicons/react/24/outline'
@@ -70,35 +72,16 @@ async function searchLocations(
 }
 
 /** Reverse-geocode coordinates → human-readable address */
-async function reverseGeocode(
-  lat: number,
-  lng: number
-): Promise<LocationSuggestion | null> {
-  if (!MAPBOX_TOKEN) return null
-  try {
-    const res = await fetch(
-      `https://api.mapbox.com/search/geocode/v6/reverse?` +
-        new URLSearchParams({
-          longitude: String(lng),
-          latitude: String(lat),
-          access_token: MAPBOX_TOKEN,
-          types: 'address,street,place',
-          language: 'en',
-        })
-    )
-    if (!res.ok) return null
-    const data = await res.json()
-    const f = data.features?.[0]
-    if (!f) return null
-    const props = f.properties || {}
-    return {
-      id: props.mapbox_id || f.id,
-      name: props.name_preferred || props.name || '',
-      fullAddress: props.full_address || props.place_formatted || props.name || '',
-      coordinates: { latitude: lat, longitude: lng },
-    }
-  } catch {
-    return null
+/** Reverse-geocode a coordinate to the most specific place at it (not the
+ *  enclosing city — see src/lib/reverse-geocode.ts for why). */
+async function reverseGeocode(lat: number, lng: number): Promise<LocationSuggestion | null> {
+  const hit = await reverseGeocodeBest(lat, lng, MAPBOX_TOKEN ?? '')
+  if (!hit) return null
+  return {
+    id: hit.id,
+    name: hit.name,
+    fullAddress: hit.fullAddress,
+    coordinates: { latitude: lat, longitude: lng },
   }
 }
 
@@ -176,7 +159,7 @@ const LocationInput: FC<Props> = ({
   }, [userCoords])
 
   const handleSelectLocation = (location: LocationSuggestion) => {
-    setInputValue(location.fullAddress)
+    setInputValue(composeAddressLabel(location.name, location.fullAddress))
     setSuggestions([])
     onChange && onChange(location)
   }

@@ -1,5 +1,7 @@
 'use client'
 
+import { reverseGeocodeBest } from '@/lib/reverse-geocode'
+import { composeAddressLabel } from '@/lib/address-label'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
@@ -70,32 +72,16 @@ async function forwardGeocode(
   }
 }
 
+/** Reverse-geocode a coordinate to the most specific place at it (not the
+ *  enclosing city — see src/lib/reverse-geocode.ts for why). */
 async function reverseGeocode(lat: number, lng: number): Promise<PickedLocation | null> {
-  if (!MAPBOX_TOKEN) return null
-  try {
-    const res = await fetch(
-      `https://api.mapbox.com/search/geocode/v6/reverse?` +
-        new URLSearchParams({
-          longitude: String(lng),
-          latitude: String(lat),
-          access_token: MAPBOX_TOKEN,
-          types: 'address,street,place',
-          language: 'en',
-        })
-    )
-    if (!res.ok) return null
-    const data = await res.json()
-    const f = data.features?.[0]
-    if (!f) return null
-    const props = f.properties || {}
-    return {
-      id: props.mapbox_id || f.id,
-      name: props.name_preferred || props.name || '',
-      fullAddress: props.full_address || props.place_formatted || props.name || '',
-      coordinates: { latitude: lat, longitude: lng },
-    }
-  } catch {
-    return null
+  const hit = await reverseGeocodeBest(lat, lng, MAPBOX_TOKEN)
+  if (!hit) return null
+  return {
+    id: hit.id,
+    name: hit.name,
+    fullAddress: hit.fullAddress,
+    coordinates: { latitude: lat, longitude: lng },
   }
 }
 
@@ -194,7 +180,7 @@ const MapLocationPicker = ({ open, onClose, onSelect, initialCoordinates, label 
           coordinates: { latitude: lat, longitude: lng },
         }
         setPicked(resolved)
-        setQuery(resolved.fullAddress)
+        setQuery(composeAddressLabel(resolved.name, resolved.fullAddress))
         setResults([])
       })
 
@@ -266,7 +252,7 @@ const MapLocationPicker = ({ open, onClose, onSelect, initialCoordinates, label 
   const selectSuggestion = useCallback(
     (loc: PickedLocation) => {
       setPicked(loc)
-      setQuery(loc.fullAddress)
+      setQuery(composeAddressLabel(loc.name, loc.fullAddress))
       setResults([])
       mapRef.current?.flyTo({ center: [loc.coordinates.longitude, loc.coordinates.latitude], zoom: 16, duration: 800 })
       placePin(loc.coordinates.latitude, loc.coordinates.longitude)
@@ -302,7 +288,7 @@ const MapLocationPicker = ({ open, onClose, onSelect, initialCoordinates, label 
             }
 
         setPicked(loc)
-        setQuery(loc.fullAddress)
+        setQuery(composeAddressLabel(loc.name, loc.fullAddress))
         setResults([])
         setGeoLoading(false)
       },

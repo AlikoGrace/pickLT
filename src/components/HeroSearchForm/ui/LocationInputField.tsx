@@ -1,5 +1,7 @@
 'use client'
 
+import { reverseGeocodeBest } from '@/lib/reverse-geocode'
+import { composeAddressLabel } from '@/lib/address-label'
 import { useInteractOutside } from '@/hooks/useInteractOutside'
 import { Divider } from '@/shared/divider'
 import T from '@/utils/getT'
@@ -102,35 +104,16 @@ async function searchLocations(
 }
 
 /** Reverse-geocode coordinates → human-readable address */
-async function reverseGeocode(
-  lat: number,
-  lng: number
-): Promise<LocationSuggestion | null> {
-  if (!MAPBOX_TOKEN) return null
-  try {
-    const res = await fetch(
-      `https://api.mapbox.com/search/geocode/v6/reverse?` +
-        new URLSearchParams({
-          longitude: String(lng),
-          latitude: String(lat),
-          access_token: MAPBOX_TOKEN,
-          types: 'address,street,place',
-          language: 'en',
-        })
-    )
-    if (!res.ok) return null
-    const data = await res.json()
-    const f = data.features?.[0]
-    if (!f) return null
-    const props = f.properties || {}
-    return {
-      id: props.mapbox_id || f.id,
-      name: props.name_preferred || props.name || '',
-      fullAddress: props.full_address || props.place_formatted || props.name || '',
-      coordinates: { latitude: lat, longitude: lng },
-    }
-  } catch {
-    return null
+/** Reverse-geocode a coordinate to the most specific place at it (not the
+ *  enclosing city — see src/lib/reverse-geocode.ts for why). */
+async function reverseGeocode(lat: number, lng: number): Promise<LocationSuggestion | null> {
+  const hit = await reverseGeocodeBest(lat, lng, MAPBOX_TOKEN ?? '')
+  if (!hit) return null
+  return {
+    id: hit.id,
+    name: hit.name,
+    fullAddress: hit.fullAddress,
+    coordinates: { latitude: lat, longitude: lng },
   }
 }
 
@@ -270,7 +253,7 @@ export const LocationInputField: FC<Props> = ({
   const handleSelectLocation = useCallback(
     (location: LocationSuggestion | null) => {
       setSelected(location)
-      setInputValue(location?.fullAddress || '')
+      setInputValue(location ? composeAddressLabel(location.name, location.fullAddress) : '')
       setSuggestions([])
 
       if (location?.id) {
@@ -316,7 +299,9 @@ export const LocationInputField: FC<Props> = ({
               placeholder={placeholder}
               autoComplete="off"
               value={inputValue}
-              displayValue={(item?: LocationSuggestion) => item?.fullAddress || inputValue}
+              displayValue={(item?: LocationSuggestion) =>
+                item ? composeAddressLabel(item.name, item.fullAddress) : inputValue
+              }
               onChange={handleInputChange}
             />
             <div className="mt-0.5 text-start text-sm font-light text-neutral-400">
