@@ -1,4 +1,4 @@
-import { Client, Databases, ID, Query } from 'node-appwrite';
+import { Client, Databases, ID, Permission, Query, Role } from 'node-appwrite';
 
 const DATABASE_ID = process.env.APPWRITE_DATABASE_ID;
 const REVIEWS_COLLECTION = process.env.APPWRITE_COLLECTION_REVIEWS;
@@ -89,6 +89,24 @@ export default async ({ req, res, log, error }) => {
       return res.json({ error: 'You have already reviewed this move' }, 400);
     }
 
+    // The reviewed mover is resolved BEFORE the write, because the row has to
+    // name them in its own permissions — `mover_profiles.$id` is not an auth id,
+    // so it has to be hopped through `userId`. Once the `reviews` collection
+    // stops granting read("users"), a row written without these grants is
+    // readable by nobody. See .agent/plans/appwrite-permissions-hardening.md §2.
+    const moverProfile = await databases.getDocument(
+      DATABASE_ID,
+      MOVER_PROFILES_COLLECTION,
+      moverProfileId
+    );
+    const moverUserId =
+      typeof moverProfile.userId === 'string' ? moverProfile.userId : moverProfile.userId?.$id;
+
+    const reviewPermissions = [Permission.read(Role.user(reviewerId))];
+    if (moverUserId && moverUserId !== reviewerId) {
+      reviewPermissions.push(Permission.read(Role.user(moverUserId)));
+    }
+
     // Create review
     const review = await databases.createDocument(
       DATABASE_ID,
@@ -100,7 +118,8 @@ export default async ({ req, res, log, error }) => {
         moverProfileId,
         rating: ratingValue,
         comment: commentValue,
-      }
+      },
+      reviewPermissions
     );
 
     // Recalculate mover's average rating
@@ -126,10 +145,7 @@ export default async ({ req, res, log, error }) => {
       { rating: avgRating }
     );
 
-    // Notify mover
-    const moverProfile = await databases.getDocument(DATABASE_ID, MOVER_PROFILES_COLLECTION, moverProfileId);
-    const moverUserId = typeof moverProfile.userId === 'string' ? moverProfile.userId : moverProfile.userId.$id;
-
+    // Notify mover (profile already resolved above, for the review's grants)
     await databases.createDocument(
       DATABASE_ID,
       NOTIFICATIONS_COLLECTION,
@@ -141,7 +157,15 @@ export default async ({ req, res, log, error }) => {
         body: `You received a ${rating}-star review${comment ? `: "${comment.substring(0, 100)}"` : '.'}`,
         data: JSON.stringify({ reviewId: review.$id, moveId, rating }),
         isRead: false,
-      }
+      },
+      // The addressee reads it, and marks it read/deletes it from the app.
+      moverUserId
+        ? [
+            Permission.read(Role.user(moverUserId)),
+            Permission.update(Role.user(moverUserId)),
+            Permission.delete(Role.user(moverUserId)),
+          ]
+        : undefined
     );
 
     log(`Review submitted for mover ${moverProfileId}: ${rating} stars`);

@@ -1,4 +1,4 @@
-import { Client, Databases, ID, Query } from 'node-appwrite';
+import { Client, Databases, ID, Permission, Query, Role } from 'node-appwrite';
 
 const DATABASE_ID = process.env.APPWRITE_DATABASE_ID;
 const MOVES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVES;
@@ -186,7 +186,17 @@ export default async ({ req, res, log, error }) => {
         paymentMethod: asText(moveData.paymentMethod),
         termsAccepted: moveData.termsAccepted ?? null,
         privacyAccepted: moveData.privacyAccepted ?? null,
-      }
+      },
+      [
+        // clientId is the client's Appwrite auth account id (users.$id ===
+        // account.$id), so it is directly usable as Role.user(...). The client
+        // reads their own move and deletes it while it is still a draft
+        // (discardDraftMove). No client-session update path exists, so no
+        // update grant. read(assignedMover) is added later by acceptmove /
+        // acceptscheduledmove / finalizeacceptance.
+        Permission.read(Role.user(clientId)),
+        Permission.delete(Role.user(clientId)),
+      ]
     );
 
     // Create initial status history entry
@@ -201,7 +211,9 @@ export default async ({ req, res, log, error }) => {
         changedBy: clientId,
         changedAt: new Date().toISOString(),
         note: 'Move created',
-      }
+      },
+      // Server-only audit trail — no client in any app reads this collection.
+      []
     );
 
     log(`Move created: ${move.$id} (${handle}) for client ${clientId}`);

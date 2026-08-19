@@ -1,4 +1,4 @@
-import { Client, Databases, ID, Query } from 'node-appwrite';
+import { Client, Databases, ID, Permission, Query, Role } from 'node-appwrite';
 
 const DATABASE_ID = process.env.APPWRITE_DATABASE_ID;
 const USERS_COLLECTION = process.env.APPWRITE_COLLECTION_USERS;
@@ -103,10 +103,29 @@ export default async ({ req, res, log, error }) => {
       error(`sanctions config check failed (continuing): ${e.message}`);
     }
 
+    // Denormalised display identity. `mover_profiles` is served to clients
+    // through the redacting `listnearbymovers` function, and that projection
+    // must never traverse the relationship into `users` — a traversal is a
+    // permission-checked read of a stranger's email, phone and date of birth.
+    // So the mover's public name and photo live on the profile row itself.
+    // `updateprofile` keeps them in sync when the mover edits their account.
+    // Mirrored in lib/mover-projection.ts.
+    let existingUser = null;
+    try {
+      existingUser = await databases.getDocument(DATABASE_ID, USERS_COLLECTION, userId);
+    } catch (e) {
+      error(`could not read user ${userId} for denormalisation: ${e.message}`);
+    }
+    const displayName =
+      (typeof fullName === 'string' && fullName.trim()) || existingUser?.fullName || null;
+    const photoUrl = selfiePhoto || existingUser?.profilePhoto || null;
+
     // Profile fields written on both create and re-submit. A re-submit returns
     // the mover to pending_verification (vehicle/KYC changes need re-review).
     const profileFields = {
       userId,
+      displayName,
+      photoUrl,
       driversLicense: driversLicense || null,
       driversLicensePhoto: driversLicensePhoto || null,
       socialSecurityNumber: socialSecurityNumber || null,
@@ -154,6 +173,22 @@ export default async ({ req, res, log, error }) => {
           currentLatitude: null,
           currentLongitude: null,
         },
+        [
+          // Owner-only read. `mover_profiles` is the KYC collection — social
+          // security number, tax number, driver's licence and its photograph,
+          // VAT id, business address — so nobody but the mover may read the
+          // row directly; clients get the redacted `listnearbymovers`
+          // projection instead.
+          //
+          // The owner is `userId`, which IS the mover's Appwrite auth account
+          // id (users.$id === account.$id). `profile.$id` is NOT an auth id and
+          // must never be used here.
+          //
+          // No update/delete grant: every write to this row goes through a
+          // function holding the API key (submitmoverprofile, setmoveronline,
+          // updatemoverlocation, adminverifymover).
+          Permission.read(Role.user(userId)),
+        ],
       );
     }
 
@@ -174,7 +209,13 @@ export default async ({ req, res, log, error }) => {
           body: 'Your mover profile is under review. We will notify you once it is verified.',
           data: JSON.stringify({ moverProfileId: profile.$id }),
           isRead: false,
-        })
+        }, [
+          // Addressee only. `update` is needed for markAsRead / markAllAsRead,
+          // which the client app performs straight from the session.
+          Permission.read(Role.user(userId)),
+          Permission.update(Role.user(userId)),
+          Permission.delete(Role.user(userId)),
+        ])
         .catch((e) => error(`notification failed: ${e.message}`));
     }
 

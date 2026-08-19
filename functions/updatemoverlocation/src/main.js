@@ -1,8 +1,12 @@
-import { Client, Databases, ID, Query } from 'node-appwrite';
+import { Client, Databases, ID, Permission, Query, Role } from 'node-appwrite';
 
 const DATABASE_ID = process.env.APPWRITE_DATABASE_ID;
 const MOVER_PROFILES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVER_PROFILES;
 const MOVER_LOCATIONS_COLLECTION = process.env.APPWRITE_COLLECTION_MOVER_LOCATIONS;
+const MOVES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVES;
+
+// Relationship attributes deserialize as a bare id OR a hydrated object.
+const relId = (v) => (!v ? null : typeof v === 'string' ? v : v.$id ?? null);
 
 /**
  * updatemoverlocation
@@ -65,6 +69,31 @@ export default async ({ req, res, log, error }) => {
       timestamp: new Date().toISOString(),
     };
 
+    // Live GPS. The mover always reads their own row; the client of the move
+    // this ping is attached to reads it only while that move is live. There is
+    // ONE row per mover which is upserted in place, so the permission set has
+    // to be re-emitted on every write — Appwrite REPLACES the array, and a row
+    // first written while the mover was idle would otherwise stay
+    // mover-only-readable for the whole of their next job. Dropping moveId
+    // (idle heartbeat) likewise revokes the previous client's read.
+    //
+    // authId is the mover's Appwrite auth account id — mover_profiles.$id is
+    // not, so it must never be used here.
+    const locationPermissions = [Permission.read(Role.user(authId))];
+    if (moveId && MOVES_COLLECTION) {
+      try {
+        const move = await databases.getDocument(DATABASE_ID, MOVES_COLLECTION, moveId);
+        const clientAuthId = relId(move.clientId);
+        if (clientAuthId && clientAuthId !== authId) {
+          locationPermissions.push(Permission.read(Role.user(clientAuthId)));
+        }
+      } catch (lookupErr) {
+        // Never fail a position ping over the lookup — the mover keeps their
+        // own read and the client falls back to mover_profiles coordinates.
+        error(`updatemoverlocation: move lookup failed for ${moveId}: ${lookupErr.message}`);
+      }
+    }
+
     // Upsert this mover's single location row.
     const existing = await databases.listDocuments(DATABASE_ID, MOVER_LOCATIONS_COLLECTION, [
       Query.equal('moverProfileId', moverProfileId),
@@ -73,7 +102,13 @@ export default async ({ req, res, log, error }) => {
     let rowId = existing.documents[0]?.$id ?? null;
 
     if (rowId) {
-      await databases.updateDocument(DATABASE_ID, MOVER_LOCATIONS_COLLECTION, rowId, payload);
+      await databases.updateDocument(
+        DATABASE_ID,
+        MOVER_LOCATIONS_COLLECTION,
+        rowId,
+        payload,
+        locationPermissions,
+      );
     } else {
       try {
         const created = await databases.createDocument(
@@ -81,6 +116,7 @@ export default async ({ req, res, log, error }) => {
           MOVER_LOCATIONS_COLLECTION,
           ID.unique(),
           payload,
+          locationPermissions,
         );
         rowId = created.$id;
       } catch (createErr) {
@@ -93,7 +129,13 @@ export default async ({ req, res, log, error }) => {
         ]);
         rowId = raced.documents[0]?.$id ?? null;
         if (!rowId) throw createErr;
-        await databases.updateDocument(DATABASE_ID, MOVER_LOCATIONS_COLLECTION, rowId, payload);
+        await databases.updateDocument(
+          DATABASE_ID,
+          MOVER_LOCATIONS_COLLECTION,
+          rowId,
+          payload,
+          locationPermissions,
+        );
       }
     }
 

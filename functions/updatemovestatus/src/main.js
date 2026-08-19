@@ -1,4 +1,4 @@
-import { Client, Databases, ID, Query } from 'node-appwrite';
+import { Client, Databases, ID, Permission, Query, Role } from 'node-appwrite';
 
 const DATABASE_ID = process.env.APPWRITE_DATABASE_ID;
 const MOVES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVES;
@@ -230,7 +230,9 @@ export default async ({ req, res, log, error }) => {
       changedBy: authId,
       changedAt: nowIso,
       note: note || null,
-    });
+    },
+    // Server-only audit trail — no client in any app reads this collection.
+    []);
 
     // Notify the client. Every transition the client cares about now maps to a
     // pushable type — the granular steps used to fall through to `system`
@@ -255,11 +257,19 @@ export default async ({ req, res, log, error }) => {
           isRead: false,
         };
         const preferredType = STATUS_PUSH_TYPE[newStatus] ?? 'system';
+        // notifications.userId IS the addressee's auth account id. `update` is
+        // required — markAsRead / markAllAsRead flip isRead from the client
+        // session.
+        const notifPermissions = [
+          Permission.read(Role.user(clientId)),
+          Permission.update(Role.user(clientId)),
+          Permission.delete(Role.user(clientId)),
+        ];
         try {
           await databases.createDocument(DATABASE_ID, NOTIFICATIONS_COLLECTION, ID.unique(), {
             ...row,
             type: preferredType,
-          });
+          }, notifPermissions);
         } catch (e) {
           if (preferredType === 'system') {
             error(`notification failed: ${e.message}`);
@@ -271,7 +281,7 @@ export default async ({ req, res, log, error }) => {
               .createDocument(DATABASE_ID, NOTIFICATIONS_COLLECTION, ID.unique(), {
                 ...row,
                 type: 'system',
-              })
+              }, notifPermissions)
               .catch((e2) => error(`notification fallback failed: ${e2.message}`));
           }
         }

@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient, withRetry } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
 import { getSessionUserId } from '@/lib/auth-session'
+import { moverLocationPermissions } from '@/lib/doc-permissions'
+import { relId } from '@/lib/notify'
 import { ID, Query } from 'node-appwrite'
 
 /**
@@ -43,6 +45,23 @@ export async function POST(req: NextRequest) {
 
     const moverProfileId = profiles.documents[0].$id
 
+    // Live GPS is readable by the mover always, and by the client of the move
+    // only while a move is attached (heartbeat rows carry no `moveId` and stay
+    // mover-only). Best-effort: a failed lookup must not cost the fix.
+    let moveClientAuthId: string | null = null
+    if (moveId) {
+      try {
+        const move = await databases.getDocument(
+          APPWRITE.DATABASE_ID,
+          APPWRITE.COLLECTIONS.MOVES,
+          moveId
+        )
+        moveClientAuthId = relId(move.clientId)
+      } catch {
+        // Unknown/unreadable move — fall back to mover-only grants.
+      }
+    }
+
     // Create location record (Appwrite Realtime will broadcast this)
     await withRetry(() =>
       databases.createDocument(
@@ -57,7 +76,10 @@ export async function POST(req: NextRequest) {
           heading: heading ?? null,
           speed: speed ?? null,
           timestamp: new Date().toISOString(),
-        }
+        },
+        // `userId` is the mover's auth account id (the session subject);
+        // `moverProfileId` is a profile row id and is not a usable role.
+        moverLocationPermissions(userId, moveClientAuthId)
       )
     )
 

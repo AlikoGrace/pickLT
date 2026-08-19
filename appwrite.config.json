@@ -196,27 +196,6 @@
             "path": "functions/updatemovestatus"
         },
         {
-            "$id": "6995a66900354bc64f62",
-            "name": "processpayment",
-            "runtime": "node-22",
-            "specification": "s-2vcpu-2gb",
-            "execute": [
-                "any"
-            ],
-            "events": [],
-            "scopes": [
-                "users.read"
-            ],
-            "schedule": "",
-            "timeout": 15,
-            "enabled": true,
-            "logging": true,
-            "entrypoint": "src/main.js",
-            "commands": "npm install --legacy-peer-deps",
-            "ignore": "node_modules,.npm",
-            "path": "functions/processpayment"
-        },
-        {
             "$id": "6995a67e002eb3fa6e09",
             "name": "submitreview",
             "runtime": "node-22",
@@ -630,6 +609,24 @@
                     "required": false,
                     "array": false,
                     "size": 255,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "displayName",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 128,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "photoUrl",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 512,
                     "default": null,
                     "encrypt": false
                 }

@@ -1,4 +1,4 @@
-import { Client, Databases, ID } from 'node-appwrite';
+import { Client, Databases, ID, Permission, Role } from 'node-appwrite';
 
 const DATABASE_ID = process.env.APPWRITE_DATABASE_ID;
 const MOVER_PROFILES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVER_PROFILES;
@@ -58,7 +58,17 @@ export default async ({ req, res, log, error }) => {
         body: statusMessages[newStatus],
         data: JSON.stringify({ moverProfileId, newStatus }),
         isRead: false,
-      }
+      },
+      // The mover reads their own verification notice and marks it read. Without
+      // these the row is readable by nobody once `notifications` stops granting
+      // read("users") — see .agent/plans/appwrite-permissions-hardening.md §2.
+      userId
+        ? [
+            Permission.read(Role.user(userId)),
+            Permission.update(Role.user(userId)),
+            Permission.delete(Role.user(userId)),
+          ]
+        : undefined
     );
 
     log(`Mover ${moverProfileId} status updated to ${newStatus} by admin ${adminId}`);

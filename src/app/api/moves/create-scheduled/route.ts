@@ -3,6 +3,7 @@ import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
 import { getSessionUserId } from '@/lib/auth-session'
 import { asText, asTextArray } from '@/lib/move-normalizers'
+import { movePermissions } from '@/lib/doc-permissions'
 import { ID } from 'node-appwrite'
 
 export const runtime = 'nodejs'
@@ -182,7 +183,12 @@ export async function POST(req: NextRequest) {
         // Legal
         termsAccepted: true,
         privacyAccepted: true,
-      }
+      },
+      // No mover is chosen yet, so only the client is granted. The mover's read
+      // is added when acceptance sets `moverProfileId` (plan Task 2.2), and
+      // browsing unassigned work goes through the redacting `listavailablemoves`
+      // function (plan hard case A) rather than a direct read.
+      movePermissions(userId)
     )
 
     return NextResponse.json({

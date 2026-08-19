@@ -2,6 +2,7 @@ import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
 import { relId, writeNotification, STATUS_NOTIFICATION } from '@/lib/notify'
+import { paymentPermissions } from '@/lib/doc-permissions'
 import { Query, ID } from 'node-appwrite'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -118,7 +119,10 @@ export async function POST(request: NextRequest) {
             status: 'pending',
             // Record how the move actually settles — card moves were being logged as cash (T7 parity fix).
             paymentMethod: (move.paymentMethod as string) || 'cash',
-          }
+          },
+          // Both parties settle against this record. `userId` is the mover's
+          // own auth id (session subject); the payer comes off the move.
+          paymentPermissions(relId(move.clientId), userId)
         )
       } catch (paymentErr) {
         console.error('Failed to create payment record (will be created on confirm):', paymentErr)

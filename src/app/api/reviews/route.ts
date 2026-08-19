@@ -2,6 +2,7 @@ import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
 import { moverUserIdFromProfile, writeNotification } from '@/lib/notify'
+import { reviewPermissions } from '@/lib/doc-permissions'
 import { Query, ID } from 'node-appwrite'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -74,6 +75,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No mover assigned to this move' }, { status: 400 })
     }
 
+    // The reviewed mover's auth id — `moverProfileId` is a mover_profiles $id,
+    // NOT an auth account id, so it must be resolved through
+    // `mover_profiles.userId` before it can be a Role.user().
+    const reviewedMoverUserId = await moverUserIdFromProfile(moverProfileId)
+
     // Create the review
     const review = await databases.createDocument(
       APPWRITE.DATABASE_ID,
@@ -85,7 +91,10 @@ export async function POST(request: NextRequest) {
         moverProfileId: moverProfileId,
         rating: Math.round(rating),
         comment: comment || '',
-      }
+      },
+      // Reviewer + reviewed mover. Strangers see the aggregate
+      // `mover_profiles.rating`, never the rows.
+      reviewPermissions(userId, reviewedMoverUserId)
     )
 
     // Recalculate mover's average rating
@@ -120,10 +129,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Notify the mover of the new review.
-    const moverUserId = await moverUserIdFromProfile(moverProfileId)
-    if (moverUserId) {
+    if (reviewedMoverUserId) {
       await writeNotification({
-        userId: moverUserId,
+        userId: reviewedMoverUserId,
         type: 'review',
         title: 'New Review',
         body: `You received a ${Math.round(rating)}-star review.`,

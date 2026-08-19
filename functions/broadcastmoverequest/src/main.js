@@ -1,4 +1,4 @@
-import { Client, Databases, ID, Query } from 'node-appwrite';
+import { Client, Databases, ID, Permission, Query, Role } from 'node-appwrite';
 
 const DATABASE_ID = process.env.APPWRITE_DATABASE_ID;
 const MOVES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVES;
@@ -305,7 +305,15 @@ export default async ({ req, res, log, error }) => {
 
     // Create move requests for each nearby mover
     const requests = [];
+    // moves.clientId IS the client's auth account id and can be used directly.
+    // mover_profiles.$id is NOT an auth id — the mover's account id has to be
+    // read off the profile's userId relationship (string or hydrated object).
+    const moveClientAuthId = relId(move.clientId);
     for (const mover of nearbyMovers) {
+      const moverAuthId = relId(mover.userId);
+      const requestPermissions = [];
+      if (moverAuthId) requestPermissions.push(Permission.read(Role.user(moverAuthId)));
+      if (moveClientAuthId) requestPermissions.push(Permission.read(Role.user(moveClientAuthId)));
       const request = await databases.createDocument(
         DATABASE_ID,
         MOVE_REQUESTS_COLLECTION,
@@ -317,7 +325,10 @@ export default async ({ req, res, log, error }) => {
           sentAt: now.toISOString(),
           respondedAt: null,
           expiresAt,
-        }
+        },
+        // The target mover needs their inbox; the client's tracking screen
+        // lists who was pinged.
+        requestPermissions
       );
       requests.push(request);
     }

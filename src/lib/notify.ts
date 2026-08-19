@@ -2,6 +2,7 @@ import { ID } from 'node-appwrite'
 
 import { createAdminClient } from './appwrite-server'
 import { APPWRITE } from './constants'
+import { notificationPermissions } from './doc-permissions'
 
 export type NotifyType =
   | 'move_request'
@@ -52,7 +53,10 @@ export async function writeNotification(params: {
       APPWRITE.DATABASE_ID,
       APPWRITE.COLLECTIONS.NOTIFICATIONS,
       ID.unique(),
-      { ...row, type: params.type }
+      { ...row, type: params.type },
+      // Addressee-only. `params.userId` is the recipient's auth account id
+      // (`users.$id` === auth `$id`), so it is usable as a Role.user directly.
+      notificationPermissions(params.userId)
     )
   } catch (err) {
     // `notifications.type` is an ENUM. The in-progress step types
@@ -74,7 +78,8 @@ export async function writeNotification(params: {
         APPWRITE.DATABASE_ID,
         APPWRITE.COLLECTIONS.NOTIFICATIONS,
         ID.unique(),
-        { ...row, type: 'system' }
+        { ...row, type: 'system' },
+        notificationPermissions(params.userId)
       )
     } catch (err2) {
       console.warn('[notify] writeNotification fallback failed:', err2)

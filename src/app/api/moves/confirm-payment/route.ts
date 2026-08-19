@@ -1,7 +1,8 @@
 import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
-import { writeNotification } from '@/lib/notify'
+import { moverUserIdFromProfile, relId, writeNotification } from '@/lib/notify'
+import { paymentPermissions } from '@/lib/doc-permissions'
 import { Query, ID } from 'node-appwrite'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -48,6 +49,13 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // The assigned mover's auth id, for the payment row's grants.
+    // `move.moverProfileId` is a mover_profiles $id, not an auth id.
+    const assignedMoverProfileId = relId(move.moverProfileId)
+    const assignedMoverUserId = assignedMoverProfileId
+      ? await moverUserIdFromProfile(assignedMoverProfileId)
+      : null
+
     // Find the pending payment for this move
     let payments = await databases.listDocuments(
       APPWRITE.DATABASE_ID,
@@ -75,7 +83,9 @@ export async function POST(request: NextRequest) {
           status: 'pending',
           // Record how the move actually settles — card moves were being logged as cash (T7 parity fix).
             paymentMethod: (move.paymentMethod as string) || 'cash',
-        }
+        },
+        // Paying client + assigned mover.
+        paymentPermissions(userId, assignedMoverUserId)
       )
     }
 
@@ -112,9 +122,7 @@ export async function POST(request: NextRequest) {
       )
 
       // Increment mover's totalMoves
-      const moverProfileId = typeof move.moverProfileId === 'string'
-        ? move.moverProfileId
-        : move.moverProfileId?.$id
+      const moverProfileId = assignedMoverProfileId
       if (moverProfileId) {
         try {
           const profile = await databases.getDocument(

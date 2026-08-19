@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient, withRetry } from '@/lib/appwrite-server'
 import { getSessionUserId } from '@/lib/auth-session'
 import { APPWRITE } from '@/lib/constants'
+import { userDocPermissions } from '@/lib/doc-permissions'
 import { Query } from 'node-appwrite'
 
 /**
@@ -73,7 +74,11 @@ export async function POST(req: NextRequest) {
             userType: requestedUserType === 'mover' ? 'mover' : 'client',
             emailVerified: emailVerified ?? false,
             phoneVerified: phoneVerified ?? false,
-          }
+          },
+          // The document id IS the auth account id, so the owner grant is the
+          // same id. Matches what functions/syncuser and functions/googleauth
+          // already write.
+          userDocPermissions(authId)
         )
       )
     } else {

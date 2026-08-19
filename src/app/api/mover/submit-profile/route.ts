@@ -3,6 +3,7 @@ import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
 import { getSessionUserId } from '@/lib/auth-session'
 import { sanctionedCountryRejection } from '@/lib/sanctions'
+import { moverProfilePermissions, notificationPermissions } from '@/lib/doc-permissions'
 import { ID, Query } from 'node-appwrite'
 
 /**
@@ -142,7 +143,11 @@ export async function POST(req: NextRequest) {
           isOnline: false,
           currentLatitude: null,
           currentLongitude: null,
-        }
+        },
+        // KYC-grade row (SSN, tax number, licence photo, VAT, business
+        // address): owner read only, no client-session write path. `userId` is
+        // the session's auth account id — the profile's own $id is not a role.
+        moverProfilePermissions(userId)
       )
     }
 
@@ -167,7 +172,8 @@ export async function POST(req: NextRequest) {
           body: 'Your mover profile is under review. We will notify you once it is verified.',
           data: JSON.stringify({ moverProfileId: profile.$id }),
           isRead: false,
-        }
+        },
+        notificationPermissions(userId)
       )
     } catch {
       // Notification is non-critical

@@ -2,6 +2,7 @@ import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
 import { moverUserIdFromProfile, relId, writeNotification } from '@/lib/notify'
+import { MOVE_STATUS_HISTORY_PERMISSIONS } from '@/lib/doc-permissions'
 import { ID, Query } from 'node-appwrite'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -97,7 +98,10 @@ export async function POST(request: NextRequest) {
           changedBy: userId ?? 'unknown',
           changedAt: new Date().toISOString(),
           note: 'Cancelled by user',
-        }
+        },
+        // Deliberately empty: `move_status_history` is a server-only audit
+        // trail that no client in any app reads.
+        MOVE_STATUS_HISTORY_PERMISSIONS
       )
     } catch (err) {
       // Non-critical — the move itself is already cancelled.

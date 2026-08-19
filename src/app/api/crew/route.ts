@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
 import { getSessionUserId } from '@/lib/auth-session'
+import { crewPermissions } from '@/lib/doc-permissions'
 import { ID, Query } from 'node-appwrite'
 
 // GET - list crew members for the current mover
@@ -79,7 +80,11 @@ export async function POST(req: NextRequest) {
         phone,
         role: role || 'helper',
         isActive: true,
-      }
+      },
+      // `userId` is the session's auth account id; `moverProfileId` is the
+      // profile row's $id and is deliberately NOT used as a role here.
+      // Mirrors pickltmover/lib/crew.ts:addCrew.
+      crewPermissions(userId)
     )
 
     return NextResponse.json({ crewMember: doc })
