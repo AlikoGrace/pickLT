@@ -230,6 +230,22 @@ export default async ({ req, res, log, error }) => {
       .filter(m => m.distanceKm <= 15)
       .sort((a, b) => a.distanceKm - b.distanceKm);
 
+    // ── Double-booking gate ────────────────────────────────────────────────
+    //
+    // Found on device: a mover holding a scheduled move due to start in minutes
+    // was still offered an instant job. Availability was only ever "verified,
+    // online, recently seen, near enough, big enough truck" — never "actually
+    // free at that time".
+    //
+    // The test is OVERLAP, not proximity: a two-hour job offered seventy
+    // minutes before a scheduled start still collides. Each commitment becomes
+    // a time window; a mover whose window intersects this job is dropped.
+    // Mirrors pickltmobile/lib/scheduling-conflict.ts — keep in sync.
+    const available = await dropConflictedMovers(databases, inRange, move);
+    if (available.length < inRange.length) {
+      log(`conflict gate: ${inRange.length - available.length}/${inRange.length} movers dropped (already committed)`);
+    }
+
     // ── Capacity gate ──────────────────────────────────────────────────────
     //
     // Offering a job to a mover whose vehicle cannot hold it wastes their time
@@ -257,17 +273,17 @@ export default async ({ req, res, log, error }) => {
 
     const loadM3 = catalog.length > 0 ? loadedVolumeM3(move, catalog) : 0;
 
-    let candidates = inRange;
+    let candidates = available;
     let capacityGated = false;
     if (loadM3 > 0) {
-      const fitting = inRange.filter(m => capacityM3(m) >= loadM3);
+      const fitting = available.filter(m => capacityM3(m) >= loadM3);
       if (fitting.length > 0) {
         candidates = fitting;
         capacityGated = true;
-      } else if (inRange.length > 0) {
+      } else if (available.length > 0) {
         // Nobody nearby can carry it. Send to the biggest vehicles anyway so a
         // human can judge — a wrong estimate must not silently kill the move.
-        candidates = [...inRange].sort(
+        candidates = [...available].sort(
           (a, b) => capacityM3(b) - capacityM3(a)
         );
         error(
@@ -323,3 +339,95 @@ export default async ({ req, res, log, error }) => {
     return res.json({ error: err.message }, 500);
   }
 };
+
+// ── Scheduling-conflict helpers (mirror of lib/scheduling-conflict.ts) ───────
+const DEFAULT_MOVE_DURATION_MS = 90 * 60 * 1000;
+const CONFLICT_BUFFER_MS = Number(process.env.CONFLICT_BUFFER_MS || 30 * 60 * 1000);
+const UNDERWAY_SET = new Set([
+  'mover_en_route', 'mover_arrived', 'loading', 'in_transit',
+  'arrived_destination', 'unloading',
+]);
+const HOLDS_TIME = new Set([...UNDERWAY_SET, 'awaiting_payment', 'paid', 'mover_accepted']);
+
+function durationMsOf(move) {
+  const secs = move.routeDurationSeconds;
+  return typeof secs === 'number' && isFinite(secs) && secs > 0 ? secs * 1000 : DEFAULT_MOVE_DURATION_MS;
+}
+
+function scheduledStartMs(move) {
+  if (!move.moveDate) return null;
+  const base = new Date(move.moveDate);
+  if (isNaN(base.getTime())) return null;
+  const m = /^\s*(\d{1,2}):(\d{2})\s*(AM|PM)?\s*$/i.exec(move.arrivalWindow || '');
+  if (!m) return base.getTime();
+  let h = parseInt(m[1], 10);
+  const mins = parseInt(m[2], 10);
+  if (mins > 59) return base.getTime();
+  const period = (m[3] || '').toUpperCase();
+  if (period) {
+    if (h < 1 || h > 12) return base.getTime();
+    if (period === 'PM' && h !== 12) h += 12;
+    if (period === 'AM' && h === 12) h = 0;
+  } else if (h > 23) return base.getTime();
+  const isMidnight =
+    base.getUTCHours() === 0 && base.getUTCMinutes() === 0 && base.getUTCSeconds() === 0;
+  if (!isMidnight) return base.getTime();
+  const tz = process.env.PLATFORM_TZ || 'Europe/Berlin';
+  const wallAsUtc = Date.UTC(base.getUTCFullYear(), base.getUTCMonth(), base.getUTCDate(), 0, h * 60 + mins);
+  const offset = (t) => {
+    const dtf = new Intl.DateTimeFormat('en-US', {
+      timeZone: tz, hour12: false, year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', second: '2-digit',
+    });
+    const parts = {};
+    for (const p of dtf.formatToParts(new Date(t))) if (p.type !== 'literal') parts[p.type] = +p.value;
+    return Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour % 24, parts.minute, parts.second) - t;
+  };
+  const guess = wallAsUtc - offset(wallAsUtc);
+  return wallAsUtc - offset(guess);
+}
+
+function windowOf(move, nowMs) {
+  if (!HOLDS_TIME.has(move.status)) return null;
+  const len = durationMsOf(move);
+  if (move.moveCategory === 'scheduled' && move.status === 'mover_accepted') {
+    const start = scheduledStartMs(move);
+    if (start === null) return null;
+    return { start, end: start + len };
+  }
+  return { start: nowMs, end: nowMs + len };
+}
+
+/**
+ * Drop movers whose existing commitments overlap this job. One query for all
+ * candidates, filtered in memory — never one round trip per mover.
+ * Fail-open: a lookup error must never make a move unbookable.
+ */
+async function dropConflictedMovers(databases, candidates, candidateMove) {
+  if (candidates.length === 0) return candidates;
+  const now = Date.now();
+  const candLen = durationMsOf(candidateMove);
+  const candWindow = { start: now, end: now + candLen };
+  try {
+    const held = await databases.listDocuments(DATABASE_ID, MOVES_COLLECTION, [
+      Query.equal('moverProfileId', candidates.map(m => m.$id)),
+      Query.equal('status', [...HOLDS_TIME]),
+      Query.limit(200),
+    ]);
+    const busy = new Set();
+    for (const move of held.documents) {
+      if (move.$id === candidateMove.$id) continue;
+      const w = windowOf(move, now);
+      if (!w) continue;
+      if (w.start - CONFLICT_BUFFER_MS < candWindow.end && candWindow.start - CONFLICT_BUFFER_MS < w.end) {
+        const owner = !move.moverProfileId ? null
+          : typeof move.moverProfileId === 'string' ? move.moverProfileId : move.moverProfileId.$id;
+        if (owner) busy.add(owner);
+      }
+    }
+    return candidates.filter(m => !busy.has(m.$id));
+  } catch (e) {
+    error(`[broadcast] conflict gate failed, allowing all: ${e.message}`);
+    return candidates;
+  }
+}
