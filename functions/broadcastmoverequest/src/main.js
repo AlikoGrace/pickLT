@@ -389,8 +389,14 @@ function scheduledStartMs(move) {
 
 function windowOf(move, nowMs) {
   if (!HOLDS_TIME.has(move.status)) return null;
+  // ONLY SCHEDULED MOVES RESERVE TIME. Queueing instant jobs is deliberate
+  // (Problems.docx #2 built the "I'm on another move" notice for exactly that).
+  // Reserving time for instant moves made two now-starting windows collide
+  // every time, which silently filtered the mover out of discovery and left the
+  // queue-notice feature unreachable. Mirrors lib/scheduling-conflict.ts.
+  if (move.moveCategory !== 'scheduled') return null;
   const len = durationMsOf(move);
-  if (move.moveCategory === 'scheduled' && move.status === 'mover_accepted') {
+  if (move.status === 'mover_accepted') {
     const start = scheduledStartMs(move);
     if (start === null) return null;
     return { start, end: start + len };
