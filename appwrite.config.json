@@ -1274,6 +1274,13 @@
                     "required": false,
                     "array": false,
                     "default": false
+                },
+                {
+                    "key": "moverQueuedBehind",
+                    "type": "boolean",
+                    "required": false,
+                    "array": false,
+                    "default": null
                 }
             ],
             "indexes": []

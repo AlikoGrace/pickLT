@@ -55,6 +55,78 @@ function relId(v) {
   return typeof v === 'string' ? v : (v.$id ?? null);
 }
 
+// "The mover is physically on this job", as opposed to merely holding it.
+// Mirrors UNDERWAY_STATUSES in lib/queue-ux.ts — the shared source of truth,
+// which `acceptmove` and `cancelmove` also mirror. Drives
+// `moves.moverQueuedBehind`; keep the four in sync.
+const QUEUE_UNDERWAY = new Set([
+  'mover_en_route',
+  'mover_arrived',
+  'loading',
+  'in_transit',
+  'arrived_destination',
+  'unloading',
+  'awaiting_payment',
+  'paid',
+]);
+
+/**
+ * Restate `moverQueuedBehind` across everything this mover still holds.
+ *
+ * That flag says "the mover who accepted your move was already partway through
+ * another job". It lives on the WAITING client's own move row because that
+ * client cannot see the mover's other jobs — it has no read permission on
+ * them — so only the server can tell it. Which means every time the mover's
+ * queue changes shape, the server has to restate it:
+ *
+ *   - the blocking job hits `completed` (or is cancelled) → it drops out of the
+ *     query below, nothing is underway any more, and the waiting client's
+ *     screen stops saying "finishing another job" instead of waiting for the
+ *     next accept to correct it;
+ *   - the mover presses Start Route on one of two accepted jobs → that one is
+ *     now underway, so the OTHER one must start saying it.
+ *
+ * One query, and it writes only rows whose flag is actually wrong — a mover
+ * holding a single job (the overwhelming case) costs one list and no writes.
+ *
+ * FAIL-OPEN: this is cosmetic state on someone else's move. A failure here must
+ * never fail the status transition the mover just made, so every error is
+ * logged and swallowed. Mirrors `queuedBehindUpdates` in lib/queue-ux.ts.
+ */
+async function syncQueuedBehind(databases, moverProfileId, changed, log, error) {
+  if (!moverProfileId) return;
+  try {
+    const held = await databases.listDocuments(DATABASE_ID, MOVES_COLLECTION, [
+      Query.equal('moverProfileId', moverProfileId),
+      Query.equal('status', ['mover_accepted', ...QUEUE_UNDERWAY]),
+      Query.limit(50),
+    ]);
+    // The row we just wrote may still read back at its old status, so take our
+    // own word for it rather than the query's.
+    const rows = held.documents.map((m) =>
+      m.$id === changed.moveId ? { ...m, status: changed.newStatus } : m,
+    );
+    const anyUnderway = (exceptId) =>
+      rows.some((m) => m.$id !== exceptId && QUEUE_UNDERWAY.has(m.status));
+
+    await Promise.all(
+      rows
+        .filter((m) => m.status === 'mover_accepted' && m.$id !== changed.moveId)
+        .filter((m) => (m.moverQueuedBehind ?? false) !== anyUnderway(m.$id))
+        .map((m) =>
+          databases
+            .updateDocument(DATABASE_ID, MOVES_COLLECTION, m.$id, {
+              moverQueuedBehind: anyUnderway(m.$id),
+            })
+            .then(() => log(`moverQueuedBehind=${anyUnderway(m.$id)} on queued move ${m.$id}`))
+            .catch((e) => error(`queued-behind sync: ${m.$id} not updated: ${e.message}`)),
+        ),
+    );
+  } catch (e) {
+    error(`queued-behind sync failed for mover ${moverProfileId}: ${e.message}`);
+  }
+}
+
 // Status → pushable notification type. Anything not listed pushes as `system`
 // (silent). Keep the pushable values in step with sendpush PUSHABLE_TYPES and
 // the notifications.type enum.
@@ -137,8 +209,18 @@ export default async ({ req, res, log, error }) => {
     const nowIso = new Date().toISOString();
     if (newStatus === 'completed') updates.completedAt = nowIso;
     if (newStatus === 'paid') updates.paidAt = nowIso;
+    // Leaving `mover_accepted` means the mover has pressed Start Route (or the
+    // job has gone away): either way this move is no longer QUEUED behind
+    // another, so its client's ETA panel must stop apologising. Folded into the
+    // same write as the status so the client's realtime subscription — which
+    // fires on this row — can never see the two disagree.
+    if (currentStatus === 'mover_accepted') updates.moverQueuedBehind = false;
 
     await databases.updateDocument(DATABASE_ID, MOVES_COLLECTION, moveId, updates);
+
+    // ...and restate the flag on the mover's OTHER waiting jobs, which this
+    // transition may have just freed (or just blocked). Fail-open by contract.
+    await syncQueuedBehind(databases, profile.$id, { moveId, newStatus }, log, error);
 
     // Status history (changedBy is the authenticated caller, not body-supplied).
     await databases.createDocument(DATABASE_ID, MOVE_STATUS_HISTORY_COLLECTION, ID.unique(), {
