@@ -20,6 +20,7 @@ const COUNTRY_CODES: Record<string, string> = {
   belgium: 'BE', be: 'BE', poland: 'PL', polska: 'PL', pl: 'PL',
   'united kingdom': 'GB', uk: 'GB', gb: 'GB',
   'united states': 'US', usa: 'US', us: 'US',
+  ghana: 'GH', gh: 'GH',
   russia: 'RU', ru: 'RU', belarus: 'BY', by: 'BY',
   iran: 'IR', ir: 'IR', syria: 'SY', sy: 'SY',
   'north korea': 'KP', kp: 'KP', cuba: 'CU', cu: 'CU',

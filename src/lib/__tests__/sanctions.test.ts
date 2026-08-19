@@ -15,6 +15,13 @@ describe('countryToIso2', () => {
     expect(countryToIso2('North Korea')).toBe('KP')
   })
 
+  it('maps Ghana, including casing and whitespace variants', () => {
+    expect(countryToIso2('Ghana')).toBe('GH')
+    expect(countryToIso2('ghana')).toBe('GH')
+    expect(countryToIso2('  GHANA  ')).toBe('GH')
+    expect(countryToIso2('gh')).toBe('GH')
+  })
+
   it('passes through bare ISO2 codes', () => {
     expect(countryToIso2('ru')).toBe('RU')
     expect(countryToIso2('IR')).toBe('IR')
@@ -40,6 +47,18 @@ describe('isSanctionedCountry', () => {
   it('allows operating countries', () => {
     expect(isSanctionedCountry('Germany', LIST)).toBe(false)
     expect(isSanctionedCountry('France', LIST)).toBe(false)
+  })
+
+  it('does not sanction Ghana — it resolves but is not on the deny list', () => {
+    expect(countryToIso2('Ghana')).toBe('GH')
+    expect(isSanctionedCountry('Ghana', LIST)).toBe(false)
+    expect(isSanctionedCountry('gh', LIST)).toBe(false)
+  })
+
+  it('still blocks every listed country after the map change', () => {
+    for (const name of ['Russia', 'Belarus', 'Iran', 'Syria', 'North Korea', 'Cuba']) {
+      expect(isSanctionedCountry(name, LIST)).toBe(true)
+    }
   })
 
   it('never blocks unknown countries or malformed lists', () => {
