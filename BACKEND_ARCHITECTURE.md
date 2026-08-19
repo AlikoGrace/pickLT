@@ -854,3 +854,39 @@ Each function below needs to be created in the Appwrite Console and linked to th
 4. Add analytics and monitoring
 5. Performance optimization
 6. Error handling and edge cases
+
+---
+
+## 2026-08-19 — `processpayment` source removed (deployments stay, disabled)
+
+**Decision, deliberate — do not "restore" this.** `processpayment` took `moveId`,
+`clientId` and `amount` straight from the request body with **no authentication of
+any kind** and wrote a `completed` payment row plus a `paid` move status. Anyone
+who could reach it could mark any move paid, for any client, for any amount.
+
+It was already decommissioned in practice: no client code path called it
+(`ENV.FN_PROCESS_PAYMENT` was declared and never referenced), payments settle via
+`chargemove` (card) and `confirmpayment` (cash), and `pickLT/src/lib/constants.ts`
+records it as intentionally absent. What remained was a loaded gun on disk: the
+deployable source still existed in `pickltmobile/`, `pickltmover/` and `pickLT/`,
+and `pickltmover`/`pickLT` still carried a `functions[]` entry with
+`"enabled": true`, so a routine `appwrite push` would have stood it back up.
+
+Removed in this change:
+
+- `functions/processpayment/` (source) — `pickltmobile`, `pickltmover`, `pickLT`
+- the `functions[]` entries — `pickltmover/appwrite.config.json` (`$id:
+  processpayment`) and `pickLT/appwrite.config.json` (`$id:
+  6995a66900354bc64f62`, which was `execute: ["any"]` — callable unauthenticated)
+- `ENV.FN_PROCESS_PAYMENT` from `lib/env.ts` and
+  `EXPO_PUBLIC_FN_PROCESS_PAYMENT` from `.env.local` in both mobile repos
+
+**The two Appwrite deployments were deliberately left in place.** Both the legacy
+id `6995a66900354bc64f62` and the name-id `processpayment` were verified as
+`enabled: false` with `execute: []`, so no client can reach either. They are kept
+(not deleted) so the historical execution logs and any payment rows traceable to
+them survive. With the config entries gone, a future `appwrite push` no longer
+re-enables them.
+
+Historical references in `.agent/plans/*.md` and earlier PROGRESS entries are left
+as written — they are the record of how this got built, not live wiring.
