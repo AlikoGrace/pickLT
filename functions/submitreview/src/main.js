@@ -12,6 +12,20 @@ const MAX_COMMENT_LENGTH = 1000;
 const relId = (v) => (typeof v === 'string' ? v : v?.$id ?? null);
 
 export default async ({ req, res, log, error }) => {
+  // Startup assertion. A missing id used to be swallowed by a guarded
+  // `if (VAR)` and the function would silently do nothing; name it instead.
+  const missingEnv = [
+    'APPWRITE_COLLECTION_MOVER_PROFILES',
+    'APPWRITE_COLLECTION_MOVES',
+    'APPWRITE_COLLECTION_NOTIFICATIONS',
+    'APPWRITE_COLLECTION_REVIEWS',
+    'APPWRITE_DATABASE_ID',
+  ].filter((k) => !process.env[k]);
+  if (missingEnv.length) {
+    error(`[submitreview] missing env: ${missingEnv.join(', ')}`);
+    return res.json({ error: 'misconfigured' }, 500);
+  }
+
   const client = new Client()
     .setEndpoint(process.env.APPWRITE_FUNCTION_API_ENDPOINT)
     .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID)

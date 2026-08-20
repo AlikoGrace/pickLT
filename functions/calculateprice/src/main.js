@@ -203,6 +203,19 @@ async function loadOverrides(databases, error) {
 }
 
 export default async ({ req, res, log, error }) => {
+  // Startup assertion. A missing id used to be swallowed by a guarded
+  // `if (VAR)` and the function would silently do nothing; name it instead.
+  // APPWRITE_API_KEY is optional: falls back to the dynamic per-execution key.
+  const missingEnv = [
+    'APPWRITE_COLLECTION_INVENTORY_CATALOG',
+    'APPWRITE_COLLECTION_MOVES',
+    'APPWRITE_DATABASE_ID',
+  ].filter((k) => !process.env[k]);
+  if (missingEnv.length) {
+    error(`[calculateprice] missing env: ${missingEnv.join(', ')}`);
+    return res.json({ error: 'misconfigured' }, 500);
+  }
+
   const client = new Client()
     .setEndpoint(process.env.APPWRITE_FUNCTION_API_ENDPOINT)
     .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID)

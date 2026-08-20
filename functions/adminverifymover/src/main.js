@@ -7,6 +7,18 @@ const NOTIFICATIONS_COLLECTION = process.env.APPWRITE_COLLECTION_NOTIFICATIONS;
 const VALID_STATUSES = ['verified', 'rejected', 'suspended'];
 
 export default async ({ req, res, log, error }) => {
+  // Startup assertion. A missing id used to be swallowed by a guarded
+  // `if (VAR)` and the function would silently do nothing; name it instead.
+  const missingEnv = [
+    'APPWRITE_COLLECTION_MOVER_PROFILES',
+    'APPWRITE_COLLECTION_NOTIFICATIONS',
+    'APPWRITE_DATABASE_ID',
+  ].filter((k) => !process.env[k]);
+  if (missingEnv.length) {
+    error(`[adminverifymover] missing env: ${missingEnv.join(', ')}`);
+    return res.json({ error: 'misconfigured' }, 500);
+  }
+
   const client = new Client()
     .setEndpoint(process.env.APPWRITE_FUNCTION_API_ENDPOINT)
     .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID)

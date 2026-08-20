@@ -131,6 +131,21 @@ function haversineKm(lat1, lon1, lat2, lon2) {
 }
 
 export default async ({ req, res, log, error }) => {
+  // Startup assertion. A missing id used to be swallowed by a guarded
+  // `if (VAR)` and the function would silently do nothing; name it instead.
+  // CONFLICT_BUFFER_MS is optional: the code supplies a numeric default.
+  const missingEnv = [
+    'APPWRITE_COLLECTION_INVENTORY_CATALOG',
+    'APPWRITE_COLLECTION_MOVER_PROFILES',
+    'APPWRITE_COLLECTION_MOVES',
+    'APPWRITE_COLLECTION_MOVE_REQUESTS',
+    'APPWRITE_DATABASE_ID',
+  ].filter((k) => !process.env[k]);
+  if (missingEnv.length) {
+    error(`[broadcastmoverequest] missing env: ${missingEnv.join(', ')}`);
+    return res.json({ error: 'misconfigured' }, 500);
+  }
+
   const client = new Client()
     .setEndpoint(process.env.APPWRITE_FUNCTION_API_ENDPOINT)
     .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID)

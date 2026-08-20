@@ -154,6 +154,22 @@ export default async ({ req, res, log, error }) => {
     return res.json({ ok: true, warm: true });
   }
 
+  // Startup assertion. A missing id used to be swallowed by a guarded
+  // `if (VAR)` and the function would silently do nothing; name it instead.
+  // After the keep-warm short-circuit: a scheduled ping does no work and
+  // must not turn a misconfiguration into a loop of failed executions.
+  const missingEnv = [
+    'APPWRITE_COLLECTION_MOVER_PROFILES',
+    'APPWRITE_COLLECTION_MOVES',
+    'APPWRITE_COLLECTION_MOVE_STATUS_HISTORY',
+    'APPWRITE_COLLECTION_NOTIFICATIONS',
+    'APPWRITE_DATABASE_ID',
+  ].filter((k) => !process.env[k]);
+  if (missingEnv.length) {
+    error(`[updatemovestatus] missing env: ${missingEnv.join(', ')}`);
+    return res.json({ error: 'misconfigured' }, 500);
+  }
+
   const client = new Client()
     .setEndpoint(process.env.APPWRITE_FUNCTION_API_ENDPOINT)
     .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID)
