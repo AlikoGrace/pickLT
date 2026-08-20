@@ -30,7 +30,12 @@ export default async ({ req, res, log, error }) => {
   }
 
   try {
-    const body = JSON.parse(req.body || '{}');
+    let body;
+    try {
+      body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
+    } catch {
+      return res.json({ error: 'Invalid JSON body' }, 400);
+    }
     const { moverProfileId, newStatus, adminId, reason } = body;
 
     if (!moverProfileId || !newStatus || !adminId) {
@@ -63,24 +68,25 @@ export default async ({ req, res, log, error }) => {
       ID.unique(),
       {
         userId,
-        // `verification` is pushable so the mover is alerted the moment an admin
-        // verifies/rejects/suspends them (verification unlocks accepting jobs).
+        // `verification` is in sendpush's PUSHABLE_TYPES and in the live
+        // notifications.type enum; `system` is in neither, so setting it here
+        // silently dropped the push telling a mover they had been verified,
+        // rejected or suspended — the one notification that decides whether
+        // they can accept work at all.
         type: 'verification',
         title: `Profile ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)}`,
         body: statusMessages[newStatus],
         data: JSON.stringify({ moverProfileId, newStatus }),
         isRead: false,
       },
-      // The mover reads their own verification notice and marks it read. Without
-      // these the row is readable by nobody once `notifications` stops granting
-      // read("users") — see .agent/plans/appwrite-permissions-hardening.md §2.
-      userId
-        ? [
-            Permission.read(Role.user(userId)),
-            Permission.update(Role.user(userId)),
-            Permission.delete(Role.user(userId)),
-          ]
-        : undefined
+      [
+        // `userId` here was resolved off mover_profiles.userId above —
+        // mover_profiles.$id is NOT an auth account id, notifications.userId
+        // is. `update` is required by markAsRead / markAllAsRead.
+        Permission.read(Role.user(userId)),
+        Permission.update(Role.user(userId)),
+        Permission.delete(Role.user(userId)),
+      ]
     );
 
     log(`Mover ${moverProfileId} status updated to ${newStatus} by admin ${adminId}`);

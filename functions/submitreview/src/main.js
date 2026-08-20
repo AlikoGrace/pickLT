@@ -12,8 +12,22 @@ const MAX_COMMENT_LENGTH = 1000;
 const relId = (v) => (typeof v === 'string' ? v : v?.$id ?? null);
 
 export default async ({ req, res, log, error }) => {
+  // Keep-warm ping (scheduled trigger): short-circuit before any work.
+  //
+  // A review is submitted once per completed move, so this container was
+  // always cold — and a cold start plus seven sequential Appwrite round trips
+  // ran past the 30 s synchronous ceiling. Production executions were failing
+  // with "Synchronous function execution timed out", which is what the app
+  // surfaced as "couldn't submit your review". Pair this with the schedule in
+  // appwrite.config.json; the short-circuit alone does nothing.
+  if (req.headers['x-appwrite-trigger'] === 'schedule') {
+    return res.json({ warm: true });
+  }
+
   // Startup assertion. A missing id used to be swallowed by a guarded
   // `if (VAR)` and the function would silently do nothing; name it instead.
+  // After the keep-warm short-circuit: a scheduled ping does no work and
+  // must not turn a misconfiguration into a loop of failed executions.
   const missingEnv = [
     'APPWRITE_COLLECTION_MOVER_PROFILES',
     'APPWRITE_COLLECTION_MOVES',
@@ -71,12 +85,38 @@ export default async ({ req, res, log, error }) => {
     }
     const commentValue = comment ? String(comment).slice(0, MAX_COMMENT_LENGTH) : null;
 
-    // The move decides who may review it and who is being reviewed.
-    let move;
-    try {
-      move = await databases.getDocument(DATABASE_ID, MOVES_COLLECTION, moveId);
-    } catch {
+    // The move decides who may review it and who is being reviewed. This
+    // collection is a new dependency of this function — without the variable
+    // every getDocument below would throw and every reviewer would be told
+    // "Move not found", so fail loudly on the misconfiguration instead.
+    if (!MOVES_COLLECTION) {
+      error('submitreview: APPWRITE_COLLECTION_MOVES is not set');
+      return res.json({ error: 'Reviews are temporarily unavailable' }, 500);
+    }
+
+    // The move fetch and the duplicate check are independent — both are keyed
+    // only on values we already have — so overlap them. Every Appwrite Cloud
+    // round trip costs a few hundred ms and this handler is a tap the user
+    // watches a spinner on.
+    const [moveResult, existingResult] = await Promise.allSettled([
+      databases.getDocument(DATABASE_ID, MOVES_COLLECTION, moveId),
+      databases.listDocuments(DATABASE_ID, REVIEWS_COLLECTION, [
+        Query.equal('moveId', moveId),
+        Query.equal('reviewerId', reviewerId),
+        Query.limit(1),
+      ]),
+    ]);
+
+    if (moveResult.status === 'rejected') {
       return res.json({ error: 'Move not found' }, 404);
+    }
+    const move = moveResult.value;
+
+    // A failed duplicate check must not pass silently — the unique-ish guard is
+    // the only thing stopping one client stacking reviews on a mover.
+    if (existingResult.status === 'rejected') {
+      error(`submitreview: duplicate check failed: ${existingResult.reason?.message}`);
+      return res.json({ error: 'Could not submit your review. Please try again.' }, 500);
     }
 
     if (relId(move.clientId) !== reviewerId) {
@@ -92,36 +132,31 @@ export default async ({ req, res, log, error }) => {
       return res.json({ error: 'This move has no assigned mover to review' }, 400);
     }
 
-    // Check if review already exists for this move
-    const existing = await databases.listDocuments(
-      DATABASE_ID,
-      REVIEWS_COLLECTION,
-      [Query.equal('moveId', moveId), Query.equal('reviewerId', reviewerId)]
-    );
-
-    if (existing.documents.length > 0) {
+    if (existingResult.value.documents.length > 0) {
       return res.json({ error: 'You have already reviewed this move' }, 400);
     }
 
-    // The reviewed mover is resolved BEFORE the write, because the row has to
-    // name them in its own permissions — `mover_profiles.$id` is not an auth id,
-    // so it has to be hopped through `userId`. Once the `reviews` collection
-    // stops granting read("users"), a row written without these grants is
-    // readable by nobody. See .agent/plans/appwrite-permissions-hardening.md §2.
-    const moverProfile = await databases.getDocument(
-      DATABASE_ID,
-      MOVER_PROFILES_COLLECTION,
-      moverProfileId
-    );
-    const moverUserId =
-      typeof moverProfile.userId === 'string' ? moverProfile.userId : moverProfile.userId?.$id;
+    // Read the mover's existing reviews and their profile together. The profile
+    // read is what turns moverProfileId — which is NOT an auth account id —
+    // into the mover's Role.user(...), via the userId relationship; the review
+    // row cannot be written until that is known, so it no longer shares the
+    // Promise.all.
+    const [priorReviews, reviewedProfile] = await Promise.all([
+      databases.listDocuments(DATABASE_ID, REVIEWS_COLLECTION, [
+        Query.equal('moverProfileId', moverProfileId),
+        Query.limit(1000),
+      ]),
+      databases.getDocument(DATABASE_ID, MOVER_PROFILES_COLLECTION, moverProfileId),
+    ]);
+    const reviewedMoverUserId = relId(reviewedProfile.userId);
 
+    // The duplicate check above already proved this review isn't in the table
+    // yet, so the new rating can be folded into the tally locally rather than
+    // re-reading the collection after the write.
     const reviewPermissions = [Permission.read(Role.user(reviewerId))];
-    if (moverUserId && moverUserId !== reviewerId) {
-      reviewPermissions.push(Permission.read(Role.user(moverUserId)));
+    if (reviewedMoverUserId) {
+      reviewPermissions.push(Permission.read(Role.user(reviewedMoverUserId)));
     }
-
-    // Create review
     const review = await databases.createDocument(
       DATABASE_ID,
       REVIEWS_COLLECTION,
@@ -133,56 +168,53 @@ export default async ({ req, res, log, error }) => {
         rating: ratingValue,
         comment: commentValue,
       },
-      reviewPermissions
+      // The public star rating comes from the aggregate mover_profiles.rating,
+      // so only the two parties need to read the row itself.
+      reviewPermissions,
     );
 
-    // Recalculate mover's average rating
-    const allReviews = await databases.listDocuments(
-      DATABASE_ID,
-      REVIEWS_COLLECTION,
-      [Query.equal('moverProfileId', moverProfileId), Query.limit(1000)]
-    );
-
+    // The list may or may not already include the row we just created,
+    // depending on which request landed first — exclude it by id and add the
+    // known rating back so the average is right either way.
+    const prior = priorReviews.documents.filter((r) => r.$id !== review.$id);
     // Number() guards against any legacy string ratings already in the table.
-    const totalRating = allReviews.documents.reduce(
-      (sum, r) => sum + (Number(r.rating) || 0),
-      0
-    );
-    const avgRating = allReviews.documents.length
-      ? Math.round((totalRating / allReviews.documents.length) * 10) / 10
-      : 0;
+    const totalRating =
+      prior.reduce((sum, r) => sum + (Number(r.rating) || 0), 0) + ratingValue;
+    const avgRating = Math.round((totalRating / (prior.length + 1)) * 10) / 10;
 
-    await databases.updateDocument(
+    // updateDocument returns the updated document, so this doubles as the
+    // profile read the notification below needs — one round trip, not two.
+    const moverProfile = await databases.updateDocument(
       DATABASE_ID,
       MOVER_PROFILES_COLLECTION,
       moverProfileId,
       { rating: avgRating }
     );
 
-    // Notify mover (profile already resolved above, for the review's grants)
-    await databases.createDocument(
-      DATABASE_ID,
-      NOTIFICATIONS_COLLECTION,
-      ID.unique(),
-      {
-        userId: moverUserId,
-        type: 'review',
-        title: 'New Review',
-        body: `You received a ${rating}-star review${comment ? `: "${comment.substring(0, 100)}"` : '.'}`,
-        data: JSON.stringify({ reviewId: review.$id, moveId, rating }),
-        isRead: false,
-      },
-      // The addressee reads it, and marks it read/deletes it from the app.
-      moverUserId
-        ? [
-            Permission.read(Role.user(moverUserId)),
-            Permission.update(Role.user(moverUserId)),
-            Permission.delete(Role.user(moverUserId)),
-          ]
-        : undefined
-    );
+    // Notify mover. Best-effort: the review is saved and the rating is updated,
+    // and neither should be undone because a notification row failed to write.
+    try {
+      const moverUserId = relId(moverProfile.userId);
+      if (moverUserId) {
+        await databases.createDocument(DATABASE_ID, NOTIFICATIONS_COLLECTION, ID.unique(), {
+          userId: moverUserId,
+          type: 'review',
+          title: 'New Review',
+          body: `You received a ${ratingValue}-star review${commentValue ? `: "${commentValue.substring(0, 100)}"` : '.'}`,
+          data: JSON.stringify({ reviewId: review.$id, moveId, rating: ratingValue }),
+          isRead: false,
+        }, [
+          // Addressee only. `update` is needed for markAsRead / markAllAsRead.
+          Permission.read(Role.user(moverUserId)),
+          Permission.update(Role.user(moverUserId)),
+          Permission.delete(Role.user(moverUserId)),
+        ]);
+      }
+    } catch (e) {
+      error(`submitreview: mover notification failed: ${e.message}`);
+    }
 
-    log(`Review submitted for mover ${moverProfileId}: ${rating} stars`);
+    log(`Review submitted for mover ${moverProfileId}: ${ratingValue} stars`);
 
     return res.json({ success: true, review, newAverageRating: avgRating });
   } catch (err) {
