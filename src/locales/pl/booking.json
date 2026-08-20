@@ -1,0 +1,351 @@
+{
+  "field": {
+    "arrivalTime": {
+      "hour": {
+        "label": "Godz."
+      },
+      "minute": {
+        "label": "Min"
+      },
+      "period": {
+        "label": "Pora"
+      },
+      "sheet": {
+        "title": "Preferowana godzina przyjazdu"
+      }
+    },
+    "contact": {
+      "label": "Kontakt"
+    },
+    "crewSize": {
+      "label": "Liczebność ekipy"
+    },
+    "distance": {
+      "label": "Odległość"
+    },
+    "dropoff": {
+      "label": "Miejsce docelowe"
+    },
+    "elevator": {
+      "label": "Czy jest winda?"
+    },
+    "inventory": {
+      "label": "Spis rzeczy"
+    },
+    "moveDate": {
+      "label": "Data przeprowadzki",
+      "placeholder": "Wybierz datę",
+      "sheet": {
+        "title": "Wybierz datę przeprowadzki"
+      }
+    },
+    "moveType": {
+      "label": "Rodzaj przeprowadzki",
+      "placeholder": "Wybierz rodzaj przeprowadzki",
+      "sheet": {
+        "title": "Wybierz rodzaj przeprowadzki"
+      }
+    },
+    "pickup": {
+      "label": "Odbiór"
+    },
+    "preferredTime": {
+      "label": "Preferowana pora",
+      "placeholder": "Wybierz przedział czasowy",
+      "sheet": {
+        "title": "Preferowana pora"
+      },
+      "value": {
+        "label": "{{label}} ({{range}})"
+      }
+    },
+    "selectDate": {
+      "helper": "Kiedy chcesz się przeprowadzić?",
+      "label": "Wybierz datę"
+    },
+    "vehicle": {
+      "label": "Pojazd"
+    }
+  },
+  "floorLevel": {
+    "floor1": {
+      "option": "1. piętro"
+    },
+    "floor2": {
+      "option": "2. piętro"
+    },
+    "floor3": {
+      "option": "3. piętro"
+    },
+    "floor4": {
+      "option": "4. piętro"
+    },
+    "floor5plus": {
+      "option": "5. piętro lub wyżej"
+    },
+    "ground": {
+      "option": "Parter"
+    },
+    "numbered": {
+      "option": "{{n}}. piętro"
+    }
+  },
+  "homeType": {
+    "apartment": {
+      "option": "Mieszkanie"
+    },
+    "house": {
+      "option": "Dom"
+    },
+    "office": {
+      "option": "Biuro"
+    },
+    "other": {
+      "option": "Inne"
+    },
+    "storage": {
+      "option": "Magazyn"
+    }
+  },
+  "location": {
+    "gpsFailed": {
+      "error": "Nie udało się ustalić Twojej lokalizacji."
+    },
+    "minQuery": {
+      "helper_few": "Wpisz co najmniej {{count}} znaki",
+      "helper_many": "Wpisz co najmniej {{count}} znaków",
+      "helper_one": "Wpisz co najmniej {{count}} znak",
+      "helper_other": "Wpisz co najmniej {{count}} znaku"
+    },
+    "noResults": {
+      "empty": "Nie znaleziono lokalizacji"
+    },
+    "permissionDenied": {
+      "error": "Odmówiono dostępu do lokalizacji. Włącz go w Ustawieniach."
+    },
+    "search": {
+      "placeholder": "Szukaj miejsca, obiektu lub adresu"
+    },
+    "searchIdle": {
+      "empty": "Zacznij pisać, aby wyszukać adres."
+    },
+    "selectPlaceholder": {
+      "placeholder": "Wybierz lokalizację: {{field}}"
+    },
+    "sheet": {
+      "title": "Lokalizacja: {{field}}"
+    },
+    "useCurrent": {
+      "cta": "Użyj bieżącej lokalizacji"
+    }
+  },
+  "map": {
+    "dropoff": {
+      "placeholder": "Miejsce dostawy"
+    },
+    "pickup": {
+      "placeholder": "Miejsce odbioru"
+    },
+    "preview": {
+      "empty": "Podgląd mapy"
+    }
+  },
+  "mapPicker": {
+    "confirm": {
+      "cta": "Potwierdź lokalizację"
+    },
+    "default": {
+      "title": "Wybierz lokalizację"
+    },
+    "locating": {
+      "helper": "Ustalanie Twojej lokalizacji…"
+    },
+    "reverseGeocoding": {
+      "helper": "Pobieranie adresu…"
+    },
+    "search": {
+      "placeholder": "Szukaj lokalizacji…"
+    },
+    "tapHint": {
+      "helper": "Dotknij mapy, aby wybrać lokalizację"
+    },
+    "useCurrent": {
+      "cta": "Użyj mojej bieżącej lokalizacji"
+    }
+  },
+  "moveType": {
+    "light": {
+      "body": "Małe przeprowadzki realizujemy małym busem.",
+      "short": "Mała",
+      "subtitle": "Idealna przy niewielkim ładunku — kartony, pojedyncze meble lub kawalerka.",
+      "title": "Mała przeprowadzka"
+    },
+    "premium": {
+      "body": "Przeprowadzki premium realizujemy większymi pojazdami i ekipą liczącą 2 osoby lub więcej.",
+      "short": "Premium",
+      "subtitle": "Pełna obsługa dużych domów — pakowanie, załadunek, transport i rozładunek.",
+      "title": "Przeprowadzka premium"
+    },
+    "regular": {
+      "body": "Standardowe przeprowadzki realizujemy średnim pojazdem i 2-osobową ekipą.",
+      "short": "Standardowa",
+      "subtitle": "Dobra dla mieszkań 2–3-pokojowych ze zwykłymi meblami i sprzętem AGD.",
+      "title": "Standardowa przeprowadzka"
+    }
+  },
+  "packingLevel": {
+    "full": {
+      "helper": "Przewoźnicy pakują wszystko za mnie",
+      "option": "Pełne pakowanie"
+    },
+    "none": {
+      "helper": "Sam wszystko spakuję",
+      "option": "Bez pomocy w pakowaniu"
+    },
+    "partial": {
+      "helper": "Przewoźnicy pakują tylko rzeczy delikatne i wartościowe",
+      "option": "Pakowanie rzeczy delikatnych"
+    },
+    "unpacking": {
+      "helper": "Przewoźnicy pakują przy odbiorze I rozpakowują w miejscu docelowym",
+      "option": "Pakowanie i rozpakowanie"
+    }
+  },
+  "parking": {
+    "atBuilding": {
+      "option": "Parking bezpośrednio przy budynku"
+    },
+    "directlyInFront": {
+      "option": "Parking bezpośrednio przed wejściem"
+    },
+    "driveway": {
+      "option": "Podjazd"
+    },
+    "limited": {
+      "option": "Ograniczone miejsca parkingowe"
+    },
+    "loadingZone": {
+      "option": "Wymagana strefa załadunku (Haltverbot)"
+    },
+    "lot": {
+      "option": "Parking"
+    },
+    "nearby": {
+      "option": "Parking w pobliżu (0–20 m)"
+    },
+    "none": {
+      "option": "Brak miejsca do parkowania"
+    },
+    "street": {
+      "option": "Parkowanie na ulicy"
+    },
+    "underground": {
+      "option": "Wjazd do garażu podziemnego"
+    }
+  },
+  "payment": {
+    "method": {
+      "cash": {
+        "label": "Gotówka"
+      }
+    },
+    "section": {
+      "title": "Płatność"
+    }
+  },
+  "photos": {
+    "chooseGallery": {
+      "cta": "Wybierz z galerii"
+    },
+    "formatHint": {
+      "subtitle": "PNG, JPG do 3 MB"
+    },
+    "sourceSheet": {
+      "title": "Dodaj zdjęcie"
+    },
+    "takePhoto": {
+      "cta": "Zrób zdjęcie"
+    }
+  },
+  "pricing": {
+    "baseRate": {
+      "label": "Stawka podstawowa ({{moveType}})"
+    },
+    "storage": {
+      "label": "Przechowywanie"
+    },
+    "subtotal": {
+      "label": "Suma częściowa"
+    },
+    "total": {
+      "label": "Razem"
+    },
+    "vat": {
+      "label": "VAT ({{rate}})"
+    }
+  },
+  "services": {
+    "applianceConnect": {
+      "helper": "Ponownie podłączamy sprzęt w nowym miejscu",
+      "label": "Podłączenie sprzętu AGD",
+      "option": "Podłączenie sprzętu AGD"
+    },
+    "applianceDisconnect": {
+      "helper": "Odłączamy pralkę, zmywarkę itp.",
+      "label": "Odłączenie sprzętu AGD",
+      "option": "Odłączenie sprzętu AGD"
+    },
+    "disposal": {
+      "helper": "Wywozimy niepotrzebne rzeczy do miejskiego punktu zbiórki odpadów",
+      "label": "Utylizacja",
+      "option": "Utylizacja"
+    },
+    "furnitureAssembly": {
+      "helper": "Montujemy meble w nowym miejscu",
+      "label": "Montaż mebli",
+      "option": "Montaż mebli"
+    },
+    "furnitureDisassembly": {
+      "helper": "Demontujemy łóżka i stoły przed załadunkiem",
+      "label": "Demontaż mebli",
+      "option": "Demontaż mebli"
+    },
+    "moveoutCleaning": {
+      "helper": "Sprzątanie pod adresem odbioru po załadunku",
+      "label": "Sprzątanie po wyprowadzce",
+      "option": "Sprzątanie po wyprowadzce"
+    },
+    "temporaryStorage": {
+      "helper": "Przechowujemy rzeczy między datą odbioru a dostawy",
+      "label": "Przechowywanie tymczasowe",
+      "option": "Przechowywanie tymczasowe"
+    },
+    "tvMountRemove": {
+      "helper": "Zdejmujemy telewizory z uchwytów ściennych przy odbiorze",
+      "label": "Demontaż uchwytu TV",
+      "option": "Demontaż uchwytu TV"
+    }
+  },
+  "timeSlot": {
+    "afternoon": {
+      "label": "Popołudnie"
+    },
+    "evening": {
+      "label": "Wieczór"
+    },
+    "morning": {
+      "label": "Rano"
+    }
+  },
+  "vehicle": {
+    "largeTruck": {
+      "label": "Duża ciężarówka"
+    },
+    "mediumTruck": {
+      "label": "Średnia ciężarówka"
+    },
+    "smallVan": {
+      "label": "Mały bus"
+    }
+  }
+}

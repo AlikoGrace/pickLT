@@ -4,7 +4,7 @@ import { Button } from '@/shared/Button'
 import Logo from '@/shared/Logo'
 import clsx from 'clsx'
 import { FC } from 'react'
-import CurrLangDropdown from './CurrLangDropdown'
+import LanguageDropdown from './LanguageDropdown'
 import HeaderAuthDropdown from './HeaderAuthDropdown'
 import HamburgerBtnMenu from './HamburgerBtnMenu'
 import MegaMenuPopover from './MegaMenuPopover'
@@ -41,7 +41,7 @@ const Header: FC<HeaderProps> = async ({ hasBorderBottom = true, className }) =>
               <HamburgerBtnMenu />
             </div>
             {/* <MegaMenuPopover megamenu={megamenu} featuredCategory={featuredCategory} /> */}
-            <CurrLangDropdown currencies={currencies} languages={languages} className="hidden md:block" />
+            <LanguageDropdown className="hidden md:block" />
             {/* <Button className="-mx-1 py-1.75!" color="light" href={'/add-listing/1'}>
               List your property
             </Button> */}

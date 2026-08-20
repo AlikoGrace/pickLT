@@ -1,0 +1,113 @@
+{
+  "category": {
+    "livingRoom": "Woonkamer",
+    "bedroom": "Slaapkamer",
+    "kitchen": "Keuken",
+    "office": "Kantoor",
+    "boxes": "Dozen",
+    "miscellaneous": "Diversen",
+    "special": "Bijzondere items"
+  },
+  "section": {
+    "special": {
+      "subtitle": "Deze items vereisen speciale behandeling en kunnen de prijs beïnvloeden."
+    },
+    "custom": {
+      "title": "Eigen items",
+      "empty": "Voeg items toe die hierboven niet staan."
+    }
+  },
+  "item": {
+    "customSuffix": "Eigen item",
+    "customName": {
+      "label": "{{name}} (eigen)"
+    },
+    "customTag": {
+      "label": "Eigen"
+    }
+  },
+  "search": {
+    "placeholder": "Zoek alle items",
+    "noMatch": {
+      "empty": "Geen items komen overeen met “{{query}}”. Voeg het hieronder toe als eigen item."
+    }
+  },
+  "customItem": {
+    "add": {
+      "cta": "Eigen item toevoegen"
+    },
+    "name": {
+      "label": "Naam",
+      "placeholder": "bijv. elektrische piano"
+    },
+    "quantity": {
+      "label": "Aantal"
+    },
+    "size": {
+      "label": "Geschatte grootte",
+      "small": {
+        "option": "Klein"
+      },
+      "medium": {
+        "option": "Middel"
+      },
+      "large": {
+        "option": "Groot"
+      },
+      "extraLarge": {
+        "option": "XL"
+      }
+    },
+    "weight": {
+      "label": "Geschat gewicht (kg)",
+      "placeholder": "bijv. 25"
+    },
+    "submit": {
+      "cta": "Item toevoegen"
+    }
+  },
+  "recommendation": {
+    "headline": {
+      "title": "{{prefix}}: {{tier}}"
+    },
+    "chosen": {
+      "label": "Uw verhuizing"
+    },
+    "suggested": {
+      "label": "Aanbevolen"
+    },
+    "itemCount": {
+      "label_one": "{{count}} item",
+      "label_other": "{{count}} items"
+    }
+  },
+  "upgrade": {
+    "headline": {
+      "title": "Deze verhuizing vereist nu"
+    },
+    "reason": {
+      "body": "Door “{{item}}” toe te voegen valt uw verhuizing nu onder {{tier}} — {{explanation}}"
+    },
+    "warnings": {
+      "title": "Items die dit niveau vereisen:"
+    }
+  },
+  "unavailable": {
+    "empty": {
+      "title": "Nog geen items beschikbaar",
+      "body": "Onze lijst met te verhuizen items wordt opgezet. Probeer het zo meteen opnieuw — bij een spoedverhuizing kunt u ons nog steeds bereiken."
+    },
+    "error": {
+      "title": "Kan de itemlijst niet laden",
+      "body": "Controleer uw verbinding en probeer het opnieuw."
+    }
+  },
+  "admin": {
+    "nameLabel": "Naam",
+    "nameHelper": "Engels is de terugval wanneer een vertaling ontbreekt.",
+    "translationsTitle": "Naamvertalingen",
+    "translationsHelper": "Laat leeg om de Engelse naam te gebruiken. Item-ID’s en categorieën worden nooit vertaald.",
+    "unknownCategoryTitle": "Niet-vertaalde categorie",
+    "unknownCategoryWarning": "“{{slug}}” is geen van de zeven vertaalde categorieën. Deze wordt in elke taal getoond als “{{label}}”, ook aan gebruikers die geen Engels lezen."
+  }
+}

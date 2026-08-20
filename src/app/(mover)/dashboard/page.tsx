@@ -7,6 +7,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import Avatar from '@/shared/Avatar'
+import { formatDateWith, formatMoney } from '@/lib/format'
 
 interface DashboardData {
   activeMoves: string[]
@@ -103,7 +104,9 @@ const DashboardPage = () => {
     pickupAddress: m.pickupAddress || '',
     dropoff: m.dropoffLabel || 'Dropoff',
     dropoffAddress: m.dropoffAddress || '',
-    date: m.scheduledDate ? new Date(m.scheduledDate).toLocaleDateString('en-DE', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '',
+    date: m.scheduledDate
+      ? formatDateWith(m.scheduledDate, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+      : '',
     status: mapApiMoveStatus(m.status),
     amount: m.estimatedPrice || 0,
     moveType: m.moveCategory ? m.moveCategory.charAt(0).toUpperCase() + m.moveCategory.slice(1) : 'Light',
@@ -148,7 +151,7 @@ const DashboardPage = () => {
     },
     {
       name: 'Earnings This Month',
-      value: `€${(dashboard?.earningsThisMonth ?? 0).toLocaleString()}`,
+      value: formatMoney(dashboard?.earningsThisMonth ?? 0, { compact: true }),
       icon: CurrencyEuroIcon,
       href: '/earnings',
       color: 'bg-neutral-500',
@@ -308,7 +311,7 @@ const DashboardPage = () => {
                     </h3>
                   </div>
                   <p className="text-xl font-bold text-green-600 dark:text-green-400 ml-2">
-                    €{move.amount}
+                    {formatMoney(move.amount, { compact: true })}
                   </p>
                 </div>
 

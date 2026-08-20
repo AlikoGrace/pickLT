@@ -1,0 +1,86 @@
+{
+  "gender": {
+    "female": {
+      "option": "Kobieta"
+    },
+    "male": {
+      "option": "Mężczyzna"
+    },
+    "other": {
+      "option": "Inna"
+    }
+  },
+  "helpCenter": {
+    "header": {
+      "title": "Centrum pomocy"
+    },
+    "search": {
+      "a11y": "Szukaj artykułów pomocy",
+      "placeholder": "Szukaj lokalizacji.."
+    }
+  },
+  "language": {
+    "active": "Aktywny",
+    "back": "Wróć",
+    "done": "Gotowe",
+    "others": "Inne",
+    "saveError": "Nie udało się zapisać języka. Spróbuj ponownie.",
+    "subtitle": "Wybierz język, którego chcesz używać w całej aplikacji.",
+    "suggested": "Sugerowane",
+    "title": "Język"
+  },
+  "menu": {
+    "appearance": {
+      "label": "Wygląd"
+    },
+    "changePassword": {
+      "label": "Zmień hasło"
+    },
+    "deleteAccount": {
+      "label": "Usuń konto"
+    },
+    "editProfile": {
+      "label": "Edytuj profil"
+    },
+    "help": {
+      "label": "Pomoc i wsparcie"
+    },
+    "language": {
+      "label": "Język"
+    },
+    "legal": {
+      "label": "Informacje prawne"
+    },
+    "logout": {
+      "label": "Wyloguj się"
+    },
+    "notifications": {
+      "label": "Powiadomienia"
+    },
+    "paymentAccount": {
+      "label": "Konto płatnicze"
+    },
+    "security": {
+      "label": "Bezpieczeństwo"
+    },
+    "yourCard": {
+      "label": "Twoja karta"
+    }
+  },
+  "privacyPolicy": {
+    "header": {
+      "title": "Prywatność i zasady"
+    }
+  },
+  "section": {
+    "general": {
+      "title": "Ogólne"
+    },
+    "payments": {
+      "title": "Płatności"
+    },
+    "preferences": {
+      "title": "Preferencje"
+    }
+  }
+}

@@ -1,0 +1,179 @@
+{
+  "action": {
+    "back": {
+      "a11y": "Terug",
+      "cta": "Terug"
+    },
+    "backToHome": {
+      "a11y": "Terug naar start"
+    },
+    "call": {
+      "cta": "Bellen"
+    },
+    "cancel": {
+      "cta": "Annuleren"
+    },
+    "confirm": {
+      "cta": "Bevestigen"
+    },
+    "continue": {
+      "cta": "Doorgaan"
+    },
+    "discard": {
+      "cta": "Verwerpen"
+    },
+    "done": {
+      "cta": "Klaar"
+    },
+    "goBack": {
+      "cta": "Terug"
+    },
+    "message": {
+      "cta": "Bericht"
+    },
+    "next": {
+      "cta": "Volgende"
+    },
+    "ok": {
+      "cta": "OK"
+    },
+    "replace": {
+      "cta": "Vervangen"
+    },
+    "retry": {
+      "cta": "Opnieuw proberen"
+    },
+    "search": {
+      "cta": "Zoeken"
+    },
+    "seeAll": {
+      "cta": "Alles bekijken"
+    },
+    "skip": {
+      "cta": "Overslaan"
+    },
+    "submitting": {
+      "cta": "Verzenden…"
+    }
+  },
+  "answer": {
+    "no": {
+      "label": "Nee",
+      "option": "Nee"
+    },
+    "yes": {
+      "label": "Ja",
+      "option": "Ja"
+    }
+  },
+  "auth": {
+    "signInRequired": {
+      "body": "Log eerst in."
+    }
+  },
+  "confirm": {
+    "irreversible": {
+      "body": "Dit kan niet ongedaan worden gemaakt."
+    }
+  },
+  "mover": {
+    "unnamed": {
+      "label": "Verhuizer"
+    }
+  },
+  "payment": {
+    "brand": {
+      "fallback": {
+        "label": "Kaart"
+      },
+      "unionpay": {
+        "label": "UnionPay"
+      }
+    },
+    "brandTag": {
+      "amex": {
+        "label": "AMEX"
+      },
+      "diners": {
+        "label": "DINER"
+      },
+      "discover": {
+        "label": "DISC"
+      },
+      "fallback": {
+        "label": "KAART"
+      },
+      "jcb": {
+        "label": "JCB"
+      },
+      "mastercard": {
+        "label": "MC"
+      },
+      "unionpay": {
+        "label": "UPay"
+      },
+      "visa": {
+        "label": "VISA"
+      }
+    },
+    "method": {
+      "applePay": {
+        "label": "Apple Pay"
+      },
+      "googlePay": {
+        "label": "Google Pay"
+      },
+      "payPal": {
+        "label": "PayPal"
+      }
+    },
+    "waiting": {
+      "done": {
+        "body": "Betaling bevestigd."
+      },
+      "forClient": {
+        "body": "Betaling bevestigd. We wachten op de bevestiging van de klant voordat de verhuizing wordt afgesloten."
+      },
+      "forMover": {
+        "body": "Betaling bevestigd. We wachten op de bevestiging van je verhuizer voordat de verhuizing wordt afgesloten."
+      }
+    }
+  },
+  "state": {
+    "loading": {
+      "label": "Laden…"
+    },
+    "processing": {
+      "cta": "Verwerken…"
+    }
+  },
+  "status": {
+    "comingSoon": {
+      "label": "Binnenkort beschikbaar"
+    }
+  },
+  "unit": {
+    "minutes": {
+      "label": "min"
+    }
+  },
+  "value": {
+    "noneSelected": {
+      "empty": "Niets geselecteerd"
+    },
+    "notSpecified": {
+      "empty": "Niet opgegeven"
+    }
+  },
+  "vehicleType": {
+    "largeTruck": {
+      "label": "Grote vrachtwagen"
+    },
+    "mediumTruck": {
+      "label": "Middelgrote vrachtwagen"
+    },
+    "smallVan": {
+      "label": "Kleine bestelwagen"
+    }
+  }
+}

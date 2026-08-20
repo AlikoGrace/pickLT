@@ -1,0 +1,84 @@
+{
+  "appwrite": {
+    "generalArgumentInvalid": "Uno de los campos no es válido. Revisa lo que has introducido.",
+    "generalRateLimitExceeded": "Demasiados intentos. Espera un momento e inténtalo de nuevo.",
+    "passwordPersonalData": "La contraseña no puede contener información personal.",
+    "passwordRecentlyUsed": "Esta contraseña se usó recientemente. Elige otra.",
+    "phoneInvalid": "El formato del número de teléfono no es válido.",
+    "userAlreadyExists": "Ya existe una cuenta con este correo electrónico.",
+    "userInvalidCode": "El código de verificación es incorrecto o ha caducado.",
+    "userInvalidCredentials": "Correo electrónico o contraseña incorrectos.",
+    "userNotFound": "No se encontró ninguna cuenta con este correo electrónico.",
+    "userPhoneNotFound": "No hay ningún número de teléfono registrado. Añade uno para continuar.",
+    "userSessionAlreadyExists": "Ya has iniciado sesión.",
+    "userSessionNotFound": "La sesión ha caducado. Vuelve a iniciar sesión.",
+    "userUnauthorized": "No tienes autorización. Vuelve a iniciar sesión."
+  },
+  "auth": {
+    "noSession": {
+      "error": "No hay ningún usuario autenticado"
+    }
+  },
+  "card": {
+    "add": {
+      "failed": "No se pudo añadir la tarjeta. Inténtalo de nuevo.",
+      "initFailed": "No se pudo iniciar la configuración de la tarjeta. Inténtalo de nuevo.",
+      "notSaved": "La tarjeta no se guardó. Inténtalo de nuevo."
+    },
+    "remove": {
+      "detachFailed": "Nuestro proveedor de pagos no pudo eliminar la tarjeta. Inténtalo de nuevo.",
+      "forbidden": "Esa tarjeta no pertenece a tu cuenta.",
+      "internal": "Algo salió mal al eliminar la tarjeta. Inténtalo de nuevo.",
+      "misconfigured": "La eliminación de tarjetas no está disponible temporalmente. Inténtalo más tarde.",
+      "noStripeCustomer": "No se encontró ningún perfil de pago para tu cuenta.",
+      "paymentMethodNotFound": "Esa tarjeta ya no existe en nuestro proveedor de pagos.",
+      "unauthenticated": "Vuelve a iniciar sesión para eliminar esta tarjeta.",
+      "userNotFound": "No se pudo cargar tu cuenta. Vuelve a iniciar sesión."
+    }
+  },
+  "generic": {
+    "fallback": "Algo salió mal. Inténtalo de nuevo.",
+    "retry": {
+      "body": "Inténtalo de nuevo.",
+      "error": "Algo salió mal. Inténtalo de nuevo."
+    },
+    "title": "Algo salió mal"
+  },
+  "google": {
+    "cancelled": {
+      "error": "Se canceló el inicio de sesión con Google."
+    },
+    "noCachedAccount": {
+      "error": "No se encontró ninguna cuenta de Google guardada."
+    },
+    "noCredentials": {
+      "error": "El inicio de sesión con Google se completó, pero el servidor no devolvió credenciales."
+    },
+    "noIdToken": {
+      "error": "El inicio de sesión con Google no devolvió un token de identificación. Inténtalo de nuevo."
+    }
+  },
+  "instant": {
+    "moverUnavailable": {
+      "error": "El transportista seleccionado ya no está disponible"
+    },
+    "submitStage": {
+      "error": "El envío falló en {{stage}}. Inténtalo de nuevo.",
+      "short": {
+        "error": "El envío falló en {{stage}}"
+      }
+    }
+  },
+  "mapbox": {
+    "unreachable": {
+      "error": "No se pudo conectar con Mapbox, comprueba tu conexión"
+    }
+  },
+  "payment": {
+    "cardDeclined": "Tu tarjeta fue rechazada. Prueba con otro método de pago.",
+    "charge": {
+      "failed": "No se pudo completar el pago. Inténtalo de nuevo.",
+      "initFailed": "No se pudo iniciar el pago. Inténtalo de nuevo."
+    }
+  }
+}

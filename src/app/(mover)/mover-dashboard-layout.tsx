@@ -5,6 +5,7 @@ import Avatar from '@/shared/Avatar'
 import { useLocationBroadcast } from '@/hooks/useLocationBroadcast'
 import Logo from '@/shared/Logo'
 import SwitchDarkMode from '@/shared/SwitchDarkMode'
+import LanguageDropdown from '@/components/Header/LanguageDropdown'
 import {
   Bars3Icon,
   CalendarDaysIcon,
@@ -274,8 +275,11 @@ const MoverDashboardLayout = ({ children }: Props) => {
             })}
           </nav>
 
-          {/* Logout */}
+          {/* Language + logout */}
           <div className="border-t border-neutral-200 p-4 dark:border-neutral-700">
+            <div className="mb-1 px-3 py-1">
+              <LanguageDropdown panelAnchor={{ to: 'top start', gap: 12 }} panelClassName="w-56" />
+            </div>
             <button
               onClick={handleLogout}
               className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-neutral-600 transition-colors hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-700"
@@ -299,6 +303,7 @@ const MoverDashboardLayout = ({ children }: Props) => {
           </span>
         </div>
         <div className="flex items-center gap-2">
+          <LanguageDropdown panelClassName="w-56" />
           <SwitchDarkMode className="!h-9 !w-9 !text-xl" />
           <button className="rounded-full p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700">
             <BellIcon className="h-6 w-6 text-neutral-600 dark:text-neutral-300" />

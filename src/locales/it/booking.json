@@ -1,0 +1,349 @@
+{
+  "field": {
+    "arrivalTime": {
+      "hour": {
+        "label": "Ora"
+      },
+      "minute": {
+        "label": "Min"
+      },
+      "period": {
+        "label": "Periodo"
+      },
+      "sheet": {
+        "title": "Orario di arrivo preferito"
+      }
+    },
+    "contact": {
+      "label": "Contatto"
+    },
+    "crewSize": {
+      "label": "Dimensione della squadra"
+    },
+    "distance": {
+      "label": "Distanza"
+    },
+    "dropoff": {
+      "label": "Destinazione"
+    },
+    "elevator": {
+      "label": "Ascensore disponibile?"
+    },
+    "inventory": {
+      "label": "Inventario"
+    },
+    "moveDate": {
+      "label": "Data del trasloco",
+      "placeholder": "Seleziona la data",
+      "sheet": {
+        "title": "Seleziona la data del trasloco"
+      }
+    },
+    "moveType": {
+      "label": "Tipo di trasloco",
+      "placeholder": "Seleziona il tipo di trasloco",
+      "sheet": {
+        "title": "Seleziona il tipo di trasloco"
+      }
+    },
+    "pickup": {
+      "label": "Ritiro"
+    },
+    "preferredTime": {
+      "label": "Orario preferito",
+      "placeholder": "Seleziona una fascia oraria",
+      "sheet": {
+        "title": "Orario preferito"
+      },
+      "value": {
+        "label": "{{label}} ({{range}})"
+      }
+    },
+    "selectDate": {
+      "helper": "Quando vuoi traslocare?",
+      "label": "Seleziona la data"
+    },
+    "vehicle": {
+      "label": "Veicolo"
+    }
+  },
+  "floorLevel": {
+    "floor1": {
+      "option": "1° piano"
+    },
+    "floor2": {
+      "option": "2° piano"
+    },
+    "floor3": {
+      "option": "3° piano"
+    },
+    "floor4": {
+      "option": "4° piano"
+    },
+    "floor5plus": {
+      "option": "5° piano o superiore"
+    },
+    "ground": {
+      "option": "Piano terra"
+    },
+    "numbered": {
+      "option": "{{n}}° piano"
+    }
+  },
+  "homeType": {
+    "apartment": {
+      "option": "Appartamento"
+    },
+    "house": {
+      "option": "Casa"
+    },
+    "office": {
+      "option": "Ufficio"
+    },
+    "other": {
+      "option": "Altro"
+    },
+    "storage": {
+      "option": "Deposito"
+    }
+  },
+  "location": {
+    "gpsFailed": {
+      "error": "Impossibile determinare la tua posizione."
+    },
+    "minQuery": {
+      "helper_one": "Digita almeno {{count}} carattere",
+      "helper_other": "Digita almeno {{count}} caratteri"
+    },
+    "noResults": {
+      "empty": "Nessun luogo trovato"
+    },
+    "permissionDenied": {
+      "error": "Accesso alla posizione negato. Attivalo nelle Impostazioni."
+    },
+    "search": {
+      "placeholder": "Cerca un luogo, un punto di riferimento o un indirizzo"
+    },
+    "searchIdle": {
+      "empty": "Inizia a digitare per cercare un indirizzo."
+    },
+    "selectPlaceholder": {
+      "placeholder": "Seleziona il luogo di {{field}}"
+    },
+    "sheet": {
+      "title": "Luogo di {{field}}"
+    },
+    "useCurrent": {
+      "cta": "Usa la posizione attuale"
+    }
+  },
+  "map": {
+    "dropoff": {
+      "placeholder": "Luogo di consegna"
+    },
+    "pickup": {
+      "placeholder": "Luogo di ritiro"
+    },
+    "preview": {
+      "empty": "Anteprima mappa"
+    }
+  },
+  "mapPicker": {
+    "confirm": {
+      "cta": "Conferma il luogo"
+    },
+    "default": {
+      "title": "Seleziona un luogo"
+    },
+    "locating": {
+      "helper": "Rilevamento della posizione…"
+    },
+    "reverseGeocoding": {
+      "helper": "Recupero dell’indirizzo…"
+    },
+    "search": {
+      "placeholder": "Cerca un luogo…"
+    },
+    "tapHint": {
+      "helper": "Tocca la mappa per selezionare un luogo"
+    },
+    "useCurrent": {
+      "cta": "Usa la mia posizione attuale"
+    }
+  },
+  "moveType": {
+    "light": {
+      "body": "I traslochi leggeri usano un furgone piccolo.",
+      "short": "Leggero",
+      "subtitle": "Perfetto per piccoli carichi: scatoloni, singoli mobili o un monolocale.",
+      "title": "Trasloco leggero"
+    },
+    "premium": {
+      "body": "I traslochi premium usano veicoli più grandi e una squadra di 2 o più persone.",
+      "short": "Premium",
+      "subtitle": "Servizio completo per case grandi: imballaggio, carico, trasporto e scarico.",
+      "title": "Trasloco premium"
+    },
+    "regular": {
+      "body": "I traslochi standard usano un veicolo medio e una squadra di 2 persone.",
+      "short": "Standard",
+      "subtitle": "Ideale per appartamenti con 1 o 2 camere da letto, con mobili ed elettrodomestici comuni.",
+      "title": "Trasloco standard"
+    }
+  },
+  "packingLevel": {
+    "full": {
+      "helper": "I trasportatori imballano tutto per me",
+      "option": "Imballaggio completo"
+    },
+    "none": {
+      "helper": "Imballo tutto da solo",
+      "option": "Nessun aiuto per l'imballaggio"
+    },
+    "partial": {
+      "helper": "I trasportatori imballano solo gli oggetti fragili o di valore",
+      "option": "Imballare gli oggetti fragili"
+    },
+    "unpacking": {
+      "helper": "I trasportatori imballano al ritiro E disimballano a destinazione",
+      "option": "Imballaggio e disimballaggio"
+    }
+  },
+  "parking": {
+    "atBuilding": {
+      "option": "Parcheggio proprio davanti all’edificio"
+    },
+    "directlyInFront": {
+      "option": "Parcheggio proprio davanti"
+    },
+    "driveway": {
+      "option": "Vialetto privato"
+    },
+    "limited": {
+      "option": "Parcheggio limitato"
+    },
+    "loadingZone": {
+      "option": "Serve una zona di carico (Haltverbot)"
+    },
+    "lot": {
+      "option": "Parcheggio"
+    },
+    "nearby": {
+      "option": "Parcheggio nelle vicinanze (0–20 m)"
+    },
+    "none": {
+      "option": "Nessun parcheggio"
+    },
+    "street": {
+      "option": "Parcheggio su strada"
+    },
+    "underground": {
+      "option": "Accesso al garage sotterraneo"
+    }
+  },
+  "payment": {
+    "method": {
+      "cash": {
+        "label": "Contanti"
+      }
+    },
+    "section": {
+      "title": "Pagamento"
+    }
+  },
+  "photos": {
+    "chooseGallery": {
+      "cta": "Scegli dalla galleria"
+    },
+    "formatHint": {
+      "subtitle": "PNG, JPG fino a 3 MB"
+    },
+    "sourceSheet": {
+      "title": "Aggiungi una foto"
+    },
+    "takePhoto": {
+      "cta": "Scatta una foto"
+    }
+  },
+  "pricing": {
+    "baseRate": {
+      "label": "Tariffa base ({{moveType}})"
+    },
+    "storage": {
+      "label": "Deposito"
+    },
+    "subtotal": {
+      "label": "Subtotale"
+    },
+    "total": {
+      "label": "Totale"
+    },
+    "vat": {
+      "label": "IVA ({{rate}})"
+    }
+  },
+  "services": {
+    "applianceConnect": {
+      "helper": "Ricolleghiamo gli elettrodomestici nella nuova casa",
+      "label": "Collegamento elettrodomestici",
+      "option": "Collegamento elettrodomestici"
+    },
+    "applianceDisconnect": {
+      "helper": "Scolleghiamo lavatrice, lavastoviglie ecc.",
+      "label": "Scollegamento elettrodomestici",
+      "option": "Scollegamento elettrodomestici"
+    },
+    "disposal": {
+      "helper": "Portiamo gli oggetti indesiderati all'isola ecologica comunale",
+      "label": "Smaltimento",
+      "option": "Smaltimento"
+    },
+    "furnitureAssembly": {
+      "helper": "Montiamo i mobili nella nuova casa",
+      "label": "Montaggio mobili",
+      "option": "Montaggio mobili"
+    },
+    "furnitureDisassembly": {
+      "helper": "Smontiamo letti e tavoli prima del carico",
+      "label": "Smontaggio mobili",
+      "option": "Smontaggio mobili"
+    },
+    "moveoutCleaning": {
+      "helper": "Servizio di pulizia all'indirizzo di ritiro dopo il carico",
+      "label": "Pulizia di fine locazione",
+      "option": "Pulizia di fine locazione"
+    },
+    "temporaryStorage": {
+      "helper": "Custodiamo gli oggetti tra la data di ritiro e quella di consegna",
+      "label": "Deposito temporaneo",
+      "option": "Deposito temporaneo"
+    },
+    "tvMountRemove": {
+      "helper": "Stacchiamo i televisori a muro al ritiro",
+      "label": "Rimozione supporto TV",
+      "option": "Rimozione supporto TV"
+    }
+  },
+  "timeSlot": {
+    "afternoon": {
+      "label": "Pomeriggio"
+    },
+    "evening": {
+      "label": "Sera"
+    },
+    "morning": {
+      "label": "Mattina"
+    }
+  },
+  "vehicle": {
+    "largeTruck": {
+      "label": "Camion grande"
+    },
+    "mediumTruck": {
+      "label": "Camion medio"
+    },
+    "smallVan": {
+      "label": "Furgone piccolo"
+    }
+  }
+}

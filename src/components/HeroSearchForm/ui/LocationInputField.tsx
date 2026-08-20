@@ -12,6 +12,7 @@ import { HugeiconsIcon } from '@hugeicons/react'
 import clsx from 'clsx'
 import { FC, useCallback, useEffect, useRef, useState } from 'react'
 import { ClearDataButton } from './ClearDataButton'
+import { mapboxLanguage } from '@/lib/mapbox-language'
 
 export type LocationSuggestion = {
   id: string
@@ -69,7 +70,7 @@ async function searchLocations(
       autocomplete: 'true',
       types: 'address,street,postcode,neighborhood,locality,place,district,region,country',
       limit: '10',
-      language: 'en',
+      language: mapboxLanguage(),
     }
 
     // Proximity bias improves relevance for nearby results

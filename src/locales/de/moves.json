@@ -1,0 +1,172 @@
+{
+  "card": {
+    "route": {
+      "dropoffFallback": {
+        "label": "Zielort"
+      },
+      "pickupFallback": {
+        "label": "Abholort"
+      }
+    },
+    "title": {
+      "generic": {
+        "label": "Umzug"
+      }
+    }
+  },
+  "category": {
+    "all": {
+      "label": "Alle"
+    },
+    "cancelled": {
+      "label": "Storniert"
+    },
+    "completed": {
+      "label": "Abgeschlossen"
+    },
+    "inProgress": {
+      "label": "Laufend"
+    },
+    "pending": {
+      "label": "Ausstehend"
+    }
+  },
+  "detail": {
+    "additionalServices": {
+      "title": "Zusätzliche Leistungen"
+    },
+    "address": {
+      "label": "Adresse"
+    },
+    "arrivalWindow": {
+      "label": "Ankunftsfenster"
+    },
+    "distance": {
+      "label": "Entfernung"
+    },
+    "dropoff": {
+      "label": "Zustellung"
+    },
+    "dropoffAddress": {
+      "title": "Zustelladresse"
+    },
+    "duration": {
+      "label": "Dauer"
+    },
+    "elevator": {
+      "label": "Aufzug"
+    },
+    "floor": {
+      "label": "Etage"
+    },
+    "itemLine": {
+      "label": "{{qty}} x {{label}}"
+    },
+    "moveDate": {
+      "label": "Umzugsdatum"
+    },
+    "moveDetails": {
+      "title": "Umzugsdetails"
+    },
+    "moveItems": {
+      "title": "Umzugsgut"
+    },
+    "packingService": {
+      "label": "Verpackungsservice"
+    },
+    "parking": {
+      "label": "Parken"
+    },
+    "pickup": {
+      "label": "Abholung"
+    },
+    "pickupAddress": {
+      "title": "Abholadresse"
+    },
+    "requestedAt": {
+      "label": "Angefragt"
+    },
+    "route": {
+      "title": "Route"
+    },
+    "status": {
+      "label": "Status"
+    },
+    "type": {
+      "label": "Art"
+    },
+    "unit": {
+      "label": "Einheit"
+    }
+  },
+  "itemCount_one": "{{count}} Gegenstand",
+  "itemCount_other": "{{count}} Gegenstände",
+  "list": {
+    "loadError": {
+      "body": "Ziehen Sie nach unten, um es erneut zu versuchen.",
+      "title": "Umzüge konnten nicht geladen werden"
+    }
+  },
+  "moveCategory": {
+    "instant": {
+      "label": "Sofort"
+    },
+    "scheduled": {
+      "label": "Geplant"
+    }
+  },
+  "payment": {
+    "method": {
+      "label": "Zahlungsmethode"
+    }
+  },
+  "pricing": {
+    "estimatedTotal": {
+      "label": "Geschätzter Gesamtpreis"
+    }
+  },
+  "status": {
+    "arrivedDestination": {
+      "label": "Angekommen"
+    },
+    "awaitingPayment": {
+      "label": "Zahlung ausstehend"
+    },
+    "cancelledByClient": {
+      "label": "Storniert"
+    },
+    "cancelledByMover": {
+      "label": "Storniert"
+    },
+    "completed": {
+      "label": "Abgeschlossen"
+    },
+    "disputed": {
+      "label": "Strittig"
+    },
+    "inTransit": {
+      "label": "Unterwegs"
+    },
+    "loading": {
+      "label": "Wird beladen"
+    },
+    "moverArrived": {
+      "label": "Umzugshelfer eingetroffen"
+    },
+    "moverAssigned": {
+      "label": "Umzugshelfer zugewiesen"
+    },
+    "moverEnRoute": {
+      "label": "Umzugshelfer unterwegs"
+    },
+    "paid": {
+      "label": "Bezahlt"
+    },
+    "pending": {
+      "label": "Ausstehend"
+    },
+    "unloading": {
+      "label": "Wird entladen"
+    }
+  }
+}

@@ -1,0 +1,179 @@
+{
+  "action": {
+    "back": {
+      "a11y": "Geri",
+      "cta": "Geri"
+    },
+    "backToHome": {
+      "a11y": "Ana sayfaya dön"
+    },
+    "call": {
+      "cta": "Ara"
+    },
+    "cancel": {
+      "cta": "İptal"
+    },
+    "confirm": {
+      "cta": "Onayla"
+    },
+    "continue": {
+      "cta": "Devam et"
+    },
+    "discard": {
+      "cta": "Vazgeç"
+    },
+    "done": {
+      "cta": "Tamam"
+    },
+    "goBack": {
+      "cta": "Geri"
+    },
+    "message": {
+      "cta": "Mesaj"
+    },
+    "next": {
+      "cta": "İleri"
+    },
+    "ok": {
+      "cta": "Tamam"
+    },
+    "replace": {
+      "cta": "Değiştir"
+    },
+    "retry": {
+      "cta": "Yeniden dene"
+    },
+    "search": {
+      "cta": "Ara"
+    },
+    "seeAll": {
+      "cta": "Tümünü gör"
+    },
+    "skip": {
+      "cta": "Atla"
+    },
+    "submitting": {
+      "cta": "Gönderiliyor…"
+    }
+  },
+  "answer": {
+    "no": {
+      "label": "Hayır",
+      "option": "Hayır"
+    },
+    "yes": {
+      "label": "Evet",
+      "option": "Evet"
+    }
+  },
+  "auth": {
+    "signInRequired": {
+      "body": "Lütfen önce giriş yapın."
+    }
+  },
+  "confirm": {
+    "irreversible": {
+      "body": "Bu işlem geri alınamaz."
+    }
+  },
+  "mover": {
+    "unnamed": {
+      "label": "Nakliyeci"
+    }
+  },
+  "payment": {
+    "brand": {
+      "fallback": {
+        "label": "Kart"
+      },
+      "unionpay": {
+        "label": "UnionPay"
+      }
+    },
+    "brandTag": {
+      "amex": {
+        "label": "AMEX"
+      },
+      "diners": {
+        "label": "DINER"
+      },
+      "discover": {
+        "label": "DISC"
+      },
+      "fallback": {
+        "label": "KART"
+      },
+      "jcb": {
+        "label": "JCB"
+      },
+      "mastercard": {
+        "label": "MC"
+      },
+      "unionpay": {
+        "label": "UPay"
+      },
+      "visa": {
+        "label": "VISA"
+      }
+    },
+    "method": {
+      "applePay": {
+        "label": "Apple Pay"
+      },
+      "googlePay": {
+        "label": "Google Pay"
+      },
+      "payPal": {
+        "label": "PayPal"
+      }
+    },
+    "waiting": {
+      "done": {
+        "body": "Ödeme onaylandı."
+      },
+      "forClient": {
+        "body": "Ödeme onaylandı. Taşıma kapatılmadan önce müşterinin onayı bekleniyor."
+      },
+      "forMover": {
+        "body": "Ödeme onaylandı. Taşıma kapatılmadan önce nakliyecinizin onayı bekleniyor."
+      }
+    }
+  },
+  "state": {
+    "loading": {
+      "label": "Yükleniyor…"
+    },
+    "processing": {
+      "cta": "İşleniyor…"
+    }
+  },
+  "status": {
+    "comingSoon": {
+      "label": "Yakında"
+    }
+  },
+  "unit": {
+    "minutes": {
+      "label": "dk"
+    }
+  },
+  "value": {
+    "noneSelected": {
+      "empty": "Seçim yok"
+    },
+    "notSpecified": {
+      "empty": "Belirtilmedi"
+    }
+  },
+  "vehicleType": {
+    "largeTruck": {
+      "label": "Büyük kamyon"
+    },
+    "mediumTruck": {
+      "label": "Orta boy kamyon"
+    },
+    "smallVan": {
+      "label": "Küçük panelvan"
+    }
+  }
+}

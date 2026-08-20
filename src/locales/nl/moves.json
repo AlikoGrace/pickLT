@@ -1,0 +1,172 @@
+{
+  "card": {
+    "route": {
+      "dropoffFallback": {
+        "label": "Bezorglocatie"
+      },
+      "pickupFallback": {
+        "label": "Ophaallocatie"
+      }
+    },
+    "title": {
+      "generic": {
+        "label": "Verhuizing"
+      }
+    }
+  },
+  "category": {
+    "all": {
+      "label": "Alle"
+    },
+    "cancelled": {
+      "label": "Geannuleerd"
+    },
+    "completed": {
+      "label": "Afgerond"
+    },
+    "inProgress": {
+      "label": "Bezig"
+    },
+    "pending": {
+      "label": "In afwachting"
+    }
+  },
+  "detail": {
+    "additionalServices": {
+      "title": "Extra diensten"
+    },
+    "address": {
+      "label": "Adres"
+    },
+    "arrivalWindow": {
+      "label": "Aankomsttijdvak"
+    },
+    "distance": {
+      "label": "Afstand"
+    },
+    "dropoff": {
+      "label": "Bezorgen"
+    },
+    "dropoffAddress": {
+      "title": "Bezorgadres"
+    },
+    "duration": {
+      "label": "Duur"
+    },
+    "elevator": {
+      "label": "Lift"
+    },
+    "floor": {
+      "label": "Verdieping"
+    },
+    "itemLine": {
+      "label": "{{qty}} x {{label}}"
+    },
+    "moveDate": {
+      "label": "Verhuisdatum"
+    },
+    "moveDetails": {
+      "title": "Verhuisdetails"
+    },
+    "moveItems": {
+      "title": "Verhuisspullen"
+    },
+    "packingService": {
+      "label": "Inpakservice"
+    },
+    "parking": {
+      "label": "Parkeren"
+    },
+    "pickup": {
+      "label": "Ophalen"
+    },
+    "pickupAddress": {
+      "title": "Ophaaladres"
+    },
+    "requestedAt": {
+      "label": "Aangevraagd"
+    },
+    "route": {
+      "title": "Route"
+    },
+    "status": {
+      "label": "Status"
+    },
+    "type": {
+      "label": "Type"
+    },
+    "unit": {
+      "label": "Appartement"
+    }
+  },
+  "itemCount_one": "{{count}} voorwerp",
+  "itemCount_other": "{{count}} voorwerpen",
+  "list": {
+    "loadError": {
+      "body": "Trek omlaag om het opnieuw te proberen.",
+      "title": "Kan verhuizingen niet laden"
+    }
+  },
+  "moveCategory": {
+    "instant": {
+      "label": "Direct"
+    },
+    "scheduled": {
+      "label": "Gepland"
+    }
+  },
+  "payment": {
+    "method": {
+      "label": "Betaalmethode"
+    }
+  },
+  "pricing": {
+    "estimatedTotal": {
+      "label": "Geschat totaal"
+    }
+  },
+  "status": {
+    "arrivedDestination": {
+      "label": "Aangekomen"
+    },
+    "awaitingPayment": {
+      "label": "Wacht op betaling"
+    },
+    "cancelledByClient": {
+      "label": "Geannuleerd"
+    },
+    "cancelledByMover": {
+      "label": "Geannuleerd"
+    },
+    "completed": {
+      "label": "Afgerond"
+    },
+    "disputed": {
+      "label": "Betwist"
+    },
+    "inTransit": {
+      "label": "Onderweg"
+    },
+    "loading": {
+      "label": "Laden"
+    },
+    "moverArrived": {
+      "label": "Verhuizer gearriveerd"
+    },
+    "moverAssigned": {
+      "label": "Verhuizer toegewezen"
+    },
+    "moverEnRoute": {
+      "label": "Verhuizer onderweg"
+    },
+    "paid": {
+      "label": "Betaald"
+    },
+    "pending": {
+      "label": "In afwachting"
+    },
+    "unloading": {
+      "label": "Uitladen"
+    }
+  }
+}

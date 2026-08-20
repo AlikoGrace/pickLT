@@ -9,6 +9,7 @@ import {
   TruckIcon,
   ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline'
+import { formatDateWith, formatMoney } from '@/lib/format'
 
 type TimePeriod = 'today' | 'week' | 'month' | 'year'
 
@@ -57,7 +58,7 @@ const EarningsPage = () => {
         moves: result.moves || 0,
         entries: (result.entries || []).map((e: Record<string, unknown>) => ({
           id: e.id as string,
-          date: new Date(e.date as string).toLocaleDateString('en-DE', {
+          date: formatDateWith(e.date as string, {
             month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
           }),
           description: e.description as string,
@@ -164,7 +165,7 @@ const EarningsPage = () => {
             <BanknotesIcon className="w-5 h-5" />
             <span className="text-sm opacity-90">Total Earnings</span>
           </div>
-          <p className="text-3xl font-bold mb-1">€{total.toLocaleString()}</p>
+          <p className="text-3xl font-bold mb-1">{formatMoney(total, { compact: true })}</p>
           <div className="flex items-center gap-1 text-sm">
             <ArrowTrendingUpIcon className="w-4 h-4" />
             <span>{periodLabels[period].toLowerCase()}</span>
@@ -192,7 +193,7 @@ const EarningsPage = () => {
               Average per Move
             </p>
             <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
-              €{averagePerMove}
+              {formatMoney(averagePerMove, { compact: true })}
             </p>
           </div>
           <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
@@ -261,7 +262,7 @@ const EarningsPage = () => {
                       : 'text-green-600 dark:text-green-400'
                   }`}
                 >
-                  +€{entry.amount}
+                  +{formatMoney(entry.amount, { compact: true })}
                 </p>
               </div>
             </div>
@@ -278,7 +279,7 @@ const EarningsPage = () => {
               Available for Payout
             </p>
             <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
-              €{Number(total).toFixed(2)}
+              {formatMoney(Number(total))}
             </p>
           </div>
           <button className="px-4 py-2 bg-primary-600 text-white rounded-full text-sm font-medium hover:bg-primary-700 transition-colors">

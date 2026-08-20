@@ -1,0 +1,115 @@
+{
+  "category": {
+    "livingRoom": "Salon",
+    "bedroom": "Sypialnia",
+    "kitchen": "Kuchnia",
+    "office": "Biuro",
+    "boxes": "Kartony",
+    "miscellaneous": "Różne",
+    "special": "Przedmioty specjalne"
+  },
+  "section": {
+    "special": {
+      "subtitle": "Te przedmioty wymagają szczególnego traktowania i mogą wpłynąć na cenę."
+    },
+    "custom": {
+      "title": "Własne przedmioty",
+      "empty": "Dodaj przedmioty, których nie ma powyżej."
+    }
+  },
+  "item": {
+    "customSuffix": "Własny przedmiot",
+    "customName": {
+      "label": "{{name}} (własny)"
+    },
+    "customTag": {
+      "label": "Własny"
+    }
+  },
+  "search": {
+    "placeholder": "Szukaj wszystkich przedmiotów",
+    "noMatch": {
+      "empty": "Żaden przedmiot nie pasuje do „{{query}}”. Dodaj go poniżej jako własny przedmiot."
+    }
+  },
+  "customItem": {
+    "add": {
+      "cta": "Dodaj własny przedmiot"
+    },
+    "name": {
+      "label": "Nazwa",
+      "placeholder": "np. pianino elektryczne"
+    },
+    "quantity": {
+      "label": "Ilość"
+    },
+    "size": {
+      "label": "Przybliżony rozmiar",
+      "small": {
+        "option": "Mały"
+      },
+      "medium": {
+        "option": "Średni"
+      },
+      "large": {
+        "option": "Duży"
+      },
+      "extraLarge": {
+        "option": "XL"
+      }
+    },
+    "weight": {
+      "label": "Przybliżona waga (kg)",
+      "placeholder": "np. 25"
+    },
+    "submit": {
+      "cta": "Dodaj przedmiot"
+    }
+  },
+  "recommendation": {
+    "headline": {
+      "title": "{{prefix}}: {{tier}}"
+    },
+    "chosen": {
+      "label": "Twoja przeprowadzka"
+    },
+    "suggested": {
+      "label": "Zalecana"
+    },
+    "itemCount": {
+      "label_one": "{{count}} przedmiot",
+      "label_few": "{{count}} przedmioty",
+      "label_many": "{{count}} przedmiotów",
+      "label_other": "{{count}} przedmiotu"
+    }
+  },
+  "upgrade": {
+    "headline": {
+      "title": "Ta przeprowadzka wymaga teraz"
+    },
+    "reason": {
+      "body": "Dodanie „{{item}}” przeniosło Twoją przeprowadzkę do kategorii {{tier}} — {{explanation}}"
+    },
+    "warnings": {
+      "title": "Przedmioty wymagające tej kategorii:"
+    }
+  },
+  "unavailable": {
+    "empty": {
+      "title": "Brak dostępnych przedmiotów",
+      "body": "Nasza lista przedmiotów do przewiezienia jest właśnie przygotowywana. Spróbuj ponownie za chwilę — jeśli przeprowadzka jest pilna, nadal możesz się z nami skontaktować."
+    },
+    "error": {
+      "title": "Nie udało się wczytać listy przedmiotów",
+      "body": "Sprawdź połączenie i spróbuj ponownie."
+    }
+  },
+  "admin": {
+    "nameLabel": "Nazwa",
+    "nameHelper": "Angielski jest tekstem zapasowym, gdy brakuje tłumaczenia.",
+    "translationsTitle": "Tłumaczenia nazwy",
+    "translationsHelper": "Pozostaw puste, aby użyć nazwy angielskiej. Identyfikatory pozycji i kategorie nigdy nie są tłumaczone.",
+    "unknownCategoryTitle": "Nieprzetłumaczona kategoria",
+    "unknownCategoryWarning": "„{{slug}}” nie jest jedną z siedmiu przetłumaczonych kategorii. We wszystkich językach wyświetli się jako „{{label}}”, także użytkownikom nieznającym angielskiego."
+  }
+}

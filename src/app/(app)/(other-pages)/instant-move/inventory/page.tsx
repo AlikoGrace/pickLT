@@ -22,6 +22,8 @@ import {
 import { HugeiconsIcon } from '@hugeicons/react'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { categoryLabel, categoryTranslator } from '@/lib/inventory-i18n'
 
 // Inventory item definitions with internal metadata for move estimation
 type InventoryItemDef = {
@@ -44,6 +46,15 @@ type InventoryItemDef = {
 
 const InstantMoveInventoryPage = () => {
   const router = useRouter()
+  // Item names arrive already localized from /api/inventory/catalog; category
+  // labels are resolved here by slug (master plan D7).
+  const { t, i18n } = useTranslation('inventory')
+  const locale = i18n.language
+  const catLabel = useMemo(() => {
+    const translate = categoryTranslator(t)
+    return (slug: string) => categoryLabel(slug, translate)
+  }, [t])
+
   const [activeCategory, setActiveCategory] = useState('living_room')
   const [isModalOpen, setIsModalOpen] = useState(false)
   // The catalog is owned by the admin platform and is the only source: there is
@@ -134,7 +145,10 @@ const InstantMoveInventoryPage = () => {
       }
     }
     fetchCatalog()
-  }, [catalogAttempt])
+    // `locale` is a dependency because the route localizes `name` server-side
+    // from the request's cookie — a language switch needs a refetch, and that
+    // refetch is what re-labels the whole wizard.
+  }, [catalogAttempt, locale])
 
   // Prefetch the next step
   useEffect(() => {
@@ -148,16 +162,15 @@ const InstantMoveInventoryPage = () => {
     for (const item of inventoryItems) {
       if (item.category !== 'special' && !seen.has(item.category)) {
         seen.add(item.category)
-        // Convert slug to display name
-        const name = item.category
-          .split('_')
-          .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-          .join(' ')
-        cats.push({ id: item.category, name })
+        // Translated BY SLUG through `inventory:category.<slug>`, never by
+        // matching label text. An admin-invented slug has no key and falls
+        // back to a title-cased slug, which stays English — the admin console
+        // warns about exactly that (master plan D7).
+        cats.push({ id: item.category, name: catLabel(item.category) })
       }
     }
     return cats
-  }, [inventoryItems])
+  }, [inventoryItems, catLabel])
 
   // ─── Build classification catalog from inventory items ───
   // If items come from the DB they already have classificationPoints & moveTypeMinimum.
@@ -326,7 +339,7 @@ const InstantMoveInventoryPage = () => {
                     className="shrink-0 text-neutral-400 dark:text-neutral-500"
                   />
                   <span className="text-sm text-neutral-600 dark:text-neutral-300">
-                    {totalItems} item{totalItems !== 1 ? 's' : ''} selected
+                    {t('booking:inventory.selectedCount', { count: totalItems })}
                   </span>
                 </div>
               )}
@@ -557,7 +570,7 @@ const InstantMoveInventoryPage = () => {
           <div className="flex items-center gap-4">
             {totalItems > 0 && (
               <span className="text-sm text-neutral-500 dark:text-neutral-400">
-                {totalItems} item{totalItems !== 1 ? 's' : ''} selected
+                {t('booking:inventory.selectedCount', { count: totalItems })}
               </span>
             )}
             <ButtonPrimary 

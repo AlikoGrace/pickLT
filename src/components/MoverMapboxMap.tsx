@@ -6,6 +6,7 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import { Navigation03Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { ThemeContext } from '@/app/theme-provider'
+import { formatMoney } from '@/lib/format'
 
 // Set the access token
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || ''
@@ -69,7 +70,7 @@ export const MoverMapboxMap = ({
     
     el.innerHTML = `
       <div class="${bgColor} ${textColor} ${scale} ${zIndex} px-3 py-1.5 rounded-full shadow-lg font-semibold text-sm whitespace-nowrap border border-neutral-200 dark:border-neutral-700 transition-all">
-        €${price}
+        ${formatMoney(price, { compact: true })}
       </div>
     `
     

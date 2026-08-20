@@ -1,0 +1,179 @@
+{
+  "action": {
+    "back": {
+      "a11y": "Back",
+      "cta": "Back"
+    },
+    "backToHome": {
+      "a11y": "Back to home"
+    },
+    "call": {
+      "cta": "Call"
+    },
+    "cancel": {
+      "cta": "Cancel"
+    },
+    "confirm": {
+      "cta": "Confirm"
+    },
+    "continue": {
+      "cta": "Continue"
+    },
+    "discard": {
+      "cta": "Discard"
+    },
+    "done": {
+      "cta": "Done"
+    },
+    "goBack": {
+      "cta": "Go Back"
+    },
+    "message": {
+      "cta": "Message"
+    },
+    "next": {
+      "cta": "Next"
+    },
+    "ok": {
+      "cta": "OK"
+    },
+    "replace": {
+      "cta": "Replace"
+    },
+    "retry": {
+      "cta": "Retry"
+    },
+    "search": {
+      "cta": "Search"
+    },
+    "seeAll": {
+      "cta": "See all"
+    },
+    "skip": {
+      "cta": "Skip"
+    },
+    "submitting": {
+      "cta": "Submitting…"
+    }
+  },
+  "answer": {
+    "no": {
+      "label": "No",
+      "option": "No"
+    },
+    "yes": {
+      "label": "Yes",
+      "option": "Yes"
+    }
+  },
+  "auth": {
+    "signInRequired": {
+      "body": "Please sign in first."
+    }
+  },
+  "confirm": {
+    "irreversible": {
+      "body": "This cannot be undone."
+    }
+  },
+  "mover": {
+    "unnamed": {
+      "label": "Mover"
+    }
+  },
+  "payment": {
+    "brand": {
+      "fallback": {
+        "label": "Card"
+      },
+      "unionpay": {
+        "label": "UnionPay"
+      }
+    },
+    "brandTag": {
+      "amex": {
+        "label": "AMEX"
+      },
+      "diners": {
+        "label": "DINER"
+      },
+      "discover": {
+        "label": "DISC"
+      },
+      "fallback": {
+        "label": "CARD"
+      },
+      "jcb": {
+        "label": "JCB"
+      },
+      "mastercard": {
+        "label": "MC"
+      },
+      "unionpay": {
+        "label": "UPay"
+      },
+      "visa": {
+        "label": "VISA"
+      }
+    },
+    "method": {
+      "applePay": {
+        "label": "Apple Pay"
+      },
+      "googlePay": {
+        "label": "Google Pay"
+      },
+      "payPal": {
+        "label": "PayPal"
+      }
+    },
+    "waiting": {
+      "done": {
+        "body": "Payment confirmed."
+      },
+      "forClient": {
+        "body": "Payment confirmed. Waiting for the client to confirm before the move is closed."
+      },
+      "forMover": {
+        "body": "Payment confirmed. Waiting for your mover to confirm before the move is closed."
+      }
+    }
+  },
+  "state": {
+    "loading": {
+      "label": "Loading…"
+    },
+    "processing": {
+      "cta": "Processing…"
+    }
+  },
+  "status": {
+    "comingSoon": {
+      "label": "Coming soon"
+    }
+  },
+  "unit": {
+    "minutes": {
+      "label": "min"
+    }
+  },
+  "value": {
+    "noneSelected": {
+      "empty": "None selected"
+    },
+    "notSpecified": {
+      "empty": "Not specified"
+    }
+  },
+  "vehicleType": {
+    "largeTruck": {
+      "label": "Large truck"
+    },
+    "mediumTruck": {
+      "label": "Medium truck"
+    },
+    "smallVan": {
+      "label": "Small van"
+    }
+  }
+}

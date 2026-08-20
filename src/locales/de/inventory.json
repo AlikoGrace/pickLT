@@ -1,0 +1,113 @@
+{
+  "category": {
+    "livingRoom": "Wohnzimmer",
+    "bedroom": "Schlafzimmer",
+    "kitchen": "Küche",
+    "office": "Büro",
+    "boxes": "Kartons",
+    "miscellaneous": "Sonstiges",
+    "special": "Besondere Gegenstände"
+  },
+  "section": {
+    "special": {
+      "subtitle": "Diese Gegenstände erfordern eine besondere Handhabung und können den Preis beeinflussen."
+    },
+    "custom": {
+      "title": "Eigene Gegenstände",
+      "empty": "Fügen Sie Gegenstände hinzu, die oben nicht aufgeführt sind."
+    }
+  },
+  "item": {
+    "customSuffix": "Eigener Gegenstand",
+    "customName": {
+      "label": "{{name}} (eigener)"
+    },
+    "customTag": {
+      "label": "Eigener"
+    }
+  },
+  "search": {
+    "placeholder": "Alle Gegenstände suchen",
+    "noMatch": {
+      "empty": "Keine Gegenstände passen zu „{{query}}“. Fügen Sie ihn unten als eigenen Gegenstand hinzu."
+    }
+  },
+  "customItem": {
+    "add": {
+      "cta": "Eigenen Gegenstand hinzufügen"
+    },
+    "name": {
+      "label": "Name",
+      "placeholder": "z. B. E-Piano"
+    },
+    "quantity": {
+      "label": "Anzahl"
+    },
+    "size": {
+      "label": "Ungefähre Größe",
+      "small": {
+        "option": "Klein"
+      },
+      "medium": {
+        "option": "Mittel"
+      },
+      "large": {
+        "option": "Groß"
+      },
+      "extraLarge": {
+        "option": "XL"
+      }
+    },
+    "weight": {
+      "label": "Ungefähres Gewicht (kg)",
+      "placeholder": "z. B. 25"
+    },
+    "submit": {
+      "cta": "Gegenstand hinzufügen"
+    }
+  },
+  "recommendation": {
+    "headline": {
+      "title": "{{prefix}}: {{tier}}"
+    },
+    "chosen": {
+      "label": "Ihr Umzug"
+    },
+    "suggested": {
+      "label": "Empfohlen"
+    },
+    "itemCount": {
+      "label_one": "{{count}} Gegenstand",
+      "label_other": "{{count}} Gegenstände"
+    }
+  },
+  "upgrade": {
+    "headline": {
+      "title": "Dieser Umzug erfordert jetzt"
+    },
+    "reason": {
+      "body": "„{{item}}“ hat Ihren Umzug in die Kategorie {{tier}} verschoben – {{explanation}}"
+    },
+    "warnings": {
+      "title": "Gegenstände, die diese Kategorie erfordern:"
+    }
+  },
+  "unavailable": {
+    "empty": {
+      "title": "Noch keine Gegenstände verfügbar",
+      "body": "Unsere Liste der Umzugsgüter wird gerade eingerichtet. Bitte versuchen Sie es in Kürze erneut – bei einem dringenden Umzug erreichen Sie uns weiterhin."
+    },
+    "error": {
+      "title": "Die Gegenstandsliste konnte nicht geladen werden",
+      "body": "Prüfen Sie Ihre Verbindung und versuchen Sie es erneut."
+    }
+  },
+  "admin": {
+    "nameLabel": "Name",
+    "nameHelper": "Englisch ist die Rückfallsprache, wenn eine Übersetzung fehlt.",
+    "translationsTitle": "Namensübersetzungen",
+    "translationsHelper": "Feld leer lassen, um den englischen Namen zu verwenden. Artikel-IDs und Kategorien werden nie übersetzt.",
+    "unknownCategoryTitle": "Nicht übersetzte Kategorie",
+    "unknownCategoryWarning": "„{{slug}}“ ist keine der sieben übersetzten Kategorien. Sie wird in allen Sprachen als „{{label}}“ angezeigt – auch Nutzern, die kein Englisch lesen."
+  }
+}

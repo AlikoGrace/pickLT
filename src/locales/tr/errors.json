@@ -1,0 +1,84 @@
+{
+  "appwrite": {
+    "generalArgumentInvalid": "Alanlardan biri geçersiz. Lütfen girdiğiniz bilgileri kontrol edin.",
+    "generalRateLimitExceeded": "Çok fazla deneme yapıldı. Lütfen biraz bekleyip tekrar deneyin.",
+    "passwordPersonalData": "Şifre kişisel bilgi içeremez.",
+    "passwordRecentlyUsed": "Bu şifre yakın zamanda kullanıldı. Lütfen başka bir şifre seçin.",
+    "phoneInvalid": "Telefon numarası biçimi geçersiz.",
+    "userAlreadyExists": "Bu e-posta ile bir hesap zaten var.",
+    "userInvalidCode": "Doğrulama kodu hatalı veya süresi dolmuş.",
+    "userInvalidCredentials": "E-posta veya şifre hatalı.",
+    "userNotFound": "Bu e-posta ile bir hesap bulunamadı.",
+    "userPhoneNotFound": "Kayıtlı telefon numarası yok. Devam etmek için bir numara ekleyin.",
+    "userSessionAlreadyExists": "Zaten giriş yaptınız.",
+    "userSessionNotFound": "Oturum süresi doldu. Lütfen tekrar giriş yapın.",
+    "userUnauthorized": "Yetkiniz yok. Lütfen tekrar giriş yapın."
+  },
+  "auth": {
+    "noSession": {
+      "error": "Kimliği doğrulanmış kullanıcı yok"
+    }
+  },
+  "card": {
+    "add": {
+      "failed": "Kart eklenemedi. Tekrar deneyin.",
+      "initFailed": "Kart kurulumu başlatılamadı. Tekrar deneyin.",
+      "notSaved": "Kart kaydedilmedi. Tekrar deneyin."
+    },
+    "remove": {
+      "detachFailed": "Ödeme sağlayıcımız kartı kaldıramadı. Lütfen tekrar deneyin.",
+      "forbidden": "Bu kart hesabınıza ait değil.",
+      "internal": "Kart kaldırılırken bir sorun oluştu. Lütfen tekrar deneyin.",
+      "misconfigured": "Kart kaldırma işlemi geçici olarak kullanılamıyor. Lütfen daha sonra tekrar deneyin.",
+      "noStripeCustomer": "Hesabınız için ödeme profili bulunamadı.",
+      "paymentMethodNotFound": "Bu kart ödeme sağlayıcımızda artık mevcut değil.",
+      "unauthenticated": "Bu kartı kaldırmak için lütfen tekrar giriş yapın.",
+      "userNotFound": "Hesabınız yüklenemedi. Lütfen tekrar giriş yapın."
+    }
+  },
+  "generic": {
+    "fallback": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
+    "retry": {
+      "body": "Lütfen tekrar deneyin.",
+      "error": "Bir şeyler ters gitti. Lütfen tekrar deneyin."
+    },
+    "title": "Bir şeyler ters gitti"
+  },
+  "google": {
+    "cancelled": {
+      "error": "Google ile giriş iptal edildi."
+    },
+    "noCachedAccount": {
+      "error": "Kayıtlı Google hesabı bulunamadı."
+    },
+    "noCredentials": {
+      "error": "Google ile giriş başarılı oldu ancak sunucu kimlik bilgisi döndürmedi."
+    },
+    "noIdToken": {
+      "error": "Google ile giriş bir kimlik belirteci döndürmedi. Tekrar deneyin."
+    }
+  },
+  "instant": {
+    "moverUnavailable": {
+      "error": "Seçilen nakliyeci artık müsait değil"
+    },
+    "submitStage": {
+      "error": "Gönderim {{stage}} aşamasında başarısız oldu. Lütfen tekrar deneyin.",
+      "short": {
+        "error": "Gönderim {{stage}} aşamasında başarısız oldu"
+      }
+    }
+  },
+  "mapbox": {
+    "unreachable": {
+      "error": "Mapbox’a ulaşılamadı, bağlantınızı kontrol edin"
+    }
+  },
+  "payment": {
+    "cardDeclined": "Kartınız reddedildi. Lütfen başka bir ödeme yöntemi deneyin.",
+    "charge": {
+      "failed": "Ödeme tamamlanamadı. Tekrar deneyin.",
+      "initFailed": "Ödeme başlatılamadı. Tekrar deneyin."
+    }
+  }
+}

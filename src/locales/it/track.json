@@ -1,0 +1,142 @@
+{
+  "address": {
+    "dropoff": {
+      "title": "Indirizzo di consegna"
+    },
+    "floor": {
+      "label": "Piano {{floor}}"
+    },
+    "pickup": {
+      "title": "Indirizzo di ritiro"
+    }
+  },
+  "eta": {
+    "assigned": {
+      "label": "Orario di arrivo stimato"
+    },
+    "distance": {
+      "footnote": "A {{distance}} km"
+    },
+    "moverArriving": {
+      "label": "Traslocatore in arrivo"
+    },
+    "moverQueued": {
+      "body": "Sta finendo un altro lavoro",
+      "footnote": "Partirà verso di te appena avrà finito.",
+      "label": "Traslocatore assegnato"
+    }
+  },
+  "mover": {
+    "moveCount": {
+      "label_one": "{{count}} trasloco",
+      "label_other": "{{count}} traslochi"
+    }
+  },
+  "order": {
+    "handle": {
+      "title": "Ordine n. {{handle}}"
+    },
+    "item": {
+      "label": "{{qty}} × {{label}}"
+    },
+    "items": {
+      "empty": "Nessun articolo registrato per questo trasloco."
+    }
+  },
+  "payment": {
+    "amount": {
+      "label": "Importo da pagare"
+    },
+    "cashNote": {
+      "body": "Paga il traslocatore direttamente (contanti o bonifico), poi tocca <0>{{cta}}</0> qui sotto. Anche il traslocatore deve confermare l’incasso prima che il trasloco risulti completato."
+    },
+    "confirm": {
+      "cta": "Ho pagato"
+    },
+    "method": {
+      "card": {
+        "label": "Carta"
+      },
+      "cash": {
+        "label": "Pagamento alla consegna"
+      }
+    },
+    "payByCard": {
+      "cta": "Paga {{amount}} con carta"
+    }
+  },
+  "phase": {
+    "arrivedDestination": {
+      "subtitle": "Il traslocatore ha raggiunto l’indirizzo di consegna",
+      "title": "Arrivato a destinazione!"
+    },
+    "awaitingPayment": {
+      "subtitle": "Paga il traslocatore e conferma qui sotto",
+      "title": "Trasloco completato — Pagamento richiesto"
+    },
+    "broadcasting": {
+      "subtitle": "Ricerca del traslocatore più vicino"
+    },
+    "cancelled": {
+      "label": "Trasloco annullato",
+      "subtitle": "Annullato"
+    },
+    "cancelledByMover": {
+      "subtitle": "Annullato dal traslocatore"
+    },
+    "completed": {
+      "label": "Trasloco completato"
+    },
+    "inTransit": {
+      "subtitle": "Le tue cose sono in viaggio",
+      "title": "In viaggio verso la destinazione"
+    },
+    "loading": {
+      "subtitle": "Le tue cose vengono caricate sul veicolo",
+      "title": "Carico delle tue cose"
+    },
+    "moverArrived": {
+      "subtitle": "Incontralo all’indirizzo di ritiro",
+      "title": "Il tuo traslocatore è arrivato!"
+    },
+    "paid": {
+      "subtitle": "In attesa che il traslocatore chiuda il trasloco",
+      "title": "Pagamento ricevuto"
+    },
+    "unloading": {
+      "subtitle": "Le tue cose vengono scaricate a destinazione",
+      "title": "Scarico delle tue cose"
+    },
+    "waitingPriority": {
+      "subtitle": "Invio della richiesta al tuo traslocatore"
+    }
+  },
+  "pricing": {
+    "subtotal": {
+      "label": "Subtotale"
+    },
+    "total": {
+      "label": "Totale"
+    }
+  },
+  "step": {
+    "completed": {
+      "label": "Trasloco completato"
+    },
+    "inTransit": {
+      "label": "In transito"
+    },
+    "moverArrived": {
+      "label": "Traslocatore al ritiro"
+    },
+    "moverAssigned": {
+      "label": "Traslocatore assegnato"
+    },
+    "moverEnRoute": {
+      "label": "Traslocatore in arrivo"
+    },
+    "orderPlaced": {
+      "label": "Ordine effettuato"
+    }
+  }
+}

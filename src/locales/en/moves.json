@@ -1,0 +1,172 @@
+{
+  "card": {
+    "route": {
+      "dropoffFallback": {
+        "label": "Dropoff"
+      },
+      "pickupFallback": {
+        "label": "Pickup"
+      }
+    },
+    "title": {
+      "generic": {
+        "label": "Move"
+      }
+    }
+  },
+  "category": {
+    "all": {
+      "label": "All"
+    },
+    "cancelled": {
+      "label": "Cancelled"
+    },
+    "completed": {
+      "label": "Completed"
+    },
+    "inProgress": {
+      "label": "In Progress"
+    },
+    "pending": {
+      "label": "Pending"
+    }
+  },
+  "detail": {
+    "additionalServices": {
+      "title": "Additional services"
+    },
+    "address": {
+      "label": "Address"
+    },
+    "arrivalWindow": {
+      "label": "Arrival window"
+    },
+    "distance": {
+      "label": "Distance"
+    },
+    "dropoff": {
+      "label": "Drop off"
+    },
+    "dropoffAddress": {
+      "title": "Drop off Address"
+    },
+    "duration": {
+      "label": "Duration"
+    },
+    "elevator": {
+      "label": "Elevator"
+    },
+    "floor": {
+      "label": "Floor"
+    },
+    "itemLine": {
+      "label": "{{qty}} x {{label}}"
+    },
+    "moveDate": {
+      "label": "Move date"
+    },
+    "moveDetails": {
+      "title": "Move Details"
+    },
+    "moveItems": {
+      "title": "Move Items"
+    },
+    "packingService": {
+      "label": "Packing service"
+    },
+    "parking": {
+      "label": "Parking"
+    },
+    "pickup": {
+      "label": "Pick up"
+    },
+    "pickupAddress": {
+      "title": "Pick Up Address"
+    },
+    "requestedAt": {
+      "label": "Requested"
+    },
+    "route": {
+      "title": "Route"
+    },
+    "status": {
+      "label": "Status"
+    },
+    "type": {
+      "label": "Type"
+    },
+    "unit": {
+      "label": "Unit"
+    }
+  },
+  "itemCount_one": "{{count}} item",
+  "itemCount_other": "{{count}} items",
+  "list": {
+    "loadError": {
+      "body": "Pull down to retry.",
+      "title": "Couldn’t load moves"
+    }
+  },
+  "moveCategory": {
+    "instant": {
+      "label": "Instant"
+    },
+    "scheduled": {
+      "label": "Scheduled"
+    }
+  },
+  "payment": {
+    "method": {
+      "label": "Payment method"
+    }
+  },
+  "pricing": {
+    "estimatedTotal": {
+      "label": "Estimated Total"
+    }
+  },
+  "status": {
+    "arrivedDestination": {
+      "label": "Arrived"
+    },
+    "awaitingPayment": {
+      "label": "Awaiting Payment"
+    },
+    "cancelledByClient": {
+      "label": "Cancelled"
+    },
+    "cancelledByMover": {
+      "label": "Cancelled"
+    },
+    "completed": {
+      "label": "Completed"
+    },
+    "disputed": {
+      "label": "Disputed"
+    },
+    "inTransit": {
+      "label": "In Transit"
+    },
+    "loading": {
+      "label": "Loading"
+    },
+    "moverArrived": {
+      "label": "Mover Arrived"
+    },
+    "moverAssigned": {
+      "label": "Mover Assigned"
+    },
+    "moverEnRoute": {
+      "label": "Mover on the Way"
+    },
+    "paid": {
+      "label": "Paid"
+    },
+    "pending": {
+      "label": "Pending"
+    },
+    "unloading": {
+      "label": "Unloading"
+    }
+  }
+}

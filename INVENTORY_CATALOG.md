@@ -6,12 +6,19 @@ Each item should be created as a document in the **inventory_catalog** collectio
 
 > **Admin extensibility**: New items and categories can be added at any time through the admin panel. The frontend dynamically derives category tabs from the items fetched from the database — if you add items with a new `category` value, that category will appear automatically.
 
+> **Localisation (master plan D7)**: `itemId` and `category` are **stable keys and are never translated**. `name` is the English fallback. Per-locale display names live in the additive `nameTranslations` column, edited per item in the admin panel; the seven category slugs are translated by slug through the shared `inventory` i18n namespace (`inventory:category.livingRoom` — camelCased, because i18next reserves `_` for plural suffixes).
+>
+> A move row persists `inventoryItems` as `{itemId: count}` and stores **no labels at all**, so editing a translation here retroactively re-labels every move ever booked, in all three client apps, with no data migration. A category slug outside the seven known ones has no translation key and falls back to a title-cased slug that stays English in every language — the admin form warns about this rather than shipping it silently.
+>
+> Custom items are user-typed free text and stay untranslated by design.
+
 ## Collection Schema (per BACKEND_ARCHITECTURE.md)
 
 | Attribute                  | Type   | Required | Description                                                        |
 | -------------------------- | ------ | -------- | ------------------------------------------------------------------ |
 | `itemId`                   | string | Yes      | Unique slug identifier (e.g. `sofa_2seater`)                       |
-| `name`                     | string | Yes      | Display name shown to the user                                     |
+| `name`                     | string | Yes      | **English** display name — the fallback for every untranslated locale |
+| `nameTranslations`         | string | No       | JSON, `{"de":"2-Sitzer-Sofa","fr":"Canapé 2 places",…}` — size 4000 |
 | `category`                 | string | Yes      | Category slug (see Categories below — admins can add new ones)     |
 | `widthCm`                  | integer| Yes      | Width in centimetres                                               |
 | `heightCm`                 | integer| Yes      | Height in centimetres                                              |

@@ -13,7 +13,7 @@ import clsx from 'clsx'
 import Form from 'next/form'
 import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
-import CurrLangDropdown from '../CurrLangDropdown'
+import LanguageDropdown from '../LanguageDropdown'
 
 interface Props {
   data: TNavigationItem[]
@@ -138,9 +138,7 @@ const SidebarNavigation: React.FC<Props> = ({ data, currencies, languages }) => 
           Get Started
         </ButtonPrimary>
 
-        <CurrLangDropdown
-          currencies={currencies}
-          languages={languages}
+        <LanguageDropdown
           panelAnchor={{
             to: 'top end',
             gap: 12,

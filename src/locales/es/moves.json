@@ -1,0 +1,172 @@
+{
+  "card": {
+    "route": {
+      "dropoffFallback": {
+        "label": "Entrega"
+      },
+      "pickupFallback": {
+        "label": "Recogida"
+      }
+    },
+    "title": {
+      "generic": {
+        "label": "Mudanza"
+      }
+    }
+  },
+  "category": {
+    "all": {
+      "label": "Todas"
+    },
+    "cancelled": {
+      "label": "Canceladas"
+    },
+    "completed": {
+      "label": "Completadas"
+    },
+    "inProgress": {
+      "label": "En curso"
+    },
+    "pending": {
+      "label": "Pendientes"
+    }
+  },
+  "detail": {
+    "additionalServices": {
+      "title": "Servicios adicionales"
+    },
+    "address": {
+      "label": "Dirección"
+    },
+    "arrivalWindow": {
+      "label": "Franja de llegada"
+    },
+    "distance": {
+      "label": "Distancia"
+    },
+    "dropoff": {
+      "label": "Entrega"
+    },
+    "dropoffAddress": {
+      "title": "Dirección de entrega"
+    },
+    "duration": {
+      "label": "Duración"
+    },
+    "elevator": {
+      "label": "Ascensor"
+    },
+    "floor": {
+      "label": "Planta"
+    },
+    "itemLine": {
+      "label": "{{qty}} x {{label}}"
+    },
+    "moveDate": {
+      "label": "Fecha de la mudanza"
+    },
+    "moveDetails": {
+      "title": "Detalles de la mudanza"
+    },
+    "moveItems": {
+      "title": "Objetos de la mudanza"
+    },
+    "packingService": {
+      "label": "Servicio de embalaje"
+    },
+    "parking": {
+      "label": "Aparcamiento"
+    },
+    "pickup": {
+      "label": "Recogida"
+    },
+    "pickupAddress": {
+      "title": "Dirección de recogida"
+    },
+    "requestedAt": {
+      "label": "Solicitada"
+    },
+    "route": {
+      "title": "Ruta"
+    },
+    "status": {
+      "label": "Estado"
+    },
+    "type": {
+      "label": "Tipo"
+    },
+    "unit": {
+      "label": "Unidad"
+    }
+  },
+  "itemCount_one": "{{count}} objeto",
+  "itemCount_other": "{{count}} objetos",
+  "list": {
+    "loadError": {
+      "body": "Desliza hacia abajo para reintentar.",
+      "title": "No se pudieron cargar las mudanzas"
+    }
+  },
+  "moveCategory": {
+    "instant": {
+      "label": "Inmediata"
+    },
+    "scheduled": {
+      "label": "Programada"
+    }
+  },
+  "payment": {
+    "method": {
+      "label": "Método de pago"
+    }
+  },
+  "pricing": {
+    "estimatedTotal": {
+      "label": "Total estimado"
+    }
+  },
+  "status": {
+    "arrivedDestination": {
+      "label": "Ha llegado"
+    },
+    "awaitingPayment": {
+      "label": "Pago pendiente"
+    },
+    "cancelledByClient": {
+      "label": "Cancelada"
+    },
+    "cancelledByMover": {
+      "label": "Cancelada"
+    },
+    "completed": {
+      "label": "Completada"
+    },
+    "disputed": {
+      "label": "En disputa"
+    },
+    "inTransit": {
+      "label": "En tránsito"
+    },
+    "loading": {
+      "label": "Cargando"
+    },
+    "moverArrived": {
+      "label": "Transportista ha llegado"
+    },
+    "moverAssigned": {
+      "label": "Transportista asignado"
+    },
+    "moverEnRoute": {
+      "label": "Transportista en camino"
+    },
+    "paid": {
+      "label": "Pagada"
+    },
+    "pending": {
+      "label": "Pendiente"
+    },
+    "unloading": {
+      "label": "Descargando"
+    }
+  }
+}

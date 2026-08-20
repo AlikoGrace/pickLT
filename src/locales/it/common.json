@@ -1,0 +1,179 @@
+{
+  "action": {
+    "back": {
+      "a11y": "Indietro",
+      "cta": "Indietro"
+    },
+    "backToHome": {
+      "a11y": "Torna alla home"
+    },
+    "call": {
+      "cta": "Chiama"
+    },
+    "cancel": {
+      "cta": "Annulla"
+    },
+    "confirm": {
+      "cta": "Conferma"
+    },
+    "continue": {
+      "cta": "Continua"
+    },
+    "discard": {
+      "cta": "Scarta"
+    },
+    "done": {
+      "cta": "Fatto"
+    },
+    "goBack": {
+      "cta": "Indietro"
+    },
+    "message": {
+      "cta": "Messaggio"
+    },
+    "next": {
+      "cta": "Avanti"
+    },
+    "ok": {
+      "cta": "OK"
+    },
+    "replace": {
+      "cta": "Sostituisci"
+    },
+    "retry": {
+      "cta": "Riprova"
+    },
+    "search": {
+      "cta": "Cerca"
+    },
+    "seeAll": {
+      "cta": "Vedi tutto"
+    },
+    "skip": {
+      "cta": "Salta"
+    },
+    "submitting": {
+      "cta": "Invio…"
+    }
+  },
+  "answer": {
+    "no": {
+      "label": "No",
+      "option": "No"
+    },
+    "yes": {
+      "label": "Sì",
+      "option": "Sì"
+    }
+  },
+  "auth": {
+    "signInRequired": {
+      "body": "Accedi prima di continuare."
+    }
+  },
+  "confirm": {
+    "irreversible": {
+      "body": "Questa azione non può essere annullata."
+    }
+  },
+  "mover": {
+    "unnamed": {
+      "label": "Traslocatore"
+    }
+  },
+  "payment": {
+    "brand": {
+      "fallback": {
+        "label": "Carta"
+      },
+      "unionpay": {
+        "label": "UnionPay"
+      }
+    },
+    "brandTag": {
+      "amex": {
+        "label": "AMEX"
+      },
+      "diners": {
+        "label": "DINER"
+      },
+      "discover": {
+        "label": "DISC"
+      },
+      "fallback": {
+        "label": "CARTA"
+      },
+      "jcb": {
+        "label": "JCB"
+      },
+      "mastercard": {
+        "label": "MC"
+      },
+      "unionpay": {
+        "label": "UPay"
+      },
+      "visa": {
+        "label": "VISA"
+      }
+    },
+    "method": {
+      "applePay": {
+        "label": "Apple Pay"
+      },
+      "googlePay": {
+        "label": "Google Pay"
+      },
+      "payPal": {
+        "label": "PayPal"
+      }
+    },
+    "waiting": {
+      "done": {
+        "body": "Pagamento confermato."
+      },
+      "forClient": {
+        "body": "Pagamento confermato. In attesa della conferma del cliente prima di chiudere il trasloco."
+      },
+      "forMover": {
+        "body": "Pagamento confermato. In attesa della conferma del tuo traslocatore prima di chiudere il trasloco."
+      }
+    }
+  },
+  "state": {
+    "loading": {
+      "label": "Caricamento…"
+    },
+    "processing": {
+      "cta": "Elaborazione…"
+    }
+  },
+  "status": {
+    "comingSoon": {
+      "label": "Prossimamente"
+    }
+  },
+  "unit": {
+    "minutes": {
+      "label": "min"
+    }
+  },
+  "value": {
+    "noneSelected": {
+      "empty": "Nessuna selezione"
+    },
+    "notSpecified": {
+      "empty": "Non specificato"
+    }
+  },
+  "vehicleType": {
+    "largeTruck": {
+      "label": "Camion grande"
+    },
+    "mediumTruck": {
+      "label": "Camion medio"
+    },
+    "smallVan": {
+      "label": "Furgone piccolo"
+    }
+  }
+}

@@ -9,6 +9,7 @@ import { Navigation03Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import clsx from 'clsx'
 import { FC, useCallback, useEffect, useRef, useState } from 'react'
+import { mapboxLanguage } from '@/lib/mapbox-language'
 
 // Shared type with the desktop LocationInputField
 export type LocationSuggestion = {
@@ -38,7 +39,7 @@ async function searchLocations(
       autocomplete: 'true',
       types: 'address,street,postcode,neighborhood,locality,place,district,region,country',
       limit: '10',
-      language: 'en',
+      language: mapboxLanguage(),
     }
 
     if (proximity) {

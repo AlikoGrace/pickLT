@@ -1,0 +1,113 @@
+{
+  "category": {
+    "livingRoom": "Salon",
+    "bedroom": "Chambre",
+    "kitchen": "Cuisine",
+    "office": "Bureau",
+    "boxes": "Cartons",
+    "miscellaneous": "Divers",
+    "special": "Objets spéciaux"
+  },
+  "section": {
+    "special": {
+      "subtitle": "Ces objets nécessitent une manutention particulière et peuvent influer sur le prix."
+    },
+    "custom": {
+      "title": "Objets personnalisés",
+      "empty": "Ajoutez les objets qui ne figurent pas ci-dessus."
+    }
+  },
+  "item": {
+    "customSuffix": "Objet personnalisé",
+    "customName": {
+      "label": "{{name}} (personnalisé)"
+    },
+    "customTag": {
+      "label": "Personnalisé"
+    }
+  },
+  "search": {
+    "placeholder": "Rechercher tous les objets",
+    "noMatch": {
+      "empty": "Aucun objet ne correspond à « {{query}} ». Ajoutez-le comme objet personnalisé ci-dessous."
+    }
+  },
+  "customItem": {
+    "add": {
+      "cta": "Ajouter un objet personnalisé"
+    },
+    "name": {
+      "label": "Nom",
+      "placeholder": "ex. piano électrique"
+    },
+    "quantity": {
+      "label": "Quantité"
+    },
+    "size": {
+      "label": "Taille approximative",
+      "small": {
+        "option": "Petit"
+      },
+      "medium": {
+        "option": "Moyen"
+      },
+      "large": {
+        "option": "Grand"
+      },
+      "extraLarge": {
+        "option": "XL"
+      }
+    },
+    "weight": {
+      "label": "Poids approximatif (kg)",
+      "placeholder": "ex. 25"
+    },
+    "submit": {
+      "cta": "Ajouter l’objet"
+    }
+  },
+  "recommendation": {
+    "headline": {
+      "title": "{{prefix}} : {{tier}}"
+    },
+    "chosen": {
+      "label": "Votre déménagement"
+    },
+    "suggested": {
+      "label": "Recommandé"
+    },
+    "itemCount": {
+      "label_one": "{{count}} objet",
+      "label_other": "{{count}} objets"
+    }
+  },
+  "upgrade": {
+    "headline": {
+      "title": "Ce déménagement nécessite désormais"
+    },
+    "reason": {
+      "body": "L’ajout de « {{item}} » a fait passer votre déménagement en formule {{tier}} — {{explanation}}"
+    },
+    "warnings": {
+      "title": "Objets nécessitant cette formule :"
+    }
+  },
+  "unavailable": {
+    "empty": {
+      "title": "Aucun objet disponible pour l’instant",
+      "body": "Notre liste d’objets déménageables est en cours de préparation. Réessayez dans un instant — vous pouvez toujours nous contacter si votre déménagement est urgent."
+    },
+    "error": {
+      "title": "Impossible de charger la liste des objets",
+      "body": "Vérifiez votre connexion et réessayez."
+    }
+  },
+  "admin": {
+    "nameLabel": "Nom",
+    "nameHelper": "L’anglais sert de secours partout où une traduction manque.",
+    "translationsTitle": "Traductions du nom",
+    "translationsHelper": "Laissez vide pour utiliser le nom anglais. Les identifiants d’articles et les catégories ne sont jamais traduits.",
+    "unknownCategoryTitle": "Catégorie non traduite",
+    "unknownCategoryWarning": "« {{slug}} » ne fait pas partie des sept catégories traduites. Elle s’affichera comme « {{label}} » dans toutes les langues, y compris pour les utilisateurs qui ne lisent pas l’anglais."
+  }
+}

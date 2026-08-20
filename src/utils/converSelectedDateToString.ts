@@ -1,18 +1,10 @@
 import { DateRage } from '@/type'
+import { formatDateWith } from '@/lib/format'
 
 const converSelectedDateToString = ([startDate, endDate]: DateRage) => {
   const dateString =
-    (startDate?.toLocaleDateString('en-US', {
-      month: 'short',
-      day: '2-digit',
-    }) || '') +
-    (endDate
-      ? ' - ' +
-        endDate?.toLocaleDateString('en-US', {
-          month: 'short',
-          day: '2-digit',
-        })
-      : '')
+    formatDateWith(startDate, { month: 'short', day: '2-digit', fallback: '' }) +
+    (endDate ? ' - ' + formatDateWith(endDate, { month: 'short', day: '2-digit', fallback: '' }) : '')
   return dateString
 }
 

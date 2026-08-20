@@ -1,0 +1,86 @@
+{
+  "gender": {
+    "female": {
+      "option": "Weiblich"
+    },
+    "male": {
+      "option": "Männlich"
+    },
+    "other": {
+      "option": "Divers"
+    }
+  },
+  "helpCenter": {
+    "header": {
+      "title": "Hilfecenter"
+    },
+    "search": {
+      "a11y": "Hilfeartikel suchen",
+      "placeholder": "Ort suchen.."
+    }
+  },
+  "language": {
+    "active": "Aktiv",
+    "back": "Zurück",
+    "done": "Fertig",
+    "others": "Weitere",
+    "saveError": "Ihre Sprache konnte nicht gespeichert werden. Bitte versuchen Sie es erneut.",
+    "subtitle": "Wählen Sie die Sprache, die in der gesamten App verwendet werden soll.",
+    "suggested": "Vorschläge",
+    "title": "Sprache"
+  },
+  "menu": {
+    "appearance": {
+      "label": "Darstellung"
+    },
+    "changePassword": {
+      "label": "Passwort ändern"
+    },
+    "deleteAccount": {
+      "label": "Konto löschen"
+    },
+    "editProfile": {
+      "label": "Profil bearbeiten"
+    },
+    "help": {
+      "label": "Hilfe & Support"
+    },
+    "language": {
+      "label": "Sprache"
+    },
+    "legal": {
+      "label": "Rechtliches"
+    },
+    "logout": {
+      "label": "Abmelden"
+    },
+    "notifications": {
+      "label": "Benachrichtigungen"
+    },
+    "paymentAccount": {
+      "label": "Zahlungskonto"
+    },
+    "security": {
+      "label": "Sicherheit"
+    },
+    "yourCard": {
+      "label": "Ihre Karte"
+    }
+  },
+  "privacyPolicy": {
+    "header": {
+      "title": "Datenschutz"
+    }
+  },
+  "section": {
+    "general": {
+      "title": "Allgemein"
+    },
+    "payments": {
+      "title": "Zahlungen"
+    },
+    "preferences": {
+      "title": "Einstellungen"
+    }
+  }
+}

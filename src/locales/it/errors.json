@@ -1,0 +1,84 @@
+{
+  "appwrite": {
+    "generalArgumentInvalid": "Uno dei campi non è valido. Controlla i dati inseriti.",
+    "generalRateLimitExceeded": "Troppi tentativi. Attendi un momento e riprova.",
+    "passwordPersonalData": "La password non può contenere informazioni personali.",
+    "passwordRecentlyUsed": "Questa password è stata usata di recente. Scegline un’altra.",
+    "phoneInvalid": "Formato del numero di telefono non valido.",
+    "userAlreadyExists": "Esiste già un account con questa email.",
+    "userInvalidCode": "Il codice di verifica non è corretto o è scaduto.",
+    "userInvalidCredentials": "Email o password non corretti.",
+    "userNotFound": "Nessun account trovato con questa email.",
+    "userPhoneNotFound": "Nessun numero di telefono registrato. Aggiungine uno per continuare.",
+    "userSessionAlreadyExists": "Hai già effettuato l’accesso.",
+    "userSessionNotFound": "Sessione scaduta. Accedi di nuovo.",
+    "userUnauthorized": "Non hai l’autorizzazione. Accedi di nuovo."
+  },
+  "auth": {
+    "noSession": {
+      "error": "Nessun utente autenticato"
+    }
+  },
+  "card": {
+    "add": {
+      "failed": "Impossibile aggiungere la carta. Riprova.",
+      "initFailed": "Impossibile avviare la configurazione della carta. Riprova.",
+      "notSaved": "La carta non è stata salvata. Riprova."
+    },
+    "remove": {
+      "detachFailed": "Il nostro fornitore di pagamenti non è riuscito a rimuovere la carta. Riprova.",
+      "forbidden": "Quella carta non è associata al tuo account.",
+      "internal": "Si è verificato un problema durante la rimozione della carta. Riprova.",
+      "misconfigured": "La rimozione delle carte non è al momento disponibile. Riprova più tardi.",
+      "noStripeCustomer": "Nessun profilo di pagamento trovato per il tuo account.",
+      "paymentMethodNotFound": "Quella carta non esiste più presso il nostro fornitore di pagamenti.",
+      "unauthenticated": "Accedi di nuovo per rimuovere questa carta.",
+      "userNotFound": "Non è stato possibile caricare il tuo account. Accedi di nuovo."
+    }
+  },
+  "generic": {
+    "fallback": "Si è verificato un problema. Riprova.",
+    "retry": {
+      "body": "Riprova.",
+      "error": "Si è verificato un problema. Riprova."
+    },
+    "title": "Si è verificato un problema"
+  },
+  "google": {
+    "cancelled": {
+      "error": "L’accesso con Google è stato annullato."
+    },
+    "noCachedAccount": {
+      "error": "Nessun account Google salvato trovato."
+    },
+    "noCredentials": {
+      "error": "L’accesso con Google è riuscito, ma il server non ha restituito le credenziali."
+    },
+    "noIdToken": {
+      "error": "L’accesso con Google non ha restituito un token ID. Riprova."
+    }
+  },
+  "instant": {
+    "moverUnavailable": {
+      "error": "Il traslocatore selezionato non è più disponibile"
+    },
+    "submitStage": {
+      "error": "L’invio non è riuscito nella fase {{stage}}. Riprova.",
+      "short": {
+        "error": "L’invio non è riuscito nella fase {{stage}}"
+      }
+    }
+  },
+  "mapbox": {
+    "unreachable": {
+      "error": "Impossibile raggiungere Mapbox, controlla la connessione"
+    }
+  },
+  "payment": {
+    "cardDeclined": "La tua carta è stata rifiutata. Prova un altro metodo di pagamento.",
+    "charge": {
+      "failed": "Impossibile completare il pagamento. Riprova.",
+      "initFailed": "Impossibile avviare il pagamento. Riprova."
+    }
+  }
+}

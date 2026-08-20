@@ -21,6 +21,8 @@ import {
   CalendarIcon,
   CheckCircleIcon,
 } from '@heroicons/react/24/outline'
+import { formatDateWith, formatMoney } from '@/lib/format'
+import { useTranslation } from 'react-i18next'
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || ''
 const MOVE_REQUESTS_COLLECTION = process.env.NEXT_PUBLIC_COLLECTION_MOVE_REQUESTS || ''
@@ -75,7 +77,7 @@ const formatDate = (dateStr: string | null) => {
   if (!dateStr) return ''
   try {
     const date = new Date(dateStr)
-    return date.toLocaleDateString('en-GB', {
+    return formatDateWith(date, {
       weekday: 'short',
       month: 'short',
       day: 'numeric',
@@ -226,6 +228,7 @@ function createAlarmSound(): { play: () => void; stop: () => void } {
 }
 
 export default function MoveRequestPopup({ children }: { children: ReactNode }) {
+  const { t } = useTranslation()
   const { user } = useAuth()
 
   const moverProfileId = user?.moverDetails?.profileId
@@ -521,7 +524,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
               />
               {/* Photo count badge */}
               <div className="absolute top-2 right-2 z-10 bg-black/50 backdrop-blur-sm text-white text-xs px-2 py-0.5 rounded-full">
-                {galleryImages.length} photo{galleryImages.length !== 1 ? 's' : ''}
+                {t('booking:photos.photoCount', { count: galleryImages.length })}
               </div>
             </div>
           )}
@@ -613,7 +616,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
               <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800">
                 <span className="text-sm font-medium text-green-700 dark:text-green-300">Your earnings</span>
                 <span className="text-2xl font-bold text-green-700 dark:text-green-300">
-                  €{move.estimatedPrice}
+                  {formatMoney(move.estimatedPrice, { compact: true })}
                 </span>
               </div>
             )}
@@ -704,7 +707,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                   <div className="text-right">
                     <p className="text-sm text-neutral-500 dark:text-neutral-400">Earnings</p>
                     <p className="text-3xl font-bold text-green-600 dark:text-green-400">
-                      €{move.estimatedPrice}
+                      {formatMoney(move.estimatedPrice, { compact: true })}
                     </p>
                   </div>
                 )}
@@ -852,7 +855,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                       <div className="flex justify-between text-base">
                         <span className="font-semibold text-neutral-900 dark:text-neutral-100">Earnings</span>
                         <span className="font-bold text-green-600 dark:text-green-400">
-                          €{move.estimatedPrice ?? 0}
+                          {formatMoney(move.estimatedPrice ?? 0, { compact: true })}
                         </span>
                       </div>
                     </div>

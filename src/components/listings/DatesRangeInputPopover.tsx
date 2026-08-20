@@ -7,6 +7,7 @@ import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
 import { CalendarIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { FC, useState } from 'react'
 import DatePicker from 'react-datepicker'
+import { formatDateWith } from '@/lib/format'
 
 interface Props {
   className?: string
@@ -45,16 +46,10 @@ const DatesRangeInputPopover: FC<Props> = ({
         </div>
         <div className="grow text-start">
           <span className="block font-semibold xl:text-lg">
-            {startDate?.toLocaleDateString('en-US', {
-              month: 'short',
-              day: '2-digit',
-            }) || label || 'Add date'}
+            {formatDateWith(startDate, { month: 'short', day: '2-digit', fallback: '' }) || label || 'Add date'}
             {endDate && !isSingleDate
               ? ' - ' +
-                endDate?.toLocaleDateString('en-US', {
-                  month: 'short',
-                  day: '2-digit',
-                })
+                formatDateWith(endDate, { month: 'short', day: '2-digit', fallback: '' })
               : ''}
           </span>
           <span className="mt-1 block text-sm leading-none font-light text-neutral-400">

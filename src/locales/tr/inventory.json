@@ -1,0 +1,113 @@
+{
+  "category": {
+    "livingRoom": "Oturma Odası",
+    "bedroom": "Yatak Odası",
+    "kitchen": "Mutfak",
+    "office": "Ofis",
+    "boxes": "Koliler",
+    "miscellaneous": "Diğer",
+    "special": "Özel Eşyalar"
+  },
+  "section": {
+    "special": {
+      "subtitle": "Bu eşyalar özel taşıma gerektirir ve fiyatı etkileyebilir."
+    },
+    "custom": {
+      "title": "Özel eşyalar",
+      "empty": "Yukarıda yer almayan eşyaları ekleyin."
+    }
+  },
+  "item": {
+    "customSuffix": "Özel eşya",
+    "customName": {
+      "label": "{{name}} (özel)"
+    },
+    "customTag": {
+      "label": "Özel"
+    }
+  },
+  "search": {
+    "placeholder": "Tüm eşyalarda ara",
+    "noMatch": {
+      "empty": "“{{query}}” ile eşleşen eşya yok. Aşağıdan özel eşya olarak ekleyin."
+    }
+  },
+  "customItem": {
+    "add": {
+      "cta": "Özel eşya ekle"
+    },
+    "name": {
+      "label": "Ad",
+      "placeholder": "örn. elektrikli piyano"
+    },
+    "quantity": {
+      "label": "Adet"
+    },
+    "size": {
+      "label": "Yaklaşık boyut",
+      "small": {
+        "option": "Küçük"
+      },
+      "medium": {
+        "option": "Orta"
+      },
+      "large": {
+        "option": "Büyük"
+      },
+      "extraLarge": {
+        "option": "XL"
+      }
+    },
+    "weight": {
+      "label": "Yaklaşık ağırlık (kg)",
+      "placeholder": "örn. 25"
+    },
+    "submit": {
+      "cta": "Eşya ekle"
+    }
+  },
+  "recommendation": {
+    "headline": {
+      "title": "{{prefix}}: {{tier}}"
+    },
+    "chosen": {
+      "label": "Taşımanız"
+    },
+    "suggested": {
+      "label": "Önerilen"
+    },
+    "itemCount": {
+      "label_one": "{{count}} eşya",
+      "label_other": "{{count}} eşya"
+    }
+  },
+  "upgrade": {
+    "headline": {
+      "title": "Bu taşıma artık şunu gerektiriyor"
+    },
+    "reason": {
+      "body": "“{{item}}” eklenmesi taşımanızı {{tier}} kademesine taşıdı — {{explanation}}"
+    },
+    "warnings": {
+      "title": "Bu kademeyi gerektiren eşyalar:"
+    }
+  },
+  "unavailable": {
+    "empty": {
+      "title": "Henüz eşya bulunmuyor",
+      "body": "Taşınabilir eşya listemiz hazırlanıyor. Lütfen kısa süre sonra tekrar deneyin — taşınmanız acilse yine de bize ulaşabilirsiniz."
+    },
+    "error": {
+      "title": "Eşya listesi yüklenemedi",
+      "body": "Bağlantınızı kontrol edip tekrar deneyin."
+    }
+  },
+  "admin": {
+    "nameLabel": "Ad",
+    "nameHelper": "Çeviri eksik olduğunda İngilizce yedek olarak gösterilir.",
+    "translationsTitle": "Ad çevirileri",
+    "translationsHelper": "İngilizce adı kullanmak için boş bırakın. Ürün kimlikleri ve kategoriler asla çevrilmez.",
+    "unknownCategoryTitle": "Çevrilmemiş kategori",
+    "unknownCategoryWarning": "“{{slug}}” çevrilmiş yedi kategoriden biri değil. Her dilde “{{label}}” olarak görünecek; İngilizce okumayan kullanıcılar için de."
+  }
+}

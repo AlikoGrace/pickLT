@@ -1,0 +1,349 @@
+{
+  "field": {
+    "arrivalTime": {
+      "hour": {
+        "label": "Uur"
+      },
+      "minute": {
+        "label": "Min"
+      },
+      "period": {
+        "label": "Periode"
+      },
+      "sheet": {
+        "title": "Gewenste aankomsttijd"
+      }
+    },
+    "contact": {
+      "label": "Contact"
+    },
+    "crewSize": {
+      "label": "Teamgrootte"
+    },
+    "distance": {
+      "label": "Afstand"
+    },
+    "dropoff": {
+      "label": "Bestemming"
+    },
+    "elevator": {
+      "label": "Is er een lift?"
+    },
+    "inventory": {
+      "label": "Inventaris"
+    },
+    "moveDate": {
+      "label": "Verhuisdatum",
+      "placeholder": "Datum kiezen",
+      "sheet": {
+        "title": "Verhuisdatum kiezen"
+      }
+    },
+    "moveType": {
+      "label": "Soort verhuizing",
+      "placeholder": "Soort verhuizing kiezen",
+      "sheet": {
+        "title": "Soort verhuizing kiezen"
+      }
+    },
+    "pickup": {
+      "label": "Ophalen"
+    },
+    "preferredTime": {
+      "label": "Voorkeurstijd",
+      "placeholder": "Tijdvak kiezen",
+      "sheet": {
+        "title": "Voorkeurstijd"
+      },
+      "value": {
+        "label": "{{label}} ({{range}})"
+      }
+    },
+    "selectDate": {
+      "helper": "Wanneer wilt u verhuizen?",
+      "label": "Datum kiezen"
+    },
+    "vehicle": {
+      "label": "Voertuig"
+    }
+  },
+  "floorLevel": {
+    "floor1": {
+      "option": "1e verdieping"
+    },
+    "floor2": {
+      "option": "2e verdieping"
+    },
+    "floor3": {
+      "option": "3e verdieping"
+    },
+    "floor4": {
+      "option": "4e verdieping"
+    },
+    "floor5plus": {
+      "option": "5e verdieping of hoger"
+    },
+    "ground": {
+      "option": "Begane grond"
+    },
+    "numbered": {
+      "option": "{{n}}e verdieping"
+    }
+  },
+  "homeType": {
+    "apartment": {
+      "option": "Appartement"
+    },
+    "house": {
+      "option": "Huis"
+    },
+    "office": {
+      "option": "Kantoor"
+    },
+    "other": {
+      "option": "Anders"
+    },
+    "storage": {
+      "option": "Opslag"
+    }
+  },
+  "location": {
+    "gpsFailed": {
+      "error": "Uw locatie kon niet worden bepaald."
+    },
+    "minQuery": {
+      "helper_one": "Typ minstens {{count}} teken",
+      "helper_other": "Typ minstens {{count}} tekens"
+    },
+    "noResults": {
+      "empty": "Geen locaties gevonden"
+    },
+    "permissionDenied": {
+      "error": "Locatietoegang geweigerd. Schakel dit in bij Instellingen."
+    },
+    "search": {
+      "placeholder": "Zoek een plaats, herkenningspunt of adres"
+    },
+    "searchIdle": {
+      "empty": "Begin met typen om een adres te zoeken."
+    },
+    "selectPlaceholder": {
+      "placeholder": "Locatie {{field}} kiezen"
+    },
+    "sheet": {
+      "title": "Locatie {{field}}"
+    },
+    "useCurrent": {
+      "cta": "Huidige locatie gebruiken"
+    }
+  },
+  "map": {
+    "dropoff": {
+      "placeholder": "Afleverlocatie"
+    },
+    "pickup": {
+      "placeholder": "Ophaallocatie"
+    },
+    "preview": {
+      "empty": "Kaartvoorbeeld"
+    }
+  },
+  "mapPicker": {
+    "confirm": {
+      "cta": "Locatie bevestigen"
+    },
+    "default": {
+      "title": "Locatie kiezen"
+    },
+    "locating": {
+      "helper": "Uw locatie wordt bepaald…"
+    },
+    "reverseGeocoding": {
+      "helper": "Adres wordt opgehaald…"
+    },
+    "search": {
+      "placeholder": "Zoek een locatie…"
+    },
+    "tapHint": {
+      "helper": "Tik op de kaart om een locatie te kiezen"
+    },
+    "useCurrent": {
+      "cta": "Mijn huidige locatie gebruiken"
+    }
+  },
+  "moveType": {
+    "light": {
+      "body": "Kleine verhuizingen gaan met een kleine bestelbus.",
+      "short": "Klein",
+      "subtitle": "Perfect voor kleine ladingen — dozen, losse meubelstukken of een studio.",
+      "title": "Kleine verhuizing"
+    },
+    "premium": {
+      "body": "Premium verhuizingen gaan met grotere voertuigen en een team van 2 of meer personen.",
+      "short": "Premium",
+      "subtitle": "Volledige service voor grote woningen — inpakken, laden, vervoer en uitladen.",
+      "title": "Premium verhuizing"
+    },
+    "regular": {
+      "body": "Gewone verhuizingen gaan met een middelgroot voertuig en een team van 2 personen.",
+      "short": "Gewoon",
+      "subtitle": "Ideaal voor appartementen met 1 of 2 slaapkamers met gewone meubels en apparatuur.",
+      "title": "Gewone verhuizing"
+    }
+  },
+  "packingLevel": {
+    "full": {
+      "helper": "Verhuizers pakken alles voor me in",
+      "option": "Volledig inpakken"
+    },
+    "none": {
+      "helper": "Ik pak alles zelf in",
+      "option": "Geen inpakhulp"
+    },
+    "partial": {
+      "helper": "Verhuizers pakken alleen breekbare of waardevolle spullen in",
+      "option": "Breekbare spullen inpakken"
+    },
+    "unpacking": {
+      "helper": "Verhuizers pakken in bij het ophalen ÉN pakken uit op de bestemming",
+      "option": "In- en uitpakken"
+    }
+  },
+  "parking": {
+    "atBuilding": {
+      "option": "Parkeren direct bij het gebouw"
+    },
+    "directlyInFront": {
+      "option": "Parkeren direct ervoor"
+    },
+    "driveway": {
+      "option": "Oprit"
+    },
+    "limited": {
+      "option": "Beperkte parkeergelegenheid"
+    },
+    "loadingZone": {
+      "option": "Laad- en loszone nodig (Haltverbot)"
+    },
+    "lot": {
+      "option": "Parkeerterrein"
+    },
+    "nearby": {
+      "option": "Parkeren in de buurt (0–20 m)"
+    },
+    "none": {
+      "option": "Geen parkeergelegenheid"
+    },
+    "street": {
+      "option": "Parkeren op straat"
+    },
+    "underground": {
+      "option": "Toegang tot parkeergarage"
+    }
+  },
+  "payment": {
+    "method": {
+      "cash": {
+        "label": "Contant"
+      }
+    },
+    "section": {
+      "title": "Betaling"
+    }
+  },
+  "photos": {
+    "chooseGallery": {
+      "cta": "Kies uit galerij"
+    },
+    "formatHint": {
+      "subtitle": "PNG, JPG tot 3 MB"
+    },
+    "sourceSheet": {
+      "title": "Foto toevoegen"
+    },
+    "takePhoto": {
+      "cta": "Foto maken"
+    }
+  },
+  "pricing": {
+    "baseRate": {
+      "label": "Basistarief ({{moveType}})"
+    },
+    "storage": {
+      "label": "Opslag"
+    },
+    "subtotal": {
+      "label": "Subtotaal"
+    },
+    "total": {
+      "label": "Totaal"
+    },
+    "vat": {
+      "label": "Btw ({{rate}})"
+    }
+  },
+  "services": {
+    "applianceConnect": {
+      "helper": "Apparaten opnieuw aansluiten op de nieuwe locatie",
+      "label": "Apparaten aansluiten",
+      "option": "Apparaten aansluiten"
+    },
+    "applianceDisconnect": {
+      "helper": "Wasmachine, vaatwasser enzovoort loskoppelen",
+      "label": "Apparaten loskoppelen",
+      "option": "Apparaten loskoppelen"
+    },
+    "disposal": {
+      "helper": "Ongewenste spullen naar de gemeentelijke milieustraat brengen",
+      "label": "Afvoeren",
+      "option": "Afvoeren"
+    },
+    "furnitureAssembly": {
+      "helper": "We monteren meubels op de nieuwe locatie",
+      "label": "Meubels monteren",
+      "option": "Meubels monteren"
+    },
+    "furnitureDisassembly": {
+      "helper": "We demonteren bedden en tafels voor het laden",
+      "label": "Meubels demonteren",
+      "option": "Meubels demonteren"
+    },
+    "moveoutCleaning": {
+      "helper": "Schoonmaak op het ophaaladres na het laden",
+      "label": "Eindschoonmaak",
+      "option": "Eindschoonmaak"
+    },
+    "temporaryStorage": {
+      "helper": "Spullen opslaan tussen de ophaal- en afleverdatum",
+      "label": "Tijdelijke opslag",
+      "option": "Tijdelijke opslag"
+    },
+    "tvMountRemove": {
+      "helper": "Wandtelevisies losmaken bij het ophaaladres",
+      "label": "Tv-beugel verwijderen",
+      "option": "Tv-beugel verwijderen"
+    }
+  },
+  "timeSlot": {
+    "afternoon": {
+      "label": "Middag"
+    },
+    "evening": {
+      "label": "Avond"
+    },
+    "morning": {
+      "label": "Ochtend"
+    }
+  },
+  "vehicle": {
+    "largeTruck": {
+      "label": "Grote vrachtwagen"
+    },
+    "mediumTruck": {
+      "label": "Middelgrote vrachtwagen"
+    },
+    "smallVan": {
+      "label": "Kleine bestelbus"
+    }
+  }
+}

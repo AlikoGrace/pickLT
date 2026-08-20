@@ -1,0 +1,84 @@
+{
+  "appwrite": {
+    "generalArgumentInvalid": "Eines der Felder ist ungültig. Bitte überprüfen Sie Ihre Eingabe.",
+    "generalRateLimitExceeded": "Zu viele Versuche. Bitte warten Sie einen Moment und versuchen Sie es erneut.",
+    "passwordPersonalData": "Das Passwort darf keine persönlichen Daten enthalten.",
+    "passwordRecentlyUsed": "Dieses Passwort wurde kürzlich verwendet. Bitte wählen Sie ein anderes.",
+    "phoneInvalid": "Ungültiges Format der Telefonnummer.",
+    "userAlreadyExists": "Mit dieser E-Mail-Adresse besteht bereits ein Konto.",
+    "userInvalidCode": "Der Bestätigungscode ist falsch oder abgelaufen.",
+    "userInvalidCredentials": "E-Mail-Adresse oder Passwort ist falsch.",
+    "userNotFound": "Es wurde kein Konto mit dieser E-Mail-Adresse gefunden.",
+    "userPhoneNotFound": "Es ist keine Telefonnummer hinterlegt. Bitte fügen Sie eine hinzu, um fortzufahren.",
+    "userSessionAlreadyExists": "Sie sind bereits angemeldet.",
+    "userSessionNotFound": "Die Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
+    "userUnauthorized": "Sie sind nicht berechtigt. Bitte melden Sie sich erneut an."
+  },
+  "auth": {
+    "noSession": {
+      "error": "Kein angemeldeter Benutzer"
+    }
+  },
+  "card": {
+    "add": {
+      "failed": "Die Karte konnte nicht hinzugefügt werden. Bitte versuchen Sie es erneut.",
+      "initFailed": "Die Karteneinrichtung konnte nicht gestartet werden. Bitte versuchen Sie es erneut.",
+      "notSaved": "Die Karte wurde nicht gespeichert. Bitte versuchen Sie es erneut."
+    },
+    "remove": {
+      "detachFailed": "Unser Zahlungsanbieter konnte die Karte nicht entfernen. Bitte versuchen Sie es erneut.",
+      "forbidden": "Diese Karte gehört nicht zu Ihrem Konto.",
+      "internal": "Beim Entfernen der Karte ist etwas schiefgelaufen. Bitte versuchen Sie es erneut.",
+      "misconfigured": "Das Entfernen von Karten ist vorübergehend nicht möglich. Bitte versuchen Sie es später erneut.",
+      "noStripeCustomer": "Für Ihr Konto wurde kein Zahlungsprofil gefunden.",
+      "paymentMethodNotFound": "Diese Karte ist bei unserem Zahlungsanbieter nicht mehr vorhanden.",
+      "unauthenticated": "Bitte melden Sie sich erneut an, um diese Karte zu entfernen.",
+      "userNotFound": "Ihr Konto konnte nicht geladen werden. Bitte melden Sie sich erneut an."
+    }
+  },
+  "generic": {
+    "fallback": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+    "retry": {
+      "body": "Bitte versuchen Sie es erneut.",
+      "error": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+    },
+    "title": "Etwas ist schiefgelaufen"
+  },
+  "google": {
+    "cancelled": {
+      "error": "Die Anmeldung mit Google wurde abgebrochen."
+    },
+    "noCachedAccount": {
+      "error": "Es wurde kein gespeichertes Google-Konto gefunden."
+    },
+    "noCredentials": {
+      "error": "Die Anmeldung mit Google war erfolgreich, aber der Server hat keine Zugangsdaten zurückgegeben."
+    },
+    "noIdToken": {
+      "error": "Die Anmeldung mit Google hat kein ID-Token zurückgegeben. Bitte versuchen Sie es erneut."
+    }
+  },
+  "instant": {
+    "moverUnavailable": {
+      "error": "Der ausgewählte Umzugshelfer ist nicht mehr verfügbar"
+    },
+    "submitStage": {
+      "error": "Das Senden ist bei {{stage}} fehlgeschlagen. Bitte versuchen Sie es erneut.",
+      "short": {
+        "error": "Das Senden ist bei {{stage}} fehlgeschlagen"
+      }
+    }
+  },
+  "mapbox": {
+    "unreachable": {
+      "error": "Mapbox ist nicht erreichbar, bitte prüfen Sie Ihre Verbindung"
+    }
+  },
+  "payment": {
+    "cardDeclined": "Ihre Karte wurde abgelehnt. Bitte versuchen Sie eine andere Zahlungsmethode.",
+    "charge": {
+      "failed": "Die Zahlung konnte nicht abgeschlossen werden. Bitte versuchen Sie es erneut.",
+      "initFailed": "Die Zahlung konnte nicht gestartet werden. Bitte versuchen Sie es erneut."
+    }
+  }
+}

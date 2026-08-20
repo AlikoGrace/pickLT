@@ -1,0 +1,53 @@
+{
+  "governingLanguage": {
+    "notice": "Questo documento è una traduzione. È fornita a solo scopo informativo; in caso di discrepanze prevale la versione inglese."
+  },
+  "help": {
+    "faq": {
+      "contactSupport": {
+        "answer": "Puoi contattare il nostro team di assistenza tramite l’opzione «Contattaci» disponibile nell’app.",
+        "question": "Come contatto l’assistenza?"
+      },
+      "manageNotifications": {
+        "answer": "Apri Profilo → Notifiche per scegliere quali avvisi ricevere.",
+        "question": "Come gestisco le notifiche?"
+      },
+      "reportIssue": {
+        "answer": "Usa la sezione «Aiuto e supporto» del tuo profilo per segnalare eventuali problemi.",
+        "question": "Come segnalo un problema?"
+      },
+      "resetPassword": {
+        "answer": "Tocca «Password dimenticata» nella schermata di accesso e segui le istruzioni per reimpostare la password via e-mail.",
+        "question": "Come reimposto la password?"
+      },
+      "updateInfo": {
+        "answer": "Apri Profilo → Modifica profilo per aggiornare i tuoi dati personali in qualsiasi momento.",
+        "question": "Come posso aggiornare i miei dati?"
+      }
+    }
+  },
+  "privacy": {
+    "effectiveDate": {
+      "label": "Data di entrata in vigore: {{date}}",
+      "value": "20 dicembre 2024"
+    },
+    "section": {
+      "informationCollection": {
+        "body": "Raccogliamo le informazioni essenziali per migliorare la tua esperienza. Sono compresi i dati che fornisci direttamente, come quelli dell’account, e le informazioni raccolte tramite analisi di utilizzo e cookie.",
+        "title": "1. Raccolta delle informazioni"
+      },
+      "informationSetting": {
+        "body": "Hai il pieno controllo dei tuoi dati. Gestisci le preferenze sulla privacy, aggiorna i dati personali e personalizza le impostazioni in base alle tue esigenze.",
+        "title": "3. Impostazioni delle informazioni"
+      },
+      "informationUsage": {
+        "body": "Le informazioni raccolte vengono utilizzate per migliorare i nostri servizi, offrire consigli personalizzati e garantire un’esperienza senza interruzioni. Non condividiamo i tuoi dati senza il tuo consenso esplicito.",
+        "title": "2. Utilizzo delle informazioni"
+      },
+      "securityMeasures": {
+        "body": "Diamo priorità alla sicurezza dei tuoi dati con protocolli di sicurezza avanzati, metodi di crittografia e verifiche periodiche per proteggerli da accessi non autorizzati o violazioni.",
+        "title": "4. Misure di sicurezza"
+      }
+    }
+  }
+}

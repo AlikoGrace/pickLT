@@ -1,0 +1,113 @@
+{
+  "category": {
+    "livingRoom": "Salón",
+    "bedroom": "Dormitorio",
+    "kitchen": "Cocina",
+    "office": "Oficina",
+    "boxes": "Cajas",
+    "miscellaneous": "Varios",
+    "special": "Objetos especiales"
+  },
+  "section": {
+    "special": {
+      "subtitle": "Estos objetos requieren un manejo especial y pueden afectar al precio."
+    },
+    "custom": {
+      "title": "Objetos personalizados",
+      "empty": "Añade objetos que no aparezcan arriba."
+    }
+  },
+  "item": {
+    "customSuffix": "Objeto personalizado",
+    "customName": {
+      "label": "{{name}} (personalizado)"
+    },
+    "customTag": {
+      "label": "Personalizado"
+    }
+  },
+  "search": {
+    "placeholder": "Buscar todos los objetos",
+    "noMatch": {
+      "empty": "Ningún objeto coincide con «{{query}}». Añádelo abajo como objeto personalizado."
+    }
+  },
+  "customItem": {
+    "add": {
+      "cta": "Añadir objeto personalizado"
+    },
+    "name": {
+      "label": "Nombre",
+      "placeholder": "p. ej. piano eléctrico"
+    },
+    "quantity": {
+      "label": "Cantidad"
+    },
+    "size": {
+      "label": "Tamaño aproximado",
+      "small": {
+        "option": "Pequeño"
+      },
+      "medium": {
+        "option": "Mediano"
+      },
+      "large": {
+        "option": "Grande"
+      },
+      "extraLarge": {
+        "option": "XL"
+      }
+    },
+    "weight": {
+      "label": "Peso aproximado (kg)",
+      "placeholder": "p. ej. 25"
+    },
+    "submit": {
+      "cta": "Añadir objeto"
+    }
+  },
+  "recommendation": {
+    "headline": {
+      "title": "{{prefix}}: {{tier}}"
+    },
+    "chosen": {
+      "label": "Tu mudanza"
+    },
+    "suggested": {
+      "label": "Recomendada"
+    },
+    "itemCount": {
+      "label_one": "{{count}} objeto",
+      "label_other": "{{count}} objetos"
+    }
+  },
+  "upgrade": {
+    "headline": {
+      "title": "Esta mudanza ahora requiere"
+    },
+    "reason": {
+      "body": "Añadir «{{item}}» ha pasado tu mudanza a la categoría {{tier}}: {{explanation}}"
+    },
+    "warnings": {
+      "title": "Objetos que requieren esta categoría:"
+    }
+  },
+  "unavailable": {
+    "empty": {
+      "title": "Todavía no hay objetos disponibles",
+      "body": "Estamos preparando nuestra lista de objetos transportables. Vuelve a intentarlo en breve; si tu mudanza es urgente, puedes contactarnos igualmente."
+    },
+    "error": {
+      "title": "No se ha podido cargar la lista de objetos",
+      "body": "Comprueba tu conexión e inténtalo de nuevo."
+    }
+  },
+  "admin": {
+    "nameLabel": "Nombre",
+    "nameHelper": "El inglés es el texto alternativo cuando falta una traducción.",
+    "translationsTitle": "Traducciones del nombre",
+    "translationsHelper": "Deja el campo vacío para usar el nombre en inglés. Los IDs de artículo y las categorías nunca se traducen.",
+    "unknownCategoryTitle": "Categoría sin traducir",
+    "unknownCategoryWarning": "«{{slug}}» no es una de las siete categorías traducidas. Se mostrará como «{{label}}» en todos los idiomas, incluso a usuarios que no leen inglés."
+  }
+}

@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react'
 import TimePicker from 'react-time-picker'
 import 'react-time-picker/dist/TimePicker.css'
 import 'react-clock/dist/Clock.css'
+import { formatDateWith } from '@/lib/format'
 
 const PageAddListing6 = () => {
   const router = useRouter()
@@ -49,7 +50,7 @@ const PageAddListing6 = () => {
     if (!dateStr) return 'Not selected'
     try {
       const date = new Date(dateStr)
-      return date.toLocaleDateString('en-GB', {
+      return formatDateWith(date, {
         weekday: 'long',
         year: 'numeric',
         month: 'long',

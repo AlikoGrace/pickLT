@@ -1,0 +1,86 @@
+{
+  "gender": {
+    "female": {
+      "option": "Vrouw"
+    },
+    "male": {
+      "option": "Man"
+    },
+    "other": {
+      "option": "Anders"
+    }
+  },
+  "helpCenter": {
+    "header": {
+      "title": "Helpcentrum"
+    },
+    "search": {
+      "a11y": "Helpartikelen zoeken",
+      "placeholder": "Locatie zoeken.."
+    }
+  },
+  "language": {
+    "active": "Actief",
+    "back": "Terug",
+    "done": "Klaar",
+    "others": "Overige",
+    "saveError": "Je taal kon niet worden opgeslagen. Probeer het opnieuw.",
+    "subtitle": "Kies de taal die je in de hele app wilt gebruiken.",
+    "suggested": "Voorgesteld",
+    "title": "Taal"
+  },
+  "menu": {
+    "appearance": {
+      "label": "Weergave"
+    },
+    "changePassword": {
+      "label": "Wachtwoord wijzigen"
+    },
+    "deleteAccount": {
+      "label": "Account verwijderen"
+    },
+    "editProfile": {
+      "label": "Profiel bewerken"
+    },
+    "help": {
+      "label": "Help en support"
+    },
+    "language": {
+      "label": "Taal"
+    },
+    "legal": {
+      "label": "Juridisch"
+    },
+    "logout": {
+      "label": "Uitloggen"
+    },
+    "notifications": {
+      "label": "Meldingen"
+    },
+    "paymentAccount": {
+      "label": "Betaalrekening"
+    },
+    "security": {
+      "label": "Beveiliging"
+    },
+    "yourCard": {
+      "label": "Je kaart"
+    }
+  },
+  "privacyPolicy": {
+    "header": {
+      "title": "Privacy en beleid"
+    }
+  },
+  "section": {
+    "general": {
+      "title": "Algemeen"
+    },
+    "payments": {
+      "title": "Betalingen"
+    },
+    "preferences": {
+      "title": "Voorkeuren"
+    }
+  }
+}

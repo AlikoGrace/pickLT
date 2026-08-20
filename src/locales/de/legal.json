@@ -1,0 +1,53 @@
+{
+  "governingLanguage": {
+    "notice": "Dieses Dokument ist eine Übersetzung. Sie dient ausschließlich Ihrer Information; im Falle von Abweichungen ist die englische Fassung maßgeblich."
+  },
+  "help": {
+    "faq": {
+      "contactSupport": {
+        "answer": "Sie erreichen unser Support-Team über die Option „Kontakt“ in der App.",
+        "question": "Wie kontaktiere ich den Support?"
+      },
+      "manageNotifications": {
+        "answer": "Öffnen Sie Profil → Benachrichtigungen, um festzulegen, welche Hinweise Sie erhalten.",
+        "question": "Wie verwalte ich Benachrichtigungen?"
+      },
+      "reportIssue": {
+        "answer": "Nutzen Sie den Bereich „Hilfe & Support“ in Ihrem Profil, um auftretende Probleme zu melden.",
+        "question": "Wie melde ich ein Problem?"
+      },
+      "resetPassword": {
+        "answer": "Tippen Sie im Anmeldebildschirm auf „Passwort vergessen“ und folgen Sie den Anweisungen, um Ihr Passwort per E-Mail zurückzusetzen.",
+        "question": "Wie setze ich mein Passwort zurück?"
+      },
+      "updateInfo": {
+        "answer": "Öffnen Sie Profil → Profil bearbeiten, um Ihre persönlichen Angaben jederzeit zu aktualisieren.",
+        "question": "Wie kann ich meine Angaben aktualisieren?"
+      }
+    }
+  },
+  "privacy": {
+    "effectiveDate": {
+      "label": "Gültig ab: {{date}}",
+      "value": "20. Dezember 2024"
+    },
+    "section": {
+      "informationCollection": {
+        "body": "Wir erheben die notwendigen Informationen, um Ihr Nutzungserlebnis zu verbessern. Dazu gehören Angaben, die Sie uns direkt machen, etwa Ihre Kontodaten, sowie Informationen aus Nutzungsanalysen und Cookies.",
+        "title": "1. Datenerhebung"
+      },
+      "informationSetting": {
+        "body": "Sie haben die volle Kontrolle über Ihre Daten. Verwalten Sie Ihre Datenschutzeinstellungen, aktualisieren Sie Ihre persönlichen Angaben und passen Sie Ihre Einstellungen an Ihre Bedürfnisse an.",
+        "title": "3. Dateneinstellungen"
+      },
+      "informationUsage": {
+        "body": "Die erhobenen Informationen werden verwendet, um unsere Dienste zu verbessern, personalisierte Empfehlungen zu geben und einen reibungslosen Ablauf zu gewährleisten. Wir geben Ihre Daten nicht ohne Ihre ausdrückliche Einwilligung weiter.",
+        "title": "2. Datenverwendung"
+      },
+      "securityMeasures": {
+        "body": "Die Sicherheit Ihrer Daten hat für uns Vorrang. Wir setzen fortschrittliche Sicherheitsprotokolle, Verschlüsselungsverfahren und regelmäßige Audits ein, um unbefugten Zugriff und Datenschutzverletzungen zu verhindern.",
+        "title": "4. Sicherheitsmaßnahmen"
+      }
+    }
+  }
+}

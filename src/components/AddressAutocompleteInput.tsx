@@ -2,6 +2,7 @@
 
 import Input from '@/shared/Input'
 import { useEffect, useRef, useState } from 'react'
+import { mapboxLanguage } from '@/lib/mapbox-language'
 
 /**
  * Street-address input with inline Mapbox suggestions (T4 parity with the
@@ -33,7 +34,7 @@ async function searchAddresses(
     autocomplete: 'true',
     types: 'address,street',
     limit: '5',
-    language: 'en',
+    language: mapboxLanguage(),
   })
   if (proximity) params.set('proximity', `${proximity.longitude},${proximity.latitude}`)
   const res = await fetch(

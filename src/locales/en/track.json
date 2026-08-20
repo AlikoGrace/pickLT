@@ -1,0 +1,142 @@
+{
+  "address": {
+    "dropoff": {
+      "title": "Drop-off address"
+    },
+    "floor": {
+      "label": "Floor {{floor}}"
+    },
+    "pickup": {
+      "title": "Pickup address"
+    }
+  },
+  "eta": {
+    "assigned": {
+      "label": "Estimated time of arrival"
+    },
+    "distance": {
+      "footnote": "{{distance}} km away"
+    },
+    "moverArriving": {
+      "label": "Mover on the way"
+    },
+    "moverQueued": {
+      "body": "Finishing another job",
+      "footnote": "They’ll head your way as soon as they’re done.",
+      "label": "Mover assigned"
+    }
+  },
+  "mover": {
+    "moveCount": {
+      "label_one": "{{count}} move",
+      "label_other": "{{count}} moves"
+    }
+  },
+  "order": {
+    "handle": {
+      "title": "Order #{{handle}}"
+    },
+    "item": {
+      "label": "{{qty}} × {{label}}"
+    },
+    "items": {
+      "empty": "No items recorded for this move."
+    }
+  },
+  "payment": {
+    "amount": {
+      "label": "Amount to pay"
+    },
+    "cashNote": {
+      "body": "Please pay the mover directly (cash or transfer), then tap <0>{{cta}}</0> below. The mover must also confirm receipt before the move is marked complete."
+    },
+    "confirm": {
+      "cta": "I have paid"
+    },
+    "method": {
+      "card": {
+        "label": "Card"
+      },
+      "cash": {
+        "label": "Cash on delivery"
+      }
+    },
+    "payByCard": {
+      "cta": "Pay {{amount}} by card"
+    }
+  },
+  "phase": {
+    "arrivedDestination": {
+      "subtitle": "Your mover has reached the drop-off location",
+      "title": "Arrived at destination!"
+    },
+    "awaitingPayment": {
+      "subtitle": "Please pay the mover and confirm below",
+      "title": "Move completed — Payment required"
+    },
+    "broadcasting": {
+      "subtitle": "Finding the nearest mover"
+    },
+    "cancelled": {
+      "label": "Move cancelled",
+      "subtitle": "Cancelled"
+    },
+    "cancelledByMover": {
+      "subtitle": "Cancelled by mover"
+    },
+    "completed": {
+      "label": "Move complete"
+    },
+    "inTransit": {
+      "subtitle": "Your items are being transported",
+      "title": "On the way to destination"
+    },
+    "loading": {
+      "subtitle": "Your items are being loaded onto the vehicle",
+      "title": "Loading your items"
+    },
+    "moverArrived": {
+      "subtitle": "Meet them at the pickup location",
+      "title": "Your mover has arrived!"
+    },
+    "paid": {
+      "subtitle": "Waiting for the mover to close out the move",
+      "title": "Payment received"
+    },
+    "unloading": {
+      "subtitle": "Your items are being unloaded at the destination",
+      "title": "Unloading your items"
+    },
+    "waitingPriority": {
+      "subtitle": "Sending request to your mover"
+    }
+  },
+  "pricing": {
+    "subtotal": {
+      "label": "Subtotal"
+    },
+    "total": {
+      "label": "Total"
+    }
+  },
+  "step": {
+    "completed": {
+      "label": "Move complete"
+    },
+    "inTransit": {
+      "label": "In transit"
+    },
+    "moverArrived": {
+      "label": "Mover arrived at pickup"
+    },
+    "moverAssigned": {
+      "label": "Mover assigned"
+    },
+    "moverEnRoute": {
+      "label": "Mover on the way"
+    },
+    "orderPlaced": {
+      "label": "Order placed"
+    }
+  }
+}

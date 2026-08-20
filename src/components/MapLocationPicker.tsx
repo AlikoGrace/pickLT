@@ -9,6 +9,7 @@ import { Cancel01Icon, Location01Icon, Navigation03Icon, Tick01Icon } from '@hug
 import { HugeiconsIcon } from '@hugeicons/react'
 import clsx from 'clsx'
 import ButtonPrimary from '@/shared/ButtonPrimary'
+import { mapboxLanguage } from '@/lib/mapbox-language'
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || ''
 
@@ -45,7 +46,7 @@ async function forwardGeocode(
       autocomplete: 'true',
       types: 'address,street,postcode,neighborhood,locality,place,district,region,country',
       limit: '8',
-      language: 'en',
+      language: mapboxLanguage(),
     }
     if (proximity) params.proximity = `${proximity.longitude},${proximity.latitude}`
 

@@ -1,0 +1,84 @@
+{
+  "appwrite": {
+    "generalArgumentInvalid": "Een van de velden is ongeldig. Controleer je invoer.",
+    "generalRateLimitExceeded": "Te veel pogingen. Wacht even en probeer het opnieuw.",
+    "passwordPersonalData": "Het wachtwoord mag geen persoonlijke gegevens bevatten.",
+    "passwordRecentlyUsed": "Dit wachtwoord is onlangs gebruikt. Kies een ander wachtwoord.",
+    "phoneInvalid": "Ongeldige notatie van het telefoonnummer.",
+    "userAlreadyExists": "Er bestaat al een account met dit e-mailadres.",
+    "userInvalidCode": "De verificatiecode is onjuist of verlopen.",
+    "userInvalidCredentials": "Onjuist e-mailadres of wachtwoord.",
+    "userNotFound": "Geen account gevonden met dit e-mailadres.",
+    "userPhoneNotFound": "Er is geen telefoonnummer bekend. Voeg er een toe om door te gaan.",
+    "userSessionAlreadyExists": "Je bent al ingelogd.",
+    "userSessionNotFound": "Sessie verlopen. Log opnieuw in.",
+    "userUnauthorized": "Je hebt geen toegang. Log opnieuw in."
+  },
+  "auth": {
+    "noSession": {
+      "error": "Geen ingelogde gebruiker"
+    }
+  },
+  "card": {
+    "add": {
+      "failed": "Kaart kon niet worden toegevoegd. Probeer het opnieuw.",
+      "initFailed": "Kaartinstelling kon niet worden gestart. Probeer het opnieuw.",
+      "notSaved": "Kaart is niet opgeslagen. Probeer het opnieuw."
+    },
+    "remove": {
+      "detachFailed": "Onze betaalprovider kon de kaart niet verwijderen. Probeer het opnieuw.",
+      "forbidden": "Die kaart hoort niet bij je account.",
+      "internal": "Er ging iets mis bij het verwijderen van de kaart. Probeer het opnieuw.",
+      "misconfigured": "Kaarten verwijderen is tijdelijk niet mogelijk. Probeer het later opnieuw.",
+      "noStripeCustomer": "Geen betaalprofiel gevonden voor je account.",
+      "paymentMethodNotFound": "Die kaart bestaat niet meer bij onze betaalprovider.",
+      "unauthenticated": "Log opnieuw in om deze kaart te verwijderen.",
+      "userNotFound": "Je account kon niet worden geladen. Log opnieuw in."
+    }
+  },
+  "generic": {
+    "fallback": "Er is iets misgegaan. Probeer het opnieuw.",
+    "retry": {
+      "body": "Probeer het opnieuw.",
+      "error": "Er is iets misgegaan. Probeer het opnieuw."
+    },
+    "title": "Er is iets misgegaan"
+  },
+  "google": {
+    "cancelled": {
+      "error": "Inloggen met Google is geannuleerd."
+    },
+    "noCachedAccount": {
+      "error": "Geen opgeslagen Google-account gevonden."
+    },
+    "noCredentials": {
+      "error": "Inloggen met Google is gelukt, maar de server heeft geen inloggegevens teruggestuurd."
+    },
+    "noIdToken": {
+      "error": "Inloggen met Google heeft geen ID-token opgeleverd. Probeer het opnieuw."
+    }
+  },
+  "instant": {
+    "moverUnavailable": {
+      "error": "De geselecteerde verhuizer is niet meer beschikbaar"
+    },
+    "submitStage": {
+      "error": "Verzenden is mislukt bij {{stage}}. Probeer het opnieuw.",
+      "short": {
+        "error": "Verzenden is mislukt bij {{stage}}"
+      }
+    }
+  },
+  "mapbox": {
+    "unreachable": {
+      "error": "Mapbox is niet bereikbaar, controleer je verbinding"
+    }
+  },
+  "payment": {
+    "cardDeclined": "Je kaart is geweigerd. Probeer een andere betaalmethode.",
+    "charge": {
+      "failed": "Betaling kon niet worden voltooid. Probeer het opnieuw.",
+      "initFailed": "Betaling kon niet worden gestart. Probeer het opnieuw."
+    }
+  }
+}

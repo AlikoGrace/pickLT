@@ -1,0 +1,349 @@
+{
+  "field": {
+    "arrivalTime": {
+      "hour": {
+        "label": "Hour"
+      },
+      "minute": {
+        "label": "Min"
+      },
+      "period": {
+        "label": "Period"
+      },
+      "sheet": {
+        "title": "Preferred Arrival Time"
+      }
+    },
+    "contact": {
+      "label": "Contact"
+    },
+    "crewSize": {
+      "label": "Crew size"
+    },
+    "distance": {
+      "label": "Distance"
+    },
+    "dropoff": {
+      "label": "Drop-off"
+    },
+    "elevator": {
+      "label": "Elevator available?"
+    },
+    "inventory": {
+      "label": "Inventory"
+    },
+    "moveDate": {
+      "label": "Move Date",
+      "placeholder": "Select date",
+      "sheet": {
+        "title": "Select Move Date"
+      }
+    },
+    "moveType": {
+      "label": "Move Type",
+      "placeholder": "Select move type",
+      "sheet": {
+        "title": "Select Move Type"
+      }
+    },
+    "pickup": {
+      "label": "Pickup"
+    },
+    "preferredTime": {
+      "label": "Preferred Time",
+      "placeholder": "Select time slot",
+      "sheet": {
+        "title": "Preferred Time"
+      },
+      "value": {
+        "label": "{{label}} ({{range}})"
+      }
+    },
+    "selectDate": {
+      "helper": "When would you like to move?",
+      "label": "Select Date"
+    },
+    "vehicle": {
+      "label": "Vehicle"
+    }
+  },
+  "floorLevel": {
+    "floor1": {
+      "option": "1st Floor"
+    },
+    "floor2": {
+      "option": "2nd Floor"
+    },
+    "floor3": {
+      "option": "3rd Floor"
+    },
+    "floor4": {
+      "option": "4th Floor"
+    },
+    "floor5plus": {
+      "option": "5th+ Floor"
+    },
+    "ground": {
+      "option": "Ground Floor"
+    },
+    "numbered": {
+      "option": "Floor {{n}}"
+    }
+  },
+  "homeType": {
+    "apartment": {
+      "option": "Apartment"
+    },
+    "house": {
+      "option": "House"
+    },
+    "office": {
+      "option": "Office"
+    },
+    "other": {
+      "option": "Other"
+    },
+    "storage": {
+      "option": "Storage"
+    }
+  },
+  "location": {
+    "gpsFailed": {
+      "error": "Couldn't determine your location."
+    },
+    "minQuery": {
+      "helper_one": "Type at least {{count}} character",
+      "helper_other": "Type at least {{count}} characters"
+    },
+    "noResults": {
+      "empty": "No locations found"
+    },
+    "permissionDenied": {
+      "error": "Location permission denied. Enable it in Settings."
+    },
+    "search": {
+      "placeholder": "Search a place, landmark or address"
+    },
+    "searchIdle": {
+      "empty": "Start typing to search for an address."
+    },
+    "selectPlaceholder": {
+      "placeholder": "Select {{field}} location"
+    },
+    "sheet": {
+      "title": "{{field}} Location"
+    },
+    "useCurrent": {
+      "cta": "Use current location"
+    }
+  },
+  "map": {
+    "dropoff": {
+      "placeholder": "Drop off location"
+    },
+    "pickup": {
+      "placeholder": "Pick up location"
+    },
+    "preview": {
+      "empty": "Map Preview"
+    }
+  },
+  "mapPicker": {
+    "confirm": {
+      "cta": "Confirm location"
+    },
+    "default": {
+      "title": "Select location"
+    },
+    "locating": {
+      "helper": "Getting your location…"
+    },
+    "reverseGeocoding": {
+      "helper": "Getting address…"
+    },
+    "search": {
+      "placeholder": "Search for a location…"
+    },
+    "tapHint": {
+      "helper": "Tap the map to select a location"
+    },
+    "useCurrent": {
+      "cta": "Use my current location"
+    }
+  },
+  "moveType": {
+    "light": {
+      "body": "Light moves use a small van.",
+      "short": "Light",
+      "subtitle": "Perfect for small loads — boxes, single furniture pieces, or a studio apartment.",
+      "title": "Light Move"
+    },
+    "premium": {
+      "body": "Premium moves use larger vehicles and a 2+ person crew.",
+      "short": "Premium",
+      "subtitle": "Full-service move for large homes — packing, loading, transport, and unloading.",
+      "title": "Premium Move"
+    },
+    "regular": {
+      "body": "Regular moves use a medium vehicle and a 2-person crew.",
+      "short": "Regular",
+      "subtitle": "Ideal for 1–2 bedroom apartments with standard furniture and appliances.",
+      "title": "Regular Move"
+    }
+  },
+  "packingLevel": {
+    "full": {
+      "helper": "Movers pack everything for me",
+      "option": "Full packing"
+    },
+    "none": {
+      "helper": "I will pack everything myself",
+      "option": "No packing help"
+    },
+    "partial": {
+      "helper": "Movers pack only fragile/valuable items",
+      "option": "Pack fragile items"
+    },
+    "unpacking": {
+      "helper": "Movers pack at pickup AND unpack at dropoff",
+      "option": "Pack and unpack"
+    }
+  },
+  "parking": {
+    "atBuilding": {
+      "option": "Parking directly at building"
+    },
+    "directlyInFront": {
+      "option": "Parking directly in front"
+    },
+    "driveway": {
+      "option": "Driveway"
+    },
+    "limited": {
+      "option": "Limited parking"
+    },
+    "loadingZone": {
+      "option": "Need loading zone (Haltverbot)"
+    },
+    "lot": {
+      "option": "Parking Lot"
+    },
+    "nearby": {
+      "option": "Parking nearby (0–20 m)"
+    },
+    "none": {
+      "option": "No Parking Available"
+    },
+    "street": {
+      "option": "Street Parking"
+    },
+    "underground": {
+      "option": "Underground garage access"
+    }
+  },
+  "payment": {
+    "method": {
+      "cash": {
+        "label": "Cash"
+      }
+    },
+    "section": {
+      "title": "Payment"
+    }
+  },
+  "photos": {
+    "chooseGallery": {
+      "cta": "Choose from gallery"
+    },
+    "formatHint": {
+      "subtitle": "PNG, JPG up to 3MB"
+    },
+    "sourceSheet": {
+      "title": "Add a photo"
+    },
+    "takePhoto": {
+      "cta": "Take a photo"
+    }
+  },
+  "pricing": {
+    "baseRate": {
+      "label": "Base rate ({{moveType}})"
+    },
+    "storage": {
+      "label": "Storage"
+    },
+    "subtotal": {
+      "label": "Subtotal"
+    },
+    "total": {
+      "label": "Total"
+    },
+    "vat": {
+      "label": "VAT ({{rate}})"
+    }
+  },
+  "services": {
+    "applianceConnect": {
+      "helper": "Reconnect appliances at new location",
+      "label": "Appliance Connect",
+      "option": "Appliance connect"
+    },
+    "applianceDisconnect": {
+      "helper": "Disconnect washing machine, dishwasher etc",
+      "label": "Appliance Disconnect",
+      "option": "Appliance disconnect"
+    },
+    "disposal": {
+      "helper": "Dispose of unwanted items at the city Wertstoffhof",
+      "label": "Disposal (Entsorgung)",
+      "option": "Disposal (Entsorgung)"
+    },
+    "furnitureAssembly": {
+      "helper": "We assemble furniture at new location",
+      "label": "Furniture Assembly",
+      "option": "Furniture assembly"
+    },
+    "furnitureDisassembly": {
+      "helper": "We disassemble beds, tables before loading",
+      "label": "Furniture Disassembly",
+      "option": "Furniture disassembly"
+    },
+    "moveoutCleaning": {
+      "helper": "Cleaning service at the pickup address after loading",
+      "label": "Move-out Cleaning",
+      "option": "Move-out cleaning"
+    },
+    "temporaryStorage": {
+      "helper": "Store items between pickup and dropoff dates",
+      "label": "Temporary Storage",
+      "option": "Temporary storage"
+    },
+    "tvMountRemove": {
+      "helper": "Detach wall-mounted TVs at pickup",
+      "label": "TV Mount Removal",
+      "option": "TV mount removal"
+    }
+  },
+  "timeSlot": {
+    "afternoon": {
+      "label": "Afternoon"
+    },
+    "evening": {
+      "label": "Evening"
+    },
+    "morning": {
+      "label": "Morning"
+    }
+  },
+  "vehicle": {
+    "largeTruck": {
+      "label": "Large Truck"
+    },
+    "mediumTruck": {
+      "label": "Medium Truck"
+    },
+    "smallVan": {
+      "label": "Small Van"
+    }
+  }
+}

@@ -26,6 +26,7 @@ import {
   parseInventoryLines,
   useInventoryNames,
 } from '@/lib/inventory-labels'
+import { formatDateWith, formatMoney } from '@/lib/format'
 
 const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || ''
 const PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || ''
@@ -119,7 +120,7 @@ const formatDate = (dateStr: string | null) => {
   if (!dateStr) return 'Not selected'
   try {
     const date = new Date(dateStr)
-    return date.toLocaleDateString('en-GB', {
+    return formatDateWith(date, {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
@@ -532,7 +533,7 @@ export default function MoverMoveDetailsPage() {
         <div className="text-right">
           <p className="text-sm text-neutral-500 dark:text-neutral-400">Earnings</p>
           <p className="text-3xl font-bold text-green-600 dark:text-green-400">
-            &euro;{totalPrice.toFixed(2)}
+            {formatMoney(totalPrice)}
           </p>
         </div>
       </div>
@@ -739,13 +740,13 @@ export default function MoverMoveDetailsPage() {
               <div className="flex justify-between">
                 <span className="text-neutral-500 dark:text-neutral-400">Created</span>
                 <span className="font-medium text-neutral-900 dark:text-neutral-100">
-                  {new Date(createdAt).toLocaleDateString('en-GB', { month: 'short', day: 'numeric', year: 'numeric' })}
+                  {formatDate(createdAt)}
                 </span>
               </div>
               <div className="my-4 border-t border-neutral-100 dark:border-neutral-700" />
               <div className="flex justify-between text-base">
                 <span className="font-semibold text-neutral-900 dark:text-neutral-100">Earnings</span>
-                <span className="font-bold text-green-600 dark:text-green-400">&euro;{totalPrice.toFixed(2)}</span>
+                <span className="font-bold text-green-600 dark:text-green-400">{formatMoney(totalPrice)}</span>
               </div>
               {paymentMethod && (
                 <div className="flex justify-between mt-2">
@@ -788,7 +789,7 @@ export default function MoverMoveDetailsPage() {
                     <span className="font-semibold">Move not startable yet.</span>{' '}
                     You can start this route on{' '}
                     <span className="font-semibold">
-                      {new Date(move?.moveDate as string).toLocaleDateString('en-GB', {
+                      {formatDateWith(move?.moveDate as string, {
                         weekday: 'short',
                         day: 'numeric',
                         month: 'short',

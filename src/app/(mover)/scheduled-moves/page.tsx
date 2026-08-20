@@ -12,6 +12,7 @@ import {
 import { Badge } from '@/shared/Badge'
 import Link from 'next/link'
 import { client } from '@/lib/appwrite'
+import { formatDateWith, formatMoney } from '@/lib/format'
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || ''
 const MOVES_COLLECTION = process.env.NEXT_PUBLIC_COLLECTION_MOVES || ''
@@ -43,7 +44,7 @@ const formatLabel = (value: string | null | undefined): string => {
 const formatDate = (dateStr: string | null) => {
   if (!dateStr) return 'Not selected'
   try {
-    return new Date(dateStr).toLocaleDateString('en-GB', {
+    return formatDateWith(dateStr, {
       weekday: 'short',
       month: 'short',
       day: 'numeric',
@@ -229,7 +230,7 @@ const ScheduledMovesPage = () => {
               {move.estimatedPrice != null && move.estimatedPrice > 0 && (
                 <div className="mt-3 text-right">
                   <span className="font-bold text-lg text-neutral-900 dark:text-neutral-100">
-                    &euro;{move.estimatedPrice.toFixed(2)}
+                    {formatMoney(move.estimatedPrice)}
                   </span>
                 </div>
               )}

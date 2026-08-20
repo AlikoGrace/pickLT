@@ -8,6 +8,7 @@ import clsx from 'clsx'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FC } from 'react'
+import { formatDayMonth, formatMoney } from '@/lib/format'
 
 interface MoveCardProps {
   className?: string
@@ -28,11 +29,7 @@ const formatDate = (dateStr: string | null) => {
   if (!dateStr) return 'Not selected'
   try {
     const date = new Date(dateStr)
-    return date.toLocaleDateString('en-GB', {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
-    })
+    return formatDayMonth(date)
   } catch {
     return dateStr
   }
@@ -148,7 +145,7 @@ const MoveCard: FC<MoveCardProps> = ({ size = 'default', className = '', data })
         <div className="w-14 border-b border-neutral-100 dark:border-neutral-800"></div>
         <div className="flex items-center justify-between gap-2">
           <div>
-            <span className="text-base font-semibold">€{totalPrice.toFixed(2)}</span>
+            <span className="text-base font-semibold">{formatMoney(totalPrice)}</span>
           </div>
           <span className="text-sm text-neutral-500 dark:text-neutral-400">
             {inventoryCount} items · {crewSize ? `${crewSize} movers` : formatLabel(vehicleType)}

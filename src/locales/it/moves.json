@@ -1,0 +1,172 @@
+{
+  "card": {
+    "route": {
+      "dropoffFallback": {
+        "label": "Consegna"
+      },
+      "pickupFallback": {
+        "label": "Ritiro"
+      }
+    },
+    "title": {
+      "generic": {
+        "label": "Trasloco"
+      }
+    }
+  },
+  "category": {
+    "all": {
+      "label": "Tutti"
+    },
+    "cancelled": {
+      "label": "Annullati"
+    },
+    "completed": {
+      "label": "Completati"
+    },
+    "inProgress": {
+      "label": "In corso"
+    },
+    "pending": {
+      "label": "In attesa"
+    }
+  },
+  "detail": {
+    "additionalServices": {
+      "title": "Servizi aggiuntivi"
+    },
+    "address": {
+      "label": "Indirizzo"
+    },
+    "arrivalWindow": {
+      "label": "Fascia di arrivo"
+    },
+    "distance": {
+      "label": "Distanza"
+    },
+    "dropoff": {
+      "label": "Consegna"
+    },
+    "dropoffAddress": {
+      "title": "Indirizzo di consegna"
+    },
+    "duration": {
+      "label": "Durata"
+    },
+    "elevator": {
+      "label": "Ascensore"
+    },
+    "floor": {
+      "label": "Piano"
+    },
+    "itemLine": {
+      "label": "{{qty}} x {{label}}"
+    },
+    "moveDate": {
+      "label": "Data del trasloco"
+    },
+    "moveDetails": {
+      "title": "Dettagli del trasloco"
+    },
+    "moveItems": {
+      "title": "Oggetti da traslocare"
+    },
+    "packingService": {
+      "label": "Servizio di imballaggio"
+    },
+    "parking": {
+      "label": "Parcheggio"
+    },
+    "pickup": {
+      "label": "Ritiro"
+    },
+    "pickupAddress": {
+      "title": "Indirizzo di ritiro"
+    },
+    "requestedAt": {
+      "label": "Richiesto il"
+    },
+    "route": {
+      "title": "Percorso"
+    },
+    "status": {
+      "label": "Stato"
+    },
+    "type": {
+      "label": "Tipo"
+    },
+    "unit": {
+      "label": "Interno"
+    }
+  },
+  "itemCount_one": "{{count}} oggetto",
+  "itemCount_other": "{{count}} oggetti",
+  "list": {
+    "loadError": {
+      "body": "Trascina verso il basso per riprovare.",
+      "title": "Impossibile caricare i traslochi"
+    }
+  },
+  "moveCategory": {
+    "instant": {
+      "label": "Immediato"
+    },
+    "scheduled": {
+      "label": "Programmato"
+    }
+  },
+  "payment": {
+    "method": {
+      "label": "Metodo di pagamento"
+    }
+  },
+  "pricing": {
+    "estimatedTotal": {
+      "label": "Totale stimato"
+    }
+  },
+  "status": {
+    "arrivedDestination": {
+      "label": "Arrivato"
+    },
+    "awaitingPayment": {
+      "label": "In attesa di pagamento"
+    },
+    "cancelledByClient": {
+      "label": "Annullato"
+    },
+    "cancelledByMover": {
+      "label": "Annullato"
+    },
+    "completed": {
+      "label": "Completato"
+    },
+    "disputed": {
+      "label": "Contestato"
+    },
+    "inTransit": {
+      "label": "In transito"
+    },
+    "loading": {
+      "label": "Carico in corso"
+    },
+    "moverArrived": {
+      "label": "Traslocatore arrivato"
+    },
+    "moverAssigned": {
+      "label": "Traslocatore assegnato"
+    },
+    "moverEnRoute": {
+      "label": "Traslocatore in arrivo"
+    },
+    "paid": {
+      "label": "Pagato"
+    },
+    "pending": {
+      "label": "In attesa"
+    },
+    "unloading": {
+      "label": "Scarico in corso"
+    }
+  }
+}

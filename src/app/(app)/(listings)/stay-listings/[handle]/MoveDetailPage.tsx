@@ -22,6 +22,7 @@ import {
 import Image from 'next/image'
 import { FC, Fragment, useEffect, useState } from 'react'
 import { parseInventoryLines, useInventoryNames } from '@/lib/inventory-labels'
+import { formatDateWith, formatMoney } from '@/lib/format'
 
 interface MoveDetailPageProps {
   handle: string
@@ -40,7 +41,7 @@ const formatDate = (dateStr: string | null) => {
   if (!dateStr) return 'Not selected'
   try {
     const date = new Date(dateStr)
-    return date.toLocaleDateString('en-GB', {
+    return formatDateWith(date, {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
@@ -363,7 +364,7 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
         {/* PRICE */}
         <div className="flex flex-col gap-y-2">
           <span className="text-sm text-neutral-500">Total Paid</span>
-          <span className="text-3xl font-semibold text-primary-600">€{totalPrice.toFixed(2)}</span>
+          <span className="text-3xl font-semibold text-primary-600">{formatMoney(totalPrice)}</span>
         </div>
 
         <Divider />
@@ -373,11 +374,7 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
           <DescriptionDetails className="sm:text-right font-mono">{bookingCode}</DescriptionDetails>
           <DescriptionTerm>Paid On</DescriptionTerm>
           <DescriptionDetails className="sm:text-right">
-            {new Date(paidAt).toLocaleDateString('en-GB', {
-              year: 'numeric',
-              month: 'short',
-              day: 'numeric',
-            })}
+            {formatDate(paidAt)}
           </DescriptionDetails>
           <DescriptionTerm>Move Date</DescriptionTerm>
           <DescriptionDetails className="sm:text-right">{formatDate(moveDate)}</DescriptionDetails>

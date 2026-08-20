@@ -25,6 +25,7 @@ import { useRouter } from 'next/navigation'
 import { Fragment, useCallback, useEffect, useState } from 'react'
 import { SectionHeading, SectionSubheading } from '@/components/listings/SectionHeading'
 import { formatInventoryLabel, useInventoryNames } from '@/lib/inventory-labels'
+import { formatDateWith, formatMoney } from '@/lib/format'
 
 // Helper to format labels
 const formatLabel = (value: string | null | undefined): string => {
@@ -39,7 +40,7 @@ const formatDate = (dateStr: string | null) => {
   if (!dateStr) return 'Not selected'
   try {
     const date = new Date(dateStr)
-    return date.toLocaleDateString('en-GB', {
+    return formatDateWith(date, {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
@@ -703,7 +704,7 @@ const Page = () => {
         <div className="text-center">
           <p className="text-sm text-neutral-500 dark:text-neutral-400">Estimated total</p>
           <div className="mt-1 text-3xl font-bold text-primary-600">
-            €{totalPrice.toLocaleString()}
+            {formatMoney(totalPrice, { compact: true })}
           </div>
           <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
             Final price confirmed after review
@@ -715,39 +716,39 @@ const Page = () => {
         {/* Price breakdown */}
         <DescriptionList>
           <DescriptionTerm>Base rate ({formatLabel(moveType)}, {distanceKm.toFixed(1)} km)</DescriptionTerm>
-          <DescriptionDetails className="sm:text-right">€{basePrice.toFixed(2)}</DescriptionDetails>
+          <DescriptionDetails className="sm:text-right">{formatMoney(basePrice)}</DescriptionDetails>
           {floorSurcharge > 0 && (
             <>
               <DescriptionTerm>Floor surcharge</DescriptionTerm>
-              <DescriptionDetails className="sm:text-right">€{floorSurcharge.toFixed(2)}</DescriptionDetails>
+              <DescriptionDetails className="sm:text-right">{formatMoney(floorSurcharge)}</DescriptionDetails>
             </>
           )}
           {packingPrice > 0 && (
             <>
               <DescriptionTerm>Packing service</DescriptionTerm>
-              <DescriptionDetails className="sm:text-right">€{packingPrice.toFixed(2)}</DescriptionDetails>
+              <DescriptionDetails className="sm:text-right">{formatMoney(packingPrice)}</DescriptionDetails>
             </>
           )}
           {crewPrice > 0 && (
             <>
               <DescriptionTerm>Crew ({crewSize} movers)</DescriptionTerm>
-              <DescriptionDetails className="sm:text-right">€{crewPrice.toFixed(2)}</DescriptionDetails>
+              <DescriptionDetails className="sm:text-right">{formatMoney(crewPrice)}</DescriptionDetails>
             </>
           )}
           {servicesPrice > 0 && (
             <>
               <DescriptionTerm>Additional services ({additionalServices.length})</DescriptionTerm>
-              <DescriptionDetails className="sm:text-right">€{servicesPrice.toFixed(2)}</DescriptionDetails>
+              <DescriptionDetails className="sm:text-right">{formatMoney(servicesPrice)}</DescriptionDetails>
             </>
           )}
           {storagePrice > 0 && (
             <>
               <DescriptionTerm>Storage ({storageWeeks} weeks)</DescriptionTerm>
-              <DescriptionDetails className="sm:text-right">€{storagePrice.toFixed(2)}</DescriptionDetails>
+              <DescriptionDetails className="sm:text-right">{formatMoney(storagePrice)}</DescriptionDetails>
             </>
           )}
           <DescriptionTerm className="font-semibold text-neutral-900 dark:text-white">Total</DescriptionTerm>
-          <DescriptionDetails className="font-semibold sm:text-right">€{totalPrice.toFixed(2)}</DescriptionDetails>
+          <DescriptionDetails className="font-semibold sm:text-right">{formatMoney(totalPrice)}</DescriptionDetails>
         </DescriptionList>
 
         {paymentMethod && (

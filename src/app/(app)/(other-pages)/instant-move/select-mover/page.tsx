@@ -28,6 +28,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState, useMemo } from 'react'
+import { formatMoney } from '@/lib/format'
+import { useTranslation } from 'react-i18next'
 
 // Mover types - matches API response from /api/movers/nearby
 interface Mover {
@@ -90,6 +92,7 @@ const formatDuration = (seconds: number): string => {
 }
 
 const SelectMoverPage = () => {
+  const { t } = useTranslation()
   const router = useRouter()
   const {
     pickupLocation,
@@ -549,7 +552,7 @@ const SelectMoverPage = () => {
                         <span>•</span>
                       </>
                     )}
-                    <span>{mover.totalMoves} move{mover.totalMoves !== 1 ? 's' : ''}</span>
+                    <span>{t('moves:moveCount', { count: mover.totalMoves })}</span>
                     {mover.yearsExperience > 0 && (
                       <>
                         <span>•</span>
@@ -582,7 +585,7 @@ const SelectMoverPage = () => {
                     </span>
                     <span className="flex items-center gap-1">
                       <HugeiconsIcon icon={UserMultiple02Icon} size={14} strokeWidth={1.5} />
-                      {mover.crewSize + 1} mover{mover.crewSize > 0 ? 's' : ''}
+                      {t('moves:moverCount', { count: mover.crewSize + 1 })}
                     </span>
                     <span className="text-neutral-400">
                       {VEHICLE_CAPACITY[mover.vehicleType]}
@@ -593,7 +596,7 @@ const SelectMoverPage = () => {
                 {/* Price & ETA */}
                 <div className="text-right shrink-0">
                   <p className="text-xl font-bold text-neutral-900 dark:text-white">
-                    €{mover.price}
+                    {formatMoney(mover.price, { compact: true })}
                   </p>
                   <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
                     ~{mover.estimatedArrival} min away
@@ -673,7 +676,7 @@ const SelectMoverPage = () => {
             {isConfirming
               ? 'Creating move...'
               : selectedMover 
-              ? `Confirm · €${moversWithPrices.find(m => m.id === selectedMover)?.price || 0}`
+              ? `Confirm · ${formatMoney(moversWithPrices.find(m => m.id === selectedMover)?.price || 0, { compact: true })}`
               : 'Select a mover'
             }
           </ButtonPrimary>

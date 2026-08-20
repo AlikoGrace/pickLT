@@ -1,0 +1,84 @@
+{
+  "appwrite": {
+    "generalArgumentInvalid": "L’un des champs est invalide. Vérifiez votre saisie.",
+    "generalRateLimitExceeded": "Trop de tentatives. Patientez un instant et réessayez.",
+    "passwordPersonalData": "Le mot de passe ne peut pas contenir d’informations personnelles.",
+    "passwordRecentlyUsed": "Ce mot de passe a été utilisé récemment. Choisissez-en un autre.",
+    "phoneInvalid": "Format de numéro de téléphone invalide.",
+    "userAlreadyExists": "Un compte existe déjà avec cette adresse e-mail.",
+    "userInvalidCode": "Le code de vérification est incorrect ou a expiré.",
+    "userInvalidCredentials": "Adresse e-mail ou mot de passe incorrect.",
+    "userNotFound": "Aucun compte n’a été trouvé avec cette adresse e-mail.",
+    "userPhoneNotFound": "Aucun numéro de téléphone enregistré. Ajoutez-en un pour continuer.",
+    "userSessionAlreadyExists": "Vous êtes déjà connecté.",
+    "userSessionNotFound": "Session expirée. Veuillez vous reconnecter.",
+    "userUnauthorized": "Vous n’êtes pas autorisé. Veuillez vous reconnecter."
+  },
+  "auth": {
+    "noSession": {
+      "error": "Aucun utilisateur connecté"
+    }
+  },
+  "card": {
+    "add": {
+      "failed": "Impossible d’ajouter la carte. Réessayez.",
+      "initFailed": "Impossible de démarrer l’enregistrement de la carte. Réessayez.",
+      "notSaved": "La carte n’a pas été enregistrée. Réessayez."
+    },
+    "remove": {
+      "detachFailed": "Notre prestataire de paiement n’a pas pu supprimer la carte. Veuillez réessayer.",
+      "forbidden": "Cette carte n’est pas associée à votre compte.",
+      "internal": "Un problème est survenu lors de la suppression de la carte. Veuillez réessayer.",
+      "misconfigured": "La suppression de carte est temporairement indisponible. Réessayez plus tard.",
+      "noStripeCustomer": "Aucun profil de paiement n’a été trouvé pour votre compte.",
+      "paymentMethodNotFound": "Cette carte n’existe plus chez notre prestataire de paiement.",
+      "unauthenticated": "Veuillez vous reconnecter pour supprimer cette carte.",
+      "userNotFound": "Votre compte n’a pas pu être chargé. Veuillez vous reconnecter."
+    }
+  },
+  "generic": {
+    "fallback": "Un problème est survenu. Veuillez réessayer.",
+    "retry": {
+      "body": "Veuillez réessayer.",
+      "error": "Un problème est survenu. Veuillez réessayer."
+    },
+    "title": "Un problème est survenu"
+  },
+  "google": {
+    "cancelled": {
+      "error": "La connexion avec Google a été annulée."
+    },
+    "noCachedAccount": {
+      "error": "Aucun compte Google enregistré n’a été trouvé."
+    },
+    "noCredentials": {
+      "error": "La connexion avec Google a réussi, mais le serveur n’a pas renvoyé d’identifiants."
+    },
+    "noIdToken": {
+      "error": "La connexion avec Google n’a pas renvoyé de jeton d’identification. Réessayez."
+    }
+  },
+  "instant": {
+    "moverUnavailable": {
+      "error": "Le déménageur sélectionné n’est plus disponible"
+    },
+    "submitStage": {
+      "error": "L’envoi a échoué à l’étape {{stage}}. Veuillez réessayer.",
+      "short": {
+        "error": "L’envoi a échoué à l’étape {{stage}}"
+      }
+    }
+  },
+  "mapbox": {
+    "unreachable": {
+      "error": "Mapbox est injoignable, vérifiez votre connexion"
+    }
+  },
+  "payment": {
+    "cardDeclined": "Votre carte a été refusée. Veuillez essayer un autre moyen de paiement.",
+    "charge": {
+      "failed": "Impossible de finaliser le paiement. Réessayez.",
+      "initFailed": "Impossible de démarrer le paiement. Réessayez."
+    }
+  }
+}

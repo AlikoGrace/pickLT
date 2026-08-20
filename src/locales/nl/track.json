@@ -1,0 +1,142 @@
+{
+  "address": {
+    "dropoff": {
+      "title": "Afleveradres"
+    },
+    "floor": {
+      "label": "Verdieping {{floor}}"
+    },
+    "pickup": {
+      "title": "Ophaaladres"
+    }
+  },
+  "eta": {
+    "assigned": {
+      "label": "Verwachte aankomsttijd"
+    },
+    "distance": {
+      "footnote": "{{distance}} km verderop"
+    },
+    "moverArriving": {
+      "label": "Verhuizer onderweg"
+    },
+    "moverQueued": {
+      "body": "Rondt een andere klus af",
+      "footnote": "Hij komt jouw kant op zodra hij klaar is.",
+      "label": "Verhuizer toegewezen"
+    }
+  },
+  "mover": {
+    "moveCount": {
+      "label_one": "{{count}} verhuizing",
+      "label_other": "{{count}} verhuizingen"
+    }
+  },
+  "order": {
+    "handle": {
+      "title": "Bestelling #{{handle}}"
+    },
+    "item": {
+      "label": "{{qty}} × {{label}}"
+    },
+    "items": {
+      "empty": "Geen items vastgelegd voor deze verhuizing."
+    }
+  },
+  "payment": {
+    "amount": {
+      "label": "Te betalen bedrag"
+    },
+    "cashNote": {
+      "body": "Betaal de verhuizer rechtstreeks (contant of via overboeking) en tik daarna hieronder op <0>{{cta}}</0>. De verhuizer moet de ontvangst ook bevestigen voordat de verhuizing als afgerond geldt."
+    },
+    "confirm": {
+      "cta": "Ik heb betaald"
+    },
+    "method": {
+      "card": {
+        "label": "Kaart"
+      },
+      "cash": {
+        "label": "Contant bij levering"
+      }
+    },
+    "payByCard": {
+      "cta": "{{amount}} met kaart betalen"
+    }
+  },
+  "phase": {
+    "arrivedDestination": {
+      "subtitle": "Je verhuizer is op het afleveradres",
+      "title": "Aangekomen op de bestemming!"
+    },
+    "awaitingPayment": {
+      "subtitle": "Betaal de verhuizer en bevestig hieronder",
+      "title": "Verhuizing afgerond — betaling vereist"
+    },
+    "broadcasting": {
+      "subtitle": "De dichtstbijzijnde verhuizer zoeken"
+    },
+    "cancelled": {
+      "label": "Verhuizing geannuleerd",
+      "subtitle": "Geannuleerd"
+    },
+    "cancelledByMover": {
+      "subtitle": "Geannuleerd door verhuizer"
+    },
+    "completed": {
+      "label": "Verhuizing afgerond"
+    },
+    "inTransit": {
+      "subtitle": "Je spullen worden vervoerd",
+      "title": "Onderweg naar de bestemming"
+    },
+    "loading": {
+      "subtitle": "Je spullen worden in het voertuig geladen",
+      "title": "Je spullen worden geladen"
+    },
+    "moverArrived": {
+      "subtitle": "Tref hem op het ophaaladres",
+      "title": "Je verhuizer is er!"
+    },
+    "paid": {
+      "subtitle": "Wachten tot de verhuizer de verhuizing afsluit",
+      "title": "Betaling ontvangen"
+    },
+    "unloading": {
+      "subtitle": "Je spullen worden op de bestemming uitgeladen",
+      "title": "Je spullen worden uitgeladen"
+    },
+    "waitingPriority": {
+      "subtitle": "Verzoek naar je verhuizer sturen"
+    }
+  },
+  "pricing": {
+    "subtotal": {
+      "label": "Subtotaal"
+    },
+    "total": {
+      "label": "Totaal"
+    }
+  },
+  "step": {
+    "completed": {
+      "label": "Verhuizing afgerond"
+    },
+    "inTransit": {
+      "label": "Onderweg"
+    },
+    "moverArrived": {
+      "label": "Verhuizer op het ophaaladres"
+    },
+    "moverAssigned": {
+      "label": "Verhuizer toegewezen"
+    },
+    "moverEnRoute": {
+      "label": "Verhuizer onderweg"
+    },
+    "orderPlaced": {
+      "label": "Bestelling geplaatst"
+    }
+  }
+}

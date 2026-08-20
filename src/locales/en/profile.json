@@ -1,0 +1,86 @@
+{
+  "gender": {
+    "female": {
+      "option": "Female"
+    },
+    "male": {
+      "option": "Male"
+    },
+    "other": {
+      "option": "Other"
+    }
+  },
+  "helpCenter": {
+    "header": {
+      "title": "Help Center"
+    },
+    "search": {
+      "a11y": "Search help articles",
+      "placeholder": "Search location.."
+    }
+  },
+  "language": {
+    "active": "Active",
+    "back": "Go back",
+    "done": "Done",
+    "others": "Others",
+    "saveError": "Could not save your language. Try again.",
+    "subtitle": "Choose the language you want to use across the app.",
+    "suggested": "Suggested",
+    "title": "Language"
+  },
+  "menu": {
+    "appearance": {
+      "label": "Appearance"
+    },
+    "changePassword": {
+      "label": "Change Password"
+    },
+    "deleteAccount": {
+      "label": "Delete Account"
+    },
+    "editProfile": {
+      "label": "Edit Profile"
+    },
+    "help": {
+      "label": "Help & Support"
+    },
+    "language": {
+      "label": "Language"
+    },
+    "legal": {
+      "label": "Legal and Policies"
+    },
+    "logout": {
+      "label": "Logout"
+    },
+    "notifications": {
+      "label": "Notifications"
+    },
+    "paymentAccount": {
+      "label": "Payment Account"
+    },
+    "security": {
+      "label": "Security"
+    },
+    "yourCard": {
+      "label": "Your Card"
+    }
+  },
+  "privacyPolicy": {
+    "header": {
+      "title": "Privacy & Policy"
+    }
+  },
+  "section": {
+    "general": {
+      "title": "General"
+    },
+    "payments": {
+      "title": "Payments"
+    },
+    "preferences": {
+      "title": "Preferences"
+    }
+  }
+}

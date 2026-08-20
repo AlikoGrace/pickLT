@@ -1,0 +1,86 @@
+{
+  "gender": {
+    "female": {
+      "option": "Femme"
+    },
+    "male": {
+      "option": "Homme"
+    },
+    "other": {
+      "option": "Autre"
+    }
+  },
+  "helpCenter": {
+    "header": {
+      "title": "Centre d'aide"
+    },
+    "search": {
+      "a11y": "Rechercher des articles d'aide",
+      "placeholder": "Rechercher un lieu.."
+    }
+  },
+  "language": {
+    "active": "Active",
+    "back": "Retour",
+    "done": "Terminé",
+    "others": "Autres",
+    "saveError": "Impossible d'enregistrer votre langue. Réessayez.",
+    "subtitle": "Choisissez la langue que vous souhaitez utiliser dans toute l'application.",
+    "suggested": "Suggestions",
+    "title": "Langue"
+  },
+  "menu": {
+    "appearance": {
+      "label": "Apparence"
+    },
+    "changePassword": {
+      "label": "Modifier le mot de passe"
+    },
+    "deleteAccount": {
+      "label": "Supprimer le compte"
+    },
+    "editProfile": {
+      "label": "Modifier le profil"
+    },
+    "help": {
+      "label": "Aide et assistance"
+    },
+    "language": {
+      "label": "Langue"
+    },
+    "legal": {
+      "label": "Mentions légales"
+    },
+    "logout": {
+      "label": "Déconnexion"
+    },
+    "notifications": {
+      "label": "Notifications"
+    },
+    "paymentAccount": {
+      "label": "Compte de paiement"
+    },
+    "security": {
+      "label": "Sécurité"
+    },
+    "yourCard": {
+      "label": "Votre carte"
+    }
+  },
+  "privacyPolicy": {
+    "header": {
+      "title": "Confidentialité"
+    }
+  },
+  "section": {
+    "general": {
+      "title": "Général"
+    },
+    "payments": {
+      "title": "Paiements"
+    },
+    "preferences": {
+      "title": "Préférences"
+    }
+  }
+}

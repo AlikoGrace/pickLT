@@ -1,0 +1,86 @@
+{
+  "gender": {
+    "female": {
+      "option": "Mujer"
+    },
+    "male": {
+      "option": "Hombre"
+    },
+    "other": {
+      "option": "Otro"
+    }
+  },
+  "helpCenter": {
+    "header": {
+      "title": "Centro de ayuda"
+    },
+    "search": {
+      "a11y": "Buscar artículos de ayuda",
+      "placeholder": "Buscar ubicación.."
+    }
+  },
+  "language": {
+    "active": "Activo",
+    "back": "Volver",
+    "done": "Hecho",
+    "others": "Otros",
+    "saveError": "No se pudo guardar tu idioma. Inténtalo de nuevo.",
+    "subtitle": "Elige el idioma que quieres usar en toda la aplicación.",
+    "suggested": "Sugeridos",
+    "title": "Idioma"
+  },
+  "menu": {
+    "appearance": {
+      "label": "Apariencia"
+    },
+    "changePassword": {
+      "label": "Cambiar contraseña"
+    },
+    "deleteAccount": {
+      "label": "Eliminar cuenta"
+    },
+    "editProfile": {
+      "label": "Editar perfil"
+    },
+    "help": {
+      "label": "Ayuda y soporte"
+    },
+    "language": {
+      "label": "Idioma"
+    },
+    "legal": {
+      "label": "Legal y políticas"
+    },
+    "logout": {
+      "label": "Cerrar sesión"
+    },
+    "notifications": {
+      "label": "Notificaciones"
+    },
+    "paymentAccount": {
+      "label": "Cuenta de pago"
+    },
+    "security": {
+      "label": "Seguridad"
+    },
+    "yourCard": {
+      "label": "Tu tarjeta"
+    }
+  },
+  "privacyPolicy": {
+    "header": {
+      "title": "Privacidad y políticas"
+    }
+  },
+  "section": {
+    "general": {
+      "title": "General"
+    },
+    "payments": {
+      "title": "Pagos"
+    },
+    "preferences": {
+      "title": "Preferencias"
+    }
+  }
+}

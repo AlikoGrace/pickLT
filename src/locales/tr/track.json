@@ -1,0 +1,142 @@
+{
+  "address": {
+    "dropoff": {
+      "title": "Teslimat adresi"
+    },
+    "floor": {
+      "label": "Kat {{floor}}"
+    },
+    "pickup": {
+      "title": "Alım adresi"
+    }
+  },
+  "eta": {
+    "assigned": {
+      "label": "Tahmini varış saati"
+    },
+    "distance": {
+      "footnote": "{{distance}} km uzaklıkta"
+    },
+    "moverArriving": {
+      "label": "Nakliyeci yolda"
+    },
+    "moverQueued": {
+      "body": "Başka bir işi bitiriyor",
+      "footnote": "İşi biter bitmez size doğru yola çıkacak.",
+      "label": "Nakliyeci atandı"
+    }
+  },
+  "mover": {
+    "moveCount": {
+      "label_one": "{{count}} taşıma",
+      "label_other": "{{count}} taşıma"
+    }
+  },
+  "order": {
+    "handle": {
+      "title": "Sipariş #{{handle}}"
+    },
+    "item": {
+      "label": "{{qty}} × {{label}}"
+    },
+    "items": {
+      "empty": "Bu taşıma için kayıtlı eşya yok."
+    }
+  },
+  "payment": {
+    "amount": {
+      "label": "Ödenecek tutar"
+    },
+    "cashNote": {
+      "body": "Lütfen nakliyeciye doğrudan ödeme yapın (nakit veya havale), ardından aşağıdaki <0>{{cta}}</0> düğmesine dokunun. Taşımanın tamamlandı sayılması için nakliyecinin de ödemeyi onaylaması gerekir."
+    },
+    "confirm": {
+      "cta": "Ödemeyi yaptım"
+    },
+    "method": {
+      "card": {
+        "label": "Kart"
+      },
+      "cash": {
+        "label": "Kapıda nakit ödeme"
+      }
+    },
+    "payByCard": {
+      "cta": "{{amount}} tutarını kartla öde"
+    }
+  },
+  "phase": {
+    "arrivedDestination": {
+      "subtitle": "Nakliyeciniz teslimat adresine ulaştı",
+      "title": "Varış noktasına ulaşıldı!"
+    },
+    "awaitingPayment": {
+      "subtitle": "Lütfen nakliyeciye ödeme yapın ve aşağıda onaylayın",
+      "title": "Taşıma tamamlandı — ödeme gerekiyor"
+    },
+    "broadcasting": {
+      "subtitle": "En yakın nakliyeci aranıyor"
+    },
+    "cancelled": {
+      "label": "Taşıma iptal edildi",
+      "subtitle": "İptal edildi"
+    },
+    "cancelledByMover": {
+      "subtitle": "Nakliyeci tarafından iptal edildi"
+    },
+    "completed": {
+      "label": "Taşıma tamamlandı"
+    },
+    "inTransit": {
+      "subtitle": "Eşyalarınız taşınıyor",
+      "title": "Varış noktasına doğru yolda"
+    },
+    "loading": {
+      "subtitle": "Eşyalarınız araca yükleniyor",
+      "title": "Eşyalarınız yükleniyor"
+    },
+    "moverArrived": {
+      "subtitle": "Onunla alım adresinde buluşun",
+      "title": "Nakliyeciniz geldi!"
+    },
+    "paid": {
+      "subtitle": "Nakliyecinin taşımayı kapatması bekleniyor",
+      "title": "Ödeme alındı"
+    },
+    "unloading": {
+      "subtitle": "Eşyalarınız varış noktasında boşaltılıyor",
+      "title": "Eşyalarınız boşaltılıyor"
+    },
+    "waitingPriority": {
+      "subtitle": "Talep nakliyecinize gönderiliyor"
+    }
+  },
+  "pricing": {
+    "subtotal": {
+      "label": "Ara toplam"
+    },
+    "total": {
+      "label": "Toplam"
+    }
+  },
+  "step": {
+    "completed": {
+      "label": "Taşıma tamamlandı"
+    },
+    "inTransit": {
+      "label": "Yolda"
+    },
+    "moverArrived": {
+      "label": "Nakliyeci alım adresinde"
+    },
+    "moverAssigned": {
+      "label": "Nakliyeci atandı"
+    },
+    "moverEnRoute": {
+      "label": "Nakliyeci yolda"
+    },
+    "orderPlaced": {
+      "label": "Sipariş oluşturuldu"
+    }
+  }
+}

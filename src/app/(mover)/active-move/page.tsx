@@ -18,6 +18,7 @@ import {
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { getMapboxDirections } from '@/utils/mapbox-directions'
+import { formatMoney } from '@/lib/format'
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || ''
 const MOVES_COLLECTION = process.env.NEXT_PUBLIC_COLLECTION_MOVES || ''
@@ -599,7 +600,7 @@ export default function ActiveMovePage() {
                 </p>
                 {paymentAmount && (
                   <p className="text-2xl font-bold text-primary-600">
-                     €{paymentAmount.toLocaleString()}
+                     {formatMoney(paymentAmount, { compact: true })}
                   </p>
                 )}
                 <p className="text-xs text-neutral-500 dark:text-neutral-400">

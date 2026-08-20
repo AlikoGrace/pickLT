@@ -1,0 +1,172 @@
+{
+  "card": {
+    "route": {
+      "dropoffFallback": {
+        "label": "Teslim noktası"
+      },
+      "pickupFallback": {
+        "label": "Alım noktası"
+      }
+    },
+    "title": {
+      "generic": {
+        "label": "Taşıma"
+      }
+    }
+  },
+  "category": {
+    "all": {
+      "label": "Tümü"
+    },
+    "cancelled": {
+      "label": "İptal edilen"
+    },
+    "completed": {
+      "label": "Tamamlanan"
+    },
+    "inProgress": {
+      "label": "Devam eden"
+    },
+    "pending": {
+      "label": "Bekleyen"
+    }
+  },
+  "detail": {
+    "additionalServices": {
+      "title": "Ek hizmetler"
+    },
+    "address": {
+      "label": "Adres"
+    },
+    "arrivalWindow": {
+      "label": "Varış aralığı"
+    },
+    "distance": {
+      "label": "Mesafe"
+    },
+    "dropoff": {
+      "label": "Teslim"
+    },
+    "dropoffAddress": {
+      "title": "Teslim adresi"
+    },
+    "duration": {
+      "label": "Süre"
+    },
+    "elevator": {
+      "label": "Asansör"
+    },
+    "floor": {
+      "label": "Kat"
+    },
+    "itemLine": {
+      "label": "{{qty}} x {{label}}"
+    },
+    "moveDate": {
+      "label": "Taşınma tarihi"
+    },
+    "moveDetails": {
+      "title": "Taşıma detayları"
+    },
+    "moveItems": {
+      "title": "Taşınacak eşyalar"
+    },
+    "packingService": {
+      "label": "Paketleme hizmeti"
+    },
+    "parking": {
+      "label": "Otopark"
+    },
+    "pickup": {
+      "label": "Alım"
+    },
+    "pickupAddress": {
+      "title": "Alım adresi"
+    },
+    "requestedAt": {
+      "label": "Talep edildi"
+    },
+    "route": {
+      "title": "Rota"
+    },
+    "status": {
+      "label": "Durum"
+    },
+    "type": {
+      "label": "Tür"
+    },
+    "unit": {
+      "label": "Daire"
+    }
+  },
+  "itemCount_one": "{{count}} eşya",
+  "itemCount_other": "{{count}} eşya",
+  "list": {
+    "loadError": {
+      "body": "Yenilemek için aşağı çekin.",
+      "title": "Taşımalar yüklenemedi"
+    }
+  },
+  "moveCategory": {
+    "instant": {
+      "label": "Anında"
+    },
+    "scheduled": {
+      "label": "Planlı"
+    }
+  },
+  "payment": {
+    "method": {
+      "label": "Ödeme yöntemi"
+    }
+  },
+  "pricing": {
+    "estimatedTotal": {
+      "label": "Tahmini toplam"
+    }
+  },
+  "status": {
+    "arrivedDestination": {
+      "label": "Varış noktasında"
+    },
+    "awaitingPayment": {
+      "label": "Ödeme bekleniyor"
+    },
+    "cancelledByClient": {
+      "label": "İptal edildi"
+    },
+    "cancelledByMover": {
+      "label": "İptal edildi"
+    },
+    "completed": {
+      "label": "Tamamlandı"
+    },
+    "disputed": {
+      "label": "İtirazlı"
+    },
+    "inTransit": {
+      "label": "Taşınıyor"
+    },
+    "loading": {
+      "label": "Yükleniyor"
+    },
+    "moverArrived": {
+      "label": "Nakliyeci geldi"
+    },
+    "moverAssigned": {
+      "label": "Nakliyeci atandı"
+    },
+    "moverEnRoute": {
+      "label": "Nakliyeci yolda"
+    },
+    "paid": {
+      "label": "Ödendi"
+    },
+    "pending": {
+      "label": "Bekliyor"
+    },
+    "unloading": {
+      "label": "Boşaltılıyor"
+    }
+  }
+}

@@ -2,6 +2,7 @@
 
 import { DocumentTextIcon } from '@heroicons/react/24/outline'
 import { useEffect, useState } from 'react'
+import { formatMoney, formatMonthYear } from '@/lib/format'
 
 /**
  * T8: the driver's monthly tax statements (parity with the mover app's
@@ -26,11 +27,7 @@ interface Statement {
 function periodLabel(period: string): string {
   const [y, m] = period.split('-').map(Number)
   if (!y || !m || m < 1 || m > 12) return period
-  return new Date(Date.UTC(y, m - 1, 1)).toLocaleDateString('en-GB', {
-    month: 'long',
-    year: 'numeric',
-    timeZone: 'UTC',
-  })
+  return formatMonthYear(new Date(Date.UTC(y, m - 1, 1)), { timeZone: 'UTC' })
 }
 
 export default function TaxDocumentsPage() {
@@ -82,8 +79,8 @@ export default function TaxDocumentsPage() {
                 </p>
                 <p className="text-xs text-neutral-500 dark:text-neutral-400">{st.number}</p>
                 <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-300">
-                  {st.moves} moves · gross €{(st.grossTotal ?? 0).toFixed(2)} · net €
-                  {(st.net ?? 0).toFixed(2)}
+                  {st.moves} moves · gross {formatMoney(st.grossTotal ?? 0)} · net{' '}
+                  {formatMoney(st.net ?? 0)}
                 </p>
               </div>
               {st.fileId ? (

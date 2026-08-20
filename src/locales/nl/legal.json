@@ -1,0 +1,53 @@
+{
+  "governingLanguage": {
+    "notice": "Dit document is een vertaling. Deze wordt uitsluitend ter informatie aangeboden; bij verschillen is de Engelse versie doorslaggevend."
+  },
+  "help": {
+    "faq": {
+      "contactSupport": {
+        "answer": "Je bereikt ons supportteam via de optie “Contact” in de app.",
+        "question": "Hoe neem ik contact op met support?"
+      },
+      "manageNotifications": {
+        "answer": "Open Profiel → Meldingen om te bepalen welke meldingen je ontvangt.",
+        "question": "Hoe beheer ik meldingen?"
+      },
+      "reportIssue": {
+        "answer": "Gebruik het onderdeel “Help en support” in je profiel om problemen te melden.",
+        "question": "Hoe meld ik een probleem?"
+      },
+      "resetPassword": {
+        "answer": "Tik op het inlogscherm op “Wachtwoord vergeten” en volg de instructies om je wachtwoord via e-mail opnieuw in te stellen.",
+        "question": "Hoe stel ik mijn wachtwoord opnieuw in?"
+      },
+      "updateInfo": {
+        "answer": "Open Profiel → Profiel bewerken om je persoonlijke gegevens op elk moment bij te werken.",
+        "question": "Hoe werk ik mijn gegevens bij?"
+      }
+    }
+  },
+  "privacy": {
+    "effectiveDate": {
+      "label": "Ingangsdatum: {{date}}",
+      "value": "20 december 2024"
+    },
+    "section": {
+      "informationCollection": {
+        "body": "We verzamelen essentiële gegevens om je ervaring te verbeteren. Dit omvat gegevens die je zelf verstrekt, zoals accountgegevens, en gegevens die we verzamelen via gebruiksanalyses en cookies.",
+        "title": "1. Verzameling van gegevens"
+      },
+      "informationSetting": {
+        "body": "Je hebt volledige controle over je gegevens. Beheer je privacyvoorkeuren, werk je persoonlijke gegevens bij en pas je instellingen aan je wensen aan.",
+        "title": "3. Instellingen voor gegevens"
+      },
+      "informationUsage": {
+        "body": "De verzamelde gegevens gebruiken we om onze diensten te verbeteren, persoonlijke aanbevelingen te doen en een soepele ervaring te bieden. We delen je gegevens niet zonder je uitdrukkelijke toestemming.",
+        "title": "2. Gebruik van gegevens"
+      },
+      "securityMeasures": {
+        "body": "De veiligheid van je gegevens staat voorop: we gebruiken geavanceerde beveiligingsprotocollen, versleuteling en regelmatige audits om je gegevens te beschermen tegen ongeoorloofde toegang en datalekken.",
+        "title": "4. Beveiligingsmaatregelen"
+      }
+    }
+  }
+}

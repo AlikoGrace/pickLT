@@ -1,0 +1,179 @@
+{
+  "action": {
+    "back": {
+      "a11y": "Zurück",
+      "cta": "Zurück"
+    },
+    "backToHome": {
+      "a11y": "Zurück zur Startseite"
+    },
+    "call": {
+      "cta": "Anrufen"
+    },
+    "cancel": {
+      "cta": "Abbrechen"
+    },
+    "confirm": {
+      "cta": "Bestätigen"
+    },
+    "continue": {
+      "cta": "Weiter"
+    },
+    "discard": {
+      "cta": "Verwerfen"
+    },
+    "done": {
+      "cta": "Fertig"
+    },
+    "goBack": {
+      "cta": "Zurück"
+    },
+    "message": {
+      "cta": "Nachricht"
+    },
+    "next": {
+      "cta": "Weiter"
+    },
+    "ok": {
+      "cta": "OK"
+    },
+    "replace": {
+      "cta": "Ersetzen"
+    },
+    "retry": {
+      "cta": "Erneut versuchen"
+    },
+    "search": {
+      "cta": "Suchen"
+    },
+    "seeAll": {
+      "cta": "Alle ansehen"
+    },
+    "skip": {
+      "cta": "Überspringen"
+    },
+    "submitting": {
+      "cta": "Wird gesendet…"
+    }
+  },
+  "answer": {
+    "no": {
+      "label": "Nein",
+      "option": "Nein"
+    },
+    "yes": {
+      "label": "Ja",
+      "option": "Ja"
+    }
+  },
+  "auth": {
+    "signInRequired": {
+      "body": "Bitte melden Sie sich zuerst an."
+    }
+  },
+  "confirm": {
+    "irreversible": {
+      "body": "Dies kann nicht rückgängig gemacht werden."
+    }
+  },
+  "mover": {
+    "unnamed": {
+      "label": "Umzugshelfer"
+    }
+  },
+  "payment": {
+    "brand": {
+      "fallback": {
+        "label": "Karte"
+      },
+      "unionpay": {
+        "label": "UnionPay"
+      }
+    },
+    "brandTag": {
+      "amex": {
+        "label": "AMEX"
+      },
+      "diners": {
+        "label": "DINER"
+      },
+      "discover": {
+        "label": "DISC"
+      },
+      "fallback": {
+        "label": "KARTE"
+      },
+      "jcb": {
+        "label": "JCB"
+      },
+      "mastercard": {
+        "label": "MC"
+      },
+      "unionpay": {
+        "label": "UPay"
+      },
+      "visa": {
+        "label": "VISA"
+      }
+    },
+    "method": {
+      "applePay": {
+        "label": "Apple Pay"
+      },
+      "googlePay": {
+        "label": "Google Pay"
+      },
+      "payPal": {
+        "label": "PayPal"
+      }
+    },
+    "waiting": {
+      "done": {
+        "body": "Zahlung bestätigt."
+      },
+      "forClient": {
+        "body": "Zahlung bestätigt. Wir warten auf die Bestätigung des Kunden, bevor der Umzug abgeschlossen wird."
+      },
+      "forMover": {
+        "body": "Zahlung bestätigt. Wir warten auf die Bestätigung Ihres Umzugshelfers, bevor der Umzug abgeschlossen wird."
+      }
+    }
+  },
+  "state": {
+    "loading": {
+      "label": "Wird geladen…"
+    },
+    "processing": {
+      "cta": "Wird verarbeitet…"
+    }
+  },
+  "status": {
+    "comingSoon": {
+      "label": "Demnächst verfügbar"
+    }
+  },
+  "unit": {
+    "minutes": {
+      "label": "Min."
+    }
+  },
+  "value": {
+    "noneSelected": {
+      "empty": "Nichts ausgewählt"
+    },
+    "notSpecified": {
+      "empty": "Keine Angabe"
+    }
+  },
+  "vehicleType": {
+    "largeTruck": {
+      "label": "Großer Lkw"
+    },
+    "mediumTruck": {
+      "label": "Mittlerer Lkw"
+    },
+    "smallVan": {
+      "label": "Kleiner Transporter"
+    }
+  }
+}

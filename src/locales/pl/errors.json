@@ -1,0 +1,84 @@
+{
+  "appwrite": {
+    "generalArgumentInvalid": "Jedno z pól jest nieprawidłowe. Sprawdź wprowadzone dane.",
+    "generalRateLimitExceeded": "Zbyt wiele prób. Odczekaj chwilę i spróbuj ponownie.",
+    "passwordPersonalData": "Hasło nie może zawierać danych osobowych.",
+    "passwordRecentlyUsed": "To hasło było niedawno używane. Wybierz inne.",
+    "phoneInvalid": "Nieprawidłowy format numeru telefonu.",
+    "userAlreadyExists": "Konto z tym adresem e-mail już istnieje.",
+    "userInvalidCode": "Kod weryfikacyjny jest nieprawidłowy lub wygasł.",
+    "userInvalidCredentials": "Nieprawidłowy e-mail lub hasło.",
+    "userNotFound": "Nie znaleziono konta z tym adresem e-mail.",
+    "userPhoneNotFound": "Brak zapisanego numeru telefonu. Dodaj numer, aby kontynuować.",
+    "userSessionAlreadyExists": "Jesteś już zalogowany.",
+    "userSessionNotFound": "Sesja wygasła. Zaloguj się ponownie.",
+    "userUnauthorized": "Brak uprawnień. Zaloguj się ponownie."
+  },
+  "auth": {
+    "noSession": {
+      "error": "Brak zalogowanego użytkownika"
+    }
+  },
+  "card": {
+    "add": {
+      "failed": "Nie udało się dodać karty. Spróbuj ponownie.",
+      "initFailed": "Nie udało się rozpocząć dodawania karty. Spróbuj ponownie.",
+      "notSaved": "Karta nie została zapisana. Spróbuj ponownie."
+    },
+    "remove": {
+      "detachFailed": "Nasz dostawca płatności nie mógł usunąć karty. Spróbuj ponownie.",
+      "forbidden": "Ta karta nie należy do Twojego konta.",
+      "internal": "Coś poszło nie tak podczas usuwania karty. Spróbuj ponownie.",
+      "misconfigured": "Usuwanie kart jest chwilowo niedostępne. Spróbuj ponownie później.",
+      "noStripeCustomer": "Nie znaleziono profilu płatności dla Twojego konta.",
+      "paymentMethodNotFound": "Ta karta nie istnieje już u naszego dostawcy płatności.",
+      "unauthenticated": "Zaloguj się ponownie, aby usunąć tę kartę.",
+      "userNotFound": "Nie udało się wczytać Twojego konta. Zaloguj się ponownie."
+    }
+  },
+  "generic": {
+    "fallback": "Coś poszło nie tak. Spróbuj ponownie.",
+    "retry": {
+      "body": "Spróbuj ponownie.",
+      "error": "Coś poszło nie tak. Spróbuj ponownie."
+    },
+    "title": "Coś poszło nie tak"
+  },
+  "google": {
+    "cancelled": {
+      "error": "Logowanie przez Google zostało anulowane."
+    },
+    "noCachedAccount": {
+      "error": "Nie znaleziono zapisanego konta Google."
+    },
+    "noCredentials": {
+      "error": "Logowanie przez Google powiodło się, ale serwer nie zwrócił danych uwierzytelniających."
+    },
+    "noIdToken": {
+      "error": "Logowanie przez Google nie zwróciło tokenu identyfikacyjnego. Spróbuj ponownie."
+    }
+  },
+  "instant": {
+    "moverUnavailable": {
+      "error": "Wybrany przewoźnik nie jest już dostępny"
+    },
+    "submitStage": {
+      "error": "Wysyłanie nie powiodło się na etapie {{stage}}. Spróbuj ponownie.",
+      "short": {
+        "error": "Wysyłanie nie powiodło się na etapie {{stage}}"
+      }
+    }
+  },
+  "mapbox": {
+    "unreachable": {
+      "error": "Nie można połączyć się z Mapbox, sprawdź połączenie"
+    }
+  },
+  "payment": {
+    "cardDeclined": "Twoja karta została odrzucona. Spróbuj innej metody płatności.",
+    "charge": {
+      "failed": "Nie udało się dokończyć płatności. Spróbuj ponownie.",
+      "initFailed": "Nie udało się rozpocząć płatności. Spróbuj ponownie."
+    }
+  }
+}

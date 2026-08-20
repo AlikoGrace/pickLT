@@ -1,0 +1,349 @@
+{
+  "field": {
+    "arrivalTime": {
+      "hour": {
+        "label": "Saat"
+      },
+      "minute": {
+        "label": "Dk"
+      },
+      "period": {
+        "label": "Dilim"
+      },
+      "sheet": {
+        "title": "Tercih edilen varış saati"
+      }
+    },
+    "contact": {
+      "label": "İletişim"
+    },
+    "crewSize": {
+      "label": "Ekip büyüklüğü"
+    },
+    "distance": {
+      "label": "Mesafe"
+    },
+    "dropoff": {
+      "label": "Varış"
+    },
+    "elevator": {
+      "label": "Asansör var mı?"
+    },
+    "inventory": {
+      "label": "Envanter"
+    },
+    "moveDate": {
+      "label": "Taşınma tarihi",
+      "placeholder": "Tarih seçin",
+      "sheet": {
+        "title": "Taşınma tarihini seçin"
+      }
+    },
+    "moveType": {
+      "label": "Taşıma türü",
+      "placeholder": "Taşıma türünü seçin",
+      "sheet": {
+        "title": "Taşıma türünü seçin"
+      }
+    },
+    "pickup": {
+      "label": "Alım"
+    },
+    "preferredTime": {
+      "label": "Tercih edilen saat",
+      "placeholder": "Zaman aralığı seçin",
+      "sheet": {
+        "title": "Tercih edilen saat"
+      },
+      "value": {
+        "label": "{{label}} ({{range}})"
+      }
+    },
+    "selectDate": {
+      "helper": "Ne zaman taşınmak istiyorsunuz?",
+      "label": "Tarih seçin"
+    },
+    "vehicle": {
+      "label": "Araç"
+    }
+  },
+  "floorLevel": {
+    "floor1": {
+      "option": "1. kat"
+    },
+    "floor2": {
+      "option": "2. kat"
+    },
+    "floor3": {
+      "option": "3. kat"
+    },
+    "floor4": {
+      "option": "4. kat"
+    },
+    "floor5plus": {
+      "option": "5. kat ve üzeri"
+    },
+    "ground": {
+      "option": "Zemin kat"
+    },
+    "numbered": {
+      "option": "{{n}}. kat"
+    }
+  },
+  "homeType": {
+    "apartment": {
+      "option": "Daire"
+    },
+    "house": {
+      "option": "Müstakil ev"
+    },
+    "office": {
+      "option": "Ofis"
+    },
+    "other": {
+      "option": "Diğer"
+    },
+    "storage": {
+      "option": "Depo"
+    }
+  },
+  "location": {
+    "gpsFailed": {
+      "error": "Konumunuz belirlenemedi."
+    },
+    "minQuery": {
+      "helper_one": "En az {{count}} karakter yazın",
+      "helper_other": "En az {{count}} karakter yazın"
+    },
+    "noResults": {
+      "empty": "Konum bulunamadı"
+    },
+    "permissionDenied": {
+      "error": "Konum izni reddedildi. Ayarlar’dan etkinleştirin."
+    },
+    "search": {
+      "placeholder": "Bir yer, simge yapı veya adres arayın"
+    },
+    "searchIdle": {
+      "empty": "Adres aramak için yazmaya başlayın."
+    },
+    "selectPlaceholder": {
+      "placeholder": "{{field}} konumunu seçin"
+    },
+    "sheet": {
+      "title": "{{field}} konumu"
+    },
+    "useCurrent": {
+      "cta": "Mevcut konumu kullan"
+    }
+  },
+  "map": {
+    "dropoff": {
+      "placeholder": "Teslim konumu"
+    },
+    "pickup": {
+      "placeholder": "Alım konumu"
+    },
+    "preview": {
+      "empty": "Harita önizlemesi"
+    }
+  },
+  "mapPicker": {
+    "confirm": {
+      "cta": "Konumu onayla"
+    },
+    "default": {
+      "title": "Konum seçin"
+    },
+    "locating": {
+      "helper": "Konumunuz alınıyor…"
+    },
+    "reverseGeocoding": {
+      "helper": "Adres alınıyor…"
+    },
+    "search": {
+      "placeholder": "Bir konum arayın…"
+    },
+    "tapHint": {
+      "helper": "Konum seçmek için haritaya dokunun"
+    },
+    "useCurrent": {
+      "cta": "Mevcut konumumu kullan"
+    }
+  },
+  "moveType": {
+    "light": {
+      "body": "Hafif taşımalarda küçük bir panelvan kullanılır.",
+      "short": "Hafif",
+      "subtitle": "Küçük yükler için ideal — kolilar, tek parça mobilyalar veya bir stüdyo daire.",
+      "title": "Hafif taşıma"
+    },
+    "premium": {
+      "body": "Premium taşımalarda daha büyük araçlar ve 2 veya daha fazla kişilik ekip kullanılır.",
+      "short": "Premium",
+      "subtitle": "Büyük evler için tam hizmet — paketleme, yükleme, taşıma ve boşaltma.",
+      "title": "Premium taşıma"
+    },
+    "regular": {
+      "body": "Standart taşımalarda orta boy bir araç ve 2 kişilik ekip kullanılır.",
+      "short": "Standart",
+      "subtitle": "1–2 yatak odalı daireler, standart mobilya ve beyaz eşya için uygun.",
+      "title": "Standart taşıma"
+    }
+  },
+  "packingLevel": {
+    "full": {
+      "helper": "Nakliyeciler her şeyi benim için paketler",
+      "option": "Tam paketleme"
+    },
+    "none": {
+      "helper": "Her şeyi kendim paketleyeceğim",
+      "option": "Paketleme yardımı yok"
+    },
+    "partial": {
+      "helper": "Nakliyeciler yalnızca kırılacak ve değerli eşyaları paketler",
+      "option": "Kırılacak eşyaları paketle"
+    },
+    "unpacking": {
+      "helper": "Nakliyeciler alımda paketler VE varışta paketleri açar",
+      "option": "Paketleme ve açma"
+    }
+  },
+  "parking": {
+    "atBuilding": {
+      "option": "Binanın hemen önünde park yeri"
+    },
+    "directlyInFront": {
+      "option": "Tam önünde park yeri"
+    },
+    "driveway": {
+      "option": "Özel giriş yolu"
+    },
+    "limited": {
+      "option": "Sınırlı park yeri"
+    },
+    "loadingZone": {
+      "option": "Yükleme alanı gerekli (Haltverbot)"
+    },
+    "lot": {
+      "option": "Otopark"
+    },
+    "nearby": {
+      "option": "Yakında park yeri (0–20 m)"
+    },
+    "none": {
+      "option": "Park yeri yok"
+    },
+    "street": {
+      "option": "Sokak park yeri"
+    },
+    "underground": {
+      "option": "Yeraltı otoparkı girişi"
+    }
+  },
+  "payment": {
+    "method": {
+      "cash": {
+        "label": "Nakit"
+      }
+    },
+    "section": {
+      "title": "Ödeme"
+    }
+  },
+  "photos": {
+    "chooseGallery": {
+      "cta": "Galeriden seç"
+    },
+    "formatHint": {
+      "subtitle": "PNG, JPG en fazla 3 MB"
+    },
+    "sourceSheet": {
+      "title": "Fotoğraf ekle"
+    },
+    "takePhoto": {
+      "cta": "Fotoğraf çek"
+    }
+  },
+  "pricing": {
+    "baseRate": {
+      "label": "Temel ücret ({{moveType}})"
+    },
+    "storage": {
+      "label": "Depolama"
+    },
+    "subtotal": {
+      "label": "Ara toplam"
+    },
+    "total": {
+      "label": "Toplam"
+    },
+    "vat": {
+      "label": "KDV ({{rate}})"
+    }
+  },
+  "services": {
+    "applianceConnect": {
+      "helper": "Cihazları yeni adreste yeniden bağlarız",
+      "label": "Beyaz eşya bağlantısı",
+      "option": "Beyaz eşya bağlantısı"
+    },
+    "applianceDisconnect": {
+      "helper": "Çamaşır makinesi, bulaşık makinesi vb. bağlantısını keseriz",
+      "label": "Beyaz eşya bağlantısını kesme",
+      "option": "Beyaz eşya bağlantısını kesme"
+    },
+    "disposal": {
+      "helper": "İstenmeyen eşyaları belediyenin atık toplama merkezine götürürüz",
+      "label": "Atık bertarafı",
+      "option": "Atık bertarafı"
+    },
+    "furnitureAssembly": {
+      "helper": "Mobilyaları yeni adreste kurarız",
+      "label": "Mobilya kurulumu",
+      "option": "Mobilya kurulumu"
+    },
+    "furnitureDisassembly": {
+      "helper": "Yüklemeden önce yatak ve masaları sökeriz",
+      "label": "Mobilya sökümü",
+      "option": "Mobilya sökümü"
+    },
+    "moveoutCleaning": {
+      "helper": "Yüklemeden sonra alım adresinde temizlik hizmeti",
+      "label": "Çıkış temizliği",
+      "option": "Çıkış temizliği"
+    },
+    "temporaryStorage": {
+      "helper": "Eşyaları alım ve teslim tarihleri arasında depolarız",
+      "label": "Geçici depolama",
+      "option": "Geçici depolama"
+    },
+    "tvMountRemove": {
+      "helper": "Alım adresinde duvara monte televizyonları sökeriz",
+      "label": "TV askısı sökümü",
+      "option": "TV askısı sökümü"
+    }
+  },
+  "timeSlot": {
+    "afternoon": {
+      "label": "Öğleden sonra"
+    },
+    "evening": {
+      "label": "Akşam"
+    },
+    "morning": {
+      "label": "Sabah"
+    }
+  },
+  "vehicle": {
+    "largeTruck": {
+      "label": "Büyük kamyon"
+    },
+    "mediumTruck": {
+      "label": "Orta boy kamyon"
+    },
+    "smallVan": {
+      "label": "Küçük panelvan"
+    }
+  }
+}

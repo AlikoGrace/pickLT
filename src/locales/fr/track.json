@@ -1,0 +1,142 @@
+{
+  "address": {
+    "dropoff": {
+      "title": "Adresse de livraison"
+    },
+    "floor": {
+      "label": "Étage {{floor}}"
+    },
+    "pickup": {
+      "title": "Adresse de départ"
+    }
+  },
+  "eta": {
+    "assigned": {
+      "label": "Heure d’arrivée estimée"
+    },
+    "distance": {
+      "footnote": "À {{distance}} km"
+    },
+    "moverArriving": {
+      "label": "Déménageur en route"
+    },
+    "moverQueued": {
+      "body": "Termine une autre mission",
+      "footnote": "Il partira vers vous dès qu’il aura terminé.",
+      "label": "Déménageur assigné"
+    }
+  },
+  "mover": {
+    "moveCount": {
+      "label_one": "{{count}} déménagement",
+      "label_other": "{{count}} déménagements"
+    }
+  },
+  "order": {
+    "handle": {
+      "title": "Commande n° {{handle}}"
+    },
+    "item": {
+      "label": "{{qty}} × {{label}}"
+    },
+    "items": {
+      "empty": "Aucun article enregistré pour ce déménagement."
+    }
+  },
+  "payment": {
+    "amount": {
+      "label": "Montant à payer"
+    },
+    "cashNote": {
+      "body": "Payez le déménageur directement (espèces ou virement), puis appuyez sur <0>{{cta}}</0> ci-dessous. Le déménageur doit aussi confirmer la réception avant que le déménagement soit marqué comme terminé."
+    },
+    "confirm": {
+      "cta": "J’ai payé"
+    },
+    "method": {
+      "card": {
+        "label": "Carte"
+      },
+      "cash": {
+        "label": "Paiement à la livraison"
+      }
+    },
+    "payByCard": {
+      "cta": "Payer {{amount}} par carte"
+    }
+  },
+  "phase": {
+    "arrivedDestination": {
+      "subtitle": "Votre déménageur a atteint l’adresse de livraison",
+      "title": "Arrivé à destination !"
+    },
+    "awaitingPayment": {
+      "subtitle": "Payez le déménageur et confirmez ci-dessous",
+      "title": "Déménagement terminé — Paiement requis"
+    },
+    "broadcasting": {
+      "subtitle": "Recherche du déménageur le plus proche"
+    },
+    "cancelled": {
+      "label": "Déménagement annulé",
+      "subtitle": "Annulé"
+    },
+    "cancelledByMover": {
+      "subtitle": "Annulé par le déménageur"
+    },
+    "completed": {
+      "label": "Déménagement terminé"
+    },
+    "inTransit": {
+      "subtitle": "Vos affaires sont en cours de transport",
+      "title": "En route vers la destination"
+    },
+    "loading": {
+      "subtitle": "Vos affaires sont chargées dans le véhicule",
+      "title": "Chargement de vos affaires"
+    },
+    "moverArrived": {
+      "subtitle": "Retrouvez-le à l’adresse de départ",
+      "title": "Votre déménageur est arrivé !"
+    },
+    "paid": {
+      "subtitle": "En attente de la clôture par le déménageur",
+      "title": "Paiement reçu"
+    },
+    "unloading": {
+      "subtitle": "Vos affaires sont déchargées à destination",
+      "title": "Déchargement de vos affaires"
+    },
+    "waitingPriority": {
+      "subtitle": "Envoi de la demande à votre déménageur"
+    }
+  },
+  "pricing": {
+    "subtotal": {
+      "label": "Sous-total"
+    },
+    "total": {
+      "label": "Total"
+    }
+  },
+  "step": {
+    "completed": {
+      "label": "Déménagement terminé"
+    },
+    "inTransit": {
+      "label": "En transit"
+    },
+    "moverArrived": {
+      "label": "Déménageur au point de départ"
+    },
+    "moverAssigned": {
+      "label": "Déménageur assigné"
+    },
+    "moverEnRoute": {
+      "label": "Déménageur en route"
+    },
+    "orderPlaced": {
+      "label": "Commande passée"
+    }
+  }
+}

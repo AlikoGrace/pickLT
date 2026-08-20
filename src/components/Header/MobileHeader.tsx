@@ -2,6 +2,7 @@
 
 import Logo from '@/shared/Logo'
 import SwitchDarkMode from '@/shared/SwitchDarkMode'
+import LanguageDropdown from './LanguageDropdown'
 import { ArrowLeft01Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { useRouter } from 'next/navigation'
@@ -19,7 +20,10 @@ const MobileHeader = () => {
         <HugeiconsIcon icon={ArrowLeft01Icon} size={20} strokeWidth={1.5} className="text-neutral-700 dark:text-neutral-300" />
       </button>
       <Logo className="w-20" />
-      <SwitchDarkMode className="!h-9 !w-9 !text-xl" />
+      <div className="flex items-center gap-1">
+        <LanguageDropdown panelClassName="w-56" />
+        <SwitchDarkMode className="!h-9 !w-9 !text-xl" />
+      </div>
     </div>
   )
 }

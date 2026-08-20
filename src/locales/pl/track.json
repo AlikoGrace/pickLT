@@ -1,0 +1,144 @@
+{
+  "address": {
+    "dropoff": {
+      "title": "Adres dostawy"
+    },
+    "floor": {
+      "label": "Piętro {{floor}}"
+    },
+    "pickup": {
+      "title": "Adres odbioru"
+    }
+  },
+  "eta": {
+    "assigned": {
+      "label": "Szacowany czas przyjazdu"
+    },
+    "distance": {
+      "footnote": "{{distance}} km stąd"
+    },
+    "moverArriving": {
+      "label": "Przeprowadzkowiec w drodze"
+    },
+    "moverQueued": {
+      "body": "Kończy inne zlecenie",
+      "footnote": "Ruszy do Ciebie, gdy tylko skończy.",
+      "label": "Przydzielono przeprowadzkowca"
+    }
+  },
+  "mover": {
+    "moveCount": {
+      "label_few": "{{count}} przeprowadzki",
+      "label_many": "{{count}} przeprowadzek",
+      "label_one": "{{count}} przeprowadzka",
+      "label_other": "{{count}} przeprowadzki"
+    }
+  },
+  "order": {
+    "handle": {
+      "title": "Zamówienie nr {{handle}}"
+    },
+    "item": {
+      "label": "{{qty}} × {{label}}"
+    },
+    "items": {
+      "empty": "Brak zapisanych rzeczy dla tej przeprowadzki."
+    }
+  },
+  "payment": {
+    "amount": {
+      "label": "Kwota do zapłaty"
+    },
+    "cashNote": {
+      "body": "Zapłać przeprowadzkowcowi bezpośrednio (gotówką lub przelewem), a następnie dotknij <0>{{cta}}</0> poniżej. Przeprowadzkowiec musi też potwierdzić otrzymanie zapłaty, zanim przeprowadzka zostanie oznaczona jako zakończona."
+    },
+    "confirm": {
+      "cta": "Zapłaciłem"
+    },
+    "method": {
+      "card": {
+        "label": "Karta"
+      },
+      "cash": {
+        "label": "Płatność przy odbiorze"
+      }
+    },
+    "payByCard": {
+      "cta": "Zapłać {{amount}} kartą"
+    }
+  },
+  "phase": {
+    "arrivedDestination": {
+      "subtitle": "Przeprowadzkowiec dotarł pod adres dostawy",
+      "title": "Na miejscu docelowym!"
+    },
+    "awaitingPayment": {
+      "subtitle": "Zapłać przeprowadzkowcowi i potwierdź poniżej",
+      "title": "Przeprowadzka zakończona — wymagana płatność"
+    },
+    "broadcasting": {
+      "subtitle": "Szukamy najbliższego przeprowadzkowca"
+    },
+    "cancelled": {
+      "label": "Przeprowadzka anulowana",
+      "subtitle": "Anulowana"
+    },
+    "cancelledByMover": {
+      "subtitle": "Anulowana przez przeprowadzkowca"
+    },
+    "completed": {
+      "label": "Przeprowadzka zakończona"
+    },
+    "inTransit": {
+      "subtitle": "Twoje rzeczy są w transporcie",
+      "title": "W drodze do celu"
+    },
+    "loading": {
+      "subtitle": "Twoje rzeczy są ładowane do pojazdu",
+      "title": "Załadunek Twoich rzeczy"
+    },
+    "moverArrived": {
+      "subtitle": "Spotkaj się z nim pod adresem odbioru",
+      "title": "Przeprowadzkowiec dotarł na miejsce!"
+    },
+    "paid": {
+      "subtitle": "Czekamy, aż przeprowadzkowiec zamknie przeprowadzkę",
+      "title": "Płatność otrzymana"
+    },
+    "unloading": {
+      "subtitle": "Twoje rzeczy są rozładowywane na miejscu",
+      "title": "Rozładunek Twoich rzeczy"
+    },
+    "waitingPriority": {
+      "subtitle": "Wysyłamy prośbę do Twojego przeprowadzkowca"
+    }
+  },
+  "pricing": {
+    "subtotal": {
+      "label": "Suma częściowa"
+    },
+    "total": {
+      "label": "Razem"
+    }
+  },
+  "step": {
+    "completed": {
+      "label": "Przeprowadzka zakończona"
+    },
+    "inTransit": {
+      "label": "W transporcie"
+    },
+    "moverArrived": {
+      "label": "Przeprowadzkowiec pod adresem odbioru"
+    },
+    "moverAssigned": {
+      "label": "Przydzielono przeprowadzkowca"
+    },
+    "moverEnRoute": {
+      "label": "Przeprowadzkowiec w drodze"
+    },
+    "orderPlaced": {
+      "label": "Zamówienie złożone"
+    }
+  }
+}

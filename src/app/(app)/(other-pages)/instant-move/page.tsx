@@ -24,6 +24,8 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { getMapboxDirections } from '@/utils/mapbox-directions'
+import { formatMoney } from '@/lib/format'
+import { useTranslation } from 'react-i18next'
 
 // ─── Types ──────────────────────────────────────────────
 interface MoverInfo {
@@ -92,6 +94,7 @@ const formatDuration = (seconds: number): string => {
 }
 
 const InstantMovePage = () => {
+  const { t } = useTranslation()
   const router = useRouter()
   const { reset } = useMoveSearch()
 
@@ -646,7 +649,7 @@ const InstantMovePage = () => {
             )}
             {phase === 'mover_arrived' && (
               <div className="text-right shrink-0">
-                <p className="text-lg font-semibold text-primary-600">€{estimatedPrice}</p>
+                <p className="text-lg font-semibold text-primary-600">{formatMoney(estimatedPrice, { compact: true })}</p>
                 <p className="text-xs text-neutral-500 dark:text-neutral-400">Estimated price</p>
               </div>
             )}
@@ -663,7 +666,7 @@ const InstantMovePage = () => {
             )}
             {(phase === 'arrived_destination' || phase === 'unloading' || phase === 'awaiting_payment') && (
               <div className="text-right shrink-0">
-                <p className="text-lg font-semibold text-primary-600">€{moveData?.finalPrice || estimatedPrice}</p>
+                <p className="text-lg font-semibold text-primary-600">{formatMoney(moveData?.finalPrice || estimatedPrice, { compact: true })}</p>
                 <p className="text-xs text-neutral-500 dark:text-neutral-400">Final price</p>
               </div>
             )}
@@ -752,7 +755,7 @@ const InstantMovePage = () => {
           </div>
           <div className="flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400">
             <HugeiconsIcon icon={UserMultiple02Icon} size={14} strokeWidth={1.5} />
-            <span>{mover.crewSize + 1} mover{mover.crewSize > 0 ? 's' : ''}</span>
+            <span>{t('moves:moverCount', { count: mover.crewSize + 1 })}</span>
           </div>
         </div>
 
@@ -923,7 +926,7 @@ const InstantMovePage = () => {
             <div className="rounded-2xl border border-neutral-200 bg-white/95 backdrop-blur-sm dark:border-neutral-700 dark:bg-neutral-800/95 p-4 shadow-lg space-y-3">
               <div className="text-center">
                 <p className="text-lg font-bold text-neutral-900 dark:text-white">
-                  €{paymentAmount || moveData?.finalPrice || estimatedPrice}
+                  {formatMoney(paymentAmount || moveData?.finalPrice || estimatedPrice, { compact: true })}
                 </p>
                 <p className="text-sm text-neutral-500 dark:text-neutral-400">Amount to pay by card</p>
               </div>
@@ -939,7 +942,7 @@ const InstantMovePage = () => {
             <div className="rounded-2xl border border-neutral-200 bg-white/95 backdrop-blur-sm dark:border-neutral-700 dark:bg-neutral-800/95 p-4 shadow-lg space-y-4">
               <div className="text-center">
                 <p className="text-lg font-bold text-neutral-900 dark:text-white">
-                  €{paymentAmount || moveData?.finalPrice || estimatedPrice}
+                  {formatMoney(paymentAmount || moveData?.finalPrice || estimatedPrice, { compact: true })}
                 </p>
                 <p className="text-sm text-neutral-500 dark:text-neutral-400">Amount to pay</p>
               </div>

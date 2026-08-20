@@ -1,5 +1,6 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import { ReactDatePickerCustomHeaderProps } from 'react-datepicker'
+import { formatMonthYear } from '@/lib/format'
 
 const DatePickerCustomHeaderTwoMonth = ({
   monthDate,
@@ -23,10 +24,7 @@ const DatePickerCustomHeaderTwoMonth = ({
         </span>
       </button>
       <span className="react-datepicker__current-month">
-        {monthDate.toLocaleString('en-US', {
-          month: 'long',
-          year: 'numeric',
-        })}
+        {formatMonthYear(monthDate)}
       </span>
       <button
         aria-label="Next Month"

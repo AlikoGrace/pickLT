@@ -1,0 +1,142 @@
+{
+  "address": {
+    "dropoff": {
+      "title": "Dirección de entrega"
+    },
+    "floor": {
+      "label": "Planta {{floor}}"
+    },
+    "pickup": {
+      "title": "Dirección de recogida"
+    }
+  },
+  "eta": {
+    "assigned": {
+      "label": "Hora estimada de llegada"
+    },
+    "distance": {
+      "footnote": "A {{distance}} km"
+    },
+    "moverArriving": {
+      "label": "Transportista en camino"
+    },
+    "moverQueued": {
+      "body": "Terminando otro trabajo",
+      "footnote": "Saldrá hacia ti en cuanto termine.",
+      "label": "Transportista asignado"
+    }
+  },
+  "mover": {
+    "moveCount": {
+      "label_one": "{{count}} mudanza",
+      "label_other": "{{count}} mudanzas"
+    }
+  },
+  "order": {
+    "handle": {
+      "title": "Pedido n.º {{handle}}"
+    },
+    "item": {
+      "label": "{{qty}} × {{label}}"
+    },
+    "items": {
+      "empty": "No hay artículos registrados en esta mudanza."
+    }
+  },
+  "payment": {
+    "amount": {
+      "label": "Importe a pagar"
+    },
+    "cashNote": {
+      "body": "Paga al transportista directamente (en efectivo o por transferencia) y luego pulsa <0>{{cta}}</0> abajo. El transportista también debe confirmar el cobro antes de que la mudanza se marque como completada."
+    },
+    "confirm": {
+      "cta": "He pagado"
+    },
+    "method": {
+      "card": {
+        "label": "Tarjeta"
+      },
+      "cash": {
+        "label": "Pago contra entrega"
+      }
+    },
+    "payByCard": {
+      "cta": "Pagar {{amount}} con tarjeta"
+    }
+  },
+  "phase": {
+    "arrivedDestination": {
+      "subtitle": "Tu transportista ha llegado a la dirección de entrega",
+      "title": "¡Ha llegado al destino!"
+    },
+    "awaitingPayment": {
+      "subtitle": "Paga al transportista y confirma abajo",
+      "title": "Mudanza completada — Pago pendiente"
+    },
+    "broadcasting": {
+      "subtitle": "Buscando el transportista más cercano"
+    },
+    "cancelled": {
+      "label": "Mudanza cancelada",
+      "subtitle": "Cancelada"
+    },
+    "cancelledByMover": {
+      "subtitle": "Cancelada por el transportista"
+    },
+    "completed": {
+      "label": "Mudanza completada"
+    },
+    "inTransit": {
+      "subtitle": "Tus cosas están en transporte",
+      "title": "De camino al destino"
+    },
+    "loading": {
+      "subtitle": "Tus cosas se están cargando en el vehículo",
+      "title": "Cargando tus cosas"
+    },
+    "moverArrived": {
+      "subtitle": "Reúnete con él en la dirección de recogida",
+      "title": "¡Tu transportista ha llegado!"
+    },
+    "paid": {
+      "subtitle": "Esperando a que el transportista cierre la mudanza",
+      "title": "Pago recibido"
+    },
+    "unloading": {
+      "subtitle": "Tus cosas se están descargando en el destino",
+      "title": "Descargando tus cosas"
+    },
+    "waitingPriority": {
+      "subtitle": "Enviando la solicitud a tu transportista"
+    }
+  },
+  "pricing": {
+    "subtotal": {
+      "label": "Subtotal"
+    },
+    "total": {
+      "label": "Total"
+    }
+  },
+  "step": {
+    "completed": {
+      "label": "Mudanza completada"
+    },
+    "inTransit": {
+      "label": "En tránsito"
+    },
+    "moverArrived": {
+      "label": "Transportista en la recogida"
+    },
+    "moverAssigned": {
+      "label": "Transportista asignado"
+    },
+    "moverEnRoute": {
+      "label": "Transportista en camino"
+    },
+    "orderPlaced": {
+      "label": "Pedido realizado"
+    }
+  }
+}

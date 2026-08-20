@@ -1,0 +1,84 @@
+{
+  "appwrite": {
+    "generalArgumentInvalid": "One of the fields is invalid. Please check your input.",
+    "generalRateLimitExceeded": "Too many attempts. Please wait a moment and try again.",
+    "passwordPersonalData": "Password cannot contain personal information.",
+    "passwordRecentlyUsed": "This password was used recently. Please choose another.",
+    "phoneInvalid": "Invalid phone number format.",
+    "userAlreadyExists": "An account with this email already exists.",
+    "userInvalidCode": "The verification code is incorrect or has expired.",
+    "userInvalidCredentials": "Incorrect email or password.",
+    "userNotFound": "No account found with this email.",
+    "userPhoneNotFound": "No phone number on file. Please add one to continue.",
+    "userSessionAlreadyExists": "You are already signed in.",
+    "userSessionNotFound": "Session expired. Please sign in again.",
+    "userUnauthorized": "You are not authorized. Please sign in again."
+  },
+  "auth": {
+    "noSession": {
+      "error": "No authenticated user"
+    }
+  },
+  "card": {
+    "add": {
+      "failed": "Could not add card. Try again.",
+      "initFailed": "Could not start card setup. Try again.",
+      "notSaved": "Card was not saved. Try again."
+    },
+    "remove": {
+      "detachFailed": "Our payment provider could not remove the card. Please try again.",
+      "forbidden": "That card is not on your account.",
+      "internal": "Something went wrong removing the card. Please try again.",
+      "misconfigured": "Card removal is temporarily unavailable. Please try again later.",
+      "noStripeCustomer": "No payment profile found for your account.",
+      "paymentMethodNotFound": "That card no longer exists at our payment provider.",
+      "unauthenticated": "Please sign in again to remove this card.",
+      "userNotFound": "Your account could not be loaded. Please sign in again."
+    }
+  },
+  "generic": {
+    "fallback": "Something went wrong. Please try again.",
+    "retry": {
+      "body": "Please try again.",
+      "error": "Something went wrong. Please try again."
+    },
+    "title": "Something went wrong"
+  },
+  "google": {
+    "cancelled": {
+      "error": "Google sign-in was cancelled."
+    },
+    "noCachedAccount": {
+      "error": "No cached Google account found."
+    },
+    "noCredentials": {
+      "error": "Sign-in succeeded with Google but the server did not return credentials."
+    },
+    "noIdToken": {
+      "error": "Google sign-in did not return an ID token. Try again."
+    }
+  },
+  "instant": {
+    "moverUnavailable": {
+      "error": "Selected mover is no longer available"
+    },
+    "submitStage": {
+      "error": "Submission failed at {{stage}}. Please try again.",
+      "short": {
+        "error": "Submission failed at {{stage}}"
+      }
+    }
+  },
+  "mapbox": {
+    "unreachable": {
+      "error": "Couldn't reach Mapbox, check connection"
+    }
+  },
+  "payment": {
+    "cardDeclined": "Your card was declined. Please try another payment method.",
+    "charge": {
+      "failed": "Could not complete payment. Try again.",
+      "initFailed": "Could not start payment. Try again."
+    }
+  }
+}

@@ -19,6 +19,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import React, { Suspense, useEffect, useState } from 'react'
 import PayWith, { PaymentMethod } from './PayWith'
 import YourMove from './YourMove'
+import { formatDateWith, formatMoney } from '@/lib/format'
 
 // Helper to format labels
 const formatLabel = (value: string | null | undefined): string => {
@@ -33,7 +34,7 @@ const formatDate = (dateStr: string | null) => {
   if (!dateStr) return 'Not selected'
   try {
     const date = new Date(dateStr)
-    return date.toLocaleDateString('en-GB', {
+    return formatDateWith(date, {
       weekday: 'short',
       year: 'numeric',
       month: 'short',
@@ -411,48 +412,48 @@ const CheckoutContent = () => {
           {isInstantMove ? (
             <>
               <DescriptionTerm>{moverPrice ? 'Mover fare' : 'Base fare'}</DescriptionTerm>
-              <DescriptionDetails className="sm:text-right">€{basePrice.toFixed(2)}</DescriptionDetails>
+              <DescriptionDetails className="sm:text-right">{formatMoney(basePrice)}</DescriptionDetails>
               
               {itemsPrice > 0 && (
                 <>
                   <DescriptionTerm>Items ({inventoryCount})</DescriptionTerm>
-                  <DescriptionDetails className="sm:text-right">€{itemsPrice.toFixed(2)}</DescriptionDetails>
+                  <DescriptionDetails className="sm:text-right">{formatMoney(itemsPrice)}</DescriptionDetails>
                 </>
               )}
             </>
           ) : (
             <>
               <DescriptionTerm>Base rate ({formatLabel(moveType)})</DescriptionTerm>
-              <DescriptionDetails className="sm:text-right">€{basePrice.toFixed(2)}</DescriptionDetails>
+              <DescriptionDetails className="sm:text-right">{formatMoney(basePrice)}</DescriptionDetails>
               
               {packingPrice > 0 && (
                 <>
                   <DescriptionTerm>Packing service</DescriptionTerm>
-                  <DescriptionDetails className="sm:text-right">€{packingPrice.toFixed(2)}</DescriptionDetails>
+                  <DescriptionDetails className="sm:text-right">{formatMoney(packingPrice)}</DescriptionDetails>
                 </>
               )}
               
               {servicesPrice > 0 && (
                 <>
                   <DescriptionTerm>Additional services ({additionalServices.length})</DescriptionTerm>
-                  <DescriptionDetails className="sm:text-right">€{servicesPrice.toFixed(2)}</DescriptionDetails>
+                  <DescriptionDetails className="sm:text-right">{formatMoney(servicesPrice)}</DescriptionDetails>
                 </>
               )}
               
               {storagePrice > 0 && (
                 <>
                   <DescriptionTerm>Storage ({storageWeeks} weeks)</DescriptionTerm>
-                  <DescriptionDetails className="sm:text-right">€{storagePrice.toFixed(2)}</DescriptionDetails>
+                  <DescriptionDetails className="sm:text-right">{formatMoney(storagePrice)}</DescriptionDetails>
                 </>
               )}
             </>
           )}
           
           <DescriptionTerm>VAT (19%)</DescriptionTerm>
-          <DescriptionDetails className="sm:text-right">€{tax.toFixed(2)}</DescriptionDetails>
+          <DescriptionDetails className="sm:text-right">{formatMoney(tax)}</DescriptionDetails>
           
           <DescriptionTerm className="font-semibold text-neutral-900 dark:text-white">Total</DescriptionTerm>
-          <DescriptionDetails className="font-semibold sm:text-right text-primary-600">€{totalPrice.toFixed(2)}</DescriptionDetails>
+          <DescriptionDetails className="font-semibold sm:text-right text-primary-600">{formatMoney(totalPrice)}</DescriptionDetails>
         </DescriptionList>
 
         {/* Cash payment notice */}
@@ -470,7 +471,7 @@ const CheckoutContent = () => {
                   Cash payment selected
                 </p>
                 <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-                  Please have €{totalPrice.toFixed(2)} ready to pay your mover after the move is complete.
+                  Please have {formatMoney(totalPrice)} ready to pay your mover after the move is complete.
                 </p>
               </div>
             </div>
@@ -500,8 +501,8 @@ const CheckoutContent = () => {
             {isSubmitting
               ? 'Processing...'
               : paymentMethod === 'cash' 
-                ? `Confirm move · €${totalPrice.toFixed(2)}`
-                : `Confirm and pay €${totalPrice.toFixed(2)}`
+                ? `Confirm move · ${formatMoney(totalPrice)}`
+                : `Confirm and pay ${formatMoney(totalPrice)}`
             }
           </ButtonPrimary>
           {paymentMethod === 'cash' && (

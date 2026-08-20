@@ -22,6 +22,7 @@ import { HugeiconsIcon } from '@hugeicons/react'
 import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import React, { Suspense, useEffect, useState } from 'react'
+import { formatDateWith, formatMoney } from '@/lib/format'
 
 // Helper to format labels
 const formatLabel = (value: string | null | undefined): string => {
@@ -36,7 +37,7 @@ const formatDate = (dateStr: string | null) => {
   if (!dateStr) return 'Not selected'
   try {
     const date = new Date(dateStr)
-    return date.toLocaleDateString('en-GB', {
+    return formatDateWith(date, {
       weekday: 'short',
       year: 'numeric',
       month: 'short',
@@ -140,7 +141,7 @@ const PayDoneContent = () => {
                   Payment reminder
                 </h4>
                 <p className="mt-1 text-sm text-amber-700 dark:text-amber-300">
-                  Please have <strong>€{move?.totalPrice?.toFixed(2) || '0.00'}</strong> ready to pay your mover directly {isInstantMove ? 'after the move is complete' : 'on move day'}.
+                  Please have <strong>{formatMoney(move?.totalPrice ?? 0)}</strong> ready to pay your mover directly {isInstantMove ? 'after the move is complete' : 'on move day'}.
                 </p>
               </div>
             </div>
@@ -234,11 +235,7 @@ const PayDoneContent = () => {
                 <DescriptionTerm>Paid on</DescriptionTerm>
                 <DescriptionDetails>
                   {move?.paidAt 
-                    ? new Date(move.paidAt).toLocaleDateString('en-GB', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric',
-                      })
+                    ? formatDate(move.paidAt)
                     : 'N/A'}
                 </DescriptionDetails>
               </>
@@ -246,7 +243,7 @@ const PayDoneContent = () => {
             
             <DescriptionTerm>Total</DescriptionTerm>
             <DescriptionDetails className="text-primary-600 font-semibold">
-              €{move?.totalPrice?.toFixed(2) || '0.00'}
+              {formatMoney(move?.totalPrice ?? 0)}
             </DescriptionDetails>
             
             <DescriptionTerm>Payment method</DescriptionTerm>

@@ -1,0 +1,53 @@
+{
+  "governingLanguage": {
+    "notice": "Ten dokument jest tłumaczeniem. Ma charakter wyłącznie informacyjny; w razie rozbieżności rozstrzygająca jest wersja angielska."
+  },
+  "help": {
+    "faq": {
+      "contactSupport": {
+        "answer": "Z naszym zespołem wsparcia skontaktujesz się przez opcję „Kontakt” dostępną w aplikacji.",
+        "question": "Jak skontaktować się z pomocą techniczną?"
+      },
+      "manageNotifications": {
+        "answer": "Otwórz Profil → Powiadomienia, aby zdecydować, jakie alerty otrzymujesz.",
+        "question": "Jak zarządzać powiadomieniami?"
+      },
+      "reportIssue": {
+        "answer": "Skorzystaj z sekcji „Pomoc i wsparcie” w swoim profilu, aby zgłosić napotkane problemy.",
+        "question": "Jak zgłosić problem?"
+      },
+      "resetPassword": {
+        "answer": "Na ekranie logowania dotknij „Nie pamiętam hasła” i postępuj zgodnie z instrukcjami, aby zresetować hasło przez e-mail.",
+        "question": "Jak zresetować hasło?"
+      },
+      "updateInfo": {
+        "answer": "Otwórz Profil → Edytuj profil, aby w dowolnym momencie zaktualizować swoje dane osobowe.",
+        "question": "Jak zaktualizować moje dane?"
+      }
+    }
+  },
+  "privacy": {
+    "effectiveDate": {
+      "label": "Data wejścia w życie: {{date}}",
+      "value": "20 grudnia 2024"
+    },
+    "section": {
+      "informationCollection": {
+        "body": "Zbieramy niezbędne informacje, aby ulepszyć korzystanie z aplikacji. Obejmuje to dane podawane bezpośrednio przez Ciebie, takie jak dane konta, oraz informacje pozyskiwane z analiz użytkowania i plików cookie.",
+        "title": "1. Zbieranie informacji"
+      },
+      "informationSetting": {
+        "body": "Masz pełną kontrolę nad swoimi danymi. Zarządzaj ustawieniami prywatności, aktualizuj dane osobowe i dostosuj ustawienia do swoich potrzeb.",
+        "title": "3. Ustawienia informacji"
+      },
+      "informationUsage": {
+        "body": "Zebrane informacje służą do ulepszania naszych usług, przedstawiania spersonalizowanych rekomendacji i zapewnienia płynnego korzystania z aplikacji. Nie udostępniamy Twoich danych bez Twojej wyraźnej zgody.",
+        "title": "2. Wykorzystanie informacji"
+      },
+      "securityMeasures": {
+        "body": "Bezpieczeństwo Twoich danych jest dla nas priorytetem. Stosujemy zaawansowane protokoły bezpieczeństwa, szyfrowanie i regularne audyty, aby chronić dane przed nieuprawnionym dostępem i naruszeniami.",
+        "title": "4. Środki bezpieczeństwa"
+      }
+    }
+  }
+}

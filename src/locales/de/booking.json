@@ -1,0 +1,349 @@
+{
+  "field": {
+    "arrivalTime": {
+      "hour": {
+        "label": "Stunde"
+      },
+      "minute": {
+        "label": "Min."
+      },
+      "period": {
+        "label": "Tageszeit"
+      },
+      "sheet": {
+        "title": "Gewünschte Ankunftszeit"
+      }
+    },
+    "contact": {
+      "label": "Kontakt"
+    },
+    "crewSize": {
+      "label": "Teamgröße"
+    },
+    "distance": {
+      "label": "Entfernung"
+    },
+    "dropoff": {
+      "label": "Zielort"
+    },
+    "elevator": {
+      "label": "Aufzug vorhanden?"
+    },
+    "inventory": {
+      "label": "Inventar"
+    },
+    "moveDate": {
+      "label": "Umzugsdatum",
+      "placeholder": "Datum wählen",
+      "sheet": {
+        "title": "Umzugsdatum wählen"
+      }
+    },
+    "moveType": {
+      "label": "Umzugsart",
+      "placeholder": "Umzugsart wählen",
+      "sheet": {
+        "title": "Umzugsart wählen"
+      }
+    },
+    "pickup": {
+      "label": "Abholort"
+    },
+    "preferredTime": {
+      "label": "Wunschzeit",
+      "placeholder": "Zeitfenster wählen",
+      "sheet": {
+        "title": "Wunschzeit"
+      },
+      "value": {
+        "label": "{{label}} ({{range}})"
+      }
+    },
+    "selectDate": {
+      "helper": "Wann möchten Sie umziehen?",
+      "label": "Datum wählen"
+    },
+    "vehicle": {
+      "label": "Fahrzeug"
+    }
+  },
+  "floorLevel": {
+    "floor1": {
+      "option": "1. Etage"
+    },
+    "floor2": {
+      "option": "2. Etage"
+    },
+    "floor3": {
+      "option": "3. Etage"
+    },
+    "floor4": {
+      "option": "4. Etage"
+    },
+    "floor5plus": {
+      "option": "5. Etage oder höher"
+    },
+    "ground": {
+      "option": "Erdgeschoss"
+    },
+    "numbered": {
+      "option": "{{n}}. Etage"
+    }
+  },
+  "homeType": {
+    "apartment": {
+      "option": "Wohnung"
+    },
+    "house": {
+      "option": "Haus"
+    },
+    "office": {
+      "option": "Büro"
+    },
+    "other": {
+      "option": "Sonstiges"
+    },
+    "storage": {
+      "option": "Lager"
+    }
+  },
+  "location": {
+    "gpsFailed": {
+      "error": "Ihr Standort konnte nicht ermittelt werden."
+    },
+    "minQuery": {
+      "helper_one": "Geben Sie mindestens {{count}} Zeichen ein",
+      "helper_other": "Geben Sie mindestens {{count}} Zeichen ein"
+    },
+    "noResults": {
+      "empty": "Keine Orte gefunden"
+    },
+    "permissionDenied": {
+      "error": "Standortzugriff verweigert. Aktivieren Sie ihn in den Einstellungen."
+    },
+    "search": {
+      "placeholder": "Ort, Sehenswürdigkeit oder Adresse suchen"
+    },
+    "searchIdle": {
+      "empty": "Tippen Sie, um nach einer Adresse zu suchen."
+    },
+    "selectPlaceholder": {
+      "placeholder": "Standort {{field}} wählen"
+    },
+    "sheet": {
+      "title": "Standort {{field}}"
+    },
+    "useCurrent": {
+      "cta": "Aktuellen Standort verwenden"
+    }
+  },
+  "map": {
+    "dropoff": {
+      "placeholder": "Zielort"
+    },
+    "pickup": {
+      "placeholder": "Abholort"
+    },
+    "preview": {
+      "empty": "Kartenvorschau"
+    }
+  },
+  "mapPicker": {
+    "confirm": {
+      "cta": "Standort bestätigen"
+    },
+    "default": {
+      "title": "Standort wählen"
+    },
+    "locating": {
+      "helper": "Ihr Standort wird ermittelt …"
+    },
+    "reverseGeocoding": {
+      "helper": "Adresse wird ermittelt …"
+    },
+    "search": {
+      "placeholder": "Nach einem Ort suchen …"
+    },
+    "tapHint": {
+      "helper": "Tippen Sie auf die Karte, um einen Standort zu wählen"
+    },
+    "useCurrent": {
+      "cta": "Meinen aktuellen Standort verwenden"
+    }
+  },
+  "moveType": {
+    "light": {
+      "body": "Kleine Umzüge werden mit einem kleinen Transporter durchgeführt.",
+      "short": "Klein",
+      "subtitle": "Ideal für kleine Mengen – Kartons, einzelne Möbelstücke oder eine Einzimmerwohnung.",
+      "title": "Kleiner Umzug"
+    },
+    "premium": {
+      "body": "Premium-Umzüge werden mit größeren Fahrzeugen und einem Team von 2 oder mehr Personen durchgeführt.",
+      "short": "Premium",
+      "subtitle": "Komplettservice für große Haushalte – Packen, Beladen, Transport und Entladen.",
+      "title": "Premium-Umzug"
+    },
+    "regular": {
+      "body": "Normale Umzüge werden mit einem mittelgroßen Fahrzeug und einem 2-köpfigen Team durchgeführt.",
+      "short": "Normal",
+      "subtitle": "Passend für 1- bis 2-Zimmer-Wohnungen mit üblichen Möbeln und Geräten.",
+      "title": "Normaler Umzug"
+    }
+  },
+  "packingLevel": {
+    "full": {
+      "helper": "Das Umzugsteam packt alles für mich",
+      "option": "Komplettes Packen"
+    },
+    "none": {
+      "helper": "Ich packe alles selbst",
+      "option": "Keine Packhilfe"
+    },
+    "partial": {
+      "helper": "Das Umzugsteam packt nur zerbrechliche und wertvolle Gegenstände",
+      "option": "Zerbrechliche Gegenstände packen"
+    },
+    "unpacking": {
+      "helper": "Das Umzugsteam packt beim Abholen UND packt am Zielort aus",
+      "option": "Packen und auspacken"
+    }
+  },
+  "parking": {
+    "atBuilding": {
+      "option": "Parkplatz direkt am Gebäude"
+    },
+    "directlyInFront": {
+      "option": "Parkplatz direkt davor"
+    },
+    "driveway": {
+      "option": "Einfahrt"
+    },
+    "limited": {
+      "option": "Eingeschränkte Parkmöglichkeiten"
+    },
+    "loadingZone": {
+      "option": "Haltverbot erforderlich"
+    },
+    "lot": {
+      "option": "Parkplatz"
+    },
+    "nearby": {
+      "option": "Parkplatz in der Nähe (0–20 m)"
+    },
+    "none": {
+      "option": "Kein Parkplatz vorhanden"
+    },
+    "street": {
+      "option": "Straßenparkplatz"
+    },
+    "underground": {
+      "option": "Zufahrt zur Tiefgarage"
+    }
+  },
+  "payment": {
+    "method": {
+      "cash": {
+        "label": "Barzahlung"
+      }
+    },
+    "section": {
+      "title": "Zahlung"
+    }
+  },
+  "photos": {
+    "chooseGallery": {
+      "cta": "Aus Galerie wählen"
+    },
+    "formatHint": {
+      "subtitle": "PNG, JPG bis 3 MB"
+    },
+    "sourceSheet": {
+      "title": "Foto hinzufügen"
+    },
+    "takePhoto": {
+      "cta": "Foto aufnehmen"
+    }
+  },
+  "pricing": {
+    "baseRate": {
+      "label": "Grundpreis ({{moveType}})"
+    },
+    "storage": {
+      "label": "Lagerung"
+    },
+    "subtotal": {
+      "label": "Zwischensumme"
+    },
+    "total": {
+      "label": "Gesamt"
+    },
+    "vat": {
+      "label": "MwSt. ({{rate}})"
+    }
+  },
+  "services": {
+    "applianceConnect": {
+      "helper": "Geräte am neuen Ort wieder anschließen",
+      "label": "Geräte anschließen",
+      "option": "Geräte anschließen"
+    },
+    "applianceDisconnect": {
+      "helper": "Waschmaschine, Geschirrspüler usw. abklemmen",
+      "label": "Geräte abklemmen",
+      "option": "Geräte abklemmen"
+    },
+    "disposal": {
+      "helper": "Unerwünschte Gegenstände beim städtischen Wertstoffhof entsorgen",
+      "label": "Entsorgung",
+      "option": "Entsorgung"
+    },
+    "furnitureAssembly": {
+      "helper": "Wir montieren Möbel am neuen Ort",
+      "label": "Möbelmontage",
+      "option": "Möbelmontage"
+    },
+    "furnitureDisassembly": {
+      "helper": "Wir demontieren Betten und Tische vor dem Verladen",
+      "label": "Möbeldemontage",
+      "option": "Möbeldemontage"
+    },
+    "moveoutCleaning": {
+      "helper": "Reinigung der Abholadresse nach dem Verladen",
+      "label": "Auszugsreinigung",
+      "option": "Auszugsreinigung"
+    },
+    "temporaryStorage": {
+      "helper": "Gegenstände zwischen Abhol- und Lieferdatum einlagern",
+      "label": "Zwischenlagerung",
+      "option": "Zwischenlagerung"
+    },
+    "tvMountRemove": {
+      "helper": "Wandmontierte Fernseher beim Abholen abnehmen",
+      "label": "TV-Halterung demontieren",
+      "option": "TV-Halterung demontieren"
+    }
+  },
+  "timeSlot": {
+    "afternoon": {
+      "label": "Nachmittag"
+    },
+    "evening": {
+      "label": "Abend"
+    },
+    "morning": {
+      "label": "Vormittag"
+    }
+  },
+  "vehicle": {
+    "largeTruck": {
+      "label": "Großer Lkw"
+    },
+    "mediumTruck": {
+      "label": "Mittlerer Lkw"
+    },
+    "smallVan": {
+      "label": "Kleiner Transporter"
+    }
+  }
+}

@@ -1,0 +1,174 @@
+{
+  "card": {
+    "route": {
+      "dropoffFallback": {
+        "label": "Dostawa"
+      },
+      "pickupFallback": {
+        "label": "Odbiór"
+      }
+    },
+    "title": {
+      "generic": {
+        "label": "Przeprowadzka"
+      }
+    }
+  },
+  "category": {
+    "all": {
+      "label": "Wszystkie"
+    },
+    "cancelled": {
+      "label": "Anulowane"
+    },
+    "completed": {
+      "label": "Zakończone"
+    },
+    "inProgress": {
+      "label": "W trakcie"
+    },
+    "pending": {
+      "label": "Oczekujące"
+    }
+  },
+  "detail": {
+    "additionalServices": {
+      "title": "Usługi dodatkowe"
+    },
+    "address": {
+      "label": "Adres"
+    },
+    "arrivalWindow": {
+      "label": "Okno przyjazdu"
+    },
+    "distance": {
+      "label": "Odległość"
+    },
+    "dropoff": {
+      "label": "Dostawa"
+    },
+    "dropoffAddress": {
+      "title": "Adres dostawy"
+    },
+    "duration": {
+      "label": "Czas trwania"
+    },
+    "elevator": {
+      "label": "Winda"
+    },
+    "floor": {
+      "label": "Piętro"
+    },
+    "itemLine": {
+      "label": "{{qty}} x {{label}}"
+    },
+    "moveDate": {
+      "label": "Data przeprowadzki"
+    },
+    "moveDetails": {
+      "title": "Szczegóły przeprowadzki"
+    },
+    "moveItems": {
+      "title": "Przedmioty do przewozu"
+    },
+    "packingService": {
+      "label": "Usługa pakowania"
+    },
+    "parking": {
+      "label": "Parking"
+    },
+    "pickup": {
+      "label": "Odbiór"
+    },
+    "pickupAddress": {
+      "title": "Adres odbioru"
+    },
+    "requestedAt": {
+      "label": "Zamówiono"
+    },
+    "route": {
+      "title": "Trasa"
+    },
+    "status": {
+      "label": "Status"
+    },
+    "type": {
+      "label": "Typ"
+    },
+    "unit": {
+      "label": "Lokal"
+    }
+  },
+  "itemCount_few": "{{count}} przedmioty",
+  "itemCount_many": "{{count}} przedmiotów",
+  "itemCount_one": "{{count}} przedmiot",
+  "itemCount_other": "{{count}} przedmiotu",
+  "list": {
+    "loadError": {
+      "body": "Pociągnij w dół, aby spróbować ponownie.",
+      "title": "Nie udało się wczytać przeprowadzek"
+    }
+  },
+  "moveCategory": {
+    "instant": {
+      "label": "Natychmiastowa"
+    },
+    "scheduled": {
+      "label": "Zaplanowana"
+    }
+  },
+  "payment": {
+    "method": {
+      "label": "Metoda płatności"
+    }
+  },
+  "pricing": {
+    "estimatedTotal": {
+      "label": "Szacowana suma"
+    }
+  },
+  "status": {
+    "arrivedDestination": {
+      "label": "Na miejscu"
+    },
+    "awaitingPayment": {
+      "label": "Oczekuje na płatność"
+    },
+    "cancelledByClient": {
+      "label": "Anulowana"
+    },
+    "cancelledByMover": {
+      "label": "Anulowana"
+    },
+    "completed": {
+      "label": "Zakończona"
+    },
+    "disputed": {
+      "label": "Sporna"
+    },
+    "inTransit": {
+      "label": "W transporcie"
+    },
+    "loading": {
+      "label": "Załadunek"
+    },
+    "moverArrived": {
+      "label": "Przeprowadzkowiec na miejscu"
+    },
+    "moverAssigned": {
+      "label": "Przydzielono przeprowadzkowca"
+    },
+    "moverEnRoute": {
+      "label": "Przeprowadzkowiec w drodze"
+    },
+    "paid": {
+      "label": "Opłacona"
+    },
+    "pending": {
+      "label": "Oczekuje"
+    },
+    "unloading": {
+      "label": "Rozładunek"
+    }
+  }
+}

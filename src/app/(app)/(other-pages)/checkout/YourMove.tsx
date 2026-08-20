@@ -13,6 +13,8 @@ import {
 } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import Link from 'next/link'
+import { formatDateWith } from '@/lib/format'
+import { useTranslation } from 'react-i18next'
 
 // Helper to format labels
 const formatLabel = (value: string | null | undefined): string => {
@@ -27,7 +29,7 @@ const formatDate = (dateStr: string | null) => {
   if (!dateStr) return 'Not selected'
   try {
     const date = new Date(dateStr)
-    return date.toLocaleDateString('en-GB', {
+    return formatDateWith(date, {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
@@ -63,6 +65,7 @@ interface YourMoveProps {
 }
 
 const YourMove = ({ routeDistance, routeDuration }: YourMoveProps) => {
+  const { t } = useTranslation()
   const {
     isInstantMove,
     moveDate,
@@ -327,7 +330,7 @@ const YourMove = ({ routeDistance, routeDuration }: YourMoveProps) => {
                 <div className="flex flex-col">
                   <span className="text-sm text-neutral-400">Items to move</span>
                   <span className="mt-1 text-base font-semibold text-neutral-900 dark:text-white">
-                    {inventoryCount} item{inventoryCount !== 1 ? 's' : ''}
+                    {t('moves:itemCount', { count: inventoryCount })}
                   </span>
                 </div>
               </div>
@@ -349,7 +352,7 @@ const YourMove = ({ routeDistance, routeDuration }: YourMoveProps) => {
                 <div className="flex flex-col">
                   <span className="text-sm text-neutral-400">Items to move</span>
                   <span className="mt-1 text-base font-semibold text-neutral-900 dark:text-white">
-                    {inventoryCount} item{inventoryCount !== 1 ? 's' : ''}
+                    {t('moves:itemCount', { count: inventoryCount })}
                   </span>
                 </div>
               </div>

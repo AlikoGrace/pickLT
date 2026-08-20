@@ -16,8 +16,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 const InstantMovePhotosPage = () => {
+  const { t } = useTranslation()
   const router = useRouter()
   const coverInputRef = useRef<HTMLInputElement>(null)
   const galleryInputRef = useRef<HTMLInputElement>(null)
@@ -263,7 +265,7 @@ const InstantMovePhotosPage = () => {
         {/* Photo Count */}
         <div className="mt-6 text-center">
           <p className="text-sm text-neutral-500 dark:text-neutral-400">
-            {coverPhotoId ? 1 : 0} main photo • {galleryPhotoIds.length} additional photo{galleryPhotoIds.length !== 1 ? 's' : ''}
+            {coverPhotoId ? 1 : 0} main photo • {t('booking:photos.additionalCount', { count: galleryPhotoIds.length })}
           </p>
         </div>
       </div>

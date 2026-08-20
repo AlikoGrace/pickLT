@@ -1,0 +1,86 @@
+{
+  "gender": {
+    "female": {
+      "option": "Kadın"
+    },
+    "male": {
+      "option": "Erkek"
+    },
+    "other": {
+      "option": "Diğer"
+    }
+  },
+  "helpCenter": {
+    "header": {
+      "title": "Yardım merkezi"
+    },
+    "search": {
+      "a11y": "Yardım makalelerinde ara",
+      "placeholder": "Konum ara.."
+    }
+  },
+  "language": {
+    "active": "Etkin",
+    "back": "Geri",
+    "done": "Tamam",
+    "others": "Diğer",
+    "saveError": "Diliniz kaydedilemedi. Lütfen tekrar deneyin.",
+    "subtitle": "Uygulamanın tamamında kullanmak istediğiniz dili seçin.",
+    "suggested": "Önerilen",
+    "title": "Dil"
+  },
+  "menu": {
+    "appearance": {
+      "label": "Görünüm"
+    },
+    "changePassword": {
+      "label": "Şifre değiştir"
+    },
+    "deleteAccount": {
+      "label": "Hesabı sil"
+    },
+    "editProfile": {
+      "label": "Profili düzenle"
+    },
+    "help": {
+      "label": "Yardım ve destek"
+    },
+    "language": {
+      "label": "Dil"
+    },
+    "legal": {
+      "label": "Yasal bilgiler"
+    },
+    "logout": {
+      "label": "Çıkış yap"
+    },
+    "notifications": {
+      "label": "Bildirimler"
+    },
+    "paymentAccount": {
+      "label": "Ödeme hesabı"
+    },
+    "security": {
+      "label": "Güvenlik"
+    },
+    "yourCard": {
+      "label": "Kartınız"
+    }
+  },
+  "privacyPolicy": {
+    "header": {
+      "title": "Gizlilik ve politika"
+    }
+  },
+  "section": {
+    "general": {
+      "title": "Genel"
+    },
+    "payments": {
+      "title": "Ödemeler"
+    },
+    "preferences": {
+      "title": "Tercihler"
+    }
+  }
+}

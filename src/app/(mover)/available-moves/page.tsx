@@ -16,6 +16,8 @@ import MoverMapboxMap from '@/components/MoverMapboxMap'
 import { Badge } from '@/shared/Badge'
 import Image from 'next/image'
 import Link from 'next/link'
+import { formatDayMonth, formatMoneyRounded } from '@/lib/format'
+import { useTranslation } from 'react-i18next'
 
 const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || ''
 const PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || ''
@@ -75,17 +77,14 @@ const formatLabel = (value: string | null | undefined): string => {
 const formatDate = (dateStr: string | null) => {
   if (!dateStr) return 'Not selected'
   try {
-    return new Date(dateStr).toLocaleDateString('en-GB', {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
-    })
+    return formatDayMonth(dateStr)
   } catch {
     return dateStr
   }
 }
 
 const AvailableMovesPage = () => {
+  const { t } = useTranslation()
   const [viewMode, setViewMode] = useState<'map' | 'list'>('map')
   const [selectedMove, setSelectedMove] = useState<NearbyMove | null>(null)
   const [moves, setMoves] = useState<NearbyMove[]>([])
@@ -245,7 +244,7 @@ const AvailableMovesPage = () => {
               Available Moves
             </h1>
             <p className="text-sm text-neutral-500 dark:text-neutral-400">
-              {moves.length} move{moves.length !== 1 ? 's' : ''} within 30 km
+              {t('moves:available.withinRadiusCount', { count: moves.length })}
               {isLoading && (
                 <ArrowPathIcon className="w-3 h-3 inline ml-1 animate-spin" />
               )}
@@ -367,7 +366,7 @@ const AvailableMovesPage = () => {
                           </p>
                         </div>
                         <span className="text-xl font-bold text-neutral-900 dark:text-neutral-100 ml-3 shrink-0">
-                          &euro;{(selectedMove.estimatedPrice || 0).toFixed(0)}
+                          {formatMoneyRounded(selectedMove.estimatedPrice || 0)}
                         </span>
                       </div>
                       <div className="flex flex-wrap gap-1.5">
@@ -440,7 +439,7 @@ const AvailableMovesPage = () => {
                         </h3>
                       </div>
                       <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100 ml-3 shrink-0">
-                        &euro;{(move.estimatedPrice || 0).toFixed(0)}
+                        {formatMoneyRounded(move.estimatedPrice || 0)}
                       </p>
                     </div>
 

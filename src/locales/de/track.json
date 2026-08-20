@@ -1,0 +1,142 @@
+{
+  "address": {
+    "dropoff": {
+      "title": "Zieladresse"
+    },
+    "floor": {
+      "label": "Etage {{floor}}"
+    },
+    "pickup": {
+      "title": "Abholadresse"
+    }
+  },
+  "eta": {
+    "assigned": {
+      "label": "Voraussichtliche Ankunft"
+    },
+    "distance": {
+      "footnote": "{{distance}} km entfernt"
+    },
+    "moverArriving": {
+      "label": "Umzugshelfer unterwegs"
+    },
+    "moverQueued": {
+      "body": "Beendet einen anderen Auftrag",
+      "footnote": "Er macht sich auf den Weg, sobald er fertig ist.",
+      "label": "Umzugshelfer zugewiesen"
+    }
+  },
+  "mover": {
+    "moveCount": {
+      "label_one": "{{count}} Umzug",
+      "label_other": "{{count}} Umzüge"
+    }
+  },
+  "order": {
+    "handle": {
+      "title": "Auftrag #{{handle}}"
+    },
+    "item": {
+      "label": "{{qty}} × {{label}}"
+    },
+    "items": {
+      "empty": "Für diesen Umzug sind keine Gegenstände erfasst."
+    }
+  },
+  "payment": {
+    "amount": {
+      "label": "Zu zahlender Betrag"
+    },
+    "cashNote": {
+      "body": "Bitte zahlen Sie direkt an den Umzugshelfer (bar oder per Überweisung) und tippen Sie dann unten auf <0>{{cta}}</0>. Der Umzugshelfer muss den Erhalt ebenfalls bestätigen, bevor der Umzug als abgeschlossen gilt."
+    },
+    "confirm": {
+      "cta": "Ich habe bezahlt"
+    },
+    "method": {
+      "card": {
+        "label": "Karte"
+      },
+      "cash": {
+        "label": "Barzahlung bei Lieferung"
+      }
+    },
+    "payByCard": {
+      "cta": "{{amount}} mit Karte zahlen"
+    }
+  },
+  "phase": {
+    "arrivedDestination": {
+      "subtitle": "Ihr Umzugshelfer hat die Zieladresse erreicht",
+      "title": "Am Ziel angekommen!"
+    },
+    "awaitingPayment": {
+      "subtitle": "Bitte zahlen Sie den Umzugshelfer und bestätigen Sie unten",
+      "title": "Umzug abgeschlossen — Zahlung erforderlich"
+    },
+    "broadcasting": {
+      "subtitle": "Nächstgelegener Umzugshelfer wird gesucht"
+    },
+    "cancelled": {
+      "label": "Umzug storniert",
+      "subtitle": "Storniert"
+    },
+    "cancelledByMover": {
+      "subtitle": "Vom Umzugshelfer storniert"
+    },
+    "completed": {
+      "label": "Umzug abgeschlossen"
+    },
+    "inTransit": {
+      "subtitle": "Ihre Sachen werden transportiert",
+      "title": "Unterwegs zum Ziel"
+    },
+    "loading": {
+      "subtitle": "Ihre Sachen werden in das Fahrzeug geladen",
+      "title": "Ihre Sachen werden beladen"
+    },
+    "moverArrived": {
+      "subtitle": "Treffen Sie ihn an der Abholadresse",
+      "title": "Ihr Umzugshelfer ist da!"
+    },
+    "paid": {
+      "subtitle": "Warten auf den Abschluss durch den Umzugshelfer",
+      "title": "Zahlung erhalten"
+    },
+    "unloading": {
+      "subtitle": "Ihre Sachen werden am Ziel entladen",
+      "title": "Ihre Sachen werden entladen"
+    },
+    "waitingPriority": {
+      "subtitle": "Anfrage wird an Ihren Umzugshelfer gesendet"
+    }
+  },
+  "pricing": {
+    "subtotal": {
+      "label": "Zwischensumme"
+    },
+    "total": {
+      "label": "Gesamt"
+    }
+  },
+  "step": {
+    "completed": {
+      "label": "Umzug abgeschlossen"
+    },
+    "inTransit": {
+      "label": "Unterwegs"
+    },
+    "moverArrived": {
+      "label": "Umzugshelfer an der Abholadresse"
+    },
+    "moverAssigned": {
+      "label": "Umzugshelfer zugewiesen"
+    },
+    "moverEnRoute": {
+      "label": "Umzugshelfer unterwegs"
+    },
+    "orderPlaced": {
+      "label": "Auftrag erteilt"
+    }
+  }
+}
