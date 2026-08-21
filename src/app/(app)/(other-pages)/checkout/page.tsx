@@ -19,21 +19,20 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import React, { Suspense, useEffect, useState } from 'react'
 import PayWith, { PaymentMethod } from './PayWith'
 import YourMove from './YourMove'
+import { formatDateWith, formatMoney, formatPercent } from '@/lib/format'
+import { baseRateLabel, moveSubtitle } from '@/lib/move-subtitle'
+import { useTranslation } from 'react-i18next'
+import type { TFunction } from 'i18next'
+import { arrivalWindowLabel, vehicleTypeLabel } from '@/lib/enum-labels'
 
-// Helper to format labels
-const formatLabel = (value: string | null | undefined): string => {
-  if (!value) return 'Not specified'
-  return value
-    .split('_')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ')
-}
+/** VAT rate applied to the subtotal. Single source for the maths and the label. */
+const VAT_RATE = 0.19
 
-const formatDate = (dateStr: string | null) => {
-  if (!dateStr) return 'Not selected'
+const formatDate = (dateStr: string | null, t: TFunction) => {
+  if (!dateStr) return t('common:value.notSelected.empty')
   try {
     const date = new Date(dateStr)
-    return date.toLocaleDateString('en-GB', {
+    return formatDateWith(date, {
       weekday: 'short',
       year: 'numeric',
       month: 'short',
@@ -67,6 +66,7 @@ const CheckoutContent = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { user } = useAuth()
+  const { t } = useTranslation()
   
   // Get route info and price from URL params (passed from instant-move page)
   const routeDistanceParam = searchParams.get('distance')
@@ -159,7 +159,7 @@ const CheckoutContent = () => {
   const itemsPrice = isInstantMove && !moverPrice ? inventoryCount * 5 : 0 // Only add if no mover price
   
   const subtotal = basePrice + packingPrice + servicesPrice + storagePrice + itemsPrice
-  const tax = Math.round(subtotal * 0.19) // 19% VAT
+  const tax = Math.round(subtotal * VAT_RATE)
   const totalPrice = subtotal + tax
 
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -345,7 +345,7 @@ const CheckoutContent = () => {
             <div className="aspect-w-4 overflow-hidden rounded-2xl aspect-h-3 sm:aspect-h-4 bg-neutral-100 dark:bg-neutral-800">
               {coverPhotoId ? (
                 <Image
-                  alt="Move preview"
+                  alt={t('booking:photos.preview.a11y')}
                   fill
                   sizes="200px"
                   src={coverPhotoId}
@@ -366,17 +366,22 @@ const CheckoutContent = () => {
           <div className="flex flex-col gap-y-3 py-5 text-start sm:ps-5">
             <div>
               <span className="line-clamp-1 text-sm text-neutral-500 dark:text-neutral-400">
-                {isInstantMove ? 'Instant Move' : `${formatLabel(moveType)} Move`}
-                {!isInstantMove && moveDate && ` · ${formatDate(moveDate)}`}
+                {/* `moveSubtitle` owns the whole phrase, date separator
+                    included. The old shape fed a title-cased English slug into
+                    "{{type}} Move", which no locale can inflect and which was
+                    never translated at all — see `lib/move-subtitle.ts`. */}
+                {isInstantMove
+                  ? t('booking:category.instant.label')
+                  : moveSubtitle(t, moveType, null, moveDate ? formatDate(moveDate, t) : null)}
               </span>
               <span className="mt-1 block text-base font-medium line-clamp-2">
-                {pickupStreetAddress || pickupLocation || 'Pickup'} → {dropoffStreetAddress || dropoffLocation || 'Drop-off'}
+                {pickupStreetAddress || pickupLocation || t('booking:field.pickup.label')} → {dropoffStreetAddress || dropoffLocation || t('booking:field.dropoff.label')}
               </span>
             </div>
             <p className="block text-sm text-neutral-500 dark:text-neutral-400">
-              {inventoryCount} items
-              {!isInstantMove && crewSize && ` · ${crewSize} movers`}
-              {!isInstantMove && vehicleType && ` · ${formatLabel(vehicleType)}`}
+              {t('moves:itemCount', { count: inventoryCount })}
+              {!isInstantMove && crewSize && ` · ${t('moves:moverCount', { count: Number(crewSize) })}`}
+              {!isInstantMove && vehicleType && ` · ${vehicleTypeLabel(t, vehicleType)}`}
             </p>
             
             {/* Route info for instant moves */}
@@ -394,11 +399,11 @@ const CheckoutContent = () => {
               {isInstantMove ? (
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-neutral-100 px-2.5 py-1 text-xs font-medium text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300">
                   <HugeiconsIcon icon={FlashIcon} size={12} strokeWidth={1.5} />
-                  Now
+                  {t('booking:timing.now.label')}
                 </span>
               ) : (
                 <span className="inline-flex items-center rounded-full bg-primary-100 px-2 py-0.5 text-xs font-medium text-primary-700 dark:bg-primary-900/30 dark:text-primary-300">
-                  {formatLabel(arrivalWindow)}
+                  {arrivalWindowLabel(t, arrivalWindow)}
                 </span>
               )}
             </div>
@@ -410,49 +415,55 @@ const CheckoutContent = () => {
         <DescriptionList>
           {isInstantMove ? (
             <>
-              <DescriptionTerm>{moverPrice ? 'Mover fare' : 'Base fare'}</DescriptionTerm>
-              <DescriptionDetails className="sm:text-right">€{basePrice.toFixed(2)}</DescriptionDetails>
+              <DescriptionTerm>
+                {moverPrice ? t('booking:pricing.moverFare.label') : t('booking:pricing.baseFare.label')}
+              </DescriptionTerm>
+              <DescriptionDetails className="sm:text-right">{formatMoney(basePrice)}</DescriptionDetails>
               
               {itemsPrice > 0 && (
                 <>
-                  <DescriptionTerm>Items ({inventoryCount})</DescriptionTerm>
-                  <DescriptionDetails className="sm:text-right">€{itemsPrice.toFixed(2)}</DescriptionDetails>
+                  <DescriptionTerm>{t('booking:pricing.itemsCount.label', { count: inventoryCount })}</DescriptionTerm>
+                  <DescriptionDetails className="sm:text-right">{formatMoney(itemsPrice)}</DescriptionDetails>
                 </>
               )}
             </>
           ) : (
             <>
-              <DescriptionTerm>Base rate ({formatLabel(moveType)})</DescriptionTerm>
-              <DescriptionDetails className="sm:text-right">€{basePrice.toFixed(2)}</DescriptionDetails>
+              <DescriptionTerm>{baseRateLabel(t, moveType)}</DescriptionTerm>
+              <DescriptionDetails className="sm:text-right">{formatMoney(basePrice)}</DescriptionDetails>
               
               {packingPrice > 0 && (
                 <>
-                  <DescriptionTerm>Packing service</DescriptionTerm>
-                  <DescriptionDetails className="sm:text-right">€{packingPrice.toFixed(2)}</DescriptionDetails>
+                  <DescriptionTerm>{t('booking:pricing.packingService.label')}</DescriptionTerm>
+                  <DescriptionDetails className="sm:text-right">{formatMoney(packingPrice)}</DescriptionDetails>
                 </>
               )}
               
               {servicesPrice > 0 && (
                 <>
-                  <DescriptionTerm>Additional services ({additionalServices.length})</DescriptionTerm>
-                  <DescriptionDetails className="sm:text-right">€{servicesPrice.toFixed(2)}</DescriptionDetails>
+                  <DescriptionTerm>
+                    {t('booking:pricing.additionalServicesCount.label', { count: additionalServices.length })}
+                  </DescriptionTerm>
+                  <DescriptionDetails className="sm:text-right">{formatMoney(servicesPrice)}</DescriptionDetails>
                 </>
               )}
               
               {storagePrice > 0 && (
                 <>
-                  <DescriptionTerm>Storage ({storageWeeks} weeks)</DescriptionTerm>
-                  <DescriptionDetails className="sm:text-right">€{storagePrice.toFixed(2)}</DescriptionDetails>
+                  <DescriptionTerm>{t('booking:pricing.storageWeeks.label', { count: storageWeeks })}</DescriptionTerm>
+                  <DescriptionDetails className="sm:text-right">{formatMoney(storagePrice)}</DescriptionDetails>
                 </>
               )}
             </>
           )}
           
-          <DescriptionTerm>VAT (19%)</DescriptionTerm>
-          <DescriptionDetails className="sm:text-right">€{tax.toFixed(2)}</DescriptionDetails>
+          <DescriptionTerm>{t('booking:pricing.vat.label', { rate: formatPercent(VAT_RATE) })}</DescriptionTerm>
+          <DescriptionDetails className="sm:text-right">{formatMoney(tax)}</DescriptionDetails>
           
-          <DescriptionTerm className="font-semibold text-neutral-900 dark:text-white">Total</DescriptionTerm>
-          <DescriptionDetails className="font-semibold sm:text-right text-primary-600">€{totalPrice.toFixed(2)}</DescriptionDetails>
+          <DescriptionTerm className="font-semibold text-neutral-900 dark:text-white">
+            {t('booking:pricing.total.label')}
+          </DescriptionTerm>
+          <DescriptionDetails className="font-semibold sm:text-right text-primary-600">{formatMoney(totalPrice)}</DescriptionDetails>
         </DescriptionList>
 
         {/* Cash payment notice */}
@@ -467,10 +478,10 @@ const CheckoutContent = () => {
               />
               <div>
                 <p className="text-sm font-medium text-neutral-900 dark:text-white">
-                  Cash payment selected
+                  {t('booking:payment.cashSelected.title')}
                 </p>
                 <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-                  Please have €{totalPrice.toFixed(2)} ready to pay your mover after the move is complete.
+                  {t('booking:payment.cashReminder.helper', { amount: formatMoney(totalPrice) })}
                 </p>
               </div>
             </div>
@@ -487,7 +498,7 @@ const CheckoutContent = () => {
         className="flex w-full flex-col gap-y-8 border-neutral-200 px-0 sm:rounded-4xl sm:border sm:p-6 xl:p-8 dark:border-neutral-700"
       >
         <h1 className="text-3xl font-semibold lg:text-4xl">
-          {isInstantMove ? 'Confirm your move' : 'Confirm and payment'}
+          {isInstantMove ? t('web:checkout.title') : t('web:checkout.pay.title')}
         </h1>
         <Divider />
         <YourMove routeDistance={routeDistance} routeDuration={routeDuration} />
@@ -498,15 +509,15 @@ const CheckoutContent = () => {
         <div>
           <ButtonPrimary type="submit" className="mt-10 text-base/6!" disabled={isSubmitting}>
             {isSubmitting
-              ? 'Processing...'
-              : paymentMethod === 'cash' 
-                ? `Confirm move · €${totalPrice.toFixed(2)}`
-                : `Confirm and pay €${totalPrice.toFixed(2)}`
+              ? t('common:state.processing.cta')
+              : paymentMethod === 'cash'
+                ? t('web:checkout.confirmMove.cta', { amount: formatMoney(totalPrice) })
+                : t('web:checkout.confirmAndPay.cta', { amount: formatMoney(totalPrice) })
             }
           </ButtonPrimary>
           {paymentMethod === 'cash' && (
             <p className="mt-3 text-sm text-neutral-500 dark:text-neutral-400">
-              You&apos;ll pay your mover directly after the move is complete.
+              {t('booking:payment.cash.footnote')}
             </p>
           )}
         </div>
@@ -524,9 +535,10 @@ const CheckoutContent = () => {
 }
 
 const Page = () => {
+  const { t } = useTranslation()
   return (
     <AuthGate redirectBack="/checkout">
-      <Suspense fallback={<div className="container mt-10 mb-24">Loading...</div>}>
+      <Suspense fallback={<div className="container mt-10 mb-24">{t('common:state.loading.label')}</div>}>
         <CheckoutContent />
       </Suspense>
     </AuthGate>

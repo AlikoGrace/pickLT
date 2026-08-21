@@ -1,0 +1,40 @@
+{
+  "doc": {
+    "draftBanner": "CONCEPT — in afwachting van controle door de belastingadviseur",
+    "driverHeading": "Chauffeur",
+    "footerDisclaimer": "Automatisch gegenereerd ter informatie van de chauffeur. Chauffeurs blijven zelf verantwoordelijk voor het aangeven van hun omzet en inkomen.",
+    "operatorHeading": "Platformexploitant",
+    "operatorPending": "[gegevens exploitant volgen nog]",
+    "operatorRegistration": "Registratienummer: {{value}}",
+    "operatorVatId": "VAT ID (btw-nummer): {{value}}",
+    "period": "Periode: {{period}}",
+    "statementNo": "Overzichtnummer: {{number}}",
+    "taxNumber": "Fiscaal nummer: {{value}}",
+    "title": "Maandelijks activiteitenoverzicht chauffeur",
+    "vatId": "VAT ID (btw-nummer): {{value}}"
+  },
+  "lines": {
+    "cashAlreadyHeld": "Waarvan al contant ontvangen",
+    "commission": "Commissie / servicekosten",
+    "deductionsHeading": "Inhoudingen platform",
+    "grossCash": "Contant geïnd",
+    "grossDigital": "Digitaal geïnd (in de app/kaart)",
+    "grossHeading": "Bruto verdiensten",
+    "grossLocal": "Bruto in lokale valuta ({{currency}})",
+    "grossTotal": "Totaal bruto verdiensten",
+    "instantMoves": "Waarvan directe verhuizingen",
+    "net": "Nettobedrag",
+    "netPayable": "Netto uit te betalen aan chauffeur",
+    "resultHeading": "Resultaat",
+    "scheduledMoves": "Waarvan geplande verhuizingen",
+    "summary": "Overzicht van afgerekende verhuizingen",
+    "totalMoves": "Totaal afgeronde verhuizingen",
+    "withholdingHeading": "Aan de bron ingehouden belastingen",
+    "withholdingIncome": "Ingehouden inkomstenbelasting",
+    "withholdingVat": "Ingehouden btw"
+  },
+  "statementReady": {
+    "body": "Overzicht {{number}} over {{period}} staat klaar bij je belastingdocumenten.",
+    "title": "Je maandoverzicht staat klaar"
+  }
+}

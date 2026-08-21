@@ -6,7 +6,6 @@ import { Badge } from '@/shared/Badge'
 import ButtonPrimary from '@/shared/ButtonPrimary'
 import { DescriptionDetails, DescriptionList, DescriptionTerm } from '@/shared/description-list'
 import { Divider } from '@/shared/divider'
-import T from '@/utils/getT'
 import {
   Calendar03Icon,
   Coins01Icon,
@@ -22,21 +21,17 @@ import { HugeiconsIcon } from '@hugeicons/react'
 import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import React, { Suspense, useEffect, useState } from 'react'
+import { formatDateWith, formatMoney } from '@/lib/format'
+import { moveSubtitle } from '@/lib/move-subtitle'
+import { Trans, useTranslation } from 'react-i18next'
+import type { TFunction } from 'i18next'
+import { vehicleTypeLabel } from '@/lib/enum-labels'
 
-// Helper to format labels
-const formatLabel = (value: string | null | undefined): string => {
-  if (!value) return 'Not specified'
-  return value
-    .split('_')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ')
-}
-
-const formatDate = (dateStr: string | null) => {
-  if (!dateStr) return 'Not selected'
+const formatDate = (dateStr: string | null, t: TFunction) => {
+  if (!dateStr) return t('common:value.notSelected.empty')
   try {
     const date = new Date(dateStr)
-    return date.toLocaleDateString('en-GB', {
+    return formatDateWith(date, {
       weekday: 'short',
       year: 'numeric',
       month: 'short',
@@ -50,6 +45,7 @@ const formatDate = (dateStr: string | null) => {
 type PaymentMethod = 'cash' | 'card' | 'paypal'
 
 const PayDoneContent = () => {
+  const { t } = useTranslation()
   const searchParams = useSearchParams()
   const handle = searchParams.get('handle')
   const paymentMethodParam = searchParams.get('paymentMethod') as PaymentMethod | null
@@ -72,18 +68,18 @@ const PayDoneContent = () => {
     }
   }, [handle, getMoveByHandle])
 
-  const pickupDisplay = move?.pickupStreetAddress || move?.pickupLocation || 'Pickup location'
-  const dropoffDisplay = move?.dropoffStreetAddress || 'Drop-off location'
+  const pickupDisplay = move?.pickupStreetAddress || move?.pickupLocation || t('booking:pickup.fallback.label')
+  const dropoffDisplay = move?.dropoffStreetAddress || t('booking:dropoff.fallback.label')
   const isInstantMove = move?.status === 'in_progress' || move?.arrivalWindow === 'now'
 
   const getPaymentMethodDisplay = () => {
     switch (paymentMethod) {
       case 'cash':
-        return 'Cash (pay mover directly)'
+        return t('booking:payment.cashLong.label')
       case 'paypal':
-        return 'PayPal'
+        return t('common:payment.method.payPal.label')
       default:
-        return 'Credit card'
+        return t('booking:payment.creditCard.label')
     }
   }
 
@@ -100,23 +96,23 @@ const PayDoneContent = () => {
 
   const getStatusBadge = () => {
     if (isInstantMove) {
-      return <Badge className="w-fit" color="lime">In Progress</Badge>
+      return <Badge className="w-fit" color="lime">{t('moves:status.inProgress.label')}</Badge>
     }
     if (paymentMethod === 'cash') {
-      return <Badge className="w-fit" color="amber">Confirmed - Pay Later</Badge>
+      return <Badge className="w-fit" color="amber">{t('moves:status.confirmedPayLater.label')}</Badge>
     }
-    return <Badge className="w-fit" color="yellow">Pending</Badge>
+    return <Badge className="w-fit" color="yellow">{t('moves:status.pending.label')}</Badge>
   }
 
   const getHeading = () => {
     if (isInstantMove) {
-      return paymentMethod === 'cash' 
-        ? 'Your move is confirmed!'
-        : 'Move confirmed and paid!'
+      return paymentMethod === 'cash'
+        ? t('web:payDone.confirmed.title')
+        : t('web:payDone.confirmedPaid.title')
     }
     return paymentMethod === 'cash'
-      ? 'Booking confirmed!'
-      : `${T['common']['Congratulation']} 🎉`
+      ? t('web:payDone.booked.title')
+      : t('web:payDone.congrats.title')
   }
 
   return (
@@ -137,10 +133,19 @@ const PayDoneContent = () => {
               />
               <div>
                 <h4 className="font-semibold text-amber-800 dark:text-amber-200">
-                  Payment reminder
+                  {t('booking:payment.reminder.title')}
                 </h4>
                 <p className="mt-1 text-sm text-amber-700 dark:text-amber-300">
-                  Please have <strong>€{move?.totalPrice?.toFixed(2) || '0.00'}</strong> ready to pay your mover directly {isInstantMove ? 'after the move is complete' : 'on move day'}.
+                  <Trans
+                    i18nKey="booking:payment.reminder.body"
+                    values={{
+                      amount: formatMoney(move?.totalPrice ?? 0),
+                      when: isInstantMove
+                        ? t('booking:payment.reminder.whenInstant.label')
+                        : t('booking:payment.reminder.whenScheduled.label'),
+                    }}
+                    components={[<strong key="amount" />]}
+                  />
                 </p>
               </div>
             </div>
@@ -149,7 +154,7 @@ const PayDoneContent = () => {
 
         <div>
           <h3 className="text-2xl font-semibold">
-            {isInstantMove ? 'Your Instant Move' : 'Your Move Booking'}
+            {isInstantMove ? t('web:payDone.instant.subtitle') : t('web:payDone.scheduled.subtitle')}
           </h3>
           <div className="mt-5 flex flex-col sm:flex-row sm:items-center">
             <div className="w-full shrink-0 sm:w-40">
@@ -157,7 +162,7 @@ const PayDoneContent = () => {
                 {move?.coverPhotoId ? (
                   <Image
                     fill
-                    alt="Move preview"
+                    alt={t('booking:photos.preview.a11y')}
                     className="object-cover"
                     src={move.coverPhotoId}
                     sizes="200px"
@@ -178,17 +183,20 @@ const PayDoneContent = () => {
             <div className="flex flex-col gap-y-3 pt-5 sm:px-5 sm:pb-5">
               <div>
                 <span className="line-clamp-1 text-sm text-neutral-500 dark:text-neutral-400">
-                  {isInstantMove ? 'Instant Move' : `${formatLabel(move?.moveType)} Move`}
-                  {!isInstantMove && ` · ${formatDate(move?.moveDate || null)}`}
+                  {/* One whole phrase per move type, date separator included
+                      — see `lib/move-subtitle.ts`. */}
+                  {isInstantMove
+                    ? t('booking:category.instant.label')
+                    : moveSubtitle(t, move?.moveType, null, formatDate(move?.moveDate || null, t))}
                 </span>
                 <span className="mt-1 block text-base font-medium sm:text-lg">
                   {pickupDisplay.split(',')[0]} → {dropoffDisplay.split(',')[0]}
                 </span>
               </div>
               <span className="block text-sm text-neutral-500 dark:text-neutral-400">
-                {move?.inventoryCount || 0} items
-                {!isInstantMove && move?.crewSize && ` · ${move.crewSize} movers`}
-                {!isInstantMove && move?.vehicleType && ` · ${formatLabel(move.vehicleType)}`}
+                {t('moves:itemCount', { count: move?.inventoryCount || 0 })}
+                {!isInstantMove && move?.crewSize && ` · ${t('moves:moverCount', { count: Number(move.crewSize) })}`}
+                {!isInstantMove && move?.vehicleType && ` · ${vehicleTypeLabel(t, move.vehicleType)}`}
               </span>
               <Divider className="w-10!" />
               {getStatusBadge()}
@@ -205,51 +213,49 @@ const PayDoneContent = () => {
             />
             <div className="flex flex-col">
               <span className="text-sm text-neutral-400">
-                {isInstantMove ? 'Move Status' : 'Move Date'}
+                {isInstantMove ? t('moves:detail.moveStatus.label') : t('booking:field.moveDate.label')}
               </span>
               <span className="mt-1.5 text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                {isInstantMove ? 'In Progress' : formatDate(move?.moveDate || null)}
+                {isInstantMove ? t('moves:status.inProgress.label') : formatDate(move?.moveDate || null, t)}
               </span>
             </div>
           </div>
           <div className="flex flex-1 gap-x-4 p-5">
             <HugeiconsIcon icon={CubeIcon} size={32} strokeWidth={1.5} />
             <div className="flex flex-col">
-              <span className="text-sm text-neutral-400">Items</span>
+              <span className="text-sm text-neutral-400">{t('moves:detail.items.label')}</span>
               <span className="mt-1.5 text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                {move?.inventoryCount || 0} Items
+                {t('moves:itemCount', { count: move?.inventoryCount || 0 })}
               </span>
             </div>
           </div>
         </div>
 
         <div>
-          <h3 className="text-2xl font-semibold">Booking Details</h3>
+          <h3 className="text-2xl font-semibold">{t('moves:booking.title')}</h3>
           <DescriptionList className="mt-5">
-            <DescriptionTerm>Booking code</DescriptionTerm>
-            <DescriptionDetails className="font-mono">{move?.bookingCode || 'N/A'}</DescriptionDetails>
-            
+            <DescriptionTerm>{t('moves:booking.code.label')}</DescriptionTerm>
+            <DescriptionDetails className="font-mono">
+              {move?.bookingCode || t('common:value.notAvailable.label')}
+            </DescriptionDetails>
+
             {paymentMethod !== 'cash' && (
               <>
-                <DescriptionTerm>Paid on</DescriptionTerm>
+                <DescriptionTerm>{t('booking:payment.paidOn.label')}</DescriptionTerm>
                 <DescriptionDetails>
-                  {move?.paidAt 
-                    ? new Date(move.paidAt).toLocaleDateString('en-GB', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric',
-                      })
-                    : 'N/A'}
+                  {move?.paidAt
+                    ? formatDate(move.paidAt, t)
+                    : t('common:value.notAvailable.label')}
                 </DescriptionDetails>
               </>
             )}
-            
-            <DescriptionTerm>Total</DescriptionTerm>
+
+            <DescriptionTerm>{t('booking:pricing.total.label')}</DescriptionTerm>
             <DescriptionDetails className="text-primary-600 font-semibold">
-              €{move?.totalPrice?.toFixed(2) || '0.00'}
+              {formatMoney(move?.totalPrice ?? 0)}
             </DescriptionDetails>
             
-            <DescriptionTerm>Payment method</DescriptionTerm>
+            <DescriptionTerm>{t('moves:payment.method.label')}</DescriptionTerm>
             <DescriptionDetails className="flex items-center gap-2">
               <HugeiconsIcon icon={getPaymentIcon()} size={18} strokeWidth={1.5} />
               {getPaymentMethodDisplay()}
@@ -260,12 +266,12 @@ const PayDoneContent = () => {
         <div className="flex flex-wrap gap-4">
           <ButtonPrimary href="/">
             <HugeiconsIcon icon={Home01Icon} size={20} strokeWidth={1.5} />
-            Back to Home
+            {t('common:action.backToHome.cta')}
           </ButtonPrimary>
           {move && (
             <ButtonPrimary href={`/stay-listings/${move.handle}`} className="bg-neutral-800 hover:bg-neutral-700">
               <HugeiconsIcon icon={Location01Icon} size={20} strokeWidth={1.5} />
-              View Move Details
+              {t('web:payDone.viewDetails.cta')}
             </ButtonPrimary>
           )}
         </div>
@@ -275,9 +281,10 @@ const PayDoneContent = () => {
 }
 
 const Page = () => {
+  const { t } = useTranslation()
   return (
     <AuthGate redirectBack="/pay-done">
-      <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh]">Loading...</div>}>
+      <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh]">{t('common:state.loading.label')}</div>}>
         <PayDoneContent />
       </Suspense>
     </AuthGate>

@@ -3,10 +3,17 @@
 import { MoveStatus, StoredMove } from '@/context/moveSearch'
 import { useAuth } from '@/context/auth'
 import ButtonPrimary from '@/shared/ButtonPrimary'
-import T from '@/utils/getT'
 import { ArrowRightIcon } from '@heroicons/react/24/solid'
 import { TruckIcon } from '@heroicons/react/24/outline'
 import { FC, ReactNode, useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import {
+  moveUiCategoryEmptyFilteredText,
+  moveUiCategoryOptions,
+  moveUiCategoryStatus,
+  toMoveUiCategory,
+  type MoveUiCategory,
+} from '@/lib/move-ui-category'
 import MoveCard from './MoveCard'
 import SectionTabHeader from './SectionTabHeader'
 
@@ -33,12 +40,20 @@ interface SectionGridFeaturePlacesProps {
 
 const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
   gridClass = '',
-  heading = 'Your Moves',
-  subHeading = 'Track all your moves',
+  heading: headingProp,
+  subHeading: subHeadingProp,
 }) => {
+  const { t } = useTranslation()
+  // Resolved in render rather than as default parameters — a default parameter
+  // cannot call a hook and would freeze at the boot language.
+  const heading = headingProp ?? t('web:home.moves.title')
+  const subHeading = subHeadingProp ?? t('web:home.moves.subtitle')
   const { user, isAuthenticated, isLoading: authLoading } = useAuth()
-  const tabs = ['All Moves', 'Scheduled', 'Pending', 'In Progress', 'Completed', 'Cancelled']
-  const [activeTab, setActiveTab] = useState('All Moves')
+  // Stable keys plus separate labels. These used to be the labels themselves,
+  // which meant translating them would have made every filter miss. See
+  // `src/lib/move-ui-category.ts`.
+  const tabs = moveUiCategoryOptions(t)
+  const [activeTab, setActiveTab] = useState<MoveUiCategory>('all')
 
   const [moves, setMoves] = useState<StoredMove[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -101,25 +116,7 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
     }
   }, [fetchMoves, authLoading])
 
-  // Map tab to status filter
-  const getStatusFromTab = (tab: string): MoveStatus | 'scheduled' | undefined => {
-    switch (tab) {
-      case 'Scheduled':
-        return 'scheduled'
-      case 'Pending':
-        return 'pending'
-      case 'In Progress':
-        return 'in_progress'
-      case 'Completed':
-        return 'completed'
-      case 'Cancelled':
-        return 'cancelled'
-      default:
-        return undefined
-    }
-  }
-
-  const status = getStatusFromTab(activeTab)
+  const status = moveUiCategoryStatus(activeTab)
   const filteredMoves = (
     status === 'scheduled'
       ? moves.filter((m) => m.moveCategory === 'scheduled' && m.status !== 'completed')
@@ -129,7 +126,10 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
   ).slice(0, 4)
 
   const handleTabChange = (tab: string) => {
-    setActiveTab(tab)
+    // The header hands back the tab's *value*, never its caption, so an
+    // unknown string here means a stale tab — fall back to showing everything
+    // rather than filtering to nothing.
+    setActiveTab(toMoveUiCategory(tab) ?? 'all')
   }
 
   // ─── Not logged in: show CTA ────────────────────────────
@@ -141,13 +141,13 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
             <TruckIcon className="h-10 w-10 text-primary-600 dark:text-primary-400" />
           </div>
           <h2 className="text-2xl font-semibold text-neutral-900 dark:text-white mb-2">
-            Your moves will appear here
+            {t('web:home.moves.signedOut.title')}
           </h2>
           <p className="text-neutral-500 dark:text-neutral-400 mb-8 max-w-md mx-auto">
-            Sign in to track your moves, view booking details, and manage your moving schedule.
+            {t('web:home.moves.signedOut.subtitle')}
           </p>
           <ButtonPrimary href="/login">
-            Sign in to get started
+            {t('web:home.moves.signedOut.cta')}
             <ArrowRightIcon className="h-5 w-5 rtl:rotate-180" />
           </ButtonPrimary>
         </div>
@@ -181,17 +181,17 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
       ) : (
         <div className="mt-8 flex flex-col items-center justify-center py-16 text-center">
           <p className="text-lg text-neutral-500 dark:text-neutral-400 mb-6">
-            {activeTab === 'All Moves'
-              ? 'No moves yet. Start by booking your first move!'
-              : activeTab === 'Scheduled'
-                ? 'No scheduled moves found.'
-                : `No ${activeTab.toLowerCase()} moves found.`}
+            {activeTab === 'all'
+              ? t('web:home.moves.empty')
+              : activeTab === 'scheduled'
+                ? t('web:home.moves.emptyScheduled')
+                : moveUiCategoryEmptyFilteredText(activeTab, t)}
           </p>
         </div>
       )}
       <div className="mt-16 flex items-center justify-center">
         <ButtonPrimary href={'/account-savelists'}>
-          {T['common']['Show me more']}
+          {t('common:action.showMore.cta')}
           <ArrowRightIcon className="h-5 w-5 rtl:rotate-180" />
         </ButtonPrimary>
       </div>

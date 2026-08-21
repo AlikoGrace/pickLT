@@ -1,0 +1,1141 @@
+{
+  "about": {
+    "hero": {
+      "subtitle": "PickLT to platforma usług przeprowadzkowych. Opisujesz swoją przeprowadzkę, porównujesz przewoźników i rezerwujesz tego, którego chcesz — dla mieszkań, biur i pojedynczych rzeczy w całej Europie.",
+      "title": "👋 O nas."
+    }
+  },
+  "account": {
+    "clientType": {
+      "label": "Konto klienta"
+    },
+    "moverType": {
+      "label": "Konto przewoźnika"
+    },
+    "myMoves": {
+      "helper": "Przeglądaj i śledź wszystkie swoje przeprowadzki"
+    },
+    "signedOut": {
+      "subtitle": "Zaloguj się, aby zarządzać profilem, przeglądać przeprowadzki i korzystać z pozostałych funkcji.",
+      "title": "Zaloguj się, aby zobaczyć swoje konto"
+    },
+    "version": {
+      "label": "PickLT v{{version}}"
+    }
+  },
+  "authGate": {
+    "redirecting": {
+      "label": "Przekierowanie do logowania…"
+    }
+  },
+  "billing": {
+    "addPayout": {
+      "cta": "Dodaj metodę wypłaty"
+    },
+    "payoutMethods": {
+      "body": "Dodaj metodę wypłaty, aby otrzymywać płatności od PickLT. Wypłaty trafiają na metodę skonfigurowaną poniżej.",
+      "title": "Metody wypłaty"
+    },
+    "title": "Płatności i wypłaty"
+  },
+  "checkout": {
+    "confirmAndPay": {
+      "cta": "Potwierdź i zapłać {{amount}}"
+    },
+    "confirmMove": {
+      "cta": "Potwierdź przeprowadzkę · {{amount}}"
+    },
+    "editHint": {
+      "helper": "Kliknij dowolną sekcję, aby edytować szczegóły przeprowadzki."
+    },
+    "pay": {
+      "title": "Potwierdzenie i płatność"
+    },
+    "title": "Potwierdź przeprowadzkę",
+    "yourMove": {
+      "title": "Twoja przeprowadzka"
+    }
+  },
+  "contact": {
+    "address": {
+      "label": "🗺 ADRES",
+      "value": "Photo booth tattooed prism, portland taiyaki hoodie neutra typewriter"
+    },
+    "email": {
+      "label": "💌 E-MAIL"
+    },
+    "fullName": {
+      "placeholder": "Jan Kowalski"
+    },
+    "message": {
+      "label": "Wiadomość"
+    },
+    "phone": {
+      "label": "☎ TELEFON"
+    },
+    "socials": {
+      "label": "🌏 MEDIA SPOŁECZNOŚCIOWE"
+    },
+    "submit": {
+      "cta": "Wyślij wiadomość"
+    },
+    "title": "Kontakt"
+  },
+  "footer": {
+    "company": {
+      "about": "O nas",
+      "careers": "Kariera",
+      "locations": "Lokalizacje",
+      "title": "Firma"
+    },
+    "copyright": "© {{year}} PickLT. Wszelkie prawa zastrzeżone.",
+    "legal": {
+      "title": "Informacje prawne"
+    },
+    "solutions": {
+      "commercial": "Przeprowadzki firmowe",
+      "localMoving": "Przeprowadzki lokalne",
+      "longDistance": "Przeprowadzki na duże odległości",
+      "packing": "Usługi pakowania",
+      "storage": "Przechowywanie",
+      "title": "Rozwiązania"
+    },
+    "support": {
+      "contact": "Kontakt",
+      "faq": "Najczęstsze pytania",
+      "quote": "Poproś o wycenę",
+      "title": "Wsparcie"
+    },
+    "tagline": "Rezerwuj przewoźników do mieszkań, biur i rzeczy w całej Europie."
+  },
+  "home": {
+    "hero": {
+      "imageAlt": "Przewoźnicy wnoszący kartony do nowego domu",
+      "subtitle": "Zaufani przewoźnicy na ważne chwile.",
+      "title": "Przeprowadzka bez stresu, za każdym razem."
+    },
+    "moverBanner": {
+      "subtitle": "Zaloguj się, aby zacząć przyjmować przeprowadzki",
+      "title": "Jesteś przewoźnikiem?"
+    },
+    "moves": {
+      "empty": "Brak przeprowadzek. Zacznij od zarezerwowania pierwszej!",
+      "emptyFiltered": {
+        "cancelled": {
+          "label": "Nie znaleziono anulowanych przeprowadzek."
+        },
+        "completed": {
+          "label": "Nie znaleziono zakończonych przeprowadzek."
+        },
+        "inProgress": {
+          "label": "Nie znaleziono przeprowadzek w trakcie."
+        },
+        "pending": {
+          "label": "Nie znaleziono oczekujących przeprowadzek."
+        }
+      },
+      "emptyScheduled": "Brak zaplanowanych przeprowadzek.",
+      "signedOut": {
+        "cta": "Zaloguj się, aby zacząć",
+        "subtitle": "Zaloguj się, aby śledzić przeprowadzki, przeglądać szczegóły rezerwacji i zarządzać harmonogramem.",
+        "title": "Tutaj pojawią się Twoje przeprowadzki"
+      },
+      "subtitle": "Śledź wszystkie swoje przeprowadzki",
+      "tab": {
+        "all": {
+          "label": "Wszystkie"
+        },
+        "cancelled": {
+          "label": "Anulowane"
+        },
+        "completed": {
+          "label": "Zakończone"
+        },
+        "inProgress": {
+          "label": "W trakcie"
+        },
+        "pending": {
+          "label": "Oczekujące"
+        },
+        "scheduled": {
+          "label": "Zaplanowane"
+        }
+      },
+      "title": "Twoje przeprowadzki"
+    },
+    "welcomeBack": {
+      "label": "Witaj ponownie, {{name}}!"
+    }
+  },
+  "instant": {
+    "cardInApp": {
+      "helper": "Ta przeprowadzka jest opłacana kartą. Otwórz aplikację PickLT, aby dokończyć płatność — obciążamy zapisaną kartę, nic nie płacisz gotówką."
+    },
+    "chat": {
+      "comingSoon": "Czat będzie dostępny wkrótce!"
+    },
+    "inventory": {
+      "next": {
+        "cta": "Dodaj zdjęcia"
+      },
+      "subtitle": "Wybierz przedmioty do przewiezienia. Dzięki temu znajdziemy odpowiedniego przewoźnika.",
+      "title": "Co przewozimy?"
+    },
+    "loadFailed": {
+      "subtitle": "Nie udało się pobrać szczegółów przeprowadzki z serwera."
+    },
+    "loading": {
+      "label": "Wczytywanie szczegółów przeprowadzki…"
+    },
+    "missingLocations": {
+      "subtitle": "Wybierz miejsce odbioru i miejsce dostawy, aby kontynuować.",
+      "title": "Brak danych lokalizacji"
+    },
+    "photos": {
+      "helper": "Wgraj zdjęcia przedmiotów do przewiezienia. Dzięki temu przewoźnik przyjedzie z odpowiednim sprzętem i będzie wiedział, czego się spodziewać.",
+      "next": {
+        "cta": "Znajdź przewoźników"
+      },
+      "subtitle": "Pomóż przewoźnikowi się przygotować",
+      "title": "Dodaj zdjęcia"
+    },
+    "review": {
+      "comment": {
+        "placeholder": "Dodaj komentarz (opcjonalnie)"
+      },
+      "prompt": "Jak oceniasz współpracę z {{name}}?",
+      "promptUnnamed": "Jak oceniasz współpracę ze swoim przewoźnikiem?",
+      "star": {
+        "a11y_few": "Oceń na {{count}} gwiazdki",
+        "a11y_many": "Oceń na {{count}} gwiazdek",
+        "a11y_one": "Oceń na {{count}} gwiazdkę",
+        "a11y_other": "Oceń na {{count}} gwiazdki"
+      },
+      "submit": {
+        "cta": "Wyślij opinię"
+      },
+      "thanks": {
+        "subtitle": "Twoja opinia została wysłana.",
+        "title": "Dziękujemy!"
+      }
+    }
+  },
+  "login": {
+    "asClient": {
+      "cta": "Zaloguj się jako klient"
+    },
+    "asMover": {
+      "cta": "Zaloguj się jako przewoźnik"
+    },
+    "clientBadge": {
+      "label": "👤 Konto klienta"
+    },
+    "moverBadge": {
+      "label": "🚚 Konto przewoźnika"
+    },
+    "phoneRequired": {
+      "helper": "Po zalogowaniu wymagana będzie weryfikacja numeru telefonu"
+    },
+    "phoneVerify": {
+      "subtitle": "Musimy zweryfikować Twój numer telefonu, aby dokończyć logowanie."
+    },
+    "resumeMove": {
+      "helper": "Zaloguj się, aby kontynuować przeprowadzkę. Postęp został zapisany."
+    },
+    "switchToClient": {
+      "label": "Jesteś klientem?"
+    },
+    "switchToMover": {
+      "label": "Jesteś przewoźnikiem?"
+    },
+    "verifyAndSignIn": {
+      "cta": "Zweryfikuj i zaloguj się"
+    }
+  },
+  "moveChoice": {
+    "instant": {
+      "cta": "Zaczynajmy",
+      "eta": "Przewoźnik dojedzie w 15-30 min",
+      "subtitle": "Musisz przeprowadzić się od razu? Znajdziemy przewoźnika w pobliżu natychmiast.",
+      "tracking": "Śledzenie na żywo"
+    },
+    "scheduled": {
+      "cta": "Zaplanuj przeprowadzkę",
+      "date": "Wybierz preferowany termin",
+      "subtitle": "Zaplanuj z wyprzedzeniem przeprowadzkę na konkretny dzień i godzinę.",
+      "title": "Zarezerwuj na później",
+      "window": "Wybierz przedział czasowy przyjazdu"
+    },
+    "subtitle": "Wybierz opcję, która najlepiej pasuje do Twoich potrzeb",
+    "summary": {
+      "title": "Szczegóły Twojej przeprowadzki"
+    },
+    "title": "Jak chcesz się przeprowadzić?"
+  },
+  "moveDetails": {
+    "mover": {
+      "title": "Twój przewoźnik"
+    },
+    "notFound": {
+      "subtitle": "Ta przeprowadzka mogła zostać usunięta lub link jest nieprawidłowy."
+    },
+    "reschedule": {
+      "dateTime": {
+        "label": "Nowa data i godzina"
+      }
+    }
+  },
+  "mover": {
+    "acceptMove": {
+      "cta": "Przyjmij przeprowadzkę"
+    },
+    "accepted": {
+      "helper": "Ta przeprowadzka została przez Ciebie przyjęta. Gdy będzie gotowe, dotknij „Rozpocznij trasę”, aby dać klientowi znać, że jesteś w drodze."
+    },
+    "activeBadge": {
+      "label": "Aktywny przewoźnik"
+    },
+    "activeMove": {
+      "advance": {
+        "cta": "Aktualizuj status"
+      },
+      "cancelledByClient": {
+        "title": "Przeprowadzka anulowana przez klienta"
+      },
+      "empty": {
+        "subtitle": "Przyjmij zgłoszenie przeprowadzki, aby zacząć ją tutaj śledzić.",
+        "title": "Brak aktywnej przeprowadzki"
+      },
+      "etaToPickup": {
+        "label": "~{{minutes}} min do miejsca odbioru"
+      },
+      "proximity": {
+        "helper": "Aby oznaczyć przyjazd, musisz znaleźć się w promieniu {{radius}} od miejsca odbioru (odległość: {{distance}})"
+      }
+    },
+    "additionalServicesCount_few": "+{{count}} usługi",
+    "additionalServicesCount_many": "+{{count}} usług",
+    "additionalServicesCount_one": "+{{count}} usługa",
+    "additionalServicesCount_other": "+{{count}} usługi",
+    "availableMoves": {
+      "empty": {
+        "subtitle": "Brak zaplanowanych przeprowadzek w promieniu {{radius}}. Sprawdzamy automatycznie co {{interval}}.",
+        "title": "Brak dostępnych przeprowadzek"
+      },
+      "error": {
+        "title": "Nie można wczytać przeprowadzek"
+      },
+      "loading": {
+        "label": "Szukanie dostępnych przeprowadzek w pobliżu…"
+      }
+    },
+    "backToDashboard": {
+      "cta": "Wróć do pulpitu"
+    },
+    "browseAvailable": {
+      "cta": "Przeglądaj dostępne przeprowadzki"
+    },
+    "clientContact": {
+      "title": "Kontakt do klienta"
+    },
+    "crew": {
+      "addFirst": {
+        "cta": "Dodaj pierwszą osobę"
+      },
+      "addMember": {
+        "cta": "Dodaj osobę"
+      },
+      "addModal": {
+        "title": "Dodaj nowego członka ekipy"
+      },
+      "editModal": {
+        "title": "Edytuj członka ekipy"
+      },
+      "empty": {
+        "subtitle": "Dodaj pierwszego członka ekipy, aby zacząć zarządzać zespołem.",
+        "title": "Brak członków ekipy"
+      },
+      "role": {
+        "label": "Rola"
+      },
+      "subtitle": "Zarządzaj członkami swojego zespołu",
+      "title": "Moja ekipa"
+    },
+    "crewSize": {
+      "label": "{{crew}} przewoźników"
+    },
+    "earnings": {
+      "average": {
+        "label": "Średnio na przeprowadzkę"
+      },
+      "breakdown": {
+        "title": "Podział"
+      },
+      "empty": "Brak zarobków w tym okresie",
+      "error": {
+        "title": "Nie można wczytać zarobków"
+      },
+      "label": "Zarobki",
+      "loading": "Wczytywanie zarobków…",
+      "movesCompleted": {
+        "label": "Ukończone przeprowadzki"
+      },
+      "payout": {
+        "helper": "Wypłaty są realizowane co tydzień"
+      },
+      "payoutAvailable": {
+        "label": "Dostępne do wypłaty"
+      },
+      "period": {
+        "month": {
+          "caption": "w tym miesiącu",
+          "label": "Ten miesiąc"
+        },
+        "today": {
+          "caption": "dziś",
+          "label": "Dziś"
+        },
+        "week": {
+          "caption": "w tym tygodniu",
+          "label": "Ten tydzień"
+        },
+        "year": {
+          "caption": "w tym roku",
+          "label": "Ten rok"
+        }
+      },
+      "refresh": {
+        "a11y": "Odśwież"
+      },
+      "requestPayout": {
+        "cta": "Zleć wypłatę"
+      },
+      "subtitle": "Śledź swoje przychody i wyniki",
+      "title": "Zarobki",
+      "total": {
+        "label": "Zarobki łącznie"
+      }
+    },
+    "experienceYears_few": "{{count}} lata",
+    "experienceYears_many": "{{count}} lat",
+    "experienceYears_one": "{{count}} rok",
+    "experienceYears_other": "{{count}} roku",
+    "field": {
+      "businessStreet": {
+        "label": "Adres firmy — ulica (opcjonalnie)",
+        "placeholder": "Ulica i numer"
+      },
+      "city": {
+        "helper": "Miasto, w którym głównie działasz jako przewoźnik"
+      },
+      "experience": {
+        "label": "Lata doświadczenia",
+        "placeholder": "np. 5"
+      },
+      "languages": {
+        "label": "Znane języki"
+      },
+      "licenseNumber": {
+        "label": "Numer prawa jazdy",
+        "placeholder": "Podaj numer prawa jazdy"
+      },
+      "licensePhoto": {
+        "a11y": "Podgląd prawa jazdy",
+        "cta": "Wgraj zdjęcie swojego prawa jazdy",
+        "helper": "Wyraźne zdjęcie przyspiesza weryfikację",
+        "label": "Zdjęcie prawa jazdy"
+      },
+      "phone": {
+        "placeholder": "+49 123 456 7890"
+      },
+      "postcode": {
+        "label": "Kod pocztowy (opcjonalnie)",
+        "placeholder": "np. 10115"
+      },
+      "selfie": {
+        "a11y": "Podgląd selfie",
+        "cta": "Zrób lub wgraj wyraźne selfie",
+        "helper": "Wyraźne selfie jest wymagane do weryfikacji tożsamości",
+        "label": "Zdjęcie selfie",
+        "retake": {
+          "cta": "Zrób selfie ponownie"
+        }
+      },
+      "ssn": {
+        "helper": "Szyfrowany i używany wyłącznie do weryfikacji podatkowej",
+        "label": "Numer ubezpieczenia społecznego",
+        "placeholder": "Podaj numer ubezpieczenia społecznego"
+      },
+      "taxId": {
+        "helper": "Wymagany do wystawiania faktur i sprawozdawczości podatkowej",
+        "label": "Numer identyfikacji podatkowej",
+        "placeholder": "np. DE123456789"
+      },
+      "vatId": {
+        "helper": "Zostaw puste, jeśli jesteś Kleinunternehmer bez VAT ID",
+        "label": "VAT ID (USt-IdNr., opcjonalnie)",
+        "placeholder": "np. DE123456789"
+      }
+    },
+    "goToActive": {
+      "cta": "Przejdź do aktywnej przeprowadzki"
+    },
+    "homeTypeMoveType": {
+      "apartment": {
+        "light": {
+          "label": "Mieszkanie · Mała"
+        },
+        "premium": {
+          "label": "Mieszkanie · Premium"
+        },
+        "regular": {
+          "label": "Mieszkanie · Standardowa"
+        }
+      },
+      "house": {
+        "light": {
+          "label": "Dom · Mała"
+        },
+        "premium": {
+          "label": "Dom · Premium"
+        },
+        "regular": {
+          "label": "Dom · Standardowa"
+        }
+      },
+      "office": {
+        "light": {
+          "label": "Biuro · Mała"
+        },
+        "premium": {
+          "label": "Biuro · Premium"
+        },
+        "regular": {
+          "label": "Biuro · Standardowa"
+        }
+      },
+      "storage": {
+        "light": {
+          "label": "Magazyn · Mała"
+        },
+        "premium": {
+          "label": "Magazyn · Premium"
+        },
+        "regular": {
+          "label": "Magazyn · Standardowa"
+        }
+      }
+    },
+    "jobDetails": {
+      "notFound": {
+        "subtitle": "Ta przeprowadzka mogła zostać usunięta lub link jest nieprawidłowy."
+      }
+    },
+    "notStartable": {
+      "body": "<0>Nie można jeszcze rozpocząć przeprowadzki.</0> Trasę możesz rozpocząć <1>{{when}}</1> (przycisk odblokowuje się 5 minut wcześniej)."
+    },
+    "notify": {
+      "newRequest": {
+        "body": "Masz nowe zgłoszenie przeprowadzki. Otwórz aplikację, aby zobaczyć szczegóły i przyjąć zlecenie.",
+        "title": "Nowe zgłoszenie przeprowadzki! 📋"
+      }
+    },
+    "onboarding": {
+      "done": {
+        "redirect": "Trwa przekierowanie do pulpitu…",
+        "subtitle": "Twój profil przewoźnika jest sprawdzany. Powiadomimy Cię po weryfikacji.",
+        "title": "Profil wysłany!"
+      },
+      "review": {
+        "experience": {
+          "title": "Doświadczenie",
+          "value_few": "{{count}} lata",
+          "value_many": "{{count}} lat",
+          "value_one": "{{count}} rok",
+          "value_other": "{{count}} roku"
+        },
+        "languages": {
+          "value": "Języki: {{languages}}"
+        },
+        "license": {
+          "value": "Prawo jazdy: {{number}}"
+        },
+        "licenseOk": "✓ Zdjęcie prawa jazdy wgrane",
+        "location": {
+          "value": "{{city}}, {{country}}"
+        },
+        "personal": {
+          "value": "{{name}} · {{phone}}"
+        },
+        "selfieOk": "✓ Selfie wgrane",
+        "ssn": {
+          "value": "Nr ubezpieczenia: ••••{{last4}}"
+        },
+        "subtitle": "Sprawdź swoje dane przed wysłaniem.",
+        "taxId": {
+          "value": "Numer podatkowy: {{taxId}}"
+        },
+        "title": "Sprawdź swój profil",
+        "vehicle": {
+          "capacity": {
+            "value": "{{vehicleType}} · nr rej.: {{registration}} · {{capacity}}"
+          },
+          "value": "{{vehicleType}} · nr rej.: {{registration}}"
+        },
+        "vehicleName": {
+          "value": "{{brand}} {{model}} ({{year}})"
+        },
+        "verification": {
+          "title": "Weryfikacja i lokalizacja"
+        }
+      },
+      "step": {
+        "experience": {
+          "label": "Doświadczenie"
+        },
+        "personal": {
+          "label": "Dane osobowe"
+        },
+        "review": {
+          "label": "Sprawdź i wyślij"
+        },
+        "vehicle": {
+          "label": "Dane pojazdu"
+        },
+        "verification": {
+          "label": "Weryfikacja"
+        }
+      },
+      "submit": {
+        "cta": "Wyślij profil"
+      },
+      "subtitle": "Uzupełnij dane, aby zacząć przyjmować przeprowadzki",
+      "title": "Uzupełnij profil przewoźnika"
+    },
+    "request": {
+      "categoryAndType": {
+        "instant": {
+          "light": {
+            "subtitle": "Natychmiastowa · mała przeprowadzka"
+          },
+          "premium": {
+            "subtitle": "Natychmiastowa · przeprowadzka premium"
+          },
+          "regular": {
+            "subtitle": "Natychmiastowa · standardowa przeprowadzka"
+          }
+        },
+        "scheduled": {
+          "light": {
+            "subtitle": "Zaplanowana · mała przeprowadzka"
+          },
+          "premium": {
+            "subtitle": "Zaplanowana · przeprowadzka premium"
+          },
+          "regular": {
+            "subtitle": "Zaplanowana · standardowa przeprowadzka"
+          }
+        }
+      },
+      "earnings": {
+        "label": "Twoje zarobki"
+      },
+      "respondWithin": {
+        "label": "Odpowiedz w ciągu <1>{{seconds}}</1>"
+      },
+      "services": {
+        "label": "Usługi: {{list}}"
+      },
+      "title": "Nowe zgłoszenie przeprowadzki!",
+      "viewDetails": {
+        "cta": "Zobacz pełne szczegóły"
+      }
+    },
+    "roleLabel": "Przewoźnik",
+    "scheduledMoves": {
+      "empty": {
+        "subtitle": "Zaplanowane przeprowadzki, które przyjmiesz, pojawią się tutaj do dnia realizacji.",
+        "title": "Brak zaplanowanych przeprowadzek"
+      },
+      "subtitle": "Przydzielone Ci przeprowadzki, które czekają na swój termin"
+    },
+    "section": {
+      "experience": {
+        "title": "Doświadczenie i stawka"
+      },
+      "verification": {
+        "helper": "Te dane są wymagane do weryfikacji tożsamości i będą przechowywane bezpiecznie.",
+        "title": "Weryfikacja i miejsce pracy"
+      }
+    },
+    "settings": {
+      "payouts": {
+        "helper": "Zarządzaj kontami wypłat",
+        "label": "Metody płatności"
+      },
+      "subtitle": "Zarządzaj kontem i preferencjami",
+      "version": {
+        "label": "PickLT Mover App v{{version}}"
+      }
+    },
+    "startRoute": {
+      "cta": "Rozpocznij trasę — jestem w drodze"
+    },
+    "tapForDetails": {
+      "helper": "Dotknij, aby zobaczyć szczegóły"
+    },
+    "tax": {
+      "empty": {
+        "subtitle": "Zrealizuj przeprowadzki w tym miesiącu, a pierwsze zestawienie pojawi się pierwszego dnia kolejnego.",
+        "title": "Brak zestawień"
+      },
+      "helper1": "Miesięczne zestawienie powstaje pierwszego dnia każdego miesiąca i obejmuje miesiąc poprzedni.",
+      "helper2": "Zachowaj je dla księgowego lub urzędu skarbowego.",
+      "openPdf": {
+        "cta": "Otwórz PDF"
+      },
+      "preparing": {
+        "label": "Przygotowywanie…"
+      },
+      "row": {
+        "summary_few": "{{count}} przeprowadzki · brutto {{gross}} · netto {{net}}",
+        "summary_many": "{{count}} przeprowadzek · brutto {{gross}} · netto {{net}}",
+        "summary_one": "{{count}} przeprowadzka · brutto {{gross}} · netto {{net}}",
+        "summary_other": "{{count}} przeprowadzki · brutto {{gross}} · netto {{net}}"
+      },
+      "title": "Dokumenty podatkowe i zarobkowe"
+    },
+    "verification": {
+      "pending": {
+        "body": "Twój profil przewoźnika jest sprawdzany. Po weryfikacji będziesz mieć dostęp do przyjmowania przeprowadzek i wszystkich funkcji.",
+        "title": "Weryfikacja w toku"
+      },
+      "rejected": {
+        "body": "Twój profil przewoźnika został odrzucony. Skontaktuj się z pomocą lub zaktualizuj profil w Ustawieniach.",
+        "title": "Profil odrzucony"
+      },
+      "suspended": {
+        "body": "Twoje konto zostało zawieszone. Skontaktuj się z pomocą, aby uzyskać więcej informacji.",
+        "title": "Konto zawieszone"
+      }
+    },
+    "viewDetails": {
+      "cta": "Zobacz szczegóły"
+    },
+    "withdraw": {
+      "cta": "Wycofaj się z przeprowadzki"
+    },
+    "withdrawConfirm": {
+      "body": "Na pewno? Przeprowadzka stanie się dostępna dla innych przewoźników.",
+      "cta": "Tak, wycofaj mnie"
+    }
+  },
+  "moverDashboard": {
+    "findMoves": {
+      "cta": "Znajdź przeprowadzki"
+    },
+    "manageCrew": {
+      "cta": "Zarządzaj ekipą"
+    },
+    "quickActions": {
+      "title": "Szybkie akcje"
+    },
+    "recentMoves": {
+      "moveType": {
+        "instant": {
+          "label": "Przeprowadzka natychmiastowa"
+        },
+        "scheduled": {
+          "label": "Przeprowadzka zaplanowana"
+        }
+      },
+      "title": "Ostatnie przeprowadzki"
+    },
+    "stat": {
+      "activeMoves": {
+        "label": "Aktywne przeprowadzki"
+      },
+      "availableMoves": {
+        "label": "Dostępne przeprowadzki"
+      },
+      "completedThisMonth": {
+        "label": "Ukończone w tym miesiącu"
+      },
+      "crewMembers": {
+        "label": "Członkowie ekipy"
+      },
+      "earningsThisMonth": {
+        "label": "Zarobki w tym miesiącu"
+      },
+      "scheduledMoves": {
+        "label": "Zaplanowane przeprowadzki"
+      }
+    },
+    "welcome": {
+      "subtitle": "Oto, co dzieje się dzisiaj",
+      "title": "Witaj ponownie, {{name}}!"
+    }
+  },
+  "moverNav": {
+    "active": {
+      "label": "Aktywne"
+    },
+    "activeMove": {
+      "label": "Aktywna przeprowadzka"
+    },
+    "availableMoves": {
+      "label": "Dostępne przeprowadzki"
+    },
+    "crew": {
+      "label": "Ekipa"
+    },
+    "dashboard": {
+      "label": "Pulpit"
+    },
+    "earnings": {
+      "label": "Zarobki"
+    },
+    "home": {
+      "label": "Start"
+    },
+    "moves": {
+      "label": "Przeprowadzki"
+    },
+    "myCrew": {
+      "label": "Moja ekipa"
+    },
+    "scheduledMoves": {
+      "label": "Zaplanowane przeprowadzki"
+    },
+    "taxDocuments": {
+      "label": "Dokumenty podatkowe"
+    }
+  },
+  "myMoves": {
+    "book": {
+      "cta": "Zarezerwuj przeprowadzkę"
+    },
+    "empty": {
+      "filtered": {
+        "cancelled": {
+          "title": "Brak anulowanych przeprowadzek"
+        },
+        "completed": {
+          "title": "Brak zakończonych przeprowadzek"
+        },
+        "inProgress": {
+          "title": "Brak przeprowadzek w trakcie"
+        },
+        "pending": {
+          "title": "Brak oczekujących przeprowadzek"
+        }
+      },
+      "subtitle": "Zarezerwuj pierwszą przeprowadzkę, a pojawi się tutaj.",
+      "title": "Brak przeprowadzek"
+    },
+    "subtitle": "Śledź wszystkie swoje przeprowadzki w jednym miejscu i zarządzaj nimi.",
+    "title": "Moje przeprowadzki"
+  },
+  "nav": {
+    "account": {
+      "a11y": "Przejdź do swojego konta",
+      "label": "Konto"
+    },
+    "backToMyMoves": {
+      "cta": "Wróć do moich przeprowadzek"
+    },
+    "becomeMover": {
+      "label": "Zostań przewoźnikiem"
+    },
+    "dashboard": {
+      "cta": "Pulpit",
+      "label": "Pulpit"
+    },
+    "earnings": {
+      "label": "Zarobki"
+    },
+    "home": {
+      "label": "Start"
+    },
+    "moverDashboard": {
+      "label": "Pulpit przewoźnika"
+    },
+    "moves": {
+      "label": "Przeprowadzki"
+    },
+    "myAccount": {
+      "label": "Moje konto"
+    },
+    "myCrew": {
+      "label": "Moja ekipa"
+    },
+    "myMoves": {
+      "cta": "Moje przeprowadzki",
+      "label": "Moje przeprowadzki"
+    },
+    "navigateTo": {
+      "a11y": "Przejdź do: {{name}}"
+    },
+    "scheduled": {
+      "label": "Zaplanowane"
+    },
+    "signInAsClient": {
+      "helper": "Zaloguj się lub załóż konto klienta",
+      "label": "Klient"
+    },
+    "signInAsMover": {
+      "helper": "Zaloguj się lub załóż konto przewoźnika",
+      "label": "Przewoźnik"
+    }
+  },
+  "notFound": {
+    "cta": "Wróć na stronę główną",
+    "image": {
+      "a11y": "Nie znaleziono strony"
+    },
+    "title": "Strona, której szukasz, nie istnieje."
+  },
+  "notify": {
+    "empty": "Nie masz żadnych powiadomień."
+  },
+  "payDone": {
+    "booked": {
+      "title": "Rezerwacja potwierdzona!"
+    },
+    "confirmed": {
+      "title": "Twoja przeprowadzka jest potwierdzona!"
+    },
+    "confirmedPaid": {
+      "title": "Przeprowadzka potwierdzona i opłacona!"
+    },
+    "congrats": {
+      "title": "Gratulacje 🎉"
+    },
+    "instant": {
+      "subtitle": "Twoja przeprowadzka natychmiastowa"
+    },
+    "scheduled": {
+      "subtitle": "Twoja rezerwacja przeprowadzki"
+    },
+    "viewDetails": {
+      "cta": "Zobacz szczegóły przeprowadzki"
+    }
+  },
+  "preview": {
+    "complete": {
+      "cta": "Zakończ przeprowadzkę"
+    },
+    "creating": {
+      "cta": "Tworzenie przeprowadzki…"
+    },
+    "editPhotos": {
+      "cta": "Edytuj zdjęcia"
+    }
+  },
+  "scheduledMoves": {
+    "book": {
+      "cta": "Zarezerwuj zaplanowaną przeprowadzkę"
+    },
+    "empty": {
+      "filtered": {
+        "cancelled": {
+          "title": "Brak anulowanych zaplanowanych przeprowadzek"
+        },
+        "completed": {
+          "title": "Brak zakończonych zaplanowanych przeprowadzek"
+        },
+        "inProgress": {
+          "title": "Brak zaplanowanych przeprowadzek w trakcie"
+        },
+        "pending": {
+          "title": "Brak oczekujących zaplanowanych przeprowadzek"
+        }
+      },
+      "subtitle": "Zarezerwuj zaplanowaną przeprowadzkę, a pojawi się tutaj.",
+      "title": "Brak zaplanowanych przeprowadzek"
+    },
+    "subtitle": "Wszystkie Twoje nadchodzące i minione zaplanowane przeprowadzki.",
+    "title": "Zaplanowane przeprowadzki"
+  },
+  "search": {
+    "dropoff": {
+      "placeholder": "Dokąd się przeprowadzasz?"
+    },
+    "from": {
+      "label": "Skąd"
+    },
+    "location": {
+      "a11y": "Wyszukaj lokalizację",
+      "placeholder": "Gdzie się przeprowadzasz?"
+    },
+    "mobile": {
+      "collapsed": {
+        "label": "Zaplanuj przeprowadzkę"
+      },
+      "title": "Zaplanuj przeprowadzkę",
+      "where": {
+        "placeholder": "Dokąd?"
+      }
+    },
+    "pickup": {
+      "placeholder": "Skąd się przeprowadzasz?"
+    },
+    "to": {
+      "label": "Dokąd"
+    }
+  },
+  "selectMover": {
+    "available": {
+      "title_few": "Dostępni przewoźnicy ({{count}})",
+      "title_many": "Dostępni przewoźnicy ({{count}})",
+      "title_one": "Dostępny przewoźnik ({{count}})",
+      "title_other": "Dostępni przewoźnicy ({{count}})"
+    },
+    "capacity": {
+      "label": "pojemność {{volume}}"
+    },
+    "confirm": {
+      "cta": "Potwierdź · {{amount}}"
+    },
+    "creating": {
+      "cta": "Tworzenie przeprowadzki…"
+    },
+    "empty": {
+      "subtitle": "W pobliżu nie ma obecnie zweryfikowanych przewoźników online. Spróbuj ponownie za kilka minut.",
+      "title": "Brak dostępnych przewoźników"
+    },
+    "error": {
+      "title": "Nie można znaleźć przewoźników"
+    },
+    "eta": {
+      "label_few": "~{{count}} min stąd",
+      "label_many": "~{{count}} min stąd",
+      "label_one": "~{{count}} min stąd",
+      "label_other": "~{{count}} min stąd"
+    },
+    "experienceYears_few": "{{count}} lata dośw.",
+    "experienceYears_many": "{{count}} lat dośw.",
+    "experienceYears_one": "{{count}} rok dośw.",
+    "experienceYears_other": "{{count}} roku dośw.",
+    "languages": {
+      "label": "Języki: {{languages}}"
+    },
+    "pricing": {
+      "disclaimer": "Cena końcowa może się różnić w zależności od rzeczywistych warunków.",
+      "helper_few": "Ceny obejmują opłatę podstawową, dystans ({{distance}}), wielkość ekipy, pojemność pojazdu oraz obsługę {{count}} przedmiotów.",
+      "helper_many": "Ceny obejmują opłatę podstawową, dystans ({{distance}}), wielkość ekipy, pojemność pojazdu oraz obsługę {{count}} przedmiotów.",
+      "helper_one": "Ceny obejmują opłatę podstawową, dystans ({{distance}}), wielkość ekipy, pojemność pojazdu oraz obsługę {{count}} przedmiotu.",
+      "helper_other": "Ceny obejmują opłatę podstawową, dystans ({{distance}}), wielkość ekipy, pojemność pojazdu oraz obsługę {{count}} przedmiotu.",
+      "title": "Jak działa wycena:"
+    },
+    "searching": {
+      "subtitle": "Szukamy zweryfikowanych przewoźników w pobliżu miejsca odbioru",
+      "title": "Szukanie dostępnych przewoźników…"
+    },
+    "selectFirst": {
+      "cta": "Wybierz przewoźnika"
+    },
+    "title": "Wybierz przewoźnika"
+  },
+  "seo": {
+    "about": {
+      "description": "PickLT to platforma usług przeprowadzkowych dla mieszkań, biur i rzeczy w całej Europie.",
+      "title": "O nas"
+    },
+    "accountBilling": {
+      "description": "Zarządzaj swoimi płatnościami i wypłatami",
+      "title": "Konto — płatności i wypłaty"
+    },
+    "accountPassword": {
+      "description": "Zarządzaj swoim hasłem",
+      "title": "Konto — hasło"
+    },
+    "contact": {
+      "description": "Skontaktuj się z zespołem PickLT.",
+      "title": "Kontakt"
+    },
+    "default": {
+      "description": "PickLT — zaufana platforma usług przeprowadzkowych",
+      "keywords": "PickLT, przeprowadzki, przewoźnicy, relokacja, Umzug",
+      "title": "PickLT — przeprowadzaj się mądrzej z PickLT"
+    },
+    "forgotPassword": {
+      "description": "Zresetuj swoje hasło",
+      "title": "Nie pamiętam hasła"
+    },
+    "home": {
+      "description": "Rezerwuj zweryfikowanych przewoźników do mieszkań, biur i rzeczy w całej Europie.",
+      "title": "Strona główna"
+    },
+    "titleTemplate": "%s - PickLT"
+  },
+  "sidebar": {
+    "blurb": "Odkrywaj najciekawsze artykuły na wszystkie tematy życia. Pisz swoje historie i dziel się nimi",
+    "getStarted": {
+      "cta": "Zaczynajmy"
+    },
+    "search": {
+      "a11y": "Szukaj artykułów",
+      "placeholder": "Wpisz i naciśnij enter"
+    }
+  },
+  "signup": {
+    "clientSubtitle": "Załóż konto, aby rezerwować przeprowadzki",
+    "moverSubtitle": "Dołącz do naszej sieci profesjonalnych przewoźników",
+    "moverTitle": "Dołącz jako przewoźnik",
+    "phoneRequired": {
+      "helper": "Po rejestracji wymagana będzie weryfikacja numeru telefonu"
+    },
+    "phoneVerify": {
+      "subtitle": "Musimy zweryfikować Twój numer telefonu, aby dokończyć rejestrację."
+    },
+    "resumeMove": {
+      "helper": "Załóż konto, aby kontynuować przeprowadzkę. Postęp został zapisany."
+    },
+    "verifyAndCreate": {
+      "cta": "Zweryfikuj i załóż konto"
+    }
+  },
+  "wizard": {
+    "finish": {
+      "cta": "Utwórz przeprowadzkę"
+    },
+    "nextStep": {
+      "cta": "Następny krok {{step}}"
+    },
+    "step1": {
+      "route": {
+        "title": "Trasa Twojej przeprowadzki"
+      },
+      "title": "KROK 1 — SZCZEGÓŁY PRZEPROWADZKI"
+    },
+    "step2": {
+      "title": "Adres odbioru"
+    },
+    "step3": {
+      "title": "Adres dostawy"
+    },
+    "step4": {
+      "subtitle": "Wybierz przedmioty do przewiezienia. Dzięki temu oszacujemy odpowiedni rozmiar pojazdu i ekipy."
+    },
+    "step5": {
+      "dateInStep1": {
+        "helper": "Datę przeprowadzki ustawisz w kroku {{step}}"
+      },
+      "subtitle": "Wybierz, kiedy przewoźnicy mają przyjechać."
+    },
+    "step6": {
+      "services": {
+        "helper": "To standardowa oferta niemieckich przewoźników."
+      },
+      "subtitle": "Wybierz usługi dodatkowe i wgraj zdjęcia przedmiotów do przewiezienia.",
+      "title": "Usługi dodatkowe i zdjęcia"
+    },
+    "stepOf": {
+      "label": "Krok {{current}} z {{total}}"
+    },
+    "stepTotal": {
+      "label": "/{{total}}"
+    }
+  }
+}

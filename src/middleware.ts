@@ -1,11 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server'
+import {
+  LOCALE_COOKIE,
+  LOCALE_COOKIE_MAX_AGE,
+  LOCALE_HEADER,
+  negotiateLocale,
+  normalizeLocale,
+  type Locale,
+} from '@/lib/i18n-config'
 
 /**
- * Session-based route protection middleware.
- * Checks for a valid signed picklt_session cookie — if absent or invalid
+ * Session-based route protection middleware + locale negotiation.
+ *
+ * Auth: checks for a valid signed picklt_session cookie — if absent or invalid
  * on protected routes, redirects to login.
  *
- * Uses Web Crypto API (Edge Runtime compatible).
+ * i18n: resolves the request locale (picklt_locale cookie -> Accept-Language ->
+ * 'en'), stamps it on the x-picklt-locale request header for the root layout,
+ * and persists it as a cookie the first time. Next.js allows exactly one
+ * middleware file, hence the two concerns living together here. The i18n code
+ * is strictly additive — it never short-circuits, redirects or changes the auth
+ * outcome; it only decorates whichever response the auth logic already chose.
+ *
+ * Uses Web Crypto API (Edge Runtime compatible). i18n-config.ts is pure TS with
+ * no Node built-ins, so it is Edge-safe too.
  */
 
 const COOKIE_NAME = 'picklt_session'
@@ -93,8 +110,49 @@ function isProtected(pathname: string) {
   )
 }
 
+/**
+ * Cookie -> Accept-Language -> 'en'. Pure, and identical to what
+ * `resolveLocale()` in src/lib/i18n-server.ts computes — both call
+ * `negotiateLocale()` from i18n-config.ts, which is the single source of the
+ * rule. The middleware runs first and stamps the answer on a request header so
+ * the layout does not have to re-derive it.
+ */
+function resolveRequestLocale(req: NextRequest): { locale: Locale; hadCookie: boolean } {
+  const cookieValue = req.cookies.get(LOCALE_COOKIE)?.value
+  const fromCookie = normalizeLocale(cookieValue)
+  return {
+    locale: fromCookie ?? negotiateLocale(null, req.headers.get('accept-language')),
+    hadCookie: fromCookie !== null,
+  }
+}
+
+/**
+ * Decorate whichever response the auth logic already chose with the negotiated
+ * locale. Strictly additive: never redirects, never short-circuits, never
+ * changes an auth outcome.
+ */
+function withLocale(res: NextResponse, locale: Locale, hadCookie: boolean): NextResponse {
+  // Echo it back so a client that wants to know what was negotiated can read it
+  // without re-parsing Accept-Language.
+  res.headers.set(LOCALE_HEADER, locale)
+
+  // Pin the negotiated locale on first visit, so a later Accept-Language change
+  // (a shared machine, a VPN, a browser update) does not silently move the UI.
+  // An existing cookie is left alone — the switcher owns it from then on.
+  if (!hadCookie) {
+    res.cookies.set(LOCALE_COOKIE, locale, {
+      path: '/',
+      maxAge: LOCALE_COOKIE_MAX_AGE,
+      sameSite: 'lax',
+      httpOnly: false, // the client switcher writes it via document.cookie
+    })
+  }
+  return res
+}
+
 export default async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
+  const { locale, hadCookie } = resolveRequestLocale(req)
 
   if (isProtected(pathname)) {
     const cookieValue = req.cookies.get(COOKIE_NAME)?.value
@@ -107,11 +165,20 @@ export default async function middleware(req: NextRequest) {
       const loginUrl = new URL('/login', req.url)
       loginUrl.searchParams.set('type', isMoverRoute ? 'mover' : 'client')
       loginUrl.searchParams.set('redirect', pathname)
-      return NextResponse.redirect(loginUrl)
+      return withLocale(NextResponse.redirect(loginUrl), locale, hadCookie)
     }
   }
 
-  return NextResponse.next()
+  // Forward the negotiated locale to the render. `resolveLocale()` prefers the
+  // cookie and only falls back to this header, so the two agree by construction.
+  const requestHeaders = new Headers(req.headers)
+  requestHeaders.set(LOCALE_HEADER, locale)
+
+  return withLocale(
+    NextResponse.next({ request: { headers: requestHeaders } }),
+    locale,
+    hadCookie
+  )
 }
 
 export const config = {

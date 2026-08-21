@@ -1,0 +1,604 @@
+{
+  "action": {
+    "add": {
+      "cta": "Ekle"
+    },
+    "back": {
+      "a11y": "Geri",
+      "cta": "Geri"
+    },
+    "backToHome": {
+      "a11y": "Ana sayfaya dön",
+      "cta": "Ana sayfaya dön"
+    },
+    "call": {
+      "cta": "Ara"
+    },
+    "cancel": {
+      "cta": "İptal"
+    },
+    "changePhoto": {
+      "cta": "Fotoğrafı değiştir"
+    },
+    "clearAll": {
+      "cta": "Tümünü temizle"
+    },
+    "confirm": {
+      "cta": "Onayla"
+    },
+    "continue": {
+      "cta": "Devam et"
+    },
+    "decline": {
+      "cta": "Reddet"
+    },
+    "decrement": {
+      "a11y": "Azalt"
+    },
+    "delete": {
+      "cta": "Sil"
+    },
+    "discard": {
+      "cta": "Vazgeç"
+    },
+    "dismiss": {
+      "cta": "Kapat"
+    },
+    "done": {
+      "cta": "Tamam"
+    },
+    "edit": {
+      "cta": "Düzenle"
+    },
+    "goBack": {
+      "cta": "Geri"
+    },
+    "goHome": {
+      "cta": "Ana sayfaya git"
+    },
+    "increment": {
+      "a11y": "Artır"
+    },
+    "keepCurrent": {
+      "label": "Mevcut kalsın"
+    },
+    "logout": {
+      "cta": "Çıkış yap"
+    },
+    "message": {
+      "cta": "Mesaj"
+    },
+    "next": {
+      "cta": "İleri"
+    },
+    "notNow": {
+      "cta": "Şimdi değil"
+    },
+    "ok": {
+      "cta": "Tamam"
+    },
+    "refresh": {
+      "a11y": "Yenile"
+    },
+    "remove": {
+      "cta": "Kaldır"
+    },
+    "replace": {
+      "cta": "Değiştir"
+    },
+    "retry": {
+      "cta": "Yeniden dene"
+    },
+    "save": {
+      "cta": "Kaydet"
+    },
+    "saveChanges": {
+      "cta": "Değişiklikleri kaydet"
+    },
+    "saving": {
+      "cta": "Kaydediliyor…"
+    },
+    "search": {
+      "cta": "Ara"
+    },
+    "seeAll": {
+      "cta": "Tümünü gör"
+    },
+    "showMore": {
+      "cta": "Daha fazlasını göster"
+    },
+    "signOut": {
+      "cta": "Oturumu kapat"
+    },
+    "skip": {
+      "cta": "Atla"
+    },
+    "submitting": {
+      "cta": "Gönderiliyor…"
+    },
+    "tapToUpload": {
+      "cta": "Yüklemek için dokunun"
+    },
+    "tryAgain": {
+      "cta": "Tekrar dene"
+    },
+    "viewAll": {
+      "cta": "Tümünü gör"
+    }
+  },
+  "answer": {
+    "no": {
+      "label": "Hayır",
+      "option": "Hayır"
+    },
+    "yes": {
+      "label": "Evet",
+      "option": "Evet"
+    }
+  },
+  "auth": {
+    "signInRequired": {
+      "body": "Lütfen önce giriş yapın."
+    }
+  },
+  "badge": {
+    "overflow": {
+      "label": "9+"
+    }
+  },
+  "call": {
+    "dialerFailed": {
+      "title": "Arama uygulaması açılamadı"
+    },
+    "inApp": {
+      "title": "Uygulama içinden ara"
+    },
+    "moveComplete": {
+      "subtitle": "Taşınma tamamlandı"
+    },
+    "noPhone": {
+      "subtitle": "Kayıtlı telefon numarası yok"
+    },
+    "title": "Ara",
+    "viaPhone": {
+      "title": "Telefonla ara"
+    }
+  },
+  "chat": {
+    "closed": {
+      "helper": "Bu taşınma tamamlandı. Sohbet kapatıldı."
+    },
+    "composer": {
+      "placeholder": "Bir mesaj yazın…"
+    },
+    "loadFailed": {
+      "error": "Mesajlar yüklenemedi"
+    },
+    "online": {
+      "label": "Çevrimiçi"
+    },
+    "sendFailed": {
+      "title": "Gönderilemedi"
+    }
+  },
+  "confirm": {
+    "irreversible": {
+      "body": "Bu işlem geri alınamaz."
+    }
+  },
+  "date": {
+    "today": {
+      "label": "Bugün"
+    }
+  },
+  "error": {
+    "checkConnection": "Bağlantınızı kontrol edip tekrar deneyin."
+  },
+  "field": {
+    "city": {
+      "label": "Şehir",
+      "placeholder": "örn. Berlin"
+    },
+    "country": {
+      "label": "Ülke",
+      "placeholder": "Ülkenizi seçin"
+    },
+    "email": {
+      "label": "E-posta",
+      "shortLabel": "E-posta"
+    },
+    "fullName": {
+      "label": "Ad soyad",
+      "placeholder": "Ad ve soyadınız"
+    },
+    "name": {
+      "label": "Ad",
+      "placeholder": "Ad girin"
+    },
+    "notes": {
+      "label": "Notlar (isteğe bağlı)",
+      "placeholder": "Eklemek istediğiniz notlar…"
+    },
+    "phone": {
+      "label": "Telefon numarası",
+      "placeholder": "Telefon numarası girin",
+      "shortLabel": "Telefon"
+    },
+    "quantity": {
+      "label": "Adet"
+    },
+    "status": {
+      "label": "Durum"
+    }
+  },
+  "label": {
+    "total": "Toplam"
+  },
+  "language": {
+    "arabic": {
+      "option": "Arapça"
+    },
+    "choose": "Bir dil seçin",
+    "english": {
+      "option": "İngilizce"
+    },
+    "french": {
+      "option": "Fransızca"
+    },
+    "german": {
+      "option": "Almanca"
+    },
+    "italian": {
+      "option": "İtalyanca"
+    },
+    "label": "Dil",
+    "polish": {
+      "option": "Lehçe"
+    },
+    "romanian": {
+      "option": "Rumence"
+    },
+    "russian": {
+      "option": "Rusça"
+    },
+    "spanish": {
+      "option": "İspanyolca"
+    },
+    "turkish": {
+      "option": "Türkçe"
+    }
+  },
+  "list": {
+    "separator": ", "
+  },
+  "map": {
+    "myLocation": {
+      "label": "Konumum"
+    }
+  },
+  "mover": {
+    "nameFallback": {
+      "label": "Nakliyeci adı"
+    },
+    "unnamed": {
+      "label": "Nakliyeci"
+    }
+  },
+  "nav": {
+    "darkTheme": {
+      "label": "Koyu tema"
+    },
+    "help": {
+      "label": "Yardım"
+    },
+    "menu": {
+      "label": "Menü"
+    },
+    "notifications": {
+      "label": "Bildirimler"
+    },
+    "openMenu": {
+      "a11y": "Menüyü aç"
+    },
+    "settings": {
+      "label": "Ayarlar"
+    }
+  },
+  "notifications": {
+    "empty": "Bildirim akışınız sessiz.",
+    "header": {
+      "title": "Bildirimler"
+    },
+    "markAll": {
+      "cta": "Tümünü okundu işaretle"
+    },
+    "markAllError": {
+      "body": "Bazı öğeler hâlâ okunmamış olabilir.",
+      "title": "Tümü okundu olarak işaretlenemedi"
+    }
+  },
+  "payment": {
+    "brand": {
+      "amex": {
+        "label": "American Express"
+      },
+      "diners": {
+        "label": "Diners Club"
+      },
+      "discover": {
+        "label": "Discover"
+      },
+      "fallback": {
+        "label": "Kart"
+      },
+      "jcb": {
+        "label": "JCB"
+      },
+      "mastercard": {
+        "label": "Mastercard"
+      },
+      "unionpay": {
+        "label": "UnionPay"
+      },
+      "visa": {
+        "label": "Visa"
+      }
+    },
+    "brandTag": {
+      "amex": {
+        "label": "AMEX"
+      },
+      "diners": {
+        "label": "DINER"
+      },
+      "discover": {
+        "label": "DISC"
+      },
+      "fallback": {
+        "label": "KART"
+      },
+      "jcb": {
+        "label": "JCB"
+      },
+      "mastercard": {
+        "label": "MC"
+      },
+      "unionpay": {
+        "label": "UPay"
+      },
+      "visa": {
+        "label": "VISA"
+      }
+    },
+    "method": {
+      "applePay": {
+        "label": "Apple Pay"
+      },
+      "googlePay": {
+        "label": "Google Pay"
+      },
+      "payPal": {
+        "label": "PayPal"
+      }
+    },
+    "waiting": {
+      "done": {
+        "body": "Ödeme onaylandı."
+      },
+      "forClient": {
+        "body": "Ödeme onaylandı. Taşınma kapatılmadan önce müşterinin onayı bekleniyor."
+      },
+      "forMover": {
+        "body": "Ödeme onaylandı. Taşınma kapatılmadan önce nakliyecinizin onayı bekleniyor."
+      }
+    }
+  },
+  "person": {
+    "fallbackMover": {
+      "label": "Nakliyeci adı"
+    },
+    "fallbackName": {
+      "label": "değerli kullanıcımız"
+    },
+    "fallbackUser": "Kullanıcı",
+    "unnamed": {
+      "label": "Adınız"
+    }
+  },
+  "photoViewer": {
+    "close": {
+      "a11y": "Fotoğraf görüntüleyiciyi kapat"
+    },
+    "counter": {
+      "label": "{{page}} / {{total}}"
+    }
+  },
+  "place": {
+    "dropoff": "Teslim",
+    "pickup": "Alış"
+  },
+  "separator": {
+    "or": {
+      "label": "veya"
+    }
+  },
+  "starRating": {
+    "rate": {
+      "a11y_one": "{{count}} yıldız ver",
+      "a11y_other": "{{count}} yıldız ver"
+    }
+  },
+  "state": {
+    "accepting": {
+      "label": "Kabul ediliyor…"
+    },
+    "adding": {
+      "label": "Ekleniyor…"
+    },
+    "checking": {
+      "cta": "Kontrol ediliyor…"
+    },
+    "confirmed": {
+      "label": "Onaylandı"
+    },
+    "declining": {
+      "label": "Reddediliyor…"
+    },
+    "loading": {
+      "label": "Yükleniyor…"
+    },
+    "loadingEllipsis": {
+      "label": "Yükleniyor…"
+    },
+    "locating": {
+      "label": "Konumunuz alınıyor…"
+    },
+    "processing": {
+      "cta": "İşleniyor…"
+    },
+    "redirecting": {
+      "label": "Yönlendiriliyor…"
+    },
+    "saving": {
+      "label": "Kaydediliyor…"
+    },
+    "searching": {
+      "label": "Aranıyor…"
+    },
+    "selected": {
+      "label": "Seçildi"
+    },
+    "starting": {
+      "label": "Başlatılıyor…"
+    },
+    "submitting": {
+      "label": "Gönderiliyor…"
+    },
+    "updating": {
+      "label": "Güncelleniyor…"
+    },
+    "waiting": {
+      "label": "Bekliyor"
+    },
+    "withdrawing": {
+      "label": "Geri çekiliyor…"
+    }
+  },
+  "status": {
+    "active": {
+      "label": "Aktif"
+    },
+    "comingSoon": {
+      "label": "Yakında"
+    },
+    "inactive": {
+      "label": "Pasif"
+    }
+  },
+  "timeAgo": {
+    "days": {
+      "label_one": "{{count}} g önce",
+      "label_other": "{{count}} g önce"
+    },
+    "hours": {
+      "label_one": "{{count}} sa önce",
+      "label_other": "{{count}} sa önce"
+    },
+    "justNow": {
+      "label": "Az önce"
+    },
+    "minutes": {
+      "label_one": "{{count}} dk önce",
+      "label_other": "{{count}} dk önce"
+    },
+    "seconds": {
+      "label_one": "{{count}} sn önce",
+      "label_other": "{{count}} sn önce"
+    }
+  },
+  "unit": {
+    "approxMinutes": {
+      "label": "~{{minutes}} dk"
+    },
+    "meters": {
+      "label": "{{value}} m"
+    },
+    "minutes": {
+      "label": "dk"
+    }
+  },
+  "upload": {
+    "constraints": {
+      "helper": "{{limit}}'a kadar PNG, JPG, GIF"
+    },
+    "constraintsNoGif": {
+      "helper": "{{limit}}'a kadar PNG, JPG"
+    },
+    "dragDrop": {
+      "label": "veya sürükleyip bırakın"
+    },
+    "file": {
+      "cta": "Dosya yükle"
+    },
+    "files": {
+      "cta": "Dosyaları yükle"
+    },
+    "multiple": {
+      "helper": "Birden fazla dosya seçebilirsiniz"
+    }
+  },
+  "value": {
+    "lessThan": {
+      "label": "<{{value}}"
+    },
+    "noEmail": {
+      "empty": "E-posta yok"
+    },
+    "noPhone": {
+      "empty": "Telefon yok"
+    },
+    "noneSelected": {
+      "empty": "Seçim yok"
+    },
+    "notAvailable": {
+      "label": "Yok"
+    },
+    "notProvided": {
+      "empty": "Girilmedi"
+    },
+    "notSelected": {
+      "empty": "Seçilmedi"
+    },
+    "notSet": {
+      "empty": "Ayarlanmadı"
+    },
+    "notSpecified": {
+      "empty": "Belirtilmedi"
+    },
+    "required": {
+      "label": "Zorunlu"
+    },
+    "standard": {
+      "label": "Standart"
+    }
+  },
+  "vehicleType": {
+    "largeTruck": {
+      "label": "Büyük kamyon"
+    },
+    "mediumTruck": {
+      "label": "Orta boy kamyon"
+    },
+    "smallVan": {
+      "label": "Küçük panelvan"
+    }
+  },
+  "view": {
+    "list": {
+      "label": "Liste"
+    },
+    "map": {
+      "label": "Harita"
+    }
+  }
+}

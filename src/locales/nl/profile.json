@@ -1,0 +1,344 @@
+{
+  "appearance": {
+    "dark": {
+      "label": "Donkere modus",
+      "subtitle": "Prettiger voor je ogen in het donker"
+    },
+    "light": {
+      "label": "Lichte modus",
+      "subtitle": "Klassieke lichte weergave"
+    },
+    "system": {
+      "label": "Systeemstandaard",
+      "subtitle": "Volgt de instellingen van je apparaat"
+    },
+    "title": "Weergave"
+  },
+  "changeEmail": {
+    "cta": "E-mailadres bijwerken",
+    "current": {
+      "label": "Huidig: {{email}}"
+    },
+    "failed": {
+      "title": "E-mailadres kon niet worden gewijzigd"
+    },
+    "googleNotice": {
+      "body": "Je account gebruikt inloggen met Google. Het e-mailadres kan niet binnen PickLT worden gewijzigd — pas het aan in je Google-account.",
+      "title": "E-mailadres wordt beheerd door Google"
+    },
+    "helper": "Werk je e-mailadres bij",
+    "helperLong": "We sturen een verificatiemail naar het nieuwe adres.",
+    "label": "E-mailadres wijzigen",
+    "sent": {
+      "body": "We hebben een verificatiemail gestuurd. Controleer je inbox."
+    },
+    "sentLong": "We hebben een verificatiemail gestuurd. Controleer je inbox en klik op de verificatielink.",
+    "title": "E-mailadres wijzigen",
+    "updatedTo": {
+      "body": "E-mailadres gewijzigd in <1>{{email}}</1>"
+    }
+  },
+  "changePassword": {
+    "failed": {
+      "title": "Wachtwoord kon niet worden bijgewerkt"
+    },
+    "googleNotice": {
+      "body": "Je account heeft nog geen wachtwoord. Log uit en gebruik “Wachtwoord vergeten” op het inlogscherm om er een in te stellen.",
+      "cta": "Uitloggen en wachtwoord opnieuw instellen",
+      "title": "Account gebruikt inloggen met Google"
+    },
+    "mismatch": {
+      "error": "De wachtwoorden komen niet overeen."
+    },
+    "success": {
+      "message": "Je wachtwoord is gewijzigd.",
+      "title": "Wachtwoord bijgewerkt"
+    },
+    "title": "Wachtwoord wijzigen"
+  },
+  "changePhone": {
+    "current": {
+      "label": "Huidig: {{phone}}"
+    },
+    "failed": {
+      "title": "Telefoonnummer kon niet worden gewijzigd"
+    },
+    "helper": "Werk je telefoonnummer bij",
+    "helperLong": "We sturen een OTP-code om het nieuwe nummer te verifiëren.",
+    "label": "Telefoonnummer wijzigen",
+    "title": "Telefoonnummer wijzigen"
+  },
+  "deleteAccount": {
+    "confirm": {
+      "body": "Deze actie is definitief en kan niet ongedaan worden gemaakt. Al je gegevens, verhuizingen en voorkeuren gaan verloren.",
+      "title": "Weet je zeker dat je je account wilt verwijderen?"
+    }
+  },
+  "dobSheet": {
+    "title": "Geboortedatum kiezen"
+  },
+  "editName": {
+    "helper": "Werk je naam bij",
+    "label": "Naam bewerken",
+    "name": {
+      "placeholder": "Je volledige naam"
+    },
+    "title": "Naam bewerken"
+  },
+  "field": {
+    "confirmPassword": {
+      "label": "Nieuw wachtwoord bevestigen",
+      "placeholder": "Voer het nieuwe wachtwoord opnieuw in"
+    },
+    "currentPassword": {
+      "label": "Huidig wachtwoord",
+      "placeholder": "Voer je huidige wachtwoord in"
+    },
+    "dateOfBirth": {
+      "label": "Geboortedatum",
+      "placeholder": "Kies je geboortedatum"
+    },
+    "email": {
+      "label": "E-mail"
+    },
+    "fullName": {
+      "label": "Volledige naam"
+    },
+    "gender": {
+      "label": "Geslacht",
+      "placeholder": "Kies je geslacht"
+    },
+    "newEmail": {
+      "label": "Nieuw e-mailadres",
+      "placeholder": "naam@voorbeeld.nl"
+    },
+    "newPassword": {
+      "label": "Nieuw wachtwoord"
+    },
+    "password": {
+      "minHelper": "Minstens 8 tekens"
+    },
+    "phone": {
+      "label": "Telefoonnummer",
+      "numberPlaceholder": "123 456 7890",
+      "placeholder": "Voeg een telefoonnummer toe"
+    }
+  },
+  "gender": {
+    "female": {
+      "option": "Vrouw"
+    },
+    "male": {
+      "option": "Man"
+    },
+    "other": {
+      "option": "Anders"
+    }
+  },
+  "genderSheet": {
+    "title": "Geslacht kiezen"
+  },
+  "help": {
+    "helper": "Krijg hulp en ondersteuning"
+  },
+  "helpCenter": {
+    "header": {
+      "title": "Helpcentrum"
+    },
+    "helper": "Krijg hulp en ondersteuning",
+    "search": {
+      "a11y": "Helpartikelen zoeken",
+      "placeholder": "Locatie zoeken.."
+    }
+  },
+  "language": {
+    "active": "Actief",
+    "back": "Terug",
+    "done": "Klaar",
+    "others": "Overige",
+    "saveError": "Je taal kon niet worden opgeslagen. Probeer het opnieuw.",
+    "subtitle": "Kies de taal die je in de hele app wilt gebruiken.",
+    "suggested": "Voorgesteld",
+    "title": "Taal"
+  },
+  "logout": {
+    "confirm": {
+      "body": "Zorg dat je je werk hebt opgeslagen of lopende taken hebt afgerond voordat je uitlogt.",
+      "title": "Weet je zeker dat je wilt uitloggen?"
+    }
+  },
+  "menu": {
+    "appearance": {
+      "label": "Weergave"
+    },
+    "changeEmail": {
+      "label": "E-mailadres wijzigen"
+    },
+    "changePassword": {
+      "label": "Wachtwoord wijzigen"
+    },
+    "changePhone": {
+      "label": "Telefoonnummer wijzigen"
+    },
+    "deleteAccount": {
+      "label": "Account verwijderen"
+    },
+    "editProfile": {
+      "label": "Profiel bewerken"
+    },
+    "help": {
+      "label": "Help en support"
+    },
+    "language": {
+      "label": "Taal"
+    },
+    "legal": {
+      "label": "Juridisch"
+    },
+    "logout": {
+      "label": "Uitloggen"
+    },
+    "notifications": {
+      "label": "Meldingen"
+    },
+    "paymentAccount": {
+      "label": "Betaalrekening"
+    },
+    "security": {
+      "label": "Beveiliging"
+    },
+    "yourCard": {
+      "label": "Je kaart"
+    }
+  },
+  "name": {
+    "updated": {
+      "success": "Naam bijgewerkt"
+    }
+  },
+  "newEmail": {
+    "label": "Nieuw e-mailadres",
+    "placeholder": "nieuw@voorbeeld.nl"
+  },
+  "newPhone": {
+    "label": "Nieuw telefoonnummer",
+    "placeholder": "+491234567890"
+  },
+  "notifications": {
+    "helper": "Stel waarschuwingen en meldingen in",
+    "rows": {
+      "appUpdates": {
+        "label": "App-updates"
+      },
+      "cashback": {
+        "label": "Cashback"
+      },
+      "notifications": {
+        "label": "Meldingen"
+      },
+      "payments": {
+        "label": "Betalingen"
+      },
+      "sound": {
+        "label": "Geluid"
+      },
+      "specialOffers": {
+        "label": "Speciale aanbiedingen"
+      },
+      "vibrate": {
+        "label": "Trillen"
+      }
+    },
+    "title": "Meldingen"
+  },
+  "password": {
+    "confirm": {
+      "label": "Wachtwoord bevestigen"
+    },
+    "current": {
+      "label": "Huidig wachtwoord"
+    },
+    "new": {
+      "label": "Nieuw wachtwoord"
+    },
+    "submit": {
+      "cta": "Wachtwoord bijwerken"
+    },
+    "title": "Werk je wachtwoord bij"
+  },
+  "paymentMethods": {
+    "helper": "Beheer je betaalmethoden",
+    "label": "Betaalmethoden"
+  },
+  "personalData": {
+    "nameRequired": {
+      "message": "Vul je naam in.",
+      "title": "Volledige naam vereist"
+    },
+    "saveFailed": {
+      "title": "Profiel kon niet worden opgeslagen"
+    },
+    "title": "Persoonlijke gegevens"
+  },
+  "phone": {
+    "updated": {
+      "success": "Telefoonnummer bijgewerkt en geverifieerd"
+    }
+  },
+  "photo": {
+    "updated": {
+      "success": "Foto bijgewerkt"
+    }
+  },
+  "privacy": {
+    "helper": "Beheer je gegevens en beveiliging",
+    "label": "Privacy en beveiliging"
+  },
+  "privacyPolicy": {
+    "header": {
+      "title": "Privacy en beleid"
+    }
+  },
+  "privacySecurity": {
+    "helper": "Beheer je gegevens en beveiliging",
+    "label": "Privacy en beveiliging"
+  },
+  "section": {
+    "account": {
+      "title": "Account"
+    },
+    "general": {
+      "title": "Algemeen"
+    },
+    "moves": {
+      "title": "Verhuizingen"
+    },
+    "payments": {
+      "title": "Betalingen"
+    },
+    "personal": {
+      "title": "Persoonlijke gegevens"
+    },
+    "preferences": {
+      "title": "Voorkeuren"
+    },
+    "support": {
+      "title": "Support"
+    }
+  },
+  "security": {
+    "biometricId": {
+      "label": "Biometrische ID"
+    },
+    "faceId": {
+      "label": "Face ID"
+    },
+    "googleAuthenticator": {
+      "label": "Google Authenticator"
+    },
+    "rememberPassword": {
+      "label": "Wachtwoord onthouden"
+    },
+    "title": "Beveiliging"
+  }
+}

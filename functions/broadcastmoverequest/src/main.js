@@ -143,7 +143,7 @@ export default async ({ req, res, log, error }) => {
   ].filter((k) => !process.env[k]);
   if (missingEnv.length) {
     error(`[broadcastmoverequest] missing env: ${missingEnv.join(', ')}`);
-    return res.json({ error: 'misconfigured' }, 500);
+    return res.json({ error: 'misconfigured', fnCode: 'generic.misconfigured' }, 500);
   }
 
   const client = new Client()
@@ -153,7 +153,7 @@ export default async ({ req, res, log, error }) => {
   const databases = new Databases(client);
 
   if (req.method !== 'POST') {
-    return res.json({ error: 'Method not allowed' }, 405);
+    return res.json({ error: 'Method not allowed', fnCode: 'generic.methodNotAllowed' }, 405);
   }
 
   try {
@@ -161,19 +161,19 @@ export default async ({ req, res, log, error }) => {
     try {
       body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
     } catch {
-      return res.json({ error: 'Invalid JSON body' }, 400);
+      return res.json({ error: 'Invalid JSON body', fnCode: 'generic.badRequest' }, 400);
     }
     const { moveId } = body;
 
     if (!moveId) {
-      return res.json({ error: 'moveId is required' }, 400);
+      return res.json({ error: 'moveId is required', fnCode: 'generic.badRequest' }, 400);
     }
 
     // Get move details
     const move = await databases.getDocument(DATABASE_ID, MOVES_COLLECTION, moveId);
 
     if (!move.pickupLatitude || !move.pickupLongitude) {
-      return res.json({ error: 'Move has no pickup coordinates' }, 400);
+      return res.json({ error: 'Move has no pickup coordinates', fnCode: 'move.noPickupCoords' }, 400);
     }
 
     // Idempotency gate. The caller is the client's track screen, whose view of
@@ -362,7 +362,7 @@ export default async ({ req, res, log, error }) => {
     });
   } catch (err) {
     error(`Broadcast move request failed: ${err.message}`);
-    return res.json({ error: err.message }, 500);
+    return res.json({ error: 'Something went wrong. Please try again.', fnCode: 'generic.unexpected' }, 500);
   }
 };
 

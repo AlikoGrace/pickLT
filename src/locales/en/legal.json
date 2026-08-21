@@ -1,0 +1,69 @@
+{
+  "accept": {
+    "privacy": "I acknowledge the <0>privacy policy</0> (GDPR)",
+    "required": {
+      "error": "Please accept terms and privacy policy to continue"
+    },
+    "terms": "I confirm the details and agree to the <0>terms & conditions</0>"
+  },
+  "governingLanguage": {
+    "notice": "This document is provided in English. Translations are offered for convenience only; in case of any discrepancy, the English version governs."
+  },
+  "help": {
+    "faq": {
+      "contactSupport": {
+        "answer": "You can reach our support team via the \"Contact Us\" option available in the app.",
+        "question": "How do I contact support?"
+      },
+      "manageNotifications": {
+        "answer": "Open Profile → Notifications to control which alerts you receive.",
+        "question": "How do I manage notifications?"
+      },
+      "reportIssue": {
+        "answer": "Use the \"Help & Support\" section in your profile to report any issues you encounter.",
+        "question": "How do I report an issue?"
+      },
+      "resetPassword": {
+        "answer": "Tap \"Forgot Password\" on the login screen and follow the instructions to reset your password via email.",
+        "question": "How do I reset my password?"
+      },
+      "updateInfo": {
+        "answer": "Open Profile → Edit Profile to update your personal details at any time.",
+        "question": "How can I update my information?"
+      }
+    }
+  },
+  "insuranceClaims": {
+    "title": "Insurance & Claims"
+  },
+  "privacy": {
+    "effectiveDate": {
+      "label": "Effective Date: {{date}}",
+      "value": "December 20, 2024"
+    },
+    "section": {
+      "informationCollection": {
+        "body": "We collect essential information to enhance your experience. This includes details you provide directly, such as account data, as well as information gathered through usage analytics and cookies.",
+        "title": "1. Information Collection"
+      },
+      "informationSetting": {
+        "body": "You have full control over your data. Manage your privacy preferences, update personal details, and customize your settings to match your needs.",
+        "title": "3. Information Setting"
+      },
+      "informationUsage": {
+        "body": "The information collected is used to improve our services, provide personalized recommendations, and ensure a seamless experience. We do not share your data without your explicit consent.",
+        "title": "2. Information Usage"
+      },
+      "securityMeasures": {
+        "body": "We prioritize your data's safety with advanced security protocols, encryption methods, and regular audits to protect against unauthorized access or breaches.",
+        "title": "4. Security Measures"
+      }
+    }
+  },
+  "privacyPolicy": {
+    "title": "Privacy Policy"
+  },
+  "termsOfService": {
+    "title": "Terms of Service"
+  }
+}

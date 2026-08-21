@@ -1,10 +1,14 @@
+import { getTranslations } from '@/lib/i18n-server'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { requireVerifiedMover, isErrorResponse } from '@/lib/mover-auth'
 import { APPWRITE } from '@/lib/constants'
 import { Query } from 'node-appwrite'
 import { NextRequest, NextResponse } from 'next/server'
+import { NEARBY_MOVES_RADIUS_KM } from '@/lib/service-limits'
 
-const RADIUS_KM = 30
+// The radius the empty state and the result count both quote. One constant, so
+// the sentence on screen cannot drift from the query that produced it.
+const RADIUS_KM = NEARBY_MOVES_RADIUS_KM
 
 // ~1.1 km of precision — enough to place an approximate pin and judge
 // distance, not enough to identify a specific building before the job is won.
@@ -34,6 +38,7 @@ function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number): nu
  * on pickupLatitude/pickupLongitude, then refines with Haversine.
  */
 export async function GET(req: NextRequest) {
+  const { t } = await getTranslations()
   try {
     // This is a pre-acceptance marketplace feed over other people's homes.
     // A bare session check let any account sweep a coordinate grid and harvest
@@ -62,7 +67,7 @@ export async function GET(req: NextRequest) {
       }
       if (!lat || !lng || Number.isNaN(lat) || Number.isNaN(lng)) {
         return NextResponse.json(
-          { error: 'No location available. Please enable location services or update your location.' },
+          { error: t('errors:mover.noLocation') },
           { status: 400 }
         )
       }
@@ -169,6 +174,6 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ moves: result, total: result.length })
   } catch (error) {
     console.error('Error fetching nearby moves:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: t('errors:generic.internal') }, { status: 500 })
   }
 }

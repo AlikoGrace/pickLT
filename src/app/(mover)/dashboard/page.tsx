@@ -6,7 +6,9 @@ import { Badge } from '@/shared/Badge'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import Avatar from '@/shared/Avatar'
+import { formatDateWith, formatMoney } from '@/lib/format'
 
 interface DashboardData {
   activeMoves: string[]
@@ -42,13 +44,14 @@ interface RecentMove {
   date: string
   status: 'completed' | 'in_progress' | 'pending' | 'cancelled'
   amount: number
-  moveType: string
+  moveTypeLabel: string
   itemCount: number
   distance: string
 }
 
 const DashboardPage = () => {
   const { user, crewMembers } = useAuth()
+  const { t } = useTranslation()
   const [dashboard, setDashboard] = useState<DashboardData | null>(null)
   const [availableMovesCount, setAvailableMovesCount] = useState(0)
   const [loading, setLoading] = useState(true)
@@ -97,58 +100,76 @@ const DashboardPage = () => {
     : '?'
 
 
+  // "Instant Move" / "Scheduled Move" — one whole phrase per category, not
+  // `"{{type}} Move"` with the category word posted into the slot. That older
+  // shape could not be made grammatical: de needs *Geplanter Umzug* (an
+  // inflected adjective, not "Geplant" + " Umzug"), and fr/es/it/pl put the
+  // modifier after the noun and agree it with the noun's gender.
+  // `moveCategory` is only ever 'instant' | 'scheduled'.
+  const moveTypeLabelFor = (moveCategory: string): string => {
+    if (moveCategory === 'instant') {
+      return t('web:moverDashboard.recentMoves.moveType.instant.label')
+    }
+    if (moveCategory === 'scheduled') {
+      return t('web:moverDashboard.recentMoves.moveType.scheduled.label')
+    }
+    return t('moves:card.title.generic.label')
+  }
+
   const recentMoves: RecentMove[] = (dashboard?.recentMoves || []).map((m) => ({
     id: m.$id,
-    pickup: m.pickupLabel || 'Pickup',
+    pickup: m.pickupLabel || t('moves:card.route.pickupFallback.label'),
     pickupAddress: m.pickupAddress || '',
-    dropoff: m.dropoffLabel || 'Dropoff',
+    dropoff: m.dropoffLabel || t('moves:card.route.dropoffFallback.label'),
     dropoffAddress: m.dropoffAddress || '',
-    date: m.scheduledDate ? new Date(m.scheduledDate).toLocaleDateString('en-DE', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '',
+    date: m.scheduledDate
+      ? formatDateWith(m.scheduledDate, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+      : '',
     status: mapApiMoveStatus(m.status),
     amount: m.estimatedPrice || 0,
-    moveType: m.moveCategory ? m.moveCategory.charAt(0).toUpperCase() + m.moveCategory.slice(1) : 'Light',
+    moveTypeLabel: moveTypeLabelFor(m.moveCategory),
     itemCount: m.totalItems || 0,
     distance: m.routeDistanceMeters ? `${(m.routeDistanceMeters / 1000).toFixed(1)} km` : '—',
   }))
   const stats = [
     {
-      name: 'Available Moves',
+      name: t('web:moverDashboard.stat.availableMoves.label'),
       value: availableMovesCount,
       icon: TruckIcon,
       href: '/available-moves',
       color: 'bg-neutral-500',
     },
     {
-      name: 'Active Moves',
+      name: t('web:moverDashboard.stat.activeMoves.label'),
       value: dashboard?.activeMovesCount ?? 0,
       icon: ClockIcon,
       href: '/active-move',
       color: 'bg-blue-500',
     },
     {
-      name: 'Scheduled Moves',
+      name: t('web:moverDashboard.stat.scheduledMoves.label'),
       value: dashboard?.scheduledMovesCount ?? 0,
       icon: CalendarDaysIcon,
       href: '/scheduled-moves',
       color: 'bg-indigo-500',
     },
     {
-      name: 'Completed This Month',
+      name: t('web:moverDashboard.stat.completedThisMonth.label'),
       value: dashboard?.completedThisMonth ?? 0,
       icon: CalendarDaysIcon,
       href: '#',
       color: 'bg-neutral-500',
     },
     {
-      name: 'Crew Members',
+      name: t('web:moverDashboard.stat.crewMembers.label'),
       value: dashboard?.crewCount ?? crewMembers?.length ?? 0,
       icon: UsersIcon,
       href: '/my-crew',
       color: 'bg-neutral-500',
     },
     {
-      name: 'Earnings This Month',
-      value: `€${(dashboard?.earningsThisMonth ?? 0).toLocaleString()}`,
+      name: t('web:moverDashboard.stat.earningsThisMonth.label'),
+      value: formatMoney(dashboard?.earningsThisMonth ?? 0, { compact: true }),
       icon: CurrencyEuroIcon,
       href: '/earnings',
       color: 'bg-neutral-500',
@@ -173,15 +194,15 @@ const DashboardPage = () => {
   const getStatusLabel = (status: RecentMove['status']): string => {
     switch (status) {
       case 'completed':
-        return 'Completed'
+        return t('moves:status.completed.label')
       case 'in_progress':
-        return 'In Progress'
+        return t('moves:status.inProgress.label')
       case 'pending':
-        return 'Pending'
+        return t('moves:status.pending.label')
       case 'cancelled':
-        return 'Cancelled'
+        return t('moves:status.cancelled.label')
       default:
-        return 'Unknown'
+        return t('moves:status.unknown.label')
     }
   }
 
@@ -197,10 +218,12 @@ const DashboardPage = () => {
           />
           <div>
             <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
-              Welcome back, {user?.fullName?.split(' ')[0] || 'Mover'}!
+              {t('web:moverDashboard.welcome.title', {
+                name: user?.fullName?.split(' ')[0] || t('common:mover.unnamed.label'),
+              })}
             </h1>
             <p className="text-neutral-500 dark:text-neutral-400">
-              Here&apos;s what&apos;s happening today
+              {t('web:moverDashboard.welcome.subtitle')}
             </p>
           </div>
         </div>
@@ -230,7 +253,7 @@ const DashboardPage = () => {
       {/* Quick Actions */}
       <div className="mb-8">
         <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
-          Quick Actions
+          {t('web:moverDashboard.quickActions.title')}
         </h2>
         <div className="flex flex-wrap gap-3">
           {isVerified ? (
@@ -240,25 +263,25 @@ const DashboardPage = () => {
                 className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-full text-sm font-medium hover:bg-primary-700 transition-colors"
               >
                 <TruckIcon className="w-4 h-4" />
-                Find Moves
+                {t('web:moverDashboard.findMoves.cta')}
               </Link>
               <Link
                 href="/my-crew"
                 className="flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 rounded-full text-sm font-medium hover:bg-neutral-200 dark:hover:bg-neutral-600 transition-colors"
               >
                 <UsersIcon className="w-4 h-4" />
-                Manage Crew
+                {t('web:moverDashboard.manageCrew.cta')}
               </Link>
             </>
           ) : (
             <>
               <div className="flex items-center gap-2 px-4 py-2 bg-neutral-200 dark:bg-neutral-700 text-neutral-400 dark:text-neutral-500 rounded-full text-sm font-medium cursor-not-allowed">
                 <TruckIcon className="w-4 h-4" />
-                Find Moves
+                {t('web:moverDashboard.findMoves.cta')}
               </div>
               <div className="flex items-center gap-2 px-4 py-2 bg-neutral-200 dark:bg-neutral-700 text-neutral-400 dark:text-neutral-500 rounded-full text-sm font-medium cursor-not-allowed">
                 <UsersIcon className="w-4 h-4" />
-                Manage Crew
+                {t('web:moverDashboard.manageCrew.cta')}
               </div>
             </>
           )}
@@ -269,13 +292,13 @@ const DashboardPage = () => {
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-            Recent Moves
+            {t('web:moverDashboard.recentMoves.title')}
           </h2>
           <Link 
             href="/earnings" 
             className="text-sm text-primary-600 hover:underline"
           >
-            View all
+            {t('common:action.viewAll.cta')}
           </Link>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -291,7 +314,7 @@ const DashboardPage = () => {
                   {getStatusLabel(move.status)}
                 </Badge>
                 <span className="absolute top-2 right-2 text-xs px-2 py-0.5 bg-white/80 dark:bg-neutral-800/80 rounded-full text-neutral-600 dark:text-neutral-400">
-                  {move.moveType} Move
+                  {move.moveTypeLabel}
                 </span>
               </div>
 
@@ -308,7 +331,7 @@ const DashboardPage = () => {
                     </h3>
                   </div>
                   <p className="text-xl font-bold text-green-600 dark:text-green-400 ml-2">
-                    €{move.amount}
+                    {formatMoney(move.amount, { compact: true })}
                   </p>
                 </div>
 
@@ -331,7 +354,7 @@ const DashboardPage = () => {
 
                 {/* Stats footer */}
                 <div className="flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400 pt-2 border-t border-neutral-100 dark:border-neutral-700">
-                  <span>{move.itemCount} items</span>
+                  <span>{t('moves:itemCount', { count: move.itemCount })}</span>
                   <span className="flex items-center gap-1">
                     <MapPinIcon className="w-3.5 h-3.5" />
                     {move.distance}

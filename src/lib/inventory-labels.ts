@@ -1,6 +1,8 @@
 'use client'
 
+import type { TFunction } from 'i18next'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 /**
  * Human labels for persisted inventory, and the field-scoping rules that decide
@@ -103,8 +105,16 @@ export function parseInventoryLines(
  *
  * Returns an empty map until the fetch resolves; `formatInventoryLabel` falls
  * back to humanising in the meantime, so labels never render as raw slugs.
+ *
+ * Names arrive ALREADY LOCALIZED — `/api/inventory/catalog` resolves them
+ * against the request's locale (master plan D7). Re-fetching on a language
+ * change is what re-labels every move the user has ever booked: the move row
+ * itself stores `{itemId: count}` and no labels at all, so nothing is
+ * backfilled and nothing goes stale.
  */
 export function useInventoryNames(): Map<string, string> {
+  const { i18n } = useTranslation()
+  const locale = i18n.language
   const [names, setNames] = useState<Map<string, string>>(new Map())
 
   useEffect(() => {
@@ -122,7 +132,7 @@ export function useInventoryNames(): Map<string, string> {
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [locale])
 
   return names
 }
@@ -167,9 +177,14 @@ export function presentRows(rows: DetailRowSpec[]): PresentRow[] {
   return out
 }
 
-export function yesNo(v: boolean | null | undefined): string | null {
-  if (v === true) return 'Yes'
-  if (v === false) return 'No'
+/**
+ * Takes `t` rather than importing one: every consumer of this module is a
+ * `'use client'` page, and those still render once on the server, where a
+ * module-level `t` has no request locale to resolve against.
+ */
+export function yesNo(t: TFunction, v: boolean | null | undefined): string | null {
+  if (v === true) return t('common:answer.yes.label')
+  if (v === false) return t('common:answer.no.label')
   return null
 }
 

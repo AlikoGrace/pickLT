@@ -1,0 +1,293 @@
+{
+  "action": {
+    "trackLive": {
+      "cta": "Suivre le déménagement en direct"
+    }
+  },
+  "address": {
+    "dropoff": {
+      "title": "Adresse de livraison"
+    },
+    "floor": {
+      "label": "Étage {{floor}}"
+    },
+    "floorWithElevator": {
+      "label": "Étage {{floor}} · Ascenseur"
+    },
+    "pickup": {
+      "title": "Adresse de départ"
+    }
+  },
+  "banner": {
+    "accepted": "Un déménageur a accepté votre déménagement ! Il prendra la route sous peu.",
+    "awaitingAccept": "En attente de l’acceptation d’un déménageur…"
+  },
+  "eta": {
+    "assigned": {
+      "label": "Heure d’arrivée estimée"
+    },
+    "distanceAway": {
+      "label": "À {{distance}}"
+    },
+    "minutes": {
+      "label_one": "{{count}} min",
+      "label_other": "{{count}} min"
+    },
+    "moverArriving": {
+      "label": "Déménageur en route"
+    },
+    "moverQueued": {
+      "body": "Termine une autre mission",
+      "footnote": "Il partira vers vous dès qu’il aura terminé.",
+      "label": "Déménageur assigné"
+    }
+  },
+  "hint": {
+    "arrivedDestination": "Arrivé ! Le déchargement va commencer.",
+    "inTransit": "En route vers votre destination…",
+    "loading": "Vos affaires sont en cours de chargement…",
+    "loadingSoon": "Votre déménageur va bientôt commencer le chargement",
+    "unloading": "Vos affaires sont en cours de déchargement…"
+  },
+  "live": {
+    "helper": "Votre déménageur est en activité — suivez sa progression en temps réel"
+  },
+  "map": {
+    "dropoffPin": {
+      "label": "L"
+    },
+    "pickupPin": {
+      "label": "E"
+    }
+  },
+  "mover": {
+    "cancelled": {
+      "searching": "Le déménageur a annulé. Recherche d’un autre déménageur…"
+    },
+    "moveCount": {
+      "label_one": "{{count}} déménagement",
+      "label_other": "{{count}} déménagements"
+    },
+    "noPhone": {
+      "error": "Numéro de téléphone du déménageur indisponible"
+    }
+  },
+  "moverPhase": {
+    "atDropoff": {
+      "subtitle": "Vous êtes arrivé à destination",
+      "title": "À l’adresse de livraison"
+    },
+    "atPickup": {
+      "subtitle": "Vous êtes arrivé. Commencez le chargement.",
+      "title": "À l’adresse d’enlèvement"
+    },
+    "awaitingPayment": {
+      "subtitle": "En attente de la confirmation du paiement",
+      "title": "Paiement à effectuer"
+    },
+    "completed": {
+      "subtitle": "Déménagement terminé avec succès !",
+      "title": "Terminé"
+    },
+    "enRoute": {
+      "subtitle": "Rendez-vous à l’adresse d’enlèvement",
+      "title": "En route vers l’enlèvement"
+    },
+    "inTransit": {
+      "subtitle": "En route vers l’adresse de livraison",
+      "title": "En transit"
+    },
+    "loading": {
+      "subtitle": "Chargement des objets dans votre véhicule",
+      "title": "Chargement"
+    },
+    "unloading": {
+      "subtitle": "Déchargement des objets à destination",
+      "title": "Déchargement"
+    }
+  },
+  "notify": {
+    "accepted": {
+      "body": "Un déménageur a accepté votre déménagement planifié. Il prendra la route sous peu.",
+      "shortBody": "Un déménageur a accepté votre demande de déménagement !",
+      "shortTitle": "Déménageur confirmé",
+      "title": "Un déménageur a accepté votre déménagement ! ✅"
+    },
+    "arrived": {
+      "body": "Votre déménageur est arrivé à l’adresse d’enlèvement. Merci de le rejoindre.",
+      "shortBody": "Votre déménageur est arrivé à l’adresse d’enlèvement.",
+      "shortTitle": "Déménageur arrivé",
+      "title": "Votre déménageur est arrivé ! 🚛"
+    },
+    "arrivedDestination": {
+      "body": "Votre déménageur est arrivé à l’adresse de livraison.",
+      "shortBody": "Votre déménageur est arrivé à destination.",
+      "shortTitle": "Arrivé",
+      "title": "Arrivé à destination ! 🏠"
+    },
+    "cancelled": {
+      "shortBody": "Le déménageur a annulé ce déménagement.",
+      "shortTitle": "Déménagement annulé"
+    },
+    "completed": {
+      "body": "Votre déménagement s’est terminé avec succès.",
+      "shortBody": "Votre déménagement est terminé ! Laissez un avis.",
+      "shortTitle": "Déménagement terminé",
+      "title": "Déménagement terminé ! ✅"
+    },
+    "enRoute": {
+      "body": "Votre déménageur se dirige vers l’adresse d’enlèvement.",
+      "shortBody": "Votre déménageur est en route vers votre adresse d’enlèvement.",
+      "shortTitle": "Déménageur en route",
+      "title": "Le déménageur est en route ! 🚚"
+    },
+    "inTransit": {
+      "body": "Vos affaires sont en cours de transport vers la destination.",
+      "shortBody": "Vos affaires sont en route vers la destination.",
+      "shortTitle": "En transit",
+      "title": "En route ! 🛣️"
+    },
+    "loading": {
+      "body": "Votre déménageur a commencé à charger vos affaires.",
+      "shortBody": "Vos affaires sont en cours de chargement.",
+      "shortTitle": "Chargement commencé",
+      "title": "Chargement commencé 📦"
+    },
+    "paymentDue": {
+      "body": "Votre déménagement se termine — merci de procéder au paiement.",
+      "shortBody": "Votre déménagement est terminé — merci de confirmer le paiement.",
+      "shortTitle": "Paiement à effectuer",
+      "title": "Paiement à effectuer 💶"
+    },
+    "unloading": {
+      "body": "Vos affaires sont en cours de déchargement à destination.",
+      "shortBody": "Vos affaires sont en cours de déchargement.",
+      "shortTitle": "Déchargement",
+      "title": "Déchargement de vos affaires 📦"
+    },
+    "withdrawn": {
+      "body": "Le déménageur s’est retiré de votre déménagement. Celui-ci est de nouveau proposé à d’autres déménageurs.",
+      "title": "Déménageur retiré"
+    }
+  },
+  "order": {
+    "handle": {
+      "title": "Commande n° {{handle}}"
+    },
+    "item": {
+      "label": "{{qty}} × {{label}}"
+    },
+    "items": {
+      "empty": "Aucun article enregistré pour ce déménagement."
+    }
+  },
+  "payment": {
+    "amount": {
+      "label": "Montant à payer"
+    },
+    "cashNote": {
+      "body": "Payez le déménageur directement (espèces ou virement), puis appuyez sur <0>{{cta}}</0> ci-dessous. Le déménageur doit aussi confirmer la réception avant que le déménagement soit marqué comme terminé."
+    },
+    "confirm": {
+      "cta": "J’ai payé"
+    },
+    "method": {
+      "card": {
+        "label": "Carte"
+      },
+      "cash": {
+        "label": "Paiement à la livraison"
+      }
+    },
+    "payByCard": {
+      "cta": "Payer {{amount}} par carte"
+    }
+  },
+  "phase": {
+    "arrived": {
+      "subtitle": "Retrouvez-le à l’adresse d’enlèvement",
+      "title": "Votre déménageur est arrivé !"
+    },
+    "arrivedDestination": {
+      "subtitle": "Votre déménageur a atteint l’adresse de livraison",
+      "title": "Arrivé à destination !"
+    },
+    "awaitingAccept": {
+      "subtitle": "Votre demande a été envoyée. Le déménageur répondra sous peu.",
+      "title": "En attente de l’acceptation du déménageur"
+    },
+    "awaitingPayment": {
+      "subtitle": "Payez le déménageur et confirmez ci-dessous",
+      "title": "Déménagement terminé — Paiement requis"
+    },
+    "broadcasting": {
+      "subtitle": "Recherche du déménageur le plus proche"
+    },
+    "cancelled": {
+      "label": "Déménagement annulé",
+      "subtitle": "Annulé"
+    },
+    "cancelledByMover": {
+      "subtitle": "Annulé par le déménageur"
+    },
+    "completed": {
+      "label": "Déménagement terminé",
+      "title": "Déménagement terminé !"
+    },
+    "inTransit": {
+      "body": "Vos affaires sont en cours de transport",
+      "subtitle": "Vos affaires sont en cours de transport",
+      "title": "En route vers la destination"
+    },
+    "loading": {
+      "subtitle": "Vos affaires sont chargées dans le véhicule",
+      "title": "Chargement de vos affaires"
+    },
+    "moverArrived": {
+      "subtitle": "Retrouvez-le à l’adresse de départ",
+      "title": "Votre déménageur est arrivé !"
+    },
+    "moverEnRoute": {
+      "title": "Le déménageur est en route"
+    },
+    "paid": {
+      "subtitle": "En attente de la clôture par le déménageur",
+      "title": "Paiement reçu"
+    },
+    "unloading": {
+      "subtitle": "Vos affaires sont déchargées à destination",
+      "title": "Déchargement de vos affaires"
+    },
+    "waitingPriority": {
+      "subtitle": "Envoi de la demande à votre déménageur"
+    }
+  },
+  "pricing": {
+    "subtotal": {
+      "label": "Sous-total"
+    },
+    "total": {
+      "label": "Total"
+    }
+  },
+  "step": {
+    "completed": {
+      "label": "Déménagement terminé"
+    },
+    "inTransit": {
+      "label": "En transit"
+    },
+    "moverArrived": {
+      "label": "Déménageur au point de départ"
+    },
+    "moverAssigned": {
+      "label": "Déménageur assigné"
+    },
+    "moverEnRoute": {
+      "label": "Déménageur en route"
+    },
+    "orderPlaced": {
+      "label": "Commande passée"
+    }
+  }
+}

@@ -1,0 +1,328 @@
+{
+  "api": {
+    "admin": {
+      "awaitingApproval": "Yönetici hesabınız mevcut bir yöneticinin onayını bekliyor.",
+      "noProfile": "Bu hesap için yönetici profili bulunamadı.",
+      "notAuthorized": "Bu hesabın yönetici konsoluna erişim yetkisi yok.",
+      "suspended": "Yönetici erişiminiz askıya alındı. Başka bir yöneticiyle iletişime geçin."
+    },
+    "admins": {
+      "alreadyAdmin": "Bu kullanıcı zaten aktif bir yönetici.",
+      "invalidStatus": "Durum şunlardan biri olmalıdır: {{list}}",
+      "lastAdmin": "Bu, aktif olan son yönetici — kaldırmadan önce başka birini yönetici yapın.",
+      "notAnAdmin": "Bu hesap yönetici değil.",
+      "notFound": "Yönetici bulunamadı.",
+      "selfDemote": "Kendi yönetici erişiminizi kaldıramazsınız.",
+      "selfStatus": "Kendi yönetici durumunuzu değiştiremezsiniz.",
+      "userIdRequired": "Kullanıcı kimliği gereklidir.",
+      "userNotFound": "Kullanıcı bulunamadı."
+    },
+    "auth": {
+      "missingUserId": "Giriş tamamlanamadı. Lütfen tekrar deneyin.",
+      "noSession": "Aktif oturum yok. Lütfen tekrar giriş yapın.",
+      "sessionInitFailed": "Oturumunuz başlatılamadı. Lütfen tekrar deneyin."
+    },
+    "dac7": {
+      "exportBlocked_one": "{{count}} satıcının vergi numarası (TIN) eksik. Dışa aktarmadan önce KYC sürecini tamamlayın veya dahili inceleme kopyası için force=1 ile yeniden talep edin.",
+      "exportBlocked_other": "{{count}} satıcının vergi numarası (TIN) eksik. Dışa aktarmadan önce KYC sürecini tamamlayın veya dahili inceleme kopyası için force=1 ile yeniden talep edin.",
+      "invalidYear": "Geçersiz yıl"
+    },
+    "dispute": {
+      "invalidStatus": "Sonuç şunlardan biri olmalıdır: {{list}}",
+      "moveIdRequired": "Taşınma kimliği gereklidir."
+    },
+    "forbidden": "Bunu yapma yetkiniz yok.",
+    "functionFailed": {
+      "error": "{{functionId}} işlevi başarısız oldu ({{status}})"
+    },
+    "internal": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
+    "inventory": {
+      "categoryRequired": "Kategori gereklidir.",
+      "invalidMoveType": "moveTypeMinimum şunlardan biri olmalıdır: {{list}}",
+      "nameRequired": "Ad gereklidir.",
+      "notANonNegativeNumber": "{{field}} negatif olmayan bir sayı olmalıdır."
+    },
+    "invite": {
+      "accountClash": "Bu e-posta adresiyle bir hesap zaten var. Bunun yerine bir yöneticiden bu hesabı yetkilendirmesini isteyin.",
+      "alreadyAccepted": "Bu davet zaten kabul edildi. Bunun yerine yönetici hesabını askıya alın.",
+      "emailExists": "Bu e-posta adresinin zaten bir PickLT hesabı var. Davet göndermek yerine Kullanıcılar sayfasından yetkilendirin.",
+      "emailIsAdmin": "Bu e-posta adresi zaten bir yöneticiye ait.",
+      "expired": "Bu davetin süresi doldu. Bir yöneticiden yeni bağlantı isteyin.",
+      "idRequired": "Davet kimliği gereklidir.",
+      "invalidEmail": "Geçerli bir e-posta adresi girin.",
+      "invalidLink": "Bu davet bağlantısı geçerli değil.",
+      "loadFailed": "Bu davet yüklenemedi.",
+      "nameRequired": "Davet edilen kişinin ad ve soyadını girin.",
+      "notFound": "Davet bulunamadı.",
+      "passwordTooShort_one": "Şifre en az {{count}} karakter olmalıdır.",
+      "passwordTooShort_other": "Şifre en az {{count}} karakter olmalıdır.",
+      "revoked": "Bu davet iptal edildi.",
+      "signupFailed": "Kayıt tamamlanamadı.",
+      "used": "Bu davet daha önce kullanıldı."
+    },
+    "mover": {
+      "invalidStatus": "Yeni durum şunlardan biri olmalıdır: {{list}}",
+      "noLicensePhoto": "Kayıtlı ehliyet fotoğrafı yok.",
+      "notFound": "Nakliyeci bulunamadı.",
+      "reasonRequired": "Bir nakliyeciyi reddederken veya askıya alırken gerekçe belirtmelisiniz.",
+      "verifyFailed": "Doğrulama başarısız oldu (durum {{status}}). Lütfen tekrar deneyin."
+    },
+    "pricing": {
+      "commissionTooLarge": "{{label}} yüzde değil, bir kesirdir — %15 için 0.15 girin.",
+      "keyRequired": "key alanı gereklidir",
+      "negative": "{{label}} negatif olamaz.",
+      "notANumber": "{{label}} bir sayı olmalıdır.",
+      "ratioTooLarge": "{{label}} fazla büyük görünüyor — bu bir euro tutarı değil, bir orandır.",
+      "unknownKey": "Bilinmeyen fiyatlandırma anahtarı: {{key}}"
+    },
+    "unauthorized": "Oturumunuzun süresi doldu. Lütfen tekrar giriş yapın.",
+    "user": {
+      "blockedFlagRequired": "Engellendi/engel kaldırıldı değeri gereklidir.",
+      "notFound": "Kullanıcı bulunamadı.",
+      "selfBlock": "Kendi hesabınızı engelleyemezsiniz."
+    }
+  },
+  "appwrite": {
+    "generalArgumentInvalid": "Alanlardan biri geçersiz. Lütfen girdiğiniz bilgileri kontrol edin.",
+    "generalRateLimitExceeded": "Çok fazla deneme yapıldı. Lütfen biraz bekleyip tekrar deneyin.",
+    "passwordPersonalData": "Şifre kişisel bilgi içeremez.",
+    "passwordRecentlyUsed": "Bu şifre yakın zamanda kullanıldı. Lütfen başka bir şifre seçin.",
+    "phoneInvalid": "Telefon numarası biçimi geçersiz.",
+    "userAlreadyExists": "Bu e-posta ile bir hesap zaten var.",
+    "userInvalidCode": "Doğrulama kodu hatalı veya süresi dolmuş.",
+    "userInvalidCredentials": "E-posta veya şifre hatalı.",
+    "userNotFound": "Bu e-posta ile bir hesap bulunamadı.",
+    "userPhoneNotFound": "Kayıtlı telefon numarası yok. Devam etmek için bir numara ekleyin.",
+    "userSessionAlreadyExists": "Zaten giriş yaptınız.",
+    "userSessionNotFound": "Oturum süresi doldu. Lütfen tekrar giriş yapın.",
+    "userUnauthorized": "Yetkiniz yok. Lütfen tekrar giriş yapın."
+  },
+  "auth": {
+    "forbidden": "Erişim reddedildi",
+    "initSessionFailed": "Oturum başlatılamadı",
+    "noActiveSession": "Aktif oturum yok",
+    "noSession": {
+      "error": "Kimliği doğrulanmış kullanıcı yok"
+    },
+    "setPhoneFailed": "Telefon numarası kaydedilemedi",
+    "syncFailed": "Kullanıcı eşitlenemedi",
+    "unauthorized": "Yetkisiz erişim"
+  },
+  "call": {
+    "noPhoneNumber": "Bu taşıyıcı için kayıtlı telefon numarası yok."
+  },
+  "card": {
+    "add": {
+      "failed": "Kart eklenemedi. Tekrar deneyin.",
+      "initFailed": "Kart kurulumu başlatılamadı. Tekrar deneyin.",
+      "notSaved": "Kart kaydedilmedi. Tekrar deneyin."
+    },
+    "remove": {
+      "detachFailed": "Ödeme sağlayıcımız kartı kaldıramadı. Lütfen tekrar deneyin.",
+      "forbidden": "Bu kart hesabınıza ait değil.",
+      "internal": "Kart kaldırılırken bir sorun oluştu. Lütfen tekrar deneyin.",
+      "misconfigured": "Kart kaldırma işlemi geçici olarak kullanılamıyor. Lütfen daha sonra tekrar deneyin.",
+      "noStripeCustomer": "Hesabınız için ödeme profili bulunamadı.",
+      "paymentMethodNotFound": "Bu kart ödeme sağlayıcımızda artık mevcut değil.",
+      "unauthenticated": "Bu kartı kaldırmak için lütfen tekrar giriş yapın.",
+      "userNotFound": "Hesabınız yüklenemedi. Lütfen tekrar giriş yapın."
+    }
+  },
+  "crew": {
+    "fieldsRequired": "Ad ve telefon numarası gereklidir",
+    "memberNotFound": "Ekip üyesi bulunamadı",
+    "notOwner": {
+      "error": "Bu ekip üyesi size ait değil"
+    }
+  },
+  "generic": {
+    "fallback": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
+    "internal": "Sunucu hatası",
+    "retry": {
+      "body": "Lütfen tekrar deneyin.",
+      "error": "Bir şeyler ters gitti. Lütfen tekrar deneyin."
+    },
+    "saveFailed": "Kaydedilemedi",
+    "title": "Bir şeyler ters gitti",
+    "unknown": "Bilinmeyen hata"
+  },
+  "geo": {
+    "denied": {
+      "error": "Konum erişimi reddedildi. Lütfen tarayıcı ayarlarınızdan izin verin."
+    },
+    "unavailable": {
+      "error": "Konumunuz alınamadı. Lütfen tekrar deneyin."
+    },
+    "unsupported": {
+      "error": "Tarayıcınız konum hizmetlerini desteklemiyor"
+    }
+  },
+  "geocode": {
+    "searchFailed": "Konumlar getirilemedi"
+  },
+  "google": {
+    "cancelled": {
+      "error": "Google ile giriş iptal edildi."
+    },
+    "noCachedAccount": {
+      "error": "Kayıtlı Google hesabı bulunamadı."
+    },
+    "noCredentials": {
+      "error": "Google ile giriş başarılı oldu ancak sunucu kimlik bilgisi döndürmedi."
+    },
+    "noIdToken": {
+      "error": "Google ile giriş bir kimlik belirteci döndürmedi. Tekrar deneyin."
+    }
+  },
+  "instant": {
+    "moverUnavailable": {
+      "error": "Seçilen nakliyeci artık müsait değil"
+    },
+    "submitStage": {
+      "error": "Gönderim {{stage}} aşamasında başarısız oldu. Lütfen tekrar deneyin.",
+      "short": {
+        "error": "Gönderim {{stage}} aşamasında başarısız oldu"
+      }
+    }
+  },
+  "location": {
+    "unavailable": {
+      "error": "Konumunuz belirlenemedi."
+    }
+  },
+  "mapbox": {
+    "unreachable": {
+      "error": "Mapbox’a ulaşılamadı, bağlantınızı kontrol edin"
+    }
+  },
+  "message": {
+    "empty": "Mesaj boş",
+    "sendFailed": "Mesaj gönderilemedi. Lütfen tekrar deneyin.",
+    "tooLong": "Mesaj çok uzun. Sınır {{max}} karakter."
+  },
+  "move": {
+    "alreadyAssigned": "Bu taşınmaya zaten bir nakliyeci atanmış",
+    "cancelFailed": "Bu taşınma iptal edilemedi. Lütfen tekrar deneyin.",
+    "cancelRetry": "İptal edilemedi. Lütfen tekrar deneyin.",
+    "createFailed": "Taşınma oluşturulamadı",
+    "dateInPast": "Taşınma tarihi gelecekte olmalıdır",
+    "invalidTransition": "Bu durum güncellemesi bu taşınma için artık geçerli değil. Lütfen taşınmayı yeniden yükleyip tekrar deneyin.",
+    "loadFailed": "Taşınma bilgileri yüklenemedi",
+    "noLongerAcceptable": "Bu taşınma artık kabul edilemez. Durumu değişti — lütfen listeyi yenileyin.",
+    "notAssigned": "Bu taşınmaya atanmış değilsiniz",
+    "notAuthorized": "Bu taşınma için yetkiniz yok",
+    "notAvailable": "Bu taşınma kabul edilebilir durumda değil",
+    "notCancellable": "Bu taşınma artık iptal edilemez ({{stage}}). Eşyalarınız yola çıkmış olabilir — lütfen doğrudan nakliyecinizle iletişime geçin.",
+    "notCancellableUnknownStage": "Bu taşınma artık iptal edilemez. Eşyalarınız yola çıkmış olabilir — lütfen doğrudan nakliyecinizle iletişime geçin.",
+    "notFound": "Taşınma bulunamadı",
+    "notReschedulable": "Bu taşınmanın tarihi artık değiştirilemez. Durumu değişti — lütfen taşınmayı yeniden yükleyin.",
+    "rescheduleFailed": "Tarih değiştirilemedi",
+    "rescheduleRetry": "Tarih değiştirilemedi. Lütfen tekrar deneyin.",
+    "scheduledOnly": "Bu şekilde yalnızca planlı taşınmalar kabul edilebilir",
+    "statusUpdateFailed": "Durum güncellenemedi",
+    "tooEarly": "Bu taşınma, planlanan tarihinden önce başlatılamaz.",
+    "withdrawTooLate": "Taşınma başladıktan sonra geri çekilemezsiniz"
+  },
+  "mover": {
+    "acceptFailed": {
+      "error": "Taşınma kabul edilemedi"
+    },
+    "acceptRetry": "Taşınma kabul edilemedi. Lütfen tekrar deneyin.",
+    "clientCannotConvert": "Hesabınız müşteri hesabı olarak kayıtlı. Müşteri hesapları nakliyeci hesabına dönüştürülemez. Nakliyeci olarak kaydolmak için lütfen yeni bir hesap oluşturun.",
+    "earningsFetchFailed": "Kazanç bilgileri getirilemedi",
+    "earningsLoadFailed": "Kazanç bilgileri yüklenemedi",
+    "licenseUploadFailed": "Ehliyet fotoğrafı yüklenemedi",
+    "noLocation": "Konum bilgisi yok. Lütfen konum hizmetlerini açın veya konumunuzu güncelleyin.",
+    "notVerified": "Nakliyeci profiliniz henüz doğrulanmadı",
+    "notVerifiedPendingApproval": "Nakliyeci profiliniz henüz doğrulanmadı. Lütfen yönetici onayını bekleyin.",
+    "profileNotFound": "Nakliyeci profili bulunamadı",
+    "profileSubmitFailed": "Profil gönderilemedi",
+    "selfieRequired": "Kimlik doğrulaması için özçekim fotoğrafı gereklidir",
+    "selfieUploadFailed": "Özçekim fotoğrafı yüklenemedi",
+    "startRouteFailed": "Rota başlatılamadı",
+    "startRouteRetry": "Rota başlatılamadı. Lütfen tekrar deneyin.",
+    "withdrawFailed": "Taşınmadan geri çekilme işlemi başarısız oldu",
+    "withdrawRetry": "Geri çekilme işlemi başarısız oldu. Lütfen tekrar deneyin."
+  },
+  "movers": {
+    "fetchFailed": "Nakliyeciler getirilemedi",
+    "findFailed": "Nakliyeci bulunamadı"
+  },
+  "moves": {
+    "fetchFailed": "Taşınmalar getirilemedi",
+    "loadFailed": "Taşınmalar yüklenemedi",
+    "scheduledLoadFailed": "Planlı taşınmalar yüklenemedi"
+  },
+  "network": {
+    "generic": {
+      "error": "Ağ hatası. Lütfen tekrar deneyin."
+    },
+    "unreachable": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin."
+  },
+  "payment": {
+    "cardDeclined": "Kartınız reddedildi. Lütfen başka bir ödeme yöntemi deneyin.",
+    "charge": {
+      "failed": "Ödeme tamamlanamadı. Tekrar deneyin.",
+      "initFailed": "Ödeme başlatılamadı. Tekrar deneyin."
+    },
+    "confirmFailed": "Ödeme onaylanamadı",
+    "notAwaiting": "Bu taşınma için ödeme beklenmiyor. Lütfen taşınmayı yeniden yükleyip tekrar deneyin."
+  },
+  "profile": {
+    "emailChangeFailed": "E-posta adresi değiştirilemedi",
+    "emailTaken": "Bu e-posta adresi başka bir hesap tarafından kullanılıyor",
+    "nameUpdateFailed": "Ad güncellenemedi",
+    "phoneChangeFailed": "Telefon numarası değiştirilemedi",
+    "phoneTaken": "Bu telefon numarası başka bir hesap tarafından kullanılıyor"
+  },
+  "request": {
+    "moveMismatch": "Talep bu taşınmayla eşleşmiyor",
+    "notOwned": "Talep bu nakliyeciye ait değil",
+    "notPending": "Talep artık beklemede değil"
+  },
+  "review": {
+    "moveNotCompleted": "Taşınma tamamlanmadı",
+    "noMover": "Bu taşınmaya atanmış bir nakliyeci yok",
+    "ratingRange": "Puan 1 ile 5 arasında olmalıdır",
+    "submitFailed": "Değerlendirme gönderilemedi"
+  },
+  "tax": {
+    "listFailed": "Bildirimler yüklenemedi",
+    "pdfLoadFailed": "PDF yüklenemedi",
+    "pdfNotReady": "Bildirim PDF'i henüz hazır değil"
+  },
+  "taxDocs": {
+    "downloadFailed": {
+      "error": "Bildirim indirilemedi. Lütfen tekrar deneyin."
+    },
+    "pdfNotReady": {
+      "error": "Bildirim PDF'i henüz hazır değil"
+    }
+  },
+  "update": {
+    "failed": {
+      "title": "Güncellenemedi"
+    }
+  },
+  "upload": {
+    "failed": "Yükleme başarısız",
+    "noFile": "Dosya seçilmedi",
+    "notAnImage": "Lütfen bir görsel dosyası seçin",
+    "notAnImage2": "Dosya bir görsel olmalıdır",
+    "photoFailed": "Fotoğraf yüklenemedi",
+    "photosFailed": "Fotoğraflar yüklenemedi",
+    "tooLarge": "Görsel {{limit}} boyutunun altında olmalıdır"
+  },
+  "validation": {
+    "emailFormat": "Geçersiz e-posta biçimi",
+    "emailRequired": "E-posta adresi gereklidir",
+    "noFields": "Güncellenecek geçerli alan yok",
+    "phoneFormat": "Geçersiz telefon numarası. Uluslararası biçimi kullanın (örn. +491234567890)",
+    "phoneRequired2": "Telefon numarası gereklidir"
+  },
+  "vehicle": {
+    "fieldsRequired": "Lütfen zorunlu araç alanlarının tümünü doldurun",
+    "saveFailed": "Araç bilgileri kaydedilemedi",
+    "updateFailed": "Araç bilgileri güncellenemedi"
+  }
+}

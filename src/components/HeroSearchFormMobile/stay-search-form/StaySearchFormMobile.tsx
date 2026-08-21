@@ -1,23 +1,18 @@
 'use client'
 
 import { useMoveSearch } from '@/context/moveSearch'
-import T from '@/utils/getT'
 import Form from 'next/form'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import FieldPanelContainer from '../FieldPanelContainer'
 import LocationInput, { LocationSuggestion } from '../LocationInput'
 import MoveTypeInput from '../MoveTypeInput'
 
 type MoveTypeKey = 'light' | 'regular' | 'premium'
 
-const MOVE_TYPE_LABELS: Record<MoveTypeKey, string> = {
-  light: 'Light Move',
-  regular: 'Regular Move',
-  premium: 'Premium Move',
-}
-
 const StaySearchFormMobile = () => {
+  const { t } = useTranslation()
   const [fieldNameShow, setFieldNameShow] = useState<'pickupLocation' | 'dropoffLocation' | 'moveType'>('pickupLocation')
   const router = useRouter()
   const {
@@ -122,14 +117,14 @@ const StaySearchFormMobile = () => {
       {/* PICKUP LOCATION */}
       <FieldPanelContainer
         isActive={fieldNameShow === 'pickupLocation'}
-        headerMain="Pickup Location"
+        headerMain={t('booking:field.pickup.label')}
         headingOnClick={() => setFieldNameShow('pickupLocation')}
-        headingTitle="From"
-        headingValue={pickupLocationInput || 'Pickup location'}
+        headingTitle={t('web:search.from.label')}
+        headingValue={pickupLocationInput || t('booking:map.pickup.placeholder')}
       >
         <LocationInput
           defaultValue={pickupLocationInput}
-          headingText="Where are you moving from?"
+          headingText={t('web:search.pickup.placeholder')}
           imputName="pickupLocation"
           onChange={handlePickupChange}
         />
@@ -138,14 +133,14 @@ const StaySearchFormMobile = () => {
       {/* DROP-OFF LOCATION */}
       <FieldPanelContainer
         isActive={fieldNameShow === 'dropoffLocation'}
-        headerMain="Drop-off Location"
+        headerMain={t('booking:field.dropoff.label')}
         headingOnClick={() => setFieldNameShow('dropoffLocation')}
-        headingTitle="To"
-        headingValue={dropoffLocationInput || 'Drop-off location'}
+        headingTitle={t('web:search.to.label')}
+        headingValue={dropoffLocationInput || t('booking:map.dropoff.placeholder')}
       >
         <LocationInput
           defaultValue={dropoffLocationInput}
-          headingText="Where are you moving to?"
+          headingText={t('web:search.dropoff.placeholder')}
           imputName="dropoffLocation"
           onChange={handleDropoffChange}
         />
@@ -154,10 +149,15 @@ const StaySearchFormMobile = () => {
       {/* MOVE TYPE */}
       <FieldPanelContainer
         isActive={fieldNameShow === 'moveType'}
-        headerMain="Select the type of move"
+        headerMain={t('booking:moveType.selectHelper')}
         headingOnClick={() => setFieldNameShow('moveType')}
-        headingTitle="Move Type"
-        headingValue={moveType ? MOVE_TYPE_LABELS[moveType] : 'Select type'}
+        headingTitle={t('booking:field.moveType.label')}
+        headingValue={
+          moveType
+            ? // i18n-keys: booking:moveType.light.title, booking:moveType.regular.title, booking:moveType.premium.title
+              t(`booking:moveType.${moveType}.title`)
+            : t('booking:moveType.selectPlaceholder')
+        }
       >
         <MoveTypeInput
           defaultValue={moveType}

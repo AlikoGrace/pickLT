@@ -1,3 +1,4 @@
+import { getTranslations } from '@/lib/i18n-server'
 import { NextResponse } from 'next/server'
 import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
@@ -13,10 +14,11 @@ import { createAdminClient } from '@/lib/appwrite-server'
  * to trigger the OTP SMS via Twilio.
  */
 export async function POST(req: Request) {
+  const { t } = await getTranslations()
   try {
     const userId = await getSessionUserId()
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
     }
 
     const { phone } = await req.json()
@@ -36,7 +38,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: true })
   } catch (err: unknown) {
     console.error('[set-phone] Error:', err)
-    const message = err instanceof Error ? err.message : 'Failed to set phone'
+    const message = err instanceof Error ? err.message : t('errors:auth.setPhoneFailed')
     return NextResponse.json({ error: message }, { status: 500 })
   }
 }

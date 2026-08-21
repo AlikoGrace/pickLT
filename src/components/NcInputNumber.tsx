@@ -4,6 +4,7 @@ import ButtonCircle from '@/shared/ButtonCircle'
 import { Description, Field, Label } from '@/shared/fieldset'
 import { MinusIcon, PlusIcon } from '@heroicons/react/24/solid'
 import { FC, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface NcInputNumberProps {
   className?: string
@@ -28,6 +29,7 @@ const NcInputNumber: FC<NcInputNumberProps> = ({
   inputName = 'guest-number',
   inputId,
 }) => {
+  const { t } = useTranslation()
   const [value, setValue] = useState(defaultValue)
 
   useEffect(() => {
@@ -63,12 +65,24 @@ const NcInputNumber: FC<NcInputNumberProps> = ({
       )}
 
       <div className="flex min-w-28 items-center justify-between gap-2.5">
-        <ButtonCircle outline disabled={min >= value} onClick={handleClickDecrement} className="size-8!">
+        <ButtonCircle
+          outline
+          disabled={min >= value}
+          onClick={handleClickDecrement}
+          aria-label={t('common:action.decrement.a11y')}
+          className="size-8!"
+        >
           <MinusIcon className="size-4!" />
         </ButtonCircle>
         <span>{value}</span>
         <input type="hidden" name={inputName} id={inputId} value={value || 0} />
-        <ButtonCircle outline onClick={handleClickIncrement} disabled={max ? max <= value : false} className="size-8!">
+        <ButtonCircle
+          outline
+          onClick={handleClickIncrement}
+          disabled={max ? max <= value : false}
+          aria-label={t('common:action.increment.a11y')}
+          className="size-8!"
+        >
           <PlusIcon className="size-4!" />
         </ButtonCircle>
       </div>

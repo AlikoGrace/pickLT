@@ -14,51 +14,28 @@ import Form from 'next/form'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
+import { formatFileSizeMb } from '@/lib/format'
+import { UPLOAD_MAX_MB } from '@/lib/service-limits'
 
-const ADDITIONAL_SERVICES: { id: AdditionalService; label: string; description: string }[] = [
-  {
-    id: 'furniture_disassembly',
-    label: 'Furniture disassembly',
-    description: 'We disassemble beds, wardrobes, tables before loading',
-  },
-  {
-    id: 'furniture_assembly',
-    label: 'Furniture assembly',
-    description: 'We reassemble furniture at the new location',
-  },
-  {
-    id: 'tv_mount_remove',
-    label: 'TV mount / remove',
-    description: 'Mount or remove wall-mounted TVs',
-  },
-  {
-    id: 'appliance_disconnect',
-    label: 'Appliance disconnect',
-    description: 'Disconnect washing machine, dishwasher, dryer',
-  },
-  {
-    id: 'appliance_connect',
-    label: 'Appliance connect',
-    description: 'Reconnect appliances at the new address',
-  },
-  {
-    id: 'disposal_entsorgung',
-    label: 'Disposal (Entsorgung)',
-    description: 'Dispose of unwanted furniture and items',
-  },
-  {
-    id: 'moveout_cleaning',
-    label: 'Move-out cleaning',
-    description: 'Professional cleaning of your old apartment',
-  },
-  {
-    id: 'temporary_storage',
-    label: 'Temporary storage',
-    description: 'Store items securely between moves',
-  },
+/**
+ * `id` is the persisted value and never changes. `key` is the catalog segment —
+ * the ids carry `_`, which i18next reserves for plural suffixes (§ 2), so the
+ * two cannot be the same string.
+ */
+const ADDITIONAL_SERVICES: { id: AdditionalService; key: string }[] = [
+  { id: 'furniture_disassembly', key: 'disassembly' },
+  { id: 'furniture_assembly', key: 'assembly' },
+  { id: 'tv_mount_remove', key: 'tvMount' },
+  { id: 'appliance_disconnect', key: 'applianceDisconnect' },
+  { id: 'appliance_connect', key: 'applianceConnect' },
+  { id: 'disposal_entsorgung', key: 'disposal' },
+  { id: 'moveout_cleaning', key: 'cleaning' },
+  { id: 'temporary_storage', key: 'storage' },
 ]
 
 const Page = () => {
+  const { t } = useTranslation()
   const router = useRouter()
   const coverInputRef = useRef<HTMLInputElement>(null)
   const galleryInputRef = useRef<HTMLInputElement>(null)
@@ -122,9 +99,9 @@ const Page = () => {
   return (
     <>
       <div>
-        <h2 className="text-2xl font-semibold">Additional services & photos</h2>
+        <h2 className="text-2xl font-semibold">{t('web:wizard.step6.title')}</h2>
         <span className="mt-2 block text-neutral-500 dark:text-neutral-400">
-          Select extra services and upload photos of items to be moved.
+          {t('web:wizard.step6.subtitle')}
         </span>
       </div>
 
@@ -133,16 +110,16 @@ const Page = () => {
       <Form id="add-listing-form" action={handleSubmitForm} className="flex flex-col gap-y-8">
         {/* Cover Photo Upload */}
         <div>
-          <span className="text-lg font-semibold">Cover photo</span>
+          <span className="text-lg font-semibold">{t('booking:photos.main.label')}</span>
           <span className="mt-1 block text-sm text-neutral-500 dark:text-neutral-400">
-            Upload a main photo showing your items or space
+            {t('booking:photos.main.helper')}
           </span>
           <div className="mt-5">
             {coverPhotoId ? (
               <div className="relative rounded-2xl overflow-hidden">
                 <Image
                   src={coverPhotoId}
-                  alt="Cover photo"
+                  alt={t('booking:photos.main.a11y')}
                   width={600}
                   height={400}
                   className="w-full h-64 object-cover"
@@ -172,7 +149,7 @@ const Page = () => {
                       htmlFor="cover-upload"
                       className="relative cursor-pointer rounded-md font-medium text-primary-600 focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 focus-within:outline-hidden hover:text-primary-500"
                     >
-                      <span>Upload a file</span>
+                      <span>{t('common:upload.file.cta')}</span>
                       <input
                         ref={coverInputRef}
                         id="cover-upload"
@@ -183,10 +160,10 @@ const Page = () => {
                         onChange={handleCoverPhotoChange}
                       />
                     </label>
-                    <p className="ps-1">or drag and drop</p>
+                    <p className="ps-1">{t('common:upload.dragDrop.label')}</p>
                   </div>
                   <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                    PNG, JPG, GIF up to 10MB
+                    {t('common:upload.constraints.helper', { limit: formatFileSizeMb(UPLOAD_MAX_MB) })}
                   </p>
                 </div>
               </div>
@@ -196,9 +173,9 @@ const Page = () => {
 
         {/* Gallery Photos Upload */}
         <div>
-          <span className="text-lg font-semibold">Gallery photos</span>
+          <span className="text-lg font-semibold">{t('booking:photos.gallery.label')}</span>
           <span className="mt-1 block text-sm text-neutral-500 dark:text-neutral-400">
-            Upload additional photos of furniture, rooms, or items
+            {t('booking:photos.gallery.helper')}
           </span>
           <div className="mt-5">
             {galleryPhotoIds.length > 0 && (
@@ -207,7 +184,7 @@ const Page = () => {
                   <div key={index} className="relative rounded-xl overflow-hidden">
                     <Image
                       src={photo}
-                      alt={`Gallery photo ${index + 1}`}
+                      alt={t('booking:photos.gallery.item.a11y', { index: index + 1 })}
                       width={200}
                       height={150}
                       className="w-full h-32 object-cover"
@@ -239,7 +216,7 @@ const Page = () => {
                     htmlFor="gallery-upload"
                     className="relative cursor-pointer rounded-md font-medium text-primary-600 focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 focus-within:outline-hidden hover:text-primary-500"
                   >
-                    <span>Upload files</span>
+                    <span>{t('common:upload.files.cta')}</span>
                     <input
                       ref={galleryInputRef}
                       id="gallery-upload"
@@ -251,10 +228,10 @@ const Page = () => {
                       onChange={handleGalleryPhotosChange}
                     />
                   </label>
-                  <p className="ps-1">or drag and drop</p>
+                  <p className="ps-1">{t('common:upload.dragDrop.label')}</p>
                 </div>
                 <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                  PNG, JPG, GIF up to 10MB
+                  {t('common:upload.constraints.helper', { limit: formatFileSizeMb(UPLOAD_MAX_MB) })}
                 </p>
               </div>
             </div>
@@ -265,9 +242,9 @@ const Page = () => {
 
         {/* Additional Services Checkboxes */}
         <div>
-          <span className="text-lg font-semibold">Additional services</span>
+          <span className="text-lg font-semibold">{t('booking:services.title')}</span>
           <span className="mt-1 block text-sm text-neutral-500 dark:text-neutral-400">
-            These are standard offerings from German movers.
+            {t('web:wizard.step6.services.helper')}
           </span>
           <Fieldset className="mt-4">
             <CheckboxGroup className="space-y-4">
@@ -278,10 +255,14 @@ const Page = () => {
                     checked={additionalServices.includes(service.id)}
                     onChange={() => toggleAdditionalService(service.id)}
                   />
+                  {/* i18n-keys: booking.service.disassembly.label, booking.service.assembly.label,
+                      booking.service.tvMount.label, booking.service.applianceDisconnect.label,
+                      booking.service.applianceConnect.label, booking.service.disposal.label,
+                      booking.service.cleaning.label, booking.service.storage.label (+ .helper each) */}
                   <Label className="flex flex-col">
-                    <span className="font-medium">{service.label}</span>
+                    <span className="font-medium">{t(`booking:service.${service.key}.label`)}</span>
                     <span className="text-sm text-neutral-500 dark:text-neutral-400">
-                      {service.description}
+                      {t(`booking:service.${service.key}.helper`)}
                     </span>
                   </Label>
                 </CheckboxField>
@@ -295,18 +276,18 @@ const Page = () => {
           <>
             <Divider />
             <div className="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-2xl border border-neutral-200 dark:border-neutral-700">
-              <p className="text-lg font-semibold mb-4">Storage details</p>
+              <p className="text-lg font-semibold mb-4">{t('booking:storage.title')}</p>
               <NcInputNumber
                 inputName="storageWeeks"
                 inputId="storageWeeks"
-                label="How many weeks of storage?"
+                label={t('booking:storage.weeks.label')}
                 defaultValue={storageWeeks}
                 min={1}
                 max={52}
                 onChange={(value) => setStorageWeeks(value)}
               />
               <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
-                Standard storage units are climate-controlled and insured.
+                {t('booking:storage.helper')}
               </p>
             </div>
           </>
@@ -317,14 +298,14 @@ const Page = () => {
           <>
             <Divider />
             <div className="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-2xl border border-neutral-200 dark:border-neutral-700">
-              <p className="text-lg font-semibold">Items for disposal</p>
+              <p className="text-lg font-semibold">{t('booking:disposal.title')}</p>
               <span className="mt-1 block text-sm text-neutral-500 dark:text-neutral-400">
-                List the furniture or items you want us to dispose of.
+                {t('booking:disposal.helper')}
               </span>
               <div className="mt-4">
                 <Textarea
                   name="disposalItems"
-                  placeholder="e.g., Old sofa, broken bookshelf, mattress..."
+                  placeholder={t('booking:disposal.placeholder')}
                   value={disposalItems}
                   onChange={(e) => setDisposalItems(e.target.value)}
                   rows={3}

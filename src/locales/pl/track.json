@@ -1,0 +1,297 @@
+{
+  "action": {
+    "trackLive": {
+      "cta": "Śledź przeprowadzkę na żywo"
+    }
+  },
+  "address": {
+    "dropoff": {
+      "title": "Adres dostawy"
+    },
+    "floor": {
+      "label": "Piętro {{floor}}"
+    },
+    "floorWithElevator": {
+      "label": "Piętro {{floor}} · winda"
+    },
+    "pickup": {
+      "title": "Adres odbioru"
+    }
+  },
+  "banner": {
+    "accepted": "Przewoźnik przyjął Twoją przeprowadzkę! Wkrótce ruszy w trasę.",
+    "awaitingAccept": "Czekamy, aż przewoźnik przyjmie Twoją przeprowadzkę…"
+  },
+  "eta": {
+    "assigned": {
+      "label": "Szacowany czas przyjazdu"
+    },
+    "distanceAway": {
+      "label": "{{distance}} stąd"
+    },
+    "minutes": {
+      "label_few": "{{count}} min",
+      "label_many": "{{count}} min",
+      "label_one": "{{count}} min",
+      "label_other": "{{count}} min"
+    },
+    "moverArriving": {
+      "label": "Przewoźnik w drodze"
+    },
+    "moverQueued": {
+      "body": "Kończy inne zlecenie",
+      "footnote": "Ruszy do Ciebie, gdy tylko skończy.",
+      "label": "Przewoźnik przydzielony"
+    }
+  },
+  "hint": {
+    "arrivedDestination": "Na miejscu! Rozładunek rozpocznie się za chwilę.",
+    "inTransit": "Jazda na miejsce docelowe…",
+    "loading": "Trwa załadunek Twoich rzeczy…",
+    "loadingSoon": "Przewoźnik wkrótce rozpocznie załadunek",
+    "unloading": "Trwa rozładunek Twoich rzeczy…"
+  },
+  "live": {
+    "helper": "Twój przewoźnik jest w akcji — śledź postęp na żywo"
+  },
+  "map": {
+    "dropoffPin": {
+      "label": "D"
+    },
+    "pickupPin": {
+      "label": "O"
+    }
+  },
+  "mover": {
+    "cancelled": {
+      "searching": "Przewoźnik anulował. Szukamy innego przewoźnika…"
+    },
+    "moveCount": {
+      "label_few": "{{count}} przeprowadzki",
+      "label_many": "{{count}} przeprowadzek",
+      "label_one": "{{count}} przeprowadzka",
+      "label_other": "{{count}} przeprowadzki"
+    },
+    "noPhone": {
+      "error": "Numer telefonu przewoźnika jest niedostępny"
+    }
+  },
+  "moverPhase": {
+    "atDropoff": {
+      "subtitle": "Jesteś na miejscu docelowym",
+      "title": "Na miejscu dostawy"
+    },
+    "atPickup": {
+      "subtitle": "Jesteś na miejscu. Rozpocznij załadunek.",
+      "title": "Na miejscu odbioru"
+    },
+    "awaitingPayment": {
+      "subtitle": "Czekamy na potwierdzenie płatności",
+      "title": "Oczekiwanie na płatność"
+    },
+    "completed": {
+      "subtitle": "Przeprowadzka zakończona pomyślnie!",
+      "title": "Zakończona"
+    },
+    "enRoute": {
+      "subtitle": "Jedź pod adres odbioru",
+      "title": "W drodze do odbioru"
+    },
+    "inTransit": {
+      "subtitle": "Jazda pod adres dostawy",
+      "title": "W trasie"
+    },
+    "loading": {
+      "subtitle": "Załadunek rzeczy do pojazdu",
+      "title": "Załadunek"
+    },
+    "unloading": {
+      "subtitle": "Rozładunek rzeczy na miejscu docelowym",
+      "title": "Rozładunek"
+    }
+  },
+  "notify": {
+    "accepted": {
+      "body": "Przewoźnik przyjął Twoją zaplanowaną przeprowadzkę. Wkrótce ruszy w trasę.",
+      "shortBody": "Przewoźnik przyjął Twoje zlecenie przeprowadzki!",
+      "shortTitle": "Przewoźnik potwierdził",
+      "title": "Przewoźnik przyjął Twoją przeprowadzkę! ✅"
+    },
+    "arrived": {
+      "body": "Twój przewoźnik dotarł pod adres odbioru. Spotkaj się z nim na miejscu.",
+      "shortBody": "Twój przewoźnik dotarł pod adres odbioru.",
+      "shortTitle": "Przewoźnik na miejscu",
+      "title": "Twój przewoźnik dotarł na miejsce! 🚛"
+    },
+    "arrivedDestination": {
+      "body": "Twój przewoźnik dotarł pod adres dostawy.",
+      "shortBody": "Twój przewoźnik dotarł na miejsce docelowe.",
+      "shortTitle": "Na miejscu docelowym",
+      "title": "Na miejscu docelowym! 🏠"
+    },
+    "cancelled": {
+      "shortBody": "Przewoźnik anulował tę przeprowadzkę.",
+      "shortTitle": "Przeprowadzka anulowana"
+    },
+    "completed": {
+      "body": "Twoja przeprowadzka została pomyślnie zakończona.",
+      "shortBody": "Twoja przeprowadzka została zakończona! Wystaw opinię.",
+      "shortTitle": "Przeprowadzka zakończona",
+      "title": "Przeprowadzka zakończona! ✅"
+    },
+    "enRoute": {
+      "body": "Twój przewoźnik jedzie pod adres odbioru.",
+      "shortBody": "Twój przewoźnik jest w drodze pod Twój adres odbioru.",
+      "shortTitle": "Przewoźnik w drodze",
+      "title": "Przewoźnik jest w drodze! 🚚"
+    },
+    "inTransit": {
+      "body": "Twoje rzeczy są transportowane na miejsce docelowe.",
+      "shortBody": "Twoje rzeczy są w drodze na miejsce docelowe.",
+      "shortTitle": "W trasie",
+      "title": "W drodze! 🛣️"
+    },
+    "loading": {
+      "body": "Twój przewoźnik rozpoczął załadunek Twoich rzeczy.",
+      "shortBody": "Trwa załadunek Twoich rzeczy.",
+      "shortTitle": "Rozpoczęto załadunek",
+      "title": "Rozpoczęto załadunek 📦"
+    },
+    "paymentDue": {
+      "body": "Twoja przeprowadzka dobiega końca — dokończ płatność.",
+      "shortBody": "Twoja przeprowadzka jest zakończona — potwierdź płatność.",
+      "shortTitle": "Płatność do uregulowania",
+      "title": "Płatność do uregulowania 💶"
+    },
+    "unloading": {
+      "body": "Twoje rzeczy są rozładowywane na miejscu docelowym.",
+      "shortBody": "Trwa rozładunek Twoich rzeczy.",
+      "shortTitle": "Rozładunek",
+      "title": "Rozładunek Twoich rzeczy 📦"
+    },
+    "withdrawn": {
+      "body": "Przewoźnik wycofał się z Twojej przeprowadzki. Jest ona teraz dostępna dla innych przewoźników.",
+      "title": "Przewoźnik się wycofał"
+    }
+  },
+  "order": {
+    "handle": {
+      "title": "Zamówienie nr {{handle}}"
+    },
+    "item": {
+      "label": "{{qty}} × {{label}}"
+    },
+    "items": {
+      "empty": "Brak zapisanych rzeczy dla tej przeprowadzki."
+    }
+  },
+  "payment": {
+    "amount": {
+      "label": "Kwota do zapłaty"
+    },
+    "cashNote": {
+      "body": "Zapłać przewoźnikowi bezpośrednio (gotówką lub przelewem), a następnie dotknij <0>{{cta}}</0> poniżej. Przewoźnik musi też potwierdzić otrzymanie zapłaty, zanim przeprowadzka zostanie oznaczona jako zakończona."
+    },
+    "confirm": {
+      "cta": "Zapłaciłem"
+    },
+    "method": {
+      "card": {
+        "label": "Karta"
+      },
+      "cash": {
+        "label": "Płatność przy odbiorze"
+      }
+    },
+    "payByCard": {
+      "cta": "Zapłać {{amount}} kartą"
+    }
+  },
+  "phase": {
+    "arrived": {
+      "subtitle": "Spotkaj się z nim pod adresem odbioru",
+      "title": "Twój przewoźnik dotarł na miejsce!"
+    },
+    "arrivedDestination": {
+      "subtitle": "Przewoźnik dotarł pod adres dostawy",
+      "title": "Na miejscu docelowym!"
+    },
+    "awaitingAccept": {
+      "subtitle": "Twoje zlecenie zostało wysłane. Przewoźnik wkrótce odpowie.",
+      "title": "Czekamy na potwierdzenie przewoźnika"
+    },
+    "awaitingPayment": {
+      "subtitle": "Zapłać przewoźnikowi i potwierdź poniżej",
+      "title": "Przeprowadzka zakończona — wymagana płatność"
+    },
+    "broadcasting": {
+      "subtitle": "Szukamy najbliższego przewoźnika"
+    },
+    "cancelled": {
+      "label": "Przeprowadzka anulowana",
+      "subtitle": "Anulowana"
+    },
+    "cancelledByMover": {
+      "subtitle": "Anulowana przez przewoźnika"
+    },
+    "completed": {
+      "label": "Przeprowadzka zakończona",
+      "title": "Przeprowadzka zakończona!"
+    },
+    "inTransit": {
+      "body": "Twoje rzeczy są transportowane",
+      "subtitle": "Twoje rzeczy są w transporcie",
+      "title": "W drodze do celu"
+    },
+    "loading": {
+      "subtitle": "Twoje rzeczy są ładowane do pojazdu",
+      "title": "Załadunek Twoich rzeczy"
+    },
+    "moverArrived": {
+      "subtitle": "Spotkaj się z nim pod adresem odbioru",
+      "title": "Przewoźnik dotarł na miejsce!"
+    },
+    "moverEnRoute": {
+      "title": "Przewoźnik jest w drodze"
+    },
+    "paid": {
+      "subtitle": "Czekamy, aż przewoźnik zamknie przeprowadzkę",
+      "title": "Płatność otrzymana"
+    },
+    "unloading": {
+      "subtitle": "Twoje rzeczy są rozładowywane na miejscu",
+      "title": "Rozładunek Twoich rzeczy"
+    },
+    "waitingPriority": {
+      "subtitle": "Wysyłamy prośbę do Twojego przewoźnika"
+    }
+  },
+  "pricing": {
+    "subtotal": {
+      "label": "Suma częściowa"
+    },
+    "total": {
+      "label": "Razem"
+    }
+  },
+  "step": {
+    "completed": {
+      "label": "Przeprowadzka zakończona"
+    },
+    "inTransit": {
+      "label": "W trasie"
+    },
+    "moverArrived": {
+      "label": "Przewoźnik pod adresem odbioru"
+    },
+    "moverAssigned": {
+      "label": "Przewoźnik przydzielony"
+    },
+    "moverEnRoute": {
+      "label": "Przewoźnik w drodze"
+    },
+    "orderPlaced": {
+      "label": "Zamówienie złożone"
+    }
+  }
+}

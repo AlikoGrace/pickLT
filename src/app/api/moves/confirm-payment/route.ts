@@ -1,3 +1,4 @@
+import { getTranslations } from '@/lib/i18n-server'
 import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
@@ -15,10 +16,11 @@ import { NextRequest, NextResponse } from 'next/server'
  * the move transitions to 'completed', and mover stats are updated.
  */
 export async function POST(request: NextRequest) {
+  const { t } = await getTranslations()
   try {
     const userId = await getSessionUserId()
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
     }
 
     const { moveId } = await request.json()
@@ -38,13 +40,13 @@ export async function POST(request: NextRequest) {
     // Verify the client owns this move
     const clientId = typeof move.clientId === 'string' ? move.clientId : move.clientId?.$id
     if (clientId !== userId) {
-      return NextResponse.json({ error: 'Not authorized for this move' }, { status: 403 })
+      return NextResponse.json({ error: t('errors:move.notAuthorized') }, { status: 403 })
     }
 
     // Move must be in awaiting_payment status
     if (move.status !== 'awaiting_payment') {
       return NextResponse.json(
-        { error: `Move is not awaiting payment (current: ${move.status})` },
+        { error: t('errors:payment.notAwaiting') },
         { status: 400 }
       )
     }
@@ -149,6 +151,7 @@ export async function POST(request: NextRequest) {
           title: 'Move Completed',
           body: 'Your move has been completed! Please leave a review.',
           data: { moveId, handle: move.handle, status: 'completed' },
+          i18n: { key: 'status.completed', params: { handle: move.handle ?? '' } },
         })
       }
 
@@ -162,10 +165,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       paymentStatus: 'pending',
-      message: 'Client payment confirmed. Waiting for mover confirmation.',
+      message: t('booking:payment.clientConfirmed.success'),
     })
   } catch (error) {
     console.error('POST /api/moves/confirm-payment error:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: t('errors:generic.internal') }, { status: 500 })
   }
 }

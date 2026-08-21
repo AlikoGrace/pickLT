@@ -4,7 +4,6 @@ import HomeAuthBanner from '@/components/HomeAuthBanner'
 import HeroSectionWithSearchForm1 from '@/components/hero-sections/HeroSectionWithSearchForm1'
 import HeroSearchForm from '@/components/HeroSearchForm/HeroSearchForm'
 import SectionBecomeAnAuthor from '@/components/SectionBecomeAnAuthor'
-import SectionClientSay from '@/components/SectionClientSay'
 import SectionGridAuthorBox from '@/components/SectionGridAuthorBox'
 import SectionGridCategoryBox from '@/components/SectionGridCategoryBox'
 import SectionGridFeaturePlaces from '@/components/SectionGridFeaturePlaces'
@@ -19,14 +18,20 @@ import heroImage from '@/images/hero-right.png'
 import ButtonPrimary from '@/shared/ButtonPrimary'
 import { Divider } from '@/shared/divider'
 import HeadingWithSub from '@/shared/Heading'
+import { getTranslations } from '@/lib/i18n-server'
 import { Metadata } from 'next'
 
-export const metadata: Metadata = {
-  title: 'Home',
-  description: 'Home page of the Stay application',
+// § 7.8 — module-scope `metadata` cannot read the request locale.
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getTranslations()
+  return {
+    title: t('web:seo.home.title'),
+    description: t('web:seo.home.description'),
+  }
 }
 
 async function Page() {
+  const { t } = await getTranslations()
   const categories = await getStayCategories()
   const authors = await getAuthors()
 
@@ -35,15 +40,15 @@ async function Page() {
       <BgGlassmorphism />
       <div className="relative container mb-24 flex flex-col gap-y-24 lg:mb-28 lg:gap-y-32">
         <HeroSectionWithSearchForm1
-          heading="A stress-free move, every time."
+          heading={t('web:home.hero.title')}
           image={heroImage}
-          imageAlt="hero"
+          imageAlt={t('web:home.hero.imageAlt')}
           searchForm={<HeroSearchForm initTab="Stays" />}
           banner={<HomeAuthBanner />}
           description={
             <>
               <p className="max-w-xl text-base text-neutral-500 sm:text-xl dark:text-neutral-400">
-                Trusted movers for life’s big moments.
+                {t('web:home.hero.subtitle')}
               </p>
               {/* <ButtonPrimary href={'/add-listing/1'} className="sm:text-base/normal">
                 Start booking move
@@ -96,9 +101,6 @@ async function Page() {
           />
         </div> */}
         {/* <SectionVideos /> */}
-        <div className="relative py-16">
-          <SectionClientSay />
-        </div>
       </div>
     </main>
   )

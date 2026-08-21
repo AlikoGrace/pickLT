@@ -19,57 +19,25 @@ import { RefObject, useCallback, useEffect, useRef } from 'react'
 import { useIntersection } from 'react-use'
 import { useAside } from './aside'
 import { useAuth } from '@/context/auth'
+import { useTranslation } from 'react-i18next'
 
-// Client navigation items — matches the client-side pages
+// § 7.6 — these were module-scope label arrays, which freeze at import and
+// keep the boot language after a switch. They now carry a stable `id`; the
+// caption is looked up during render, and `id` is what the code compares on.
 const CLIENT_NAV = [
-  {
-    name: 'Home',
-    link: '/',
-    icon: HomeIcon,
-  },
-  {
-    name: 'Scheduled',
-    link: '/my-scheduled-moves',
-    icon: CalendarDaysIcon,
-  },
-  {
-    name: 'My Moves',
-    link: '/account-savelists',
-    icon: ClipboardDocumentListIcon,
-  },
-  {
-    name: 'Account',
-    link: '/account',
-    icon: UserCircleIcon,
-  },
+  { id: 'home', labelKey: 'web:nav.home.label', link: '/', icon: HomeIcon },
+  { id: 'scheduled', labelKey: 'web:nav.scheduled.label', link: '/my-scheduled-moves', icon: CalendarDaysIcon },
+  { id: 'myMoves', labelKey: 'web:nav.myMoves.label', link: '/account-savelists', icon: ClipboardDocumentListIcon },
+  { id: 'account', labelKey: 'web:nav.account.label', link: '/account', icon: UserCircleIcon },
 ]
 
 // Mover navigation items
 const MOVER_NAV = [
-  {
-    name: 'Dashboard',
-    link: '/dashboard',
-    icon: HomeIcon,
-  },
-  {
-    name: 'Moves',
-    link: '/available-moves',
-    icon: TruckIcon,
-  },
-  {
-    name: 'My Crew',
-    link: '/my-crew',
-    icon: UsersIcon,
-  },
-  {
-    name: 'Earnings',
-    link: '/earnings',
-    icon: CurrencyEuroIcon,
-  },
-  {
-    name: 'Menu',
-    icon: Bars3Icon,
-  },
+  { id: 'dashboard', labelKey: 'web:nav.dashboard.label', link: '/dashboard', icon: HomeIcon },
+  { id: 'moves', labelKey: 'web:nav.moves.label', link: '/available-moves', icon: TruckIcon },
+  { id: 'myCrew', labelKey: 'web:nav.myCrew.label', link: '/my-crew', icon: UsersIcon },
+  { id: 'earnings', labelKey: 'web:nav.earnings.label', link: '/earnings', icon: CurrencyEuroIcon },
+  { id: 'menu', labelKey: 'common:nav.menu.label', link: undefined as string | undefined, icon: Bars3Icon },
 ]
 const SCROLL_THRESHOLD = 80
 
@@ -84,6 +52,7 @@ const HIDDEN_PATHS = [
 ]
 
 const FooterQuickNavigation = () => {
+  const { t } = useTranslation()
   const containerRef = useRef<HTMLDivElement>(null)
   const rafId = useRef<number | null>(null)
   const lastScrollY = useRef<number>(0)
@@ -98,7 +67,13 @@ const FooterQuickNavigation = () => {
   const isInViewport = intersection && intersection.intersectionRatio >= 1
 
   // Determine which nav items to show based on user type
-  const navItems = user?.userType === 'mover' ? MOVER_NAV : CLIENT_NAV
+  const navItems = (user?.userType === 'mover' ? MOVER_NAV : CLIENT_NAV).map((item) => ({
+    ...item,
+    // i18n-keys: web.nav.home.label, web.nav.scheduled.label, web.nav.myMoves.label,
+    // web.nav.account.label, web.nav.dashboard.label, web.nav.moves.label,
+    // web.nav.myCrew.label, web.nav.earnings.label, common.nav.menu.label
+    name: t(item.labelKey),
+  }))
 
   // Hide navigation on move booking flow pages
   const isBookingFlow = HIDDEN_PATHS.some((path) => pathname.startsWith(path))
@@ -162,11 +137,11 @@ const FooterQuickNavigation = () => {
             : pathname === item.link
           return item.link ? (
             <Link
-              key={item.name}
+              key={item.id}
               href={item.link}
               tabIndex={0}
               role="menuitem"
-              aria-label={`Navigate to ${item.name}`}
+              aria-label={t('web:nav.navigateTo.a11y', { name: item.name })}
               className={clsx(
                 '-mx-2 flex flex-col items-center justify-between px-2 text-neutral-500 dark:text-neutral-300',
                 isActive && 'text-red-600'
@@ -177,16 +152,16 @@ const FooterQuickNavigation = () => {
             </Link>
           ) : (
             <div
-              key={item.name}
+              key={item.id}
               role="menuitem"
               tabIndex={0}
-              aria-label={`Open menu`}
+              aria-label={t('common:nav.openMenu.a11y')}
               className={clsx(
                 '-mx-2 flex cursor-pointer flex-col items-center justify-between px-2 text-neutral-500 dark:text-neutral-300',
                 isActive && 'text-red-600'
               )}
               onClick={() => {
-                if (item.name === 'Menu') {
+                if (item.id === 'menu') {
                   openAside('sidebar-navigation')
                 }
               }}

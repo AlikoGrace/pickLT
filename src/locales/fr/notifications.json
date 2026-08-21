@@ -1,0 +1,147 @@
+{
+  "cancel": {
+    "byClient": {
+      "body": "Le client a annulé le déménagement.",
+      "bodyWithHandle": "Le client a annulé le déménagement {{handle}}.",
+      "title": "Déménagement annulé"
+    },
+    "reassigning": {
+      "body": "Votre déménageur a dû renoncer à votre déménagement. Nous le proposons à d’autres déménageurs à proximité.",
+      "bodyWithHandle": "Votre déménageur a dû renoncer au déménagement {{handle}}. Nous le proposons à d’autres déménageurs à proximité.",
+      "title": "Recherche d’un autre déménageur"
+    }
+  },
+  "message": {
+    "new": {
+      "title": "Nouveau message"
+    }
+  },
+  "payment": {
+    "clientCharged": {
+      "body": "Votre paiement de {{amount}} a été traité. Votre réservation est confirmée !",
+      "title": "Paiement confirmé"
+    },
+    "clientConfirmed": {
+      "body": "Le client a marqué ce déménagement comme payé. Confirmez de votre côté pour le clôturer.",
+      "title": "Le client a confirmé le paiement"
+    },
+    "confirmYours": {
+      "body": "Votre déménageur a confirmé le paiement. Confirmez de votre côté pour terminer le déménagement.",
+      "title": "Confirmez votre paiement"
+    },
+    "moverPaid": {
+      "body": "Vous avez reçu {{amount}}.",
+      "bodyWithHandle": "Vous avez reçu {{amount}} pour le déménagement {{handle}}.",
+      "title": "Paiement reçu"
+    }
+  },
+  "reminder": {
+    "starting": {
+      "client": {
+        "body": "Le déménagement {{handle}} va commencer. Votre déménageur se prépare.",
+        "title": "Votre déménagement commence {{lead}}"
+      },
+      "mover": {
+        "body": "Le déménagement {{handle}} commence {{lead}} — « Démarrer l’itinéraire » est maintenant disponible.",
+        "title": "C’est l’heure de démarrer votre déménagement"
+      }
+    },
+    "upcoming": {
+      "client": {
+        "body": "Votre déménagement {{handle}} commence {{lead}}.",
+        "bodyWithWindow": "Votre déménagement {{handle}} commence {{lead}} sur le créneau {{window}}.",
+        "title": "Rappel de déménagement"
+      },
+      "mover": {
+        "body": "Le déménagement planifié {{handle}} commence {{lead}}.",
+        "bodyWithWindow": "Le déménagement planifié {{handle}} commence {{lead}} sur le créneau {{window}}.",
+        "title": "Rappel de déménagement"
+      }
+    }
+  },
+  "request": {
+    "new": {
+      "body": "Vous avez une nouvelle demande de déménagement à proximité. Appuyez pour voir et accepter.",
+      "bodyRoute": "{{from}} → {{to}}. Appuyez pour voir et accepter.",
+      "title": "Nouvelle demande de déménagement"
+    }
+  },
+  "review": {
+    "received": {
+      "bodyWithComment_one": "Vous avez reçu un avis de {{count}} étoile : « {{comment}} »",
+      "bodyWithComment_other": "Vous avez reçu un avis de {{count}} étoiles : « {{comment}} »",
+      "body_one": "Vous avez reçu un avis de {{count}} étoile.",
+      "body_other": "Vous avez reçu un avis de {{count}} étoiles.",
+      "title": "Nouvel avis"
+    }
+  },
+  "status": {
+    "arrivedDestination": {
+      "body": "Votre déménageur est arrivé à destination.",
+      "title": "Arrivé à destination"
+    },
+    "awaitingPayment": {
+      "body": "Votre déménagement est terminé — veuillez confirmer le paiement.",
+      "title": "Paiement à effectuer"
+    },
+    "cancelledByMover": {
+      "body": "Le déménageur a annulé ce déménagement.",
+      "title": "Déménagement annulé"
+    },
+    "completed": {
+      "body": "Votre déménagement est terminé ! Laissez un avis.",
+      "title": "Déménagement terminé"
+    },
+    "inTransit": {
+      "body": "Vos objets sont en route vers la destination.",
+      "title": "En transit"
+    },
+    "loading": {
+      "body": "Vos objets sont en cours de chargement.",
+      "title": "Chargement commencé"
+    },
+    "moverAccepted": {
+      "body": "Un déménageur a accepté votre demande de déménagement !",
+      "title": "Déménageur confirmé"
+    },
+    "moverAcceptedScheduled": {
+      "body": "Un déménageur a accepté votre déménagement planifié !",
+      "title": "Déménageur confirmé"
+    },
+    "moverArrived": {
+      "body": "Votre déménageur est arrivé à l’adresse d’enlèvement.",
+      "title": "Déménageur arrivé"
+    },
+    "moverEnRoute": {
+      "body": "Votre déménageur est en route vers votre adresse d’enlèvement.",
+      "title": "Déménageur en route"
+    },
+    "moverWithdrew": {
+      "body": "Votre déménageur s’est désisté. Nous vous en cherchons un autre.",
+      "title": "Déménageur désisté"
+    },
+    "unloading": {
+      "body": "Vos objets sont en cours de déchargement.",
+      "title": "Déchargement"
+    }
+  },
+  "verification": {
+    "contactSupport": "Veuillez contacter le support pour plus de détails.",
+    "rejected": {
+      "body": "Votre demande de profil déménageur a été refusée. {{reason}}",
+      "title": "Profil refusé"
+    },
+    "submitted": {
+      "body": "Votre profil déménageur est en cours d’examen. Nous vous préviendrons dès qu’il sera vérifié.",
+      "title": "Profil envoyé"
+    },
+    "suspended": {
+      "body": "Votre compte déménageur a été suspendu. {{reason}}",
+      "title": "Compte suspendu"
+    },
+    "verified": {
+      "body": "Félicitations ! Votre profil déménageur a été vérifié. Vous pouvez maintenant accepter des déménagements.",
+      "title": "Profil vérifié"
+    }
+  }
+}

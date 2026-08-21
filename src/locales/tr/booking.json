@@ -1,0 +1,1333 @@
+{
+  "accessNotes": {
+    "helper": "Ekibimizin adrese erişmesine yardımcı olacak tüm ayrıntılar",
+    "label": "Erişim notları (isteğe bağlı)",
+    "placeholder": "örn. dar koridor, dik merdiven, girişte inşaat",
+    "shortLabel": "Erişim notları"
+  },
+  "address": {
+    "accessNotes": {
+      "label": "Erişim notları: {{notes}}"
+    },
+    "aptUnit": {
+      "label": "Daire/Bölüm: {{unit}}"
+    },
+    "elevatorAvailable": {
+      "label": "Asansör var"
+    },
+    "floor": {
+      "label": "Kat: {{floor}}"
+    },
+    "label": "Konum",
+    "noResults": {
+      "empty": "Konum bulunamadı"
+    },
+    "parking": {
+      "label": "Park yeri: {{value}}"
+    },
+    "suggestions": {
+      "label": "Önerilen konumlar"
+    },
+    "typeToSearch": {
+      "empty": "Konum aramak için yazmaya başlayın"
+    },
+    "useCurrent": {
+      "cta": "Mevcut konumumu kullan"
+    },
+    "withUnit": {
+      "label": "{{address}}, Daire {{unit}}"
+    }
+  },
+  "apartmentUnit": {
+    "dropoff": {
+      "placeholder": "örn. 2. kat, Daire 5"
+    },
+    "helper": "Kat, daire numarası veya bölüm adı",
+    "label": "Daire / Bölüm (isteğe bağlı)",
+    "pickup": {
+      "placeholder": "örn. 3. kat, Daire 12"
+    }
+  },
+  "arrivalTime": {
+    "fieldLabel": "Varış saati",
+    "helper": "Nakliyecilerin ne zaman gelmesini istediğinizi seçin.",
+    "label": "Tercih edilen varış saati",
+    "placeholder": "Saat seçin"
+  },
+  "arrivalWindow": {
+    "afternoon": {
+      "label": "Öğleden sonra"
+    },
+    "evening": {
+      "label": "Akşam"
+    },
+    "label": "Varış zaman aralığı",
+    "morning": {
+      "label": "Sabah"
+    },
+    "optionalLabel": "Varış zaman aralığı (isteğe bağlı)",
+    "withRange": {
+      "label": "{{window}} ({{range}})"
+    }
+  },
+  "business": {
+    "company": {
+      "label": "Şirket adı",
+      "placeholder": "örn. Mustermann GmbH",
+      "shortLabel": "Şirket"
+    },
+    "companyName": {
+      "label": "Şirket"
+    },
+    "isBusiness": {
+      "label": "Bu bir kurumsal taşınma (KDV'li fatura istiyorum)"
+    },
+    "title": "Kurumsal bilgiler",
+    "type": {
+      "business": {
+        "label": "Kurumsal taşınma"
+      },
+      "personal": {
+        "label": "Bireysel taşınma"
+      }
+    },
+    "vatId": {
+      "helper": "AB kurumsal faturaları için",
+      "label": "VAT ID (USt-IdNr.)",
+      "placeholder": "örn. DE123456789",
+      "shortLabel": "VAT ID"
+    }
+  },
+  "card": {
+    "cvc": {
+      "label": "CVC"
+    },
+    "expiry": {
+      "label": "Son kullanma tarihi"
+    },
+    "holder": {
+      "label": "Kart sahibi",
+      "placeholder": "AD SOYAD"
+    },
+    "number": {
+      "label": "Kart numarası"
+    }
+  },
+  "category": {
+    "instant": {
+      "label": "Anında taşınma"
+    }
+  },
+  "classification": {
+    "itemMinimum": {
+      "premium": "\"{{item}}\" için en az Premium taşıma gerekir",
+      "regular": "\"{{item}}\" için en az Standart taşıma gerekir"
+    },
+    "keepCurrent": {
+      "cta": "Mevcut kalsın"
+    },
+    "nearLimit": {
+      "light": "Hafif taşıma sınırına yaklaşıyorsunuz",
+      "regular": "Standart taşıma sınırına yaklaşıyorsunuz"
+    },
+    "notice": {
+      "title": "Taşıma sınıflandırması bildirimi"
+    },
+    "pointCount_one": "{{count}} puan",
+    "pointCount_other": "{{count}} puan",
+    "points": {
+      "label": "Puan"
+    },
+    "summary": {
+      "label": "{{items}} · ~{{weight}} · {{points}}"
+    },
+    "title": "Taşıma sınıflandırması",
+    "upgrade": {
+      "fallback": {
+        "cta": "Taşıma türünü yükselt"
+      },
+      "light": {
+        "cta": "Hafif taşımaya yükselt"
+      },
+      "premium": {
+        "cta": "Premium taşımaya yükselt"
+      },
+      "regular": {
+        "cta": "Standart taşımaya yükselt"
+      },
+      "subtitle": "Seçtiğiniz eşyalara göre <0>{{from}}</0> yerine <1>{{to}}</1> seçmenizi öneriyoruz.",
+      "title": "Taşıma türünü yükseltmenizi öneririz"
+    },
+    "weight": {
+      "label": "Tahmini ağırlık"
+    }
+  },
+  "contact": {
+    "email": {
+      "helper": "Rezervasyon onayı ve güncellemeler için",
+      "invalid": {
+        "error": "Lütfen geçerli bir e-posta adresi girin"
+      },
+      "label": "E-posta",
+      "placeholder": "örn. max@example.com",
+      "required": {
+        "error": "Lütfen e-posta adresinizi girin"
+      }
+    },
+    "emailPhone": {
+      "label": "{{email}} · {{phone}}"
+    },
+    "name": {
+      "helper": "Adınız ve soyadınız",
+      "label": "Ad",
+      "placeholder": "örn. Max Mustermann",
+      "required": {
+        "error": "Lütfen ad ve soyadınızı girin"
+      },
+      "shortLabel": "İletişim kişisi"
+    },
+    "notes": {
+      "helper": "Özel talimatlar veya istekler",
+      "label": "Nakliyeciler için notlar (isteğe bağlı)",
+      "placeholder": "örn. Gelmeden 30 dakika önce arayın, yatak odasında kırılacak eşyalar var…",
+      "shortLabel": "Nakliyeciler için notlar"
+    },
+    "phone": {
+      "helper": "Ayrıntıları teyit etmek için sizi arayabiliriz",
+      "label": "Telefon",
+      "placeholder": "örn. +49 170 1234567",
+      "required": {
+        "error": "Lütfen telefon numaranızı girin"
+      }
+    },
+    "subtitle": "Bu bilgileri rezervasyonunuzu onaylamak ve taşınmayı planlamak için kullanacağız.",
+    "title": "İletişim bilgileri"
+  },
+  "crew": {
+    "label": "Ekip",
+    "size": {
+      "label": "Ekip büyüklüğü"
+    },
+    "tbd": {
+      "label": "Ekip belirlenecek"
+    }
+  },
+  "crewRole": {
+    "driver": {
+      "label": "Şoför"
+    },
+    "helper": {
+      "label": "Yardımcı"
+    }
+  },
+  "details": {
+    "title": "Taşınma detayları"
+  },
+  "disposal": {
+    "helper": "Bertaraf etmemizi istediğiniz mobilya veya eşyaları yazın.",
+    "items": {
+      "label": "Bertaraf edilecek eşyalar"
+    },
+    "placeholder": "örn. Eski koltuk, kırık kitaplık, yatak…",
+    "title": "Bertaraf edilecek eşyalar"
+  },
+  "dropoff": {
+    "edit": {
+      "a11y": "Teslim konumunu düzenle"
+    },
+    "fallback": {
+      "label": "Teslim konumu"
+    },
+    "label": "Teslim konumu",
+    "location": {
+      "label": "Teslim konumu"
+    },
+    "required": {
+      "error": "Lütfen bir teslim konumu seçin"
+    },
+    "short": {
+      "label": "Teslim"
+    },
+    "tapToSelect": {
+      "placeholder": "Teslim noktasını seçmek için dokunun"
+    },
+    "tapToSelectLong": {
+      "placeholder": "Teslim konumunu seçmek için dokunun"
+    }
+  },
+  "dropoffAddress": {
+    "label": "Teslim adresi"
+  },
+  "dropoffParking": {
+    "directlyInFront": {
+      "label": "Tam önünde park yeri"
+    },
+    "limited": {
+      "label": "Sınırlı park yeri"
+    },
+    "loadingZone": {
+      "label": "Yükleme alanı gerekli (Haltverbot)"
+    },
+    "streetOnly": {
+      "label": "Park yeri yok / yalnızca sokak"
+    },
+    "underground": {
+      "label": "Yeraltı otoparkı girişi"
+    }
+  },
+  "duration": {
+    "estimated": {
+      "label": "Tahmini süre"
+    }
+  },
+  "elevator": {
+    "dropoff": {
+      "helper": "Teslim adresinde asansör var mı?"
+    },
+    "label": "Asansör var",
+    "question": {
+      "label": "Asansör var mı?"
+    }
+  },
+  "field": {
+    "accessNotes": {
+      "value": "Erişim notları: {{notes}}"
+    },
+    "additionalServices": {
+      "label": "Ek hizmetler"
+    },
+    "apartmentUnit": {
+      "value": "Daire/Bölüm: {{unit}}"
+    },
+    "arrivalTime": {
+      "hour": {
+        "label": "Saat"
+      },
+      "minute": {
+        "label": "Dk"
+      },
+      "period": {
+        "label": "Dilim"
+      },
+      "sheet": {
+        "title": "Tercih edilen varış saati"
+      }
+    },
+    "arrivalWindow": {
+      "label": "Varış zaman aralığı",
+      "value": {
+        "label": "Varış: {{window}}"
+      }
+    },
+    "contact": {
+      "label": "İletişim"
+    },
+    "crew": {
+      "label": "Ekip"
+    },
+    "crewSize": {
+      "label": "Ekip büyüklüğü"
+    },
+    "disposalItems": {
+      "label": "Bertaraf edilecek eşyalar"
+    },
+    "distance": {
+      "label": "Mesafe"
+    },
+    "dropoff": {
+      "label": "Varış"
+    },
+    "dropoffLocation": {
+      "label": "Teslim konumu"
+    },
+    "elevator": {
+      "label": "Asansör var mı?"
+    },
+    "elevatorAvailable": {
+      "label": "Asansör var"
+    },
+    "estimatedDuration": {
+      "label": "Tahmini süre"
+    },
+    "flexibility": {
+      "label": "Esneklik"
+    },
+    "floor": {
+      "value": "Kat: {{floor}}"
+    },
+    "homeType": {
+      "label": "Konut türü"
+    },
+    "inventory": {
+      "label": "Envanter"
+    },
+    "items": {
+      "label": "Eşyalar"
+    },
+    "moveDate": {
+      "label": "Taşınma tarihi",
+      "placeholder": "Tarih seçin",
+      "sheet": {
+        "title": "Taşınma tarihini seçin"
+      }
+    },
+    "moveDateTime": {
+      "label": "Taşınma tarihi ve saati"
+    },
+    "moveType": {
+      "label": "Taşıma türü",
+      "placeholder": "Taşıma türünü seçin",
+      "sheet": {
+        "title": "Taşıma türünü seçin"
+      }
+    },
+    "name": {
+      "label": "Ad"
+    },
+    "notesForMovers": {
+      "label": "Nakliyeciler için notlar"
+    },
+    "packingMaterials": {
+      "label": "Paketleme malzemeleri"
+    },
+    "packingNotes": {
+      "label": "Paketleme notları"
+    },
+    "packingService": {
+      "label": "Paketleme hizmeti"
+    },
+    "parking": {
+      "value": "Park yeri: {{parking}}"
+    },
+    "pickup": {
+      "label": "Alış"
+    },
+    "pickupLocation": {
+      "label": "Alış konumu"
+    },
+    "preferredTime": {
+      "label": "Tercih edilen saat",
+      "placeholder": "Zaman aralığı seçin",
+      "sheet": {
+        "title": "Tercih edilen saat"
+      },
+      "value": {
+        "label": "{{label}} ({{range}})"
+      }
+    },
+    "selectDate": {
+      "helper": "Ne zaman taşınmak istiyorsunuz?",
+      "label": "Tarih seçin"
+    },
+    "vehicle": {
+      "label": "Araç"
+    },
+    "weight": {
+      "label": "Ağırlık"
+    }
+  },
+  "flexibility": {
+    "flexible1hr": {
+      "label": "1 saate kadar esnek olabilirim"
+    },
+    "label": "Esneklik",
+    "notFlexible": {
+      "label": "Esnek değilim"
+    }
+  },
+  "floorLevel": {
+    "dropoff": {
+      "helper": "Teslim adresi hangi katta?"
+    },
+    "floor1": {
+      "option": "1. kat"
+    },
+    "floor2": {
+      "option": "2. kat"
+    },
+    "floor3": {
+      "option": "3. kat"
+    },
+    "floor4": {
+      "option": "4. kat"
+    },
+    "floor5plus": {
+      "option": "5. kat ve üzeri"
+    },
+    "ground": {
+      "label": "Zemin kat",
+      "option": "Zemin kat"
+    },
+    "label": "Kat",
+    "numbered": {
+      "label_ordinal_other": "{{count}}. kat",
+      "option": "{{n}}. kat"
+    },
+    "pickup": {
+      "helper": "Alış adresi hangi katta?"
+    },
+    "placeholder": "Kat seçin",
+    "required": {
+      "error": "Lütfen bir kat seçin"
+    }
+  },
+  "haltverbot": {
+    "arrange": {
+      "helper": "İzin başvurusunu yerel belediyeniz nezdinde biz yürütürüz",
+      "label": "Haltverbot iznini sizin için almamızı ister misiniz?"
+    },
+    "arrangeDropoff": {
+      "helper": "İzin başvurusunu yerel belediye nezdinde biz yürütürüz",
+      "label": "Teslim adresi için Haltverbot iznini biz alalım mı?"
+    },
+    "arrangeNo": {
+      "label": "Hayır, ben halledeceğim"
+    },
+    "arrangeYes": {
+      "label": "Evet, benim için ayarlayın"
+    },
+    "customerArranges": {
+      "label": "Müşteri ayarlıyor"
+    },
+    "helper": "Haltverbot bölgesi, nakliye aracı için park yeri ayırır",
+    "label": "Yükleme alanı gerekli mi? (Almanya'daki Haltverbot izni)",
+    "requested": {
+      "label": "Haltverbot (park yasağı bölgesi) talep edildi"
+    },
+    "weArrange": {
+      "label": "Biz ayarlıyoruz"
+    }
+  },
+  "homeType": {
+    "apartment": {
+      "label": "Daire",
+      "option": "Daire"
+    },
+    "helper": "Taşınacak konut veya alan türünü seçin",
+    "house": {
+      "label": "Müstakil ev",
+      "option": "Müstakil ev"
+    },
+    "label": "Konut türü",
+    "office": {
+      "label": "Ofis",
+      "option": "Ofis"
+    },
+    "other": {
+      "option": "Diğer"
+    },
+    "placeholder": "Bir tür seçin",
+    "required": {
+      "error": "Lütfen bir konut türü seçin"
+    },
+    "storage": {
+      "label": "Depo",
+      "option": "Depo"
+    }
+  },
+  "inventory": {
+    "addCustom": {
+      "cta": "Özel eşya ekle"
+    },
+    "addItem": {
+      "cta": "Eşya ekle"
+    },
+    "custom": {
+      "name": {
+        "label": "Eşya adı *",
+        "placeholder": "örn. Ayaklı saat"
+      },
+      "qty": {
+        "label_one": "Adet: {{count}}",
+        "label_other": "Adet: {{count}}"
+      },
+      "size": {
+        "label": "• Boyut: {{size}}"
+      },
+      "sizeField": {
+        "label": "Yaklaşık boyut",
+        "placeholder": "örn. 100x50x200 cm"
+      },
+      "weight": {
+        "label": "• Ağırlık: {{weight}}"
+      },
+      "weightField": {
+        "label": "Yaklaşık ağırlık",
+        "placeholder": "örn. 50 kg"
+      }
+    },
+    "customItems": {
+      "empty": "Henüz özel eşya eklenmedi. Listede olmayan eşyaları eklemek için yukarıdaki düğmeyi kullanın.",
+      "title": "Özel eşyalar"
+    },
+    "customModal": {
+      "title": "Özel eşya ekle"
+    },
+    "emptyCatalog": {
+      "subtitle": "Taşınabilir eşya listemiz hazırlanıyor. Lütfen kısa süre sonra tekrar deneyin.",
+      "title": "Henüz eşya yok"
+    },
+    "heavyItems": {
+      "label": "Özel taşıma gerektiren ağır eşyalar"
+    },
+    "items": {
+      "label": "Eşyalar"
+    },
+    "itemsCount": {
+      "label": "Eşyalar"
+    },
+    "itemsToMove": {
+      "title": "Taşınacak eşyalar"
+    },
+    "loadFailed": {
+      "title": "Eşya listesi yüklenemedi"
+    },
+    "required": {
+      "error": "Devam etmeden önce lütfen listenize en az bir eşya ekleyin."
+    },
+    "selectedCount_one": "{{count}} eşya seçildi",
+    "selectedCount_other": "{{count}} eşya seçildi",
+    "specialItems": {
+      "helper": "Bu eşyalar özel taşıma gerektirir ve fiyatı etkileyebilir.",
+      "title": "Özel eşyalar"
+    },
+    "title": "Eşya listesi"
+  },
+  "location": {
+    "gpsFailed": {
+      "error": "Konumunuz belirlenemedi."
+    },
+    "minQuery": {
+      "helper_one": "En az {{count}} karakter yazın",
+      "helper_other": "En az {{count}} karakter yazın"
+    },
+    "noResults": {
+      "empty": "Konum bulunamadı"
+    },
+    "noResultsLong": {
+      "empty": "Konum bulunamadı. Farklı bir arama deneyin."
+    },
+    "permissionDenied": {
+      "error": "Konum izni reddedildi. Ayarlar’dan etkinleştirin."
+    },
+    "search": {
+      "placeholder": "Bir yer, simge yapı veya adres arayın"
+    },
+    "searchIdle": {
+      "empty": "Adres aramak için yazmaya başlayın."
+    },
+    "section": {
+      "title": "Konumlar"
+    },
+    "selectPlaceholder": {
+      "placeholder": "{{field}} konumunu seçin"
+    },
+    "sheet": {
+      "title": "{{field}} konumu"
+    },
+    "suggestions": {
+      "label": "Önerilen konumlar"
+    },
+    "useCurrent": {
+      "cta": "Mevcut konumu kullan"
+    }
+  },
+  "locations": {
+    "title": "Konumlar"
+  },
+  "map": {
+    "dropoff": {
+      "placeholder": "Teslim konumu"
+    },
+    "pickup": {
+      "placeholder": "Alış konumu"
+    },
+    "preview": {
+      "empty": "Harita önizlemesi"
+    }
+  },
+  "mapPicker": {
+    "confirm": {
+      "cta": "Konumu onayla"
+    },
+    "default": {
+      "title": "Konum seçin"
+    },
+    "locating": {
+      "helper": "Konumunuz alınıyor…"
+    },
+    "reverseGeocoding": {
+      "helper": "Adres alınıyor…"
+    },
+    "search": {
+      "placeholder": "Bir konum arayın…"
+    },
+    "selected": {
+      "label": "Seçilen konum"
+    },
+    "tapHint": {
+      "helper": "Konum seçmek için haritaya dokunun"
+    },
+    "useCurrent": {
+      "cta": "Mevcut konumumu kullan"
+    }
+  },
+  "moveDate": {
+    "helper": "Ne zaman taşınmak istiyorsunuz?",
+    "label": "Taşınma tarihi",
+    "placeholder": "Taşınma tarihinizi seçin",
+    "required": {
+      "error": "Lütfen bir taşınma tarihi seçin"
+    }
+  },
+  "moveType": {
+    "a11y": "Taşıma türünü seçin",
+    "label": "Taşıma türü",
+    "light": {
+      "body": "Hafif taşımalarda küçük bir panelvan kullanılır.",
+      "helper": "Küçük yük — az sayıda eşya",
+      "label": "Hafif taşıma",
+      "short": "Hafif",
+      "subtitle": "Küçük yükler için ideal — kolilar, tek parça mobilyalar veya bir stüdyo daire.",
+      "title": "Hafif taşıma"
+    },
+    "placeholder": "Bir taşıma türü seçin",
+    "premium": {
+      "body": "Premium taşımalarda daha büyük araçlar ve 2 veya daha fazla kişilik ekip kullanılır.",
+      "helper": "Tam hizmet taşıma",
+      "label": "Premium taşıma",
+      "short": "Premium",
+      "subtitle": "Büyük evler için tam hizmet — paketleme, yükleme, taşıma ve boşaltma.",
+      "title": "Premium taşıma"
+    },
+    "regular": {
+      "body": "Standart taşımalarda orta boy bir araç ve 2 kişilik ekip kullanılır.",
+      "helper": "Standart ev taşıması",
+      "label": "Standart taşıma",
+      "short": "Standart",
+      "subtitle": "1–2 yatak odalı daireler, standart mobilya ve beyaz eşya için uygun.",
+      "title": "Standart taşıma"
+    },
+    "section": {
+      "title": "Taşıma türü"
+    },
+    "selectHelper": "Taşıma türünü seçin",
+    "selectPlaceholder": "Tür seçin"
+  },
+  "packing": {
+    "label": "Paketleme hizmeti"
+  },
+  "packingLevel": {
+    "full": {
+      "helper": "Nakliyeciler her şeyi benim için paketler",
+      "option": "Tam paketleme"
+    },
+    "none": {
+      "helper": "Her şeyi kendim paketleyeceğim",
+      "option": "Paketleme yardımı yok"
+    },
+    "partial": {
+      "helper": "Nakliyeciler yalnızca kırılacak ve değerli eşyaları paketler",
+      "option": "Kırılacak eşyaları paketle"
+    },
+    "unpacking": {
+      "helper": "Nakliyeciler alışta paketler VE varışta paketleri açar",
+      "option": "Paketleme ve açma"
+    }
+  },
+  "packingMaterials": {
+    "bubbleWrap": {
+      "option": "Balonlu naylon"
+    },
+    "dishInserts": {
+      "option": "Bulaşık ayracı"
+    },
+    "furnitureBlankets": {
+      "option": "Mobilya battaniyeleri"
+    },
+    "label": "Paketleme malzemeleri",
+    "mattressCovers": {
+      "option": "Yatak kılıfları"
+    },
+    "movingBoxes": {
+      "option": "Taşıma kolileri"
+    },
+    "packingPaper": {
+      "option": "Ambalaj kağıdı"
+    },
+    "packingTape": {
+      "option": "Koli bandı"
+    },
+    "selectedCount": {
+      "label_one": "{{count}} seçildi",
+      "label_other": "{{count}} seçildi"
+    },
+    "tvProtection": {
+      "option": "TV koruması"
+    },
+    "wardrobeBoxes": {
+      "option": "Gardırop kolileri"
+    }
+  },
+  "packingNotes": {
+    "label": "Paketleme notları"
+  },
+  "parking": {
+    "atBuilding": {
+      "label": "Binanın hemen önünde park yeri",
+      "option": "Binanın hemen önünde park yeri"
+    },
+    "directlyInFront": {
+      "option": "Tam önünde park yeri"
+    },
+    "driveway": {
+      "option": "Özel giriş yolu"
+    },
+    "helper": "Nakliye aracı için bina yakınında park yeri durumu",
+    "label": "Park durumu",
+    "limited": {
+      "option": "Sınırlı park yeri"
+    },
+    "loadingZone": {
+      "option": "Yükleme alanı gerekli (Haltverbot)"
+    },
+    "lot": {
+      "option": "Otopark"
+    },
+    "nearby": {
+      "label": "Yakında park yeri (0–20 m)",
+      "option": "Yakında park yeri (0–20 m)"
+    },
+    "noParking": {
+      "label": "Park yeri yok / uzun mesafe taşıma"
+    },
+    "none": {
+      "option": "Park yeri yok"
+    },
+    "placeholder": "Park durumunu seçin",
+    "required": {
+      "error": "Lütfen park durumunu seçin"
+    },
+    "street": {
+      "option": "Sokak park yeri"
+    },
+    "underground": {
+      "option": "Yeraltı otoparkı girişi"
+    }
+  },
+  "payment": {
+    "amount": {
+      "label": "Ödenecek tutar"
+    },
+    "amountCard": {
+      "label": "Kartla ödenecek tutar"
+    },
+    "awaitingClient": {
+      "label": "Müşterinin ödemeyi onaylaması bekleniyor…"
+    },
+    "awaitingMover": {
+      "label": "Ödeme onaylandı! Nakliyecinin tahsilatı onaylaması bekleniyor…"
+    },
+    "bankTransfer": {
+      "label": "Havale/EFT"
+    },
+    "card": {
+      "helper": "Kartınızdan, taşınma tamamlandığında tahsilat yapılır. Şimdi hiçbir tutar çekilmez.",
+      "label": "Kart"
+    },
+    "cash": {
+      "body": "Nakit ödemeyi seçtiğinizde, taşınma tamamlandıktan sonra nakliyeciye doğrudan ödeme yaparsınız. Lütfen tutarı tam olarak hazır bulundurun.",
+      "footnote": "Taşınma tamamlandıktan sonra nakliyecinize doğrudan ödeme yaparsınız.",
+      "helper": "Nakliyeciye geldiğinde nakit ödeyin. Karttan tahsilat yapılmaz.",
+      "label": "Nakit",
+      "noUpfront": {
+        "label": "Peşin ödeme gerekmez"
+      },
+      "payAfter": {
+        "label": "Taşınma tamamlandıktan sonra ödeyin"
+      },
+      "receipt": {
+        "label": "Makbuz nakliyeci tarafından verilir"
+      },
+      "title": "Nakliyecinize doğrudan ödeyin"
+    },
+    "cashHandshake": {
+      "helper": "Lütfen nakliyeciye doğrudan ödeme yapın (nakit veya havale), ardından aşağıdaki \"{{cta}}\" düğmesine dokunun."
+    },
+    "cashLong": {
+      "label": "Nakit (nakliyeciye doğrudan ödeme)"
+    },
+    "cashReminder": {
+      "helper": "Taşınma tamamlandıktan sonra nakliyecinize ödemek üzere {{amount}} tutarını hazır bulundurun."
+    },
+    "cashSelected": {
+      "title": "Nakit ödeme seçildi"
+    },
+    "clientConfirmed": {
+      "label": "Müşteri onayladı",
+      "success": "Müşteri ödemeyi onayladı. Nakliyecinin onayı bekleniyor."
+    },
+    "confirmation": {
+      "title": "Ödeme onayı"
+    },
+    "confirming": {
+      "cta": "Onaylanıyor…"
+    },
+    "creditCard": {
+      "label": "Kredi kartı"
+    },
+    "dualConfirm": {
+      "helper": "Taşınmanın tamamlandı sayılması için nakliyecinin de tahsilatı onaylaması gerekir."
+    },
+    "iHavePaid": {
+      "cta": "Ödemeyi yaptım"
+    },
+    "method": {
+      "card": {
+        "label": "Kart"
+      },
+      "cash": {
+        "label": "Nakit"
+      },
+      "helper": "Taşınma için nasıl ödeme yapmak istersiniz?",
+      "label": "Tercih edilen ödeme yöntemi"
+    },
+    "moverConfirm": {
+      "cta": "Ödemeyi aldığımı onaylıyorum",
+      "helper": "Müşteri size ödeme yaptıktan sonra onaylayın"
+    },
+    "moverConfirmed": {
+      "success": "Nakliyeci tahsilatı onayladı. Müşterinin onayı bekleniyor."
+    },
+    "paidOn": {
+      "label": "Ödeme tarihi"
+    },
+    "payCard": {
+      "cta": "Kartla öde"
+    },
+    "payCash": {
+      "cta": "Nakit öde"
+    },
+    "payWith": {
+      "title": "Ödeme yöntemi"
+    },
+    "reminder": {
+      "body": "Nakliyecinize {{when}} doğrudan ödemek üzere lütfen <0>{{amount}}</0> hazır bulundurun.",
+      "title": "Ödeme hatırlatması",
+      "whenInstant": {
+        "label": "taşınma tamamlandıktan sonra"
+      },
+      "whenScheduled": {
+        "label": "taşınma günü"
+      }
+    },
+    "section": {
+      "title": "Ödeme"
+    },
+    "title": "Ödeme",
+    "yourConfirmation": {
+      "label": "Sizin onayınız"
+    }
+  },
+  "paypal": {
+    "email": {
+      "label": "PayPal e-posta adresi",
+      "placeholder": "ad@ornek.com"
+    },
+    "redirect": {
+      "helper": "Ödemenizi güvenle tamamlamak için PayPal'a yönlendirileceksiniz."
+    }
+  },
+  "photos": {
+    "addMore": {
+      "cta": "Daha fazla fotoğraf ekle"
+    },
+    "additional": {
+      "helper": "Mobilyaların, odaların veya belirli eşyaların daha fazla fotoğrafını yükleyin",
+      "label": "Ek fotoğraflar"
+    },
+    "additionalCount_one": "{{count}} ek fotoğraf",
+    "additionalCount_other": "{{count}} ek fotoğraf",
+    "all": {
+      "title": "Tüm fotoğraflar"
+    },
+    "chooseGallery": {
+      "cta": "Galeriden seç"
+    },
+    "countSummary": {
+      "label": "{{main}} • {{additional}}"
+    },
+    "gallery": {
+      "a11y": "Taşınma fotoğrafları",
+      "helper": "Mobilyaların, odaların veya eşyaların ek fotoğraflarını yükleyin",
+      "item": {
+        "a11y": "Galeri fotoğrafı {{index}}"
+      },
+      "label": "Galeri fotoğrafları"
+    },
+    "item": {
+      "a11y": "Taşınma fotoğrafı"
+    },
+    "itemIndexed": {
+      "a11y": "Taşınma fotoğrafı {{index}}"
+    },
+    "itemNumbered": {
+      "a11y": "Taşınma fotoğrafı {{n}}"
+    },
+    "main": {
+      "a11y": "Ana fotoğraf",
+      "cta": "Ana fotoğrafı yüklemek için dokunun",
+      "helper": "Eşyalarınızı veya alanı gösteren bir ana fotoğraf yükleyin",
+      "label": "Ana fotoğraf"
+    },
+    "mainCount_one": "{{count}} ana fotoğraf",
+    "mainCount_other": "{{count}} ana fotoğraf",
+    "photoCount_one": "{{count}} fotoğraf",
+    "photoCount_other": "{{count}} fotoğraf",
+    "preview": {
+      "a11y": "Taşınma önizlemesi"
+    },
+    "required": {
+      "error": "Devam etmeden önce lütfen eşyalarınızın en az bir fotoğrafını ekleyin."
+    },
+    "sourceSheet": {
+      "title": "Fotoğraf ekle"
+    },
+    "takePhoto": {
+      "cta": "Fotoğraf çek"
+    }
+  },
+  "pickup": {
+    "edit": {
+      "a11y": "Alış konumunu düzenle"
+    },
+    "fallback": {
+      "label": "Alış konumu"
+    },
+    "label": "Alış konumu",
+    "location": {
+      "label": "Alış konumu"
+    },
+    "required": {
+      "error": "Lütfen bir alış konumu seçin"
+    },
+    "short": {
+      "label": "Alış"
+    },
+    "tapToSelect": {
+      "placeholder": "Alış noktasını seçmek için dokunun"
+    },
+    "tapToSelectLong": {
+      "placeholder": "Alış konumunu seçmek için dokunun"
+    }
+  },
+  "pickupAddress": {
+    "label": "Alış adresi"
+  },
+  "price": {
+    "estimated": {
+      "label": "Tahmini fiyat"
+    },
+    "final": {
+      "label": "Nihai fiyat"
+    }
+  },
+  "pricing": {
+    "additionalServicesCount": {
+      "label_one": "Ek hizmetler ({{count}})",
+      "label_other": "Ek hizmetler ({{count}})"
+    },
+    "baseFare": {
+      "label": "Temel ücret"
+    },
+    "baseRate": {
+      "fallback": {
+        "label": "Temel ücret"
+      },
+      "light": {
+        "label": "Temel ücret (Hafif taşıma)"
+      },
+      "premium": {
+        "label": "Temel ücret (Premium taşıma)"
+      },
+      "regular": {
+        "label": "Temel ücret (Standart taşıma)"
+      }
+    },
+    "baseRateWithDistance": {
+      "fallback": {
+        "label": "Temel ücret ({{distance}})"
+      },
+      "light": {
+        "label": "Temel ücret (Hafif taşıma, {{distance}})"
+      },
+      "premium": {
+        "label": "Temel ücret (Premium taşıma, {{distance}})"
+      },
+      "regular": {
+        "label": "Temel ücret (Standart taşıma, {{distance}})"
+      }
+    },
+    "crew": {
+      "label": "Ekip ({{crew}})"
+    },
+    "estimatedTotal": {
+      "label": "Tahmini toplam"
+    },
+    "finalAfterReview": {
+      "helper": "Nihai fiyat inceleme sonrasında kesinleşir"
+    },
+    "floorSurcharge": {
+      "label": "Kat farkı"
+    },
+    "itemsCount": {
+      "label_one": "Eşyalar ({{count}})",
+      "label_other": "Eşyalar ({{count}})"
+    },
+    "moverFare": {
+      "label": "Nakliyeci ücreti"
+    },
+    "packingService": {
+      "label": "Paketleme hizmeti"
+    },
+    "storage": {
+      "label": "Depolama"
+    },
+    "storageWeeks": {
+      "label_one": "Depolama ({{count}} hafta)",
+      "label_other": "Depolama ({{count}} hafta)"
+    },
+    "subtotal": {
+      "label": "Ara toplam"
+    },
+    "total": {
+      "label": "Toplam"
+    },
+    "vat": {
+      "label": "KDV ({{rate}})"
+    }
+  },
+  "route": {
+    "driveTime": {
+      "label": "~{{duration}} sürüş"
+    },
+    "from": {
+      "label": "Nereden"
+    },
+    "title": "Rota detayları",
+    "to": {
+      "label": "Nereye"
+    }
+  },
+  "service": {
+    "applianceConnect": {
+      "helper": "Cihazları yeni adreste yeniden bağlarız",
+      "label": "Beyaz eşya bağlantısı"
+    },
+    "applianceDisconnect": {
+      "helper": "Çamaşır makinesi, bulaşık makinesi, kurutma makinesi bağlantısını keseriz",
+      "label": "Beyaz eşya bağlantısını kesme"
+    },
+    "assembly": {
+      "helper": "Mobilyaları yeni adreste yeniden kurarız",
+      "label": "Mobilya kurulumu"
+    },
+    "cleaning": {
+      "helper": "Eski dairenizde profesyonel temizlik",
+      "label": "Çıkış temizliği"
+    },
+    "disassembly": {
+      "helper": "Yüklemeden önce yatak, gardırop ve masaları sökeriz",
+      "label": "Mobilya sökümü"
+    },
+    "disposal": {
+      "helper": "İstenmeyen mobilya ve eşyaları bertaraf ederiz",
+      "label": "Atık bertarafı (Entsorgung)"
+    },
+    "storage": {
+      "helper": "Eşyaları taşınmalar arasında güvenle depolarız",
+      "label": "Geçici depolama"
+    },
+    "tvMount": {
+      "helper": "Duvara monte televizyonları takar veya söker",
+      "label": "TV askısı takma / sökme"
+    }
+  },
+  "services": {
+    "additional": {
+      "label": "Ek hizmetler"
+    },
+    "applianceConnect": {
+      "helper": "Cihazları yeni adreste yeniden bağlarız",
+      "label": "Beyaz eşya bağlantısı",
+      "option": "Beyaz eşya bağlantısı"
+    },
+    "applianceDisconnect": {
+      "helper": "Çamaşır makinesi, bulaşık makinesi vb. bağlantısını keseriz",
+      "label": "Beyaz eşya bağlantısını kesme",
+      "option": "Beyaz eşya bağlantısını kesme"
+    },
+    "detailsSubtitle": "Seçtiğiniz hizmetler ve tercihleriniz",
+    "detailsTitle": "Hizmet detayları",
+    "disposal": {
+      "helper": "İstenmeyen eşyaları belediyenin atık toplama merkezine götürürüz",
+      "label": "Atık bertarafı",
+      "option": "Atık bertarafı"
+    },
+    "disposalItems": {
+      "label": "Bertaraf edilecek eşyalar: {{items}}"
+    },
+    "furnitureAssembly": {
+      "helper": "Mobilyaları yeni adreste kurarız",
+      "label": "Mobilya kurulumu",
+      "option": "Mobilya kurulumu"
+    },
+    "furnitureDisassembly": {
+      "helper": "Yüklemeden önce yatak ve masaları sökeriz",
+      "label": "Mobilya sökümü",
+      "option": "Mobilya sökümü"
+    },
+    "moveoutCleaning": {
+      "helper": "Yüklemeden sonra alış adresinde temizlik hizmeti",
+      "label": "Çıkış temizliği",
+      "option": "Çıkış temizliği"
+    },
+    "section": {
+      "title": "Hizmetler"
+    },
+    "subtitle": "Seçtiğiniz ek hizmetler",
+    "temporaryStorage": {
+      "helper": "Eşyaları alış ve teslim tarihleri arasında depolarız",
+      "label": "Geçici depolama",
+      "option": "Geçici depolama"
+    },
+    "temporaryStorageWeeks": {
+      "label_one": "Geçici depolama: {{count}} hafta",
+      "label_other": "Geçici depolama: {{count}} hafta"
+    },
+    "title": "Ek hizmetler",
+    "tvMountRemove": {
+      "helper": "Alış adresinde duvara monte televizyonları sökeriz",
+      "label": "TV askısı sökümü",
+      "option": "TV askısı sökümü"
+    }
+  },
+  "storage": {
+    "helper": "Standart depolama birimleri iklim kontrollüdür ve sigortalıdır.",
+    "title": "Depolama detayları",
+    "weeks": {
+      "label": "Kaç hafta depolama gerekiyor?"
+    }
+  },
+  "storageWeekCount_one": "{{count}} hafta",
+  "storageWeekCount_other": "{{count}} hafta",
+  "streetAddress": {
+    "dropoff": {
+      "helper": "Teslim adresinin tamamını girin",
+      "placeholder": "örn. Berliner Straße 12"
+    },
+    "label": "Açık adres",
+    "pickup": {
+      "helper": "Alış adresinin tamamını girin",
+      "placeholder": "örn. Hauptstraße 45"
+    },
+    "required": {
+      "error": "Lütfen bir açık adres girin"
+    }
+  },
+  "timeSlot": {
+    "afternoon": {
+      "label": "Öğleden sonra"
+    },
+    "evening": {
+      "label": "Akşam"
+    },
+    "morning": {
+      "label": "Sabah"
+    }
+  },
+  "timing": {
+    "now": {
+      "label": "Şimdi"
+    },
+    "title": "Taşınma zamanlaması"
+  },
+  "timingPrefs": {
+    "earliest": {
+      "label": "Mümkün olan en erken varışı tercih ederim"
+    },
+    "helper": "Varsa ek zamanlama tercihlerinizi seçin.",
+    "noEvening": {
+      "label": "Akşam tesliminden kaçının"
+    },
+    "noLunchGap": {
+      "label": "Öğle arası molasından kaçının"
+    },
+    "title": "İsteğe bağlı tercihler"
+  },
+  "vehicle": {
+    "addDetails": {
+      "helper": "Araç bilgilerinizi ekleyin"
+    },
+    "brand": {
+      "label": "Araç markası *",
+      "placeholder": "örn. Mercedes-Benz"
+    },
+    "brandShort": {
+      "label": "Marka *"
+    },
+    "capacity": {
+      "label": "Kapasite (m³)",
+      "placeholder": "örn. 15",
+      "upTo": {
+        "value": "{{capacity}}'e kadar"
+      }
+    },
+    "edit": {
+      "title": "Araç bilgilerini düzenle"
+    },
+    "largeTruck": {
+      "helper": "{{capacity}} — ev taşımaları, büyük yükler",
+      "label": "Büyük kamyon"
+    },
+    "mediumTruck": {
+      "helper": "{{capacity}} — daire taşımaları",
+      "label": "Orta boy kamyon"
+    },
+    "model": {
+      "label": "Araç modeli *",
+      "placeholder": "örn. Sprinter"
+    },
+    "modelShort": {
+      "label": "Model *"
+    },
+    "multiple": {
+      "label": "Birden fazla"
+    },
+    "registration": {
+      "label": "Araç plakası *",
+      "placeholder": "örn. B-AB 1234"
+    },
+    "registrationShort": {
+      "label": "Plaka *"
+    },
+    "smallVan": {
+      "helper": "{{capacity}} — küçük taşımalar, tek parça eşyalar",
+      "label": "Küçük panelvan"
+    },
+    "title": "Araç bilgileri",
+    "type": {
+      "label": "Araç türü"
+    },
+    "updated": {
+      "success": "Araç bilgileri güncellendi"
+    },
+    "year": {
+      "label": "Yıl *",
+      "placeholder": "örn. 2022"
+    },
+    "yearShort": {
+      "label": "Yıl"
+    }
+  }
+}

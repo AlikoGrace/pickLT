@@ -1,0 +1,385 @@
+{
+  "action": {
+    "cancel": {
+      "cta": "Umzug stornieren"
+    },
+    "reschedule": {
+      "cta": "Termin ändern"
+    }
+  },
+  "available": {
+    "withinRadiusCount_one": "{{count}} Umzug im Umkreis von {{radius}}",
+    "withinRadiusCount_other": "{{count}} Umzüge im Umkreis von {{radius}}"
+  },
+  "booking": {
+    "code": {
+      "label": "Buchungscode"
+    },
+    "title": "Buchungsdetails"
+  },
+  "cancelConfirm": {
+    "cancelling": {
+      "cta": "Wird storniert…"
+    },
+    "confirm": {
+      "cta": "Ja, stornieren"
+    },
+    "keep": {
+      "cta": "Umzug behalten"
+    },
+    "subtitle": "Ihr Umzugsprofi ist bereits unterwegs. Möchten Sie den Umzug wirklich stornieren? Das lässt sich nicht rückgängig machen.",
+    "title": "Diesen Umzug stornieren?",
+    "window": "Möchten Sie diesen Umzug wirklich stornieren? Das lässt sich nicht rückgängig machen."
+  },
+  "card": {
+    "category": {
+      "instant": {
+        "label": "Sofort"
+      },
+      "scheduled": {
+        "label": "Geplant"
+      }
+    },
+    "route": {
+      "dropoffFallback": {
+        "label": "Zielort"
+      },
+      "pickupFallback": {
+        "label": "Abholort"
+      }
+    },
+    "title": {
+      "generic": {
+        "label": "Umzug"
+      }
+    },
+    "typeAndCategory": {
+      "light": {
+        "instant": {
+          "subtitle": "Kleiner Umzug · Sofort"
+        },
+        "scheduled": {
+          "subtitle": "Kleiner Umzug · Geplant"
+        }
+      },
+      "premium": {
+        "instant": {
+          "subtitle": "Premium-Umzug · Sofort"
+        },
+        "scheduled": {
+          "subtitle": "Premium-Umzug · Geplant"
+        }
+      },
+      "regular": {
+        "instant": {
+          "subtitle": "Normaler Umzug · Sofort"
+        },
+        "scheduled": {
+          "subtitle": "Normaler Umzug · Geplant"
+        }
+      }
+    },
+    "typeAndDate": {
+      "light": {
+        "subtitle": "Kleiner Umzug · {{date}}"
+      },
+      "premium": {
+        "subtitle": "Premium-Umzug · {{date}}"
+      },
+      "regular": {
+        "subtitle": "Normaler Umzug · {{date}}"
+      }
+    },
+    "typeCategoryDate": {
+      "light": {
+        "instant": {
+          "subtitle": "Kleiner Umzug · Sofort · {{date}}"
+        },
+        "scheduled": {
+          "subtitle": "Kleiner Umzug · Geplant · {{date}}"
+        }
+      },
+      "premium": {
+        "instant": {
+          "subtitle": "Premium-Umzug · Sofort · {{date}}"
+        },
+        "scheduled": {
+          "subtitle": "Premium-Umzug · Geplant · {{date}}"
+        }
+      },
+      "regular": {
+        "instant": {
+          "subtitle": "Normaler Umzug · Sofort · {{date}}"
+        },
+        "scheduled": {
+          "subtitle": "Normaler Umzug · Geplant · {{date}}"
+        }
+      }
+    }
+  },
+  "category": {
+    "all": {
+      "label": "Alle"
+    },
+    "cancelled": {
+      "label": "Storniert"
+    },
+    "completed": {
+      "label": "Abgeschlossen"
+    },
+    "inProgress": {
+      "label": "Laufend"
+    },
+    "pending": {
+      "label": "Ausstehend"
+    }
+  },
+  "createdAt": {
+    "label": "Erstellt"
+  },
+  "detail": {
+    "additionalServices": {
+      "title": "Zusätzliche Leistungen"
+    },
+    "address": {
+      "label": "Adresse"
+    },
+    "arrivalWindow": {
+      "label": "Ankunftsfenster"
+    },
+    "category": {
+      "label": "Kategorie"
+    },
+    "client": {
+      "title": "Kunde"
+    },
+    "distance": {
+      "label": "Entfernung"
+    },
+    "dropoff": {
+      "label": "Zielort"
+    },
+    "dropoffAddress": {
+      "title": "Zieladresse"
+    },
+    "duration": {
+      "label": "Dauer"
+    },
+    "elevator": {
+      "label": "Aufzug"
+    },
+    "floor": {
+      "label": "Etage"
+    },
+    "itemLine": {
+      "label": "{{qty}} x {{label}}"
+    },
+    "itemLineReversed": {
+      "label": "{{label}} × {{qty}}"
+    },
+    "itemQuantity": {
+      "label": "{{label}} × {{qty}}"
+    },
+    "items": {
+      "label": "Gegenstände"
+    },
+    "moveDate": {
+      "label": "Umzugsdatum"
+    },
+    "moveDetails": {
+      "title": "Umzugsdetails"
+    },
+    "moveItems": {
+      "title": "Umzugsgut"
+    },
+    "moveStatus": {
+      "label": "Umzugsstatus"
+    },
+    "packingService": {
+      "label": "Verpackungsservice"
+    },
+    "parking": {
+      "label": "Parken"
+    },
+    "pickup": {
+      "label": "Abholung"
+    },
+    "pickupAddress": {
+      "title": "Abholadresse"
+    },
+    "requestedAt": {
+      "label": "Angefragt"
+    },
+    "route": {
+      "title": "Route"
+    },
+    "status": {
+      "label": "Status"
+    },
+    "type": {
+      "label": "Art"
+    },
+    "typeAndCategory": {
+      "light": {
+        "instant": {
+          "value": "Klein · Sofort"
+        },
+        "scheduled": {
+          "value": "Klein · Geplant"
+        }
+      },
+      "premium": {
+        "instant": {
+          "value": "Premium · Sofort"
+        },
+        "scheduled": {
+          "value": "Premium · Geplant"
+        }
+      },
+      "regular": {
+        "instant": {
+          "value": "Normal · Sofort"
+        },
+        "scheduled": {
+          "value": "Normal · Geplant"
+        }
+      }
+    },
+    "unit": {
+      "label": "Einheit"
+    }
+  },
+  "filter": {
+    "count": {
+      "badge": "({{value}})"
+    },
+    "empty": {
+      "helper": "Wählen Sie einen anderen Filter."
+    }
+  },
+  "itemCount_one": "{{count}} Gegenstand",
+  "itemCount_other": "{{count}} Gegenstände",
+  "list": {
+    "loadError": {
+      "body": "Ziehen Sie nach unten, um es erneut zu versuchen.",
+      "title": "Umzüge konnten nicht geladen werden"
+    }
+  },
+  "moveCategory": {
+    "instant": {
+      "label": "Sofort"
+    },
+    "scheduled": {
+      "label": "Geplant"
+    }
+  },
+  "moveCount_one": "{{count}} Umzug",
+  "moveCount_other": "{{count}} Umzüge",
+  "mover": {
+    "experience": {
+      "label": "Erfahrung"
+    },
+    "languages": {
+      "label": "Sprachen"
+    },
+    "verified": {
+      "badge": "Verifizierter Umzugsprofi"
+    }
+  },
+  "moverCount_one": "{{count}} Umzugsprofi",
+  "moverCount_other": "{{count}} Umzugsprofis",
+  "notify": {
+    "cancelledByClient": {
+      "body": "Der Kunde hat diesen Umzug storniert.",
+      "title": "Umzug vom Kunden storniert ❌"
+    },
+    "moverWithdrawn": {
+      "body": "Der zugewiesene Umzugsprofi hat diesen Umzug abgesagt.",
+      "title": "Umzugsprofi hat abgesagt"
+    }
+  },
+  "payment": {
+    "method": {
+      "label": "Zahlungsmethode"
+    }
+  },
+  "pricing": {
+    "estimatedTotal": {
+      "label": "Geschätzter Gesamtpreis"
+    }
+  },
+  "status": {
+    "arrivedDestination": {
+      "label": "Am Zielort"
+    },
+    "assigned": {
+      "label": "Zugewiesen"
+    },
+    "awaitingPayment": {
+      "label": "Zahlung offen"
+    },
+    "booked": {
+      "label": "Gebucht"
+    },
+    "cancelled": {
+      "label": "Storniert"
+    },
+    "cancelledByClient": {
+      "label": "Storniert"
+    },
+    "cancelledByMover": {
+      "label": "Storniert"
+    },
+    "completed": {
+      "label": "Abgeschlossen"
+    },
+    "confirmedPayLater": {
+      "label": "Bestätigt – später bezahlen"
+    },
+    "disputed": {
+      "label": "In Klärung"
+    },
+    "draft": {
+      "label": "Entwurf"
+    },
+    "inProgress": {
+      "label": "Läuft"
+    },
+    "inTransit": {
+      "label": "Unterwegs"
+    },
+    "loading": {
+      "label": "Wird beladen"
+    },
+    "moverAccepted": {
+      "label": "Umzugsprofi bestätigt"
+    },
+    "moverArrived": {
+      "label": "Umzugsprofi eingetroffen"
+    },
+    "moverAssigned": {
+      "label": "Umzugsprofi zugewiesen"
+    },
+    "moverEnRoute": {
+      "label": "Umzugsprofi unterwegs"
+    },
+    "paid": {
+      "label": "Bezahlt"
+    },
+    "pending": {
+      "label": "Ausstehend"
+    },
+    "pendingPayment": {
+      "label": "Zahlung ausstehend"
+    },
+    "unknown": {
+      "label": "Unbekannt"
+    },
+    "unloading": {
+      "label": "Wird entladen"
+    }
+  },
+  "summary": {
+    "title": "Übersicht"
+  }
+}

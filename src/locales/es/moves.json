@@ -1,0 +1,385 @@
+{
+  "action": {
+    "cancel": {
+      "cta": "Cancelar mudanza"
+    },
+    "reschedule": {
+      "cta": "Reprogramar mudanza"
+    }
+  },
+  "available": {
+    "withinRadiusCount_one": "{{count}} mudanza a menos de {{radius}}",
+    "withinRadiusCount_other": "{{count}} mudanzas a menos de {{radius}}"
+  },
+  "booking": {
+    "code": {
+      "label": "Código de reserva"
+    },
+    "title": "Detalles de la reserva"
+  },
+  "cancelConfirm": {
+    "cancelling": {
+      "cta": "Cancelando…"
+    },
+    "confirm": {
+      "cta": "Sí, cancelar"
+    },
+    "keep": {
+      "cta": "Mantener la mudanza"
+    },
+    "subtitle": "Tu transportista ya está en camino. ¿Seguro que quieres cancelar? Esta acción no se puede deshacer.",
+    "title": "¿Cancelar esta mudanza?",
+    "window": "¿Seguro que quieres cancelar esta mudanza? Esta acción no se puede deshacer."
+  },
+  "card": {
+    "category": {
+      "instant": {
+        "label": "Inmediata"
+      },
+      "scheduled": {
+        "label": "Programada"
+      }
+    },
+    "route": {
+      "dropoffFallback": {
+        "label": "Entrega"
+      },
+      "pickupFallback": {
+        "label": "Recogida"
+      }
+    },
+    "title": {
+      "generic": {
+        "label": "Mudanza"
+      }
+    },
+    "typeAndCategory": {
+      "light": {
+        "instant": {
+          "subtitle": "Mudanza ligera · Inmediata"
+        },
+        "scheduled": {
+          "subtitle": "Mudanza ligera · Programada"
+        }
+      },
+      "premium": {
+        "instant": {
+          "subtitle": "Mudanza premium · Inmediata"
+        },
+        "scheduled": {
+          "subtitle": "Mudanza premium · Programada"
+        }
+      },
+      "regular": {
+        "instant": {
+          "subtitle": "Mudanza estándar · Inmediata"
+        },
+        "scheduled": {
+          "subtitle": "Mudanza estándar · Programada"
+        }
+      }
+    },
+    "typeAndDate": {
+      "light": {
+        "subtitle": "Mudanza ligera · {{date}}"
+      },
+      "premium": {
+        "subtitle": "Mudanza premium · {{date}}"
+      },
+      "regular": {
+        "subtitle": "Mudanza estándar · {{date}}"
+      }
+    },
+    "typeCategoryDate": {
+      "light": {
+        "instant": {
+          "subtitle": "Mudanza ligera · Inmediata · {{date}}"
+        },
+        "scheduled": {
+          "subtitle": "Mudanza ligera · Programada · {{date}}"
+        }
+      },
+      "premium": {
+        "instant": {
+          "subtitle": "Mudanza premium · Inmediata · {{date}}"
+        },
+        "scheduled": {
+          "subtitle": "Mudanza premium · Programada · {{date}}"
+        }
+      },
+      "regular": {
+        "instant": {
+          "subtitle": "Mudanza estándar · Inmediata · {{date}}"
+        },
+        "scheduled": {
+          "subtitle": "Mudanza estándar · Programada · {{date}}"
+        }
+      }
+    }
+  },
+  "category": {
+    "all": {
+      "label": "Todas"
+    },
+    "cancelled": {
+      "label": "Canceladas"
+    },
+    "completed": {
+      "label": "Completadas"
+    },
+    "inProgress": {
+      "label": "En curso"
+    },
+    "pending": {
+      "label": "Pendientes"
+    }
+  },
+  "createdAt": {
+    "label": "Creada"
+  },
+  "detail": {
+    "additionalServices": {
+      "title": "Servicios adicionales"
+    },
+    "address": {
+      "label": "Dirección"
+    },
+    "arrivalWindow": {
+      "label": "Franja de llegada"
+    },
+    "category": {
+      "label": "Categoría"
+    },
+    "client": {
+      "title": "Cliente"
+    },
+    "distance": {
+      "label": "Distancia"
+    },
+    "dropoff": {
+      "label": "Entrega"
+    },
+    "dropoffAddress": {
+      "title": "Dirección de entrega"
+    },
+    "duration": {
+      "label": "Duración"
+    },
+    "elevator": {
+      "label": "Ascensor"
+    },
+    "floor": {
+      "label": "Planta"
+    },
+    "itemLine": {
+      "label": "{{qty}} x {{label}}"
+    },
+    "itemLineReversed": {
+      "label": "{{label}} × {{qty}}"
+    },
+    "itemQuantity": {
+      "label": "{{label}} × {{qty}}"
+    },
+    "items": {
+      "label": "Objetos"
+    },
+    "moveDate": {
+      "label": "Fecha de la mudanza"
+    },
+    "moveDetails": {
+      "title": "Detalles de la mudanza"
+    },
+    "moveItems": {
+      "title": "Objetos de la mudanza"
+    },
+    "moveStatus": {
+      "label": "Estado de la mudanza"
+    },
+    "packingService": {
+      "label": "Servicio de embalaje"
+    },
+    "parking": {
+      "label": "Aparcamiento"
+    },
+    "pickup": {
+      "label": "Recogida"
+    },
+    "pickupAddress": {
+      "title": "Dirección de recogida"
+    },
+    "requestedAt": {
+      "label": "Solicitada"
+    },
+    "route": {
+      "title": "Ruta"
+    },
+    "status": {
+      "label": "Estado"
+    },
+    "type": {
+      "label": "Tipo"
+    },
+    "typeAndCategory": {
+      "light": {
+        "instant": {
+          "value": "Ligera · Inmediata"
+        },
+        "scheduled": {
+          "value": "Ligera · Programada"
+        }
+      },
+      "premium": {
+        "instant": {
+          "value": "Premium · Inmediata"
+        },
+        "scheduled": {
+          "value": "Premium · Programada"
+        }
+      },
+      "regular": {
+        "instant": {
+          "value": "Estándar · Inmediata"
+        },
+        "scheduled": {
+          "value": "Estándar · Programada"
+        }
+      }
+    },
+    "unit": {
+      "label": "Unidad"
+    }
+  },
+  "filter": {
+    "count": {
+      "badge": "({{value}})"
+    },
+    "empty": {
+      "helper": "Prueba a seleccionar otro filtro."
+    }
+  },
+  "itemCount_one": "{{count}} objeto",
+  "itemCount_other": "{{count}} objetos",
+  "list": {
+    "loadError": {
+      "body": "Desliza hacia abajo para reintentar.",
+      "title": "No se pudieron cargar las mudanzas"
+    }
+  },
+  "moveCategory": {
+    "instant": {
+      "label": "Inmediata"
+    },
+    "scheduled": {
+      "label": "Programada"
+    }
+  },
+  "moveCount_one": "{{count}} mudanza",
+  "moveCount_other": "{{count}} mudanzas",
+  "mover": {
+    "experience": {
+      "label": "Experiencia"
+    },
+    "languages": {
+      "label": "Idiomas"
+    },
+    "verified": {
+      "badge": "Transportista verificado"
+    }
+  },
+  "moverCount_one": "{{count}} transportista",
+  "moverCount_other": "{{count}} transportistas",
+  "notify": {
+    "cancelledByClient": {
+      "body": "El cliente ha cancelado esta mudanza.",
+      "title": "Mudanza cancelada por el cliente ❌"
+    },
+    "moverWithdrawn": {
+      "body": "El transportista asignado se ha retirado de esta mudanza.",
+      "title": "Transportista retirado"
+    }
+  },
+  "payment": {
+    "method": {
+      "label": "Método de pago"
+    }
+  },
+  "pricing": {
+    "estimatedTotal": {
+      "label": "Total estimado"
+    }
+  },
+  "status": {
+    "arrivedDestination": {
+      "label": "Llegada a destino"
+    },
+    "assigned": {
+      "label": "Asignada"
+    },
+    "awaitingPayment": {
+      "label": "Pago por confirmar"
+    },
+    "booked": {
+      "label": "Reservada"
+    },
+    "cancelled": {
+      "label": "Cancelada"
+    },
+    "cancelledByClient": {
+      "label": "Cancelada"
+    },
+    "cancelledByMover": {
+      "label": "Cancelada"
+    },
+    "completed": {
+      "label": "Completada"
+    },
+    "confirmedPayLater": {
+      "label": "Confirmada · pago posterior"
+    },
+    "disputed": {
+      "label": "En disputa"
+    },
+    "draft": {
+      "label": "Borrador"
+    },
+    "inProgress": {
+      "label": "En curso"
+    },
+    "inTransit": {
+      "label": "En tránsito"
+    },
+    "loading": {
+      "label": "Cargando"
+    },
+    "moverAccepted": {
+      "label": "Transportista confirmado"
+    },
+    "moverArrived": {
+      "label": "Transportista ha llegado"
+    },
+    "moverAssigned": {
+      "label": "Transportista asignado"
+    },
+    "moverEnRoute": {
+      "label": "Transportista en camino"
+    },
+    "paid": {
+      "label": "Pagada"
+    },
+    "pending": {
+      "label": "Pendiente"
+    },
+    "pendingPayment": {
+      "label": "Pago pendiente"
+    },
+    "unknown": {
+      "label": "Desconocido"
+    },
+    "unloading": {
+      "label": "Descargando"
+    }
+  },
+  "summary": {
+    "title": "Resumen"
+  }
+}

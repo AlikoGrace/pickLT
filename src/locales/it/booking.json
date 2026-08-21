@@ -1,0 +1,1333 @@
+{
+  "accessNotes": {
+    "helper": "Qualsiasi dettaglio utile al nostro team per accedere al luogo",
+    "label": "Note di accesso (facoltative)",
+    "placeholder": "es. corridoio stretto, scale ripide, cantiere all’ingresso",
+    "shortLabel": "Note di accesso"
+  },
+  "address": {
+    "accessNotes": {
+      "label": "Note di accesso: {{notes}}"
+    },
+    "aptUnit": {
+      "label": "Interno: {{unit}}"
+    },
+    "elevatorAvailable": {
+      "label": "Ascensore disponibile"
+    },
+    "floor": {
+      "label": "Piano: {{floor}}"
+    },
+    "label": "Luogo",
+    "noResults": {
+      "empty": "Nessun luogo trovato"
+    },
+    "parking": {
+      "label": "Parcheggio: {{value}}"
+    },
+    "suggestions": {
+      "label": "Luoghi suggeriti"
+    },
+    "typeToSearch": {
+      "empty": "Digita per cercare un luogo"
+    },
+    "useCurrent": {
+      "cta": "Usa la mia posizione attuale"
+    },
+    "withUnit": {
+      "label": "{{address}}, interno {{unit}}"
+    }
+  },
+  "apartmentUnit": {
+    "dropoff": {
+      "placeholder": "es. 2° piano, int. 5"
+    },
+    "helper": "Piano, numero di appartamento o nome dell’interno",
+    "label": "Appartamento / interno (facoltativo)",
+    "pickup": {
+      "placeholder": "es. 3° piano, int. 12"
+    }
+  },
+  "arrivalTime": {
+    "fieldLabel": "Orario di arrivo",
+    "helper": "Scegli quando vuoi che arrivino i traslocatori.",
+    "label": "Orario di arrivo preferito",
+    "placeholder": "Seleziona l’orario"
+  },
+  "arrivalWindow": {
+    "afternoon": {
+      "label": "Pomeriggio"
+    },
+    "evening": {
+      "label": "Sera"
+    },
+    "label": "Fascia oraria di arrivo",
+    "morning": {
+      "label": "Mattina"
+    },
+    "optionalLabel": "Fascia oraria di arrivo (facoltativa)",
+    "withRange": {
+      "label": "{{window}} ({{range}})"
+    }
+  },
+  "business": {
+    "company": {
+      "label": "Ragione sociale",
+      "placeholder": "es. Mustermann GmbH",
+      "shortLabel": "Azienda"
+    },
+    "companyName": {
+      "label": "Azienda"
+    },
+    "isBusiness": {
+      "label": "Questo è un trasloco aziendale (mi serve una fattura con IVA)"
+    },
+    "title": "Dati aziendali",
+    "type": {
+      "business": {
+        "label": "Trasloco aziendale"
+      },
+      "personal": {
+        "label": "Trasloco personale"
+      }
+    },
+    "vatId": {
+      "helper": "Per le fatture aziendali nell’UE",
+      "label": "VAT ID (USt-IdNr.)",
+      "placeholder": "es. DE123456789",
+      "shortLabel": "VAT ID"
+    }
+  },
+  "card": {
+    "cvc": {
+      "label": "CVC"
+    },
+    "expiry": {
+      "label": "Data di scadenza"
+    },
+    "holder": {
+      "label": "Titolare della carta",
+      "placeholder": "MARIO ROSSI"
+    },
+    "number": {
+      "label": "Numero della carta"
+    }
+  },
+  "category": {
+    "instant": {
+      "label": "Trasloco immediato"
+    }
+  },
+  "classification": {
+    "itemMinimum": {
+      "premium": "«{{item}}» richiede almeno un trasloco premium",
+      "regular": "«{{item}}» richiede almeno un trasloco standard"
+    },
+    "keepCurrent": {
+      "cta": "Mantieni attuale"
+    },
+    "nearLimit": {
+      "light": "Stai raggiungendo il limite del trasloco leggero",
+      "regular": "Stai raggiungendo il limite del trasloco standard"
+    },
+    "notice": {
+      "title": "Avviso di classificazione del trasloco"
+    },
+    "pointCount_one": "{{count}} punto",
+    "pointCount_other": "{{count}} punti",
+    "points": {
+      "label": "Punti"
+    },
+    "summary": {
+      "label": "{{items}} · ~{{weight}} · {{points}}"
+    },
+    "title": "Classificazione del trasloco",
+    "upgrade": {
+      "fallback": {
+        "cta": "Cambia tipo di trasloco"
+      },
+      "light": {
+        "cta": "Passa al trasloco leggero"
+      },
+      "premium": {
+        "cta": "Passa al trasloco premium"
+      },
+      "regular": {
+        "cta": "Passa al trasloco standard"
+      },
+      "subtitle": "In base agli oggetti che hai scelto, ti consigliamo di passare da <0>{{from}}</0> a <1>{{to}}</1>.",
+      "title": "Ti consigliamo un tipo di trasloco superiore"
+    },
+    "weight": {
+      "label": "Peso stimato"
+    }
+  },
+  "contact": {
+    "email": {
+      "helper": "Per la conferma della prenotazione e gli aggiornamenti",
+      "invalid": {
+        "error": "Inserisci un indirizzo e-mail valido"
+      },
+      "label": "E-mail",
+      "placeholder": "es. max@example.com",
+      "required": {
+        "error": "Inserisci il tuo indirizzo e-mail"
+      }
+    },
+    "emailPhone": {
+      "label": "{{email}} · {{phone}}"
+    },
+    "name": {
+      "helper": "Il tuo nome e cognome",
+      "label": "Nome",
+      "placeholder": "es. Max Mustermann",
+      "required": {
+        "error": "Inserisci il tuo nome completo"
+      },
+      "shortLabel": "Nome del contatto"
+    },
+    "notes": {
+      "helper": "Eventuali istruzioni o richieste particolari",
+      "label": "Note per i traslocatori (facoltative)",
+      "placeholder": "es. chiamami 30 minuti prima dell’arrivo, oggetti fragili in camera da letto…",
+      "shortLabel": "Note per i traslocatori"
+    },
+    "phone": {
+      "helper": "Potremmo chiamarti per confermare i dettagli",
+      "label": "Telefono",
+      "placeholder": "es. +49 170 1234567",
+      "required": {
+        "error": "Inserisci il tuo numero di telefono"
+      }
+    },
+    "subtitle": "Useremo questi dati per confermare la prenotazione e coordinare il trasloco.",
+    "title": "Dati di contatto"
+  },
+  "crew": {
+    "label": "Squadra",
+    "size": {
+      "label": "Dimensione della squadra"
+    },
+    "tbd": {
+      "label": "Squadra da definire"
+    }
+  },
+  "crewRole": {
+    "driver": {
+      "label": "Autista"
+    },
+    "helper": {
+      "label": "Aiutante"
+    }
+  },
+  "details": {
+    "title": "Dettagli del trasloco"
+  },
+  "disposal": {
+    "helper": "Elenca i mobili o gli oggetti che vuoi farci smaltire.",
+    "items": {
+      "label": "Oggetti da smaltire"
+    },
+    "placeholder": "es. divano vecchio, libreria rotta, materasso…",
+    "title": "Oggetti da smaltire"
+  },
+  "dropoff": {
+    "edit": {
+      "a11y": "Modifica il luogo di consegna"
+    },
+    "fallback": {
+      "label": "Luogo di consegna"
+    },
+    "label": "Luogo di consegna",
+    "location": {
+      "label": "Luogo di consegna"
+    },
+    "required": {
+      "error": "Seleziona un luogo di consegna"
+    },
+    "short": {
+      "label": "Consegna"
+    },
+    "tapToSelect": {
+      "placeholder": "Tocca per scegliere la consegna"
+    },
+    "tapToSelectLong": {
+      "placeholder": "Tocca per scegliere il luogo di consegna"
+    }
+  },
+  "dropoffAddress": {
+    "label": "Indirizzo di consegna"
+  },
+  "dropoffParking": {
+    "directlyInFront": {
+      "label": "Parcheggio proprio davanti"
+    },
+    "limited": {
+      "label": "Parcheggio limitato"
+    },
+    "loadingZone": {
+      "label": "Serve una zona di carico (Haltverbot)"
+    },
+    "streetOnly": {
+      "label": "Nessun parcheggio / solo su strada"
+    },
+    "underground": {
+      "label": "Accesso al garage sotterraneo"
+    }
+  },
+  "duration": {
+    "estimated": {
+      "label": "Durata stimata"
+    }
+  },
+  "elevator": {
+    "dropoff": {
+      "helper": "C’è un ascensore all’indirizzo di consegna?"
+    },
+    "label": "Ascensore disponibile",
+    "question": {
+      "label": "Ascensore disponibile?"
+    }
+  },
+  "field": {
+    "accessNotes": {
+      "value": "Note di accesso: {{notes}}"
+    },
+    "additionalServices": {
+      "label": "Servizi aggiuntivi"
+    },
+    "apartmentUnit": {
+      "value": "Interno: {{unit}}"
+    },
+    "arrivalTime": {
+      "hour": {
+        "label": "Ora"
+      },
+      "minute": {
+        "label": "Min"
+      },
+      "period": {
+        "label": "Periodo"
+      },
+      "sheet": {
+        "title": "Orario di arrivo preferito"
+      }
+    },
+    "arrivalWindow": {
+      "label": "Fascia oraria di arrivo",
+      "value": {
+        "label": "Arrivo: {{window}}"
+      }
+    },
+    "contact": {
+      "label": "Contatto"
+    },
+    "crew": {
+      "label": "Squadra"
+    },
+    "crewSize": {
+      "label": "Dimensione della squadra"
+    },
+    "disposalItems": {
+      "label": "Oggetti da smaltire"
+    },
+    "distance": {
+      "label": "Distanza"
+    },
+    "dropoff": {
+      "label": "Destinazione"
+    },
+    "dropoffLocation": {
+      "label": "Luogo di consegna"
+    },
+    "elevator": {
+      "label": "Ascensore disponibile?"
+    },
+    "elevatorAvailable": {
+      "label": "Ascensore disponibile"
+    },
+    "estimatedDuration": {
+      "label": "Durata stimata"
+    },
+    "flexibility": {
+      "label": "Flessibilità"
+    },
+    "floor": {
+      "value": "Piano: {{floor}}"
+    },
+    "homeType": {
+      "label": "Tipo di immobile"
+    },
+    "inventory": {
+      "label": "Inventario"
+    },
+    "items": {
+      "label": "Oggetti"
+    },
+    "moveDate": {
+      "label": "Data del trasloco",
+      "placeholder": "Seleziona la data",
+      "sheet": {
+        "title": "Seleziona la data del trasloco"
+      }
+    },
+    "moveDateTime": {
+      "label": "Data e ora del trasloco"
+    },
+    "moveType": {
+      "label": "Tipo di trasloco",
+      "placeholder": "Seleziona il tipo di trasloco",
+      "sheet": {
+        "title": "Seleziona il tipo di trasloco"
+      }
+    },
+    "name": {
+      "label": "Nome"
+    },
+    "notesForMovers": {
+      "label": "Note per i traslocatori"
+    },
+    "packingMaterials": {
+      "label": "Materiale da imballaggio"
+    },
+    "packingNotes": {
+      "label": "Note sull’imballaggio"
+    },
+    "packingService": {
+      "label": "Servizio di imballaggio"
+    },
+    "parking": {
+      "value": "Parcheggio: {{parking}}"
+    },
+    "pickup": {
+      "label": "Ritiro"
+    },
+    "pickupLocation": {
+      "label": "Luogo di ritiro"
+    },
+    "preferredTime": {
+      "label": "Orario preferito",
+      "placeholder": "Seleziona una fascia oraria",
+      "sheet": {
+        "title": "Orario preferito"
+      },
+      "value": {
+        "label": "{{label}} ({{range}})"
+      }
+    },
+    "selectDate": {
+      "helper": "Quando vuoi traslocare?",
+      "label": "Seleziona la data"
+    },
+    "vehicle": {
+      "label": "Veicolo"
+    },
+    "weight": {
+      "label": "Peso"
+    }
+  },
+  "flexibility": {
+    "flexible1hr": {
+      "label": "Sono flessibile fino a 1 ora"
+    },
+    "label": "Flessibilità",
+    "notFlexible": {
+      "label": "Non sono flessibile"
+    }
+  },
+  "floorLevel": {
+    "dropoff": {
+      "helper": "A che piano si trova l’indirizzo di consegna?"
+    },
+    "floor1": {
+      "option": "1° piano"
+    },
+    "floor2": {
+      "option": "2° piano"
+    },
+    "floor3": {
+      "option": "3° piano"
+    },
+    "floor4": {
+      "option": "4° piano"
+    },
+    "floor5plus": {
+      "option": "5° piano o superiore"
+    },
+    "ground": {
+      "label": "Piano terra",
+      "option": "Piano terra"
+    },
+    "label": "Piano",
+    "numbered": {
+      "label_ordinal_other": "{{count}}° piano",
+      "option": "{{n}}° piano"
+    },
+    "pickup": {
+      "helper": "A che piano si trova l’indirizzo di ritiro?"
+    },
+    "placeholder": "Seleziona il piano",
+    "required": {
+      "error": "Seleziona un piano"
+    }
+  },
+  "haltverbot": {
+    "arrange": {
+      "helper": "Ci occupiamo noi della richiesta del permesso presso il tuo comune",
+      "label": "Vuoi che richiediamo noi il permesso Haltverbot per te?"
+    },
+    "arrangeDropoff": {
+      "helper": "Ci occupiamo noi della richiesta del permesso presso il comune",
+      "label": "Dobbiamo richiedere il permesso Haltverbot per il luogo di consegna?"
+    },
+    "arrangeNo": {
+      "label": "No, ci penso io"
+    },
+    "arrangeYes": {
+      "label": "Sì, occupatevene voi"
+    },
+    "customerArranges": {
+      "label": "Se ne occupa il cliente"
+    },
+    "helper": "Una zona Haltverbot riserva il posteggio per il camion del trasloco",
+    "label": "Serve una zona di carico? (permesso tedesco Haltverbot)",
+    "requested": {
+      "label": "Haltverbot (zona di divieto di sosta) richiesto"
+    },
+    "weArrange": {
+      "label": "Ce ne occupiamo noi"
+    }
+  },
+  "homeType": {
+    "apartment": {
+      "label": "Appartamento",
+      "option": "Appartamento"
+    },
+    "helper": "Scegli il tipo di immobile o di spazio da traslocare",
+    "house": {
+      "label": "Casa",
+      "option": "Casa"
+    },
+    "label": "Tipo di immobile",
+    "office": {
+      "label": "Ufficio",
+      "option": "Ufficio"
+    },
+    "other": {
+      "option": "Altro"
+    },
+    "placeholder": "Seleziona un tipo",
+    "required": {
+      "error": "Seleziona un tipo di immobile"
+    },
+    "storage": {
+      "label": "Box",
+      "option": "Deposito"
+    }
+  },
+  "inventory": {
+    "addCustom": {
+      "cta": "Aggiungi oggetto personalizzato"
+    },
+    "addItem": {
+      "cta": "Aggiungi oggetto"
+    },
+    "custom": {
+      "name": {
+        "label": "Nome dell’oggetto *",
+        "placeholder": "es. orologio a pendolo"
+      },
+      "qty": {
+        "label_one": "Qtà: {{count}}",
+        "label_other": "Qtà: {{count}}"
+      },
+      "size": {
+        "label": "• Dimensioni: {{size}}"
+      },
+      "sizeField": {
+        "label": "Dimensioni approssimative",
+        "placeholder": "es. 100x50x200 cm"
+      },
+      "weight": {
+        "label": "• Peso: {{weight}}"
+      },
+      "weightField": {
+        "label": "Peso approssimativo",
+        "placeholder": "es. 50 kg"
+      }
+    },
+    "customItems": {
+      "empty": "Non hai ancora aggiunto oggetti personalizzati. Tocca il pulsante qui sopra per aggiungere quelli non presenti in elenco.",
+      "title": "Oggetti personalizzati"
+    },
+    "customModal": {
+      "title": "Aggiungi un oggetto personalizzato"
+    },
+    "emptyCatalog": {
+      "subtitle": "Stiamo preparando l’elenco degli oggetti trasportabili. Riprova tra poco.",
+      "title": "Nessun oggetto disponibile al momento"
+    },
+    "heavyItems": {
+      "label": "Oggetti pesanti che richiedono una gestione particolare"
+    },
+    "items": {
+      "label": "Oggetti"
+    },
+    "itemsCount": {
+      "label": "Oggetti"
+    },
+    "itemsToMove": {
+      "title": "Oggetti da traslocare"
+    },
+    "loadFailed": {
+      "title": "Impossibile caricare l’elenco degli oggetti"
+    },
+    "required": {
+      "error": "Aggiungi almeno un oggetto all’inventario prima di continuare."
+    },
+    "selectedCount_one": "{{count}} oggetto selezionato",
+    "selectedCount_other": "{{count}} oggetti selezionati",
+    "specialItems": {
+      "helper": "Questi oggetti richiedono una gestione particolare e possono incidere sul prezzo.",
+      "title": "Oggetti particolari"
+    },
+    "title": "Inventario"
+  },
+  "location": {
+    "gpsFailed": {
+      "error": "Impossibile determinare la tua posizione."
+    },
+    "minQuery": {
+      "helper_one": "Digita almeno {{count}} carattere",
+      "helper_other": "Digita almeno {{count}} caratteri"
+    },
+    "noResults": {
+      "empty": "Nessun luogo trovato"
+    },
+    "noResultsLong": {
+      "empty": "Nessun luogo trovato. Prova con un’altra ricerca."
+    },
+    "permissionDenied": {
+      "error": "Accesso alla posizione negato. Attivalo nelle Impostazioni."
+    },
+    "search": {
+      "placeholder": "Cerca un luogo, un punto di riferimento o un indirizzo"
+    },
+    "searchIdle": {
+      "empty": "Inizia a digitare per cercare un indirizzo."
+    },
+    "section": {
+      "title": "Luoghi"
+    },
+    "selectPlaceholder": {
+      "placeholder": "Seleziona il luogo di {{field}}"
+    },
+    "sheet": {
+      "title": "Luogo di {{field}}"
+    },
+    "suggestions": {
+      "label": "Luoghi suggeriti"
+    },
+    "useCurrent": {
+      "cta": "Usa la posizione attuale"
+    }
+  },
+  "locations": {
+    "title": "Luoghi"
+  },
+  "map": {
+    "dropoff": {
+      "placeholder": "Luogo di consegna"
+    },
+    "pickup": {
+      "placeholder": "Luogo di ritiro"
+    },
+    "preview": {
+      "empty": "Anteprima mappa"
+    }
+  },
+  "mapPicker": {
+    "confirm": {
+      "cta": "Conferma il luogo"
+    },
+    "default": {
+      "title": "Seleziona un luogo"
+    },
+    "locating": {
+      "helper": "Rilevamento della posizione…"
+    },
+    "reverseGeocoding": {
+      "helper": "Recupero dell’indirizzo…"
+    },
+    "search": {
+      "placeholder": "Cerca un luogo…"
+    },
+    "selected": {
+      "label": "Luogo selezionato"
+    },
+    "tapHint": {
+      "helper": "Tocca la mappa per selezionare un luogo"
+    },
+    "useCurrent": {
+      "cta": "Usa la mia posizione attuale"
+    }
+  },
+  "moveDate": {
+    "helper": "Quando vuoi traslocare?",
+    "label": "Data del trasloco",
+    "placeholder": "Seleziona la data del trasloco",
+    "required": {
+      "error": "Seleziona una data per il trasloco"
+    }
+  },
+  "moveType": {
+    "a11y": "Seleziona il tipo di trasloco",
+    "label": "Tipo di trasloco",
+    "light": {
+      "body": "I traslochi leggeri usano un furgone piccolo.",
+      "helper": "Carico ridotto, pochi oggetti",
+      "label": "Trasloco leggero",
+      "short": "Leggero",
+      "subtitle": "Perfetto per piccoli carichi: scatoloni, singoli mobili o un monolocale.",
+      "title": "Trasloco leggero"
+    },
+    "placeholder": "Scegli un tipo di trasloco",
+    "premium": {
+      "body": "I traslochi premium usano veicoli più grandi e una squadra di 2 o più persone.",
+      "helper": "Trasloco con servizio completo",
+      "label": "Trasloco premium",
+      "short": "Premium",
+      "subtitle": "Servizio completo per case grandi: imballaggio, carico, trasporto e scarico.",
+      "title": "Trasloco premium"
+    },
+    "regular": {
+      "body": "I traslochi standard usano un veicolo medio e una squadra di 2 persone.",
+      "helper": "Trasloco domestico standard",
+      "label": "Trasloco standard",
+      "short": "Standard",
+      "subtitle": "Ideale per appartamenti con 1 o 2 camere da letto, con mobili ed elettrodomestici comuni.",
+      "title": "Trasloco standard"
+    },
+    "section": {
+      "title": "Tipo di trasloco"
+    },
+    "selectHelper": "Seleziona il tipo di trasloco",
+    "selectPlaceholder": "Seleziona il tipo"
+  },
+  "packing": {
+    "label": "Servizio di imballaggio"
+  },
+  "packingLevel": {
+    "full": {
+      "helper": "I trasportatori imballano tutto per me",
+      "option": "Imballaggio completo"
+    },
+    "none": {
+      "helper": "Imballo tutto da solo",
+      "option": "Nessun aiuto per l'imballaggio"
+    },
+    "partial": {
+      "helper": "I trasportatori imballano solo gli oggetti fragili o di valore",
+      "option": "Imballare gli oggetti fragili"
+    },
+    "unpacking": {
+      "helper": "I trasportatori imballano al ritiro E disimballano a destinazione",
+      "option": "Imballaggio e disimballaggio"
+    }
+  },
+  "packingMaterials": {
+    "bubbleWrap": {
+      "option": "Pluriball"
+    },
+    "dishInserts": {
+      "option": "Divisori per stoviglie"
+    },
+    "furnitureBlankets": {
+      "option": "Coperte per mobili"
+    },
+    "label": "Materiale da imballaggio",
+    "mattressCovers": {
+      "option": "Coprimaterassi"
+    },
+    "movingBoxes": {
+      "option": "Scatole per trasloco"
+    },
+    "packingPaper": {
+      "option": "Carta da imballaggio"
+    },
+    "packingTape": {
+      "option": "Nastro adesivo"
+    },
+    "selectedCount": {
+      "label_one": "{{count}} selezionato",
+      "label_other": "{{count}} selezionati"
+    },
+    "tvProtection": {
+      "option": "Protezione TV"
+    },
+    "wardrobeBoxes": {
+      "option": "Scatole armadio"
+    }
+  },
+  "packingNotes": {
+    "label": "Note sull’imballaggio"
+  },
+  "parking": {
+    "atBuilding": {
+      "label": "Parcheggio proprio davanti all’edificio",
+      "option": "Parcheggio proprio davanti all’edificio"
+    },
+    "directlyInFront": {
+      "option": "Parcheggio proprio davanti"
+    },
+    "driveway": {
+      "option": "Vialetto privato"
+    },
+    "helper": "Disponibilità di parcheggio vicino all’edificio per il camion del trasloco",
+    "label": "Situazione del parcheggio",
+    "limited": {
+      "option": "Parcheggio limitato"
+    },
+    "loadingZone": {
+      "option": "Serve una zona di carico (Haltverbot)"
+    },
+    "lot": {
+      "option": "Parcheggio"
+    },
+    "nearby": {
+      "label": "Parcheggio nelle vicinanze (0–20 m)",
+      "option": "Parcheggio nelle vicinanze (0–20 m)"
+    },
+    "noParking": {
+      "label": "Nessun parcheggio / percorso a piedi lungo"
+    },
+    "none": {
+      "option": "Nessun parcheggio"
+    },
+    "placeholder": "Seleziona la situazione del parcheggio",
+    "required": {
+      "error": "Seleziona la situazione del parcheggio"
+    },
+    "street": {
+      "option": "Parcheggio su strada"
+    },
+    "underground": {
+      "option": "Accesso al garage sotterraneo"
+    }
+  },
+  "payment": {
+    "amount": {
+      "label": "Importo da pagare"
+    },
+    "amountCard": {
+      "label": "Importo da pagare con carta"
+    },
+    "awaitingClient": {
+      "label": "In attesa che il cliente confermi il pagamento…"
+    },
+    "awaitingMover": {
+      "label": "Pagamento confermato! In attesa che il traslocatore confermi l’incasso…"
+    },
+    "bankTransfer": {
+      "label": "Bonifico bancario"
+    },
+    "card": {
+      "helper": "La carta viene addebitata al termine del trasloco. Ora non addebitiamo nulla.",
+      "label": "Carta"
+    },
+    "cash": {
+      "body": "Scegliendo il pagamento in contanti, pagherai il traslocatore direttamente al termine del trasloco. Tieni pronto l’importo esatto.",
+      "footnote": "Pagherai il tuo traslocatore direttamente al termine del trasloco.",
+      "helper": "Paga il traslocatore in contanti all’arrivo. Nessun addebito sulla carta.",
+      "label": "Contanti",
+      "noUpfront": {
+        "label": "Nessun pagamento anticipato"
+      },
+      "payAfter": {
+        "label": "Paga al termine del trasloco"
+      },
+      "receipt": {
+        "label": "Ricevuta rilasciata dal traslocatore"
+      },
+      "title": "Paga direttamente il tuo traslocatore"
+    },
+    "cashHandshake": {
+      "helper": "Paga il traslocatore direttamente (contanti o bonifico), poi tocca «{{cta}}» qui sotto."
+    },
+    "cashLong": {
+      "label": "Contanti (paghi direttamente il traslocatore)"
+    },
+    "cashReminder": {
+      "helper": "Tieni pronti {{amount}} da consegnare al tuo traslocatore al termine del trasloco."
+    },
+    "cashSelected": {
+      "title": "Hai scelto il pagamento in contanti"
+    },
+    "clientConfirmed": {
+      "label": "Cliente ha confermato",
+      "success": "Pagamento del cliente confermato. In attesa della conferma del traslocatore."
+    },
+    "confirmation": {
+      "title": "Conferma di pagamento"
+    },
+    "confirming": {
+      "cta": "Conferma in corso…"
+    },
+    "creditCard": {
+      "label": "Carta di credito"
+    },
+    "dualConfirm": {
+      "helper": "Anche il traslocatore deve confermare l’incasso prima che il trasloco risulti completato."
+    },
+    "iHavePaid": {
+      "cta": "Ho pagato"
+    },
+    "method": {
+      "card": {
+        "label": "Carta"
+      },
+      "cash": {
+        "label": "Contanti"
+      },
+      "helper": "Come preferisci pagare il trasloco?",
+      "label": "Metodo di pagamento preferito"
+    },
+    "moverConfirm": {
+      "cta": "Conferma il pagamento ricevuto",
+      "helper": "Conferma quando il cliente ti ha pagato"
+    },
+    "moverConfirmed": {
+      "success": "Pagamento confermato dal traslocatore. In attesa della conferma del cliente."
+    },
+    "paidOn": {
+      "label": "Pagato il"
+    },
+    "payCard": {
+      "cta": "Paga con carta"
+    },
+    "payCash": {
+      "cta": "Paga in contanti"
+    },
+    "payWith": {
+      "title": "Paga con"
+    },
+    "reminder": {
+      "body": "Tieni pronti <0>{{amount}}</0> da consegnare direttamente al tuo traslocatore {{when}}.",
+      "title": "Promemoria di pagamento",
+      "whenInstant": {
+        "label": "al termine del trasloco"
+      },
+      "whenScheduled": {
+        "label": "il giorno del trasloco"
+      }
+    },
+    "section": {
+      "title": "Pagamento"
+    },
+    "title": "Pagamento",
+    "yourConfirmation": {
+      "label": "La tua conferma"
+    }
+  },
+  "paypal": {
+    "email": {
+      "label": "E-mail PayPal",
+      "placeholder": "nome@esempio.com"
+    },
+    "redirect": {
+      "helper": "Ti reindirizzeremo a PayPal per completare il pagamento in sicurezza."
+    }
+  },
+  "photos": {
+    "addMore": {
+      "cta": "Aggiungi altre foto"
+    },
+    "additional": {
+      "helper": "Carica altre foto di mobili, stanze o oggetti specifici",
+      "label": "Foto aggiuntive"
+    },
+    "additionalCount_one": "{{count}} foto aggiuntiva",
+    "additionalCount_other": "{{count}} foto aggiuntive",
+    "all": {
+      "title": "Tutte le foto"
+    },
+    "chooseGallery": {
+      "cta": "Scegli dalla galleria"
+    },
+    "countSummary": {
+      "label": "{{main}} • {{additional}}"
+    },
+    "gallery": {
+      "a11y": "Foto del trasloco",
+      "helper": "Carica altre foto di mobili, stanze o oggetti",
+      "item": {
+        "a11y": "Foto della galleria {{index}}"
+      },
+      "label": "Foto della galleria"
+    },
+    "item": {
+      "a11y": "Foto del trasloco"
+    },
+    "itemIndexed": {
+      "a11y": "Foto del trasloco {{index}}"
+    },
+    "itemNumbered": {
+      "a11y": "Foto del trasloco {{n}}"
+    },
+    "main": {
+      "a11y": "Foto principale",
+      "cta": "Tocca per caricare la foto principale",
+      "helper": "Carica una foto principale che mostri i tuoi oggetti o lo spazio",
+      "label": "Foto principale"
+    },
+    "mainCount_one": "{{count}} foto principale",
+    "mainCount_other": "{{count}} foto principali",
+    "photoCount_one": "{{count}} foto",
+    "photoCount_other": "{{count}} foto",
+    "preview": {
+      "a11y": "Anteprima del trasloco"
+    },
+    "required": {
+      "error": "Aggiungi almeno una foto dei tuoi oggetti prima di continuare."
+    },
+    "sourceSheet": {
+      "title": "Aggiungi una foto"
+    },
+    "takePhoto": {
+      "cta": "Scatta una foto"
+    }
+  },
+  "pickup": {
+    "edit": {
+      "a11y": "Modifica il luogo di ritiro"
+    },
+    "fallback": {
+      "label": "Luogo di ritiro"
+    },
+    "label": "Luogo di ritiro",
+    "location": {
+      "label": "Luogo di ritiro"
+    },
+    "required": {
+      "error": "Seleziona un luogo di ritiro"
+    },
+    "short": {
+      "label": "Ritiro"
+    },
+    "tapToSelect": {
+      "placeholder": "Tocca per scegliere il ritiro"
+    },
+    "tapToSelectLong": {
+      "placeholder": "Tocca per scegliere il luogo di ritiro"
+    }
+  },
+  "pickupAddress": {
+    "label": "Indirizzo di ritiro"
+  },
+  "price": {
+    "estimated": {
+      "label": "Prezzo stimato"
+    },
+    "final": {
+      "label": "Prezzo finale"
+    }
+  },
+  "pricing": {
+    "additionalServicesCount": {
+      "label_one": "Servizi aggiuntivi ({{count}})",
+      "label_other": "Servizi aggiuntivi ({{count}})"
+    },
+    "baseFare": {
+      "label": "Tariffa base"
+    },
+    "baseRate": {
+      "fallback": {
+        "label": "Tariffa base"
+      },
+      "light": {
+        "label": "Tariffa base (Trasloco leggero)"
+      },
+      "premium": {
+        "label": "Tariffa base (Trasloco premium)"
+      },
+      "regular": {
+        "label": "Tariffa base (Trasloco standard)"
+      }
+    },
+    "baseRateWithDistance": {
+      "fallback": {
+        "label": "Tariffa base ({{distance}})"
+      },
+      "light": {
+        "label": "Tariffa base (Trasloco leggero, {{distance}})"
+      },
+      "premium": {
+        "label": "Tariffa base (Trasloco premium, {{distance}})"
+      },
+      "regular": {
+        "label": "Tariffa base (Trasloco standard, {{distance}})"
+      }
+    },
+    "crew": {
+      "label": "Squadra ({{crew}})"
+    },
+    "estimatedTotal": {
+      "label": "Totale stimato"
+    },
+    "finalAfterReview": {
+      "helper": "Prezzo definitivo confermato dopo la verifica"
+    },
+    "floorSurcharge": {
+      "label": "Supplemento piano"
+    },
+    "itemsCount": {
+      "label_one": "Oggetti ({{count}})",
+      "label_other": "Oggetti ({{count}})"
+    },
+    "moverFare": {
+      "label": "Compenso del traslocatore"
+    },
+    "packingService": {
+      "label": "Servizio di imballaggio"
+    },
+    "storage": {
+      "label": "Deposito"
+    },
+    "storageWeeks": {
+      "label_one": "Deposito ({{count}} settimana)",
+      "label_other": "Deposito ({{count}} settimane)"
+    },
+    "subtotal": {
+      "label": "Subtotale"
+    },
+    "total": {
+      "label": "Totale"
+    },
+    "vat": {
+      "label": "IVA ({{rate}})"
+    }
+  },
+  "route": {
+    "driveTime": {
+      "label": "~{{duration}} di viaggio"
+    },
+    "from": {
+      "label": "Da"
+    },
+    "title": "Dettagli del percorso",
+    "to": {
+      "label": "A"
+    }
+  },
+  "service": {
+    "applianceConnect": {
+      "helper": "Ricolleghiamo gli elettrodomestici al nuovo indirizzo",
+      "label": "Collegamento elettrodomestici"
+    },
+    "applianceDisconnect": {
+      "helper": "Scolleghiamo lavatrice, lavastoviglie e asciugatrice",
+      "label": "Scollegamento elettrodomestici"
+    },
+    "assembly": {
+      "helper": "Rimontiamo i mobili nella nuova casa",
+      "label": "Montaggio mobili"
+    },
+    "cleaning": {
+      "helper": "Pulizia professionale del tuo vecchio appartamento",
+      "label": "Pulizia di fine locazione"
+    },
+    "disassembly": {
+      "helper": "Smontiamo letti, armadi e tavoli prima del carico",
+      "label": "Smontaggio mobili"
+    },
+    "disposal": {
+      "helper": "Smaltiamo i mobili e gli oggetti che non ti servono più",
+      "label": "Smaltimento (Entsorgung)"
+    },
+    "storage": {
+      "helper": "Custodiamo gli oggetti in sicurezza tra un trasloco e l’altro",
+      "label": "Deposito temporaneo"
+    },
+    "tvMount": {
+      "helper": "Montiamo o smontiamo i televisori fissati a muro",
+      "label": "Montaggio / rimozione supporto TV"
+    }
+  },
+  "services": {
+    "additional": {
+      "label": "Servizi aggiuntivi"
+    },
+    "applianceConnect": {
+      "helper": "Ricolleghiamo gli elettrodomestici nella nuova casa",
+      "label": "Collegamento elettrodomestici",
+      "option": "Collegamento elettrodomestici"
+    },
+    "applianceDisconnect": {
+      "helper": "Scolleghiamo lavatrice, lavastoviglie ecc.",
+      "label": "Scollegamento elettrodomestici",
+      "option": "Scollegamento elettrodomestici"
+    },
+    "detailsSubtitle": "I servizi e le preferenze che hai scelto",
+    "detailsTitle": "Dettagli dei servizi",
+    "disposal": {
+      "helper": "Portiamo gli oggetti indesiderati all'isola ecologica comunale",
+      "label": "Smaltimento",
+      "option": "Smaltimento"
+    },
+    "disposalItems": {
+      "label": "Oggetti da smaltire: {{items}}"
+    },
+    "furnitureAssembly": {
+      "helper": "Montiamo i mobili nella nuova casa",
+      "label": "Montaggio mobili",
+      "option": "Montaggio mobili"
+    },
+    "furnitureDisassembly": {
+      "helper": "Smontiamo letti e tavoli prima del carico",
+      "label": "Smontaggio mobili",
+      "option": "Smontaggio mobili"
+    },
+    "moveoutCleaning": {
+      "helper": "Servizio di pulizia all'indirizzo di ritiro dopo il carico",
+      "label": "Pulizia di fine locazione",
+      "option": "Pulizia di fine locazione"
+    },
+    "section": {
+      "title": "Servizi"
+    },
+    "subtitle": "Servizi extra che hai scelto",
+    "temporaryStorage": {
+      "helper": "Custodiamo gli oggetti tra la data di ritiro e quella di consegna",
+      "label": "Deposito temporaneo",
+      "option": "Deposito temporaneo"
+    },
+    "temporaryStorageWeeks": {
+      "label_one": "Deposito temporaneo: {{count}} settimana",
+      "label_other": "Deposito temporaneo: {{count}} settimane"
+    },
+    "title": "Servizi aggiuntivi",
+    "tvMountRemove": {
+      "helper": "Stacchiamo i televisori a muro al ritiro",
+      "label": "Rimozione supporto TV",
+      "option": "Rimozione supporto TV"
+    }
+  },
+  "storage": {
+    "helper": "I box standard sono climatizzati e assicurati.",
+    "title": "Dettagli del deposito",
+    "weeks": {
+      "label": "Per quante settimane ti serve il deposito?"
+    }
+  },
+  "storageWeekCount_one": "{{count}} settimana",
+  "storageWeekCount_other": "{{count}} settimane",
+  "streetAddress": {
+    "dropoff": {
+      "helper": "Inserisci l’indirizzo completo di consegna",
+      "placeholder": "es. Berliner Straße 12"
+    },
+    "label": "Indirizzo",
+    "pickup": {
+      "helper": "Inserisci l’indirizzo completo di ritiro",
+      "placeholder": "es. Hauptstraße 45"
+    },
+    "required": {
+      "error": "Inserisci un indirizzo"
+    }
+  },
+  "timeSlot": {
+    "afternoon": {
+      "label": "Pomeriggio"
+    },
+    "evening": {
+      "label": "Sera"
+    },
+    "morning": {
+      "label": "Mattina"
+    }
+  },
+  "timing": {
+    "now": {
+      "label": "Adesso"
+    },
+    "title": "Tempistiche del trasloco"
+  },
+  "timingPrefs": {
+    "earliest": {
+      "label": "Preferisco l’arrivo più presto possibile"
+    },
+    "helper": "Seleziona eventuali preferenze aggiuntive sugli orari.",
+    "noEvening": {
+      "label": "Evita la consegna in serata"
+    },
+    "noLunchGap": {
+      "label": "Evita la pausa pranzo"
+    },
+    "title": "Preferenze facoltative"
+  },
+  "vehicle": {
+    "addDetails": {
+      "helper": "Aggiungi i dati del tuo veicolo"
+    },
+    "brand": {
+      "label": "Marca del veicolo *",
+      "placeholder": "es. Mercedes-Benz"
+    },
+    "brandShort": {
+      "label": "Marca *"
+    },
+    "capacity": {
+      "label": "Capacità (m³)",
+      "placeholder": "es. 15",
+      "upTo": {
+        "value": "Fino a {{capacity}}"
+      }
+    },
+    "edit": {
+      "title": "Modifica i dati del veicolo"
+    },
+    "largeTruck": {
+      "helper": "{{capacity}} — traslochi di case, carichi grandi",
+      "label": "Camion grande"
+    },
+    "mediumTruck": {
+      "helper": "{{capacity}} — traslochi di appartamenti",
+      "label": "Camion medio"
+    },
+    "model": {
+      "label": "Modello del veicolo *",
+      "placeholder": "es. Sprinter"
+    },
+    "modelShort": {
+      "label": "Modello *"
+    },
+    "multiple": {
+      "label": "Più veicoli"
+    },
+    "registration": {
+      "label": "Targa del veicolo *",
+      "placeholder": "es. B-AB 1234"
+    },
+    "registrationShort": {
+      "label": "Targa *"
+    },
+    "smallVan": {
+      "helper": "{{capacity}} — piccoli traslochi, singoli oggetti",
+      "label": "Furgone piccolo"
+    },
+    "title": "Dati del veicolo",
+    "type": {
+      "label": "Tipo di veicolo"
+    },
+    "updated": {
+      "success": "Dati del veicolo aggiornati correttamente"
+    },
+    "year": {
+      "label": "Anno *",
+      "placeholder": "es. 2022"
+    },
+    "yearShort": {
+      "label": "Anno"
+    }
+  }
+}

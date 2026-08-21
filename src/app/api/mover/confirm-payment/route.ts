@@ -1,3 +1,4 @@
+import { getTranslations } from '@/lib/i18n-server'
 import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
@@ -15,10 +16,11 @@ import { NextRequest, NextResponse } from 'next/server'
  * the move transitions to 'completed', and mover stats are updated.
  */
 export async function POST(request: NextRequest) {
+  const { t } = await getTranslations()
   try {
     const userId = await getSessionUserId()
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
     }
 
     const { moveId } = await request.json()
@@ -36,13 +38,13 @@ export async function POST(request: NextRequest) {
     )
     const moverProfile = profiles.documents[0]
     if (!moverProfile) {
-      return NextResponse.json({ error: 'Mover profile not found' }, { status: 404 })
+      return NextResponse.json({ error: t('errors:mover.profileNotFound') }, { status: 404 })
     }
 
     // Require verified mover to confirm payment
     if (moverProfile.verificationStatus !== 'verified') {
       return NextResponse.json(
-        { error: 'Your mover profile has not been verified yet' },
+        { error: t('errors:mover.notVerified') },
         { status: 403 }
       )
     }
@@ -59,13 +61,16 @@ export async function POST(request: NextRequest) {
       ? move.moverProfileId
       : move.moverProfileId?.$id
     if (moveMoverProfileId !== moverProfile.$id) {
-      return NextResponse.json({ error: 'Not assigned to this move' }, { status: 403 })
+      return NextResponse.json({ error: t('errors:move.notAssigned') }, { status: 403 })
     }
 
     // Move must be in awaiting_payment status
     if (move.status !== 'awaiting_payment') {
       return NextResponse.json(
-        { error: `Move is not awaiting payment (current: ${move.status})` },
+        // `(current: {{status}})` dropped a translated status label into a
+        // parenthesis; see `accept-move/route.ts` for why the slot went away
+        // rather than becoming a 17-key family.
+        { error: t('errors:payment.notAwaiting') },
         { status: 400 }
       )
     }
@@ -156,6 +161,7 @@ export async function POST(request: NextRequest) {
           title: 'Move Completed',
           body: 'Your move has been completed! Please leave a review.',
           data: { moveId, handle: move.handle, status: 'completed' },
+          i18n: { key: 'status.completed', params: { handle: move.handle ?? '' } },
         })
       }
 
@@ -170,10 +176,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       paymentStatus: 'pending',
-      message: 'Mover payment confirmed. Waiting for client confirmation.',
+      message: t('booking:payment.moverConfirmed.success'),
     })
   } catch (error) {
     console.error('POST /api/mover/confirm-payment error:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: t('errors:generic.internal') }, { status: 500 })
   }
 }

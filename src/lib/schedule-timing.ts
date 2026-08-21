@@ -18,6 +18,8 @@ export const START_WINDOW_BEFORE_MS = 5 * 60 * 1000 // Start Route unlocks at T-
 export const PLATFORM_TZ = 'Europe/Berlin'
 
 function tzOffsetMs(tz: string, utcMs: number): number {
+  // NOT a display locale: this derives a UTC offset from the parts and never
+  // reaches a screen. Localising the tag would break DST handling. Leave as-is.
   const parts = new Intl.DateTimeFormat('en-US', {
     timeZone: tz,
     hour12: false,

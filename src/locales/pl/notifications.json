@@ -1,0 +1,151 @@
+{
+  "cancel": {
+    "byClient": {
+      "body": "Klient anulował przeprowadzkę.",
+      "bodyWithHandle": "Klient anulował przeprowadzkę {{handle}}.",
+      "title": "Przeprowadzka anulowana"
+    },
+    "reassigning": {
+      "body": "Twój przewoźnik musiał zrezygnować z przeprowadzki. Proponujemy ją innym przewoźnikom w pobliżu.",
+      "bodyWithHandle": "Twój przewoźnik musiał zrezygnować z przeprowadzki {{handle}}. Proponujemy ją innym przewoźnikom w pobliżu.",
+      "title": "Szukamy innego przewoźnika"
+    }
+  },
+  "message": {
+    "new": {
+      "title": "Nowa wiadomość"
+    }
+  },
+  "payment": {
+    "clientCharged": {
+      "body": "Płatność {{amount}} została zrealizowana. Rezerwacja przeprowadzki jest potwierdzona!",
+      "title": "Płatność potwierdzona"
+    },
+    "clientConfirmed": {
+      "body": "Klient oznaczył tę przeprowadzkę jako opłaconą. Potwierdź ze swojej strony, aby ją zamknąć.",
+      "title": "Klient potwierdził płatność"
+    },
+    "confirmYours": {
+      "body": "Przewoźnik potwierdził płatność. Potwierdź ze swojej strony, aby zakończyć przeprowadzkę.",
+      "title": "Potwierdź płatność"
+    },
+    "moverPaid": {
+      "body": "Wypłacono Ci {{amount}}.",
+      "bodyWithHandle": "Wypłacono Ci {{amount}} za przeprowadzkę {{handle}}.",
+      "title": "Płatność otrzymana"
+    }
+  },
+  "reminder": {
+    "starting": {
+      "client": {
+        "body": "Przeprowadzka {{handle}} zaraz się zacznie. Przewoźnik już się przygotowuje.",
+        "title": "Twoja przeprowadzka zaczyna się {{lead}}"
+      },
+      "mover": {
+        "body": "Przeprowadzka {{handle}} zaczyna się {{lead}} — opcja „Rozpocznij trasę” jest już dostępna.",
+        "title": "Czas rozpocząć przeprowadzkę"
+      }
+    },
+    "upcoming": {
+      "client": {
+        "body": "Twoja przeprowadzka {{handle}} zaczyna się {{lead}}.",
+        "bodyWithWindow": "Twoja przeprowadzka {{handle}} zaczyna się {{lead}} w przedziale {{window}}.",
+        "title": "Przypomnienie o przeprowadzce"
+      },
+      "mover": {
+        "body": "Zaplanowana przeprowadzka {{handle}} zaczyna się {{lead}}.",
+        "bodyWithWindow": "Zaplanowana przeprowadzka {{handle}} zaczyna się {{lead}} w przedziale {{window}}.",
+        "title": "Przypomnienie o przeprowadzce"
+      }
+    }
+  },
+  "request": {
+    "new": {
+      "body": "W pobliżu jest nowe zlecenie przeprowadzki. Dotknij, aby zobaczyć i przyjąć.",
+      "bodyRoute": "{{from}} → {{to}}. Dotknij, aby zobaczyć i przyjąć.",
+      "title": "Nowe zlecenie przeprowadzki"
+    }
+  },
+  "review": {
+    "received": {
+      "bodyWithComment_few": "Masz opinię na {{count}} gwiazdki: „{{comment}}”",
+      "bodyWithComment_many": "Masz opinię na {{count}} gwiazdek: „{{comment}}”",
+      "bodyWithComment_one": "Masz opinię na {{count}} gwiazdkę: „{{comment}}”",
+      "bodyWithComment_other": "Masz opinię na {{count}} gwiazdki: „{{comment}}”",
+      "body_few": "Masz opinię na {{count}} gwiazdki.",
+      "body_many": "Masz opinię na {{count}} gwiazdek.",
+      "body_one": "Masz opinię na {{count}} gwiazdkę.",
+      "body_other": "Masz opinię na {{count}} gwiazdki.",
+      "title": "Nowa opinia"
+    }
+  },
+  "status": {
+    "arrivedDestination": {
+      "body": "Przewoźnik dotarł na miejsce docelowe.",
+      "title": "Na miejscu docelowym"
+    },
+    "awaitingPayment": {
+      "body": "Przeprowadzka zakończona — potwierdź płatność.",
+      "title": "Płatność do rozliczenia"
+    },
+    "cancelledByMover": {
+      "body": "Przewoźnik anulował tę przeprowadzkę.",
+      "title": "Przeprowadzka anulowana"
+    },
+    "completed": {
+      "body": "Twoja przeprowadzka została zakończona! Wystaw opinię.",
+      "title": "Przeprowadzka zakończona"
+    },
+    "inTransit": {
+      "body": "Twoje przedmioty są w drodze na miejsce docelowe.",
+      "title": "W trasie"
+    },
+    "loading": {
+      "body": "Trwa załadunek Twoich przedmiotów.",
+      "title": "Rozpoczęto załadunek"
+    },
+    "moverAccepted": {
+      "body": "Przewoźnik przyjął Twoje zlecenie przeprowadzki!",
+      "title": "Przewoźnik potwierdził"
+    },
+    "moverAcceptedScheduled": {
+      "body": "Przewoźnik przyjął Twoją zaplanowaną przeprowadzkę!",
+      "title": "Przewoźnik potwierdził"
+    },
+    "moverArrived": {
+      "body": "Przewoźnik dotarł pod adres odbioru.",
+      "title": "Przewoźnik na miejscu"
+    },
+    "moverEnRoute": {
+      "body": "Przewoźnik jedzie pod Twój adres odbioru.",
+      "title": "Przewoźnik w drodze"
+    },
+    "moverWithdrew": {
+      "body": "Przewoźnik zrezygnował. Szukamy dla Ciebie innego przewoźnika.",
+      "title": "Przewoźnik zrezygnował"
+    },
+    "unloading": {
+      "body": "Trwa rozładunek Twoich przedmiotów.",
+      "title": "Rozładunek"
+    }
+  },
+  "verification": {
+    "contactSupport": "Skontaktuj się z pomocą techniczną, aby poznać szczegóły.",
+    "rejected": {
+      "body": "Twój wniosek o profil przewoźnika został odrzucony. {{reason}}",
+      "title": "Profil odrzucony"
+    },
+    "submitted": {
+      "body": "Twój profil przewoźnika jest weryfikowany. Powiadomimy Cię, gdy zostanie zatwierdzony.",
+      "title": "Profil wysłany"
+    },
+    "suspended": {
+      "body": "Twoje konto przewoźnika zostało zawieszone. {{reason}}",
+      "title": "Konto zawieszone"
+    },
+    "verified": {
+      "body": "Gratulacje! Twój profil przewoźnika został zweryfikowany. Możesz już przyjmować przeprowadzki.",
+      "title": "Profil zweryfikowany"
+    }
+  }
+}

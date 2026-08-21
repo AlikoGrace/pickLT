@@ -1,0 +1,69 @@
+{
+  "accept": {
+    "privacy": "Je reconnais avoir pris connaissance de la <0>politique de confidentialité</0> (RGPD)",
+    "required": {
+      "error": "Veuillez accepter les conditions générales et la politique de confidentialité pour continuer"
+    },
+    "terms": "Je confirme les informations et j’accepte les <0>conditions générales</0>"
+  },
+  "governingLanguage": {
+    "notice": "Ce document est une traduction. Elle est fournie à titre informatif uniquement ; en cas de divergence, la version anglaise fait foi."
+  },
+  "help": {
+    "faq": {
+      "contactSupport": {
+        "answer": "Vous pouvez joindre notre équipe d’assistance via l’option « Nous contacter » disponible dans l’application.",
+        "question": "Comment contacter l’assistance ?"
+      },
+      "manageNotifications": {
+        "answer": "Ouvrez Profil → Notifications pour choisir les alertes que vous recevez.",
+        "question": "Comment gérer les notifications ?"
+      },
+      "reportIssue": {
+        "answer": "Utilisez la section « Aide et assistance » de votre profil pour signaler tout problème rencontré.",
+        "question": "Comment signaler un problème ?"
+      },
+      "resetPassword": {
+        "answer": "Appuyez sur « Mot de passe oublié » sur l’écran de connexion et suivez les instructions pour réinitialiser votre mot de passe par e-mail.",
+        "question": "Comment réinitialiser mon mot de passe ?"
+      },
+      "updateInfo": {
+        "answer": "Ouvrez Profil → Modifier le profil pour mettre à jour vos informations personnelles à tout moment.",
+        "question": "Comment mettre à jour mes informations ?"
+      }
+    }
+  },
+  "insuranceClaims": {
+    "title": "Assurance et sinistres"
+  },
+  "privacy": {
+    "effectiveDate": {
+      "label": "Date d’entrée en vigueur : {{date}}",
+      "value": "20 décembre 2024"
+    },
+    "section": {
+      "informationCollection": {
+        "body": "Nous collectons les informations essentielles pour améliorer votre expérience. Cela comprend les données que vous fournissez directement, telles que les informations de votre compte, ainsi que celles recueillies par les analyses d’utilisation et les cookies.",
+        "title": "1. Collecte des informations"
+      },
+      "informationSetting": {
+        "body": "Vous gardez le contrôle total de vos données. Gérez vos préférences de confidentialité, mettez à jour vos informations personnelles et adaptez vos paramètres à vos besoins.",
+        "title": "3. Paramètres des informations"
+      },
+      "informationUsage": {
+        "body": "Les informations collectées servent à améliorer nos services, à proposer des recommandations personnalisées et à garantir une expérience fluide. Nous ne partageons pas vos données sans votre consentement explicite.",
+        "title": "2. Utilisation des informations"
+      },
+      "securityMeasures": {
+        "body": "La sécurité de vos données est notre priorité : protocoles de sécurité avancés, méthodes de chiffrement et audits réguliers protègent vos informations contre les accès non autorisés et les violations.",
+        "title": "4. Mesures de sécurité"
+      }
+    }
+  },
+  "privacyPolicy": {
+    "title": "Politique de confidentialité"
+  },
+  "termsOfService": {
+    "title": "Conditions générales d’utilisation"
+  }
+}

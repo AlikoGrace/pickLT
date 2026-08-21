@@ -1,0 +1,40 @@
+{
+  "doc": {
+    "draftBanner": "BOZZA — in attesa di revisione da parte del consulente fiscale",
+    "driverHeading": "Autista",
+    "footerDisclaimer": "Generato automaticamente a titolo informativo per l’autista. Gli autisti restano responsabili della dichiarazione dei propri ricavi e redditi.",
+    "operatorHeading": "Gestore della piattaforma",
+    "operatorPending": "[dati del gestore in attesa]",
+    "operatorRegistration": "Numero di registrazione: {{value}}",
+    "operatorVatId": "VAT ID (partita IVA): {{value}}",
+    "period": "Periodo: {{period}}",
+    "statementNo": "Estratto n.: {{number}}",
+    "taxNumber": "Codice fiscale: {{value}}",
+    "title": "Estratto mensile dell’attività dell’autista",
+    "vatId": "VAT ID (partita IVA): {{value}}"
+  },
+  "lines": {
+    "cashAlreadyHeld": "Di cui già ricevuto in contanti",
+    "commission": "Commissione / costo del servizio",
+    "deductionsHeading": "Trattenute della piattaforma",
+    "grossCash": "Incassato in contanti",
+    "grossDigital": "Incassato digitalmente (in app/carta)",
+    "grossHeading": "Guadagni lordi",
+    "grossLocal": "Lordo in valuta locale ({{currency}})",
+    "grossTotal": "Totale guadagni lordi",
+    "instantMoves": "Di cui traslochi immediati",
+    "net": "Importo netto",
+    "netPayable": "Netto da accreditare all’autista",
+    "resultHeading": "Risultato",
+    "scheduledMoves": "Di cui traslochi programmati",
+    "summary": "Riepilogo dei traslochi liquidati",
+    "totalMoves": "Totale traslochi completati",
+    "withholdingHeading": "Imposte trattenute alla fonte",
+    "withholdingIncome": "Imposta sul reddito trattenuta",
+    "withholdingVat": "IVA trattenuta"
+  },
+  "statementReady": {
+    "body": "L’estratto {{number}} per {{period}} è disponibile nei tuoi documenti fiscali.",
+    "title": "Il tuo estratto mensile è pronto"
+  }
+}

@@ -1,0 +1,1123 @@
+{
+  "about": {
+    "hero": {
+      "subtitle": "PickLT is een platform voor verhuisdiensten. Je beschrijft je verhuizing, vergelijkt verhuizers en boekt degene die je wilt — voor appartementen, kantoren en losse spullen in heel Europa.",
+      "title": "👋 Over ons."
+    }
+  },
+  "account": {
+    "clientType": {
+      "label": "Klantaccount"
+    },
+    "moverType": {
+      "label": "Verhuizersaccount"
+    },
+    "myMoves": {
+      "helper": "Bekijk en volg al je verhuizingen"
+    },
+    "signedOut": {
+      "subtitle": "Log in om je profiel te beheren, je verhuizingen te bekijken en meer.",
+      "title": "Log in om je account te bekijken"
+    },
+    "version": {
+      "label": "PickLT v{{version}}"
+    }
+  },
+  "authGate": {
+    "redirecting": {
+      "label": "Doorsturen naar inloggen…"
+    }
+  },
+  "billing": {
+    "addPayout": {
+      "cta": "Uitbetaalmethode toevoegen"
+    },
+    "payoutMethods": {
+      "body": "Voeg een uitbetaalmethode toe om betalingen van PickLT te ontvangen. Uitbetalingen gaan naar de methode die je hieronder instelt.",
+      "title": "Uitbetaalmethoden"
+    },
+    "title": "Betalingen en uitbetalingen"
+  },
+  "checkout": {
+    "confirmAndPay": {
+      "cta": "Bevestigen en {{amount}} betalen"
+    },
+    "confirmMove": {
+      "cta": "Verhuizing bevestigen · {{amount}}"
+    },
+    "editHint": {
+      "helper": "Klik op een sectie om je verhuisgegevens te bewerken."
+    },
+    "pay": {
+      "title": "Bevestigen en betalen"
+    },
+    "title": "Bevestig je verhuizing",
+    "yourMove": {
+      "title": "Je verhuizing"
+    }
+  },
+  "contact": {
+    "address": {
+      "label": "🗺 ADRES",
+      "value": "Photo booth tattooed prism, portland taiyaki hoodie neutra typewriter"
+    },
+    "email": {
+      "label": "💌 E-MAIL"
+    },
+    "fullName": {
+      "placeholder": "Jan Jansen"
+    },
+    "message": {
+      "label": "Bericht"
+    },
+    "phone": {
+      "label": "☎ TELEFOON"
+    },
+    "socials": {
+      "label": "🌏 SOCIALS"
+    },
+    "submit": {
+      "cta": "Bericht versturen"
+    },
+    "title": "Contact"
+  },
+  "footer": {
+    "company": {
+      "about": "Over ons",
+      "careers": "Werken bij",
+      "locations": "Locaties",
+      "title": "Bedrijf"
+    },
+    "copyright": "© {{year}} PickLT. Alle rechten voorbehouden.",
+    "legal": {
+      "title": "Juridisch"
+    },
+    "solutions": {
+      "commercial": "Zakelijke verhuizingen",
+      "localMoving": "Lokaal verhuizen",
+      "longDistance": "Verhuizen over lange afstand",
+      "packing": "Inpakservice",
+      "storage": "Opslagoplossingen",
+      "title": "Oplossingen"
+    },
+    "support": {
+      "contact": "Neem contact op",
+      "faq": "Veelgestelde vragen",
+      "quote": "Offerte aanvragen",
+      "title": "Support"
+    },
+    "tagline": "Boek verhuizers voor appartementen, kantoren en spullen in heel Europa."
+  },
+  "home": {
+    "hero": {
+      "imageAlt": "Verhuizers dragen dozen een nieuwe woning binnen",
+      "subtitle": "Vertrouwde verhuizers voor de grote momenten in je leven.",
+      "title": "Elke verhuizing zonder stress."
+    },
+    "moverBanner": {
+      "subtitle": "Log in om verhuizingen aan te nemen",
+      "title": "Ben je verhuizer?"
+    },
+    "moves": {
+      "empty": "Nog geen verhuizingen. Boek je eerste verhuizing!",
+      "emptyFiltered": {
+        "cancelled": {
+          "label": "Geen geannuleerde verhuizingen gevonden."
+        },
+        "completed": {
+          "label": "Geen afgeronde verhuizingen gevonden."
+        },
+        "inProgress": {
+          "label": "Geen lopende verhuizingen gevonden."
+        },
+        "pending": {
+          "label": "Geen openstaande verhuizingen gevonden."
+        }
+      },
+      "emptyScheduled": "Geen geplande verhuizingen gevonden.",
+      "signedOut": {
+        "cta": "Log in om te beginnen",
+        "subtitle": "Log in om je verhuizingen te volgen, boekingsgegevens te bekijken en je verhuisplanning te beheren.",
+        "title": "Je verhuizingen verschijnen hier"
+      },
+      "subtitle": "Volg al je verhuizingen",
+      "tab": {
+        "all": {
+          "label": "Alle verhuizingen"
+        },
+        "cancelled": {
+          "label": "Geannuleerd"
+        },
+        "completed": {
+          "label": "Afgerond"
+        },
+        "inProgress": {
+          "label": "Bezig"
+        },
+        "pending": {
+          "label": "In afwachting"
+        },
+        "scheduled": {
+          "label": "Gepland"
+        }
+      },
+      "title": "Je verhuizingen"
+    },
+    "welcomeBack": {
+      "label": "Welkom terug, {{name}}!"
+    }
+  },
+  "instant": {
+    "cardInApp": {
+      "helper": "Deze verhuizing wordt met kaart betaald. Open de PickLT-app om de betaling af te ronden — je opgeslagen kaart wordt daar belast, contant hoef je niets te betalen."
+    },
+    "chat": {
+      "comingSoon": "Chatfunctie komt binnenkort!"
+    },
+    "inventory": {
+      "next": {
+        "cta": "Foto's toevoegen"
+      },
+      "subtitle": "Kies de spullen die je wilt verhuizen. Zo vinden we de juiste verhuizer voor je.",
+      "title": "Wat ga je verhuizen?"
+    },
+    "loadFailed": {
+      "subtitle": "Kan de verhuisgegevens niet van de server laden."
+    },
+    "loading": {
+      "label": "Verhuisgegevens laden…"
+    },
+    "missingLocations": {
+      "subtitle": "Kies je ophaal- en afleverlocatie om verder te gaan.",
+      "title": "Locatiegegevens ontbreken"
+    },
+    "photos": {
+      "helper": "Upload foto's van de spullen die je wilt verhuizen. Zo komt de verhuizer voorbereid met het juiste materiaal en weet hij precies wat de klus inhoudt.",
+      "next": {
+        "cta": "Verhuizers zoeken"
+      },
+      "subtitle": "Help je verhuizer zich voor te bereiden",
+      "title": "Foto's toevoegen"
+    },
+    "review": {
+      "comment": {
+        "placeholder": "Voeg een opmerking toe (optioneel)"
+      },
+      "prompt": "Hoe was je ervaring met {{name}}?",
+      "promptUnnamed": "Hoe was je ervaring met je verhuizer?",
+      "star": {
+        "a11y_one": "Geef {{count}} ster",
+        "a11y_other": "Geef {{count}} sterren"
+      },
+      "submit": {
+        "cta": "Review versturen"
+      },
+      "thanks": {
+        "subtitle": "Je review is verstuurd.",
+        "title": "Bedankt!"
+      }
+    }
+  },
+  "login": {
+    "asClient": {
+      "cta": "Inloggen als klant"
+    },
+    "asMover": {
+      "cta": "Inloggen als verhuizer"
+    },
+    "clientBadge": {
+      "label": "👤 Klantaccount"
+    },
+    "moverBadge": {
+      "label": "🚚 Verhuizersaccount"
+    },
+    "phoneRequired": {
+      "helper": "Na het inloggen is verificatie van je telefoonnummer nodig"
+    },
+    "phoneVerify": {
+      "subtitle": "We moeten je telefoonnummer verifiëren om het inloggen af te ronden."
+    },
+    "resumeMove": {
+      "helper": "Log in om verder te gaan met je verhuizing. Je voortgang is bewaard."
+    },
+    "switchToClient": {
+      "label": "Ben je klant?"
+    },
+    "switchToMover": {
+      "label": "Ben je verhuizer?"
+    },
+    "verifyAndSignIn": {
+      "cta": "Verifiëren en inloggen"
+    }
+  },
+  "moveChoice": {
+    "instant": {
+      "cta": "Aan de slag",
+      "eta": "Verhuizer is er in 15-30 min",
+      "subtitle": "Moet je nu meteen verhuizen? We zoeken direct een verhuizer bij je in de buurt.",
+      "tracking": "Volgen in realtime"
+    },
+    "scheduled": {
+      "cta": "Verhuizing plannen",
+      "date": "Kies je gewenste datum",
+      "subtitle": "Plan vooruit en zet je verhuizing op een vaste datum en tijd.",
+      "title": "Later boeken",
+      "window": "Kies een aankomsttijdvak"
+    },
+    "subtitle": "Kies de optie die het beste bij je past",
+    "summary": {
+      "title": "Je verhuisgegevens"
+    },
+    "title": "Hoe wil je verhuizen?"
+  },
+  "moveDetails": {
+    "mover": {
+      "title": "Je verhuizer"
+    },
+    "notFound": {
+      "subtitle": "Deze verhuizing is mogelijk verwijderd of de link klopt niet."
+    },
+    "reschedule": {
+      "dateTime": {
+        "label": "Nieuwe datum en tijd"
+      }
+    }
+  },
+  "mover": {
+    "acceptMove": {
+      "cta": "Verhuizing accepteren"
+    },
+    "accepted": {
+      "helper": "Je hebt deze verhuizing geaccepteerd. Tik op \"Route starten\" zodra je klaar bent, dan weet de klant dat je onderweg bent."
+    },
+    "activeBadge": {
+      "label": "Actieve verhuizer"
+    },
+    "activeMove": {
+      "advance": {
+        "cta": "Status bijwerken"
+      },
+      "cancelledByClient": {
+        "title": "Verhuizing geannuleerd door klant"
+      },
+      "empty": {
+        "subtitle": "Accepteer een verhuisverzoek om hier te gaan volgen.",
+        "title": "Geen actieve verhuizing"
+      },
+      "etaToPickup": {
+        "label": "~{{minutes}} min tot ophaaladres"
+      },
+      "proximity": {
+        "helper": "Je moet binnen {{radius}} van het ophaaladres zijn om je aankomst te melden ({{distance}} verderop)"
+      }
+    },
+    "additionalServicesCount_one": "+{{count}} dienst",
+    "additionalServicesCount_other": "+{{count}} diensten",
+    "availableMoves": {
+      "empty": {
+        "subtitle": "Op dit moment geen geplande verhuizingen binnen {{radius}}. We kijken automatisch elke {{interval}} opnieuw.",
+        "title": "Geen verhuizingen beschikbaar"
+      },
+      "error": {
+        "title": "Kan verhuizingen niet laden"
+      },
+      "loading": {
+        "label": "Beschikbare verhuizingen bij je in de buurt zoeken…"
+      }
+    },
+    "backToDashboard": {
+      "cta": "Terug naar dashboard"
+    },
+    "browseAvailable": {
+      "cta": "Beschikbare verhuizingen bekijken"
+    },
+    "clientContact": {
+      "title": "Contactgegevens klant"
+    },
+    "crew": {
+      "addFirst": {
+        "cta": "Eerste teamlid toevoegen"
+      },
+      "addMember": {
+        "cta": "Teamlid toevoegen"
+      },
+      "addModal": {
+        "title": "Nieuw teamlid toevoegen"
+      },
+      "editModal": {
+        "title": "Teamlid bewerken"
+      },
+      "empty": {
+        "subtitle": "Voeg je eerste teamlid toe om je team te beheren.",
+        "title": "Nog geen teamleden"
+      },
+      "role": {
+        "label": "Rol"
+      },
+      "subtitle": "Beheer je teamleden",
+      "title": "Mijn team"
+    },
+    "crewSize": {
+      "label": "{{crew}} verhuizers"
+    },
+    "earnings": {
+      "average": {
+        "label": "Gemiddeld per verhuizing"
+      },
+      "breakdown": {
+        "title": "Specificatie"
+      },
+      "empty": "Nog geen verdiensten in deze periode",
+      "error": {
+        "title": "Kan verdiensten niet laden"
+      },
+      "label": "Verdiensten",
+      "loading": "Verdiensten laden…",
+      "movesCompleted": {
+        "label": "Afgeronde verhuizingen"
+      },
+      "payout": {
+        "helper": "Uitbetalingen worden wekelijks verwerkt"
+      },
+      "payoutAvailable": {
+        "label": "Beschikbaar voor uitbetaling"
+      },
+      "period": {
+        "month": {
+          "caption": "deze maand",
+          "label": "Deze maand"
+        },
+        "today": {
+          "caption": "vandaag",
+          "label": "Vandaag"
+        },
+        "week": {
+          "caption": "deze week",
+          "label": "Deze week"
+        },
+        "year": {
+          "caption": "dit jaar",
+          "label": "Dit jaar"
+        }
+      },
+      "refresh": {
+        "a11y": "Vernieuwen"
+      },
+      "requestPayout": {
+        "cta": "Uitbetaling aanvragen"
+      },
+      "subtitle": "Volg je inkomsten en prestaties",
+      "title": "Verdiensten",
+      "total": {
+        "label": "Totale verdiensten"
+      }
+    },
+    "experienceYears_one": "{{count}} jaar",
+    "experienceYears_other": "{{count}} jaar",
+    "field": {
+      "businessStreet": {
+        "label": "Straatadres bedrijf (optioneel)",
+        "placeholder": "Straat en huisnummer"
+      },
+      "city": {
+        "helper": "De stad waar je hoofdzakelijk als verhuizer werkt"
+      },
+      "experience": {
+        "label": "Jaren ervaring",
+        "placeholder": "bijv. 5"
+      },
+      "languages": {
+        "label": "Talen die je spreekt"
+      },
+      "licenseNumber": {
+        "label": "Rijbewijsnummer",
+        "placeholder": "Voer je rijbewijsnummer in"
+      },
+      "licensePhoto": {
+        "a11y": "Voorbeeld rijbewijs",
+        "cta": "Upload een foto van je rijbewijs",
+        "helper": "Een scherpe foto versnelt de verificatie",
+        "label": "Foto van je rijbewijs"
+      },
+      "phone": {
+        "placeholder": "+49 123 456 7890"
+      },
+      "postcode": {
+        "label": "Postcode (optioneel)",
+        "placeholder": "bijv. 10115"
+      },
+      "selfie": {
+        "a11y": "Voorbeeld selfie",
+        "cta": "Maak of upload een duidelijke selfie",
+        "helper": "Een duidelijke selfie is nodig voor identiteitsverificatie",
+        "label": "Selfie",
+        "retake": {
+          "cta": "Selfie opnieuw maken"
+        }
+      },
+      "ssn": {
+        "helper": "Versleuteld en alleen gebruikt voor belastingverificatie",
+        "label": "Sociaalzekerheidsnummer",
+        "placeholder": "Voer je sociaalzekerheidsnummer in"
+      },
+      "taxId": {
+        "helper": "Vereist voor het aanmaken van facturen en de belastingrapportage",
+        "label": "Fiscaal identificatienummer",
+        "placeholder": "bijv. DE123456789"
+      },
+      "vatId": {
+        "helper": "Laat dit leeg als je Kleinunternehmer bent zonder VAT ID",
+        "label": "VAT ID (USt-IdNr., optioneel)",
+        "placeholder": "bijv. DE123456789"
+      }
+    },
+    "goToActive": {
+      "cta": "Naar actieve verhuizing"
+    },
+    "homeTypeMoveType": {
+      "apartment": {
+        "light": {
+          "label": "Appartement · Klein"
+        },
+        "premium": {
+          "label": "Appartement · Premium"
+        },
+        "regular": {
+          "label": "Appartement · Gewoon"
+        }
+      },
+      "house": {
+        "light": {
+          "label": "Huis · Klein"
+        },
+        "premium": {
+          "label": "Huis · Premium"
+        },
+        "regular": {
+          "label": "Huis · Gewoon"
+        }
+      },
+      "office": {
+        "light": {
+          "label": "Kantoor · Klein"
+        },
+        "premium": {
+          "label": "Kantoor · Premium"
+        },
+        "regular": {
+          "label": "Kantoor · Gewoon"
+        }
+      },
+      "storage": {
+        "light": {
+          "label": "Opslag · Klein"
+        },
+        "premium": {
+          "label": "Opslag · Premium"
+        },
+        "regular": {
+          "label": "Opslag · Gewoon"
+        }
+      }
+    },
+    "jobDetails": {
+      "notFound": {
+        "subtitle": "Deze verhuizing is mogelijk verwijderd of de link klopt niet."
+      }
+    },
+    "notStartable": {
+      "body": "<0>Deze verhuizing kan nog niet starten.</0> Je kunt deze route starten op <1>{{when}}</1> (Route starten komt 5 minuten van tevoren vrij)."
+    },
+    "notify": {
+      "newRequest": {
+        "body": "Je hebt een nieuw verhuisverzoek. Open de app om de details te bekijken en te accepteren.",
+        "title": "Nieuw verhuisverzoek! 📋"
+      }
+    },
+    "onboarding": {
+      "done": {
+        "redirect": "Je wordt doorgestuurd naar je dashboard…",
+        "subtitle": "Je verhuizersprofiel wordt beoordeeld. We laten het je weten zodra het is geverifieerd.",
+        "title": "Profiel ingediend!"
+      },
+      "review": {
+        "experience": {
+          "title": "Ervaring",
+          "value_one": "{{count}} jaar",
+          "value_other": "{{count}} jaar"
+        },
+        "languages": {
+          "value": "Talen: {{languages}}"
+        },
+        "license": {
+          "value": "Rijbewijs: {{number}}"
+        },
+        "licenseOk": "✓ Foto van rijbewijs geüpload",
+        "location": {
+          "value": "{{city}}, {{country}}"
+        },
+        "personal": {
+          "value": "{{name}} · {{phone}}"
+        },
+        "selfieOk": "✓ Selfie geüpload",
+        "ssn": {
+          "value": "Sociaalzekerheidsnummer: ••••{{last4}}"
+        },
+        "subtitle": "Controleer je gegevens voordat je ze indient.",
+        "taxId": {
+          "value": "Fiscaal nummer: {{taxId}}"
+        },
+        "title": "Controleer je profiel",
+        "vehicle": {
+          "capacity": {
+            "value": "{{vehicleType}} · Kenteken: {{registration}} · {{capacity}}"
+          },
+          "value": "{{vehicleType}} · Kenteken: {{registration}}"
+        },
+        "vehicleName": {
+          "value": "{{brand}} {{model}} ({{year}})"
+        },
+        "verification": {
+          "title": "Verificatie en locatie"
+        }
+      },
+      "step": {
+        "experience": {
+          "label": "Ervaring"
+        },
+        "personal": {
+          "label": "Persoonlijke gegevens"
+        },
+        "review": {
+          "label": "Controleren en indienen"
+        },
+        "vehicle": {
+          "label": "Voertuiggegevens"
+        },
+        "verification": {
+          "label": "Verificatie"
+        }
+      },
+      "submit": {
+        "cta": "Profiel indienen"
+      },
+      "subtitle": "Vul je gegevens in om verhuizingen te kunnen aannemen",
+      "title": "Maak je verhuizersprofiel compleet"
+    },
+    "request": {
+      "categoryAndType": {
+        "instant": {
+          "light": {
+            "subtitle": "Direct · Kleine verhuizing"
+          },
+          "premium": {
+            "subtitle": "Direct · Premium verhuizing"
+          },
+          "regular": {
+            "subtitle": "Direct · Gewone verhuizing"
+          }
+        },
+        "scheduled": {
+          "light": {
+            "subtitle": "Gepland · Kleine verhuizing"
+          },
+          "premium": {
+            "subtitle": "Gepland · Premium verhuizing"
+          },
+          "regular": {
+            "subtitle": "Gepland · Gewone verhuizing"
+          }
+        }
+      },
+      "earnings": {
+        "label": "Jouw verdiensten"
+      },
+      "respondWithin": {
+        "label": "Reageer binnen <1>{{seconds}}</1>"
+      },
+      "services": {
+        "label": "Diensten: {{list}}"
+      },
+      "title": "Nieuw verhuisverzoek!",
+      "viewDetails": {
+        "cta": "Alle details bekijken"
+      }
+    },
+    "roleLabel": "Verhuizer",
+    "scheduledMoves": {
+      "empty": {
+        "subtitle": "Geplande verhuizingen die je accepteert, blijven hier staan tot hun verhuisdatum.",
+        "title": "Geen geplande verhuizingen"
+      },
+      "subtitle": "Verhuizingen waaraan je bent toegewezen en die wachten op hun geplande datum"
+    },
+    "section": {
+      "experience": {
+        "title": "Ervaring en tarief"
+      },
+      "verification": {
+        "helper": "Deze gegevens zijn nodig voor identiteitsverificatie en worden veilig bewaard.",
+        "title": "Verificatie en werkgebied"
+      }
+    },
+    "settings": {
+      "payouts": {
+        "helper": "Beheer uitbetaalrekeningen",
+        "label": "Betaalmethoden"
+      },
+      "subtitle": "Beheer je account en voorkeuren",
+      "version": {
+        "label": "PickLT Mover App v{{version}}"
+      }
+    },
+    "startRoute": {
+      "cta": "Route starten — ik ben onderweg"
+    },
+    "tapForDetails": {
+      "helper": "Tik om details te bekijken"
+    },
+    "tax": {
+      "empty": {
+        "subtitle": "Rond deze maand verhuizingen af, dan verschijnt je eerste overzicht op de 1e.",
+        "title": "Nog geen overzichten"
+      },
+      "helper1": "Je maandelijkse overzicht wordt op de 1e van elke maand aangemaakt en gaat over de maand ervoor.",
+      "helper2": "Bewaar ze voor je boekhouder of de belastingdienst.",
+      "openPdf": {
+        "cta": "PDF openen"
+      },
+      "preparing": {
+        "label": "Voorbereiden…"
+      },
+      "row": {
+        "summary_one": "{{count}} verhuizing · bruto {{gross}} · netto {{net}}",
+        "summary_other": "{{count}} verhuizingen · bruto {{gross}} · netto {{net}}"
+      },
+      "title": "Belasting- en verdienstendocumenten"
+    },
+    "verification": {
+      "pending": {
+        "body": "Je verhuizersprofiel wordt beoordeeld. Zodra het is geverifieerd, kun je verhuizingen accepteren en alle functies gebruiken.",
+        "title": "Verificatie in behandeling"
+      },
+      "rejected": {
+        "body": "Je verhuizersprofiel is afgewezen. Neem contact op met support of werk je profiel bij in Instellingen.",
+        "title": "Profiel afgewezen"
+      },
+      "suspended": {
+        "body": "Je account is geblokkeerd. Neem contact op met support voor meer informatie.",
+        "title": "Account geblokkeerd"
+      }
+    },
+    "viewDetails": {
+      "cta": "Details bekijken"
+    },
+    "withdraw": {
+      "cta": "Terugtrekken uit verhuizing"
+    },
+    "withdrawConfirm": {
+      "body": "Weet je het zeker? De verhuizing komt beschikbaar voor andere verhuizers.",
+      "cta": "Ja, terugtrekken"
+    }
+  },
+  "moverDashboard": {
+    "findMoves": {
+      "cta": "Verhuizingen zoeken"
+    },
+    "manageCrew": {
+      "cta": "Team beheren"
+    },
+    "quickActions": {
+      "title": "Snelle acties"
+    },
+    "recentMoves": {
+      "moveType": {
+        "instant": {
+          "label": "Directe verhuizing"
+        },
+        "scheduled": {
+          "label": "Geplande verhuizing"
+        }
+      },
+      "title": "Recente verhuizingen"
+    },
+    "stat": {
+      "activeMoves": {
+        "label": "Actieve verhuizingen"
+      },
+      "availableMoves": {
+        "label": "Beschikbare verhuizingen"
+      },
+      "completedThisMonth": {
+        "label": "Afgerond deze maand"
+      },
+      "crewMembers": {
+        "label": "Teamleden"
+      },
+      "earningsThisMonth": {
+        "label": "Verdiensten deze maand"
+      },
+      "scheduledMoves": {
+        "label": "Geplande verhuizingen"
+      }
+    },
+    "welcome": {
+      "subtitle": "Dit staat er vandaag op het programma",
+      "title": "Welkom terug, {{name}}!"
+    }
+  },
+  "moverNav": {
+    "active": {
+      "label": "Actief"
+    },
+    "activeMove": {
+      "label": "Actieve verhuizing"
+    },
+    "availableMoves": {
+      "label": "Beschikbare verhuizingen"
+    },
+    "crew": {
+      "label": "Team"
+    },
+    "dashboard": {
+      "label": "Dashboard"
+    },
+    "earnings": {
+      "label": "Verdiensten"
+    },
+    "home": {
+      "label": "Start"
+    },
+    "moves": {
+      "label": "Verhuizingen"
+    },
+    "myCrew": {
+      "label": "Mijn team"
+    },
+    "scheduledMoves": {
+      "label": "Geplande verhuizingen"
+    },
+    "taxDocuments": {
+      "label": "Belastingdocumenten"
+    }
+  },
+  "myMoves": {
+    "book": {
+      "cta": "Verhuizing boeken"
+    },
+    "empty": {
+      "filtered": {
+        "cancelled": {
+          "title": "Geen geannuleerde verhuizingen"
+        },
+        "completed": {
+          "title": "Geen afgeronde verhuizingen"
+        },
+        "inProgress": {
+          "title": "Geen lopende verhuizingen"
+        },
+        "pending": {
+          "title": "Geen openstaande verhuizingen"
+        }
+      },
+      "subtitle": "Boek je eerste verhuizing, dan verschijnt die hier.",
+      "title": "Nog geen verhuizingen"
+    },
+    "subtitle": "Volg en beheer al je verhuizingen op één plek.",
+    "title": "Mijn verhuizingen"
+  },
+  "nav": {
+    "account": {
+      "a11y": "Naar je account",
+      "label": "Account"
+    },
+    "backToMyMoves": {
+      "cta": "Terug naar mijn verhuizingen"
+    },
+    "becomeMover": {
+      "label": "Word verhuizer"
+    },
+    "dashboard": {
+      "cta": "Dashboard",
+      "label": "Dashboard"
+    },
+    "earnings": {
+      "label": "Verdiensten"
+    },
+    "home": {
+      "label": "Start"
+    },
+    "moverDashboard": {
+      "label": "Verhuizersdashboard"
+    },
+    "moves": {
+      "label": "Verhuizingen"
+    },
+    "myAccount": {
+      "label": "Mijn account"
+    },
+    "myCrew": {
+      "label": "Mijn team"
+    },
+    "myMoves": {
+      "cta": "Mijn verhuizingen",
+      "label": "Mijn verhuizingen"
+    },
+    "navigateTo": {
+      "a11y": "Ga naar {{name}}"
+    },
+    "scheduled": {
+      "label": "Gepland"
+    },
+    "signInAsClient": {
+      "helper": "Log in of meld je aan als klant",
+      "label": "Klant"
+    },
+    "signInAsMover": {
+      "helper": "Log in of meld je aan als verhuizer",
+      "label": "Verhuizer"
+    }
+  },
+  "notFound": {
+    "cta": "Terug naar de homepage",
+    "image": {
+      "a11y": "Pagina niet gevonden"
+    },
+    "title": "De pagina die je zocht, bestaat niet."
+  },
+  "notify": {
+    "empty": "Je hebt geen meldingen."
+  },
+  "payDone": {
+    "booked": {
+      "title": "Boeking bevestigd!"
+    },
+    "confirmed": {
+      "title": "Je verhuizing is bevestigd!"
+    },
+    "confirmedPaid": {
+      "title": "Verhuizing bevestigd en betaald!"
+    },
+    "congrats": {
+      "title": "Gefeliciteerd 🎉"
+    },
+    "instant": {
+      "subtitle": "Je directe verhuizing"
+    },
+    "scheduled": {
+      "subtitle": "Je verhuisboeking"
+    },
+    "viewDetails": {
+      "cta": "Verhuisdetails bekijken"
+    }
+  },
+  "preview": {
+    "complete": {
+      "cta": "Verhuizing afronden"
+    },
+    "creating": {
+      "cta": "Je verhuizing wordt aangemaakt…"
+    },
+    "editPhotos": {
+      "cta": "Foto's bewerken"
+    }
+  },
+  "scheduledMoves": {
+    "book": {
+      "cta": "Geplande verhuizing boeken"
+    },
+    "empty": {
+      "filtered": {
+        "cancelled": {
+          "title": "Geen geannuleerde geplande verhuizingen"
+        },
+        "completed": {
+          "title": "Geen afgeronde geplande verhuizingen"
+        },
+        "inProgress": {
+          "title": "Geen lopende geplande verhuizingen"
+        },
+        "pending": {
+          "title": "Geen openstaande geplande verhuizingen"
+        }
+      },
+      "subtitle": "Boek een geplande verhuizing, dan verschijnt die hier.",
+      "title": "Nog geen geplande verhuizingen"
+    },
+    "subtitle": "Al je komende en eerdere geplande verhuizingen.",
+    "title": "Geplande verhuizingen"
+  },
+  "search": {
+    "dropoff": {
+      "placeholder": "Waar verhuis je naartoe?"
+    },
+    "from": {
+      "label": "Van"
+    },
+    "location": {
+      "a11y": "Zoek een locatie",
+      "placeholder": "Waar verhuis je?"
+    },
+    "mobile": {
+      "collapsed": {
+        "label": "Plan je verhuizing"
+      },
+      "title": "Plan je verhuizing",
+      "where": {
+        "placeholder": "Waarheen?"
+      }
+    },
+    "pickup": {
+      "placeholder": "Waar verhuis je vandaan?"
+    },
+    "to": {
+      "label": "Naar"
+    }
+  },
+  "selectMover": {
+    "available": {
+      "title_one": "Beschikbare verhuizers ({{count}})",
+      "title_other": "Beschikbare verhuizers ({{count}})"
+    },
+    "capacity": {
+      "label": "{{volume}} capaciteit"
+    },
+    "confirm": {
+      "cta": "Bevestigen · {{amount}}"
+    },
+    "creating": {
+      "cta": "Verhuizing aanmaken…"
+    },
+    "empty": {
+      "subtitle": "Er zijn nu geen geverifieerde verhuizers online bij jou in de buurt. Probeer het over een paar minuten opnieuw.",
+      "title": "Geen verhuizers beschikbaar"
+    },
+    "error": {
+      "title": "Kan geen verhuizers vinden"
+    },
+    "eta": {
+      "label_one": "~{{count}} min rijden",
+      "label_other": "~{{count}} min rijden"
+    },
+    "experienceYears_one": "{{count}} j ervaring",
+    "experienceYears_other": "{{count}} j ervaring",
+    "languages": {
+      "label": "Talen: {{languages}}"
+    },
+    "pricing": {
+      "disclaimer": "De uiteindelijke prijs kan afwijken op basis van de werkelijke omstandigheden.",
+      "helper_one": "De prijzen omvatten het basistarief, de afstand ({{distance}}), de teamgrootte, de laadruimte van het voertuig en het hanteren van {{count}} voorwerp.",
+      "helper_other": "De prijzen omvatten het basistarief, de afstand ({{distance}}), de teamgrootte, de laadruimte van het voertuig en het hanteren van {{count}} voorwerpen.",
+      "title": "Zo komt de prijs tot stand:"
+    },
+    "searching": {
+      "subtitle": "We zoeken geverifieerde verhuizers bij je ophaaladres in de buurt",
+      "title": "Beschikbare verhuizers zoeken…"
+    },
+    "selectFirst": {
+      "cta": "Kies een verhuizer"
+    },
+    "title": "Verhuizer kiezen"
+  },
+  "seo": {
+    "about": {
+      "description": "PickLT is een platform voor verhuisdiensten voor appartementen, kantoren en spullen in heel Europa.",
+      "title": "Over ons"
+    },
+    "accountBilling": {
+      "description": "Beheer je betalingen en uitbetalingen",
+      "title": "Account - Betalingen en uitbetalingen"
+    },
+    "accountPassword": {
+      "description": "Beheer je wachtwoord",
+      "title": "Account - wachtwoord"
+    },
+    "contact": {
+      "description": "Neem contact op met het team van PickLT.",
+      "title": "Neem contact op"
+    },
+    "default": {
+      "description": "PickLT - Jouw vertrouwde platform voor verhuisdiensten",
+      "keywords": "PickLT, verhuizen, verhuizers, verhuisservice, Umzug",
+      "title": "PickLT - Slimmer verhuizen met PickLT"
+    },
+    "forgotPassword": {
+      "description": "Stel je wachtwoord opnieuw in",
+      "title": "Wachtwoord vergeten"
+    },
+    "home": {
+      "description": "Boek geverifieerde verhuizers voor appartementen, kantoren en spullen in heel Europa.",
+      "title": "Start"
+    },
+    "titleTemplate": "%s - PickLT"
+  },
+  "sidebar": {
+    "blurb": "Ontdek de meest bijzondere artikelen over alle facetten van het leven. Schrijf je eigen verhalen en deel ze",
+    "getStarted": {
+      "cta": "Aan de slag"
+    },
+    "search": {
+      "a11y": "Zoek naar artikelen",
+      "placeholder": "Typ en druk op enter"
+    }
+  },
+  "signup": {
+    "clientSubtitle": "Maak een account om je verhuizingen te boeken",
+    "moverSubtitle": "Sluit je aan bij ons netwerk van professionele verhuizers",
+    "moverTitle": "Aanmelden als verhuizer",
+    "phoneRequired": {
+      "helper": "Na het aanmelden is verificatie van je telefoonnummer nodig"
+    },
+    "phoneVerify": {
+      "subtitle": "We moeten je telefoonnummer verifiëren om je registratie af te ronden."
+    },
+    "resumeMove": {
+      "helper": "Maak een account om verder te gaan met je verhuizing. Je voortgang is bewaard."
+    },
+    "verifyAndCreate": {
+      "cta": "Verifiëren en account aanmaken"
+    }
+  },
+  "wizard": {
+    "finish": {
+      "cta": "Verhuizing aanmaken"
+    },
+    "nextStep": {
+      "cta": "Volgende stap {{step}}"
+    },
+    "step1": {
+      "route": {
+        "title": "Je verhuisroute"
+      },
+      "title": "STAP 1 — Verhuisgegevens"
+    },
+    "step2": {
+      "title": "Ophaaladres"
+    },
+    "step3": {
+      "title": "Afleveradres"
+    },
+    "step4": {
+      "subtitle": "Kies de spullen die je wilt verhuizen. Zo schatten we de juiste voertuiggrootte en teamgrootte in."
+    },
+    "step5": {
+      "dateInStep1": {
+        "helper": "Je kunt je verhuisdatum instellen in stap {{step}}"
+      },
+      "subtitle": "Kies wanneer de verhuizers moeten aankomen."
+    },
+    "step6": {
+      "services": {
+        "helper": "Dit zijn standaarddiensten van Duitse verhuisbedrijven."
+      },
+      "subtitle": "Kies extra diensten en upload foto's van de spullen die mee moeten.",
+      "title": "Extra diensten en foto's"
+    },
+    "stepOf": {
+      "label": "Stap {{current}} van {{total}}"
+    },
+    "stepTotal": {
+      "label": "/{{total}}"
+    }
+  }
+}

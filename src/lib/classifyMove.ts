@@ -16,13 +16,25 @@ export interface InventoryItemDef {
 }
 
 // ─── Classification result ─────────────────────────────────
+/** A warning as a translation key and its params, resolved by the renderer. */
+export interface ClassificationWarning {
+  key: string
+  params?: Record<string, string>
+}
+
 export interface MoveClassification {
   recommendedType: MoveType
   totalPoints: number
   totalWeightKg: number
   totalVolumeCm3: number
   totalItems: number
-  warnings: string[]
+  /**
+   * i18next keys plus their interpolation params, not resolved copy.
+   * Classification is pure maths that runs during SSR as well as in the
+   * browser, so it must not resolve text itself — the caller renders each
+   * entry with its own request-scoped `t`.
+   */
+  warningKeys: ClassificationWarning[]
   requiresUpgrade: boolean
   upgradeFrom?: MoveType
   upgradeTo?: MoveType
@@ -56,7 +68,7 @@ export function classifyMove(
   let totalWeightKg = 0
   let totalVolumeCm3 = 0
   let totalItems = 0
-  const warnings: string[] = []
+  const warningKeys: ClassificationWarning[] = []
 
   // Calculate from catalog items
   for (const [itemId, quantity] of Object.entries(inventory)) {
@@ -72,9 +84,15 @@ export function classifyMove(
 
     // Single-item minimum check
     if (item.moveTypeMinimum === 'premium' && currentMoveType !== 'premium') {
-      warnings.push(`"${item.name}" requires at least a Premium move`)
+      warningKeys.push({
+        key: 'booking:classification.itemMinimum.premium',
+        params: { item: item.name },
+      })
     } else if (item.moveTypeMinimum === 'regular' && currentMoveType === 'light') {
-      warnings.push(`"${item.name}" requires at least a Regular move`)
+      warningKeys.push({
+        key: 'booking:classification.itemMinimum.regular',
+        params: { item: item.name },
+      })
     }
   }
 
@@ -108,10 +126,10 @@ export function classifyMove(
 
   // Warning thresholds (80% of next tier)
   if (currentMoveType === 'light' && totalPoints > 20) {
-    warnings.push('You are approaching the limit for a Light move')
+    warningKeys.push({ key: 'booking:classification.nearLimit.light' })
   }
   if (currentMoveType === 'regular' && totalPoints > 64) {
-    warnings.push('You are approaching the limit for a Regular move')
+    warningKeys.push({ key: 'booking:classification.nearLimit.regular' })
   }
 
   return {
@@ -120,7 +138,7 @@ export function classifyMove(
     totalWeightKg,
     totalVolumeCm3,
     totalItems,
-    warnings,
+    warningKeys,
     requiresUpgrade,
     upgradeFrom: requiresUpgrade ? currentMoveType : undefined,
     upgradeTo: requiresUpgrade ? recommendedType : undefined,

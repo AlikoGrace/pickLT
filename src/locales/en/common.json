@@ -1,0 +1,604 @@
+{
+  "action": {
+    "add": {
+      "cta": "Add"
+    },
+    "back": {
+      "a11y": "Go back",
+      "cta": "Back"
+    },
+    "backToHome": {
+      "a11y": "Back to home",
+      "cta": "Back to home"
+    },
+    "call": {
+      "cta": "Call"
+    },
+    "cancel": {
+      "cta": "Cancel"
+    },
+    "changePhoto": {
+      "cta": "Change photo"
+    },
+    "clearAll": {
+      "cta": "Clear all"
+    },
+    "confirm": {
+      "cta": "Confirm"
+    },
+    "continue": {
+      "cta": "Continue"
+    },
+    "decline": {
+      "cta": "Decline"
+    },
+    "decrement": {
+      "a11y": "Decrease"
+    },
+    "delete": {
+      "cta": "Delete"
+    },
+    "discard": {
+      "cta": "Discard"
+    },
+    "dismiss": {
+      "cta": "Dismiss"
+    },
+    "done": {
+      "cta": "Done"
+    },
+    "edit": {
+      "cta": "Edit"
+    },
+    "goBack": {
+      "cta": "Go back"
+    },
+    "goHome": {
+      "cta": "Go home"
+    },
+    "increment": {
+      "a11y": "Increase"
+    },
+    "keepCurrent": {
+      "label": "Keep current"
+    },
+    "logout": {
+      "cta": "Log out"
+    },
+    "message": {
+      "cta": "Message"
+    },
+    "next": {
+      "cta": "Next"
+    },
+    "notNow": {
+      "cta": "Not now"
+    },
+    "ok": {
+      "cta": "OK"
+    },
+    "refresh": {
+      "a11y": "Refresh"
+    },
+    "remove": {
+      "cta": "Remove"
+    },
+    "replace": {
+      "cta": "Replace"
+    },
+    "retry": {
+      "cta": "Retry"
+    },
+    "save": {
+      "cta": "Save"
+    },
+    "saveChanges": {
+      "cta": "Save Changes"
+    },
+    "saving": {
+      "cta": "Saving…"
+    },
+    "search": {
+      "cta": "Search"
+    },
+    "seeAll": {
+      "cta": "See all"
+    },
+    "showMore": {
+      "cta": "Show me more"
+    },
+    "signOut": {
+      "cta": "Sign out"
+    },
+    "skip": {
+      "cta": "Skip"
+    },
+    "submitting": {
+      "cta": "Submitting…"
+    },
+    "tapToUpload": {
+      "cta": "Tap to upload"
+    },
+    "tryAgain": {
+      "cta": "Try again"
+    },
+    "viewAll": {
+      "cta": "View all"
+    }
+  },
+  "answer": {
+    "no": {
+      "label": "No",
+      "option": "No"
+    },
+    "yes": {
+      "label": "Yes",
+      "option": "Yes"
+    }
+  },
+  "auth": {
+    "signInRequired": {
+      "body": "Please sign in first."
+    }
+  },
+  "badge": {
+    "overflow": {
+      "label": "9+"
+    }
+  },
+  "call": {
+    "dialerFailed": {
+      "title": "Couldn't open the dialer"
+    },
+    "inApp": {
+      "title": "Call in-app"
+    },
+    "moveComplete": {
+      "subtitle": "Move is complete"
+    },
+    "noPhone": {
+      "subtitle": "No phone number on file"
+    },
+    "title": "Call",
+    "viaPhone": {
+      "title": "Call via phone"
+    }
+  },
+  "chat": {
+    "closed": {
+      "helper": "This move is complete. Chat is closed."
+    },
+    "composer": {
+      "placeholder": "Type a message..."
+    },
+    "loadFailed": {
+      "error": "Could not load messages"
+    },
+    "online": {
+      "label": "Online"
+    },
+    "sendFailed": {
+      "title": "Couldn't send"
+    }
+  },
+  "confirm": {
+    "irreversible": {
+      "body": "This cannot be undone."
+    }
+  },
+  "date": {
+    "today": {
+      "label": "Today"
+    }
+  },
+  "error": {
+    "checkConnection": "Check your connection and try again."
+  },
+  "field": {
+    "city": {
+      "label": "City",
+      "placeholder": "e.g. Berlin"
+    },
+    "country": {
+      "label": "Country",
+      "placeholder": "Select your country"
+    },
+    "email": {
+      "label": "Email",
+      "shortLabel": "Email"
+    },
+    "fullName": {
+      "label": "Full name",
+      "placeholder": "Your full name"
+    },
+    "name": {
+      "label": "Name",
+      "placeholder": "Enter name"
+    },
+    "notes": {
+      "label": "Notes (optional)",
+      "placeholder": "Any additional notes..."
+    },
+    "phone": {
+      "label": "Phone number",
+      "placeholder": "Enter phone number",
+      "shortLabel": "Phone"
+    },
+    "quantity": {
+      "label": "Quantity"
+    },
+    "status": {
+      "label": "Status"
+    }
+  },
+  "label": {
+    "total": "Total"
+  },
+  "language": {
+    "arabic": {
+      "option": "Arabic"
+    },
+    "choose": "Choose a language",
+    "english": {
+      "option": "English"
+    },
+    "french": {
+      "option": "French"
+    },
+    "german": {
+      "option": "German"
+    },
+    "italian": {
+      "option": "Italian"
+    },
+    "label": "Language",
+    "polish": {
+      "option": "Polish"
+    },
+    "romanian": {
+      "option": "Romanian"
+    },
+    "russian": {
+      "option": "Russian"
+    },
+    "spanish": {
+      "option": "Spanish"
+    },
+    "turkish": {
+      "option": "Turkish"
+    }
+  },
+  "list": {
+    "separator": ", "
+  },
+  "map": {
+    "myLocation": {
+      "label": "My location"
+    }
+  },
+  "mover": {
+    "nameFallback": {
+      "label": "Mover Name"
+    },
+    "unnamed": {
+      "label": "Mover"
+    }
+  },
+  "nav": {
+    "darkTheme": {
+      "label": "Dark theme"
+    },
+    "help": {
+      "label": "Help"
+    },
+    "menu": {
+      "label": "Menu"
+    },
+    "notifications": {
+      "label": "Notifications"
+    },
+    "openMenu": {
+      "a11y": "Open menu"
+    },
+    "settings": {
+      "label": "Settings"
+    }
+  },
+  "notifications": {
+    "empty": "Your notification feed is quiet.",
+    "header": {
+      "title": "Notifications"
+    },
+    "markAll": {
+      "cta": "Mark all read"
+    },
+    "markAllError": {
+      "body": "Some items may still be unread.",
+      "title": "Couldn’t mark all as read"
+    }
+  },
+  "payment": {
+    "brand": {
+      "amex": {
+        "label": "American Express"
+      },
+      "diners": {
+        "label": "Diners Club"
+      },
+      "discover": {
+        "label": "Discover"
+      },
+      "fallback": {
+        "label": "Card"
+      },
+      "jcb": {
+        "label": "JCB"
+      },
+      "mastercard": {
+        "label": "Mastercard"
+      },
+      "unionpay": {
+        "label": "UnionPay"
+      },
+      "visa": {
+        "label": "Visa"
+      }
+    },
+    "brandTag": {
+      "amex": {
+        "label": "AMEX"
+      },
+      "diners": {
+        "label": "DINER"
+      },
+      "discover": {
+        "label": "DISC"
+      },
+      "fallback": {
+        "label": "CARD"
+      },
+      "jcb": {
+        "label": "JCB"
+      },
+      "mastercard": {
+        "label": "MC"
+      },
+      "unionpay": {
+        "label": "UPay"
+      },
+      "visa": {
+        "label": "VISA"
+      }
+    },
+    "method": {
+      "applePay": {
+        "label": "Apple Pay"
+      },
+      "googlePay": {
+        "label": "Google Pay"
+      },
+      "payPal": {
+        "label": "PayPal"
+      }
+    },
+    "waiting": {
+      "done": {
+        "body": "Payment confirmed."
+      },
+      "forClient": {
+        "body": "Payment confirmed. Waiting for the client to confirm before the move is closed."
+      },
+      "forMover": {
+        "body": "Payment confirmed. Waiting for your mover to confirm before the move is closed."
+      }
+    }
+  },
+  "person": {
+    "fallbackMover": {
+      "label": "Mover Name"
+    },
+    "fallbackName": {
+      "label": "there"
+    },
+    "fallbackUser": "User",
+    "unnamed": {
+      "label": "Your name"
+    }
+  },
+  "photoViewer": {
+    "close": {
+      "a11y": "Close photo viewer"
+    },
+    "counter": {
+      "label": "{{page}} / {{total}}"
+    }
+  },
+  "place": {
+    "dropoff": "Drop-off",
+    "pickup": "Pickup"
+  },
+  "separator": {
+    "or": {
+      "label": "or"
+    }
+  },
+  "starRating": {
+    "rate": {
+      "a11y_one": "Rate {{count}} star",
+      "a11y_other": "Rate {{count}} stars"
+    }
+  },
+  "state": {
+    "accepting": {
+      "label": "Accepting…"
+    },
+    "adding": {
+      "label": "Adding…"
+    },
+    "checking": {
+      "cta": "Checking…"
+    },
+    "confirmed": {
+      "label": "Confirmed"
+    },
+    "declining": {
+      "label": "Declining…"
+    },
+    "loading": {
+      "label": "Loading…"
+    },
+    "loadingEllipsis": {
+      "label": "Loading…"
+    },
+    "locating": {
+      "label": "Getting your location..."
+    },
+    "processing": {
+      "cta": "Processing…"
+    },
+    "redirecting": {
+      "label": "Redirecting..."
+    },
+    "saving": {
+      "label": "Saving…"
+    },
+    "searching": {
+      "label": "Searching…"
+    },
+    "selected": {
+      "label": "Selected"
+    },
+    "starting": {
+      "label": "Starting..."
+    },
+    "submitting": {
+      "label": "Submitting…"
+    },
+    "updating": {
+      "label": "Updating…"
+    },
+    "waiting": {
+      "label": "Waiting"
+    },
+    "withdrawing": {
+      "label": "Withdrawing..."
+    }
+  },
+  "status": {
+    "active": {
+      "label": "Active"
+    },
+    "comingSoon": {
+      "label": "Coming soon"
+    },
+    "inactive": {
+      "label": "Inactive"
+    }
+  },
+  "timeAgo": {
+    "days": {
+      "label_one": "{{count}}d ago",
+      "label_other": "{{count}}d ago"
+    },
+    "hours": {
+      "label_one": "{{count}}h ago",
+      "label_other": "{{count}}h ago"
+    },
+    "justNow": {
+      "label": "Just now"
+    },
+    "minutes": {
+      "label_one": "{{count}}m ago",
+      "label_other": "{{count}}m ago"
+    },
+    "seconds": {
+      "label_one": "{{count}}s ago",
+      "label_other": "{{count}}s ago"
+    }
+  },
+  "unit": {
+    "approxMinutes": {
+      "label": "~{{minutes}} min"
+    },
+    "meters": {
+      "label": "{{value}} m"
+    },
+    "minutes": {
+      "label": "min"
+    }
+  },
+  "upload": {
+    "constraints": {
+      "helper": "PNG, JPG, GIF up to {{limit}}"
+    },
+    "constraintsNoGif": {
+      "helper": "PNG, JPG up to {{limit}}"
+    },
+    "dragDrop": {
+      "label": "or drag and drop"
+    },
+    "file": {
+      "cta": "Upload a file"
+    },
+    "files": {
+      "cta": "Upload files"
+    },
+    "multiple": {
+      "helper": "You can select multiple files"
+    }
+  },
+  "value": {
+    "lessThan": {
+      "label": "<{{value}}"
+    },
+    "noEmail": {
+      "empty": "No email"
+    },
+    "noPhone": {
+      "empty": "No phone"
+    },
+    "noneSelected": {
+      "empty": "None selected"
+    },
+    "notAvailable": {
+      "label": "N/A"
+    },
+    "notProvided": {
+      "empty": "Not provided"
+    },
+    "notSelected": {
+      "empty": "Not selected"
+    },
+    "notSet": {
+      "empty": "Not set"
+    },
+    "notSpecified": {
+      "empty": "Not specified"
+    },
+    "required": {
+      "label": "Required"
+    },
+    "standard": {
+      "label": "Standard"
+    }
+  },
+  "vehicleType": {
+    "largeTruck": {
+      "label": "Large truck"
+    },
+    "mediumTruck": {
+      "label": "Medium truck"
+    },
+    "smallVan": {
+      "label": "Small van"
+    }
+  },
+  "view": {
+    "list": {
+      "label": "List"
+    },
+    "map": {
+      "label": "Map"
+    }
+  }
+}

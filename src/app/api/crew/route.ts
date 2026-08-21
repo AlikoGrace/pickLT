@@ -1,3 +1,4 @@
+import { getTranslations } from '@/lib/i18n-server'
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
@@ -7,9 +8,10 @@ import { ID, Query } from 'node-appwrite'
 
 // GET - list crew members for the current mover
 export async function GET() {
+  const { t } = await getTranslations()
   const userId = await getSessionUserId()
   if (!userId) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
   }
 
   try {
@@ -36,16 +38,17 @@ export async function GET() {
 
     return NextResponse.json({ crewMembers: crewDocs.documents })
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Unknown error'
+    const message = err instanceof Error ? err.message : t('errors:generic.unknown')
     return NextResponse.json({ error: message }, { status: 500 })
   }
 }
 
 // POST - add a new crew member
 export async function POST(req: NextRequest) {
+  const { t } = await getTranslations()
   const userId = await getSessionUserId()
   if (!userId) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
   }
 
   try {
@@ -54,7 +57,7 @@ export async function POST(req: NextRequest) {
     const { name, phone, role } = body
 
     if (!name || !phone) {
-      return NextResponse.json({ error: 'name and phone are required' }, { status: 400 })
+      return NextResponse.json({ error: t('errors:crew.fieldsRequired') }, { status: 400 })
     }
 
     // Find mover profile
@@ -65,7 +68,7 @@ export async function POST(req: NextRequest) {
     )
 
     if (profiles.documents.length === 0) {
-      return NextResponse.json({ error: 'No mover profile found' }, { status: 404 })
+      return NextResponse.json({ error: t('errors:mover.profileNotFound') }, { status: 404 })
     }
 
     const moverProfileId = profiles.documents[0].$id
@@ -89,7 +92,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ crewMember: doc })
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Unknown error'
+    const message = err instanceof Error ? err.message : t('errors:generic.unknown')
     return NextResponse.json({ error: message }, { status: 500 })
   }
 }

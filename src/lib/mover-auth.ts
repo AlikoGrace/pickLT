@@ -3,6 +3,7 @@ import { APPWRITE } from '@/lib/constants'
 import { getSessionUserId } from '@/lib/auth-session'
 import { Query } from 'node-appwrite'
 import { NextResponse } from 'next/server'
+import { getTranslations } from '@/lib/i18n-server'
 import type { Models } from 'node-appwrite'
 
 interface VerifiedMoverResult {
@@ -18,9 +19,10 @@ interface VerifiedMoverResult {
 export async function requireVerifiedMover(): Promise<
   VerifiedMoverResult | NextResponse
 > {
+  const { t } = await getTranslations()
   const userId = await getSessionUserId()
   if (!userId) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
   }
 
   const { databases } = createAdminClient()
@@ -32,12 +34,12 @@ export async function requireVerifiedMover(): Promise<
   )
   const moverProfile = profiles.documents[0]
   if (!moverProfile) {
-    return NextResponse.json({ error: 'Mover profile not found' }, { status: 404 })
+    return NextResponse.json({ error: t('errors:mover.profileNotFound') }, { status: 404 })
   }
 
   if (moverProfile.verificationStatus !== 'verified') {
     return NextResponse.json(
-      { error: 'Your mover profile has not been verified yet. Please wait for admin approval.' },
+      { error: t('errors:mover.notVerifiedPendingApproval') },
       { status: 403 }
     )
   }

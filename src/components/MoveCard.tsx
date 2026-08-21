@@ -1,3 +1,5 @@
+'use client'
+
 import GallerySlider from '@/components/GallerySlider'
 import { StoredMove } from '@/context/moveSearch'
 import { Badge } from '@/shared/Badge'
@@ -8,6 +10,10 @@ import clsx from 'clsx'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FC } from 'react'
+import { formatDayMonth, formatMoney } from '@/lib/format'
+import { moveSubtitle } from '@/lib/move-subtitle'
+import { useTranslation } from 'react-i18next'
+import type { TFunction } from 'i18next'
 
 interface MoveCardProps {
   className?: string
@@ -15,24 +21,26 @@ interface MoveCardProps {
   size?: 'default' | 'small'
 }
 
-// Helper to format labels
-const formatLabel = (value: string | null | undefined): string => {
-  if (!value) return 'Not specified'
-  return value
-    .split('_')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ')
+// `moveType` and `vehicleType` are STORED SLUGS, never labels — look the label
+// up in the catalog, never humanise the slug (catalog conventions §5).
+const VEHICLE_KEY: Record<string, string> = {
+  small_van: 'smallVan',
+  medium_truck: 'mediumTruck',
+  large_truck: 'largeTruck',
 }
 
-const formatDate = (dateStr: string | null) => {
-  if (!dateStr) return 'Not selected'
+const vehicleLabel = (t: TFunction, value: string | null | undefined): string => {
+  // i18n-keys: booking:vehicle.smallVan.label, booking:vehicle.mediumTruck.label, booking:vehicle.largeTruck.label, booking:vehicle.multiple.label
+  if (!value) return t('common:value.notSpecified.empty')
+  const slug = VEHICLE_KEY[value] ?? value
+  return t(`booking:vehicle.${slug}.label`)
+}
+
+const formatDate = (t: TFunction, dateStr: string | null) => {
+  if (!dateStr) return t('common:value.notSelected.empty')
   try {
     const date = new Date(dateStr)
-    return date.toLocaleDateString('en-GB', {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
-    })
+    return formatDayMonth(date)
   } catch {
     return dateStr
   }
@@ -53,22 +61,23 @@ const getStatusBadgeColor = (status: StoredMove['status']): 'green' | 'yellow' |
   }
 }
 
-const getStatusLabel = (status: StoredMove['status']): string => {
+const getStatusLabel = (t: TFunction, status: StoredMove['status']): string => {
   switch (status) {
     case 'completed':
-      return 'Completed'
+      return t('moves:status.completed.label')
     case 'in_progress':
-      return 'In Progress'
+      return t('moves:status.inProgress.label')
     case 'pending':
-      return 'Pending'
+      return t('moves:status.pending.label')
     case 'cancelled':
-      return 'Cancelled'
+      return t('moves:status.cancelled.label')
     default:
-      return 'Unknown'
+      return t('moves:status.unknown.label')
   }
 }
 
 const MoveCard: FC<MoveCardProps> = ({ size = 'default', className = '', data }) => {
+  const { t } = useTranslation()
   const {
     handle,
     status,
@@ -110,22 +119,24 @@ const MoveCard: FC<MoveCardProps> = ({ size = 'default', className = '', data })
           </Link>
         )}
         <Badge color={getStatusBadgeColor(status)} className="absolute start-3 top-3">
-          {getStatusLabel(status)}
+          {getStatusLabel(t, status)}
         </Badge>
       </div>
     )
   }
 
   const renderContent = () => {
-    const pickupDisplay = pickupStreetAddress || pickupLocation || 'Pickup'
-    const dropoffDisplay = dropoffStreetAddress || 'Drop-off'
+    const pickupDisplay = pickupStreetAddress || pickupLocation || t('booking:field.pickup.label')
+    const dropoffDisplay = dropoffStreetAddress || t('booking:field.dropoff.label')
     const title = `${pickupDisplay.split(',')[0]} → ${dropoffDisplay.split(',')[0]}`
 
     return (
       <div className={clsx(size === 'default' ? 'mt-3 gap-y-3' : 'mt-2 gap-y-2', 'flex flex-col')}>
         <div className="flex flex-col gap-y-2">
           <span className="text-sm text-neutral-500 dark:text-neutral-400">
-            {formatLabel(moveType)} Move · {formatDate(moveDate)}
+            {/* One whole phrase per move type — see `lib/move-subtitle.ts` for
+                why the type cannot be interpolated into a frame. */}
+            {moveSubtitle(t, moveType, null, moveDate ? formatDate(t, moveDate) : null)}
           </span>
           <div className="flex items-center gap-x-2">
             <h2 className={`text-base font-semibold text-neutral-900 capitalize dark:text-white`}>
@@ -148,10 +159,11 @@ const MoveCard: FC<MoveCardProps> = ({ size = 'default', className = '', data })
         <div className="w-14 border-b border-neutral-100 dark:border-neutral-800"></div>
         <div className="flex items-center justify-between gap-2">
           <div>
-            <span className="text-base font-semibold">€{totalPrice.toFixed(2)}</span>
+            <span className="text-base font-semibold">{formatMoney(totalPrice)}</span>
           </div>
           <span className="text-sm text-neutral-500 dark:text-neutral-400">
-            {inventoryCount} items · {crewSize ? `${crewSize} movers` : formatLabel(vehicleType)}
+            {t('moves:itemCount', { count: inventoryCount })} ·{' '}
+            {crewSize ? t('moves:moverCount', { count: Number(crewSize) }) : vehicleLabel(t, vehicleType)}
           </span>
         </div>
       </div>

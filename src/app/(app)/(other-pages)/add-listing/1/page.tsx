@@ -2,7 +2,6 @@
 
 import Input from '@/shared/Input'
 import Select from '@/shared/Select'
-import T from '@/utils/getT'
 import Form from 'next/form'
 import { useRouter } from 'next/navigation'
 import { useSearchParams } from 'next/navigation'
@@ -15,8 +14,13 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { CalendarDaysIcon, PencilSquareIcon } from '@heroicons/react/24/outline'
 import MapLocationPicker, { PickedLocation } from '@/components/MapLocationPicker'
 import MapboxMap, { RouteInfo } from '@/components/MapboxMap'
+import { useTranslation } from 'react-i18next'
+
+/** Floor values persisted as-is; the caption is a locale ordinal (§ 5.5). */
+const NUMBERED_FLOORS = Array.from({ length: 12 }, (_, i) => i + 1)
 
 const PageContent = () => {
+  const { t } = useTranslation()
   const router = useRouter()
   // Prefetch the next step to improve performance
   useEffect(() => {
@@ -32,12 +36,12 @@ const PageContent = () => {
     const errors: Record<string, string> = {}
     // Pickup/dropoff come from the location picker, not the form — without
     // this check the wizard advanced (and submitted) with no addresses at all.
-    if (!pickupLocation) errors.pickupLocation = 'Please select a pickup location'
-    if (!dropoffLocation) errors.dropoffLocation = 'Please select a drop-off location'
-    if (!moveDate) errors.moveDate = 'Please select a move date'
-    if (!formObject['homeType']) errors.homeType = 'Please select a home type'
-    if (!formObject['floorLevel']) errors.floorLevel = 'Please select a floor level'
-    if (!formObject['parkingSituation']) errors.parkingSituation = 'Please select a parking situation'
+    if (!pickupLocation) errors.pickupLocation = t('booking:pickup.required.error')
+    if (!dropoffLocation) errors.dropoffLocation = t('booking:dropoff.required.error')
+    if (!moveDate) errors.moveDate = t('booking:moveDate.required.error')
+    if (!formObject['homeType']) errors.homeType = t('booking:homeType.required.error')
+    if (!formObject['floorLevel']) errors.floorLevel = t('booking:floorLevel.required.error')
+    if (!formObject['parkingSituation']) errors.parkingSituation = t('booking:parking.required.error')
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors)
       return
@@ -120,7 +124,7 @@ const PageContent = () => {
 
   return (
     <>
-      <h1 className="text-2xl font-semibold">STEP 1 — Move Details</h1>
+      <h1 className="text-2xl font-semibold">{t('web:wizard.step1.title')}</h1>
       <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
 
       {(formErrors.pickupLocation || formErrors.dropoffLocation) && (
@@ -148,7 +152,7 @@ const PageContent = () => {
             </div>
           )}
           <div className="bg-neutral-50 dark:bg-neutral-800 p-4">
-            <h3 className="text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-3">Your move route</h3>
+            <h3 className="text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-3">{t('web:wizard.step1.route.title')}</h3>
             <div className="flex items-center gap-3">
               <div className="flex flex-col items-center">
                 <div className="w-3 h-3 rounded-full bg-green-500" />
@@ -161,9 +165,9 @@ const PageContent = () => {
                   onClick={() => handleEditLocation('pickup')}
                   className="block w-full text-left rounded-lg px-2 py-1 -mx-2 hover:bg-neutral-100 dark:hover:bg-neutral-700/60 transition"
                 >
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400">From</p>
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400">{t('booking:route.from.label')}</p>
                   <p className="text-sm font-medium text-neutral-900 dark:text-white truncate">
-                    {pickupLocation || 'Tap to select pickup'}
+                    {pickupLocation || t('booking:pickup.tapToSelect.placeholder')}
                   </p>
                 </button>
                 <button
@@ -171,9 +175,9 @@ const PageContent = () => {
                   onClick={() => handleEditLocation('dropoff')}
                   className="block w-full text-left rounded-lg px-2 py-1 -mx-2 hover:bg-neutral-100 dark:hover:bg-neutral-700/60 transition"
                 >
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400">To</p>
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400">{t('booking:route.to.label')}</p>
                   <p className="text-sm font-medium text-neutral-900 dark:text-white truncate">
-                    {dropoffLocation || 'Tap to select drop-off'}
+                    {dropoffLocation || t('booking:dropoff.tapToSelect.placeholder')}
                   </p>
                 </button>
               </div>
@@ -199,14 +203,14 @@ const PageContent = () => {
       {/* FORM */}
       <Form id="add-listing-form" action={handleSubmitForm} className="flex flex-col gap-y-8">
         {/* Move Date */}
-        <FormItem label="Move date" desccription="When would you like to move?">
+        <FormItem label={t('booking:moveDate.label')} desccription={t('booking:moveDate.helper')}>
           <div className="relative">
             <DatePicker
               selected={selectedDate}
               onChange={handleDateChange}
               minDate={new Date()}
               dateFormat="EEEE, MMMM d, yyyy"
-              placeholderText="Select your move date"
+              placeholderText={t('booking:moveDate.placeholder')}
               className="w-full rounded-2xl border border-neutral-200 bg-white px-4 py-3 pl-12 text-sm font-medium focus:border-primary-500 focus:ring-primary-500 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white"
               calendarClassName="!rounded-2xl !border-neutral-200 dark:!border-neutral-700 !shadow-xl"
               wrapperClassName="w-full"
@@ -217,42 +221,36 @@ const PageContent = () => {
         </FormItem>
 
         {/* Home type */}
-        <FormItem label="Home type" desccription="Select the type of home or space to move">
+        <FormItem label={t('booking:homeType.label')} desccription={t('booking:homeType.helper')}>
           <Select
             name="homeType"
             defaultValue={homeType ?? ''}
             onChange={(e: any) => setHomeType(e.target.value ? (e.target.value as any) : null)}
           >
-            <option value="">Select a type</option>
-            <option value="apartment">Apartment</option>
-            <option value="house">House</option>
-            <option value="office">Office</option>
-            <option value="storage">Storage unit</option>
+            <option value="">{t('booking:homeType.placeholder')}</option>
+            <option value="apartment">{t('booking:homeType.apartment.label')}</option>
+            <option value="house">{t('booking:homeType.house.label')}</option>
+            <option value="office">{t('booking:homeType.office.label')}</option>
+            <option value="storage">{t('booking:homeType.storage.label')}</option>
           </Select>
           {formErrors.homeType && <div className="text-sm text-red-600 mt-2">{formErrors.homeType}</div>}
         </FormItem>
 
         {/* Floor level + elevator */}
-        <FormItem label="Floor level" desccription="Which floor is the pickup address on?">
+        <FormItem label={t('booking:floorLevel.label')} desccription={t('booking:floorLevel.pickup.helper')}>
           <Select
             name="floorLevel"
             defaultValue={floorLevel ?? ''}
             onChange={(e: any) => setFloorLevel(e.target.value ? (e.target.value as any) : null)}
           >
-            <option value="">Select floor</option>
-            <option value="ground">Ground floor</option>
-            <option value="1">1st floor</option>
-            <option value="2">2nd floor</option>
-            <option value="3">3rd floor</option>
-            <option value="4">4th floor</option>
-            <option value="5">5th floor</option>
-            <option value="6">6th floor</option>
-            <option value="7">7th floor</option>
-            <option value="8">8th floor</option>
-            <option value="9">9th floor</option>
-            <option value="10">10th floor</option>
-            <option value="11">11th floor</option>
-            <option value="12">12th floor</option>
+            <option value="">{t('booking:floorLevel.placeholder')}</option>
+            <option value="ground">{t('booking:floorLevel.ground.label')}</option>
+            {/* Ordinal morphology is `Intl.PluralRules`' job, not 12 catalog keys (§ 5.5). */}
+            {NUMBERED_FLOORS.map((n) => (
+              <option key={n} value={String(n)}>
+                {t('booking:floorLevel.numbered.label', { count: n, ordinal: true })}
+              </option>
+            ))}
           </Select>
 
           <div className="mt-3 flex items-center gap-3">
@@ -265,23 +263,23 @@ const PageContent = () => {
               className="w-4 h-4"
             />
             <label htmlFor="elevatorAvailable" className="text-sm">
-              Elevator available
+              {t('booking:elevator.label')}
             </label>
           </div>
           {formErrors.floorLevel && <div className="text-sm text-red-600 mt-2">{formErrors.floorLevel}</div>}
         </FormItem>
 
         {/* Parking */}
-        <FormItem label="Parking situation" desccription="Availability of parking near the building for the moving truck">
+        <FormItem label={t('booking:parking.label')} desccription={t('booking:parking.helper')}>
           <Select
             name="parkingSituation"
             defaultValue={parkingSituation ?? ''}
             onChange={(e: any) => setParkingSituation(e.target.value ? (e.target.value as any) : null)}
           >
-            <option value="">Select parking situation</option>
-            <option value="at_building">Parking directly at building</option>
-            <option value="nearby">Parking nearby (0–20 m)</option>
-            <option value="no_parking">No parking / long carry</option>
+            <option value="">{t('booking:parking.placeholder')}</option>
+            <option value="at_building">{t('booking:parking.atBuilding.label')}</option>
+            <option value="nearby">{t('booking:parking.nearby.label')}</option>
+            <option value="no_parking">{t('booking:parking.noParking.label')}</option>
           </Select>
           {formErrors.parkingSituation && <div className="text-sm text-red-600 mt-2">{formErrors.parkingSituation}</div>}
         </FormItem>
@@ -300,15 +298,24 @@ const PageContent = () => {
         initialCoordinates={
           editingLocationType === 'pickup' ? pickupCoordinates : dropoffCoordinates
         }
-        label={editingLocationType === 'pickup' ? 'Edit pickup location' : 'Edit drop-off location'}
+        label={
+          editingLocationType === 'pickup'
+            ? t('booking:pickup.edit.a11y')
+            : t('booking:dropoff.edit.a11y')
+        }
       />
     </>
   )
 }
 
+const PageFallback = () => {
+  const { t } = useTranslation()
+  return <div>{t('common:state.loading.label')}</div>
+}
+
 const Page = () => {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<PageFallback />}>
       <PageContent />
     </Suspense>
   )

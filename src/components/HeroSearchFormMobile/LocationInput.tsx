@@ -3,12 +3,13 @@
 import { reverseGeocodeBest } from '@/lib/reverse-geocode'
 import { composeAddressLabel } from '@/lib/address-label'
 import { Search01Icon } from '@/components/Icons'
-import T from '@/utils/getT'
 import { MapPinIcon } from '@heroicons/react/24/outline'
 import { Navigation03Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import clsx from 'clsx'
 import { FC, useCallback, useEffect, useRef, useState } from 'react'
+import { mapboxLanguage } from '@/lib/mapbox-language'
+import { useTranslation } from 'react-i18next'
 
 // Shared type with the desktop LocationInputField
 export type LocationSuggestion = {
@@ -38,7 +39,7 @@ async function searchLocations(
       autocomplete: 'true',
       types: 'address,street,postcode,neighborhood,locality,place,district,region,country',
       limit: '10',
-      language: 'en',
+      language: mapboxLanguage(),
     }
 
     if (proximity) {
@@ -98,9 +99,11 @@ const LocationInput: FC<Props> = ({
   onChange,
   className,
   defaultValue = '',
-  headingText = T['HeroSearchForm']['Where to?'],
+  headingText,
   imputName = 'location',
 }) => {
+  const { t } = useTranslation()
+  const heading = headingText ?? t('web:search.mobile.where.placeholder')
   const [inputValue, setInputValue] = useState('')
   const [suggestions, setSuggestions] = useState<LocationSuggestion[]>([])
   const [isLoading, setIsLoading] = useState(false)
@@ -166,7 +169,7 @@ const LocationInput: FC<Props> = ({
 
   const handleUseCurrentLocation = useCallback(async () => {
     if (!navigator.geolocation) {
-      setGeoError('Geolocation is not supported by your browser')
+      setGeoError(t('errors:geo.unsupported.error'))
       return
     }
 
@@ -197,8 +200,8 @@ const LocationInput: FC<Props> = ({
         setGeoLoading(false)
         setGeoError(
           err.code === 1
-            ? 'Location access denied. Please enable it in your browser settings.'
-            : 'Unable to get your location. Please try again.'
+            ? t('errors:geo.denied.error')
+            : t('errors:geo.unavailable.error')
         )
       },
       { enableHighAccuracy: true, timeout: 10_000, maximumAge: 60_000 }
@@ -237,11 +240,11 @@ const LocationInput: FC<Props> = ({
 
   return (
     <div className={clsx(className)} ref={containerRef}>
-      <h3 className="text-xl font-semibold sm:text-2xl">{headingText}</h3>
+      <h3 className="text-xl font-semibold sm:text-2xl">{heading}</h3>
       <div className="relative mt-5">
         <input
           className="block w-full truncate rounded-xl border border-neutral-300 bg-transparent px-4 py-3 pe-12 leading-none font-normal placeholder-neutral-500 placeholder:truncate focus:border-primary-300 focus:ring-3 focus:ring-primary-200/50 sm:text-sm dark:border-neutral-700 dark:bg-neutral-900 dark:placeholder-neutral-300 dark:focus:ring-primary-600/25"
-          placeholder="Search for a location..."
+          placeholder={t('booking:mapPicker.search.placeholder')}
           value={inputValue}
           onChange={handleInputChange}
           ref={inputRef}
@@ -270,7 +273,7 @@ const LocationInput: FC<Props> = ({
           </span>
           <div className="min-w-0 flex-1 text-start">
             <span className="block text-sm font-medium text-primary-600 dark:text-primary-400">
-              {geoLoading ? 'Getting your location...' : 'Use my current location'}
+              {geoLoading ? t('booking:mapPicker.locating.helper') : t('booking:mapPicker.useCurrent.cta')}
             </span>
             {geoError && (
               <span className="block text-xs text-red-500">{geoError}</span>
@@ -279,22 +282,22 @@ const LocationInput: FC<Props> = ({
         </button>
 
         {isLoading && (
-          <p className="text-sm text-neutral-500 dark:text-neutral-400">Searching...</p>
+          <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('common:state.searching.label')}</p>
         )}
 
         {!isLoading && inputValue.length < 2 && (
           <p className="text-sm text-neutral-500 dark:text-neutral-400">
-            Type at least 2 characters to search
+            {t('booking:location.minQuery.helper', { count: 2 })}
           </p>
         )}
 
         {!isLoading && inputValue.length >= 2 && suggestions.length === 0 && (
-          <p className="text-sm text-neutral-500">No locations found. Try a different search.</p>
+          <p className="text-sm text-neutral-500">{t('booking:location.noResultsLong.empty')}</p>
         )}
 
         {!isLoading && suggestions.length > 0 &&
           renderSearchValues({
-            heading: 'Suggested locations',
+            heading: t('booking:location.suggestions.label'),
             items: suggestions,
           })}
       </div>

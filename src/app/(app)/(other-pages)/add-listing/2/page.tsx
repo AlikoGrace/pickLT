@@ -9,8 +9,10 @@ import Form from 'next/form'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import FormItem from '../FormItem'
+import { useTranslation } from 'react-i18next'
 
 const Page = () => {
+  const { t } = useTranslation()
   const router = useRouter()
   const [formErrors, setFormErrors] = useState<Record<string, string>>({})
 
@@ -52,7 +54,7 @@ const Page = () => {
     // Basic validation
     const errors: Record<string, string> = {}
     if (!formObject['streetAddress'] || String(formObject['streetAddress']).trim() === '') {
-      errors.streetAddress = 'Please enter a street address'
+      errors.streetAddress = t('booking:streetAddress.required.error')
     }
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors)
@@ -72,16 +74,19 @@ const Page = () => {
 
   return (
     <>
-      <h1 className="text-2xl font-semibold">Pickup Address</h1>
+      <h1 className="text-2xl font-semibold">{t('web:wizard.step2.title')}</h1>
       <Divider className="w-14!" />
 
       {/* FORM */}
       <Form id="add-listing-form" action={handleSubmitForm} className="flex flex-col gap-y-8">
         {/* Street Address */}
-        <FormItem label="Street address" desccription="Enter the full pickup street address">
+        <FormItem
+          label={t('booking:streetAddress.label')}
+          desccription={t('booking:streetAddress.pickup.helper')}
+        >
           <AddressAutocompleteInput
             name="streetAddress"
-            placeholder="e.g., Hauptstraße 45"
+            placeholder={t('booking:streetAddress.pickup.placeholder')}
             value={pickupStreetAddress}
             onChangeText={setPickupStreetAddress}
             proximity={pickupCoordinates}
@@ -92,20 +97,26 @@ const Page = () => {
         </FormItem>
 
         {/* Apartment/Unit */}
-        <FormItem label="Apartment / Unit (optional)" desccription="Floor, apartment number, or unit name">
+        <FormItem
+          label={t('booking:apartmentUnit.label')}
+          desccription={t('booking:apartmentUnit.helper')}
+        >
           <Input
             name="apartmentUnit"
-            placeholder="e.g., 3rd floor, Apt 12"
+            placeholder={t('booking:apartmentUnit.pickup.placeholder')}
             value={pickupApartmentUnit}
             onChange={(e) => setPickupApartmentUnit(e.target.value)}
           />
         </FormItem>
 
         {/* Access Notes */}
-        <FormItem label="Access notes (optional)" desccription="Any details that will help our team access the location">
+        <FormItem
+          label={t('booking:accessNotes.label')}
+          desccription={t('booking:accessNotes.helper')}
+        >
           <Textarea
             name="accessNotes"
-            placeholder="e.g., narrow corridor, steep stairs, construction at entrance"
+            placeholder={t('booking:accessNotes.placeholder')}
             value={pickupAccessNotes}
             onChange={(e) => setPickupAccessNotes(e.target.value)}
           />
@@ -115,8 +126,8 @@ const Page = () => {
 
         {/* Loading Zone Required */}
         <FormItem
-          label="Loading zone required? (German Haltverbot permit)"
-          desccription="A Haltverbot zone reserves parking space for the moving truck"
+          label={t('booking:haltverbot.label')}
+          desccription={t('booking:haltverbot.helper')}
         >
           <div className="flex items-center gap-6 mt-2">
             <label className="flex items-center gap-2 cursor-pointer">
@@ -128,7 +139,7 @@ const Page = () => {
                 onChange={() => setPickupLoadingZoneRequired(true)}
                 className="w-4 h-4 text-primary-600"
               />
-              <span className="text-sm">Yes</span>
+              <span className="text-sm">{t('common:answer.yes.label')}</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input
@@ -139,7 +150,7 @@ const Page = () => {
                 onChange={() => setPickupLoadingZoneRequired(false)}
                 className="w-4 h-4 text-primary-600"
               />
-              <span className="text-sm">No</span>
+              <span className="text-sm">{t('common:answer.no.label')}</span>
             </label>
           </div>
         </FormItem>
@@ -148,8 +159,8 @@ const Page = () => {
         {pickupLoadingZoneRequired && (
           <div className="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-2xl border border-neutral-200 dark:border-neutral-700">
             <FormItem
-              label="Do you want us to arrange the Haltverbot permit for you?"
-              desccription="We'll handle the permit application with your local municipality"
+              label={t('booking:haltverbot.arrange.label')}
+              desccription={t('booking:haltverbot.arrange.helper')}
             >
               <div className="flex items-center gap-6 mt-2">
                 <label className="flex items-center gap-2 cursor-pointer">
@@ -161,7 +172,7 @@ const Page = () => {
                     onChange={() => setPickupArrangeHaltverbot(true)}
                     className="w-4 h-4 text-primary-600"
                   />
-                  <span className="text-sm">Yes, arrange it for me</span>
+                  <span className="text-sm">{t('booking:haltverbot.arrangeYes.label')}</span>
                 </label>
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
@@ -172,7 +183,7 @@ const Page = () => {
                     onChange={() => setPickupArrangeHaltverbot(false)}
                     className="w-4 h-4 text-primary-600"
                   />
-                  <span className="text-sm">No, I&apos;ll handle it</span>
+                  <span className="text-sm">{t('booking:haltverbot.arrangeNo.label')}</span>
                 </label>
               </div>
             </FormItem>

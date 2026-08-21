@@ -1,0 +1,113 @@
+{
+  "category": {
+    "livingRoom": "Soggiorno",
+    "bedroom": "Camera da letto",
+    "kitchen": "Cucina",
+    "office": "Ufficio",
+    "boxes": "Scatole",
+    "miscellaneous": "Varie",
+    "special": "Oggetti speciali"
+  },
+  "section": {
+    "special": {
+      "subtitle": "Questi oggetti richiedono una gestione particolare e possono incidere sul prezzo."
+    },
+    "custom": {
+      "title": "Oggetti personalizzati",
+      "empty": "Aggiungi oggetti non presenti nell’elenco sopra."
+    }
+  },
+  "item": {
+    "customSuffix": "Oggetto personalizzato",
+    "customName": {
+      "label": "{{name}} (personalizzato)"
+    },
+    "customTag": {
+      "label": "Personalizzato"
+    }
+  },
+  "search": {
+    "placeholder": "Cerca tutti gli oggetti",
+    "noMatch": {
+      "empty": "Nessun oggetto corrisponde a «{{query}}». Aggiungilo qui sotto come oggetto personalizzato."
+    }
+  },
+  "customItem": {
+    "add": {
+      "cta": "Aggiungi oggetto personalizzato"
+    },
+    "name": {
+      "label": "Nome",
+      "placeholder": "es. pianoforte elettrico"
+    },
+    "quantity": {
+      "label": "Quantità"
+    },
+    "size": {
+      "label": "Dimensione approssimativa",
+      "small": {
+        "option": "Piccolo"
+      },
+      "medium": {
+        "option": "Medio"
+      },
+      "large": {
+        "option": "Grande"
+      },
+      "extraLarge": {
+        "option": "XL"
+      }
+    },
+    "weight": {
+      "label": "Peso approssimativo (kg)",
+      "placeholder": "es. 25"
+    },
+    "submit": {
+      "cta": "Aggiungi oggetto"
+    }
+  },
+  "recommendation": {
+    "headline": {
+      "title": "{{prefix}}: {{tier}}"
+    },
+    "chosen": {
+      "label": "Il tuo trasloco"
+    },
+    "suggested": {
+      "label": "Consigliato"
+    },
+    "itemCount": {
+      "label_one": "{{count}} oggetto",
+      "label_other": "{{count}} oggetti"
+    }
+  },
+  "upgrade": {
+    "headline": {
+      "title": "Questo trasloco richiede ora"
+    },
+    "reason": {
+      "body": "L’aggiunta di «{{item}}» ha portato il tuo trasloco al livello {{tier}} — {{explanation}}"
+    },
+    "warnings": {
+      "title": "Oggetti che richiedono questo livello:"
+    }
+  },
+  "unavailable": {
+    "empty": {
+      "title": "Nessun oggetto ancora disponibile",
+      "body": "Stiamo preparando l’elenco degli oggetti trasportabili. Riprova tra poco: puoi comunque contattarci se il tuo trasloco è urgente."
+    },
+    "error": {
+      "title": "Impossibile caricare l’elenco degli oggetti",
+      "body": "Controlla la connessione e riprova."
+    }
+  },
+  "admin": {
+    "nameLabel": "Nome",
+    "nameHelper": "L'inglese è il testo di riserva quando manca una traduzione.",
+    "translationsTitle": "Traduzioni del nome",
+    "translationsHelper": "Lascia vuoto per usare il nome inglese. Gli ID articolo e le categorie non vengono mai tradotti.",
+    "unknownCategoryTitle": "Categoria non tradotta",
+    "unknownCategoryWarning": "«{{slug}}» non è una delle sette categorie tradotte. Verrà mostrata come «{{label}}» in tutte le lingue, anche agli utenti che non leggono l’inglese."
+  }
+}

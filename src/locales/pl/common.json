@@ -1,0 +1,614 @@
+{
+  "action": {
+    "add": {
+      "cta": "Dodaj"
+    },
+    "back": {
+      "a11y": "Wstecz",
+      "cta": "Wstecz"
+    },
+    "backToHome": {
+      "a11y": "Powrót do strony głównej",
+      "cta": "Powrót do strony głównej"
+    },
+    "call": {
+      "cta": "Zadzwoń"
+    },
+    "cancel": {
+      "cta": "Anuluj"
+    },
+    "changePhoto": {
+      "cta": "Zmień zdjęcie"
+    },
+    "clearAll": {
+      "cta": "Wyczyść wszystko"
+    },
+    "confirm": {
+      "cta": "Potwierdź"
+    },
+    "continue": {
+      "cta": "Kontynuuj"
+    },
+    "decline": {
+      "cta": "Odrzuć"
+    },
+    "decrement": {
+      "a11y": "Zmniejsz"
+    },
+    "delete": {
+      "cta": "Usuń"
+    },
+    "discard": {
+      "cta": "Odrzuć"
+    },
+    "dismiss": {
+      "cta": "Zamknij"
+    },
+    "done": {
+      "cta": "Gotowe"
+    },
+    "edit": {
+      "cta": "Edytuj"
+    },
+    "goBack": {
+      "cta": "Wstecz"
+    },
+    "goHome": {
+      "cta": "Przejdź do strony głównej"
+    },
+    "increment": {
+      "a11y": "Zwiększ"
+    },
+    "keepCurrent": {
+      "label": "Zachowaj obecne"
+    },
+    "logout": {
+      "cta": "Wyloguj się"
+    },
+    "message": {
+      "cta": "Wiadomość"
+    },
+    "next": {
+      "cta": "Dalej"
+    },
+    "notNow": {
+      "cta": "Nie teraz"
+    },
+    "ok": {
+      "cta": "OK"
+    },
+    "refresh": {
+      "a11y": "Odśwież"
+    },
+    "remove": {
+      "cta": "Usuń"
+    },
+    "replace": {
+      "cta": "Zamień"
+    },
+    "retry": {
+      "cta": "Spróbuj ponownie"
+    },
+    "save": {
+      "cta": "Zapisz"
+    },
+    "saveChanges": {
+      "cta": "Zapisz zmiany"
+    },
+    "saving": {
+      "cta": "Zapisywanie…"
+    },
+    "search": {
+      "cta": "Szukaj"
+    },
+    "seeAll": {
+      "cta": "Zobacz wszystko"
+    },
+    "showMore": {
+      "cta": "Pokaż więcej"
+    },
+    "signOut": {
+      "cta": "Wyloguj się"
+    },
+    "skip": {
+      "cta": "Pomiń"
+    },
+    "submitting": {
+      "cta": "Wysyłanie…"
+    },
+    "tapToUpload": {
+      "cta": "Dotknij, aby przesłać"
+    },
+    "tryAgain": {
+      "cta": "Spróbuj ponownie"
+    },
+    "viewAll": {
+      "cta": "Zobacz wszystko"
+    }
+  },
+  "answer": {
+    "no": {
+      "label": "Nie",
+      "option": "Nie"
+    },
+    "yes": {
+      "label": "Tak",
+      "option": "Tak"
+    }
+  },
+  "auth": {
+    "signInRequired": {
+      "body": "Najpierw się zaloguj."
+    }
+  },
+  "badge": {
+    "overflow": {
+      "label": "9+"
+    }
+  },
+  "call": {
+    "dialerFailed": {
+      "title": "Nie udało się otworzyć telefonu"
+    },
+    "inApp": {
+      "title": "Połączenie w aplikacji"
+    },
+    "moveComplete": {
+      "subtitle": "Przeprowadzka jest zakończona"
+    },
+    "noPhone": {
+      "subtitle": "Brak zapisanego numeru telefonu"
+    },
+    "title": "Zadzwoń",
+    "viaPhone": {
+      "title": "Zadzwoń przez telefon"
+    }
+  },
+  "chat": {
+    "closed": {
+      "helper": "Ta przeprowadzka jest zakończona. Czat jest zamknięty."
+    },
+    "composer": {
+      "placeholder": "Napisz wiadomość…"
+    },
+    "loadFailed": {
+      "error": "Nie udało się wczytać wiadomości"
+    },
+    "online": {
+      "label": "Online"
+    },
+    "sendFailed": {
+      "title": "Nie udało się wysłać"
+    }
+  },
+  "confirm": {
+    "irreversible": {
+      "body": "Tej operacji nie można cofnąć."
+    }
+  },
+  "date": {
+    "today": {
+      "label": "Dziś"
+    }
+  },
+  "error": {
+    "checkConnection": "Sprawdź połączenie i spróbuj ponownie."
+  },
+  "field": {
+    "city": {
+      "label": "Miasto",
+      "placeholder": "np. Berlin"
+    },
+    "country": {
+      "label": "Kraj",
+      "placeholder": "Wybierz swój kraj"
+    },
+    "email": {
+      "label": "E-mail",
+      "shortLabel": "E-mail"
+    },
+    "fullName": {
+      "label": "Imię i nazwisko",
+      "placeholder": "Twoje imię i nazwisko"
+    },
+    "name": {
+      "label": "Nazwa",
+      "placeholder": "Wpisz nazwę"
+    },
+    "notes": {
+      "label": "Uwagi (opcjonalnie)",
+      "placeholder": "Dodatkowe uwagi…"
+    },
+    "phone": {
+      "label": "Numer telefonu",
+      "placeholder": "Wpisz numer telefonu",
+      "shortLabel": "Telefon"
+    },
+    "quantity": {
+      "label": "Liczba"
+    },
+    "status": {
+      "label": "Status"
+    }
+  },
+  "label": {
+    "total": "Razem"
+  },
+  "language": {
+    "arabic": {
+      "option": "Arabski"
+    },
+    "choose": "Wybierz język",
+    "english": {
+      "option": "Angielski"
+    },
+    "french": {
+      "option": "Francuski"
+    },
+    "german": {
+      "option": "Niemiecki"
+    },
+    "italian": {
+      "option": "Włoski"
+    },
+    "label": "Język",
+    "polish": {
+      "option": "Polski"
+    },
+    "romanian": {
+      "option": "Rumuński"
+    },
+    "russian": {
+      "option": "Rosyjski"
+    },
+    "spanish": {
+      "option": "Hiszpański"
+    },
+    "turkish": {
+      "option": "Turecki"
+    }
+  },
+  "list": {
+    "separator": ", "
+  },
+  "map": {
+    "myLocation": {
+      "label": "Moja lokalizacja"
+    }
+  },
+  "mover": {
+    "nameFallback": {
+      "label": "Nazwa przewoźnika"
+    },
+    "unnamed": {
+      "label": "Przewoźnik"
+    }
+  },
+  "nav": {
+    "darkTheme": {
+      "label": "Ciemny motyw"
+    },
+    "help": {
+      "label": "Pomoc"
+    },
+    "menu": {
+      "label": "Menu"
+    },
+    "notifications": {
+      "label": "Powiadomienia"
+    },
+    "openMenu": {
+      "a11y": "Otwórz menu"
+    },
+    "settings": {
+      "label": "Ustawienia"
+    }
+  },
+  "notifications": {
+    "empty": "Brak nowych powiadomień.",
+    "header": {
+      "title": "Powiadomienia"
+    },
+    "markAll": {
+      "cta": "Oznacz wszystkie jako przeczytane"
+    },
+    "markAllError": {
+      "body": "Niektóre pozycje mogą pozostać nieprzeczytane.",
+      "title": "Nie udało się oznaczyć wszystkich jako przeczytane"
+    }
+  },
+  "payment": {
+    "brand": {
+      "amex": {
+        "label": "American Express"
+      },
+      "diners": {
+        "label": "Diners Club"
+      },
+      "discover": {
+        "label": "Discover"
+      },
+      "fallback": {
+        "label": "Karta"
+      },
+      "jcb": {
+        "label": "JCB"
+      },
+      "mastercard": {
+        "label": "Mastercard"
+      },
+      "unionpay": {
+        "label": "UnionPay"
+      },
+      "visa": {
+        "label": "Visa"
+      }
+    },
+    "brandTag": {
+      "amex": {
+        "label": "AMEX"
+      },
+      "diners": {
+        "label": "DINER"
+      },
+      "discover": {
+        "label": "DISC"
+      },
+      "fallback": {
+        "label": "KARTA"
+      },
+      "jcb": {
+        "label": "JCB"
+      },
+      "mastercard": {
+        "label": "MC"
+      },
+      "unionpay": {
+        "label": "UPay"
+      },
+      "visa": {
+        "label": "VISA"
+      }
+    },
+    "method": {
+      "applePay": {
+        "label": "Apple Pay"
+      },
+      "googlePay": {
+        "label": "Google Pay"
+      },
+      "payPal": {
+        "label": "PayPal"
+      }
+    },
+    "waiting": {
+      "done": {
+        "body": "Płatność potwierdzona."
+      },
+      "forClient": {
+        "body": "Płatność potwierdzona. Czekamy na potwierdzenie od klienta, zanim przeprowadzka zostanie zamknięta."
+      },
+      "forMover": {
+        "body": "Płatność potwierdzona. Czekamy na potwierdzenie od przewoźnika, zanim przeprowadzka zostanie zamknięta."
+      }
+    }
+  },
+  "person": {
+    "fallbackMover": {
+      "label": "Nazwa przewoźnika"
+    },
+    "fallbackName": {
+      "label": "użytkowniku"
+    },
+    "fallbackUser": "Użytkownik",
+    "unnamed": {
+      "label": "Twoje imię i nazwisko"
+    }
+  },
+  "photoViewer": {
+    "close": {
+      "a11y": "Zamknij podgląd zdjęcia"
+    },
+    "counter": {
+      "label": "{{page}} / {{total}}"
+    }
+  },
+  "place": {
+    "dropoff": "Dostawa",
+    "pickup": "Odbiór"
+  },
+  "separator": {
+    "or": {
+      "label": "lub"
+    }
+  },
+  "starRating": {
+    "rate": {
+      "a11y_few": "Oceń na {{count}} gwiazdki",
+      "a11y_many": "Oceń na {{count}} gwiazdek",
+      "a11y_one": "Oceń na {{count}} gwiazdkę",
+      "a11y_other": "Oceń na {{count}} gwiazdki"
+    }
+  },
+  "state": {
+    "accepting": {
+      "label": "Akceptowanie…"
+    },
+    "adding": {
+      "label": "Dodawanie…"
+    },
+    "checking": {
+      "cta": "Sprawdzanie…"
+    },
+    "confirmed": {
+      "label": "Potwierdzono"
+    },
+    "declining": {
+      "label": "Odrzucanie…"
+    },
+    "loading": {
+      "label": "Ładowanie…"
+    },
+    "loadingEllipsis": {
+      "label": "Ładowanie…"
+    },
+    "locating": {
+      "label": "Ustalanie Twojej lokalizacji…"
+    },
+    "processing": {
+      "cta": "Przetwarzanie…"
+    },
+    "redirecting": {
+      "label": "Przekierowywanie…"
+    },
+    "saving": {
+      "label": "Zapisywanie…"
+    },
+    "searching": {
+      "label": "Szukanie…"
+    },
+    "selected": {
+      "label": "Wybrano"
+    },
+    "starting": {
+      "label": "Rozpoczynanie…"
+    },
+    "submitting": {
+      "label": "Wysyłanie…"
+    },
+    "updating": {
+      "label": "Aktualizowanie…"
+    },
+    "waiting": {
+      "label": "Oczekiwanie"
+    },
+    "withdrawing": {
+      "label": "Wycofywanie…"
+    }
+  },
+  "status": {
+    "active": {
+      "label": "Aktywny"
+    },
+    "comingSoon": {
+      "label": "Wkrótce"
+    },
+    "inactive": {
+      "label": "Nieaktywny"
+    }
+  },
+  "timeAgo": {
+    "days": {
+      "label_few": "{{count}} dni temu",
+      "label_many": "{{count}} dni temu",
+      "label_one": "{{count}} dzień temu",
+      "label_other": "{{count}} dnia temu"
+    },
+    "hours": {
+      "label_few": "{{count}} godz. temu",
+      "label_many": "{{count}} godz. temu",
+      "label_one": "{{count}} godz. temu",
+      "label_other": "{{count}} godz. temu"
+    },
+    "justNow": {
+      "label": "Przed chwilą"
+    },
+    "minutes": {
+      "label_few": "{{count}} min temu",
+      "label_many": "{{count}} min temu",
+      "label_one": "{{count}} min temu",
+      "label_other": "{{count}} min temu"
+    },
+    "seconds": {
+      "label_few": "{{count}} s temu",
+      "label_many": "{{count}} s temu",
+      "label_one": "{{count}} s temu",
+      "label_other": "{{count}} s temu"
+    }
+  },
+  "unit": {
+    "approxMinutes": {
+      "label": "~{{minutes}} min"
+    },
+    "meters": {
+      "label": "{{value}} m"
+    },
+    "minutes": {
+      "label": "min"
+    }
+  },
+  "upload": {
+    "constraints": {
+      "helper": "PNG, JPG, GIF do {{limit}}"
+    },
+    "constraintsNoGif": {
+      "helper": "PNG, JPG do {{limit}}"
+    },
+    "dragDrop": {
+      "label": "lub przeciągnij i upuść"
+    },
+    "file": {
+      "cta": "Prześlij plik"
+    },
+    "files": {
+      "cta": "Prześlij pliki"
+    },
+    "multiple": {
+      "helper": "Możesz wybrać wiele plików"
+    }
+  },
+  "value": {
+    "lessThan": {
+      "label": "<{{value}}"
+    },
+    "noEmail": {
+      "empty": "Brak adresu e-mail"
+    },
+    "noPhone": {
+      "empty": "Brak numeru telefonu"
+    },
+    "noneSelected": {
+      "empty": "Nie wybrano"
+    },
+    "notAvailable": {
+      "label": "Nd."
+    },
+    "notProvided": {
+      "empty": "Nie podano"
+    },
+    "notSelected": {
+      "empty": "Nie wybrano"
+    },
+    "notSet": {
+      "empty": "Nie ustawiono"
+    },
+    "notSpecified": {
+      "empty": "Nie podano"
+    },
+    "required": {
+      "label": "Wymagane"
+    },
+    "standard": {
+      "label": "Standard"
+    }
+  },
+  "vehicleType": {
+    "largeTruck": {
+      "label": "Duża ciężarówka"
+    },
+    "mediumTruck": {
+      "label": "Średnia ciężarówka"
+    },
+    "smallVan": {
+      "label": "Mały van"
+    }
+  },
+  "view": {
+    "list": {
+      "label": "Lista"
+    },
+    "map": {
+      "label": "Mapa"
+    }
+  }
+}

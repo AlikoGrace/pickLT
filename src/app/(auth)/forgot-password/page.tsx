@@ -2,16 +2,23 @@ import ButtonPrimary from '@/shared/ButtonPrimary'
 import { Field, Label } from '@/shared/fieldset'
 import Input from '@/shared/Input'
 import Logo from '@/shared/Logo'
-import T from '@/utils/getT'
+import { getTranslations } from '@/lib/i18n-server'
 import { Metadata } from 'next'
 import Link from 'next/link'
 
-export const metadata: Metadata = {
-  title: 'Forgot Password',
-  description: 'Reset your password',
+// § 7.8 — `export const metadata` is module scope and cannot read the
+// request-scoped locale. Every localisable title has to become async.
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getTranslations()
+  return {
+    title: t('web:seo.forgotPassword.title'),
+    description: t('web:seo.forgotPassword.description'),
+  }
 }
 
-const Page = () => {
+const Page = async () => {
+  const { t } = await getTranslations()
+
   return (
     <div className="container">
       <div className="my-16 flex justify-center">
@@ -22,22 +29,30 @@ const Page = () => {
         {/* FORM */}
         <form className="grid grid-cols-1 gap-6" action="#" method="post">
           <Field className="block">
-            <Label className="text-neutral-800 dark:text-neutral-200">{T['login']['Email address']}</Label>
-            <Input type="email" placeholder="example@example.com" className="mt-1" />
+            <Label className="text-neutral-800 dark:text-neutral-200">
+              {t('auth:field.email.label')}
+            </Label>
+            <Input
+              type="email"
+              placeholder={t('auth:field.email.placeholder')}
+              className="mt-1"
+            />
           </Field>
 
-          <ButtonPrimary type="submit">{T['common']['Continue']}</ButtonPrimary>
+          <ButtonPrimary type="submit">{t('common:action.continue.cta')}</ButtonPrimary>
         </form>
 
         {/* ==== */}
         <div className="block text-center text-sm text-neutral-700 dark:text-neutral-300">
-          {T['login']['New user?']} {` `}
+          {t('auth:login.newUser.label')} {` `}
           <Link href="/signup" className="font-medium underline">
-            {T['login']['Create an account']}
+            {t('auth:signup.createAccount.cta')}
           </Link>
-          {`  or  `}
+          {` `}
+          {t('common:separator.or.label')}
+          {` `}
           <Link href="/login" className="font-medium underline">
-            {T['login']['Sign in']}
+            {t('auth:login.submit.cta')}
           </Link>
         </div>
       </div>

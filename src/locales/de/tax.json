@@ -1,0 +1,40 @@
+{
+  "doc": {
+    "draftBanner": "ENTWURF — steuerliche Prüfung ausstehend",
+    "driverHeading": "Fahrer",
+    "footerDisclaimer": "Automatisch erstellt zur Information des Fahrers. Für die Erklärung seiner Umsätze und Einkünfte bleibt der Fahrer selbst verantwortlich.",
+    "operatorHeading": "Plattformbetreiber",
+    "operatorPending": "[Angaben zum Betreiber ausstehend]",
+    "operatorRegistration": "Registernummer: {{value}}",
+    "operatorVatId": "USt-IdNr.: {{value}}",
+    "period": "Zeitraum: {{period}}",
+    "statementNo": "Abrechnungsnummer: {{number}}",
+    "taxNumber": "Steuernummer: {{value}}",
+    "title": "Monatliche Tätigkeitsabrechnung für Fahrer",
+    "vatId": "USt-IdNr.: {{value}}"
+  },
+  "lines": {
+    "cashAlreadyHeld": "Davon bereits bar vereinnahmt",
+    "commission": "Provision / Servicegebühr",
+    "deductionsHeading": "Abzüge der Plattform",
+    "grossCash": "Bar vereinnahmt",
+    "grossDigital": "Digital vereinnahmt (App/Karte)",
+    "grossHeading": "Bruttoeinnahmen",
+    "grossLocal": "Brutto in Landeswährung ({{currency}})",
+    "grossTotal": "Summe der Bruttoeinnahmen",
+    "instantMoves": "Davon Sofort-Umzüge",
+    "net": "Nettobetrag",
+    "netPayable": "An den Fahrer auszuzahlender Nettobetrag",
+    "resultHeading": "Ergebnis",
+    "scheduledMoves": "Davon geplante Umzüge",
+    "summary": "Übersicht der abgerechneten Umzüge",
+    "totalMoves": "Abgeschlossene Umzüge insgesamt",
+    "withholdingHeading": "Einbehaltene Quellensteuern",
+    "withholdingIncome": "Einbehaltene Einkommensteuer",
+    "withholdingVat": "Einbehaltene Umsatzsteuer"
+  },
+  "statementReady": {
+    "body": "Abrechnung {{number}} für {{period}} steht in Ihren Steuerdokumenten bereit.",
+    "title": "Ihre Monatsabrechnung ist bereit"
+  }
+}

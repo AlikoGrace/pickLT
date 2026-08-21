@@ -1,0 +1,344 @@
+{
+  "appearance": {
+    "dark": {
+      "label": "Tryb ciemny",
+      "subtitle": "Łagodniejszy dla oczu wieczorem"
+    },
+    "light": {
+      "label": "Tryb jasny",
+      "subtitle": "Klasyczny jasny wygląd"
+    },
+    "system": {
+      "label": "Ustawienie systemowe",
+      "subtitle": "Zgodne z ustawieniami urządzenia"
+    },
+    "title": "Wygląd"
+  },
+  "changeEmail": {
+    "cta": "Zaktualizuj e-mail",
+    "current": {
+      "label": "Obecny: {{email}}"
+    },
+    "failed": {
+      "title": "Nie udało się zmienić adresu e-mail"
+    },
+    "googleNotice": {
+      "body": "Twoje konto korzysta z logowania Google. Adresu e-mail nie można zmienić w PickLT — zaktualizuj go na swoim koncie Google.",
+      "title": "Adresem e-mail zarządza Google"
+    },
+    "helper": "Zaktualizuj swój adres e-mail",
+    "helperLong": "Na nowy adres wyślemy wiadomość weryfikacyjną.",
+    "label": "Zmień e-mail",
+    "sent": {
+      "body": "Wysłaliśmy wiadomość weryfikacyjną. Sprawdź swoją skrzynkę."
+    },
+    "sentLong": "Wysłaliśmy wiadomość weryfikacyjną. Sprawdź skrzynkę i kliknij link weryfikacyjny.",
+    "title": "Zmień e-mail",
+    "updatedTo": {
+      "body": "Adres e-mail zmieniony na <1>{{email}}</1>"
+    }
+  },
+  "changePassword": {
+    "failed": {
+      "title": "Nie udało się zaktualizować hasła"
+    },
+    "googleNotice": {
+      "body": "Twoje konto nie ma jeszcze hasła. Aby je ustawić, wyloguj się i skorzystaj z opcji „Nie pamiętasz hasła?” na ekranie logowania.",
+      "cta": "Wyloguj się i zresetuj hasło",
+      "title": "Konto korzysta z logowania Google"
+    },
+    "mismatch": {
+      "error": "Hasła nie są takie same."
+    },
+    "success": {
+      "message": "Twoje hasło zostało zmienione.",
+      "title": "Hasło zaktualizowane"
+    },
+    "title": "Zmień hasło"
+  },
+  "changePhone": {
+    "current": {
+      "label": "Obecny: {{phone}}"
+    },
+    "failed": {
+      "title": "Nie udało się zmienić numeru telefonu"
+    },
+    "helper": "Zaktualizuj swój numer telefonu",
+    "helperLong": "Na nowy numer wyślemy kod weryfikacyjny.",
+    "label": "Zmień telefon",
+    "title": "Zmień numer telefonu"
+  },
+  "deleteAccount": {
+    "confirm": {
+      "body": "Ta operacja jest nieodwracalna. Utracisz wszystkie swoje dane, przeprowadzki i ustawienia.",
+      "title": "Na pewno chcesz usunąć swoje konto?"
+    }
+  },
+  "dobSheet": {
+    "title": "Wybierz datę urodzenia"
+  },
+  "editName": {
+    "helper": "Zaktualizuj swoje imię i nazwisko",
+    "label": "Edytuj imię i nazwisko",
+    "name": {
+      "placeholder": "Twoje imię i nazwisko"
+    },
+    "title": "Edytuj imię i nazwisko"
+  },
+  "field": {
+    "confirmPassword": {
+      "label": "Potwierdź nowe hasło",
+      "placeholder": "Wpisz ponownie nowe hasło"
+    },
+    "currentPassword": {
+      "label": "Obecne hasło",
+      "placeholder": "Wpisz swoje obecne hasło"
+    },
+    "dateOfBirth": {
+      "label": "Data urodzenia",
+      "placeholder": "Wybierz swoją datę urodzenia"
+    },
+    "email": {
+      "label": "E-mail"
+    },
+    "fullName": {
+      "label": "Imię i nazwisko"
+    },
+    "gender": {
+      "label": "Płeć",
+      "placeholder": "Wybierz płeć"
+    },
+    "newEmail": {
+      "label": "Nowy e-mail",
+      "placeholder": "imie@przyklad.pl"
+    },
+    "newPassword": {
+      "label": "Nowe hasło"
+    },
+    "password": {
+      "minHelper": "Co najmniej 8 znaków"
+    },
+    "phone": {
+      "label": "Numer telefonu",
+      "numberPlaceholder": "123 456 789",
+      "placeholder": "Dodaj numer telefonu"
+    }
+  },
+  "gender": {
+    "female": {
+      "option": "Kobieta"
+    },
+    "male": {
+      "option": "Mężczyzna"
+    },
+    "other": {
+      "option": "Inna"
+    }
+  },
+  "genderSheet": {
+    "title": "Wybierz płeć"
+  },
+  "help": {
+    "helper": "Uzyskaj pomoc i wsparcie"
+  },
+  "helpCenter": {
+    "header": {
+      "title": "Centrum pomocy"
+    },
+    "helper": "Uzyskaj pomoc i wsparcie",
+    "search": {
+      "a11y": "Szukaj artykułów pomocy",
+      "placeholder": "Szukaj lokalizacji.."
+    }
+  },
+  "language": {
+    "active": "Aktywny",
+    "back": "Wróć",
+    "done": "Gotowe",
+    "others": "Inne",
+    "saveError": "Nie udało się zapisać języka. Spróbuj ponownie.",
+    "subtitle": "Wybierz język, którego chcesz używać w całej aplikacji.",
+    "suggested": "Sugerowane",
+    "title": "Język"
+  },
+  "logout": {
+    "confirm": {
+      "body": "Przed wylogowaniem upewnij się, że wszystko zostało zapisane, a bieżące zadania są ukończone.",
+      "title": "Na pewno chcesz się wylogować?"
+    }
+  },
+  "menu": {
+    "appearance": {
+      "label": "Wygląd"
+    },
+    "changeEmail": {
+      "label": "Zmień e-mail"
+    },
+    "changePassword": {
+      "label": "Zmień hasło"
+    },
+    "changePhone": {
+      "label": "Zmień telefon"
+    },
+    "deleteAccount": {
+      "label": "Usuń konto"
+    },
+    "editProfile": {
+      "label": "Edytuj profil"
+    },
+    "help": {
+      "label": "Pomoc i wsparcie"
+    },
+    "language": {
+      "label": "Język"
+    },
+    "legal": {
+      "label": "Informacje prawne"
+    },
+    "logout": {
+      "label": "Wyloguj się"
+    },
+    "notifications": {
+      "label": "Powiadomienia"
+    },
+    "paymentAccount": {
+      "label": "Konto płatnicze"
+    },
+    "security": {
+      "label": "Bezpieczeństwo"
+    },
+    "yourCard": {
+      "label": "Twoja karta"
+    }
+  },
+  "name": {
+    "updated": {
+      "success": "Imię i nazwisko zaktualizowane"
+    }
+  },
+  "newEmail": {
+    "label": "Nowy adres e-mail",
+    "placeholder": "nowy@przyklad.pl"
+  },
+  "newPhone": {
+    "label": "Nowy numer telefonu",
+    "placeholder": "+491234567890"
+  },
+  "notifications": {
+    "helper": "Skonfiguruj alerty i powiadomienia",
+    "rows": {
+      "appUpdates": {
+        "label": "Aktualizacje aplikacji"
+      },
+      "cashback": {
+        "label": "Zwrot gotówki"
+      },
+      "notifications": {
+        "label": "Powiadomienia"
+      },
+      "payments": {
+        "label": "Płatności"
+      },
+      "sound": {
+        "label": "Dźwięk"
+      },
+      "specialOffers": {
+        "label": "Oferty specjalne"
+      },
+      "vibrate": {
+        "label": "Wibracje"
+      }
+    },
+    "title": "Powiadomienia"
+  },
+  "password": {
+    "confirm": {
+      "label": "Potwierdź hasło"
+    },
+    "current": {
+      "label": "Obecne hasło"
+    },
+    "new": {
+      "label": "Nowe hasło"
+    },
+    "submit": {
+      "cta": "Zaktualizuj hasło"
+    },
+    "title": "Zaktualizuj swoje hasło"
+  },
+  "paymentMethods": {
+    "helper": "Zarządzaj swoimi metodami płatności",
+    "label": "Metody płatności"
+  },
+  "personalData": {
+    "nameRequired": {
+      "message": "Podaj swoje imię i nazwisko.",
+      "title": "Wymagane imię i nazwisko"
+    },
+    "saveFailed": {
+      "title": "Nie udało się zapisać profilu"
+    },
+    "title": "Dane osobowe"
+  },
+  "phone": {
+    "updated": {
+      "success": "Numer telefonu zaktualizowany i zweryfikowany"
+    }
+  },
+  "photo": {
+    "updated": {
+      "success": "Zdjęcie zaktualizowane"
+    }
+  },
+  "privacy": {
+    "helper": "Zarządzaj swoimi danymi i bezpieczeństwem",
+    "label": "Prywatność i bezpieczeństwo"
+  },
+  "privacyPolicy": {
+    "header": {
+      "title": "Prywatność i zasady"
+    }
+  },
+  "privacySecurity": {
+    "helper": "Zarządzaj swoimi danymi i bezpieczeństwem",
+    "label": "Prywatność i bezpieczeństwo"
+  },
+  "section": {
+    "account": {
+      "title": "Konto"
+    },
+    "general": {
+      "title": "Ogólne"
+    },
+    "moves": {
+      "title": "Przeprowadzki"
+    },
+    "payments": {
+      "title": "Płatności"
+    },
+    "personal": {
+      "title": "Dane osobowe"
+    },
+    "preferences": {
+      "title": "Preferencje"
+    },
+    "support": {
+      "title": "Wsparcie"
+    }
+  },
+  "security": {
+    "biometricId": {
+      "label": "Identyfikacja biometryczna"
+    },
+    "faceId": {
+      "label": "Face ID"
+    },
+    "googleAuthenticator": {
+      "label": "Google Authenticator"
+    },
+    "rememberPassword": {
+      "label": "Zapamiętaj hasło"
+    },
+    "title": "Bezpieczeństwo"
+  }
+}

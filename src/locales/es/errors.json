@@ -1,0 +1,328 @@
+{
+  "api": {
+    "admin": {
+      "awaitingApproval": "Tu cuenta de administrador está pendiente de aprobación por parte de otro administrador.",
+      "noProfile": "No se ha encontrado ningún perfil de administrador para esta cuenta.",
+      "notAuthorized": "Esta cuenta no tiene autorización para acceder a la consola de administración.",
+      "suspended": "Se ha suspendido tu acceso de administrador. Ponte en contacto con otro administrador."
+    },
+    "admins": {
+      "alreadyAdmin": "Ese usuario ya es administrador activo.",
+      "invalidStatus": "El estado debe ser uno de los siguientes: {{list}}",
+      "lastAdmin": "Es el último administrador activo; asigna otro antes de eliminarlo.",
+      "notAnAdmin": "Esa cuenta no es de administrador.",
+      "notFound": "Administrador no encontrado.",
+      "selfDemote": "No puedes retirarte tu propio acceso de administrador.",
+      "selfStatus": "No puedes cambiar tu propio estado de administrador.",
+      "userIdRequired": "Se requiere un identificador de usuario.",
+      "userNotFound": "Usuario no encontrado."
+    },
+    "auth": {
+      "missingUserId": "No se ha podido completar el inicio de sesión. Inténtalo de nuevo.",
+      "noSession": "No hay ninguna sesión activa. Vuelve a iniciar sesión.",
+      "sessionInitFailed": "No se ha podido iniciar tu sesión. Inténtalo de nuevo."
+    },
+    "dac7": {
+      "exportBlocked_one": "{{count}} vendedor sin número de identificación fiscal (TIN). Completa su KYC antes de exportar o vuelve a solicitarlo con force=1 para obtener una copia de revisión interna.",
+      "exportBlocked_other": "{{count}} vendedores sin número de identificación fiscal (TIN). Completa su KYC antes de exportar o vuelve a solicitarlo con force=1 para obtener una copia de revisión interna.",
+      "invalidYear": "Año no válido"
+    },
+    "dispute": {
+      "invalidStatus": "El resultado debe ser uno de los siguientes: {{list}}",
+      "moveIdRequired": "Se requiere un identificador de mudanza."
+    },
+    "forbidden": "No tienes permiso para hacer eso.",
+    "functionFailed": {
+      "error": "La función {{functionId}} ha fallado ({{status}})"
+    },
+    "internal": "Algo ha salido mal. Inténtalo de nuevo.",
+    "inventory": {
+      "categoryRequired": "La categoría es obligatoria.",
+      "invalidMoveType": "moveTypeMinimum debe ser uno de los siguientes: {{list}}",
+      "nameRequired": "El nombre es obligatorio.",
+      "notANonNegativeNumber": "{{field}} debe ser un número no negativo."
+    },
+    "invite": {
+      "accountClash": "Ya existe una cuenta con este correo electrónico. Pide a un administrador que la ascienda en su lugar.",
+      "alreadyAccepted": "Esa invitación ya se aceptó. Suspende la cuenta de administrador en su lugar.",
+      "emailExists": "Ese correo electrónico ya tiene una cuenta de PickLT. Asciéndela desde la página de usuarios en lugar de enviar una invitación.",
+      "emailIsAdmin": "Ese correo electrónico ya pertenece a un administrador.",
+      "expired": "Esta invitación ha caducado. Pide a un administrador un enlace nuevo.",
+      "idRequired": "Se requiere un identificador de invitación.",
+      "invalidEmail": "Introduce una dirección de correo electrónico válida.",
+      "invalidLink": "Este enlace de invitación no es válido.",
+      "loadFailed": "No se ha podido cargar esta invitación.",
+      "nameRequired": "Introduce el nombre completo de la persona invitada.",
+      "notFound": "Invitación no encontrada.",
+      "passwordTooShort_one": "La contraseña debe tener al menos {{count}} carácter.",
+      "passwordTooShort_other": "La contraseña debe tener al menos {{count}} caracteres.",
+      "revoked": "Esta invitación se ha revocado.",
+      "signupFailed": "No se ha podido completar el registro.",
+      "used": "Esta invitación ya se ha utilizado."
+    },
+    "mover": {
+      "invalidStatus": "El nuevo estado debe ser uno de los siguientes: {{list}}",
+      "noLicensePhoto": "No hay ninguna foto del permiso de conducir registrada.",
+      "notFound": "Transportista no encontrado.",
+      "reasonRequired": "Debes indicar un motivo al rechazar o suspender a un transportista.",
+      "verifyFailed": "La verificación ha fallado (estado {{status}}). Inténtalo de nuevo."
+    },
+    "pricing": {
+      "commissionTooLarge": "{{label}} es una fracción, no un porcentaje: introduce 0.15 para el 15 %.",
+      "keyRequired": "key es obligatorio",
+      "negative": "{{label}} no puede ser negativo.",
+      "notANumber": "{{label}} debe ser un número.",
+      "ratioTooLarge": "{{label}} parece demasiado alto: es una proporción, no un importe en euros.",
+      "unknownKey": "Clave de precios desconocida: {{key}}"
+    },
+    "unauthorized": "Tu sesión ha caducado. Vuelve a iniciar sesión.",
+    "user": {
+      "blockedFlagRequired": "Se requiere un valor de bloqueado/desbloqueado.",
+      "notFound": "Usuario no encontrado.",
+      "selfBlock": "No puedes bloquear tu propia cuenta."
+    }
+  },
+  "appwrite": {
+    "generalArgumentInvalid": "Uno de los campos no es válido. Revisa lo que has introducido.",
+    "generalRateLimitExceeded": "Demasiados intentos. Espera un momento e inténtalo de nuevo.",
+    "passwordPersonalData": "La contraseña no puede contener información personal.",
+    "passwordRecentlyUsed": "Esta contraseña se usó recientemente. Elige otra.",
+    "phoneInvalid": "El formato del número de teléfono no es válido.",
+    "userAlreadyExists": "Ya existe una cuenta con este correo electrónico.",
+    "userInvalidCode": "El código de verificación es incorrecto o ha caducado.",
+    "userInvalidCredentials": "Correo electrónico o contraseña incorrectos.",
+    "userNotFound": "No se encontró ninguna cuenta con este correo electrónico.",
+    "userPhoneNotFound": "No hay ningún número de teléfono registrado. Añade uno para continuar.",
+    "userSessionAlreadyExists": "Ya has iniciado sesión.",
+    "userSessionNotFound": "La sesión ha caducado. Vuelve a iniciar sesión.",
+    "userUnauthorized": "No tienes autorización. Vuelve a iniciar sesión."
+  },
+  "auth": {
+    "forbidden": "Acceso denegado",
+    "initSessionFailed": "No se ha podido inicializar la sesión",
+    "noActiveSession": "No hay ninguna sesión activa",
+    "noSession": {
+      "error": "No hay ningún usuario autenticado"
+    },
+    "setPhoneFailed": "No se ha podido guardar el número de teléfono",
+    "syncFailed": "No se ha podido sincronizar el usuario",
+    "unauthorized": "No autorizado"
+  },
+  "call": {
+    "noPhoneNumber": "No hay ningún número de teléfono registrado para este transportista."
+  },
+  "card": {
+    "add": {
+      "failed": "No se pudo añadir la tarjeta. Inténtalo de nuevo.",
+      "initFailed": "No se pudo iniciar la configuración de la tarjeta. Inténtalo de nuevo.",
+      "notSaved": "La tarjeta no se guardó. Inténtalo de nuevo."
+    },
+    "remove": {
+      "detachFailed": "Nuestro proveedor de pagos no pudo eliminar la tarjeta. Inténtalo de nuevo.",
+      "forbidden": "Esa tarjeta no pertenece a tu cuenta.",
+      "internal": "Algo salió mal al eliminar la tarjeta. Inténtalo de nuevo.",
+      "misconfigured": "La eliminación de tarjetas no está disponible temporalmente. Inténtalo más tarde.",
+      "noStripeCustomer": "No se encontró ningún perfil de pago para tu cuenta.",
+      "paymentMethodNotFound": "Esa tarjeta ya no existe en nuestro proveedor de pagos.",
+      "unauthenticated": "Vuelve a iniciar sesión para eliminar esta tarjeta.",
+      "userNotFound": "No se pudo cargar tu cuenta. Vuelve a iniciar sesión."
+    }
+  },
+  "crew": {
+    "fieldsRequired": "El nombre y el teléfono son obligatorios",
+    "memberNotFound": "Miembro del equipo no encontrado",
+    "notOwner": {
+      "error": "Este miembro no pertenece a tu equipo"
+    }
+  },
+  "generic": {
+    "fallback": "Algo salió mal. Inténtalo de nuevo.",
+    "internal": "Error interno del servidor",
+    "retry": {
+      "body": "Inténtalo de nuevo.",
+      "error": "Algo salió mal. Inténtalo de nuevo."
+    },
+    "saveFailed": "No se ha podido guardar",
+    "title": "Algo salió mal",
+    "unknown": "Error desconocido"
+  },
+  "geo": {
+    "denied": {
+      "error": "Se ha denegado el acceso a la ubicación. Actívalo en los ajustes de tu navegador."
+    },
+    "unavailable": {
+      "error": "No se ha podido obtener tu ubicación. Inténtalo de nuevo."
+    },
+    "unsupported": {
+      "error": "Tu navegador no admite la geolocalización"
+    }
+  },
+  "geocode": {
+    "searchFailed": "No se han podido obtener las ubicaciones"
+  },
+  "google": {
+    "cancelled": {
+      "error": "Se canceló el inicio de sesión con Google."
+    },
+    "noCachedAccount": {
+      "error": "No se encontró ninguna cuenta de Google guardada."
+    },
+    "noCredentials": {
+      "error": "El inicio de sesión con Google se completó, pero el servidor no devolvió credenciales."
+    },
+    "noIdToken": {
+      "error": "El inicio de sesión con Google no devolvió un token de identificación. Inténtalo de nuevo."
+    }
+  },
+  "instant": {
+    "moverUnavailable": {
+      "error": "El transportista seleccionado ya no está disponible"
+    },
+    "submitStage": {
+      "error": "El envío falló en {{stage}}. Inténtalo de nuevo.",
+      "short": {
+        "error": "El envío falló en {{stage}}"
+      }
+    }
+  },
+  "location": {
+    "unavailable": {
+      "error": "No se ha podido determinar tu ubicación."
+    }
+  },
+  "mapbox": {
+    "unreachable": {
+      "error": "No se pudo conectar con Mapbox, comprueba tu conexión"
+    }
+  },
+  "message": {
+    "empty": "El mensaje está vacío",
+    "sendFailed": "No se pudo enviar el mensaje. Inténtalo de nuevo.",
+    "tooLong": "El mensaje es demasiado largo. El límite es de {{max}} caracteres."
+  },
+  "move": {
+    "alreadyAssigned": "Esta mudanza ya tiene un transportista asignado",
+    "cancelFailed": "No se ha podido cancelar esta mudanza. Inténtalo de nuevo.",
+    "cancelRetry": "No se ha podido cancelar. Inténtalo de nuevo.",
+    "createFailed": "No se ha podido crear la mudanza",
+    "dateInPast": "La fecha de la mudanza debe ser futura",
+    "invalidTransition": "Esa actualización de estado ya no es válida para esta mudanza. Vuelve a cargar la mudanza e inténtalo de nuevo.",
+    "loadFailed": "No se han podido cargar los datos de la mudanza",
+    "noLongerAcceptable": "Esta mudanza ya no se puede aceptar. Su estado ha cambiado; vuelve a cargar la lista.",
+    "notAssigned": "No estás asignado a esta mudanza",
+    "notAuthorized": "No tienes autorización para esta mudanza",
+    "notAvailable": "Esta mudanza no está disponible para aceptarla",
+    "notCancellable": "Esta mudanza ya no se puede cancelar ({{stage}}). Puede que tus objetos ya estén en tránsito; ponte en contacto directamente con tu transportista.",
+    "notCancellableUnknownStage": "Esta mudanza ya no se puede cancelar. Puede que tus objetos ya estén en tránsito; ponte en contacto directamente con tu transportista.",
+    "notFound": "Mudanza no encontrada",
+    "notReschedulable": "Esta mudanza ya no se puede reprogramar. Su estado ha cambiado; vuelve a cargar la mudanza.",
+    "rescheduleFailed": "No se ha podido reprogramar",
+    "rescheduleRetry": "No se ha podido reprogramar. Inténtalo de nuevo.",
+    "scheduledOnly": "Solo las mudanzas programadas se pueden aceptar de esta forma",
+    "statusUpdateFailed": "No se ha podido actualizar el estado",
+    "tooEarly": "Esta mudanza no se puede iniciar antes de su fecha programada.",
+    "withdrawTooLate": "No puedes retirarte una vez iniciada la mudanza"
+  },
+  "mover": {
+    "acceptFailed": {
+      "error": "No se ha podido aceptar la mudanza"
+    },
+    "acceptRetry": "No se ha podido aceptar la mudanza. Inténtalo de nuevo.",
+    "clientCannotConvert": "Tu cuenta está registrada como cliente. Las cuentas de cliente no se pueden convertir en cuentas de transportista. Crea una cuenta nueva para registrarte como transportista.",
+    "earningsFetchFailed": "No se han podido obtener las ganancias",
+    "earningsLoadFailed": "No se han podido cargar las ganancias",
+    "licenseUploadFailed": "No se ha podido subir la foto del permiso de conducir",
+    "noLocation": "No hay ninguna ubicación disponible. Activa los servicios de ubicación o actualiza tu ubicación.",
+    "notVerified": "Tu perfil de transportista aún no se ha verificado",
+    "notVerifiedPendingApproval": "Tu perfil de transportista aún no se ha verificado. Espera la aprobación del administrador.",
+    "profileNotFound": "Perfil de transportista no encontrado",
+    "profileSubmitFailed": "No se ha podido enviar el perfil",
+    "selfieRequired": "Se requiere un selfi para la verificación de identidad",
+    "selfieUploadFailed": "No se ha podido subir el selfi",
+    "startRouteFailed": "No se ha podido iniciar la ruta",
+    "startRouteRetry": "No se ha podido iniciar la ruta. Inténtalo de nuevo.",
+    "withdrawFailed": "No se ha podido retirar de la mudanza",
+    "withdrawRetry": "No se ha podido retirar. Inténtalo de nuevo."
+  },
+  "movers": {
+    "fetchFailed": "No se han podido obtener los transportistas",
+    "findFailed": "No se han podido encontrar transportistas"
+  },
+  "moves": {
+    "fetchFailed": "No se han podido obtener las mudanzas",
+    "loadFailed": "No se han podido cargar las mudanzas",
+    "scheduledLoadFailed": "No se han podido cargar las mudanzas programadas"
+  },
+  "network": {
+    "generic": {
+      "error": "Error de red. Inténtalo de nuevo."
+    },
+    "unreachable": "No se ha podido conectar con el servidor. Comprueba tu conexión e inténtalo de nuevo."
+  },
+  "payment": {
+    "cardDeclined": "Tu tarjeta fue rechazada. Prueba con otro método de pago.",
+    "charge": {
+      "failed": "No se pudo completar el pago. Inténtalo de nuevo.",
+      "initFailed": "No se pudo iniciar el pago. Inténtalo de nuevo."
+    },
+    "confirmFailed": "No se ha podido confirmar el pago",
+    "notAwaiting": "Esta mudanza no está a la espera de pago. Vuelve a cargar la mudanza e inténtalo de nuevo."
+  },
+  "profile": {
+    "emailChangeFailed": "No se ha podido cambiar el correo electrónico",
+    "emailTaken": "Este correo electrónico ya lo utiliza otra cuenta",
+    "nameUpdateFailed": "No se ha podido actualizar el nombre",
+    "phoneChangeFailed": "No se ha podido cambiar el número de teléfono",
+    "phoneTaken": "Este número de teléfono ya lo utiliza otra cuenta"
+  },
+  "request": {
+    "moveMismatch": "La solicitud no corresponde a esta mudanza",
+    "notOwned": "La solicitud no pertenece a este transportista",
+    "notPending": "La solicitud ya no está pendiente"
+  },
+  "review": {
+    "moveNotCompleted": "La mudanza no está completada",
+    "noMover": "No hay ningún transportista asignado a esta mudanza",
+    "ratingRange": "La valoración debe estar entre 1 y 5",
+    "submitFailed": "No se ha podido enviar la reseña"
+  },
+  "tax": {
+    "listFailed": "No se han podido cargar los certificados",
+    "pdfLoadFailed": "No se ha podido cargar el PDF",
+    "pdfNotReady": "El PDF del certificado aún no está listo"
+  },
+  "taxDocs": {
+    "downloadFailed": {
+      "error": "No se ha podido descargar el certificado. Inténtalo de nuevo."
+    },
+    "pdfNotReady": {
+      "error": "El PDF del certificado aún no está listo"
+    }
+  },
+  "update": {
+    "failed": {
+      "title": "No se ha podido actualizar"
+    }
+  },
+  "upload": {
+    "failed": "Error al subir el archivo",
+    "noFile": "No se ha proporcionado ningún archivo",
+    "notAnImage": "Selecciona un archivo de imagen",
+    "notAnImage2": "El archivo debe ser una imagen",
+    "photoFailed": "No se ha podido subir la foto",
+    "photosFailed": "No se han podido subir las fotos",
+    "tooLarge": "La imagen debe pesar menos de {{limit}}"
+  },
+  "validation": {
+    "emailFormat": "El formato del correo electrónico no es válido",
+    "emailRequired": "El correo electrónico es obligatorio",
+    "noFields": "No hay campos válidos que actualizar",
+    "phoneFormat": "Número de teléfono no válido. Usa el formato internacional (p. ej., +491234567890)",
+    "phoneRequired2": "El número de teléfono es obligatorio"
+  },
+  "vehicle": {
+    "fieldsRequired": "Rellena todos los campos obligatorios del vehículo",
+    "saveFailed": "No se ha podido guardar la información del vehículo",
+    "updateFailed": "No se ha podido actualizar la información del vehículo"
+  }
+}

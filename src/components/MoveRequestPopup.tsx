@@ -21,6 +21,11 @@ import {
   CalendarIcon,
   CheckCircleIcon,
 } from '@heroicons/react/24/outline'
+import { formatDateWith, formatMoney } from '@/lib/format'
+import { moveSubtitle, moveTypeAndCategoryValue, requestCategoryAndType } from '@/lib/move-subtitle'
+import { Trans, useTranslation } from 'react-i18next'
+import type { TFunction } from 'i18next'
+import { formatSeconds, formatWeightKg } from '@/lib/format'
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || ''
 const MOVE_REQUESTS_COLLECTION = process.env.NEXT_PUBLIC_COLLECTION_MOVE_REQUESTS || ''
@@ -63,19 +68,54 @@ interface IncomingRequest {
 }
 
 // ─── Helper functions ───────────────────────────────────
-const formatLabel = (value: string | null | undefined): string => {
-  if (!value) return 'Not specified'
-  return value
-    .split('_')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ')
+// `moveType`, `homeType`, `vehicleType`, `packingServiceLevel` and every entry
+// of `additionalServices` are STORED SLUGS, never labels. Look the label up in
+// the catalog; never humanise the slug (catalog conventions §5).
+const snakeToCamel = (value: string) => value.replace(/_([a-z])/g, (_, c: string) => c.toUpperCase())
+
+const homeTypeLabel = (t: TFunction, value: string | null | undefined): string => {
+  // i18n-keys: booking:homeType.apartment.option, booking:homeType.house.option, booking:homeType.office.option, booking:homeType.storage.option, booking:homeType.other.option
+  if (!value) return t('common:value.notSpecified.empty')
+  return t(`booking:homeType.${snakeToCamel(value)}.option`)
 }
+
+const VEHICLE_KEY: Record<string, string> = {
+  small_van: 'smallVan',
+  medium_truck: 'mediumTruck',
+  large_truck: 'largeTruck',
+}
+
+const vehicleLabel = (t: TFunction, value: string | null | undefined): string => {
+  // i18n-keys: booking:vehicle.smallVan.label, booking:vehicle.mediumTruck.label, booking:vehicle.largeTruck.label, booking:vehicle.multiple.label
+  if (!value) return t('common:value.notSpecified.empty')
+  return t(`booking:vehicle.${VEHICLE_KEY[value] ?? snakeToCamel(value)}.label`)
+}
+
+const packingLabel = (t: TFunction, value: string | null | undefined): string => {
+  // i18n-keys: booking:packingLevel.none.option, booking:packingLevel.partial.option, booking:packingLevel.full.option, booking:packingLevel.unpacking.option
+  if (!value) return t('common:value.notSpecified.empty')
+  return t(`booking:packingLevel.${snakeToCamel(value)}.option`)
+}
+
+const SERVICE_KEY: Record<string, string> = {
+  disposal_entsorgung: 'disposal',
+}
+
+// A standalone row label ("Category: Instant"), not a fragment of a phrase —
+// so this one stays a lookup. It is the assembled *sentences* that had to go.
+// i18n-keys: moves:moveCategory.instant.label, moves:moveCategory.scheduled.label
+const categoryLabel = (t: TFunction, moveCategory: string | null | undefined): string =>
+  moveCategory === 'instant' ? t('moves:moveCategory.instant.label') : t('moves:moveCategory.scheduled.label')
+
+const serviceLabel = (t: TFunction, value: string): string =>
+  // i18n-keys: booking:services.furnitureDisassembly.option, booking:services.furnitureAssembly.option, booking:services.tvMountRemove.option, booking:services.applianceDisconnect.option, booking:services.applianceConnect.option, booking:services.disposal.option, booking:services.moveoutCleaning.option, booking:services.temporaryStorage.option
+  t(`booking:services.${SERVICE_KEY[value] ?? snakeToCamel(value)}.option`)
 
 const formatDate = (dateStr: string | null) => {
   if (!dateStr) return ''
   try {
     const date = new Date(dateStr)
-    return date.toLocaleDateString('en-GB', {
+    return formatDateWith(date, {
       weekday: 'short',
       month: 'short',
       day: 'numeric',
@@ -226,6 +266,7 @@ function createAlarmSound(): { play: () => void; stop: () => void } {
 }
 
 export default function MoveRequestPopup({ children }: { children: ReactNode }) {
+  const { t } = useTranslation()
   const { user } = useAuth()
 
   const moverProfileId = user?.moverDetails?.profileId
@@ -421,14 +462,14 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
         router.push('/active-move')
       } else {
         const errData = await res.json().catch(() => ({}))
-        alert(errData.error || 'Failed to accept move')
+        alert(errData.error || t('errors:mover.acceptFailed.error'))
       }
     } catch {
-      alert('Network error. Please try again.')
+      alert(t('errors:network.generic.error'))
     } finally {
       setIsAccepting(false)
     }
-  }, [incoming, router])
+  }, [incoming, router, t])
 
   const handleDecline = useCallback(async () => {
     if (!incoming) return
@@ -462,8 +503,10 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
       })
     }
 
-    const pickupDisplay = move?.pickupStreetAddress || move?.pickupLocation?.split(',')[0] || 'Pickup location'
-    const dropoffDisplay = move?.dropoffStreetAddress || move?.dropoffLocation?.split(',')[0] || 'Drop-off location'
+    const pickupDisplay =
+      move?.pickupStreetAddress || move?.pickupLocation?.split(',')[0] || t('booking:map.pickup.placeholder')
+    const dropoffDisplay =
+      move?.dropoffStreetAddress || move?.dropoffLocation?.split(',')[0] || t('booking:map.dropoff.placeholder')
 
     return (
       <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
@@ -479,8 +522,10 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                   <TruckIcon className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="font-bold text-lg block leading-tight">New Move Request!</span>
-                  <span className="text-xs opacity-80">{move?.moveCategory === 'instant' ? 'Instant' : 'Scheduled'} · {formatLabel(move?.moveType)}</span>
+                  <span className="font-bold text-lg block leading-tight">{t('web:mover.request.title')}</span>
+                  <span className="text-xs opacity-80">
+                    {requestCategoryAndType(t, move?.moveCategory, move?.moveType)}
+                  </span>
                 </div>
               </div>
               <button
@@ -495,7 +540,11 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
             <div className="flex items-center gap-2 mt-3">
               <ClockIcon className="w-4 h-4 opacity-80" />
               <span className="text-sm opacity-90">
-                Respond within <span className="font-bold text-lg">{countdown}s</span>
+                <Trans
+                  i18nKey="web:mover.request.respondWithin.label"
+                  values={{ seconds: formatSeconds(countdown) }}
+                  components={{ 1: <span className="font-bold text-lg" /> }}
+                />
               </span>
             </div>
 
@@ -521,7 +570,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
               />
               {/* Photo count badge */}
               <div className="absolute top-2 right-2 z-10 bg-black/50 backdrop-blur-sm text-white text-xs px-2 py-0.5 rounded-full">
-                {galleryImages.length} photo{galleryImages.length !== 1 ? 's' : ''}
+                {t('booking:photos.photoCount', { count: galleryImages.length })}
               </div>
             </div>
           )}
@@ -533,7 +582,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
               <div className="flex items-start gap-3">
                 <div className="mt-1.5 w-2.5 h-2.5 rounded-full bg-green-500 shrink-0 ring-2 ring-green-500/30" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-[10px] font-medium uppercase tracking-wider text-neutral-400">Pickup</p>
+                  <p className="text-[10px] font-medium uppercase tracking-wider text-neutral-400">{t('booking:field.pickup.label')}</p>
                   <p className="text-sm font-semibold text-neutral-900 dark:text-white truncate">
                     {pickupDisplay}
                   </p>
@@ -543,7 +592,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
               <div className="flex items-start gap-3">
                 <div className="mt-1.5 w-2.5 h-2.5 rounded-full bg-red-500 shrink-0 ring-2 ring-red-500/30" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-[10px] font-medium uppercase tracking-wider text-neutral-400">Drop-off</p>
+                  <p className="text-[10px] font-medium uppercase tracking-wider text-neutral-400">{t('booking:field.dropoff.label')}</p>
                   <p className="text-sm font-semibold text-neutral-900 dark:text-white truncate">
                     {dropoffDisplay}
                   </p>
@@ -560,25 +609,25 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
               )}
               {move?.homeType && (
                 <span className="text-xs px-2 py-1 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-full font-medium">
-                  {formatLabel(move.homeType)}
+                  {homeTypeLabel(t, move.homeType)}
                 </span>
               )}
               {move?.totalItemCount && move.totalItemCount > 0 && (
                 <span className="text-xs px-2 py-1 bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 rounded-full flex items-center gap-1">
                   <CubeIcon className="w-3 h-3" />
-                  {move.totalItemCount} items
+                  {t('moves:itemCount', { count: move.totalItemCount })}
                 </span>
               )}
               {move?.crewSize && (
                 <span className="text-xs px-2 py-1 bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 rounded-full flex items-center gap-1">
                   <UserGroupIcon className="w-3 h-3" />
-                  {Number(move.crewSize) + 1} movers
+                  {t('moves:moverCount', { count: Number(move.crewSize) + 1 })}
                 </span>
               )}
               {move?.vehicleType && (
                 <span className="text-xs px-2 py-1 bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 rounded-full flex items-center gap-1">
                   <TruckIcon className="w-3 h-3" />
-                  {formatLabel(move.vehicleType)}
+                  {vehicleLabel(t, move.vehicleType)}
                 </span>
               )}
             </div>
@@ -604,16 +653,18 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
             {/* Additional services */}
             {move?.additionalServices && move.additionalServices.length > 0 && (
               <div className="text-xs text-neutral-500 dark:text-neutral-400">
-                Services: {move.additionalServices.map(formatLabel).join(', ')}
+                {t('web:mover.request.services.label', {
+                  list: move.additionalServices.map((sv) => serviceLabel(t, sv)).join(', '),
+                })}
               </div>
             )}
 
             {/* Price — prominent */}
             {move?.estimatedPrice && move.estimatedPrice > 0 && (
               <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800">
-                <span className="text-sm font-medium text-green-700 dark:text-green-300">Your earnings</span>
+                <span className="text-sm font-medium text-green-700 dark:text-green-300">{t('web:mover.request.earnings.label')}</span>
                 <span className="text-2xl font-bold text-green-700 dark:text-green-300">
-                  €{move.estimatedPrice}
+                  {formatMoney(move.estimatedPrice, { compact: true })}
                 </span>
               </div>
             )}
@@ -628,7 +679,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                 className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-medium text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-xl transition-colors"
               >
                 <EyeIcon className="w-4 h-4" />
-                View Full Details
+                {t('web:mover.request.viewDetails.cta')}
               </button>
             )}
             <div className="flex gap-3">
@@ -637,7 +688,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
               disabled={isDeclining}
               className="flex-1 py-3 px-4 rounded-xl border-2 border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 font-semibold text-sm hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors disabled:opacity-50"
             >
-              {isDeclining ? 'Declining...' : 'Decline'}
+              {isDeclining ? t('common:state.declining.label') : t('common:action.decline.cta')}
             </button>
             <button
               onClick={handleAccept}
@@ -645,11 +696,11 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
               className="flex-[2] py-3 px-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold text-sm transition-colors disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg shadow-green-600/30"
             >
               {isAccepting ? (
-                'Accepting...'
+                t('common:state.accepting.label')
               ) : (
                 <>
                   <CheckIcon className="w-5 h-5" />
-                  Accept Move
+                  {t('web:mover.acceptMove.cta')}
                 </>
               )}
             </button>
@@ -671,9 +722,13 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                 <ArrowLeftIcon className="w-5 h-5 text-neutral-700 dark:text-neutral-300" />
               </button>
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-neutral-900 dark:text-white truncate">Move Details</p>
+                <p className="font-semibold text-neutral-900 dark:text-white truncate">{t('moves:detail.moveDetails.title')}</p>
                 <p className="text-xs text-neutral-500">
-                  Respond within <span className="font-bold text-red-500">{countdown}s</span>
+                  <Trans
+                    i18nKey="web:mover.request.respondWithin.label"
+                    values={{ seconds: formatSeconds(countdown) }}
+                    components={{ 1: <span className="font-bold text-red-500" /> }}
+                  />
                 </p>
               </div>
               <button
@@ -696,15 +751,17 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                     {pickupDisplay.split(',')[0]} &rarr; {dropoffDisplay.split(',')[0]}
                   </h1>
                   <p className="text-neutral-500 dark:text-neutral-400 mt-1">
-                    {formatLabel(move.moveType)} Move{move.moveCategory === 'instant' ? ' · Instant' : ' · Scheduled'}
-                    {move.moveDate ? ` · ${formatDate(move.moveDate)}` : ''}
+                    {/* One whole phrase per (type, category) pair — see
+                        `lib/move-subtitle.ts`. `formatDate` already returns ''
+                        for a null date, so the date branch is inside. */}
+                    {moveSubtitle(t, move.moveType, move.moveCategory, formatDate(move.moveDate))}
                   </p>
                 </div>
                 {move.estimatedPrice != null && move.estimatedPrice > 0 && (
                   <div className="text-right">
-                    <p className="text-sm text-neutral-500 dark:text-neutral-400">Earnings</p>
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('web:mover.earnings.label')}</p>
                     <p className="text-3xl font-bold text-green-600 dark:text-green-400">
-                      €{move.estimatedPrice}
+                      {formatMoney(move.estimatedPrice, { compact: true })}
                     </p>
                   </div>
                 )}
@@ -714,11 +771,11 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
               {galleryImages.length > 0 && (
                 <div className="grid grid-cols-4 gap-2 rounded-2xl overflow-hidden mb-10">
                   <div className="col-span-4 sm:col-span-2 sm:row-span-2 relative aspect-[4/3]">
-                    <img src={galleryImages[0]} alt="Move photo" className="w-full h-full object-cover" />
+                    <img src={galleryImages[0]} alt={t('booking:photos.item.a11y')} className="w-full h-full object-cover" />
                   </div>
                   {galleryImages.slice(1, 5).map((img, i) => (
                     <div key={i} className="hidden sm:block relative aspect-[4/3]">
-                      <img src={img} alt={`Photo ${i + 2}`} className="w-full h-full object-cover" />
+                      <img src={img} alt={t('booking:photos.itemNumbered.a11y', { n: i + 2 })} className="w-full h-full object-cover" />
                     </div>
                   ))}
                 </div>
@@ -730,14 +787,14 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                 <div className="lg:col-span-2 space-y-8">
                   {/* Locations */}
                   <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm">
-                    <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Locations</h2>
+                    <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">{t('booking:location.section.title')}</h2>
                     <div className="space-y-4">
                       <div className="flex items-start gap-3">
                         <div className="mt-1 w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center flex-shrink-0">
                           <MapPinIcon className="w-4 h-4 text-green-600" />
                         </div>
                         <div>
-                          <p className="text-sm text-neutral-500 dark:text-neutral-400">Pickup</p>
+                          <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('booking:field.pickup.label')}</p>
                           <p className="font-medium text-neutral-900 dark:text-neutral-100">{pickupDisplay}</p>
                         </div>
                       </div>
@@ -747,7 +804,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                           <MapPinIcon className="w-4 h-4 text-red-600" />
                         </div>
                         <div>
-                          <p className="text-sm text-neutral-500 dark:text-neutral-400">Drop-off</p>
+                          <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('booking:field.dropoff.label')}</p>
                           <p className="font-medium text-neutral-900 dark:text-neutral-100">{dropoffDisplay}</p>
                         </div>
                       </div>
@@ -772,29 +829,36 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
 
                   {/* Move Details */}
                   <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm">
-                    <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Move Details</h2>
-                    <InfoRow icon={TruckIcon} label="Move Type" value={`${formatLabel(move.moveType)} · ${move.moveCategory === 'instant' ? 'Instant' : 'Scheduled'}`} />
-                    {move.moveDate && <InfoRow icon={CalendarIcon} label="Move Date" value={formatDate(move.moveDate)} />}
-                    {move.homeType && <InfoRow icon={HomeIcon} label="Home Type" value={formatLabel(move.homeType)} />}
+                    <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">{t('moves:detail.moveDetails.title')}</h2>
+                    <InfoRow
+                      icon={TruckIcon}
+                      label={t('booking:field.moveType.label')}
+                      value={moveTypeAndCategoryValue(t, move.moveType, move.moveCategory)}
+                    />
+                    {move.moveDate && <InfoRow icon={CalendarIcon} label={t('booking:field.moveDate.label')} value={formatDate(move.moveDate)} />}
+                    {move.homeType && <InfoRow icon={HomeIcon} label={t('booking:field.homeType.label')} value={homeTypeLabel(t, move.homeType)} />}
                     {move.totalItemCount != null && move.totalItemCount > 0 && (
-                      <InfoRow icon={CubeIcon} label="Items" value={`${move.totalItemCount} items`} />
+                      <InfoRow icon={CubeIcon} label={t('booking:field.items.label')} value={t('moves:itemCount', { count: move.totalItemCount })} />
                     )}
                     {move.totalWeightKg != null && move.totalWeightKg > 0 && (
-                      <InfoRow icon={CubeIcon} label="Weight" value={`${move.totalWeightKg} kg`} />
+                      <InfoRow icon={CubeIcon} label={t('booking:field.weight.label')} value={formatWeightKg(move.totalWeightKg)} />
                     )}
-                    {move.vehicleType && <InfoRow icon={TruckIcon} label="Vehicle" value={formatLabel(move.vehicleType)} />}
-                    {move.crewSize && <InfoRow icon={UserGroupIcon} label="Crew" value={`${Number(move.crewSize) + 1} movers`} />}
+                    {move.vehicleType && <InfoRow icon={TruckIcon} label={t('booking:field.vehicle.label')} value={vehicleLabel(t, move.vehicleType)} />}
+                    {move.crewSize && <InfoRow icon={UserGroupIcon} label={t('booking:field.crew.label')} value={t('moves:moverCount', { count: Number(move.crewSize) + 1 })} />}
                   </div>
 
                   {/* Services */}
                   {(move.packingServiceLevel || (move.additionalServices && move.additionalServices.length > 0)) && (
                     <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm">
-                      <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Services</h2>
+                      <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">{t('booking:services.section.title')}</h2>
                       {move.packingServiceLevel && (
-                        <InfoRow icon={CheckCircleIcon} label="Packing Service" value={formatLabel(move.packingServiceLevel)} />
+                        <InfoRow icon={CheckCircleIcon} label={t('booking:field.packingService.label')} value={packingLabel(t, move.packingServiceLevel)} />
                       )}
                       {move.additionalServices && move.additionalServices.length > 0 && (
-                        <InfoRow label="Additional Services" value={move.additionalServices.map(formatLabel).join(', ')} />
+                        <InfoRow
+                          label={t('booking:services.additional.label')}
+                          value={move.additionalServices.map((sv) => serviceLabel(t, sv)).join(', ')}
+                        />
                       )}
                     </div>
                   )}
@@ -802,11 +866,11 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                   {/* Photos grid (if more than shown in header gallery) */}
                   {galleryImages.length > 5 && (
                     <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm">
-                      <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">All Photos</h2>
+                      <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">{t('booking:photos.all.title')}</h2>
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                         {galleryImages.map((url, i) => (
                           <div key={i} className="relative aspect-[4/3] rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-700">
-                            <img src={url} alt={`Photo ${i + 1}`} className="w-full h-full object-cover" />
+                            <img src={url} alt={t('booking:photos.itemNumbered.a11y', { n: i + 1 })} className="w-full h-full object-cover" />
                           </div>
                         ))}
                       </div>
@@ -819,28 +883,28 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                   {/* Earnings Summary */}
                   <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm sticky top-24">
                     <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
-                      Summary
+                      {t('moves:summary.title')}
                     </h3>
                     <div className="space-y-2 text-sm">
                       {move.moveDate && (
                         <div className="flex justify-between">
-                          <span className="text-neutral-500 dark:text-neutral-400">Move Date</span>
+                          <span className="text-neutral-500 dark:text-neutral-400">{t('booking:field.moveDate.label')}</span>
                           <span className="font-medium text-neutral-900 dark:text-neutral-100">{formatDate(move.moveDate)}</span>
                         </div>
                       )}
                       <div className="flex justify-between">
-                        <span className="text-neutral-500 dark:text-neutral-400">Category</span>
-                        <span className="font-medium text-neutral-900 dark:text-neutral-100">{move.moveCategory === 'instant' ? 'Instant' : 'Scheduled'}</span>
+                        <span className="text-neutral-500 dark:text-neutral-400">{t('moves:detail.category.label')}</span>
+                        <span className="font-medium text-neutral-900 dark:text-neutral-100">{categoryLabel(t, move.moveCategory)}</span>
                       </div>
                       {move.totalItemCount != null && move.totalItemCount > 0 && (
                         <div className="flex justify-between">
-                          <span className="text-neutral-500 dark:text-neutral-400">Items</span>
-                          <span className="font-medium text-neutral-900 dark:text-neutral-100">{move.totalItemCount} items</span>
+                          <span className="text-neutral-500 dark:text-neutral-400">{t('booking:field.items.label')}</span>
+                          <span className="font-medium text-neutral-900 dark:text-neutral-100">{t('moves:itemCount', { count: move.totalItemCount })}</span>
                         </div>
                       )}
                       {(move.routeDistanceMeters || move.routeDurationSeconds) && (
                         <div className="flex justify-between">
-                          <span className="text-neutral-500 dark:text-neutral-400">Distance</span>
+                          <span className="text-neutral-500 dark:text-neutral-400">{t('moves:detail.distance.label')}</span>
                           <span className="font-medium text-neutral-900 dark:text-neutral-100">
                             {move.routeDistanceMeters ? formatDistance(move.routeDistanceMeters) : ''}
                             {move.routeDistanceMeters && move.routeDurationSeconds ? ' · ' : ''}
@@ -850,9 +914,9 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                       )}
                       <div className="my-4 border-t border-neutral-100 dark:border-neutral-700" />
                       <div className="flex justify-between text-base">
-                        <span className="font-semibold text-neutral-900 dark:text-neutral-100">Earnings</span>
+                        <span className="font-semibold text-neutral-900 dark:text-neutral-100">{t('web:mover.earnings.label')}</span>
                         <span className="font-bold text-green-600 dark:text-green-400">
-                          €{move.estimatedPrice ?? 0}
+                          {formatMoney(move.estimatedPrice ?? 0, { compact: true })}
                         </span>
                       </div>
                     </div>
@@ -861,8 +925,8 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                   {/* Client Info */}
                   {move.contactFullName && (
                     <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm">
-                      <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Client</h3>
-                      <InfoRow label="Name" value={move.contactFullName} />
+                      <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">{t('moves:detail.client.title')}</h3>
+                      <InfoRow label={t('booking:field.name.label')} value={move.contactFullName} />
                     </div>
                   )}
                 </div>
@@ -878,7 +942,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                 disabled={isDeclining}
                 className="flex-1 py-3 px-4 rounded-xl border-2 border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 font-semibold text-sm hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors disabled:opacity-50"
               >
-                Decline
+                {t('common:action.decline.cta')}
               </button>
               <button
                 onClick={() => { setShowDetails(false); handleAccept() }}
@@ -886,7 +950,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                 className="flex-[2] py-3 px-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold text-sm transition-colors disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg shadow-green-600/30"
               >
                 <CheckIcon className="w-5 h-5" />
-                Accept Move
+                {t('web:mover.acceptMove.cta')}
               </button>
             </div>
           </div>

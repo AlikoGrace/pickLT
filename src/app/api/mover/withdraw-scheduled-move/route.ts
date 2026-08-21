@@ -1,3 +1,4 @@
+import { getTranslations } from '@/lib/i18n-server'
 import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
@@ -15,10 +16,11 @@ import { NextRequest, NextResponse } from 'next/server'
  * Body: { moveId: string }
  */
 export async function POST(request: NextRequest) {
+  const { t } = await getTranslations()
   try {
     const userId = await getSessionUserId()
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
     }
 
     const body = await request.json()
@@ -38,13 +40,13 @@ export async function POST(request: NextRequest) {
     )
     const moverProfile = profiles.documents[0]
     if (!moverProfile) {
-      return NextResponse.json({ error: 'Mover profile not found' }, { status: 404 })
+      return NextResponse.json({ error: t('errors:mover.profileNotFound') }, { status: 404 })
     }
 
     // Require verified mover to withdraw from moves
     if (moverProfile.verificationStatus !== 'verified') {
       return NextResponse.json(
-        { error: 'Your mover profile has not been verified yet' },
+        { error: t('errors:mover.notVerified') },
         { status: 403 }
       )
     }
@@ -63,14 +65,14 @@ export async function POST(request: NextRequest) {
         : (move.moverProfileId as Record<string, string>)?.$id || null
 
     if (existingMoverProfileId !== moverProfile.$id) {
-      return NextResponse.json({ error: 'You are not assigned to this move' }, { status: 403 })
+      return NextResponse.json({ error: t('errors:move.notAssigned') }, { status: 403 })
     }
 
     // Only allow withdrawal before en_route phase begins
     const withdrawableStatuses = ['mover_accepted', 'mover_assigned', 'draft', 'booked', 'paid', 'pending_payment']
     if (!withdrawableStatuses.includes(move.status as string)) {
       return NextResponse.json(
-        { error: 'Cannot withdraw after the move has started (en_route or later)' },
+        { error: t('errors:move.withdrawTooLate') },
         { status: 409 }
       )
     }
@@ -95,12 +97,13 @@ export async function POST(request: NextRequest) {
         title: 'Mover Withdrew',
         body: 'Your mover withdrew. We are finding you another mover.',
         data: { moveId, handle: move.handle, status: 'booked' },
+        i18n: { key: 'status.moverWithdrew', params: { handle: move.handle ?? '' } },
       })
     }
 
     return NextResponse.json({ success: true, moveId })
   } catch (error) {
     console.error('POST /api/mover/withdraw-scheduled-move error:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: t('errors:generic.internal') }, { status: 500 })
   }
 }

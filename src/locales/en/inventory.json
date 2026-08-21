@@ -1,0 +1,113 @@
+{
+  "admin": {
+    "nameHelper": "English is the fallback shown wherever a translation is missing.",
+    "nameLabel": "Name",
+    "translationsHelper": "Leave a language blank to fall back to the English name. Item IDs and categories are never translated.",
+    "translationsTitle": "Name translations",
+    "unknownCategoryTitle": "Untranslated category",
+    "unknownCategoryWarning": "“{{slug}}” is not one of the seven translated categories. It will show as “{{label}}” in every language, including to users who do not read English."
+  },
+  "category": {
+    "bedroom": "Bedroom",
+    "boxes": "Boxes",
+    "kitchen": "Kitchen",
+    "livingRoom": "Living Room",
+    "miscellaneous": "Miscellaneous",
+    "office": "Office",
+    "special": "Special Items"
+  },
+  "customItem": {
+    "add": {
+      "cta": "Add Custom Item"
+    },
+    "name": {
+      "label": "Name",
+      "placeholder": "e.g. Electric piano"
+    },
+    "quantity": {
+      "label": "Quantity"
+    },
+    "size": {
+      "extraLarge": {
+        "option": "XL"
+      },
+      "label": "Approximate size",
+      "large": {
+        "option": "Large"
+      },
+      "medium": {
+        "option": "Medium"
+      },
+      "small": {
+        "option": "Small"
+      }
+    },
+    "submit": {
+      "cta": "Add Item"
+    },
+    "weight": {
+      "label": "Approximate weight (kg)",
+      "placeholder": "e.g. 25"
+    }
+  },
+  "item": {
+    "customName": {
+      "label": "{{name}} (custom)"
+    },
+    "customSuffix": "Custom item",
+    "customTag": {
+      "label": "Custom"
+    }
+  },
+  "recommendation": {
+    "chosen": {
+      "label": "Your move"
+    },
+    "headline": {
+      "title": "{{prefix}}: {{tier}}"
+    },
+    "itemCount": {
+      "label_one": "{{count}} item",
+      "label_other": "{{count}} items"
+    },
+    "suggested": {
+      "label": "Recommended"
+    }
+  },
+  "search": {
+    "noMatch": {
+      "empty": "No items match “{{query}}”. Add it as a custom item below."
+    },
+    "placeholder": "Search all items"
+  },
+  "section": {
+    "custom": {
+      "empty": "Add items not listed above.",
+      "title": "Custom Items"
+    },
+    "special": {
+      "subtitle": "These items require special handling and may affect pricing."
+    }
+  },
+  "unavailable": {
+    "empty": {
+      "body": "Our movable-items list is being set up. Please try again shortly — you can still reach us if your move is urgent.",
+      "title": "No items available yet"
+    },
+    "error": {
+      "body": "Check your connection and try again.",
+      "title": "Couldn't load the item list"
+    }
+  },
+  "upgrade": {
+    "headline": {
+      "title": "This move now requires"
+    },
+    "reason": {
+      "body": "Adding “{{item}}” pushed your move into the {{tier}} tier — {{explanation}}"
+    },
+    "warnings": {
+      "title": "Items needing this tier:"
+    }
+  }
+}

@@ -16,8 +16,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { formatFileSizeMb } from '@/lib/format'
+import { UPLOAD_MAX_MB } from '@/lib/service-limits'
 
 const InstantMovePhotosPage = () => {
+  const { t } = useTranslation()
   const router = useRouter()
   const coverInputRef = useRef<HTMLInputElement>(null)
   const galleryInputRef = useRef<HTMLInputElement>(null)
@@ -90,13 +94,15 @@ const InstantMovePhotosPage = () => {
               className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
             >
               <HugeiconsIcon icon={ArrowLeft02Icon} size={20} strokeWidth={1.5} />
-              <span className="text-sm font-medium">Back</span>
+              <span className="text-sm font-medium">{t('common:action.back.cta')}</span>
             </Link>
             <div className="text-center">
               <p className="text-sm font-medium text-neutral-900 dark:text-white">
-                Add Photos
+                {t('web:instant.photos.title')}
               </p>
-              <p className="text-xs text-neutral-500">Step 3 of 4</p>
+              <p className="text-xs text-neutral-500">
+                {t('web:wizard.stepOf.label', { current: 3, total: 4 })}
+              </p>
             </div>
             <div className="w-16" /> {/* Spacer for centering */}
           </div>
@@ -108,11 +114,17 @@ const InstantMovePhotosPage = () => {
         <div className="rounded-2xl bg-neutral-50 dark:bg-neutral-800/50 p-4 mb-8">
           <div className="flex items-center justify-between text-sm">
             <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
-              <span className="font-medium">{pickupLocation?.split(',')[0] || 'Pickup'}</span>
+              <span className="font-medium">
+                {pickupLocation?.split(',')[0] || t('booking:pickup.short.label')}
+              </span>
               <span>→</span>
-              <span className="font-medium">{dropoffLocation?.split(',')[0] || 'Drop-off'}</span>
+              <span className="font-medium">
+                {dropoffLocation?.split(',')[0] || t('booking:dropoff.short.label')}
+              </span>
             </div>
-            <span className="text-neutral-500">{inventoryCount} items</span>
+            <span className="text-neutral-500">
+              {t('moves:itemCount', { count: inventoryCount })}
+            </span>
           </div>
         </div>
 
@@ -127,10 +139,10 @@ const InstantMovePhotosPage = () => {
             />
             <div>
               <p className="text-sm font-medium text-primary-900 dark:text-primary-100">
-                Help your mover prepare
+                {t('web:instant.photos.subtitle')}
               </p>
               <p className="text-sm text-primary-700 dark:text-primary-300 mt-1">
-                Upload photos of the items you want to move. This helps the mover come prepared with the right equipment and gives them a clear idea of the job.
+                {t('web:instant.photos.helper')}
               </p>
             </div>
           </div>
@@ -140,7 +152,7 @@ const InstantMovePhotosPage = () => {
         {showError && (
           <div className="rounded-2xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-4 mb-6">
             <p className="text-sm text-red-700 dark:text-red-300">
-              Please add at least one photo of your items before continuing.
+              {t('booking:photos.required.error')}
             </p>
           </div>
         )}
@@ -148,17 +160,17 @@ const InstantMovePhotosPage = () => {
         {/* Cover Photo Upload */}
         <div className="mb-8">
           <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">
-            Main photo
+            {t('booking:photos.main.label')}
           </h2>
           <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-            Upload a main photo showing your items or the space
+            {t('booking:photos.main.helper')}
           </p>
           <div className="mt-4">
             {coverPhotoId ? (
               <div className="relative rounded-2xl overflow-hidden">
                 <Image
                   src={coverPhotoId}
-                  alt="Cover photo"
+                  alt={t('booking:photos.main.a11y')}
                   width={600}
                   height={400}
                   className="w-full h-64 object-cover"
@@ -183,10 +195,10 @@ const InstantMovePhotosPage = () => {
                   className="text-neutral-400 mb-4"
                 />
                 <p className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                  Tap to upload main photo
+                  {t('booking:photos.main.cta')}
                 </p>
                 <p className="text-xs text-neutral-500 mt-1">
-                  PNG, JPG up to 10MB
+                  {t('common:upload.constraintsNoGif.helper', { limit: formatFileSizeMb(UPLOAD_MAX_MB) })}
                 </p>
                 <input
                   ref={coverInputRef}
@@ -205,10 +217,10 @@ const InstantMovePhotosPage = () => {
         {/* Gallery Photos Upload */}
         <div className="mt-8">
           <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">
-            Additional photos
+            {t('booking:photos.additional.label')}
           </h2>
           <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-            Upload more photos of furniture, rooms, or specific items
+            {t('booking:photos.additional.helper')}
           </p>
           <div className="mt-4">
             {galleryPhotoIds.length > 0 && (
@@ -217,7 +229,7 @@ const InstantMovePhotosPage = () => {
                   <div key={index} className="relative rounded-xl overflow-hidden aspect-square">
                     <Image
                       src={photo}
-                      alt={`Photo ${index + 1}`}
+                      alt={t('booking:photos.item.a11y', { index: index + 1 })}
                       fill
                       className="object-cover"
                     />
@@ -243,10 +255,10 @@ const InstantMovePhotosPage = () => {
                 className="text-neutral-400 mb-3"
               />
               <p className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                Add more photos
+                {t('booking:photos.addMore.cta')}
               </p>
               <p className="text-xs text-neutral-500 mt-1">
-                You can select multiple files
+                {t('common:upload.multiple.helper')}
               </p>
               <input
                 ref={galleryInputRef}
@@ -263,7 +275,12 @@ const InstantMovePhotosPage = () => {
         {/* Photo Count */}
         <div className="mt-6 text-center">
           <p className="text-sm text-neutral-500 dark:text-neutral-400">
-            {coverPhotoId ? 1 : 0} main photo • {galleryPhotoIds.length} additional photo{galleryPhotoIds.length !== 1 ? 's' : ''}
+            {t('booking:photos.countSummary.label', {
+              main: t('booking:photos.mainCount', { count: coverPhotoId ? 1 : 0 }),
+              additional: t('booking:photos.additionalCount', {
+                count: galleryPhotoIds.length,
+              }),
+            })}
           </p>
         </div>
       </div>
@@ -275,14 +292,14 @@ const InstantMovePhotosPage = () => {
             href="/instant-move/inventory"
             className="flex-1"
           >
-            Back
+            {t('common:action.back.cta')}
           </ButtonSecondary>
           <ButtonPrimary
             onClick={handleContinue}
             className="flex-1"
             disabled={!hasAtLeastOnePhoto}
           >
-            Find Movers
+            {t('web:instant.photos.next.cta')}
           </ButtonPrimary>
         </div>
       </div>

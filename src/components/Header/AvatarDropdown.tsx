@@ -17,12 +17,14 @@ import {
 } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { useRouter } from 'next/navigation'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   className?: string
 }
 
 export default function AvatarDropdown({ className }: Props) {
+  const { t } = useTranslation()
   const { user, logout } = useAuth()
   const router = useRouter()
 
@@ -71,7 +73,7 @@ export default function AvatarDropdown({ className }: Props) {
                 className="size-12 bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300"
               />
               <div className="min-w-0 grow">
-                <h4 className="truncate font-semibold">{user?.fullName || 'User'}</h4>
+                <h4 className="truncate font-semibold">{user?.fullName || t('common:person.fallbackUser')}</h4>
                 <p className="mt-0.5 truncate text-xs text-neutral-500">
                   {user?.email || ''}
                 </p>
@@ -90,7 +92,7 @@ export default function AvatarDropdown({ className }: Props) {
                 <div className="flex shrink-0 items-center justify-center text-neutral-500 dark:text-neutral-300">
                   <HugeiconsIcon icon={DashboardSquare01Icon} size={24} strokeWidth={1.5} />
                 </div>
-                <p className="ms-4 text-sm font-medium">Mover Dashboard</p>
+                <p className="ms-4 text-sm font-medium">{t('web:nav.moverDashboard.label')}</p>
               </CloseButton>
             )}
 
@@ -104,7 +106,7 @@ export default function AvatarDropdown({ className }: Props) {
                 <div className="flex shrink-0 items-center justify-center text-neutral-500 dark:text-neutral-300">
                   <HugeiconsIcon icon={Task01Icon} size={24} strokeWidth={1.5} />
                 </div>
-                <p className="ms-4 text-sm font-medium">My Moves</p>
+                <p className="ms-4 text-sm font-medium">{t('web:nav.myMoves.label')}</p>
               </CloseButton>
             )}
 
@@ -118,7 +120,7 @@ export default function AvatarDropdown({ className }: Props) {
                 <HugeiconsIcon icon={UserIcon} size={24} strokeWidth={1.5} />
               </div>
               <p className="ms-4 text-sm font-medium">
-                {isMover ? 'Settings' : 'My Account'}
+                {isMover ? t('common:nav.settings.label') : t('web:nav.myAccount.label')}
               </p>
             </CloseButton>
 
@@ -132,7 +134,7 @@ export default function AvatarDropdown({ className }: Props) {
                 <div className="flex shrink-0 items-center justify-center text-neutral-500 dark:text-neutral-300">
                   <HugeiconsIcon icon={TruckIcon} size={24} strokeWidth={1.5} />
                 </div>
-                <p className="ms-4 text-sm font-medium">Become a Mover</p>
+                <p className="ms-4 text-sm font-medium">{t('web:nav.becomeMover.label')}</p>
               </CloseButton>
             )}
 
@@ -144,7 +146,7 @@ export default function AvatarDropdown({ className }: Props) {
                 <div className="flex shrink-0 items-center justify-center text-neutral-500 dark:text-neutral-300">
                   <HugeiconsIcon icon={Idea01Icon} size={24} strokeWidth={1.5} />
                 </div>
-                <p className="ms-4 text-sm font-medium">Dark theme</p>
+                <p className="ms-4 text-sm font-medium">{t('common:nav.darkTheme.label')}</p>
               </div>
               <SwitchDarkMode2 />
             </div>
@@ -158,7 +160,7 @@ export default function AvatarDropdown({ className }: Props) {
               <div className="flex shrink-0 items-center justify-center text-neutral-500 dark:text-neutral-300">
                 <HugeiconsIcon icon={BulbChargingIcon} size={24} strokeWidth={1.5} />
               </div>
-              <p className="ms-4 text-sm font-medium">Help</p>
+              <p className="ms-4 text-sm font-medium">{t('common:nav.help.label')}</p>
             </CloseButton>
 
             {/* Log out */}
@@ -169,7 +171,7 @@ export default function AvatarDropdown({ className }: Props) {
               <div className="flex shrink-0 items-center justify-center text-red-500 dark:text-red-400">
                 <HugeiconsIcon icon={Logout01Icon} size={24} strokeWidth={1.5} />
               </div>
-              <p className="ms-4 text-sm font-medium text-red-500 dark:text-red-400">Log out</p>
+              <p className="ms-4 text-sm font-medium text-red-500 dark:text-red-400">{t('common:action.logout.cta')}</p>
             </button>
           </div>
         </PopoverPanel>

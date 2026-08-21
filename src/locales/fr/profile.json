@@ -1,0 +1,344 @@
+{
+  "appearance": {
+    "dark": {
+      "label": "Mode sombre",
+      "subtitle": "Plus reposant pour les yeux la nuit"
+    },
+    "light": {
+      "label": "Mode clair",
+      "subtitle": "Apparence claire classique"
+    },
+    "system": {
+      "label": "Paramètre du système",
+      "subtitle": "Suit les réglages de votre appareil"
+    },
+    "title": "Apparence"
+  },
+  "changeEmail": {
+    "cta": "Mettre à jour l'e-mail",
+    "current": {
+      "label": "Actuel : {{email}}"
+    },
+    "failed": {
+      "title": "Impossible de modifier l'e-mail"
+    },
+    "googleNotice": {
+      "body": "Votre compte utilise la connexion Google. L'adresse e-mail ne peut pas être modifiée depuis PickLT : mettez-la à jour dans votre compte Google.",
+      "title": "E-mail géré par Google"
+    },
+    "helper": "Mettez à jour votre adresse e-mail",
+    "helperLong": "Un e-mail de vérification sera envoyé à la nouvelle adresse.",
+    "label": "Modifier l'e-mail",
+    "sent": {
+      "body": "Un e-mail de vérification a été envoyé. Consultez votre boîte de réception."
+    },
+    "sentLong": "Un e-mail de vérification a été envoyé. Consultez votre boîte de réception et cliquez sur le lien de vérification.",
+    "title": "Modifier l'e-mail",
+    "updatedTo": {
+      "body": "E-mail mis à jour : <1>{{email}}</1>"
+    }
+  },
+  "changePassword": {
+    "failed": {
+      "title": "Impossible de mettre à jour le mot de passe"
+    },
+    "googleNotice": {
+      "body": "Votre compte n'a pas encore de mot de passe. Pour en définir un, déconnectez-vous et utilisez « Mot de passe oublié » sur l'écran de connexion.",
+      "cta": "Se déconnecter et réinitialiser le mot de passe",
+      "title": "Le compte utilise la connexion Google"
+    },
+    "mismatch": {
+      "error": "Les mots de passe ne correspondent pas."
+    },
+    "success": {
+      "message": "Votre mot de passe a été modifié.",
+      "title": "Mot de passe mis à jour"
+    },
+    "title": "Modifier le mot de passe"
+  },
+  "changePhone": {
+    "current": {
+      "label": "Actuel : {{phone}}"
+    },
+    "failed": {
+      "title": "Impossible de modifier le numéro de téléphone"
+    },
+    "helper": "Mettez à jour votre numéro de téléphone",
+    "helperLong": "Un code de vérification sera envoyé pour valider le nouveau numéro.",
+    "label": "Modifier le téléphone",
+    "title": "Modifier le numéro de téléphone"
+  },
+  "deleteAccount": {
+    "confirm": {
+      "body": "Cette action est définitive et irréversible. Toutes vos données, vos déménagements et vos préférences seront perdus.",
+      "title": "Voulez-vous vraiment supprimer votre compte ?"
+    }
+  },
+  "dobSheet": {
+    "title": "Sélectionnez votre date de naissance"
+  },
+  "editName": {
+    "helper": "Mettez à jour votre nom",
+    "label": "Modifier le nom",
+    "name": {
+      "placeholder": "Votre nom complet"
+    },
+    "title": "Modifier le nom"
+  },
+  "field": {
+    "confirmPassword": {
+      "label": "Confirmez le nouveau mot de passe",
+      "placeholder": "Saisissez à nouveau le nouveau mot de passe"
+    },
+    "currentPassword": {
+      "label": "Mot de passe actuel",
+      "placeholder": "Saisissez votre mot de passe actuel"
+    },
+    "dateOfBirth": {
+      "label": "Date de naissance",
+      "placeholder": "Sélectionnez votre date de naissance"
+    },
+    "email": {
+      "label": "E-mail"
+    },
+    "fullName": {
+      "label": "Nom complet"
+    },
+    "gender": {
+      "label": "Genre",
+      "placeholder": "Sélectionnez votre genre"
+    },
+    "newEmail": {
+      "label": "Nouvel e-mail",
+      "placeholder": "vous@exemple.com"
+    },
+    "newPassword": {
+      "label": "Nouveau mot de passe"
+    },
+    "password": {
+      "minHelper": "8 caractères minimum"
+    },
+    "phone": {
+      "label": "Numéro de téléphone",
+      "numberPlaceholder": "123 456 7890",
+      "placeholder": "Ajouter un numéro de téléphone"
+    }
+  },
+  "gender": {
+    "female": {
+      "option": "Femme"
+    },
+    "male": {
+      "option": "Homme"
+    },
+    "other": {
+      "option": "Autre"
+    }
+  },
+  "genderSheet": {
+    "title": "Sélectionnez votre genre"
+  },
+  "help": {
+    "helper": "Obtenez de l'aide et de l'assistance"
+  },
+  "helpCenter": {
+    "header": {
+      "title": "Centre d'aide"
+    },
+    "helper": "Obtenez de l'aide et de l'assistance",
+    "search": {
+      "a11y": "Rechercher des articles d'aide",
+      "placeholder": "Rechercher un lieu.."
+    }
+  },
+  "language": {
+    "active": "Active",
+    "back": "Retour",
+    "done": "Terminé",
+    "others": "Autres",
+    "saveError": "Impossible d'enregistrer votre langue. Réessayez.",
+    "subtitle": "Choisissez la langue que vous souhaitez utiliser dans toute l'application.",
+    "suggested": "Suggestions",
+    "title": "Langue"
+  },
+  "logout": {
+    "confirm": {
+      "body": "Assurez-vous d'avoir enregistré votre travail ou terminé vos tâches en cours avant de vous déconnecter.",
+      "title": "Voulez-vous vraiment vous déconnecter ?"
+    }
+  },
+  "menu": {
+    "appearance": {
+      "label": "Apparence"
+    },
+    "changeEmail": {
+      "label": "Modifier l'e-mail"
+    },
+    "changePassword": {
+      "label": "Modifier le mot de passe"
+    },
+    "changePhone": {
+      "label": "Modifier le téléphone"
+    },
+    "deleteAccount": {
+      "label": "Supprimer le compte"
+    },
+    "editProfile": {
+      "label": "Modifier le profil"
+    },
+    "help": {
+      "label": "Aide et assistance"
+    },
+    "language": {
+      "label": "Langue"
+    },
+    "legal": {
+      "label": "Mentions légales"
+    },
+    "logout": {
+      "label": "Déconnexion"
+    },
+    "notifications": {
+      "label": "Notifications"
+    },
+    "paymentAccount": {
+      "label": "Compte de paiement"
+    },
+    "security": {
+      "label": "Sécurité"
+    },
+    "yourCard": {
+      "label": "Votre carte"
+    }
+  },
+  "name": {
+    "updated": {
+      "success": "Nom mis à jour"
+    }
+  },
+  "newEmail": {
+    "label": "Nouvelle adresse e-mail",
+    "placeholder": "nouveau@exemple.com"
+  },
+  "newPhone": {
+    "label": "Nouveau numéro de téléphone",
+    "placeholder": "+491234567890"
+  },
+  "notifications": {
+    "helper": "Configurez les alertes et les notifications",
+    "rows": {
+      "appUpdates": {
+        "label": "Mises à jour de l'application"
+      },
+      "cashback": {
+        "label": "Cashback"
+      },
+      "notifications": {
+        "label": "Notifications"
+      },
+      "payments": {
+        "label": "Paiements"
+      },
+      "sound": {
+        "label": "Son"
+      },
+      "specialOffers": {
+        "label": "Offres spéciales"
+      },
+      "vibrate": {
+        "label": "Vibreur"
+      }
+    },
+    "title": "Notifications"
+  },
+  "password": {
+    "confirm": {
+      "label": "Confirmez le mot de passe"
+    },
+    "current": {
+      "label": "Mot de passe actuel"
+    },
+    "new": {
+      "label": "Nouveau mot de passe"
+    },
+    "submit": {
+      "cta": "Mettre à jour"
+    },
+    "title": "Modifiez votre mot de passe"
+  },
+  "paymentMethods": {
+    "helper": "Gérez vos moyens de paiement",
+    "label": "Moyens de paiement"
+  },
+  "personalData": {
+    "nameRequired": {
+      "message": "Veuillez saisir votre nom.",
+      "title": "Nom complet requis"
+    },
+    "saveFailed": {
+      "title": "Impossible d'enregistrer le profil"
+    },
+    "title": "Données personnelles"
+  },
+  "phone": {
+    "updated": {
+      "success": "Numéro de téléphone mis à jour et vérifié"
+    }
+  },
+  "photo": {
+    "updated": {
+      "success": "Photo mise à jour"
+    }
+  },
+  "privacy": {
+    "helper": "Gérez vos données et votre sécurité",
+    "label": "Confidentialité et sécurité"
+  },
+  "privacyPolicy": {
+    "header": {
+      "title": "Confidentialité"
+    }
+  },
+  "privacySecurity": {
+    "helper": "Gérez vos données et votre sécurité",
+    "label": "Confidentialité et sécurité"
+  },
+  "section": {
+    "account": {
+      "title": "Compte"
+    },
+    "general": {
+      "title": "Général"
+    },
+    "moves": {
+      "title": "Déménagements"
+    },
+    "payments": {
+      "title": "Paiements"
+    },
+    "personal": {
+      "title": "Informations personnelles"
+    },
+    "preferences": {
+      "title": "Préférences"
+    },
+    "support": {
+      "title": "Assistance"
+    }
+  },
+  "security": {
+    "biometricId": {
+      "label": "Identification biométrique"
+    },
+    "faceId": {
+      "label": "Face ID"
+    },
+    "googleAuthenticator": {
+      "label": "Google Authenticator"
+    },
+    "rememberPassword": {
+      "label": "Mémoriser le mot de passe"
+    },
+    "title": "Sécurité"
+  }
+}

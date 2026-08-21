@@ -1,0 +1,40 @@
+{
+  "doc": {
+    "draftBanner": "BROUILLON — en attente de vérification par un conseil fiscal",
+    "driverHeading": "Chauffeur",
+    "footerDisclaimer": "Document généré automatiquement à titre d’information pour le chauffeur. Le chauffeur reste responsable de la déclaration de son chiffre d’affaires et de ses revenus.",
+    "operatorHeading": "Opérateur de plateforme",
+    "operatorPending": "[coordonnées de l’opérateur à venir]",
+    "operatorRegistration": "Numéro d’immatriculation : {{value}}",
+    "operatorVatId": "Numéro de TVA (VAT ID) : {{value}}",
+    "period": "Période : {{period}}",
+    "statementNo": "Relevé n° : {{number}}",
+    "taxNumber": "Numéro fiscal : {{value}}",
+    "title": "Relevé mensuel d’activité du chauffeur",
+    "vatId": "Numéro de TVA (VAT ID) : {{value}}"
+  },
+  "lines": {
+    "cashAlreadyHeld": "Dont déjà encaissé en espèces",
+    "commission": "Commission / frais de service",
+    "deductionsHeading": "Retenues de la plateforme",
+    "grossCash": "Encaissé en espèces",
+    "grossDigital": "Encaissé par voie numérique (application/carte)",
+    "grossHeading": "Revenus bruts",
+    "grossLocal": "Brut en devise locale ({{currency}})",
+    "grossTotal": "Total des revenus bruts",
+    "instantMoves": "Dont déménagements immédiats",
+    "net": "Montant net",
+    "netPayable": "Montant net à verser au chauffeur",
+    "resultHeading": "Résultat",
+    "scheduledMoves": "Dont déménagements planifiés",
+    "summary": "Récapitulatif des déménagements réglés",
+    "totalMoves": "Total des déménagements réalisés",
+    "withholdingHeading": "Retenues à la source",
+    "withholdingIncome": "Impôt sur le revenu retenu à la source",
+    "withholdingVat": "TVA retenue à la source"
+  },
+  "statementReady": {
+    "body": "Le relevé {{number}} pour {{period}} est disponible dans vos documents fiscaux.",
+    "title": "Votre relevé mensuel est disponible"
+  }
+}

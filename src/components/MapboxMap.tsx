@@ -6,6 +6,7 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import { Navigation03Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { ThemeContext } from '@/app/theme-provider'
+import { useTranslation } from 'react-i18next'
 
 // Set the access token
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || ''
@@ -48,6 +49,7 @@ export const MapboxMap = ({
   onPickupMarkerClick,
   onDropoffMarkerClick,
 }: MapboxMapProps) => {
+  const { t } = useTranslation()
   const isDarkMode = useContext(ThemeContext)?.isDarkMode ?? false
 
   const mapContainer = useRef<HTMLDivElement>(null)
@@ -414,7 +416,7 @@ export const MapboxMap = ({
         onClick={handleMyLocation}
         className="absolute right-2.5 z-10 flex h-[30px] w-[30px] items-center justify-center rounded-lg bg-white shadow-md border border-neutral-200/80 hover:bg-neutral-50 active:scale-95 transition dark:bg-neutral-800 dark:border-neutral-700 dark:hover:bg-neutral-700"
         style={{ top: 'calc(50% + 40px)' }}
-        title="My location"
+        title={t('common:map.myLocation.label')}
       >
         <HugeiconsIcon icon={Navigation03Icon} size={16} strokeWidth={2} className="text-primary-600 dark:text-primary-400" />
       </button>

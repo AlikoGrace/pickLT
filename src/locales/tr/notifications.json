@@ -1,0 +1,147 @@
+{
+  "cancel": {
+    "byClient": {
+      "body": "Müşteri taşınmayı iptal etti.",
+      "bodyWithHandle": "Müşteri {{handle}} numaralı taşınmayı iptal etti.",
+      "title": "Taşınma iptal edildi"
+    },
+    "reassigning": {
+      "body": "Nakliyeciniz taşınmanızı bırakmak zorunda kaldı. Taşınmayı yakındaki diğer nakliyecilere sunuyoruz.",
+      "bodyWithHandle": "Nakliyeciniz {{handle}} numaralı taşınmayı bırakmak zorunda kaldı. Taşınmayı yakındaki diğer nakliyecilere sunuyoruz.",
+      "title": "Size başka bir nakliyeci arıyoruz"
+    }
+  },
+  "message": {
+    "new": {
+      "title": "Yeni mesaj"
+    }
+  },
+  "payment": {
+    "clientCharged": {
+      "body": "{{amount}} tutarındaki ödemeniz işleme alındı. Taşınma rezervasyonunuz onaylandı!",
+      "title": "Ödeme onaylandı"
+    },
+    "clientConfirmed": {
+      "body": "Müşteri bu taşınmayı ödendi olarak işaretledi. Kapatmak için siz de onaylayın.",
+      "title": "Müşteri ödemeyi onayladı"
+    },
+    "confirmYours": {
+      "body": "Nakliyeciniz ödemeyi onayladı. Taşınmayı tamamlamak için siz de onaylayın.",
+      "title": "Ödemenizi onaylayın"
+    },
+    "moverPaid": {
+      "body": "{{amount}} tutarındaki hakedişiniz ödendi.",
+      "bodyWithHandle": "{{handle}} numaralı taşınma için {{amount}} tutarındaki hakedişiniz ödendi.",
+      "title": "Hakediş ödendi"
+    }
+  },
+  "reminder": {
+    "starting": {
+      "client": {
+        "body": "{{handle}} numaralı taşınma başlamak üzere. Nakliyeciniz hazırlanıyor.",
+        "title": "Taşınmanız {{lead}} başlıyor"
+      },
+      "mover": {
+        "body": "{{handle}} numaralı taşınma {{lead}} başlıyor — rotayı şimdi başlatabilirsiniz.",
+        "title": "Taşınmayı başlatma zamanı"
+      }
+    },
+    "upcoming": {
+      "client": {
+        "body": "{{handle}} numaralı taşınmanız {{lead}} başlıyor.",
+        "bodyWithWindow": "{{handle}} numaralı taşınmanız {{lead}}, {{window}} zaman aralığında başlıyor.",
+        "title": "Taşınma hatırlatması"
+      },
+      "mover": {
+        "body": "{{handle}} numaralı planlı taşınma {{lead}} başlıyor.",
+        "bodyWithWindow": "{{handle}} numaralı planlı taşınma {{lead}}, {{window}} zaman aralığında başlıyor.",
+        "title": "Taşınma hatırlatması"
+      }
+    }
+  },
+  "request": {
+    "new": {
+      "body": "Yakınınızda yeni bir taşınma talebi var. Görüntüleyip kabul etmek için dokunun.",
+      "bodyRoute": "{{from}} → {{to}}. Görüntüleyip kabul etmek için dokunun.",
+      "title": "Yeni taşınma talebi"
+    }
+  },
+  "review": {
+    "received": {
+      "bodyWithComment_one": "{{count}} yıldızlı bir değerlendirme aldınız: “{{comment}}”",
+      "bodyWithComment_other": "{{count}} yıldızlı bir değerlendirme aldınız: “{{comment}}”",
+      "body_one": "{{count}} yıldızlı bir değerlendirme aldınız.",
+      "body_other": "{{count}} yıldızlı bir değerlendirme aldınız.",
+      "title": "Yeni değerlendirme"
+    }
+  },
+  "status": {
+    "arrivedDestination": {
+      "body": "Nakliyeciniz varış noktasına ulaştı.",
+      "title": "Varış noktasında"
+    },
+    "awaitingPayment": {
+      "body": "Taşınmanız tamamlandı — lütfen ödemeyi onaylayın.",
+      "title": "Tahsilat bekleniyor"
+    },
+    "cancelledByMover": {
+      "body": "Nakliyeci bu taşınmayı iptal etti.",
+      "title": "Taşınma iptal edildi"
+    },
+    "completed": {
+      "body": "Taşınmanız tamamlandı! Lütfen bir değerlendirme bırakın.",
+      "title": "Taşınma tamamlandı"
+    },
+    "inTransit": {
+      "body": "Eşyalarınız varış noktasına doğru yolda.",
+      "title": "Yolda"
+    },
+    "loading": {
+      "body": "Eşyalarınız yükleniyor.",
+      "title": "Yükleme başladı"
+    },
+    "moverAccepted": {
+      "body": "Bir nakliyeci taşınma talebinizi kabul etti!",
+      "title": "Nakliyeci onayladı"
+    },
+    "moverAcceptedScheduled": {
+      "body": "Bir nakliyeci planlı taşınmanızı kabul etti!",
+      "title": "Nakliyeci onayladı"
+    },
+    "moverArrived": {
+      "body": "Nakliyeciniz alış adresine ulaştı.",
+      "title": "Nakliyeci geldi"
+    },
+    "moverEnRoute": {
+      "body": "Nakliyeciniz alış adresinize doğru yolda.",
+      "title": "Nakliyeci yolda"
+    },
+    "moverWithdrew": {
+      "body": "Nakliyeciniz çekildi. Size başka bir nakliyeci arıyoruz.",
+      "title": "Nakliyeci çekildi"
+    },
+    "unloading": {
+      "body": "Eşyalarınız boşaltılıyor.",
+      "title": "Boşaltılıyor"
+    }
+  },
+  "verification": {
+    "contactSupport": "Ayrıntılar için lütfen destek ekibiyle iletişime geçin.",
+    "rejected": {
+      "body": "Nakliyeci profili başvurunuz reddedildi. {{reason}}",
+      "title": "Profil reddedildi"
+    },
+    "submitted": {
+      "body": "Nakliyeci profiliniz inceleniyor. Doğrulandığında sizi bilgilendireceğiz.",
+      "title": "Profil gönderildi"
+    },
+    "suspended": {
+      "body": "Nakliyeci hesabınız askıya alındı. {{reason}}",
+      "title": "Hesap askıya alındı"
+    },
+    "verified": {
+      "body": "Tebrikler! Nakliyeci profiliniz doğrulandı. Artık taşınma işlerini kabul edebilirsiniz.",
+      "title": "Profil doğrulandı"
+    }
+  }
+}

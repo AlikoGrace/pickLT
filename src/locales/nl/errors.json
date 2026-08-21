@@ -1,0 +1,328 @@
+{
+  "api": {
+    "admin": {
+      "awaitingApproval": "Je beheerdersaccount wacht op goedkeuring door een bestaande beheerder.",
+      "noProfile": "Geen beheerdersprofiel gevonden voor dit account.",
+      "notAuthorized": "Dit account heeft geen toegang tot de beheerconsole.",
+      "suspended": "Je beheerderstoegang is opgeschort. Neem contact op met een andere beheerder."
+    },
+    "admins": {
+      "alreadyAdmin": "Die gebruiker is al een actieve beheerder.",
+      "invalidStatus": "De status moet een van de volgende zijn: {{list}}",
+      "lastAdmin": "Dit is de laatste actieve beheerder — maak eerst iemand anders beheerder.",
+      "notAnAdmin": "Dat account is geen beheerder.",
+      "notFound": "Beheerder niet gevonden.",
+      "selfDemote": "Je kunt je eigen beheerderstoegang niet intrekken.",
+      "selfStatus": "Je kunt je eigen beheerdersstatus niet wijzigen.",
+      "userIdRequired": "Een gebruikers-id is verplicht.",
+      "userNotFound": "Gebruiker niet gevonden."
+    },
+    "auth": {
+      "missingUserId": "Inloggen kon niet worden voltooid. Probeer het opnieuw.",
+      "noSession": "Geen actieve sessie. Log opnieuw in.",
+      "sessionInitFailed": "Je sessie kon niet worden gestart. Probeer het opnieuw."
+    },
+    "dac7": {
+      "exportBlocked_one": "Bij {{count}} verkoper ontbreekt een fiscaal nummer (TIN). Rond de KYC af voor je exporteert, of vraag opnieuw aan met force=1 voor een interne controlekopie.",
+      "exportBlocked_other": "Bij {{count}} verkopers ontbreekt een fiscaal nummer (TIN). Rond de KYC af voor je exporteert, of vraag opnieuw aan met force=1 voor een interne controlekopie.",
+      "invalidYear": "Ongeldig jaar"
+    },
+    "dispute": {
+      "invalidStatus": "De uitkomst moet een van de volgende zijn: {{list}}",
+      "moveIdRequired": "Een verhuizings-id is verplicht."
+    },
+    "forbidden": "Je hebt geen rechten om dat te doen.",
+    "functionFailed": {
+      "error": "Functie {{functionId}} is mislukt ({{status}})"
+    },
+    "internal": "Er is iets misgegaan. Probeer het opnieuw.",
+    "inventory": {
+      "categoryRequired": "Categorie is verplicht.",
+      "invalidMoveType": "moveTypeMinimum moet een van de volgende zijn: {{list}}",
+      "nameRequired": "Naam is verplicht.",
+      "notANonNegativeNumber": "{{field}} moet een getal van 0 of hoger zijn."
+    },
+    "invite": {
+      "accountClash": "Er bestaat al een account met dit e-mailadres. Vraag een beheerder om dat account te promoveren.",
+      "alreadyAccepted": "Die uitnodiging is al geaccepteerd. Schort in plaats daarvan het beheerdersaccount op.",
+      "emailExists": "Dat e-mailadres heeft al een PickLT-account. Promoveer het via de pagina Gebruikers in plaats van een uitnodiging te sturen.",
+      "emailIsAdmin": "Dat e-mailadres hoort al bij een beheerder.",
+      "expired": "Deze uitnodiging is verlopen. Vraag een beheerder om een nieuwe link.",
+      "idRequired": "Een uitnodigings-id is verplicht.",
+      "invalidEmail": "Voer een geldig e-mailadres in.",
+      "invalidLink": "Deze uitnodigingslink is niet geldig.",
+      "loadFailed": "Deze uitnodiging kon niet worden geladen.",
+      "nameRequired": "Voer de volledige naam van de genodigde in.",
+      "notFound": "Uitnodiging niet gevonden.",
+      "passwordTooShort_one": "Het wachtwoord moet minstens {{count}} teken bevatten.",
+      "passwordTooShort_other": "Het wachtwoord moet minstens {{count}} tekens bevatten.",
+      "revoked": "Deze uitnodiging is ingetrokken.",
+      "signupFailed": "Registratie kon niet worden voltooid.",
+      "used": "Deze uitnodiging is al gebruikt."
+    },
+    "mover": {
+      "invalidStatus": "De nieuwe status moet een van de volgende zijn: {{list}}",
+      "noLicensePhoto": "Geen foto van het rijbewijs beschikbaar.",
+      "notFound": "Verhuizer niet gevonden.",
+      "reasonRequired": "Bij het afwijzen of opschorten van een verhuizer is een reden verplicht.",
+      "verifyFailed": "Verificatie mislukt (status {{status}}). Probeer het opnieuw."
+    },
+    "pricing": {
+      "commissionTooLarge": "{{label}} is een breuk, geen percentage — voer 0.15 in voor 15%.",
+      "keyRequired": "key is verplicht",
+      "negative": "{{label}} kan niet negatief zijn.",
+      "notANumber": "{{label}} moet een getal zijn.",
+      "ratioTooLarge": "{{label}} lijkt te groot — het is een verhouding, geen bedrag in euro's.",
+      "unknownKey": "Onbekende prijssleutel: {{key}}"
+    },
+    "unauthorized": "Je sessie is verlopen. Log opnieuw in.",
+    "user": {
+      "blockedFlagRequired": "Een waarde voor geblokkeerd/gedeblokkeerd is verplicht.",
+      "notFound": "Gebruiker niet gevonden.",
+      "selfBlock": "Je kunt je eigen account niet blokkeren."
+    }
+  },
+  "appwrite": {
+    "generalArgumentInvalid": "Een van de velden is ongeldig. Controleer je invoer.",
+    "generalRateLimitExceeded": "Te veel pogingen. Wacht even en probeer het opnieuw.",
+    "passwordPersonalData": "Het wachtwoord mag geen persoonlijke gegevens bevatten.",
+    "passwordRecentlyUsed": "Dit wachtwoord is onlangs gebruikt. Kies een ander wachtwoord.",
+    "phoneInvalid": "Ongeldige notatie van het telefoonnummer.",
+    "userAlreadyExists": "Er bestaat al een account met dit e-mailadres.",
+    "userInvalidCode": "De verificatiecode is onjuist of verlopen.",
+    "userInvalidCredentials": "Onjuist e-mailadres of wachtwoord.",
+    "userNotFound": "Geen account gevonden met dit e-mailadres.",
+    "userPhoneNotFound": "Er is geen telefoonnummer bekend. Voeg er een toe om door te gaan.",
+    "userSessionAlreadyExists": "Je bent al ingelogd.",
+    "userSessionNotFound": "Sessie verlopen. Log opnieuw in.",
+    "userUnauthorized": "Je hebt geen toegang. Log opnieuw in."
+  },
+  "auth": {
+    "forbidden": "Geen toegang",
+    "initSessionFailed": "Sessie kon niet worden gestart",
+    "noActiveSession": "Geen actieve sessie",
+    "noSession": {
+      "error": "Geen ingelogde gebruiker"
+    },
+    "setPhoneFailed": "Telefoonnummer kon niet worden ingesteld",
+    "syncFailed": "Gebruiker kon niet worden gesynchroniseerd",
+    "unauthorized": "Niet geautoriseerd"
+  },
+  "call": {
+    "noPhoneNumber": "Geen telefoonnummer bekend voor deze verhuizer."
+  },
+  "card": {
+    "add": {
+      "failed": "Kaart kon niet worden toegevoegd. Probeer het opnieuw.",
+      "initFailed": "Kaartinstelling kon niet worden gestart. Probeer het opnieuw.",
+      "notSaved": "Kaart is niet opgeslagen. Probeer het opnieuw."
+    },
+    "remove": {
+      "detachFailed": "Onze betaalprovider kon de kaart niet verwijderen. Probeer het opnieuw.",
+      "forbidden": "Die kaart hoort niet bij je account.",
+      "internal": "Er ging iets mis bij het verwijderen van de kaart. Probeer het opnieuw.",
+      "misconfigured": "Kaarten verwijderen is tijdelijk niet mogelijk. Probeer het later opnieuw.",
+      "noStripeCustomer": "Geen betaalprofiel gevonden voor je account.",
+      "paymentMethodNotFound": "Die kaart bestaat niet meer bij onze betaalprovider.",
+      "unauthenticated": "Log opnieuw in om deze kaart te verwijderen.",
+      "userNotFound": "Je account kon niet worden geladen. Log opnieuw in."
+    }
+  },
+  "crew": {
+    "fieldsRequired": "Naam en telefoonnummer zijn verplicht",
+    "memberNotFound": "Teamlid niet gevonden",
+    "notOwner": {
+      "error": "Dit is niet jouw teamlid"
+    }
+  },
+  "generic": {
+    "fallback": "Er is iets misgegaan. Probeer het opnieuw.",
+    "internal": "Interne serverfout",
+    "retry": {
+      "body": "Probeer het opnieuw.",
+      "error": "Er is iets misgegaan. Probeer het opnieuw."
+    },
+    "saveFailed": "Opslaan mislukt",
+    "title": "Er is iets misgegaan",
+    "unknown": "Onbekende fout"
+  },
+  "geo": {
+    "denied": {
+      "error": "Geen toegang tot je locatie. Schakel dit in bij je browserinstellingen."
+    },
+    "unavailable": {
+      "error": "Je locatie kon niet worden bepaald. Probeer het opnieuw."
+    },
+    "unsupported": {
+      "error": "Je browser ondersteunt geolocatie niet"
+    }
+  },
+  "geocode": {
+    "searchFailed": "Locaties konden niet worden opgehaald"
+  },
+  "google": {
+    "cancelled": {
+      "error": "Inloggen met Google is geannuleerd."
+    },
+    "noCachedAccount": {
+      "error": "Geen opgeslagen Google-account gevonden."
+    },
+    "noCredentials": {
+      "error": "Inloggen met Google is gelukt, maar de server heeft geen inloggegevens teruggestuurd."
+    },
+    "noIdToken": {
+      "error": "Inloggen met Google heeft geen ID-token opgeleverd. Probeer het opnieuw."
+    }
+  },
+  "instant": {
+    "moverUnavailable": {
+      "error": "De geselecteerde verhuizer is niet meer beschikbaar"
+    },
+    "submitStage": {
+      "error": "Verzenden is mislukt bij {{stage}}. Probeer het opnieuw.",
+      "short": {
+        "error": "Verzenden is mislukt bij {{stage}}"
+      }
+    }
+  },
+  "location": {
+    "unavailable": {
+      "error": "Je locatie kon niet worden bepaald."
+    }
+  },
+  "mapbox": {
+    "unreachable": {
+      "error": "Mapbox is niet bereikbaar, controleer je verbinding"
+    }
+  },
+  "message": {
+    "empty": "Het bericht is leeg",
+    "sendFailed": "Het bericht kon niet worden verzonden. Probeer het opnieuw.",
+    "tooLong": "Het bericht is te lang. De limiet is {{max}} tekens."
+  },
+  "move": {
+    "alreadyAssigned": "Aan deze verhuizing is al een verhuizer toegewezen",
+    "cancelFailed": "Deze verhuizing kon niet worden geannuleerd. Probeer het opnieuw.",
+    "cancelRetry": "Annuleren mislukt. Probeer het opnieuw.",
+    "createFailed": "Verhuizing kon niet worden aangemaakt",
+    "dateInPast": "De verhuisdatum moet in de toekomst liggen",
+    "invalidTransition": "Deze statuswijziging is niet meer geldig voor deze verhuizing. Laad de verhuizing opnieuw en probeer het nog eens.",
+    "loadFailed": "Verhuisgegevens konden niet worden geladen",
+    "noLongerAcceptable": "Deze verhuizing kan niet meer worden geaccepteerd. De status is gewijzigd — laad de lijst opnieuw.",
+    "notAssigned": "Je bent niet aan deze verhuizing toegewezen",
+    "notAuthorized": "Geen rechten voor deze verhuizing",
+    "notAvailable": "Deze verhuizing kan niet worden geaccepteerd",
+    "notCancellable": "Deze verhuizing kan niet meer worden geannuleerd ({{stage}}). Je spullen zijn mogelijk al onderweg — neem rechtstreeks contact op met je verhuizer.",
+    "notCancellableUnknownStage": "Deze verhuizing kan niet meer worden geannuleerd. Je spullen zijn mogelijk al onderweg — neem rechtstreeks contact op met je verhuizer.",
+    "notFound": "Verhuizing niet gevonden",
+    "notReschedulable": "Deze verhuizing kan niet meer worden verzet. De status is gewijzigd — laad de verhuizing opnieuw.",
+    "rescheduleFailed": "Verzetten mislukt",
+    "rescheduleRetry": "Verzetten mislukt. Probeer het opnieuw.",
+    "scheduledOnly": "Alleen geplande verhuizingen kunnen op deze manier worden geaccepteerd",
+    "statusUpdateFailed": "Status kon niet worden bijgewerkt",
+    "tooEarly": "Deze verhuizing kan niet vóór de geplande datum worden gestart.",
+    "withdrawTooLate": "Terugtrekken kan niet meer nadat de verhuizing is gestart"
+  },
+  "mover": {
+    "acceptFailed": {
+      "error": "Verhuizing accepteren mislukt"
+    },
+    "acceptRetry": "Verhuizing accepteren mislukt. Probeer het opnieuw.",
+    "clientCannotConvert": "Je account is geregistreerd als klant. Klantaccounts kunnen niet worden omgezet naar verhuizersaccounts. Maak een nieuw account aan om je als verhuizer te registreren.",
+    "earningsFetchFailed": "Verdiensten konden niet worden opgehaald",
+    "earningsLoadFailed": "Verdiensten konden niet worden geladen",
+    "licenseUploadFailed": "Foto van het rijbewijs kon niet worden geüpload",
+    "noLocation": "Geen locatie beschikbaar. Schakel locatievoorzieningen in of werk je locatie bij.",
+    "notVerified": "Je verhuizersprofiel is nog niet geverifieerd",
+    "notVerifiedPendingApproval": "Je verhuizersprofiel is nog niet geverifieerd. Wacht op goedkeuring door een beheerder.",
+    "profileNotFound": "Verhuizersprofiel niet gevonden",
+    "profileSubmitFailed": "Profiel kon niet worden verstuurd",
+    "selfieRequired": "Een selfie is verplicht voor identiteitsverificatie",
+    "selfieUploadFailed": "Selfie kon niet worden geüpload",
+    "startRouteFailed": "Route kon niet worden gestart",
+    "startRouteRetry": "Route kon niet worden gestart. Probeer het opnieuw.",
+    "withdrawFailed": "Terugtrekken uit de verhuizing mislukt",
+    "withdrawRetry": "Terugtrekken mislukt. Probeer het opnieuw."
+  },
+  "movers": {
+    "fetchFailed": "Verhuizers konden niet worden opgehaald",
+    "findFailed": "Er konden geen verhuizers worden gevonden"
+  },
+  "moves": {
+    "fetchFailed": "Verhuizingen konden niet worden opgehaald",
+    "loadFailed": "Verhuizingen konden niet worden geladen",
+    "scheduledLoadFailed": "Geplande verhuizingen konden niet worden geladen"
+  },
+  "network": {
+    "generic": {
+      "error": "Netwerkfout. Probeer het opnieuw."
+    },
+    "unreachable": "De server is niet bereikbaar. Controleer je verbinding en probeer het opnieuw."
+  },
+  "payment": {
+    "cardDeclined": "Je kaart is geweigerd. Probeer een andere betaalmethode.",
+    "charge": {
+      "failed": "Betaling kon niet worden voltooid. Probeer het opnieuw.",
+      "initFailed": "Betaling kon niet worden gestart. Probeer het opnieuw."
+    },
+    "confirmFailed": "Betaling kon niet worden bevestigd",
+    "notAwaiting": "Deze verhuizing wacht niet op betaling. Laad de verhuizing opnieuw en probeer het nog eens."
+  },
+  "profile": {
+    "emailChangeFailed": "E-mailadres wijzigen mislukt",
+    "emailTaken": "Dit e-mailadres is al in gebruik bij een ander account",
+    "nameUpdateFailed": "Naam bijwerken mislukt",
+    "phoneChangeFailed": "Telefoonnummer wijzigen mislukt",
+    "phoneTaken": "Dit telefoonnummer is al in gebruik bij een ander account"
+  },
+  "request": {
+    "moveMismatch": "De aanvraag hoort niet bij deze verhuizing",
+    "notOwned": "De aanvraag hoort niet bij deze verhuizer",
+    "notPending": "De aanvraag staat niet meer open"
+  },
+  "review": {
+    "moveNotCompleted": "De verhuizing is niet afgerond",
+    "noMover": "Aan deze verhuizing is geen verhuizer toegewezen",
+    "ratingRange": "De beoordeling moet tussen 1 en 5 liggen",
+    "submitFailed": "Review kon niet worden verstuurd"
+  },
+  "tax": {
+    "listFailed": "Overzichten konden niet worden geladen",
+    "pdfLoadFailed": "PDF kon niet worden geladen",
+    "pdfNotReady": "De PDF van het overzicht is nog niet klaar"
+  },
+  "taxDocs": {
+    "downloadFailed": {
+      "error": "Het overzicht kon niet worden gedownload. Probeer het opnieuw."
+    },
+    "pdfNotReady": {
+      "error": "De PDF van het overzicht is nog niet klaar"
+    }
+  },
+  "update": {
+    "failed": {
+      "title": "Bijwerken mislukt"
+    }
+  },
+  "upload": {
+    "failed": "Uploaden mislukt",
+    "noFile": "Geen bestand opgegeven",
+    "notAnImage": "Selecteer een afbeeldingsbestand",
+    "notAnImage2": "Het bestand moet een afbeelding zijn",
+    "photoFailed": "Foto kon niet worden geüpload",
+    "photosFailed": "Foto's konden niet worden geüpload",
+    "tooLarge": "De afbeelding moet kleiner zijn dan {{limit}}"
+  },
+  "validation": {
+    "emailFormat": "Ongeldig e-mailadres",
+    "emailRequired": "E-mailadres is verplicht",
+    "noFields": "Geen geldige velden om bij te werken",
+    "phoneFormat": "Ongeldig telefoonnummer. Gebruik de internationale notatie (bijv. +491234567890)",
+    "phoneRequired2": "Telefoonnummer is verplicht"
+  },
+  "vehicle": {
+    "fieldsRequired": "Vul alle verplichte voertuigvelden in",
+    "saveFailed": "Voertuiggegevens konden niet worden opgeslagen",
+    "updateFailed": "Voertuiggegevens konden niet worden bijgewerkt"
+  }
+}

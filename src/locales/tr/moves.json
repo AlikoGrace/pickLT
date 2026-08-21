@@ -1,0 +1,385 @@
+{
+  "action": {
+    "cancel": {
+      "cta": "Taşınmayı iptal et"
+    },
+    "reschedule": {
+      "cta": "Taşınma tarihini değiştir"
+    }
+  },
+  "available": {
+    "withinRadiusCount_one": "{{radius}} içinde {{count}} taşınma",
+    "withinRadiusCount_other": "{{radius}} içinde {{count}} taşınma"
+  },
+  "booking": {
+    "code": {
+      "label": "Rezervasyon kodu"
+    },
+    "title": "Rezervasyon detayları"
+  },
+  "cancelConfirm": {
+    "cancelling": {
+      "cta": "İptal ediliyor…"
+    },
+    "confirm": {
+      "cta": "Evet, iptal et"
+    },
+    "keep": {
+      "cta": "Taşınmayı sürdür"
+    },
+    "subtitle": "Nakliyeciniz çoktan yola çıktı. İptal etmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+    "title": "Bu taşınma iptal edilsin mi?",
+    "window": "Bu taşınmayı iptal etmek istediğinizden emin misiniz? Bu işlem geri alınamaz."
+  },
+  "card": {
+    "category": {
+      "instant": {
+        "label": "Anında"
+      },
+      "scheduled": {
+        "label": "Planlı"
+      }
+    },
+    "route": {
+      "dropoffFallback": {
+        "label": "Teslim noktası"
+      },
+      "pickupFallback": {
+        "label": "Alış noktası"
+      }
+    },
+    "title": {
+      "generic": {
+        "label": "Taşınma"
+      }
+    },
+    "typeAndCategory": {
+      "light": {
+        "instant": {
+          "subtitle": "Hafif taşıma · Anında"
+        },
+        "scheduled": {
+          "subtitle": "Hafif taşıma · Planlı"
+        }
+      },
+      "premium": {
+        "instant": {
+          "subtitle": "Premium taşıma · Anında"
+        },
+        "scheduled": {
+          "subtitle": "Premium taşıma · Planlı"
+        }
+      },
+      "regular": {
+        "instant": {
+          "subtitle": "Standart taşıma · Anında"
+        },
+        "scheduled": {
+          "subtitle": "Standart taşıma · Planlı"
+        }
+      }
+    },
+    "typeAndDate": {
+      "light": {
+        "subtitle": "Hafif taşıma · {{date}}"
+      },
+      "premium": {
+        "subtitle": "Premium taşıma · {{date}}"
+      },
+      "regular": {
+        "subtitle": "Standart taşıma · {{date}}"
+      }
+    },
+    "typeCategoryDate": {
+      "light": {
+        "instant": {
+          "subtitle": "Hafif taşıma · Anında · {{date}}"
+        },
+        "scheduled": {
+          "subtitle": "Hafif taşıma · Planlı · {{date}}"
+        }
+      },
+      "premium": {
+        "instant": {
+          "subtitle": "Premium taşıma · Anında · {{date}}"
+        },
+        "scheduled": {
+          "subtitle": "Premium taşıma · Planlı · {{date}}"
+        }
+      },
+      "regular": {
+        "instant": {
+          "subtitle": "Standart taşıma · Anında · {{date}}"
+        },
+        "scheduled": {
+          "subtitle": "Standart taşıma · Planlı · {{date}}"
+        }
+      }
+    }
+  },
+  "category": {
+    "all": {
+      "label": "Tümü"
+    },
+    "cancelled": {
+      "label": "İptal edilen"
+    },
+    "completed": {
+      "label": "Tamamlanan"
+    },
+    "inProgress": {
+      "label": "Devam eden"
+    },
+    "pending": {
+      "label": "Bekleyen"
+    }
+  },
+  "createdAt": {
+    "label": "Oluşturulma"
+  },
+  "detail": {
+    "additionalServices": {
+      "title": "Ek hizmetler"
+    },
+    "address": {
+      "label": "Adres"
+    },
+    "arrivalWindow": {
+      "label": "Varış aralığı"
+    },
+    "category": {
+      "label": "Kategori"
+    },
+    "client": {
+      "title": "Müşteri"
+    },
+    "distance": {
+      "label": "Mesafe"
+    },
+    "dropoff": {
+      "label": "Teslim"
+    },
+    "dropoffAddress": {
+      "title": "Teslim adresi"
+    },
+    "duration": {
+      "label": "Süre"
+    },
+    "elevator": {
+      "label": "Asansör"
+    },
+    "floor": {
+      "label": "Kat"
+    },
+    "itemLine": {
+      "label": "{{qty}} x {{label}}"
+    },
+    "itemLineReversed": {
+      "label": "{{label}} × {{qty}}"
+    },
+    "itemQuantity": {
+      "label": "{{label}} × {{qty}}"
+    },
+    "items": {
+      "label": "Eşyalar"
+    },
+    "moveDate": {
+      "label": "Taşınma tarihi"
+    },
+    "moveDetails": {
+      "title": "Taşınma detayları"
+    },
+    "moveItems": {
+      "title": "Taşınacak eşyalar"
+    },
+    "moveStatus": {
+      "label": "Taşınma durumu"
+    },
+    "packingService": {
+      "label": "Paketleme hizmeti"
+    },
+    "parking": {
+      "label": "Otopark"
+    },
+    "pickup": {
+      "label": "Alış"
+    },
+    "pickupAddress": {
+      "title": "Alış adresi"
+    },
+    "requestedAt": {
+      "label": "Talep edildi"
+    },
+    "route": {
+      "title": "Rota"
+    },
+    "status": {
+      "label": "Durum"
+    },
+    "type": {
+      "label": "Tür"
+    },
+    "typeAndCategory": {
+      "light": {
+        "instant": {
+          "value": "Hafif · Anında"
+        },
+        "scheduled": {
+          "value": "Hafif · Planlı"
+        }
+      },
+      "premium": {
+        "instant": {
+          "value": "Premium · Anında"
+        },
+        "scheduled": {
+          "value": "Premium · Planlı"
+        }
+      },
+      "regular": {
+        "instant": {
+          "value": "Standart · Anında"
+        },
+        "scheduled": {
+          "value": "Standart · Planlı"
+        }
+      }
+    },
+    "unit": {
+      "label": "Daire"
+    }
+  },
+  "filter": {
+    "count": {
+      "badge": "({{value}})"
+    },
+    "empty": {
+      "helper": "Farklı bir filtre seçmeyi deneyin."
+    }
+  },
+  "itemCount_one": "{{count}} eşya",
+  "itemCount_other": "{{count}} eşya",
+  "list": {
+    "loadError": {
+      "body": "Yenilemek için aşağı çekin.",
+      "title": "Taşınmalar yüklenemedi"
+    }
+  },
+  "moveCategory": {
+    "instant": {
+      "label": "Anında"
+    },
+    "scheduled": {
+      "label": "Planlı"
+    }
+  },
+  "moveCount_one": "{{count}} taşınma",
+  "moveCount_other": "{{count}} taşınma",
+  "mover": {
+    "experience": {
+      "label": "Deneyim"
+    },
+    "languages": {
+      "label": "Diller"
+    },
+    "verified": {
+      "badge": "Doğrulanmış nakliyeci"
+    }
+  },
+  "moverCount_one": "{{count}} nakliyeci",
+  "moverCount_other": "{{count}} nakliyeci",
+  "notify": {
+    "cancelledByClient": {
+      "body": "Müşteri bu taşınmayı iptal etti.",
+      "title": "Taşınma müşteri tarafından iptal edildi ❌"
+    },
+    "moverWithdrawn": {
+      "body": "Atanan nakliyeci bu taşınmadan çekildi.",
+      "title": "Nakliyeci çekildi"
+    }
+  },
+  "payment": {
+    "method": {
+      "label": "Ödeme yöntemi"
+    }
+  },
+  "pricing": {
+    "estimatedTotal": {
+      "label": "Tahmini toplam"
+    }
+  },
+  "status": {
+    "arrivedDestination": {
+      "label": "Varış noktasında"
+    },
+    "assigned": {
+      "label": "Atandı"
+    },
+    "awaitingPayment": {
+      "label": "Tahsilat bekleniyor"
+    },
+    "booked": {
+      "label": "Rezerve edildi"
+    },
+    "cancelled": {
+      "label": "İptal edildi"
+    },
+    "cancelledByClient": {
+      "label": "İptal edildi"
+    },
+    "cancelledByMover": {
+      "label": "İptal edildi"
+    },
+    "completed": {
+      "label": "Tamamlandı"
+    },
+    "confirmedPayLater": {
+      "label": "Onaylandı, ödeme daha sonra"
+    },
+    "disputed": {
+      "label": "İtirazlı"
+    },
+    "draft": {
+      "label": "Taslak"
+    },
+    "inProgress": {
+      "label": "Devam ediyor"
+    },
+    "inTransit": {
+      "label": "Yolda"
+    },
+    "loading": {
+      "label": "Yükleniyor"
+    },
+    "moverAccepted": {
+      "label": "Nakliyeci onayladı"
+    },
+    "moverArrived": {
+      "label": "Nakliyeci geldi"
+    },
+    "moverAssigned": {
+      "label": "Nakliyeci atandı"
+    },
+    "moverEnRoute": {
+      "label": "Nakliyeci yolda"
+    },
+    "paid": {
+      "label": "Ödendi"
+    },
+    "pending": {
+      "label": "Beklemede"
+    },
+    "pendingPayment": {
+      "label": "Ödeme bekleniyor"
+    },
+    "unknown": {
+      "label": "Bilinmiyor"
+    },
+    "unloading": {
+      "label": "Boşaltılıyor"
+    }
+  },
+  "summary": {
+    "title": "Özet"
+  }
+}

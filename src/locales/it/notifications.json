@@ -1,0 +1,147 @@
+{
+  "cancel": {
+    "byClient": {
+      "body": "Il cliente ha annullato il trasloco.",
+      "bodyWithHandle": "Il cliente ha annullato il trasloco {{handle}}.",
+      "title": "Trasloco annullato"
+    },
+    "reassigning": {
+      "body": "Il tuo traslocatore ha dovuto rinunciare al trasloco. Lo stiamo proponendo ad altri traslocatori nelle vicinanze.",
+      "bodyWithHandle": "Il tuo traslocatore ha dovuto rinunciare al trasloco {{handle}}. Lo stiamo proponendo ad altri traslocatori nelle vicinanze.",
+      "title": "Stiamo cercando un altro traslocatore"
+    }
+  },
+  "message": {
+    "new": {
+      "title": "Nuovo messaggio"
+    }
+  },
+  "payment": {
+    "clientCharged": {
+      "body": "Il tuo pagamento di {{amount}} è stato elaborato. La prenotazione del trasloco è confermata!",
+      "title": "Pagamento confermato"
+    },
+    "clientConfirmed": {
+      "body": "Il cliente ha segnato questo trasloco come pagato. Conferma anche tu per chiuderlo.",
+      "title": "Il cliente ha confermato il pagamento"
+    },
+    "confirmYours": {
+      "body": "Il tuo traslocatore ha confermato il pagamento. Conferma anche tu per completare il trasloco.",
+      "title": "Conferma il tuo pagamento"
+    },
+    "moverPaid": {
+      "body": "Hai ricevuto un accredito di {{amount}}.",
+      "bodyWithHandle": "Hai ricevuto un accredito di {{amount}} per il trasloco {{handle}}.",
+      "title": "Accredito ricevuto"
+    }
+  },
+  "reminder": {
+    "starting": {
+      "client": {
+        "body": "Il trasloco {{handle}} sta per iniziare. Il tuo traslocatore si sta preparando.",
+        "title": "Il tuo trasloco inizia {{lead}}"
+      },
+      "mover": {
+        "body": "Il trasloco {{handle}} inizia {{lead}}: ora puoi avviare il percorso.",
+        "title": "È ora di iniziare il trasloco"
+      }
+    },
+    "upcoming": {
+      "client": {
+        "body": "Il tuo trasloco {{handle}} inizia {{lead}}.",
+        "bodyWithWindow": "Il tuo trasloco {{handle}} inizia {{lead}}, nella fascia oraria {{window}}.",
+        "title": "Promemoria trasloco"
+      },
+      "mover": {
+        "body": "Il trasloco programmato {{handle}} inizia {{lead}}.",
+        "bodyWithWindow": "Il trasloco programmato {{handle}} inizia {{lead}}, nella fascia oraria {{window}}.",
+        "title": "Promemoria trasloco"
+      }
+    }
+  },
+  "request": {
+    "new": {
+      "body": "Hai una nuova richiesta di trasloco nelle vicinanze. Tocca per vederla e accettarla.",
+      "bodyRoute": "{{from}} → {{to}}. Tocca per vederla e accettarla.",
+      "title": "Nuova richiesta di trasloco"
+    }
+  },
+  "review": {
+    "received": {
+      "bodyWithComment_one": "Hai ricevuto una recensione da {{count}} stella: «{{comment}}»",
+      "bodyWithComment_other": "Hai ricevuto una recensione da {{count}} stelle: «{{comment}}»",
+      "body_one": "Hai ricevuto una recensione da {{count}} stella.",
+      "body_other": "Hai ricevuto una recensione da {{count}} stelle.",
+      "title": "Nuova recensione"
+    }
+  },
+  "status": {
+    "arrivedDestination": {
+      "body": "Il tuo traslocatore è arrivato a destinazione.",
+      "title": "Arrivato a destinazione"
+    },
+    "awaitingPayment": {
+      "body": "Il tuo trasloco è concluso: conferma il pagamento.",
+      "title": "Pagamento da effettuare"
+    },
+    "cancelledByMover": {
+      "body": "Il traslocatore ha annullato questo trasloco.",
+      "title": "Trasloco annullato"
+    },
+    "completed": {
+      "body": "Il tuo trasloco è stato completato! Lascia una recensione.",
+      "title": "Trasloco completato"
+    },
+    "inTransit": {
+      "body": "Le tue cose sono in viaggio verso la destinazione.",
+      "title": "In transito"
+    },
+    "loading": {
+      "body": "Le tue cose vengono caricate.",
+      "title": "Carico iniziato"
+    },
+    "moverAccepted": {
+      "body": "Un traslocatore ha accettato la tua richiesta di trasloco!",
+      "title": "Traslocatore confermato"
+    },
+    "moverAcceptedScheduled": {
+      "body": "Un traslocatore ha accettato il tuo trasloco programmato!",
+      "title": "Traslocatore confermato"
+    },
+    "moverArrived": {
+      "body": "Il tuo traslocatore è arrivato all’indirizzo di ritiro.",
+      "title": "Traslocatore arrivato"
+    },
+    "moverEnRoute": {
+      "body": "Il tuo traslocatore è in viaggio verso il tuo indirizzo di ritiro.",
+      "title": "Traslocatore in arrivo"
+    },
+    "moverWithdrew": {
+      "body": "Il tuo traslocatore si è ritirato. Stiamo cercando un altro traslocatore.",
+      "title": "Traslocatore ritirato"
+    },
+    "unloading": {
+      "body": "Le tue cose vengono scaricate.",
+      "title": "Scarico in corso"
+    }
+  },
+  "verification": {
+    "contactSupport": "Contatta l’assistenza per maggiori dettagli.",
+    "rejected": {
+      "body": "La tua richiesta di profilo traslocatore è stata rifiutata. {{reason}}",
+      "title": "Profilo rifiutato"
+    },
+    "submitted": {
+      "body": "Il tuo profilo traslocatore è in fase di verifica. Ti avviseremo appena sarà verificato.",
+      "title": "Profilo inviato"
+    },
+    "suspended": {
+      "body": "Il tuo account traslocatore è stato sospeso. {{reason}}",
+      "title": "Account sospeso"
+    },
+    "verified": {
+      "body": "Congratulazioni! Il tuo profilo traslocatore è stato verificato. Ora puoi accettare traslochi.",
+      "title": "Profilo verificato"
+    }
+  }
+}

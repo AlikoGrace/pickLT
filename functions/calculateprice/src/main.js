@@ -213,7 +213,7 @@ export default async ({ req, res, log, error }) => {
   ].filter((k) => !process.env[k]);
   if (missingEnv.length) {
     error(`[calculateprice] missing env: ${missingEnv.join(', ')}`);
-    return res.json({ error: 'misconfigured' }, 500);
+    return res.json({ error: 'misconfigured', fnCode: 'generic.misconfigured' }, 500);
   }
 
   const client = new Client()
@@ -228,7 +228,7 @@ export default async ({ req, res, log, error }) => {
   const databases = new Databases(client);
 
   if (req.method !== 'POST') {
-    return res.json({ error: 'Method not allowed' }, 405);
+    return res.json({ error: 'Method not allowed', fnCode: 'generic.methodNotAllowed' }, 405);
   }
 
   try {
@@ -239,7 +239,7 @@ export default async ({ req, res, log, error }) => {
     try {
       body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
     } catch {
-      return res.json({ error: 'Invalid JSON body' }, 400);
+      return res.json({ error: 'Invalid JSON body', fnCode: 'generic.badRequest' }, 400);
     }
     const { moveId, routeDistanceMeters, routeDurationSeconds, moveType, packingServiceLevel, crewSize, pickupFloorLevel, pickupElevator, dropoffFloorLevel, dropoffElevator, storageWeeks } = body;
 
@@ -312,18 +312,18 @@ export default async ({ req, res, log, error }) => {
       if (moveId) {
         const callerId = req.headers['x-appwrite-user-id'];
         if (!callerId) {
-          return res.json({ error: 'Authentication required to persist a quote' }, 401);
+          return res.json({ error: 'Authentication required to persist a quote', fnCode: 'api.unauthorized' }, 401);
         }
         let owner;
         try {
           owner = await databases.getDocument(DATABASE_ID, MOVES_COLLECTION, moveId);
         } catch {
-          return res.json({ error: 'Move not found' }, 404);
+          return res.json({ error: 'Move not found', fnCode: 'move.notFound' }, 404);
         }
         const clientId =
           typeof owner.clientId === 'string' ? owner.clientId : owner.clientId?.$id ?? null;
         if (clientId !== callerId) {
-          return res.json({ error: 'Move not found' }, 404);
+          return res.json({ error: 'Move not found', fnCode: 'move.notFound' }, 404);
         }
         await databases.updateDocument(DATABASE_ID, MOVES_COLLECTION, moveId, {
           estimatedPrice: quote.estimatedPrice,
@@ -397,21 +397,21 @@ export default async ({ req, res, log, error }) => {
     if (moveId) {
       const callerId = req.headers['x-appwrite-user-id'];
       if (!callerId) {
-        return res.json({ error: 'Authentication required to persist a quote' }, 401);
+        return res.json({ error: 'Authentication required to persist a quote', fnCode: 'api.unauthorized' }, 401);
       }
 
       let move;
       try {
         move = await databases.getDocument(DATABASE_ID, MOVES_COLLECTION, moveId);
       } catch {
-        return res.json({ error: 'Move not found' }, 404);
+        return res.json({ error: 'Move not found', fnCode: 'move.notFound' }, 404);
       }
 
       // Relationship attributes arrive as either a bare id or a hydrated doc.
       const clientId =
         typeof move.clientId === 'string' ? move.clientId : move.clientId?.$id ?? null;
       if (clientId !== callerId) {
-        return res.json({ error: 'Move not found' }, 404);
+        return res.json({ error: 'Move not found', fnCode: 'move.notFound' }, 404);
       }
 
       await databases.updateDocument(DATABASE_ID, MOVES_COLLECTION, moveId, {
@@ -426,6 +426,6 @@ export default async ({ req, res, log, error }) => {
     return res.json({ success: true, breakdown });
   } catch (err) {
     error(`Calculate price failed: ${err.message}`);
-    return res.json({ error: err.message }, 500);
+    return res.json({ error: 'Something went wrong. Please try again.', fnCode: 'generic.unexpected' }, 500);
   }
 };

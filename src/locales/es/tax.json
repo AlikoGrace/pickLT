@@ -1,0 +1,40 @@
+{
+  "doc": {
+    "draftBanner": "BORRADOR — pendiente de revisión por el asesor fiscal",
+    "driverHeading": "Conductor",
+    "footerDisclaimer": "Generado automáticamente a título informativo para el conductor. Los conductores siguen siendo responsables de declarar sus propios ingresos y rendimientos.",
+    "operatorHeading": "Operador de la plataforma",
+    "operatorPending": "[datos del operador pendientes]",
+    "operatorRegistration": "Número de registro: {{value}}",
+    "operatorVatId": "VAT ID (NIF/IVA): {{value}}",
+    "period": "Periodo: {{period}}",
+    "statementNo": "N.º de extracto: {{number}}",
+    "taxNumber": "Número fiscal: {{value}}",
+    "title": "Extracto mensual de actividad del conductor",
+    "vatId": "VAT ID (NIF/IVA): {{value}}"
+  },
+  "lines": {
+    "cashAlreadyHeld": "De ello, ya recibido en efectivo",
+    "commission": "Comisión / tarifa de servicio",
+    "deductionsHeading": "Deducciones de la plataforma",
+    "grossCash": "Cobrado en efectivo",
+    "grossDigital": "Cobrado digitalmente (en la app/tarjeta)",
+    "grossHeading": "Ganancias brutas",
+    "grossLocal": "Bruto en moneda local ({{currency}})",
+    "grossTotal": "Total de ganancias brutas",
+    "instantMoves": "De ellas, mudanzas inmediatas",
+    "net": "Importe neto",
+    "netPayable": "Neto a abonar al conductor",
+    "resultHeading": "Resultado",
+    "scheduledMoves": "De ellas, mudanzas programadas",
+    "summary": "Resumen de mudanzas liquidadas",
+    "totalMoves": "Total de mudanzas completadas",
+    "withholdingHeading": "Impuestos retenidos en origen",
+    "withholdingIncome": "Impuesto sobre la renta retenido",
+    "withholdingVat": "IVA retenido"
+  },
+  "statementReady": {
+    "body": "El extracto {{number}} de {{period}} ya está disponible en tus documentos fiscales.",
+    "title": "Tu extracto mensual está listo"
+  }
+}

@@ -1,0 +1,385 @@
+{
+  "action": {
+    "cancel": {
+      "cta": "Annulla trasloco"
+    },
+    "reschedule": {
+      "cta": "Riprogramma trasloco"
+    }
+  },
+  "available": {
+    "withinRadiusCount_one": "{{count}} trasloco entro {{radius}}",
+    "withinRadiusCount_other": "{{count}} traslochi entro {{radius}}"
+  },
+  "booking": {
+    "code": {
+      "label": "Codice di prenotazione"
+    },
+    "title": "Dettagli della prenotazione"
+  },
+  "cancelConfirm": {
+    "cancelling": {
+      "cta": "Annullamento in corso…"
+    },
+    "confirm": {
+      "cta": "Sì, annulla"
+    },
+    "keep": {
+      "cta": "Mantieni il trasloco"
+    },
+    "subtitle": "Il tuo traslocatore è già in arrivo. Vuoi davvero annullare? L’operazione non è reversibile.",
+    "title": "Annullare questo trasloco?",
+    "window": "Vuoi davvero annullare questo trasloco? L’operazione non è reversibile."
+  },
+  "card": {
+    "category": {
+      "instant": {
+        "label": "Immediato"
+      },
+      "scheduled": {
+        "label": "Programmato"
+      }
+    },
+    "route": {
+      "dropoffFallback": {
+        "label": "Consegna"
+      },
+      "pickupFallback": {
+        "label": "Ritiro"
+      }
+    },
+    "title": {
+      "generic": {
+        "label": "Trasloco"
+      }
+    },
+    "typeAndCategory": {
+      "light": {
+        "instant": {
+          "subtitle": "Trasloco leggero · Immediato"
+        },
+        "scheduled": {
+          "subtitle": "Trasloco leggero · Programmato"
+        }
+      },
+      "premium": {
+        "instant": {
+          "subtitle": "Trasloco premium · Immediato"
+        },
+        "scheduled": {
+          "subtitle": "Trasloco premium · Programmato"
+        }
+      },
+      "regular": {
+        "instant": {
+          "subtitle": "Trasloco standard · Immediato"
+        },
+        "scheduled": {
+          "subtitle": "Trasloco standard · Programmato"
+        }
+      }
+    },
+    "typeAndDate": {
+      "light": {
+        "subtitle": "Trasloco leggero · {{date}}"
+      },
+      "premium": {
+        "subtitle": "Trasloco premium · {{date}}"
+      },
+      "regular": {
+        "subtitle": "Trasloco standard · {{date}}"
+      }
+    },
+    "typeCategoryDate": {
+      "light": {
+        "instant": {
+          "subtitle": "Trasloco leggero · Immediato · {{date}}"
+        },
+        "scheduled": {
+          "subtitle": "Trasloco leggero · Programmato · {{date}}"
+        }
+      },
+      "premium": {
+        "instant": {
+          "subtitle": "Trasloco premium · Immediato · {{date}}"
+        },
+        "scheduled": {
+          "subtitle": "Trasloco premium · Programmato · {{date}}"
+        }
+      },
+      "regular": {
+        "instant": {
+          "subtitle": "Trasloco standard · Immediato · {{date}}"
+        },
+        "scheduled": {
+          "subtitle": "Trasloco standard · Programmato · {{date}}"
+        }
+      }
+    }
+  },
+  "category": {
+    "all": {
+      "label": "Tutti"
+    },
+    "cancelled": {
+      "label": "Annullati"
+    },
+    "completed": {
+      "label": "Completati"
+    },
+    "inProgress": {
+      "label": "In corso"
+    },
+    "pending": {
+      "label": "In attesa"
+    }
+  },
+  "createdAt": {
+    "label": "Creato il"
+  },
+  "detail": {
+    "additionalServices": {
+      "title": "Servizi aggiuntivi"
+    },
+    "address": {
+      "label": "Indirizzo"
+    },
+    "arrivalWindow": {
+      "label": "Fascia di arrivo"
+    },
+    "category": {
+      "label": "Categoria"
+    },
+    "client": {
+      "title": "Cliente"
+    },
+    "distance": {
+      "label": "Distanza"
+    },
+    "dropoff": {
+      "label": "Consegna"
+    },
+    "dropoffAddress": {
+      "title": "Indirizzo di consegna"
+    },
+    "duration": {
+      "label": "Durata"
+    },
+    "elevator": {
+      "label": "Ascensore"
+    },
+    "floor": {
+      "label": "Piano"
+    },
+    "itemLine": {
+      "label": "{{qty}} x {{label}}"
+    },
+    "itemLineReversed": {
+      "label": "{{label}} × {{qty}}"
+    },
+    "itemQuantity": {
+      "label": "{{label}} × {{qty}}"
+    },
+    "items": {
+      "label": "Oggetti"
+    },
+    "moveDate": {
+      "label": "Data del trasloco"
+    },
+    "moveDetails": {
+      "title": "Dettagli del trasloco"
+    },
+    "moveItems": {
+      "title": "Oggetti da traslocare"
+    },
+    "moveStatus": {
+      "label": "Stato del trasloco"
+    },
+    "packingService": {
+      "label": "Servizio di imballaggio"
+    },
+    "parking": {
+      "label": "Parcheggio"
+    },
+    "pickup": {
+      "label": "Ritiro"
+    },
+    "pickupAddress": {
+      "title": "Indirizzo di ritiro"
+    },
+    "requestedAt": {
+      "label": "Richiesto il"
+    },
+    "route": {
+      "title": "Percorso"
+    },
+    "status": {
+      "label": "Stato"
+    },
+    "type": {
+      "label": "Tipo"
+    },
+    "typeAndCategory": {
+      "light": {
+        "instant": {
+          "value": "Leggero · Immediato"
+        },
+        "scheduled": {
+          "value": "Leggero · Programmato"
+        }
+      },
+      "premium": {
+        "instant": {
+          "value": "Premium · Immediato"
+        },
+        "scheduled": {
+          "value": "Premium · Programmato"
+        }
+      },
+      "regular": {
+        "instant": {
+          "value": "Standard · Immediato"
+        },
+        "scheduled": {
+          "value": "Standard · Programmato"
+        }
+      }
+    },
+    "unit": {
+      "label": "Interno"
+    }
+  },
+  "filter": {
+    "count": {
+      "badge": "({{value}})"
+    },
+    "empty": {
+      "helper": "Prova a selezionare un altro filtro."
+    }
+  },
+  "itemCount_one": "{{count}} oggetto",
+  "itemCount_other": "{{count}} oggetti",
+  "list": {
+    "loadError": {
+      "body": "Trascina verso il basso per riprovare.",
+      "title": "Impossibile caricare i traslochi"
+    }
+  },
+  "moveCategory": {
+    "instant": {
+      "label": "Immediato"
+    },
+    "scheduled": {
+      "label": "Programmato"
+    }
+  },
+  "moveCount_one": "{{count}} trasloco",
+  "moveCount_other": "{{count}} traslochi",
+  "mover": {
+    "experience": {
+      "label": "Esperienza"
+    },
+    "languages": {
+      "label": "Lingue"
+    },
+    "verified": {
+      "badge": "Traslocatore verificato"
+    }
+  },
+  "moverCount_one": "{{count}} traslocatore",
+  "moverCount_other": "{{count}} traslocatori",
+  "notify": {
+    "cancelledByClient": {
+      "body": "Il cliente ha annullato questo trasloco.",
+      "title": "Trasloco annullato dal cliente ❌"
+    },
+    "moverWithdrawn": {
+      "body": "Il traslocatore assegnato si è ritirato da questo trasloco.",
+      "title": "Traslocatore ritirato"
+    }
+  },
+  "payment": {
+    "method": {
+      "label": "Metodo di pagamento"
+    }
+  },
+  "pricing": {
+    "estimatedTotal": {
+      "label": "Totale stimato"
+    }
+  },
+  "status": {
+    "arrivedDestination": {
+      "label": "Arrivato a destinazione"
+    },
+    "assigned": {
+      "label": "Assegnato"
+    },
+    "awaitingPayment": {
+      "label": "In attesa di pagamento"
+    },
+    "booked": {
+      "label": "Prenotato"
+    },
+    "cancelled": {
+      "label": "Annullato"
+    },
+    "cancelledByClient": {
+      "label": "Annullato"
+    },
+    "cancelledByMover": {
+      "label": "Annullato"
+    },
+    "completed": {
+      "label": "Completato"
+    },
+    "confirmedPayLater": {
+      "label": "Confermato - paga dopo"
+    },
+    "disputed": {
+      "label": "Contestato"
+    },
+    "draft": {
+      "label": "Bozza"
+    },
+    "inProgress": {
+      "label": "In corso"
+    },
+    "inTransit": {
+      "label": "In transito"
+    },
+    "loading": {
+      "label": "Carico in corso"
+    },
+    "moverAccepted": {
+      "label": "Traslocatore confermato"
+    },
+    "moverArrived": {
+      "label": "Traslocatore arrivato"
+    },
+    "moverAssigned": {
+      "label": "Traslocatore assegnato"
+    },
+    "moverEnRoute": {
+      "label": "Traslocatore in arrivo"
+    },
+    "paid": {
+      "label": "Pagato"
+    },
+    "pending": {
+      "label": "In attesa"
+    },
+    "pendingPayment": {
+      "label": "Pagamento in sospeso"
+    },
+    "unknown": {
+      "label": "Sconosciuto"
+    },
+    "unloading": {
+      "label": "Scarico in corso"
+    }
+  },
+  "summary": {
+    "title": "Riepilogo"
+  }
+}

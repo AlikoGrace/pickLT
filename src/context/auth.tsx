@@ -4,6 +4,9 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import { account } from '@/lib/appwrite'
 import { OAuthProvider } from 'appwrite'
 import type { UserDoc, MoverProfileDoc, CrewMemberDoc } from '@/lib/types'
+// Non-component `t` (see src/lib/i18n-runtime.ts): these throws happen inside
+// callbacks, not in render, so there is no hook to read from here.
+import { t } from '@/lib/i18n-runtime'
 
 export type UserType = 'client' | 'mover'
 
@@ -152,7 +155,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         localStorage.removeItem('picklt_pending_user_type')
       }
 
-      if (!res.ok) throw new Error('Failed to sync user')
+      if (!res.ok) throw new Error(t('errors:auth.syncFailed'))
 
       const data = await res.json()
       const userDoc: UserDoc = data.user
@@ -268,7 +271,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     })
     if (!res.ok) {
       const data = await res.json()
-      throw new Error(data.error || 'Failed to set phone number')
+      throw new Error(data.error || t('errors:auth.setPhoneFailed'))
     }
   }
 

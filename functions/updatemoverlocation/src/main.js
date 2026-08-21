@@ -43,7 +43,7 @@ export default async ({ req, res, log, error }) => {
   ].filter((k) => !process.env[k]);
   if (missingEnv.length) {
     error(`[updatemoverlocation] missing env: ${missingEnv.join(', ')}`);
-    return res.json({ error: 'misconfigured' }, 500);
+    return res.json({ error: 'misconfigured', fnCode: 'generic.misconfigured' }, 500);
   }
 
   const client = new Client()
@@ -53,7 +53,7 @@ export default async ({ req, res, log, error }) => {
   const databases = new Databases(client);
 
   if (req.method !== 'POST') {
-    return res.json({ error: 'Method not allowed' }, 405);
+    return res.json({ error: 'Method not allowed', fnCode: 'generic.methodNotAllowed' }, 405);
   }
 
   try {
@@ -61,9 +61,9 @@ export default async ({ req, res, log, error }) => {
     const { moveId, latitude, longitude, heading, speed } = body;
     const authId = req.headers['x-appwrite-user-id'] ?? null;
 
-    if (!authId) return res.json({ error: 'Unauthenticated' }, 401);
+    if (!authId) return res.json({ error: 'Unauthenticated', fnCode: 'api.unauthorized' }, 401);
     if (latitude == null || longitude == null) {
-      return res.json({ error: 'latitude and longitude are required' }, 400);
+      return res.json({ error: 'latitude and longitude are required', fnCode: 'generic.badRequest' }, 400);
     }
 
     // Resolve the caller's own profile — never trust a body-supplied id.
@@ -71,7 +71,7 @@ export default async ({ req, res, log, error }) => {
       Query.equal('userId', authId),
       Query.limit(1),
     ]);
-    if (profiles.documents.length === 0) return res.json({ error: 'Not a mover' }, 403);
+    if (profiles.documents.length === 0) return res.json({ error: 'Not a mover', fnCode: 'mover.notAMover' }, 403);
     const moverProfileId = profiles.documents[0].$id;
 
     const payload = {
@@ -167,6 +167,6 @@ export default async ({ req, res, log, error }) => {
     return res.json({ success: true, locationId: rowId });
   } catch (err) {
     error(`Update mover location failed: ${err.message}`);
-    return res.json({ error: err.message }, 500);
+    return res.json({ error: 'Something went wrong. Please try again.', fnCode: 'generic.unexpected' }, 500);
   }
 };

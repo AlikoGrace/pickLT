@@ -37,7 +37,7 @@ export default async ({ req, res, log, error }) => {
   ].filter((k) => !process.env[k]);
   if (missingEnv.length) {
     error(`[submitreview] missing env: ${missingEnv.join(', ')}`);
-    return res.json({ error: 'misconfigured' }, 500);
+    return res.json({ error: 'misconfigured', fnCode: 'generic.misconfigured' }, 500);
   }
 
   const client = new Client()
@@ -47,7 +47,7 @@ export default async ({ req, res, log, error }) => {
   const databases = new Databases(client);
 
   if (req.method !== 'POST') {
-    return res.json({ error: 'Method not allowed' }, 405);
+    return res.json({ error: 'Method not allowed', fnCode: 'generic.methodNotAllowed' }, 405);
   }
 
   try {
@@ -55,7 +55,7 @@ export default async ({ req, res, log, error }) => {
     try {
       body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
     } catch {
-      return res.json({ error: 'Invalid JSON body' }, 400);
+      return res.json({ error: 'Invalid JSON body', fnCode: 'generic.badRequest' }, 400);
     }
     const { moveId, rating, comment } = body;
 
@@ -65,11 +65,11 @@ export default async ({ req, res, log, error }) => {
     // controlled) and let anyone inflate their own or wreck a rival's rating.
     const reviewerId = req.headers['x-appwrite-user-id'];
     if (!reviewerId) {
-      return res.json({ error: 'Authentication required' }, 401);
+      return res.json({ error: 'Authentication required', fnCode: 'api.unauthorized' }, 401);
     }
 
     if (!moveId || rating === undefined || rating === null) {
-      return res.json({ error: 'moveId and rating are required' }, 400);
+      return res.json({ error: 'moveId and rating are required', fnCode: 'generic.badRequest' }, 400);
     }
 
     // Coerce before comparing. A string "5" passed the old numeric range check
@@ -77,11 +77,11 @@ export default async ({ req, res, log, error }) => {
     // poisoning mover_profiles.rating with NaN.
     const ratingValue = Number(rating);
     if (!Number.isInteger(ratingValue) || ratingValue < 1 || ratingValue > 5) {
-      return res.json({ error: 'Rating must be an integer between 1 and 5' }, 400);
+      return res.json({ error: 'Rating must be an integer between 1 and 5', fnCode: 'review.ratingRange' }, 400);
     }
 
     if (comment != null && typeof comment !== 'string') {
-      return res.json({ error: 'Comment must be a string' }, 400);
+      return res.json({ error: 'Comment must be a string', fnCode: 'review.invalidComment' }, 400);
     }
     const commentValue = comment ? String(comment).slice(0, MAX_COMMENT_LENGTH) : null;
 
@@ -91,7 +91,7 @@ export default async ({ req, res, log, error }) => {
     // "Move not found", so fail loudly on the misconfiguration instead.
     if (!MOVES_COLLECTION) {
       error('submitreview: APPWRITE_COLLECTION_MOVES is not set');
-      return res.json({ error: 'Reviews are temporarily unavailable' }, 500);
+      return res.json({ error: 'Reviews are temporarily unavailable', fnCode: 'review.unavailable' }, 500);
     }
 
     // The move fetch and the duplicate check are independent — both are keyed
@@ -108,7 +108,7 @@ export default async ({ req, res, log, error }) => {
     ]);
 
     if (moveResult.status === 'rejected') {
-      return res.json({ error: 'Move not found' }, 404);
+      return res.json({ error: 'Move not found', fnCode: 'move.notFound' }, 404);
     }
     const move = moveResult.value;
 
@@ -116,24 +116,24 @@ export default async ({ req, res, log, error }) => {
     // the only thing stopping one client stacking reviews on a mover.
     if (existingResult.status === 'rejected') {
       error(`submitreview: duplicate check failed: ${existingResult.reason?.message}`);
-      return res.json({ error: 'Could not submit your review. Please try again.' }, 500);
+      return res.json({ error: 'Could not submit your review. Please try again.', fnCode: 'review.submitFailed' }, 500);
     }
 
     if (relId(move.clientId) !== reviewerId) {
-      return res.json({ error: 'Only the move\'s client may review it' }, 403);
+      return res.json({ error: 'Only the move\'s client may review it', fnCode: 'review.notClient' }, 403);
     }
 
     if (move.status !== 'completed') {
-      return res.json({ error: 'You can only review a completed move' }, 400);
+      return res.json({ error: 'You can only review a completed move', fnCode: 'review.moveNotCompleted' }, 400);
     }
 
     const moverProfileId = relId(move.moverProfileId);
     if (!moverProfileId) {
-      return res.json({ error: 'This move has no assigned mover to review' }, 400);
+      return res.json({ error: 'This move has no assigned mover to review', fnCode: 'review.noMover' }, 400);
     }
 
     if (existingResult.value.documents.length > 0) {
-      return res.json({ error: 'You have already reviewed this move' }, 400);
+      return res.json({ error: 'You have already reviewed this move', fnCode: 'review.alreadyReviewed' }, 400);
     }
 
     // Read the mover's existing reviews and their profile together. The profile
@@ -200,8 +200,24 @@ export default async ({ req, res, log, error }) => {
           userId: moverUserId,
           type: 'review',
           title: 'New Review',
-          body: `You received a ${ratingValue}-star review${commentValue ? `: "${commentValue.substring(0, 100)}"` : '.'}`,
-          data: JSON.stringify({ reviewId: review.$id, moveId, rating: ratingValue }),
+          // `{{count}}` is i18next's plural selector, so "star" pluralises per
+          // locale (`_one`/`_other`, and `_few`/`_many` in Polish) instead of
+          // by an English `s`. The quoted comment is the client's own words:
+          // it rides in as a param and is never translated, only truncated.
+          body: commentValue
+            ? `You received a ${ratingValue}-star review: "${commentValue.substring(0, 100)}"`
+            : `You received a ${ratingValue}-star review.`,
+          data: JSON.stringify({
+            reviewId: review.$id,
+            moveId,
+            rating: ratingValue,
+            i18nKey: 'review.received',
+            ...(commentValue ? { i18nBodyKey: 'review.received.bodyWithComment' } : {}),
+            i18nParams: {
+              count: ratingValue,
+              ...(commentValue ? { comment: commentValue.substring(0, 100) } : {}),
+            },
+          }),
           isRead: false,
         }, [
           // Addressee only. `update` is needed for markAsRead / markAllAsRead.
@@ -219,6 +235,6 @@ export default async ({ req, res, log, error }) => {
     return res.json({ success: true, review, newAverageRating: avgRating });
   } catch (err) {
     error(`Submit review failed: ${err.message}`);
-    return res.json({ error: err.message }, 500);
+    return res.json({ error: 'Something went wrong. Please try again.', fnCode: 'generic.unexpected' }, 500);
   }
 };

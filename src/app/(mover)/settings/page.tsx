@@ -22,17 +22,26 @@ import {
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState, useRef } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
+import { formatFileSizeMb } from '@/lib/format'
+import { AVATAR_UPLOAD_MAX_MB } from '@/lib/service-limits'
+import { vehicleCapacityLabel } from '@/lib/vehicle-capacity'
 
 type ModalType = 'editName' | 'changeEmail' | 'changePhone' | 'editVehicle' | null
 
-const VEHICLE_TYPES = [
-  { value: 'small_van', label: 'Small Van', description: 'Up to 10 m³' },
-  { value: 'medium_truck', label: 'Medium Truck', description: '10–25 m³' },
-  { value: 'large_truck', label: 'Large Truck', description: '25+ m³' },
-]
+/**
+ * Stored slug -> catalog segment. The slug is what Appwrite persists; the label is
+ * looked up. Never derive the slug back out of a label.
+ */
+const VEHICLE_TYPE_SLUGS = [
+  { value: 'small_van', key: 'smallVan' },
+  { value: 'medium_truck', key: 'mediumTruck' },
+  { value: 'large_truck', key: 'largeTruck' },
+] as const
 
 const SettingsPage = () => {
   const { user, updateUser, logout, refreshProfile } = useAuth()
+  const { t } = useTranslation()
   const router = useRouter()
   const [activeModal, setActiveModal] = useState<ModalType>(null)
   const [isSaving, setIsSaving] = useState(false)
@@ -69,12 +78,12 @@ const SettingsPage = () => {
     if (!file) return
 
     if (!file.type.startsWith('image/')) {
-      setError('Please select an image file')
+      setError(t('errors:upload.notAnImage'))
       return
     }
 
-    if (file.size > 5 * 1024 * 1024) {
-      setError('Image must be under 5MB')
+    if (file.size > AVATAR_UPLOAD_MAX_MB * 1024 * 1024) {
+      setError(t('errors:upload.tooLarge', { limit: formatFileSizeMb(AVATAR_UPLOAD_MAX_MB) }))
       return
     }
 
@@ -93,15 +102,15 @@ const SettingsPage = () => {
 
       if (!res.ok) {
         const data = await res.json()
-        throw new Error(data.error || 'Upload failed')
+        throw new Error(data.error || t('errors:upload.failed'))
       }
 
       const { photoUrl } = await res.json()
       updateUser({ profilePhoto: photoUrl })
-      setSuccess('Photo updated successfully')
+      setSuccess(t('profile:photo.updated.success'))
       setTimeout(() => setSuccess(''), 3000)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to upload photo')
+      setError(err instanceof Error ? err.message : t('errors:upload.photoFailed'))
     } finally {
       setIsUploading(false)
     }
@@ -119,15 +128,15 @@ const SettingsPage = () => {
       })
       if (!res.ok) {
         const data = await res.json()
-        throw new Error(data.error || 'Failed to update name')
+        throw new Error(data.error || t('errors:profile.nameUpdateFailed'))
       }
       updateUser({ fullName: fullName.trim() })
       await refreshProfile()
       setActiveModal(null)
-      setSuccess('Name updated successfully')
+      setSuccess(t('profile:name.updated.success'))
       setTimeout(() => setSuccess(''), 3000)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save')
+      setError(err instanceof Error ? err.message : t('errors:generic.saveFailed'))
     } finally {
       setIsSaving(false)
     }
@@ -145,7 +154,7 @@ const SettingsPage = () => {
       })
       if (!res.ok) {
         const data = await res.json()
-        throw new Error(data.error || 'Failed to change email')
+        throw new Error(data.error || t('errors:profile.emailChangeFailed'))
       }
 
       // Send verification email to the new address
@@ -158,7 +167,7 @@ const SettingsPage = () => {
 
       setEmailStep('sent')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to change email')
+      setError(err instanceof Error ? err.message : t('errors:profile.emailChangeFailed'))
     } finally {
       setIsSaving(false)
     }
@@ -188,14 +197,14 @@ const SettingsPage = () => {
       })
       if (!res.ok) {
         const data = await res.json()
-        throw new Error(data.error || 'Failed to change phone')
+        throw new Error(data.error || t('errors:profile.phoneChangeFailed'))
       }
 
       // Send OTP to the new phone number
       await account.createPhoneVerification()
       setPhoneStep('verify')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to change phone number')
+      setError(err instanceof Error ? err.message : t('errors:profile.phoneChangeFailed'))
     } finally {
       setIsSaving(false)
     }
@@ -209,10 +218,10 @@ const SettingsPage = () => {
       await account.updatePhoneVerification(user.authId, phoneOtp.trim())
       await refreshProfile()
       setActiveModal(null)
-      setSuccess('Phone number updated and verified')
+      setSuccess(t('profile:phone.updated.success'))
       setTimeout(() => setSuccess(''), 3000)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Invalid verification code')
+      setError(err instanceof Error ? err.message : t('auth:otp.invalid.error'))
     } finally {
       setIsSaving(false)
     }
@@ -235,7 +244,7 @@ const SettingsPage = () => {
 
   const handleSaveVehicle = async () => {
     if (!vehicleForm.vehicleBrand.trim() || !vehicleForm.vehicleModel.trim() || !vehicleForm.vehicleRegistration.trim() || !vehicleForm.vehicleType) {
-      setError('Please fill in all required vehicle fields')
+      setError(t('errors:vehicle.fieldsRequired'))
       return
     }
     setIsSaving(true)
@@ -262,14 +271,14 @@ const SettingsPage = () => {
       })
       if (!res.ok) {
         const data = await res.json()
-        throw new Error(data.error || 'Failed to update vehicle info')
+        throw new Error(data.error || t('errors:vehicle.updateFailed'))
       }
       await refreshProfile()
       setActiveModal(null)
-      setSuccess('Vehicle information updated successfully')
+      setSuccess(t('booking:vehicle.updated.success'))
       setTimeout(() => setSuccess(''), 3000)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save vehicle info')
+      setError(err instanceof Error ? err.message : t('errors:vehicle.saveFailed'))
     } finally {
       setIsSaving(false)
     }
@@ -277,12 +286,14 @@ const SettingsPage = () => {
 
   const settingsSections = [
     {
-      title: 'Account',
+      id: 'account',
+      title: t('profile:section.account.title'),
       items: [
         {
+          id: 'editName',
           icon: PencilSquareIcon,
-          label: 'Edit Name',
-          description: user?.fullName || 'Update your name',
+          label: t('profile:editName.label'),
+          description: user?.fullName || t('profile:editName.helper'),
           action: () => {
             setFullName(user?.fullName || '')
             setError('')
@@ -290,9 +301,10 @@ const SettingsPage = () => {
           },
         },
         {
+          id: 'changeEmail',
           icon: EnvelopeIcon,
-          label: 'Change Email',
-          description: user?.email || 'Update your email address',
+          label: t('profile:changeEmail.label'),
+          description: user?.email || t('profile:changeEmail.helper'),
           action: () => {
             setNewEmail('')
             setEmailStep('input')
@@ -301,9 +313,10 @@ const SettingsPage = () => {
           },
         },
         {
+          id: 'changePhone',
           icon: PhoneIcon,
-          label: 'Change Phone',
-          description: user?.phone || 'Update your phone number',
+          label: t('profile:changePhone.label'),
+          description: user?.phone || t('profile:changePhone.helper'),
           action: () => {
             setNewPhone('')
             setPhoneOtp('')
@@ -313,11 +326,12 @@ const SettingsPage = () => {
           },
         },
         {
+          id: 'vehicle',
           icon: TruckIcon,
-          label: 'Vehicle Information',
-          description: user?.moverDetails?.vehicleBrand 
-            ? `${user.moverDetails.vehicleBrand} ${user.moverDetails.vehicleModel}` 
-            : 'Add your vehicle details',
+          label: t('booking:vehicle.title'),
+          description: user?.moverDetails?.vehicleBrand
+            ? `${user.moverDetails.vehicleBrand} ${user.moverDetails.vehicleModel}`
+            : t('booking:vehicle.addDetails.helper'),
           action: () => {
             setVehicleForm({
               vehicleBrand: user?.moverDetails?.vehicleBrand || '',
@@ -332,37 +346,43 @@ const SettingsPage = () => {
           },
         },
         {
+          id: 'payouts',
           icon: CreditCardIcon,
-          label: 'Payment Methods',
-          description: 'Manage payout accounts',
+          label: t('web:mover.settings.payouts.label'),
+          description: t('web:mover.settings.payouts.helper'),
           action: () => {},
         },
       ],
     },
     {
-      title: 'Preferences',
+      id: 'preferences',
+      title: t('profile:section.preferences.title'),
       items: [
         {
+          id: 'notifications',
           icon: BellIcon,
-          label: 'Notifications',
-          description: 'Configure alerts and notifications',
+          label: t('profile:menu.notifications.label'),
+          description: t('profile:notifications.helper'),
           action: () => {},
         },
         {
+          id: 'privacy',
           icon: ShieldCheckIcon,
-          label: 'Privacy & Security',
-          description: 'Manage your data and security',
+          label: t('profile:privacySecurity.label'),
+          description: t('profile:privacySecurity.helper'),
           action: () => {},
         },
       ],
     },
     {
-      title: 'Support',
+      id: 'support',
+      title: t('profile:section.support.title'),
       items: [
         {
+          id: 'help',
           icon: QuestionMarkCircleIcon,
-          label: 'Help Center',
-          description: 'Get help and support',
+          label: t('profile:helpCenter.header.title'),
+          description: t('profile:helpCenter.helper'),
           action: () => {},
         },
       ],
@@ -374,10 +394,10 @@ const SettingsPage = () => {
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
-          Settings
+          {t('common:nav.settings.label')}
         </h1>
         <p className="text-neutral-500 dark:text-neutral-400">
-          Manage your account and preferences
+          {t('web:mover.settings.subtitle')}
         </p>
       </div>
 
@@ -428,7 +448,7 @@ const SettingsPage = () => {
           </div>
           <div className="flex-1">
             <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-              {user?.fullName || 'Mover Name'}
+              {user?.fullName || t('common:person.fallbackMover.label')}
             </h2>
             <p className="text-sm text-neutral-500 dark:text-neutral-400">
               {user?.email || 'email@example.com'}
@@ -436,7 +456,7 @@ const SettingsPage = () => {
             <div className="flex items-center gap-1 mt-1">
               <span className="w-2 h-2 rounded-full bg-green-500" />
               <span className="text-xs text-green-600 dark:text-green-400">
-                Active Mover
+                {t('web:mover.activeBadge.label')}
               </span>
             </div>
           </div>
@@ -446,14 +466,14 @@ const SettingsPage = () => {
       {/* Settings Sections */}
       <div className="space-y-6">
         {settingsSections.map((section) => (
-          <div key={section.title}>
+          <div key={section.id}>
             <h3 className="text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-2 px-1">
               {section.title}
             </h3>
             <div className="bg-white dark:bg-neutral-800 rounded-2xl shadow-sm overflow-hidden">
               {section.items.map((item, index) => (
                 <button
-                  key={item.label}
+                  key={item.id}
                   onClick={item.action}
                   className={`w-full flex items-center gap-4 p-4 hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-colors ${
                     index < section.items.length - 1
@@ -486,12 +506,12 @@ const SettingsPage = () => {
         className="w-full mt-8 flex items-center justify-center gap-2 p-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-2xl font-medium hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors"
       >
         <ArrowRightOnRectangleIcon className="w-5 h-5" />
-        Sign Out
+        {t('common:action.logout.cta')}
       </button>
 
       {/* App Version */}
       <p className="text-center text-xs text-neutral-400 dark:text-neutral-500 mt-6">
-        pickLT Mover App v1.0.0
+        {t('web:mover.settings.version.label', { version: '1.0.0' })}
       </p>
 
       {/* ─── MODALS ────────────────────────────────────────── */}
@@ -510,18 +530,18 @@ const SettingsPage = () => {
             {activeModal === 'editName' && (
               <>
                 <h3 className="text-xl font-bold text-neutral-900 dark:text-neutral-100 mb-4">
-                  Edit Name
+                  {t('profile:editName.title')}
                 </h3>
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                      Full Name
+                      {t('common:field.fullName.label')}
                     </label>
                     <input
                       type="text"
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
-                      placeholder="Your full name"
+                      placeholder={t('common:field.fullName.placeholder')}
                       className="w-full px-4 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-transparent focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none"
                     />
                   </div>
@@ -533,14 +553,14 @@ const SettingsPage = () => {
                       onClick={closeModal}
                       className="flex-1 px-4 py-2 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-full font-medium hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
                     >
-                      Cancel
+                      {t('common:action.cancel.cta')}
                     </button>
                     <button
                       onClick={handleSaveName}
                       disabled={isSaving || !fullName.trim()}
                       className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-full font-medium hover:bg-primary-700 transition-colors disabled:opacity-50"
                     >
-                      {isSaving ? 'Saving...' : 'Save'}
+                      {isSaving ? t('common:state.saving.label') : t('common:action.save.cta')}
                     </button>
                   </div>
                 </div>
@@ -551,43 +571,43 @@ const SettingsPage = () => {
             {activeModal === 'changeEmail' && (
               <>
                 <h3 className="text-xl font-bold text-neutral-900 dark:text-neutral-100 mb-1">
-                  Change Email
+                  {t('profile:changeEmail.title')}
                 </h3>
                 <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
-                  Current: {user?.email}
+                  {t('profile:changeEmail.current.label', { email: user?.email ?? '' })}
                 </p>
 
                 {emailStep === 'input' && (
                   <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                        New Email Address
+                        {t('profile:newEmail.label')}
                       </label>
                       <input
                         type="email"
                         value={newEmail}
                         onChange={(e) => setNewEmail(e.target.value)}
-                        placeholder="new@example.com"
+                        placeholder={t('profile:newEmail.placeholder')}
                         className="w-full px-4 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-transparent focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none"
                       />
                     </div>
                     {error && <p className="text-sm text-red-500">{error}</p>}
                     <p className="text-xs text-neutral-400">
-                      A verification email will be sent to the new address.
+                      {t('profile:changeEmail.helperLong')}
                     </p>
                     <div className="flex gap-3">
                       <button
                         onClick={closeModal}
                         className="flex-1 px-4 py-2 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-full font-medium hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
                       >
-                        Cancel
+                        {t('common:action.cancel.cta')}
                       </button>
                       <button
                         onClick={handleChangeEmail}
                         disabled={isSaving || !newEmail.trim()}
                         className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-full font-medium hover:bg-primary-700 transition-colors disabled:opacity-50"
                       >
-                        {isSaving ? 'Updating...' : 'Update Email'}
+                        {isSaving ? t('common:state.updating.label') : t('profile:changeEmail.cta')}
                       </button>
                     </div>
                   </div>
@@ -599,10 +619,14 @@ const SettingsPage = () => {
                       <EnvelopeIcon className="w-6 h-6 text-green-600 dark:text-green-400" />
                     </div>
                     <p className="text-neutral-700 dark:text-neutral-300">
-                      Email updated to <strong>{newEmail}</strong>
+                      <Trans
+                        i18nKey="profile:changeEmail.updatedTo.body"
+                        values={{ email: newEmail }}
+                        components={{ 1: <strong /> }}
+                      />
                     </p>
                     <p className="text-sm text-neutral-500 dark:text-neutral-400">
-                      A verification email has been sent. Please check your inbox and click the verification link.
+                      {t('profile:changeEmail.sentLong')}
                     </p>
                     <button
                       onClick={async () => {
@@ -611,7 +635,7 @@ const SettingsPage = () => {
                       }}
                       className="px-6 py-2 bg-primary-600 text-white rounded-full font-medium hover:bg-primary-700 transition-colors"
                     >
-                      Done
+                      {t('common:action.done.cta')}
                     </button>
                   </div>
                 )}
@@ -622,43 +646,45 @@ const SettingsPage = () => {
             {activeModal === 'changePhone' && (
               <>
                 <h3 className="text-xl font-bold text-neutral-900 dark:text-neutral-100 mb-1">
-                  Change Phone Number
+                  {t('profile:changePhone.title')}
                 </h3>
                 <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
-                  Current: {user?.phone || 'Not set'}
+                  {t('profile:changePhone.current.label', {
+                    phone: user?.phone || t('common:value.notSet.empty'),
+                  })}
                 </p>
 
                 {phoneStep === 'input' && (
                   <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                        New Phone Number
+                        {t('profile:newPhone.label')}
                       </label>
                       <input
                         type="tel"
                         value={newPhone}
                         onChange={(e) => setNewPhone(e.target.value)}
-                        placeholder="+491234567890"
+                        placeholder={t('profile:newPhone.placeholder')}
                         className="w-full px-4 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-transparent focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none"
                       />
                     </div>
                     {error && <p className="text-sm text-red-500">{error}</p>}
                     <p className="text-xs text-neutral-400">
-                      An OTP code will be sent to verify the new number.
+                      {t('profile:changePhone.helperLong')}
                     </p>
                     <div className="flex gap-3">
                       <button
                         onClick={closeModal}
                         className="flex-1 px-4 py-2 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-full font-medium hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
                       >
-                        Cancel
+                        {t('common:action.cancel.cta')}
                       </button>
                       <button
                         onClick={handleChangePhone}
                         disabled={isSaving || !newPhone.trim()}
                         className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-full font-medium hover:bg-primary-700 transition-colors disabled:opacity-50"
                       >
-                        {isSaving ? 'Sending OTP...' : 'Send OTP'}
+                        {isSaving ? t('auth:otp.sendingOtp.cta') : t('auth:otp.sendShort.cta')}
                       </button>
                     </div>
                   </div>
@@ -670,14 +696,18 @@ const SettingsPage = () => {
                       <PhoneIcon className="w-6 h-6 text-primary-600 dark:text-primary-400" />
                     </div>
                     <p className="text-center text-sm text-neutral-500 dark:text-neutral-400">
-                      Enter the verification code sent to <strong>{newPhone}</strong>
+                      <Trans
+                        i18nKey="auth:otp.sentToInline.body"
+                        values={{ phone: newPhone }}
+                        components={[<strong key="0" />]}
+                      />
                     </p>
                     <div>
                       <input
                         type="text"
                         value={phoneOtp}
                         onChange={(e) => setPhoneOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                        placeholder="Enter 6-digit code"
+                        placeholder={t('auth:otp.input.placeholder', { count: 6 })}
                         maxLength={6}
                         className="w-full px-4 py-3 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-transparent text-center text-lg tracking-widest focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none"
                       />
@@ -688,14 +718,14 @@ const SettingsPage = () => {
                         onClick={() => { setPhoneStep('input'); setError('') }}
                         className="flex-1 px-4 py-2 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-full font-medium hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
                       >
-                        Back
+                        {t('common:action.back.cta')}
                       </button>
                       <button
                         onClick={handleVerifyPhoneOtp}
                         disabled={isSaving || phoneOtp.length < 6}
                         className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-full font-medium hover:bg-primary-700 transition-colors disabled:opacity-50"
                       >
-                        {isSaving ? 'Verifying...' : 'Verify'}
+                        {isSaving ? t('auth:otp.verifying.cta') : t('auth:otp.verify.cta')}
                       </button>
                     </div>
                     <button
@@ -703,7 +733,7 @@ const SettingsPage = () => {
                       disabled={isSaving}
                       className="w-full text-center text-sm text-primary-600 dark:text-primary-400 hover:underline disabled:opacity-50"
                     >
-                      Resend code
+                      {t('auth:otp.resend.cta')}
                     </button>
                   </div>
                 )}
@@ -714,31 +744,31 @@ const SettingsPage = () => {
             {activeModal === 'editVehicle' && (
               <>
                 <h3 className="text-xl font-bold text-neutral-900 dark:text-neutral-100 mb-4">
-                  Edit Vehicle Information
+                  {t('booking:vehicle.edit.title')}
                 </h3>
                 <div className="space-y-4 max-h-[60vh] overflow-y-auto">
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                        Brand *
+                        {t('booking:vehicle.brandShort.label')}
                       </label>
                       <input
                         type="text"
                         value={vehicleForm.vehicleBrand}
                         onChange={(e) => setVehicleForm(prev => ({ ...prev, vehicleBrand: e.target.value }))}
-                        placeholder="e.g. Mercedes-Benz"
+                        placeholder={t('booking:vehicle.brand.placeholder')}
                         className="w-full px-4 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-transparent focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none"
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                        Model *
+                        {t('booking:vehicle.modelShort.label')}
                       </label>
                       <input
                         type="text"
                         value={vehicleForm.vehicleModel}
                         onChange={(e) => setVehicleForm(prev => ({ ...prev, vehicleModel: e.target.value }))}
-                        placeholder="e.g. Sprinter"
+                        placeholder={t('booking:vehicle.model.placeholder')}
                         className="w-full px-4 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-transparent focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none"
                       />
                     </div>
@@ -746,48 +776,49 @@ const SettingsPage = () => {
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                        Year
+                        {t('booking:vehicle.yearShort.label')}
                       </label>
                       <input
                         type="text"
                         value={vehicleForm.vehicleYear}
                         onChange={(e) => setVehicleForm(prev => ({ ...prev, vehicleYear: e.target.value }))}
-                        placeholder="e.g. 2022"
+                        placeholder={t('booking:vehicle.year.placeholder')}
                         maxLength={4}
                         className="w-full px-4 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-transparent focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none"
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                        Capacity (m³)
+                        {t('booking:vehicle.capacity.label')}
                       </label>
                       <input
                         type="text"
                         value={vehicleForm.vehicleCapacity}
                         onChange={(e) => setVehicleForm(prev => ({ ...prev, vehicleCapacity: e.target.value }))}
-                        placeholder="e.g. 15"
+                        placeholder={t('booking:vehicle.capacity.placeholder')}
                         className="w-full px-4 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-transparent focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none"
                       />
                     </div>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                      Registration *
+                      {t('booking:vehicle.registrationShort.label')}
                     </label>
                     <input
                       type="text"
                       value={vehicleForm.vehicleRegistration}
                       onChange={(e) => setVehicleForm(prev => ({ ...prev, vehicleRegistration: e.target.value }))}
-                      placeholder="e.g. B-AB 1234"
+                      placeholder={t('booking:vehicle.registration.placeholder')}
                       className="w-full px-4 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-transparent focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none"
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                      Vehicle Type *
+                      {t('booking:vehicle.type.label')}
                     </label>
                     <div className="space-y-2">
-                      {VEHICLE_TYPES.map((v) => (
+                      {/* i18n-keys: booking:vehicle.smallVan.label, booking:vehicle.mediumTruck.label, booking:vehicle.largeTruck.label */}
+                      {VEHICLE_TYPE_SLUGS.map((v) => (
                         <label
                           key={v.value}
                           className={`flex cursor-pointer items-center rounded-xl border p-3 transition-colors ${
@@ -806,8 +837,12 @@ const SettingsPage = () => {
                           />
                           <TruckIcon className="mr-3 h-5 w-5 flex-shrink-0 text-neutral-500" />
                           <div>
-                            <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">{v.label}</p>
-                            <p className="text-xs text-neutral-500 dark:text-neutral-400">{v.description}</p>
+                            <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                              {t(`booking:vehicle.${v.key}.label`)}
+                            </p>
+                            <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                              {vehicleCapacityLabel(t, v.key)}
+                            </p>
                           </div>
                         </label>
                       ))}
@@ -819,14 +854,14 @@ const SettingsPage = () => {
                       onClick={closeModal}
                       className="flex-1 px-4 py-2 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-full font-medium hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
                     >
-                      Cancel
+                      {t('common:action.cancel.cta')}
                     </button>
                     <button
                       onClick={handleSaveVehicle}
                       disabled={isSaving}
                       className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-full font-medium hover:bg-primary-700 transition-colors disabled:opacity-50"
                     >
-                      {isSaving ? 'Saving...' : 'Save Changes'}
+                      {isSaving ? t('common:state.saving.label') : t('common:action.saveChanges.cta')}
                     </button>
                   </div>
                 </div>

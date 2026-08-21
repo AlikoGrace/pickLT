@@ -1,0 +1,385 @@
+{
+  "action": {
+    "cancel": {
+      "cta": "Cancel move"
+    },
+    "reschedule": {
+      "cta": "Reschedule Move"
+    }
+  },
+  "available": {
+    "withinRadiusCount_one": "{{count}} move within {{radius}}",
+    "withinRadiusCount_other": "{{count}} moves within {{radius}}"
+  },
+  "booking": {
+    "code": {
+      "label": "Booking code"
+    },
+    "title": "Booking Details"
+  },
+  "cancelConfirm": {
+    "cancelling": {
+      "cta": "Cancelling…"
+    },
+    "confirm": {
+      "cta": "Yes, cancel"
+    },
+    "keep": {
+      "cta": "Keep move"
+    },
+    "subtitle": "Your mover is already on the way. Are you sure you want to cancel? This action cannot be undone.",
+    "title": "Cancel this move?",
+    "window": "Are you sure you want to cancel this move? This cannot be undone."
+  },
+  "card": {
+    "category": {
+      "instant": {
+        "label": "Instant"
+      },
+      "scheduled": {
+        "label": "Scheduled"
+      }
+    },
+    "route": {
+      "dropoffFallback": {
+        "label": "Dropoff"
+      },
+      "pickupFallback": {
+        "label": "Pickup"
+      }
+    },
+    "title": {
+      "generic": {
+        "label": "Move"
+      }
+    },
+    "typeAndCategory": {
+      "light": {
+        "instant": {
+          "subtitle": "Light Move · Instant"
+        },
+        "scheduled": {
+          "subtitle": "Light Move · Scheduled"
+        }
+      },
+      "premium": {
+        "instant": {
+          "subtitle": "Premium Move · Instant"
+        },
+        "scheduled": {
+          "subtitle": "Premium Move · Scheduled"
+        }
+      },
+      "regular": {
+        "instant": {
+          "subtitle": "Regular Move · Instant"
+        },
+        "scheduled": {
+          "subtitle": "Regular Move · Scheduled"
+        }
+      }
+    },
+    "typeAndDate": {
+      "light": {
+        "subtitle": "Light Move · {{date}}"
+      },
+      "premium": {
+        "subtitle": "Premium Move · {{date}}"
+      },
+      "regular": {
+        "subtitle": "Regular Move · {{date}}"
+      }
+    },
+    "typeCategoryDate": {
+      "light": {
+        "instant": {
+          "subtitle": "Light Move · Instant · {{date}}"
+        },
+        "scheduled": {
+          "subtitle": "Light Move · Scheduled · {{date}}"
+        }
+      },
+      "premium": {
+        "instant": {
+          "subtitle": "Premium Move · Instant · {{date}}"
+        },
+        "scheduled": {
+          "subtitle": "Premium Move · Scheduled · {{date}}"
+        }
+      },
+      "regular": {
+        "instant": {
+          "subtitle": "Regular Move · Instant · {{date}}"
+        },
+        "scheduled": {
+          "subtitle": "Regular Move · Scheduled · {{date}}"
+        }
+      }
+    }
+  },
+  "category": {
+    "all": {
+      "label": "All"
+    },
+    "cancelled": {
+      "label": "Cancelled"
+    },
+    "completed": {
+      "label": "Completed"
+    },
+    "inProgress": {
+      "label": "In Progress"
+    },
+    "pending": {
+      "label": "Pending"
+    }
+  },
+  "createdAt": {
+    "label": "Created"
+  },
+  "detail": {
+    "additionalServices": {
+      "title": "Additional services"
+    },
+    "address": {
+      "label": "Address"
+    },
+    "arrivalWindow": {
+      "label": "Arrival window"
+    },
+    "category": {
+      "label": "Category"
+    },
+    "client": {
+      "title": "Client"
+    },
+    "distance": {
+      "label": "Distance"
+    },
+    "dropoff": {
+      "label": "Drop off"
+    },
+    "dropoffAddress": {
+      "title": "Drop off Address"
+    },
+    "duration": {
+      "label": "Duration"
+    },
+    "elevator": {
+      "label": "Elevator"
+    },
+    "floor": {
+      "label": "Floor"
+    },
+    "itemLine": {
+      "label": "{{qty}} x {{label}}"
+    },
+    "itemLineReversed": {
+      "label": "{{label}} × {{qty}}"
+    },
+    "itemQuantity": {
+      "label": "{{label}} × {{qty}}"
+    },
+    "items": {
+      "label": "Items"
+    },
+    "moveDate": {
+      "label": "Move date"
+    },
+    "moveDetails": {
+      "title": "Move Details"
+    },
+    "moveItems": {
+      "title": "Move Items"
+    },
+    "moveStatus": {
+      "label": "Move Status"
+    },
+    "packingService": {
+      "label": "Packing service"
+    },
+    "parking": {
+      "label": "Parking"
+    },
+    "pickup": {
+      "label": "Pick up"
+    },
+    "pickupAddress": {
+      "title": "Pick Up Address"
+    },
+    "requestedAt": {
+      "label": "Requested"
+    },
+    "route": {
+      "title": "Route"
+    },
+    "status": {
+      "label": "Status"
+    },
+    "type": {
+      "label": "Type"
+    },
+    "typeAndCategory": {
+      "light": {
+        "instant": {
+          "value": "Light · Instant"
+        },
+        "scheduled": {
+          "value": "Light · Scheduled"
+        }
+      },
+      "premium": {
+        "instant": {
+          "value": "Premium · Instant"
+        },
+        "scheduled": {
+          "value": "Premium · Scheduled"
+        }
+      },
+      "regular": {
+        "instant": {
+          "value": "Regular · Instant"
+        },
+        "scheduled": {
+          "value": "Regular · Scheduled"
+        }
+      }
+    },
+    "unit": {
+      "label": "Unit"
+    }
+  },
+  "filter": {
+    "count": {
+      "badge": "({{value}})"
+    },
+    "empty": {
+      "helper": "Try selecting a different filter."
+    }
+  },
+  "itemCount_one": "{{count}} item",
+  "itemCount_other": "{{count}} items",
+  "list": {
+    "loadError": {
+      "body": "Pull down to retry.",
+      "title": "Couldn’t load moves"
+    }
+  },
+  "moveCategory": {
+    "instant": {
+      "label": "Instant"
+    },
+    "scheduled": {
+      "label": "Scheduled"
+    }
+  },
+  "moveCount_one": "{{count}} move",
+  "moveCount_other": "{{count}} moves",
+  "mover": {
+    "experience": {
+      "label": "Experience"
+    },
+    "languages": {
+      "label": "Languages"
+    },
+    "verified": {
+      "badge": "Verified mover"
+    }
+  },
+  "moverCount_one": "{{count}} mover",
+  "moverCount_other": "{{count}} movers",
+  "notify": {
+    "cancelledByClient": {
+      "body": "The client has cancelled this move.",
+      "title": "Move cancelled by client ❌"
+    },
+    "moverWithdrawn": {
+      "body": "The assigned mover has withdrawn from this move.",
+      "title": "Mover Withdrawn"
+    }
+  },
+  "payment": {
+    "method": {
+      "label": "Payment method"
+    }
+  },
+  "pricing": {
+    "estimatedTotal": {
+      "label": "Estimated Total"
+    }
+  },
+  "status": {
+    "arrivedDestination": {
+      "label": "Arrived"
+    },
+    "assigned": {
+      "label": "Assigned"
+    },
+    "awaitingPayment": {
+      "label": "Awaiting Payment"
+    },
+    "booked": {
+      "label": "Booked"
+    },
+    "cancelled": {
+      "label": "Cancelled"
+    },
+    "cancelledByClient": {
+      "label": "Cancelled"
+    },
+    "cancelledByMover": {
+      "label": "Cancelled"
+    },
+    "completed": {
+      "label": "Completed"
+    },
+    "confirmedPayLater": {
+      "label": "Confirmed - Pay Later"
+    },
+    "disputed": {
+      "label": "Disputed"
+    },
+    "draft": {
+      "label": "Draft"
+    },
+    "inProgress": {
+      "label": "In Progress"
+    },
+    "inTransit": {
+      "label": "In transit"
+    },
+    "loading": {
+      "label": "Loading"
+    },
+    "moverAccepted": {
+      "label": "Mover Accepted"
+    },
+    "moverArrived": {
+      "label": "Mover Arrived"
+    },
+    "moverAssigned": {
+      "label": "Mover Assigned"
+    },
+    "moverEnRoute": {
+      "label": "Mover on the Way"
+    },
+    "paid": {
+      "label": "Paid"
+    },
+    "pending": {
+      "label": "Pending"
+    },
+    "pendingPayment": {
+      "label": "Pending Payment"
+    },
+    "unknown": {
+      "label": "Unknown"
+    },
+    "unloading": {
+      "label": "Unloading"
+    }
+  },
+  "summary": {
+    "title": "Summary"
+  }
+}

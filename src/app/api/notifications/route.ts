@@ -1,3 +1,4 @@
+import { getTranslations } from '@/lib/i18n-server'
 import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
@@ -10,10 +11,11 @@ import { getSessionUserId } from '@/lib/auth-session'
  * Query params: ?unreadOnly=true&limit=50
  */
 export async function GET(req: Request) {
+  const { t } = await getTranslations()
   try {
     const userId = await getSessionUserId()
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
     }
 
     const { searchParams } = new URL(req.url)
@@ -44,6 +46,6 @@ export async function GET(req: Request) {
     })
   } catch (err) {
     console.error('GET /api/notifications error:', err)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: t('errors:generic.internal') }, { status: 500 })
   }
 }

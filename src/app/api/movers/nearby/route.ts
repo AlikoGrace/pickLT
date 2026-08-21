@@ -1,3 +1,4 @@
+import { getTranslations } from '@/lib/i18n-server'
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient, withRetry } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
@@ -54,10 +55,11 @@ function publicMover(mover: AnyDoc, distanceKm: number) {
  * Query params: ?lat=52.52&lng=13.405&radiusKm=15
  */
 export async function GET(req: NextRequest) {
+  const { t } = await getTranslations()
   try {
     const userId = await getSessionUserId()
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
     }
 
     const { searchParams } = new URL(req.url)
@@ -138,7 +140,7 @@ export async function GET(req: NextRequest) {
     })
   } catch (err) {
     console.error('GET /api/movers/nearby error:', err)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: t('errors:generic.internal') }, { status: 500 })
   }
 }
 

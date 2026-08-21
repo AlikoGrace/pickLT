@@ -1,0 +1,1123 @@
+{
+  "about": {
+    "hero": {
+      "subtitle": "PickLT is a moving-services platform. You describe your move, compare movers, and book the one you want — for apartments, offices, and individual belongings across Europe.",
+      "title": "👋 About Us."
+    }
+  },
+  "account": {
+    "clientType": {
+      "label": "Client account"
+    },
+    "moverType": {
+      "label": "Mover account"
+    },
+    "myMoves": {
+      "helper": "View and track all your moves"
+    },
+    "signedOut": {
+      "subtitle": "Log in to manage your profile, view your moves, and more.",
+      "title": "Sign in to view your account"
+    },
+    "version": {
+      "label": "PickLT v{{version}}"
+    }
+  },
+  "authGate": {
+    "redirecting": {
+      "label": "Redirecting to sign in..."
+    }
+  },
+  "billing": {
+    "addPayout": {
+      "cta": "Add payout method"
+    },
+    "payoutMethods": {
+      "body": "Add a payout method to receive payments from PickLT. Payouts are sent to the method you set up below.",
+      "title": "Payout methods"
+    },
+    "title": "Payments & payouts"
+  },
+  "checkout": {
+    "confirmAndPay": {
+      "cta": "Confirm and pay {{amount}}"
+    },
+    "confirmMove": {
+      "cta": "Confirm move · {{amount}}"
+    },
+    "editHint": {
+      "helper": "Click on any section to edit your move details."
+    },
+    "pay": {
+      "title": "Confirm and pay"
+    },
+    "title": "Confirm your move",
+    "yourMove": {
+      "title": "Your move"
+    }
+  },
+  "contact": {
+    "address": {
+      "label": "🗺 ADDRESS",
+      "value": "Photo booth tattooed prism, portland taiyaki hoodie neutra typewriter"
+    },
+    "email": {
+      "label": "💌 EMAIL"
+    },
+    "fullName": {
+      "placeholder": "Example Doe"
+    },
+    "message": {
+      "label": "Message"
+    },
+    "phone": {
+      "label": "☎ PHONE"
+    },
+    "socials": {
+      "label": "🌏 SOCIALS"
+    },
+    "submit": {
+      "cta": "Send Message"
+    },
+    "title": "Contact"
+  },
+  "footer": {
+    "company": {
+      "about": "About Us",
+      "careers": "Careers",
+      "locations": "Locations",
+      "title": "Company"
+    },
+    "copyright": "© {{year}} PickLT. All rights reserved.",
+    "legal": {
+      "title": "Legal"
+    },
+    "solutions": {
+      "commercial": "Commercial Moving",
+      "localMoving": "Local Moving",
+      "longDistance": "Long Distance Moving",
+      "packing": "Packing Services",
+      "storage": "Storage Solutions",
+      "title": "Solutions"
+    },
+    "support": {
+      "contact": "Contact Us",
+      "faq": "FAQs",
+      "quote": "Get a Quote",
+      "title": "Support"
+    },
+    "tagline": "Book movers for apartments, offices, and belongings across Europe."
+  },
+  "home": {
+    "hero": {
+      "imageAlt": "Movers carrying boxes into a new home",
+      "subtitle": "Trusted movers for life’s big moments.",
+      "title": "A stress-free move, every time."
+    },
+    "moverBanner": {
+      "subtitle": "Sign in to start accepting moves",
+      "title": "Are you a mover?"
+    },
+    "moves": {
+      "empty": "No moves yet. Start by booking your first move!",
+      "emptyFiltered": {
+        "cancelled": {
+          "label": "No cancelled moves found."
+        },
+        "completed": {
+          "label": "No completed moves found."
+        },
+        "inProgress": {
+          "label": "No moves in progress found."
+        },
+        "pending": {
+          "label": "No pending moves found."
+        }
+      },
+      "emptyScheduled": "No scheduled moves found.",
+      "signedOut": {
+        "cta": "Sign in to get started",
+        "subtitle": "Sign in to track your moves, view booking details, and manage your moving schedule.",
+        "title": "Your moves will appear here"
+      },
+      "subtitle": "Track all your moves",
+      "tab": {
+        "all": {
+          "label": "All Moves"
+        },
+        "cancelled": {
+          "label": "Cancelled"
+        },
+        "completed": {
+          "label": "Completed"
+        },
+        "inProgress": {
+          "label": "In Progress"
+        },
+        "pending": {
+          "label": "Pending"
+        },
+        "scheduled": {
+          "label": "Scheduled"
+        }
+      },
+      "title": "Your Moves"
+    },
+    "welcomeBack": {
+      "label": "Welcome back, {{name}}!"
+    }
+  },
+  "instant": {
+    "cardInApp": {
+      "helper": "This move is paid by card. Open the PickLT app to complete the payment — your saved card is charged there, nothing is due in cash."
+    },
+    "chat": {
+      "comingSoon": "Chat feature coming soon!"
+    },
+    "inventory": {
+      "next": {
+        "cta": "Add photos"
+      },
+      "subtitle": "Select the items you need to move. This helps us find the right mover for you.",
+      "title": "What are you moving?"
+    },
+    "loadFailed": {
+      "subtitle": "Could not load move details from the server."
+    },
+    "loading": {
+      "label": "Loading move details..."
+    },
+    "missingLocations": {
+      "subtitle": "Please select your pickup and drop-off locations to continue.",
+      "title": "Missing location details"
+    },
+    "photos": {
+      "helper": "Upload photos of the items you want to move. This helps the mover come prepared with the right equipment and gives them a clear idea of the job.",
+      "next": {
+        "cta": "Find Movers"
+      },
+      "subtitle": "Help your mover prepare",
+      "title": "Add Photos"
+    },
+    "review": {
+      "comment": {
+        "placeholder": "Add a comment (optional)"
+      },
+      "prompt": "How was your experience with {{name}}?",
+      "promptUnnamed": "How was your experience with your mover?",
+      "star": {
+        "a11y_one": "Rate {{count}} star",
+        "a11y_other": "Rate {{count}} stars"
+      },
+      "submit": {
+        "cta": "Submit Review"
+      },
+      "thanks": {
+        "subtitle": "Your review has been submitted.",
+        "title": "Thank you!"
+      }
+    }
+  },
+  "login": {
+    "asClient": {
+      "cta": "Login as Client"
+    },
+    "asMover": {
+      "cta": "Login as Mover"
+    },
+    "clientBadge": {
+      "label": "👤 Client Account"
+    },
+    "moverBadge": {
+      "label": "🚚 Mover Account"
+    },
+    "phoneRequired": {
+      "helper": "Phone verification will be required after sign-in"
+    },
+    "phoneVerify": {
+      "subtitle": "We need to verify your phone number to complete sign-in."
+    },
+    "resumeMove": {
+      "helper": "Sign in to continue with your move. Your progress has been saved."
+    },
+    "switchToClient": {
+      "label": "Are you a client?"
+    },
+    "switchToMover": {
+      "label": "Are you a mover?"
+    },
+    "verifyAndSignIn": {
+      "cta": "Verify & sign in"
+    }
+  },
+  "moveChoice": {
+    "instant": {
+      "cta": "Get started",
+      "eta": "Mover arrives in 15-30 min",
+      "subtitle": "Need to move right now? We'll find a mover near you immediately.",
+      "tracking": "Real-time tracking"
+    },
+    "scheduled": {
+      "cta": "Schedule move",
+      "date": "Choose your preferred date",
+      "subtitle": "Plan ahead and schedule your move for a specific date and time.",
+      "title": "Book for Later",
+      "window": "Select arrival time window"
+    },
+    "subtitle": "Choose the option that best fits your needs",
+    "summary": {
+      "title": "Your move details"
+    },
+    "title": "How would you like to move?"
+  },
+  "moveDetails": {
+    "mover": {
+      "title": "Your Mover"
+    },
+    "notFound": {
+      "subtitle": "This move may have been removed or the link is invalid."
+    },
+    "reschedule": {
+      "dateTime": {
+        "label": "New Date & Time"
+      }
+    }
+  },
+  "mover": {
+    "acceptMove": {
+      "cta": "Accept move"
+    },
+    "accepted": {
+      "helper": "You've accepted this move. When you're ready, tap \"Start Route\" to let the client know you're on your way."
+    },
+    "activeBadge": {
+      "label": "Active Mover"
+    },
+    "activeMove": {
+      "advance": {
+        "cta": "Update status"
+      },
+      "cancelledByClient": {
+        "title": "Move Cancelled by Client"
+      },
+      "empty": {
+        "subtitle": "Accept a move request to start tracking here.",
+        "title": "No active move"
+      },
+      "etaToPickup": {
+        "label": "~{{minutes}} min to pickup"
+      },
+      "proximity": {
+        "helper": "You must be within {{radius}} of the pickup location to mark as arrived ({{distance}} away)"
+      }
+    },
+    "additionalServicesCount_one": "+{{count}} service",
+    "additionalServicesCount_other": "+{{count}} services",
+    "availableMoves": {
+      "empty": {
+        "subtitle": "No scheduled moves within {{radius}} right now. We check automatically every {{interval}}.",
+        "title": "No moves available"
+      },
+      "error": {
+        "title": "Unable to load moves"
+      },
+      "loading": {
+        "label": "Finding available moves near you..."
+      }
+    },
+    "backToDashboard": {
+      "cta": "Back to Dashboard"
+    },
+    "browseAvailable": {
+      "cta": "Browse available moves"
+    },
+    "clientContact": {
+      "title": "Client Contact"
+    },
+    "crew": {
+      "addFirst": {
+        "cta": "Add First Member"
+      },
+      "addMember": {
+        "cta": "Add Member"
+      },
+      "addModal": {
+        "title": "Add New Crew Member"
+      },
+      "editModal": {
+        "title": "Edit Crew Member"
+      },
+      "empty": {
+        "subtitle": "Add your first crew member to start managing your team.",
+        "title": "No Crew Members Yet"
+      },
+      "role": {
+        "label": "Role"
+      },
+      "subtitle": "Manage your team members",
+      "title": "My Crew"
+    },
+    "crewSize": {
+      "label": "{{crew}} movers"
+    },
+    "earnings": {
+      "average": {
+        "label": "Average per Move"
+      },
+      "breakdown": {
+        "title": "Breakdown"
+      },
+      "empty": "No earnings for this period yet",
+      "error": {
+        "title": "Unable to load earnings"
+      },
+      "label": "Earnings",
+      "loading": "Loading earnings...",
+      "movesCompleted": {
+        "label": "Moves Completed"
+      },
+      "payout": {
+        "helper": "Payouts are processed weekly"
+      },
+      "payoutAvailable": {
+        "label": "Available for Payout"
+      },
+      "period": {
+        "month": {
+          "caption": "this month",
+          "label": "This Month"
+        },
+        "today": {
+          "caption": "today",
+          "label": "Today"
+        },
+        "week": {
+          "caption": "this week",
+          "label": "This Week"
+        },
+        "year": {
+          "caption": "this year",
+          "label": "This Year"
+        }
+      },
+      "refresh": {
+        "a11y": "Refresh"
+      },
+      "requestPayout": {
+        "cta": "Request Payout"
+      },
+      "subtitle": "Track your income and performance",
+      "title": "Earnings",
+      "total": {
+        "label": "Total Earnings"
+      }
+    },
+    "experienceYears_one": "{{count}} year",
+    "experienceYears_other": "{{count}} years",
+    "field": {
+      "businessStreet": {
+        "label": "Business street address (optional)",
+        "placeholder": "Street and number"
+      },
+      "city": {
+        "helper": "The city where you primarily operate as a mover"
+      },
+      "experience": {
+        "label": "Years of Experience",
+        "placeholder": "e.g. 5"
+      },
+      "languages": {
+        "label": "Languages Spoken"
+      },
+      "licenseNumber": {
+        "label": "Driver's License Number",
+        "placeholder": "Enter your driver's license number"
+      },
+      "licensePhoto": {
+        "a11y": "License preview",
+        "cta": "Upload a photo of your driver's license",
+        "helper": "A clear photo helps speed up verification",
+        "label": "Driver's License Photo"
+      },
+      "phone": {
+        "placeholder": "+49 123 456 7890"
+      },
+      "postcode": {
+        "label": "Postcode (optional)",
+        "placeholder": "e.g. 10115"
+      },
+      "selfie": {
+        "a11y": "Selfie preview",
+        "cta": "Take or upload a clear selfie",
+        "helper": "A clear selfie is required for identity verification",
+        "label": "Selfie Photo",
+        "retake": {
+          "cta": "Retake selfie"
+        }
+      },
+      "ssn": {
+        "helper": "Encrypted and only used for tax verification",
+        "label": "Social Security Number",
+        "placeholder": "Enter your SSN"
+      },
+      "taxId": {
+        "helper": "Required for invoice generation and tax reporting",
+        "label": "Tax Identification Number",
+        "placeholder": "e.g. DE123456789"
+      },
+      "vatId": {
+        "helper": "Leave empty if you are a Kleinunternehmer without a VAT ID",
+        "label": "VAT ID (USt-IdNr., optional)",
+        "placeholder": "e.g. DE123456789"
+      }
+    },
+    "goToActive": {
+      "cta": "Go to Active Move"
+    },
+    "homeTypeMoveType": {
+      "apartment": {
+        "light": {
+          "label": "Apartment · Light"
+        },
+        "premium": {
+          "label": "Apartment · Premium"
+        },
+        "regular": {
+          "label": "Apartment · Regular"
+        }
+      },
+      "house": {
+        "light": {
+          "label": "House · Light"
+        },
+        "premium": {
+          "label": "House · Premium"
+        },
+        "regular": {
+          "label": "House · Regular"
+        }
+      },
+      "office": {
+        "light": {
+          "label": "Office · Light"
+        },
+        "premium": {
+          "label": "Office · Premium"
+        },
+        "regular": {
+          "label": "Office · Regular"
+        }
+      },
+      "storage": {
+        "light": {
+          "label": "Storage · Light"
+        },
+        "premium": {
+          "label": "Storage · Premium"
+        },
+        "regular": {
+          "label": "Storage · Regular"
+        }
+      }
+    },
+    "jobDetails": {
+      "notFound": {
+        "subtitle": "This move may have been removed or the link is invalid."
+      }
+    },
+    "notStartable": {
+      "body": "<0>Move not startable yet.</0> You can start this route on <1>{{when}}</1> (Start Route unlocks 5 minutes before)."
+    },
+    "notify": {
+      "newRequest": {
+        "body": "You have a new move request. Open the app to view details and accept.",
+        "title": "New move request! 📋"
+      }
+    },
+    "onboarding": {
+      "done": {
+        "redirect": "You're being redirected to your dashboard...",
+        "subtitle": "Your mover profile is under review. We'll notify you once it's verified.",
+        "title": "Profile Submitted!"
+      },
+      "review": {
+        "experience": {
+          "title": "Experience",
+          "value_one": "{{count}} year",
+          "value_other": "{{count}} years"
+        },
+        "languages": {
+          "value": "Languages: {{languages}}"
+        },
+        "license": {
+          "value": "License: {{number}}"
+        },
+        "licenseOk": "✓ License photo uploaded",
+        "location": {
+          "value": "{{city}}, {{country}}"
+        },
+        "personal": {
+          "value": "{{name}} · {{phone}}"
+        },
+        "selfieOk": "✓ Selfie uploaded",
+        "ssn": {
+          "value": "SSN: ••••{{last4}}"
+        },
+        "subtitle": "Please review your information before submitting.",
+        "taxId": {
+          "value": "Tax ID: {{taxId}}"
+        },
+        "title": "Review Your Profile",
+        "vehicle": {
+          "capacity": {
+            "value": "{{vehicleType}} · Reg: {{registration}} · {{capacity}}"
+          },
+          "value": "{{vehicleType}} · Reg: {{registration}}"
+        },
+        "vehicleName": {
+          "value": "{{brand}} {{model}} ({{year}})"
+        },
+        "verification": {
+          "title": "Verification & Location"
+        }
+      },
+      "step": {
+        "experience": {
+          "label": "Experience"
+        },
+        "personal": {
+          "label": "Personal Info"
+        },
+        "review": {
+          "label": "Review & Submit"
+        },
+        "vehicle": {
+          "label": "Vehicle Details"
+        },
+        "verification": {
+          "label": "Verification"
+        }
+      },
+      "submit": {
+        "cta": "Submit Profile"
+      },
+      "subtitle": "Fill in your details to start accepting moves",
+      "title": "Complete Your Mover Profile"
+    },
+    "request": {
+      "categoryAndType": {
+        "instant": {
+          "light": {
+            "subtitle": "Instant · Light Move"
+          },
+          "premium": {
+            "subtitle": "Instant · Premium Move"
+          },
+          "regular": {
+            "subtitle": "Instant · Regular Move"
+          }
+        },
+        "scheduled": {
+          "light": {
+            "subtitle": "Scheduled · Light Move"
+          },
+          "premium": {
+            "subtitle": "Scheduled · Premium Move"
+          },
+          "regular": {
+            "subtitle": "Scheduled · Regular Move"
+          }
+        }
+      },
+      "earnings": {
+        "label": "Your earnings"
+      },
+      "respondWithin": {
+        "label": "Respond within <1>{{seconds}}</1>"
+      },
+      "services": {
+        "label": "Services: {{list}}"
+      },
+      "title": "New Move Request!",
+      "viewDetails": {
+        "cta": "View Full Details"
+      }
+    },
+    "roleLabel": "Mover",
+    "scheduledMoves": {
+      "empty": {
+        "subtitle": "When you accept scheduled moves, they'll appear here until their move date.",
+        "title": "No scheduled moves"
+      },
+      "subtitle": "Moves you've been assigned to that are awaiting their scheduled date"
+    },
+    "section": {
+      "experience": {
+        "title": "Experience & Rate"
+      },
+      "verification": {
+        "helper": "This information is required for identity verification and will be kept secure.",
+        "title": "Verification & Work Location"
+      }
+    },
+    "settings": {
+      "payouts": {
+        "helper": "Manage payout accounts",
+        "label": "Payment Methods"
+      },
+      "subtitle": "Manage your account and preferences",
+      "version": {
+        "label": "PickLT Mover App v{{version}}"
+      }
+    },
+    "startRoute": {
+      "cta": "Start Route — I'm On My Way"
+    },
+    "tapForDetails": {
+      "helper": "Tap to view details"
+    },
+    "tax": {
+      "empty": {
+        "subtitle": "Complete moves this month and your first statement appears on the 1st.",
+        "title": "No statements yet"
+      },
+      "helper1": "Your monthly statement is generated on the 1st of each month, covering the month before.",
+      "helper2": "Keep them for your accountant or tax office.",
+      "openPdf": {
+        "cta": "Open PDF"
+      },
+      "preparing": {
+        "label": "Preparing…"
+      },
+      "row": {
+        "summary_one": "{{count}} move · gross {{gross}} · net {{net}}",
+        "summary_other": "{{count}} moves · gross {{gross}} · net {{net}}"
+      },
+      "title": "Tax & Earnings Documents"
+    },
+    "verification": {
+      "pending": {
+        "body": "Your mover profile is under review. You’ll be able to accept moves and access all features once verified.",
+        "title": "Verification Pending"
+      },
+      "rejected": {
+        "body": "Your mover profile was rejected. Please contact support or update your profile in Settings.",
+        "title": "Profile Rejected"
+      },
+      "suspended": {
+        "body": "Your account has been suspended. Please contact support for more information.",
+        "title": "Account Suspended"
+      }
+    },
+    "viewDetails": {
+      "cta": "View details"
+    },
+    "withdraw": {
+      "cta": "Withdraw from Move"
+    },
+    "withdrawConfirm": {
+      "body": "Are you sure? The move will become available for other movers.",
+      "cta": "Yes, Withdraw"
+    }
+  },
+  "moverDashboard": {
+    "findMoves": {
+      "cta": "Find Moves"
+    },
+    "manageCrew": {
+      "cta": "Manage Crew"
+    },
+    "quickActions": {
+      "title": "Quick Actions"
+    },
+    "recentMoves": {
+      "moveType": {
+        "instant": {
+          "label": "Instant Move"
+        },
+        "scheduled": {
+          "label": "Scheduled Move"
+        }
+      },
+      "title": "Recent Moves"
+    },
+    "stat": {
+      "activeMoves": {
+        "label": "Active Moves"
+      },
+      "availableMoves": {
+        "label": "Available Moves"
+      },
+      "completedThisMonth": {
+        "label": "Completed This Month"
+      },
+      "crewMembers": {
+        "label": "Crew Members"
+      },
+      "earningsThisMonth": {
+        "label": "Earnings This Month"
+      },
+      "scheduledMoves": {
+        "label": "Scheduled Moves"
+      }
+    },
+    "welcome": {
+      "subtitle": "Here’s what’s happening today",
+      "title": "Welcome back, {{name}}!"
+    }
+  },
+  "moverNav": {
+    "active": {
+      "label": "Active"
+    },
+    "activeMove": {
+      "label": "Active Move"
+    },
+    "availableMoves": {
+      "label": "Available Moves"
+    },
+    "crew": {
+      "label": "Crew"
+    },
+    "dashboard": {
+      "label": "Dashboard"
+    },
+    "earnings": {
+      "label": "Earnings"
+    },
+    "home": {
+      "label": "Home"
+    },
+    "moves": {
+      "label": "Moves"
+    },
+    "myCrew": {
+      "label": "My Crew"
+    },
+    "scheduledMoves": {
+      "label": "Scheduled Moves"
+    },
+    "taxDocuments": {
+      "label": "Tax Documents"
+    }
+  },
+  "myMoves": {
+    "book": {
+      "cta": "Book a Move"
+    },
+    "empty": {
+      "filtered": {
+        "cancelled": {
+          "title": "No cancelled moves"
+        },
+        "completed": {
+          "title": "No completed moves"
+        },
+        "inProgress": {
+          "title": "No moves in progress"
+        },
+        "pending": {
+          "title": "No pending moves"
+        }
+      },
+      "subtitle": "Book your first move and it will show up here.",
+      "title": "No moves yet"
+    },
+    "subtitle": "Track and manage all your moves in one place.",
+    "title": "My Moves"
+  },
+  "nav": {
+    "account": {
+      "a11y": "Go to your account",
+      "label": "Account"
+    },
+    "backToMyMoves": {
+      "cta": "Back to My Moves"
+    },
+    "becomeMover": {
+      "label": "Become a Mover"
+    },
+    "dashboard": {
+      "cta": "Dashboard",
+      "label": "Dashboard"
+    },
+    "earnings": {
+      "label": "Earnings"
+    },
+    "home": {
+      "label": "Home"
+    },
+    "moverDashboard": {
+      "label": "Mover Dashboard"
+    },
+    "moves": {
+      "label": "Moves"
+    },
+    "myAccount": {
+      "label": "My Account"
+    },
+    "myCrew": {
+      "label": "My Crew"
+    },
+    "myMoves": {
+      "cta": "My Moves",
+      "label": "My Moves"
+    },
+    "navigateTo": {
+      "a11y": "Navigate to {{name}}"
+    },
+    "scheduled": {
+      "label": "Scheduled"
+    },
+    "signInAsClient": {
+      "helper": "Sign in or sign up as a client",
+      "label": "Client"
+    },
+    "signInAsMover": {
+      "helper": "Sign in or sign up as a mover",
+      "label": "Mover"
+    }
+  },
+  "notFound": {
+    "cta": "Back to home page",
+    "image": {
+      "a11y": "Page not found"
+    },
+    "title": "The page you were looking for doesn't exist."
+  },
+  "notify": {
+    "empty": "You have no notifications."
+  },
+  "payDone": {
+    "booked": {
+      "title": "Booking confirmed!"
+    },
+    "confirmed": {
+      "title": "Your move is confirmed!"
+    },
+    "confirmedPaid": {
+      "title": "Move confirmed and paid!"
+    },
+    "congrats": {
+      "title": "Congratulations 🎉"
+    },
+    "instant": {
+      "subtitle": "Your Instant Move"
+    },
+    "scheduled": {
+      "subtitle": "Your Move Booking"
+    },
+    "viewDetails": {
+      "cta": "View Move Details"
+    }
+  },
+  "preview": {
+    "complete": {
+      "cta": "Complete Move"
+    },
+    "creating": {
+      "cta": "Creating your move..."
+    },
+    "editPhotos": {
+      "cta": "Edit photos"
+    }
+  },
+  "scheduledMoves": {
+    "book": {
+      "cta": "Book a Scheduled Move"
+    },
+    "empty": {
+      "filtered": {
+        "cancelled": {
+          "title": "No cancelled scheduled moves"
+        },
+        "completed": {
+          "title": "No completed scheduled moves"
+        },
+        "inProgress": {
+          "title": "No scheduled moves in progress"
+        },
+        "pending": {
+          "title": "No pending scheduled moves"
+        }
+      },
+      "subtitle": "Book a scheduled move and it will appear here.",
+      "title": "No scheduled moves yet"
+    },
+    "subtitle": "All your upcoming and past scheduled moves.",
+    "title": "Scheduled Moves"
+  },
+  "search": {
+    "dropoff": {
+      "placeholder": "Where are you moving to?"
+    },
+    "from": {
+      "label": "From"
+    },
+    "location": {
+      "a11y": "Search for a location",
+      "placeholder": "Where are you moving?"
+    },
+    "mobile": {
+      "collapsed": {
+        "label": "Plan your move"
+      },
+      "title": "Plan Your Move",
+      "where": {
+        "placeholder": "Where to?"
+      }
+    },
+    "pickup": {
+      "placeholder": "Where are you moving from?"
+    },
+    "to": {
+      "label": "To"
+    }
+  },
+  "selectMover": {
+    "available": {
+      "title_one": "Available movers ({{count}})",
+      "title_other": "Available movers ({{count}})"
+    },
+    "capacity": {
+      "label": "{{volume}} capacity"
+    },
+    "confirm": {
+      "cta": "Confirm · {{amount}}"
+    },
+    "creating": {
+      "cta": "Creating move..."
+    },
+    "empty": {
+      "subtitle": "No verified movers are currently online near your location. Please try again in a few minutes.",
+      "title": "No movers available"
+    },
+    "error": {
+      "title": "Unable to find movers"
+    },
+    "eta": {
+      "label_one": "~{{count}} min away",
+      "label_other": "~{{count}} min away"
+    },
+    "experienceYears_one": "{{count}}y exp",
+    "experienceYears_other": "{{count}}y exp",
+    "languages": {
+      "label": "Languages: {{languages}}"
+    },
+    "pricing": {
+      "disclaimer": "Final price may vary based on actual conditions.",
+      "helper_one": "Prices include base fee, distance ({{distance}}), crew size, vehicle capacity, and handling for {{count}} item.",
+      "helper_other": "Prices include base fee, distance ({{distance}}), crew size, vehicle capacity, and handling for {{count}} items.",
+      "title": "How pricing works:"
+    },
+    "searching": {
+      "subtitle": "We're searching for verified movers near your pickup location",
+      "title": "Finding available movers..."
+    },
+    "selectFirst": {
+      "cta": "Select a mover"
+    },
+    "title": "Select Mover"
+  },
+  "seo": {
+    "about": {
+      "description": "PickLT is a moving-services platform for apartments, offices, and belongings across Europe.",
+      "title": "About Us"
+    },
+    "accountBilling": {
+      "description": "Manage your payments and payouts",
+      "title": "Account - Payments & Payouts"
+    },
+    "accountPassword": {
+      "description": "Manage your password",
+      "title": "Account - password"
+    },
+    "contact": {
+      "description": "Get in touch with the PickLT team.",
+      "title": "Contact Us"
+    },
+    "default": {
+      "description": "PickLT - Your trusted moving service platform",
+      "keywords": "PickLT, Moving, Movers, Relocation, Umzug",
+      "title": "PickLT - Move smarter with PickLT"
+    },
+    "forgotPassword": {
+      "description": "Reset your password",
+      "title": "Forgot Password"
+    },
+    "home": {
+      "description": "Book verified movers for apartments, offices and belongings across Europe.",
+      "title": "Home"
+    },
+    "titleTemplate": "%s - PickLT"
+  },
+  "sidebar": {
+    "blurb": "Discover the most outstanding articles on all topics of life. Write your stories and share them",
+    "getStarted": {
+      "cta": "Get Started"
+    },
+    "search": {
+      "a11y": "Search for articles",
+      "placeholder": "Type and press enter"
+    }
+  },
+  "signup": {
+    "clientSubtitle": "Create an account to book your moves",
+    "moverSubtitle": "Join our network of professional movers",
+    "moverTitle": "Join as a Mover",
+    "phoneRequired": {
+      "helper": "Phone verification will be required after sign-up"
+    },
+    "phoneVerify": {
+      "subtitle": "We need to verify your phone number to complete your registration."
+    },
+    "resumeMove": {
+      "helper": "Create an account to continue with your move. Your progress has been saved."
+    },
+    "verifyAndCreate": {
+      "cta": "Verify & create account"
+    }
+  },
+  "wizard": {
+    "finish": {
+      "cta": "Create Move"
+    },
+    "nextStep": {
+      "cta": "Next step {{step}}"
+    },
+    "step1": {
+      "route": {
+        "title": "Your move route"
+      },
+      "title": "STEP 1 — Move Details"
+    },
+    "step2": {
+      "title": "Pickup Address"
+    },
+    "step3": {
+      "title": "Drop-Off Address"
+    },
+    "step4": {
+      "subtitle": "Select the items you need to move. This helps us estimate the right truck size and crew."
+    },
+    "step5": {
+      "dateInStep1": {
+        "helper": "You can set your move date in Step {{step}}"
+      },
+      "subtitle": "Choose when the movers should arrive."
+    },
+    "step6": {
+      "services": {
+        "helper": "These are standard offerings from German movers."
+      },
+      "subtitle": "Select extra services and upload photos of items to be moved.",
+      "title": "Additional services & photos"
+    },
+    "stepOf": {
+      "label": "Step {{current}} of {{total}}"
+    },
+    "stepTotal": {
+      "label": "/{{total}}"
+    }
+  }
+}

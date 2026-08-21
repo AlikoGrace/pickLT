@@ -1,0 +1,40 @@
+{
+  "doc": {
+    "draftBanner": "PROJEKT — oczekuje na weryfikację doradcy podatkowego",
+    "driverHeading": "Kierowca",
+    "footerDisclaimer": "Dokument wygenerowany automatycznie w celach informacyjnych dla kierowcy. Za rozliczenie własnych przychodów i dochodów odpowiada kierowca.",
+    "operatorHeading": "Operator platformy",
+    "operatorPending": "[dane operatora w przygotowaniu]",
+    "operatorRegistration": "Numer rejestrowy: {{value}}",
+    "operatorVatId": "Numer VAT (VAT ID): {{value}}",
+    "period": "Okres: {{period}}",
+    "statementNo": "Nr zestawienia: {{number}}",
+    "taxNumber": "Numer podatkowy: {{value}}",
+    "title": "Miesięczne zestawienie działalności kierowcy",
+    "vatId": "Numer VAT (VAT ID): {{value}}"
+  },
+  "lines": {
+    "cashAlreadyHeld": "W tym już otrzymane gotówką",
+    "commission": "Prowizja / opłata za usługę",
+    "deductionsHeading": "Potrącenia platformy",
+    "grossCash": "Pobrano gotówką",
+    "grossDigital": "Pobrano elektronicznie (aplikacja/karta)",
+    "grossHeading": "Przychody brutto",
+    "grossLocal": "Brutto w walucie lokalnej ({{currency}})",
+    "grossTotal": "Łączne przychody brutto",
+    "instantMoves": "W tym przeprowadzki natychmiastowe",
+    "net": "Kwota netto",
+    "netPayable": "Kwota netto do wypłaty kierowcy",
+    "resultHeading": "Wynik",
+    "scheduledMoves": "W tym przeprowadzki zaplanowane",
+    "summary": "Podsumowanie rozliczonych przeprowadzek",
+    "totalMoves": "Łączna liczba zakończonych przeprowadzek",
+    "withholdingHeading": "Podatki pobrane u źródła",
+    "withholdingIncome": "Pobrany podatek dochodowy",
+    "withholdingVat": "Pobrany VAT"
+  },
+  "statementReady": {
+    "body": "Zestawienie {{number}} za {{period}} jest dostępne w Twoich dokumentach podatkowych.",
+    "title": "Miesięczne zestawienie jest gotowe"
+  }
+}

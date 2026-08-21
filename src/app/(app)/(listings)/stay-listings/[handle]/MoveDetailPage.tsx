@@ -22,25 +22,20 @@ import {
 import Image from 'next/image'
 import { FC, Fragment, useEffect, useState } from 'react'
 import { parseInventoryLines, useInventoryNames } from '@/lib/inventory-labels'
+import { formatDateWith, formatMoney } from '@/lib/format'
+import { additionalServiceLabel, arrivalWindowLabel, dropoffParkingLabel, floorLevelLabel, packingLevelLabel, parkingLabel, vehicleTypeLabel } from '@/lib/enum-labels'
+import { homeTypeLabel, moveTypeLabel } from '@/lib/move-subtitle'
+import { useTranslation } from 'react-i18next'
 
 interface MoveDetailPageProps {
   handle: string
-}
-
-// Helper to format labels
-const formatLabel = (value: string | null | undefined): string => {
-  if (!value) return 'Not specified'
-  return value
-    .split('_')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ')
 }
 
 const formatDate = (dateStr: string | null) => {
   if (!dateStr) return 'Not selected'
   try {
     const date = new Date(dateStr)
-    return date.toLocaleDateString('en-GB', {
+    return formatDateWith(date, {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
@@ -82,6 +77,11 @@ const getStatusLabel = (status: StoredMove['status']): string => {
 }
 
 const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
+  // This screen is otherwise still un-translated — its row labels ("Home
+  // type:", "Floor:") are hard-coded English and are a separate piece of work.
+  // `t` is pulled in here for the enum *values*, which were rendering a
+  // title-cased database slug in every language.
+  const { t } = useTranslation()
   const { getMoveByHandle, updateMoveStatus } = useMoveSearch()
   const [move, setMove] = useState<StoredMove | undefined>(undefined)
   // Admin catalog names, so persisted items render the wording the client saw.
@@ -155,7 +155,7 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
         <div className="mt-4 flex flex-wrap items-center gap-4 text-neutral-500 dark:text-neutral-400">
           <div className="flex items-center gap-x-2">
             <TruckIcon className="size-5" />
-            <span>{formatLabel(moveType)} Move</span>
+            <span>{moveTypeLabel(t, moveType)} Move</span>
           </div>
           <div className="flex items-center gap-x-2">
             <CalendarIcon className="size-5" />
@@ -197,10 +197,10 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
               <p className="text-sm text-neutral-500 mt-1">Unit: {pickupApartmentUnit}</p>
             )}
             <div className="mt-3 space-y-1 text-sm text-neutral-500">
-              <p>Home type: {formatLabel(homeType)}</p>
-              <p>Floor: {formatLabel(floorLevel)}</p>
+              <p>Home type: {homeTypeLabel(t, homeType)}</p>
+              <p>Floor: {floorLevelLabel(t, floorLevel)}</p>
               <p>Elevator: {elevatorAvailable ? 'Yes' : 'No'}</p>
-              <p>Parking: {formatLabel(parkingSituation)}</p>
+              <p>Parking: {parkingLabel(t, parkingSituation)}</p>
             </div>
           </div>
 
@@ -217,9 +217,9 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
               <p className="text-sm text-neutral-500 mt-1">Unit: {dropoffApartmentUnit}</p>
             )}
             <div className="mt-3 space-y-1 text-sm text-neutral-500">
-              <p>Floor: {formatLabel(dropoffFloorLevel)}</p>
+              <p>Floor: {floorLevelLabel(t, dropoffFloorLevel)}</p>
               <p>Elevator: {dropoffElevatorAvailable ? 'Yes' : 'No'}</p>
-              <p>Parking: {formatLabel(dropoffParkingSituation)}</p>
+              <p>Parking: {dropoffParkingLabel(t, dropoffParkingSituation)}</p>
             </div>
           </div>
         </div>
@@ -271,7 +271,7 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
             <TruckIcon className="h-6 w-6 text-neutral-500 shrink-0" />
             <div>
               <span className="font-medium">Vehicle</span>
-              <p className="text-sm text-neutral-500">{formatLabel(vehicleType)}</p>
+              <p className="text-sm text-neutral-500">{vehicleTypeLabel(t, vehicleType)}</p>
             </div>
           </div>
           <div className="flex items-start gap-x-3">
@@ -285,14 +285,14 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
             <ClockIcon className="h-6 w-6 text-neutral-500 shrink-0" />
             <div>
               <span className="font-medium">Arrival Window</span>
-              <p className="text-sm text-neutral-500">{formatLabel(arrivalWindow)}</p>
+              <p className="text-sm text-neutral-500">{arrivalWindowLabel(t, arrivalWindow)}</p>
             </div>
           </div>
           <div className="flex items-start gap-x-3">
             <CubeIcon className="h-6 w-6 text-neutral-500 shrink-0" />
             <div>
               <span className="font-medium">Packing Service</span>
-              <p className="text-sm text-neutral-500">{formatLabel(packingServiceLevel)}</p>
+              <p className="text-sm text-neutral-500">{packingLevelLabel(t, packingServiceLevel)}</p>
             </div>
           </div>
           {storageWeeks > 0 && (
@@ -318,7 +318,7 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
                     className="inline-flex items-center gap-x-1 rounded-full bg-neutral-100 px-3 py-1 text-sm dark:bg-neutral-800"
                   >
                     <CheckCircleIcon className="h-4 w-4 text-green-500" />
-                    {formatLabel(service)}
+                    {additionalServiceLabel(t, service)}
                   </span>
                 ))}
               </div>
@@ -363,7 +363,7 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
         {/* PRICE */}
         <div className="flex flex-col gap-y-2">
           <span className="text-sm text-neutral-500">Total Paid</span>
-          <span className="text-3xl font-semibold text-primary-600">€{totalPrice.toFixed(2)}</span>
+          <span className="text-3xl font-semibold text-primary-600">{formatMoney(totalPrice)}</span>
         </div>
 
         <Divider />
@@ -373,11 +373,7 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
           <DescriptionDetails className="sm:text-right font-mono">{bookingCode}</DescriptionDetails>
           <DescriptionTerm>Paid On</DescriptionTerm>
           <DescriptionDetails className="sm:text-right">
-            {new Date(paidAt).toLocaleDateString('en-GB', {
-              year: 'numeric',
-              month: 'short',
-              day: 'numeric',
-            })}
+            {formatDate(paidAt)}
           </DescriptionDetails>
           <DescriptionTerm>Move Date</DescriptionTerm>
           <DescriptionDetails className="sm:text-right">{formatDate(moveDate)}</DescriptionDetails>

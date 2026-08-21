@@ -1,3 +1,5 @@
+import { mapboxLanguage } from './mapbox-language'
+
 /**
  * Reverse-geocoding that can actually name a building.
  *
@@ -29,7 +31,7 @@ export async function reverseGeocodePlaces(
     longitude: String(lng),
     latitude: String(lat),
     limit: String(limit),
-    language: 'en',
+    language: mapboxLanguage(),
     types: 'poi,address,street,neighborhood',
   })
   try {

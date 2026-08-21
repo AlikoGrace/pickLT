@@ -1,0 +1,147 @@
+{
+  "cancel": {
+    "byClient": {
+      "body": "El cliente ha cancelado la mudanza.",
+      "bodyWithHandle": "El cliente ha cancelado la mudanza {{handle}}.",
+      "title": "Mudanza cancelada"
+    },
+    "reassigning": {
+      "body": "Tu transportista ha tenido que dejar tu mudanza. Se la estamos ofreciendo a otros transportistas cercanos.",
+      "bodyWithHandle": "Tu transportista ha tenido que dejar la mudanza {{handle}}. Se la estamos ofreciendo a otros transportistas cercanos.",
+      "title": "Buscando otro transportista"
+    }
+  },
+  "message": {
+    "new": {
+      "title": "Nuevo mensaje"
+    }
+  },
+  "payment": {
+    "clientCharged": {
+      "body": "Se ha procesado tu pago de {{amount}}. ¡Tu reserva de mudanza está confirmada!",
+      "title": "Pago confirmado"
+    },
+    "clientConfirmed": {
+      "body": "El cliente ha marcado esta mudanza como pagada. Confírmalo por tu parte para cerrarla.",
+      "title": "El cliente ha confirmado el pago"
+    },
+    "confirmYours": {
+      "body": "Tu transportista ha confirmado el pago. Confírmalo por tu parte para completar la mudanza.",
+      "title": "Confirma tu pago"
+    },
+    "moverPaid": {
+      "body": "Has recibido un abono de {{amount}}.",
+      "bodyWithHandle": "Has recibido un abono de {{amount}} por la mudanza {{handle}}.",
+      "title": "Abono recibido"
+    }
+  },
+  "reminder": {
+    "starting": {
+      "client": {
+        "body": "La mudanza {{handle}} está a punto de empezar. Tu transportista se está preparando.",
+        "title": "Tu mudanza empieza {{lead}}"
+      },
+      "mover": {
+        "body": "La mudanza {{handle}} empieza {{lead}}: ya puedes iniciar la ruta.",
+        "title": "Es hora de empezar la mudanza"
+      }
+    },
+    "upcoming": {
+      "client": {
+        "body": "Tu mudanza {{handle}} empieza {{lead}}.",
+        "bodyWithWindow": "Tu mudanza {{handle}} empieza {{lead}}, en la franja de {{window}}.",
+        "title": "Recordatorio de mudanza"
+      },
+      "mover": {
+        "body": "La mudanza programada {{handle}} empieza {{lead}}.",
+        "bodyWithWindow": "La mudanza programada {{handle}} empieza {{lead}}, en la franja de {{window}}.",
+        "title": "Recordatorio de mudanza"
+      }
+    }
+  },
+  "request": {
+    "new": {
+      "body": "Tienes una nueva solicitud de mudanza cerca. Toca para verla y aceptarla.",
+      "bodyRoute": "{{from}} → {{to}}. Toca para verla y aceptarla.",
+      "title": "Nueva solicitud de mudanza"
+    }
+  },
+  "review": {
+    "received": {
+      "bodyWithComment_one": "Has recibido una reseña de {{count}} estrella: «{{comment}}»",
+      "bodyWithComment_other": "Has recibido una reseña de {{count}} estrellas: «{{comment}}»",
+      "body_one": "Has recibido una reseña de {{count}} estrella.",
+      "body_other": "Has recibido una reseña de {{count}} estrellas.",
+      "title": "Nueva reseña"
+    }
+  },
+  "status": {
+    "arrivedDestination": {
+      "body": "Tu transportista ha llegado al destino.",
+      "title": "Ha llegado"
+    },
+    "awaitingPayment": {
+      "body": "Tu mudanza ha terminado: confirma el pago.",
+      "title": "Pago por confirmar"
+    },
+    "cancelledByMover": {
+      "body": "El transportista ha cancelado esta mudanza.",
+      "title": "Mudanza cancelada"
+    },
+    "completed": {
+      "body": "¡Tu mudanza se ha completado! Deja una reseña.",
+      "title": "Mudanza completada"
+    },
+    "inTransit": {
+      "body": "Tus cosas van de camino al destino.",
+      "title": "En tránsito"
+    },
+    "loading": {
+      "body": "Tus cosas se están cargando.",
+      "title": "Carga iniciada"
+    },
+    "moverAccepted": {
+      "body": "¡Un transportista ha aceptado tu solicitud de mudanza!",
+      "title": "Transportista confirmado"
+    },
+    "moverAcceptedScheduled": {
+      "body": "¡Un transportista ha aceptado tu mudanza programada!",
+      "title": "Transportista confirmado"
+    },
+    "moverArrived": {
+      "body": "Tu transportista ha llegado al punto de recogida.",
+      "title": "Transportista ha llegado"
+    },
+    "moverEnRoute": {
+      "body": "Tu transportista va de camino a tu punto de recogida.",
+      "title": "Transportista en camino"
+    },
+    "moverWithdrew": {
+      "body": "Tu transportista se ha retirado. Estamos buscándote otro transportista.",
+      "title": "Transportista retirado"
+    },
+    "unloading": {
+      "body": "Tus cosas se están descargando.",
+      "title": "Descargando"
+    }
+  },
+  "verification": {
+    "contactSupport": "Ponte en contacto con soporte para más detalles.",
+    "rejected": {
+      "body": "Se ha rechazado tu solicitud de perfil de transportista. {{reason}}",
+      "title": "Perfil rechazado"
+    },
+    "submitted": {
+      "body": "Tu perfil de transportista está en revisión. Te avisaremos cuando esté verificado.",
+      "title": "Perfil enviado"
+    },
+    "suspended": {
+      "body": "Tu cuenta de transportista ha sido suspendida. {{reason}}",
+      "title": "Cuenta suspendida"
+    },
+    "verified": {
+      "body": "¡Enhorabuena! Tu perfil de transportista ha sido verificado. Ya puedes aceptar mudanzas.",
+      "title": "Perfil verificado"
+    }
+  }
+}

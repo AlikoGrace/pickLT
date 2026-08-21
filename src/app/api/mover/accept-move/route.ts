@@ -1,3 +1,4 @@
+import { getTranslations } from '@/lib/i18n-server'
 import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
@@ -17,10 +18,11 @@ const ASSIGNABLE_STATUSES = new Set([
 
 // POST /api/mover/accept-move — Accept a move request
 export async function POST(request: NextRequest) {
+  const { t } = await getTranslations()
   try {
     const userId = await getSessionUserId()
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
     }
 
     const body = await request.json()
@@ -40,13 +42,13 @@ export async function POST(request: NextRequest) {
     )
     const moverProfile = profiles.documents[0]
     if (!moverProfile) {
-      return NextResponse.json({ error: 'Mover profile not found' }, { status: 404 })
+      return NextResponse.json({ error: t('errors:mover.profileNotFound') }, { status: 404 })
     }
 
     // Require verified mover to accept moves
     if (moverProfile.verificationStatus !== 'verified') {
       return NextResponse.json(
-        { error: 'Your mover profile has not been verified yet' },
+        { error: t('errors:mover.notVerified') },
         { status: 403 }
       )
     }
@@ -64,11 +66,11 @@ export async function POST(request: NextRequest) {
       : (moveRequest.moverProfileId as Record<string, string>)?.$id || ''
 
     if (reqMoverProfileId !== moverProfile.$id) {
-      return NextResponse.json({ error: 'Request does not belong to this mover' }, { status: 403 })
+      return NextResponse.json({ error: t('errors:request.notOwned') }, { status: 403 })
     }
 
     if (moveRequest.status !== 'pending') {
-      return NextResponse.json({ error: 'Request is no longer pending' }, { status: 409 })
+      return NextResponse.json({ error: t('errors:request.notPending') }, { status: 409 })
     }
 
     // The request authorises exactly one move. Without this check a mover
@@ -76,7 +78,7 @@ export async function POST(request: NextRequest) {
     // over a job assigned to someone else — including one already in transit.
     if (relId(moveRequest.moveId) !== moveId) {
       return NextResponse.json(
-        { error: 'Request does not correspond to this move' },
+        { error: t('errors:request.moveMismatch') },
         { status: 403 }
       )
     }
@@ -89,11 +91,19 @@ export async function POST(request: NextRequest) {
     )
     const existingMover = relId(targetMove.moverProfileId)
     if (existingMover && existingMover !== moverProfile.$id) {
-      return NextResponse.json({ error: 'Move is already assigned' }, { status: 409 })
+      return NextResponse.json({ error: t('errors:move.alreadyAssigned') }, { status: 409 })
     }
     if (!ASSIGNABLE_STATUSES.has(targetMove.status)) {
       return NextResponse.json(
-        { error: `Move cannot be accepted while it is ${targetMove.status}` },
+        // No status word is injected. `"…while it is {{status}}"` put a
+        // `moves:status.*` label in a predicative slot: fr/es/it need it to
+        // agree in gender with "move", de/pl govern its case, and Turkish
+        // built "{{status}} durumundayken" around a label that is often a
+        // whole finite clause ("Nakliyeci yolda"). Seventeen statuses × four
+        // sentences is not a proportionate key family for a diagnostic the
+        // reader cannot act on, so the sentence loses the slot instead —
+        // the same repair `errors:move.notCancellableUnknownStage` already is.
+        { error: t('errors:move.noLongerAcceptable') },
         { status: 409 }
       )
     }
@@ -130,12 +140,13 @@ export async function POST(request: NextRequest) {
         title: 'Mover Accepted',
         body: 'A mover has accepted your move request!',
         data: { moveId, handle: move.handle, status: 'mover_accepted' },
+        i18n: { key: 'status.moverAccepted', params: { handle: move.handle ?? '' } },
       })
     }
 
     // Best-effort: Decline all other pending requests for this move.
     // Wrapped in its own try-catch so a failure here doesn't return
-    // "Internal server error" when the accept itself already succeeded.
+    // t('errors:generic.internal') when the accept itself already succeeded.
     try {
       const otherRequests = await databases.listDocuments(
         APPWRITE.DATABASE_ID,
@@ -173,6 +184,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true, moveId, requestId })
   } catch (error) {
     console.error('Error accepting move:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: t('errors:generic.internal') }, { status: 500 })
   }
 }

@@ -1,0 +1,1123 @@
+{
+  "about": {
+    "hero": {
+      "subtitle": "PickLT è una piattaforma di servizi di trasloco. Descrivi il tuo trasloco, confronta i traslocatori e prenota quello che preferisci — per appartamenti, uffici e singoli oggetti in tutta Europa.",
+      "title": "👋 Chi siamo."
+    }
+  },
+  "account": {
+    "clientType": {
+      "label": "Account cliente"
+    },
+    "moverType": {
+      "label": "Account traslocatore"
+    },
+    "myMoves": {
+      "helper": "Visualizza e segui tutti i tuoi traslochi"
+    },
+    "signedOut": {
+      "subtitle": "Accedi per gestire il tuo profilo, vedere i tuoi traslochi e altro ancora.",
+      "title": "Accedi per vedere il tuo account"
+    },
+    "version": {
+      "label": "PickLT v{{version}}"
+    }
+  },
+  "authGate": {
+    "redirecting": {
+      "label": "Reindirizzamento all’accesso…"
+    }
+  },
+  "billing": {
+    "addPayout": {
+      "cta": "Aggiungi metodo di accredito"
+    },
+    "payoutMethods": {
+      "body": "Aggiungi un metodo di accredito per ricevere i pagamenti da PickLT. Gli accrediti vengono inviati al metodo che imposti qui sotto.",
+      "title": "Metodi di accredito"
+    },
+    "title": "Pagamenti e accrediti"
+  },
+  "checkout": {
+    "confirmAndPay": {
+      "cta": "Conferma e paga {{amount}}"
+    },
+    "confirmMove": {
+      "cta": "Conferma il trasloco · {{amount}}"
+    },
+    "editHint": {
+      "helper": "Tocca una sezione qualsiasi per modificare i dettagli del trasloco."
+    },
+    "pay": {
+      "title": "Conferma e pagamento"
+    },
+    "title": "Conferma il tuo trasloco",
+    "yourMove": {
+      "title": "Il tuo trasloco"
+    }
+  },
+  "contact": {
+    "address": {
+      "label": "🗺 INDIRIZZO",
+      "value": "Photo booth tattooed prism, portland taiyaki hoodie neutra typewriter"
+    },
+    "email": {
+      "label": "💌 EMAIL"
+    },
+    "fullName": {
+      "placeholder": "Mario Rossi"
+    },
+    "message": {
+      "label": "Messaggio"
+    },
+    "phone": {
+      "label": "☎ TELEFONO"
+    },
+    "socials": {
+      "label": "🌏 SOCIAL"
+    },
+    "submit": {
+      "cta": "Invia messaggio"
+    },
+    "title": "Contatti"
+  },
+  "footer": {
+    "company": {
+      "about": "Chi siamo",
+      "careers": "Lavora con noi",
+      "locations": "Sedi",
+      "title": "Azienda"
+    },
+    "copyright": "© {{year}} PickLT. Tutti i diritti riservati.",
+    "legal": {
+      "title": "Note legali"
+    },
+    "solutions": {
+      "commercial": "Traslochi commerciali",
+      "localMoving": "Traslochi locali",
+      "longDistance": "Traslochi a lunga distanza",
+      "packing": "Servizi di imballaggio",
+      "storage": "Soluzioni di deposito",
+      "title": "Soluzioni"
+    },
+    "support": {
+      "contact": "Contattaci",
+      "faq": "FAQ",
+      "quote": "Richiedi un preventivo",
+      "title": "Assistenza"
+    },
+    "tagline": "Prenota traslocatori per appartamenti, uffici e oggetti in tutta Europa."
+  },
+  "home": {
+    "hero": {
+      "imageAlt": "Traslocatori che portano scatoloni in una nuova casa",
+      "subtitle": "Traslocatori di fiducia per i grandi momenti della vita.",
+      "title": "Un trasloco senza stress, ogni volta."
+    },
+    "moverBanner": {
+      "subtitle": "Accedi per iniziare ad accettare traslochi",
+      "title": "Sei un traslocatore?"
+    },
+    "moves": {
+      "empty": "Nessun trasloco. Inizia prenotando il tuo primo trasloco!",
+      "emptyFiltered": {
+        "cancelled": {
+          "label": "Nessun trasloco annullato trovato."
+        },
+        "completed": {
+          "label": "Nessun trasloco completato trovato."
+        },
+        "inProgress": {
+          "label": "Nessun trasloco in corso trovato."
+        },
+        "pending": {
+          "label": "Nessun trasloco in attesa trovato."
+        }
+      },
+      "emptyScheduled": "Nessun trasloco programmato trovato.",
+      "signedOut": {
+        "cta": "Accedi per iniziare",
+        "subtitle": "Accedi per seguire i tuoi traslochi, vedere i dettagli della prenotazione e gestire il tuo calendario.",
+        "title": "Qui compariranno i tuoi traslochi"
+      },
+      "subtitle": "Segui tutti i tuoi traslochi",
+      "tab": {
+        "all": {
+          "label": "Tutti i traslochi"
+        },
+        "cancelled": {
+          "label": "Annullati"
+        },
+        "completed": {
+          "label": "Completati"
+        },
+        "inProgress": {
+          "label": "In corso"
+        },
+        "pending": {
+          "label": "In attesa"
+        },
+        "scheduled": {
+          "label": "Programmati"
+        }
+      },
+      "title": "I tuoi traslochi"
+    },
+    "welcomeBack": {
+      "label": "Bentornato, {{name}}!"
+    }
+  },
+  "instant": {
+    "cardInApp": {
+      "helper": "Questo trasloco si paga con carta. Apri l’app PickLT per completare il pagamento: la carta salvata viene addebitata lì, non è dovuto nulla in contanti."
+    },
+    "chat": {
+      "comingSoon": "La chat arriverà presto!"
+    },
+    "inventory": {
+      "next": {
+        "cta": "Aggiungi foto"
+      },
+      "subtitle": "Seleziona gli oggetti che devi traslocare. Così troviamo il traslocatore giusto per te.",
+      "title": "Cosa devi traslocare?"
+    },
+    "loadFailed": {
+      "subtitle": "Impossibile caricare i dettagli del trasloco dal server."
+    },
+    "loading": {
+      "label": "Caricamento dei dettagli del trasloco…"
+    },
+    "missingLocations": {
+      "subtitle": "Seleziona i luoghi di ritiro e di consegna per continuare.",
+      "title": "Dettagli sui luoghi mancanti"
+    },
+    "photos": {
+      "helper": "Carica le foto degli oggetti da traslocare. Così il traslocatore arriva con l’attrezzatura giusta e ha un’idea chiara del lavoro.",
+      "next": {
+        "cta": "Trova traslocatori"
+      },
+      "subtitle": "Aiuta il tuo traslocatore a prepararsi",
+      "title": "Aggiungi foto"
+    },
+    "review": {
+      "comment": {
+        "placeholder": "Aggiungi un commento (facoltativo)"
+      },
+      "prompt": "Com’è andata con {{name}}?",
+      "promptUnnamed": "Com’è andata con il tuo traslocatore?",
+      "star": {
+        "a11y_one": "Valuta {{count}} stella",
+        "a11y_other": "Valuta {{count}} stelle"
+      },
+      "submit": {
+        "cta": "Invia recensione"
+      },
+      "thanks": {
+        "subtitle": "La tua recensione è stata inviata.",
+        "title": "Grazie!"
+      }
+    }
+  },
+  "login": {
+    "asClient": {
+      "cta": "Accedi come cliente"
+    },
+    "asMover": {
+      "cta": "Accedi come traslocatore"
+    },
+    "clientBadge": {
+      "label": "👤 Account cliente"
+    },
+    "moverBadge": {
+      "label": "🚚 Account traslocatore"
+    },
+    "phoneRequired": {
+      "helper": "Dopo l’accesso sarà necessaria la verifica del telefono"
+    },
+    "phoneVerify": {
+      "subtitle": "Dobbiamo verificare il tuo numero di telefono per completare l’accesso."
+    },
+    "resumeMove": {
+      "helper": "Accedi per continuare con il tuo trasloco. I tuoi progressi sono stati salvati."
+    },
+    "switchToClient": {
+      "label": "Sei un cliente?"
+    },
+    "switchToMover": {
+      "label": "Sei un traslocatore?"
+    },
+    "verifyAndSignIn": {
+      "cta": "Verifica e accedi"
+    }
+  },
+  "moveChoice": {
+    "instant": {
+      "cta": "Inizia",
+      "eta": "Il traslocatore arriva in 15-30 min",
+      "subtitle": "Devi traslocare subito? Troviamo immediatamente un traslocatore vicino a te.",
+      "tracking": "Tracciamento in tempo reale"
+    },
+    "scheduled": {
+      "cta": "Programma il trasloco",
+      "date": "Scegli la data che preferisci",
+      "subtitle": "Organizzati in anticipo e programma il trasloco per una data e un’ora precise.",
+      "title": "Prenota per dopo",
+      "window": "Scegli la fascia oraria di arrivo"
+    },
+    "subtitle": "Scegli l’opzione più adatta alle tue esigenze",
+    "summary": {
+      "title": "I dettagli del tuo trasloco"
+    },
+    "title": "Come vuoi traslocare?"
+  },
+  "moveDetails": {
+    "mover": {
+      "title": "Il tuo traslocatore"
+    },
+    "notFound": {
+      "subtitle": "Questo trasloco potrebbe essere stato rimosso oppure il link non è valido."
+    },
+    "reschedule": {
+      "dateTime": {
+        "label": "Nuova data e ora"
+      }
+    }
+  },
+  "mover": {
+    "acceptMove": {
+      "cta": "Accetta il trasloco"
+    },
+    "accepted": {
+      "helper": "Hai accettato questo trasloco. Quando sei pronto, tocca «Avvia il percorso» per far sapere al cliente che stai arrivando."
+    },
+    "activeBadge": {
+      "label": "Traslocatore attivo"
+    },
+    "activeMove": {
+      "advance": {
+        "cta": "Aggiorna stato"
+      },
+      "cancelledByClient": {
+        "title": "Trasloco annullato dal cliente"
+      },
+      "empty": {
+        "subtitle": "Accetta una richiesta di trasloco per iniziare a seguirla qui.",
+        "title": "Nessun trasloco attivo"
+      },
+      "etaToPickup": {
+        "label": "~{{minutes}} min al ritiro"
+      },
+      "proximity": {
+        "helper": "Devi essere entro {{radius}} dal luogo di ritiro per segnalare l’arrivo (sei a {{distance}})"
+      }
+    },
+    "additionalServicesCount_one": "+{{count}} servizio",
+    "additionalServicesCount_other": "+{{count}} servizi",
+    "availableMoves": {
+      "empty": {
+        "subtitle": "Al momento non ci sono traslochi programmati entro {{radius}}. Controlliamo automaticamente ogni {{interval}}.",
+        "title": "Nessun trasloco disponibile"
+      },
+      "error": {
+        "title": "Impossibile caricare i traslochi"
+      },
+      "loading": {
+        "label": "Ricerca dei traslochi disponibili vicino a te…"
+      }
+    },
+    "backToDashboard": {
+      "cta": "Torna alla dashboard"
+    },
+    "browseAvailable": {
+      "cta": "Sfoglia i traslochi disponibili"
+    },
+    "clientContact": {
+      "title": "Contatto del cliente"
+    },
+    "crew": {
+      "addFirst": {
+        "cta": "Aggiungi il primo membro"
+      },
+      "addMember": {
+        "cta": "Aggiungi membro"
+      },
+      "addModal": {
+        "title": "Aggiungi un nuovo membro della squadra"
+      },
+      "editModal": {
+        "title": "Modifica membro della squadra"
+      },
+      "empty": {
+        "subtitle": "Aggiungi il primo membro per iniziare a gestire la tua squadra.",
+        "title": "Nessun membro della squadra"
+      },
+      "role": {
+        "label": "Ruolo"
+      },
+      "subtitle": "Gestisci i membri della tua squadra",
+      "title": "La mia squadra"
+    },
+    "crewSize": {
+      "label": "{{crew}} traslocatori"
+    },
+    "earnings": {
+      "average": {
+        "label": "Media per trasloco"
+      },
+      "breakdown": {
+        "title": "Dettaglio"
+      },
+      "empty": "Ancora nessun guadagno per questo periodo",
+      "error": {
+        "title": "Impossibile caricare i guadagni"
+      },
+      "label": "Guadagni",
+      "loading": "Caricamento dei guadagni…",
+      "movesCompleted": {
+        "label": "Traslochi completati"
+      },
+      "payout": {
+        "helper": "Gli accrediti vengono elaborati ogni settimana"
+      },
+      "payoutAvailable": {
+        "label": "Disponibile per l’accredito"
+      },
+      "period": {
+        "month": {
+          "caption": "questo mese",
+          "label": "Questo mese"
+        },
+        "today": {
+          "caption": "oggi",
+          "label": "Oggi"
+        },
+        "week": {
+          "caption": "questa settimana",
+          "label": "Questa settimana"
+        },
+        "year": {
+          "caption": "quest’anno",
+          "label": "Quest’anno"
+        }
+      },
+      "refresh": {
+        "a11y": "Aggiorna"
+      },
+      "requestPayout": {
+        "cta": "Richiedi accredito"
+      },
+      "subtitle": "Segui i tuoi incassi e i tuoi risultati",
+      "title": "Guadagni",
+      "total": {
+        "label": "Guadagni totali"
+      }
+    },
+    "experienceYears_one": "{{count}} anno",
+    "experienceYears_other": "{{count}} anni",
+    "field": {
+      "businessStreet": {
+        "label": "Indirizzo dell’attività (facoltativo)",
+        "placeholder": "Via e numero civico"
+      },
+      "city": {
+        "helper": "La città in cui operi principalmente come traslocatore"
+      },
+      "experience": {
+        "label": "Anni di esperienza",
+        "placeholder": "es. 5"
+      },
+      "languages": {
+        "label": "Lingue parlate"
+      },
+      "licenseNumber": {
+        "label": "Numero della patente",
+        "placeholder": "Inserisci il numero della tua patente"
+      },
+      "licensePhoto": {
+        "a11y": "Anteprima della patente",
+        "cta": "Carica una foto della tua patente",
+        "helper": "Una foto nitida velocizza la verifica",
+        "label": "Foto della patente"
+      },
+      "phone": {
+        "placeholder": "+49 123 456 7890"
+      },
+      "postcode": {
+        "label": "Codice postale (facoltativo)",
+        "placeholder": "es. 10115"
+      },
+      "selfie": {
+        "a11y": "Anteprima del selfie",
+        "cta": "Scatta o carica un selfie nitido",
+        "helper": "Per la verifica dell’identità serve un selfie nitido",
+        "label": "Foto selfie",
+        "retake": {
+          "cta": "Scatta di nuovo il selfie"
+        }
+      },
+      "ssn": {
+        "helper": "Cifrato e usato solo per la verifica fiscale",
+        "label": "Numero di previdenza sociale",
+        "placeholder": "Inserisci il tuo numero di previdenza sociale"
+      },
+      "taxId": {
+        "helper": "Necessario per l’emissione delle fatture e per la comunicazione fiscale",
+        "label": "Numero di identificazione fiscale",
+        "placeholder": "es. DE123456789"
+      },
+      "vatId": {
+        "helper": "Lascia vuoto se sei un Kleinunternehmer senza VAT ID",
+        "label": "VAT ID (USt-IdNr., facoltativo)",
+        "placeholder": "es. DE123456789"
+      }
+    },
+    "goToActive": {
+      "cta": "Vai al trasloco attivo"
+    },
+    "homeTypeMoveType": {
+      "apartment": {
+        "light": {
+          "label": "Appartamento · Leggero"
+        },
+        "premium": {
+          "label": "Appartamento · Premium"
+        },
+        "regular": {
+          "label": "Appartamento · Standard"
+        }
+      },
+      "house": {
+        "light": {
+          "label": "Casa · Leggero"
+        },
+        "premium": {
+          "label": "Casa · Premium"
+        },
+        "regular": {
+          "label": "Casa · Standard"
+        }
+      },
+      "office": {
+        "light": {
+          "label": "Ufficio · Leggero"
+        },
+        "premium": {
+          "label": "Ufficio · Premium"
+        },
+        "regular": {
+          "label": "Ufficio · Standard"
+        }
+      },
+      "storage": {
+        "light": {
+          "label": "Deposito · Leggero"
+        },
+        "premium": {
+          "label": "Deposito · Premium"
+        },
+        "regular": {
+          "label": "Deposito · Standard"
+        }
+      }
+    },
+    "jobDetails": {
+      "notFound": {
+        "subtitle": "Questo trasloco potrebbe essere stato rimosso oppure il link non è valido."
+      }
+    },
+    "notStartable": {
+      "body": "<0>Trasloco non ancora avviabile.</0> Puoi avviare questo percorso il <1>{{when}}</1> (l’avvio del percorso si sblocca 5 minuti prima)."
+    },
+    "notify": {
+      "newRequest": {
+        "body": "Hai una nuova richiesta di trasloco. Apri l’app per vedere i dettagli e accettare.",
+        "title": "Nuova richiesta di trasloco! 📋"
+      }
+    },
+    "onboarding": {
+      "done": {
+        "redirect": "Stai per essere reindirizzato alla tua dashboard…",
+        "subtitle": "Il tuo profilo di traslocatore è in esame. Ti avviseremo quando sarà verificato.",
+        "title": "Profilo inviato!"
+      },
+      "review": {
+        "experience": {
+          "title": "Esperienza",
+          "value_one": "{{count}} anno",
+          "value_other": "{{count}} anni"
+        },
+        "languages": {
+          "value": "Lingue: {{languages}}"
+        },
+        "license": {
+          "value": "Patente: {{number}}"
+        },
+        "licenseOk": "✓ Foto della patente caricata",
+        "location": {
+          "value": "{{city}}, {{country}}"
+        },
+        "personal": {
+          "value": "{{name}} · {{phone}}"
+        },
+        "selfieOk": "✓ Selfie caricato",
+        "ssn": {
+          "value": "Prev. sociale: ••••{{last4}}"
+        },
+        "subtitle": "Controlla i tuoi dati prima di inviare.",
+        "taxId": {
+          "value": "N. fiscale: {{taxId}}"
+        },
+        "title": "Controlla il tuo profilo",
+        "vehicle": {
+          "capacity": {
+            "value": "{{vehicleType}} · Targa: {{registration}} · {{capacity}}"
+          },
+          "value": "{{vehicleType}} · Targa: {{registration}}"
+        },
+        "vehicleName": {
+          "value": "{{brand}} {{model}} ({{year}})"
+        },
+        "verification": {
+          "title": "Verifica e posizione"
+        }
+      },
+      "step": {
+        "experience": {
+          "label": "Esperienza"
+        },
+        "personal": {
+          "label": "Dati personali"
+        },
+        "review": {
+          "label": "Controlla e invia"
+        },
+        "vehicle": {
+          "label": "Dati del veicolo"
+        },
+        "verification": {
+          "label": "Verifica"
+        }
+      },
+      "submit": {
+        "cta": "Invia il profilo"
+      },
+      "subtitle": "Inserisci i tuoi dati per iniziare ad accettare traslochi",
+      "title": "Completa il tuo profilo di traslocatore"
+    },
+    "request": {
+      "categoryAndType": {
+        "instant": {
+          "light": {
+            "subtitle": "Immediato · Trasloco leggero"
+          },
+          "premium": {
+            "subtitle": "Immediato · Trasloco premium"
+          },
+          "regular": {
+            "subtitle": "Immediato · Trasloco standard"
+          }
+        },
+        "scheduled": {
+          "light": {
+            "subtitle": "Programmato · Trasloco leggero"
+          },
+          "premium": {
+            "subtitle": "Programmato · Trasloco premium"
+          },
+          "regular": {
+            "subtitle": "Programmato · Trasloco standard"
+          }
+        }
+      },
+      "earnings": {
+        "label": "I tuoi guadagni"
+      },
+      "respondWithin": {
+        "label": "Rispondi entro <1>{{seconds}}</1>"
+      },
+      "services": {
+        "label": "Servizi: {{list}}"
+      },
+      "title": "Nuova richiesta di trasloco!",
+      "viewDetails": {
+        "cta": "Vedi tutti i dettagli"
+      }
+    },
+    "roleLabel": "Traslocatore",
+    "scheduledMoves": {
+      "empty": {
+        "subtitle": "Quando accetti traslochi programmati, restano qui fino alla data del trasloco.",
+        "title": "Nessun trasloco programmato"
+      },
+      "subtitle": "Traslochi che ti sono stati assegnati e che attendono la data programmata"
+    },
+    "section": {
+      "experience": {
+        "title": "Esperienza e tariffa"
+      },
+      "verification": {
+        "helper": "Queste informazioni servono per la verifica dell’identità e saranno conservate in modo sicuro.",
+        "title": "Verifica e zona di lavoro"
+      }
+    },
+    "settings": {
+      "payouts": {
+        "helper": "Gestisci i conti per gli accrediti",
+        "label": "Metodi di pagamento"
+      },
+      "subtitle": "Gestisci il tuo account e le tue preferenze",
+      "version": {
+        "label": "PickLT Mover App v{{version}}"
+      }
+    },
+    "startRoute": {
+      "cta": "Avvia il percorso — sto arrivando"
+    },
+    "tapForDetails": {
+      "helper": "Tocca per vedere i dettagli"
+    },
+    "tax": {
+      "empty": {
+        "subtitle": "Completa dei traslochi questo mese e il tuo primo estratto conto comparirà il 1º.",
+        "title": "Nessun estratto conto"
+      },
+      "helper1": "Il tuo estratto conto mensile viene generato il 1º di ogni mese e copre il mese precedente.",
+      "helper2": "Conservalo per il tuo commercialista o per l’ufficio delle imposte.",
+      "openPdf": {
+        "cta": "Apri PDF"
+      },
+      "preparing": {
+        "label": "Preparazione…"
+      },
+      "row": {
+        "summary_one": "{{count}} trasloco · lordo {{gross}} · netto {{net}}",
+        "summary_other": "{{count}} traslochi · lordo {{gross}} · netto {{net}}"
+      },
+      "title": "Documenti fiscali e guadagni"
+    },
+    "verification": {
+      "pending": {
+        "body": "Il tuo profilo di traslocatore è in esame. Potrai accettare traslochi e usare tutte le funzioni dopo la verifica.",
+        "title": "Verifica in attesa"
+      },
+      "rejected": {
+        "body": "Il tuo profilo di traslocatore è stato rifiutato. Contatta l’assistenza o aggiorna il profilo nelle impostazioni.",
+        "title": "Profilo rifiutato"
+      },
+      "suspended": {
+        "body": "Il tuo account è stato sospeso. Contatta l’assistenza per maggiori informazioni.",
+        "title": "Account sospeso"
+      }
+    },
+    "viewDetails": {
+      "cta": "Vedi dettagli"
+    },
+    "withdraw": {
+      "cta": "Ritirati dal trasloco"
+    },
+    "withdrawConfirm": {
+      "body": "Sei sicuro? Il trasloco tornerà disponibile per gli altri traslocatori.",
+      "cta": "Sì, ritirati"
+    }
+  },
+  "moverDashboard": {
+    "findMoves": {
+      "cta": "Trova traslochi"
+    },
+    "manageCrew": {
+      "cta": "Gestisci la squadra"
+    },
+    "quickActions": {
+      "title": "Azioni rapide"
+    },
+    "recentMoves": {
+      "moveType": {
+        "instant": {
+          "label": "Trasloco immediato"
+        },
+        "scheduled": {
+          "label": "Trasloco programmato"
+        }
+      },
+      "title": "Traslochi recenti"
+    },
+    "stat": {
+      "activeMoves": {
+        "label": "Traslochi attivi"
+      },
+      "availableMoves": {
+        "label": "Traslochi disponibili"
+      },
+      "completedThisMonth": {
+        "label": "Completati questo mese"
+      },
+      "crewMembers": {
+        "label": "Membri della squadra"
+      },
+      "earningsThisMonth": {
+        "label": "Guadagni di questo mese"
+      },
+      "scheduledMoves": {
+        "label": "Traslochi programmati"
+      }
+    },
+    "welcome": {
+      "subtitle": "Ecco cosa succede oggi",
+      "title": "Bentornato, {{name}}!"
+    }
+  },
+  "moverNav": {
+    "active": {
+      "label": "Attivo"
+    },
+    "activeMove": {
+      "label": "Trasloco attivo"
+    },
+    "availableMoves": {
+      "label": "Traslochi disponibili"
+    },
+    "crew": {
+      "label": "Squadra"
+    },
+    "dashboard": {
+      "label": "Dashboard"
+    },
+    "earnings": {
+      "label": "Guadagni"
+    },
+    "home": {
+      "label": "Home"
+    },
+    "moves": {
+      "label": "Traslochi"
+    },
+    "myCrew": {
+      "label": "La mia squadra"
+    },
+    "scheduledMoves": {
+      "label": "Traslochi programmati"
+    },
+    "taxDocuments": {
+      "label": "Documenti fiscali"
+    }
+  },
+  "myMoves": {
+    "book": {
+      "cta": "Prenota un trasloco"
+    },
+    "empty": {
+      "filtered": {
+        "cancelled": {
+          "title": "Nessun trasloco annullato"
+        },
+        "completed": {
+          "title": "Nessun trasloco completato"
+        },
+        "inProgress": {
+          "title": "Nessun trasloco in corso"
+        },
+        "pending": {
+          "title": "Nessun trasloco in attesa"
+        }
+      },
+      "subtitle": "Prenota il tuo primo trasloco e comparirà qui.",
+      "title": "Nessun trasloco"
+    },
+    "subtitle": "Segui e gestisci tutti i tuoi traslochi in un unico posto.",
+    "title": "I miei traslochi"
+  },
+  "nav": {
+    "account": {
+      "a11y": "Vai al tuo account",
+      "label": "Account"
+    },
+    "backToMyMoves": {
+      "cta": "Torna ai miei traslochi"
+    },
+    "becomeMover": {
+      "label": "Diventa traslocatore"
+    },
+    "dashboard": {
+      "cta": "Dashboard",
+      "label": "Dashboard"
+    },
+    "earnings": {
+      "label": "Guadagni"
+    },
+    "home": {
+      "label": "Home"
+    },
+    "moverDashboard": {
+      "label": "Dashboard traslocatore"
+    },
+    "moves": {
+      "label": "Traslochi"
+    },
+    "myAccount": {
+      "label": "Il mio account"
+    },
+    "myCrew": {
+      "label": "La mia squadra"
+    },
+    "myMoves": {
+      "cta": "I miei traslochi",
+      "label": "I miei traslochi"
+    },
+    "navigateTo": {
+      "a11y": "Vai a {{name}}"
+    },
+    "scheduled": {
+      "label": "Programmati"
+    },
+    "signInAsClient": {
+      "helper": "Accedi o registrati come cliente",
+      "label": "Cliente"
+    },
+    "signInAsMover": {
+      "helper": "Accedi o registrati come traslocatore",
+      "label": "Traslocatore"
+    }
+  },
+  "notFound": {
+    "cta": "Torna alla home",
+    "image": {
+      "a11y": "Pagina non trovata"
+    },
+    "title": "La pagina che cercavi non esiste."
+  },
+  "notify": {
+    "empty": "Non hai notifiche."
+  },
+  "payDone": {
+    "booked": {
+      "title": "Prenotazione confermata!"
+    },
+    "confirmed": {
+      "title": "Il tuo trasloco è confermato!"
+    },
+    "confirmedPaid": {
+      "title": "Trasloco confermato e pagato!"
+    },
+    "congrats": {
+      "title": "Congratulazioni 🎉"
+    },
+    "instant": {
+      "subtitle": "Il tuo trasloco immediato"
+    },
+    "scheduled": {
+      "subtitle": "La tua prenotazione di trasloco"
+    },
+    "viewDetails": {
+      "cta": "Vedi i dettagli del trasloco"
+    }
+  },
+  "preview": {
+    "complete": {
+      "cta": "Completa il trasloco"
+    },
+    "creating": {
+      "cta": "Creazione del tuo trasloco…"
+    },
+    "editPhotos": {
+      "cta": "Modifica le foto"
+    }
+  },
+  "scheduledMoves": {
+    "book": {
+      "cta": "Prenota un trasloco programmato"
+    },
+    "empty": {
+      "filtered": {
+        "cancelled": {
+          "title": "Nessun trasloco programmato annullato"
+        },
+        "completed": {
+          "title": "Nessun trasloco programmato completato"
+        },
+        "inProgress": {
+          "title": "Nessun trasloco programmato in corso"
+        },
+        "pending": {
+          "title": "Nessun trasloco programmato in attesa"
+        }
+      },
+      "subtitle": "Prenota un trasloco programmato e comparirà qui.",
+      "title": "Nessun trasloco programmato"
+    },
+    "subtitle": "Tutti i tuoi traslochi programmati, passati e futuri.",
+    "title": "Traslochi programmati"
+  },
+  "search": {
+    "dropoff": {
+      "placeholder": "Dove ti trasferisci?"
+    },
+    "from": {
+      "label": "Da"
+    },
+    "location": {
+      "a11y": "Cerca un luogo",
+      "placeholder": "Dove stai traslocando?"
+    },
+    "mobile": {
+      "collapsed": {
+        "label": "Organizza il tuo trasloco"
+      },
+      "title": "Organizza il tuo trasloco",
+      "where": {
+        "placeholder": "Dove?"
+      }
+    },
+    "pickup": {
+      "placeholder": "Da dove ti trasferisci?"
+    },
+    "to": {
+      "label": "A"
+    }
+  },
+  "selectMover": {
+    "available": {
+      "title_one": "Traslocatori disponibili ({{count}})",
+      "title_other": "Traslocatori disponibili ({{count}})"
+    },
+    "capacity": {
+      "label": "capacità di {{volume}}"
+    },
+    "confirm": {
+      "cta": "Conferma · {{amount}}"
+    },
+    "creating": {
+      "cta": "Creazione del trasloco…"
+    },
+    "empty": {
+      "subtitle": "Al momento non ci sono traslocatori verificati online vicino a te. Riprova tra qualche minuto.",
+      "title": "Nessun traslocatore disponibile"
+    },
+    "error": {
+      "title": "Impossibile trovare traslocatori"
+    },
+    "eta": {
+      "label_one": "a ~{{count}} min",
+      "label_other": "a ~{{count}} min"
+    },
+    "experienceYears_one": "{{count}} anno di esp.",
+    "experienceYears_other": "{{count}} anni di esp.",
+    "languages": {
+      "label": "Lingue: {{languages}}"
+    },
+    "pricing": {
+      "disclaimer": "Il prezzo finale può variare in base alle condizioni effettive.",
+      "helper_one": "I prezzi comprendono la tariffa base, la distanza ({{distance}}), la dimensione della squadra, la capacità del veicolo e la gestione di {{count}} oggetto.",
+      "helper_other": "I prezzi comprendono la tariffa base, la distanza ({{distance}}), la dimensione della squadra, la capacità del veicolo e la gestione di {{count}} oggetti.",
+      "title": "Come funziona il prezzo:"
+    },
+    "searching": {
+      "subtitle": "Stiamo cercando traslocatori verificati vicino al tuo luogo di ritiro",
+      "title": "Ricerca dei traslocatori disponibili…"
+    },
+    "selectFirst": {
+      "cta": "Scegli un traslocatore"
+    },
+    "title": "Scegli il traslocatore"
+  },
+  "seo": {
+    "about": {
+      "description": "PickLT è una piattaforma di servizi di trasloco per appartamenti, uffici e oggetti in tutta Europa.",
+      "title": "Chi siamo"
+    },
+    "accountBilling": {
+      "description": "Gestisci i tuoi pagamenti e accrediti",
+      "title": "Account - Pagamenti e accrediti"
+    },
+    "accountPassword": {
+      "description": "Gestisci la tua password",
+      "title": "Account - password"
+    },
+    "contact": {
+      "description": "Mettiti in contatto con il team PickLT.",
+      "title": "Contattaci"
+    },
+    "default": {
+      "description": "PickLT - La tua piattaforma di servizi di trasloco di fiducia",
+      "keywords": "PickLT, Trasloco, Traslochi, Traslocatori, Trasferimento, Umzug",
+      "title": "PickLT - Trasloca meglio con PickLT"
+    },
+    "forgotPassword": {
+      "description": "Reimposta la tua password",
+      "title": "Password dimenticata"
+    },
+    "home": {
+      "description": "Prenota traslocatori verificati per appartamenti, uffici e oggetti in tutta Europa.",
+      "title": "Home"
+    },
+    "titleTemplate": "%s - PickLT"
+  },
+  "sidebar": {
+    "blurb": "Scopri gli articoli più interessanti su tutti i temi della vita. Scrivi le tue storie e condividile",
+    "getStarted": {
+      "cta": "Inizia"
+    },
+    "search": {
+      "a11y": "Cerca articoli",
+      "placeholder": "Scrivi e premi invio"
+    }
+  },
+  "signup": {
+    "clientSubtitle": "Crea un account per prenotare i tuoi traslochi",
+    "moverSubtitle": "Entra nella nostra rete di traslocatori professionisti",
+    "moverTitle": "Iscriviti come traslocatore",
+    "phoneRequired": {
+      "helper": "Dopo la registrazione sarà necessaria la verifica del telefono"
+    },
+    "phoneVerify": {
+      "subtitle": "Dobbiamo verificare il tuo numero di telefono per completare la registrazione."
+    },
+    "resumeMove": {
+      "helper": "Crea un account per continuare con il tuo trasloco. I tuoi progressi sono stati salvati."
+    },
+    "verifyAndCreate": {
+      "cta": "Verifica e crea l’account"
+    }
+  },
+  "wizard": {
+    "finish": {
+      "cta": "Crea il trasloco"
+    },
+    "nextStep": {
+      "cta": "Passo successivo {{step}}"
+    },
+    "step1": {
+      "route": {
+        "title": "Il percorso del tuo trasloco"
+      },
+      "title": "PASSO 1 — Dettagli del trasloco"
+    },
+    "step2": {
+      "title": "Indirizzo di ritiro"
+    },
+    "step3": {
+      "title": "Indirizzo di consegna"
+    },
+    "step4": {
+      "subtitle": "Seleziona gli oggetti che devi traslocare. Così stimiamo la dimensione giusta del veicolo e della squadra."
+    },
+    "step5": {
+      "dateInStep1": {
+        "helper": "Puoi impostare la data del trasloco al passo {{step}}"
+      },
+      "subtitle": "Scegli quando devono arrivare i traslocatori."
+    },
+    "step6": {
+      "services": {
+        "helper": "Sono i servizi standard offerti dai traslocatori tedeschi."
+      },
+      "subtitle": "Seleziona i servizi extra e carica le foto degli oggetti da traslocare.",
+      "title": "Servizi aggiuntivi e foto"
+    },
+    "stepOf": {
+      "label": "Passo {{current}} di {{total}}"
+    },
+    "stepTotal": {
+      "label": "/{{total}}"
+    }
+  }
+}

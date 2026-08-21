@@ -9,6 +9,7 @@ import clsx from 'clsx'
 import { FC, useState, useEffect } from 'react'
 import DatePicker from 'react-datepicker'
 import { ClearDataButton } from './ClearDataButton'
+import { formatDateWith } from '@/lib/format'
 
 const styles = {
   button: {
@@ -77,16 +78,12 @@ export const DateRangeField: FC<Props> = ({
 
               <div className="flex-1 text-start">
                 <span className={clsx('block font-semibold', styles.mainText[fieldStyle])}>
-                  {startDate?.toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: '2-digit',
-                  }) || label || T['HeroSearchForm']['Add dates']}
+                  {formatDateWith(startDate, { month: 'short', day: '2-digit', fallback: '' }) ||
+                    label ||
+                    T['HeroSearchForm']['Add dates']}
                   {endDate && !isOnlySingleDate
                     ? ' - ' +
-                      endDate?.toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: '2-digit',
-                      })
+                      formatDateWith(endDate, { month: 'short', day: '2-digit', fallback: '' })
                     : ''}
                 </span>
                 <span className="mt-1 block text-sm leading-none font-light text-neutral-400">

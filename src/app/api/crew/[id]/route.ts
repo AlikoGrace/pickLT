@@ -1,9 +1,11 @@
+import { getTranslations } from '@/lib/i18n-server'
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
 import { getSessionUserId } from '@/lib/auth-session'
 import { relId } from '@/lib/notify'
 import { Query } from 'node-appwrite'
+import type { TFunction } from 'i18next'
 
 /**
  * Confirm the crew row belongs to the caller's own mover profile.
@@ -13,7 +15,11 @@ import { Query } from 'node-appwrite'
  * another mover's crew by id. Crew ids are disclosed to clients through the
  * move detail endpoints, so they are not secret.
  */
-async function assertOwnsCrew(id: string, userId: string): Promise<string | null> {
+async function assertOwnsCrew(
+  id: string,
+  userId: string,
+  t: TFunction
+): Promise<string | null> {
   const { databases } = createAdminClient()
 
   const profiles = await databases.listDocuments(
@@ -22,7 +28,7 @@ async function assertOwnsCrew(id: string, userId: string): Promise<string | null
     [Query.equal('userId', [userId])]
   )
   const moverProfile = profiles.documents[0]
-  if (!moverProfile) return 'Mover profile not found'
+  if (!moverProfile) return t('errors:mover.profileNotFound')
 
   let crew
   try {
@@ -32,11 +38,11 @@ async function assertOwnsCrew(id: string, userId: string): Promise<string | null
       id
     )
   } catch {
-    return 'Crew member not found'
+    return t('errors:crew.memberNotFound')
   }
 
   if (relId(crew.moverProfileId) !== moverProfile.$id) {
-    return 'Crew member not found'
+    return t('errors:crew.memberNotFound')
   }
 
   return null
@@ -47,16 +53,17 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const { t } = await getTranslations()
   const userId = await getSessionUserId()
   if (!userId) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
   }
 
   try {
     const { databases } = createAdminClient()
     const { id } = await params
 
-    const denied = await assertOwnsCrew(id, userId)
+    const denied = await assertOwnsCrew(id, userId, t)
     if (denied) return NextResponse.json({ error: denied }, { status: 404 })
 
     const body = await req.json()
@@ -77,7 +84,7 @@ export async function PATCH(
 
     return NextResponse.json({ crewMember: doc })
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Unknown error'
+    const message = err instanceof Error ? err.message : t('errors:generic.unknown')
     return NextResponse.json({ error: message }, { status: 500 })
   }
 }
@@ -87,16 +94,17 @@ export async function DELETE(
   _req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const { t } = await getTranslations()
   const userId = await getSessionUserId()
   if (!userId) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
   }
 
   try {
     const { databases } = createAdminClient()
     const { id } = await params
 
-    const denied = await assertOwnsCrew(id, userId)
+    const denied = await assertOwnsCrew(id, userId, t)
     if (denied) return NextResponse.json({ error: denied }, { status: 404 })
 
     await databases.deleteDocument(
@@ -107,7 +115,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true })
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Unknown error'
+    const message = err instanceof Error ? err.message : t('errors:generic.unknown')
     return NextResponse.json({ error: message }, { status: 500 })
   }
 }

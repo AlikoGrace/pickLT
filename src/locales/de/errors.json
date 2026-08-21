@@ -1,0 +1,328 @@
+{
+  "api": {
+    "admin": {
+      "awaitingApproval": "Ihr Administratorkonto muss noch von einem bestehenden Administrator freigegeben werden.",
+      "noProfile": "Für dieses Konto wurde kein Administratorprofil gefunden.",
+      "notAuthorized": "Dieses Konto ist nicht für die Administrationskonsole freigegeben.",
+      "suspended": "Ihr Administratorzugang wurde gesperrt. Wenden Sie sich an einen anderen Administrator."
+    },
+    "admins": {
+      "alreadyAdmin": "Dieser Nutzer ist bereits ein aktiver Administrator.",
+      "invalidStatus": "Der Status muss einer der folgenden sein: {{list}}",
+      "lastAdmin": "Dies ist der letzte aktive Administrator — ernennen Sie einen weiteren, bevor Sie ihn entfernen.",
+      "notAnAdmin": "Dieses Konto ist kein Administrator.",
+      "notFound": "Administrator nicht gefunden.",
+      "selfDemote": "Sie können Ihren eigenen Administratorzugang nicht entfernen.",
+      "selfStatus": "Sie können Ihren eigenen Administratorstatus nicht ändern.",
+      "userIdRequired": "Eine Nutzer-ID ist erforderlich.",
+      "userNotFound": "Nutzer nicht gefunden."
+    },
+    "auth": {
+      "missingUserId": "Die Anmeldung konnte nicht abgeschlossen werden. Bitte versuchen Sie es erneut.",
+      "noSession": "Keine aktive Sitzung. Bitte melden Sie sich erneut an.",
+      "sessionInitFailed": "Ihre Sitzung konnte nicht gestartet werden. Bitte versuchen Sie es erneut."
+    },
+    "dac7": {
+      "exportBlocked_one": "Bei {{count}} Anbieter fehlt die Steuernummer (TIN). Schließen Sie dessen KYC ab, bevor Sie exportieren, oder fordern Sie den Export mit force=1 als interne Prüfkopie erneut an.",
+      "exportBlocked_other": "Bei {{count}} Anbietern fehlt die Steuernummer (TIN). Schließen Sie deren KYC ab, bevor Sie exportieren, oder fordern Sie den Export mit force=1 als interne Prüfkopie erneut an.",
+      "invalidYear": "Ungültiges Jahr"
+    },
+    "dispute": {
+      "invalidStatus": "Das Ergebnis muss eines der folgenden sein: {{list}}",
+      "moveIdRequired": "Eine Umzugs-ID ist erforderlich."
+    },
+    "forbidden": "Sie haben dafür keine Berechtigung.",
+    "functionFailed": {
+      "error": "Funktion {{functionId}} fehlgeschlagen ({{status}})"
+    },
+    "internal": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+    "inventory": {
+      "categoryRequired": "Kategorie ist erforderlich.",
+      "invalidMoveType": "moveTypeMinimum muss einer der folgenden Werte sein: {{list}}",
+      "nameRequired": "Name ist erforderlich.",
+      "notANonNegativeNumber": "{{field}} muss eine nicht negative Zahl sein."
+    },
+    "invite": {
+      "accountClash": "Für diese E-Mail-Adresse besteht bereits ein Konto. Bitten Sie einen Administrator, es stattdessen hochzustufen.",
+      "alreadyAccepted": "Diese Einladung wurde bereits angenommen. Sperren Sie stattdessen das Administratorkonto.",
+      "emailExists": "Für diese E-Mail-Adresse besteht bereits ein PickLT-Konto. Stufen Sie es auf der Seite „Nutzer“ hoch, statt eine Einladung zu senden.",
+      "emailIsAdmin": "Diese E-Mail-Adresse gehört bereits zu einem Administrator.",
+      "expired": "Diese Einladung ist abgelaufen. Bitten Sie einen Administrator um einen neuen Link.",
+      "idRequired": "Eine Einladungs-ID ist erforderlich.",
+      "invalidEmail": "Geben Sie eine gültige E-Mail-Adresse ein.",
+      "invalidLink": "Dieser Einladungslink ist ungültig.",
+      "loadFailed": "Diese Einladung konnte nicht geladen werden.",
+      "nameRequired": "Geben Sie den vollständigen Namen der eingeladenen Person ein.",
+      "notFound": "Einladung nicht gefunden.",
+      "passwordTooShort_one": "Das Passwort muss mindestens {{count}} Zeichen lang sein.",
+      "passwordTooShort_other": "Das Passwort muss mindestens {{count}} Zeichen lang sein.",
+      "revoked": "Diese Einladung wurde widerrufen.",
+      "signupFailed": "Die Registrierung konnte nicht abgeschlossen werden.",
+      "used": "Diese Einladung wurde bereits verwendet."
+    },
+    "mover": {
+      "invalidStatus": "Der neue Status muss einer der folgenden sein: {{list}}",
+      "noLicensePhoto": "Kein Foto des Führerscheins hinterlegt.",
+      "notFound": "Umzugsprofi nicht gefunden.",
+      "reasonRequired": "Beim Ablehnen oder Sperren eines Umzugsprofis ist eine Begründung erforderlich.",
+      "verifyFailed": "Verifizierung fehlgeschlagen (Status {{status}}). Bitte versuchen Sie es erneut."
+    },
+    "pricing": {
+      "commissionTooLarge": "{{label}} ist ein Anteil, kein Prozentwert – geben Sie 0.15 für 15 % ein.",
+      "keyRequired": "key ist erforderlich",
+      "negative": "{{label}} darf nicht negativ sein.",
+      "notANumber": "{{label}} muss eine Zahl sein.",
+      "ratioTooLarge": "{{label}} wirkt zu groß — es handelt sich um ein Verhältnis, nicht um einen Eurobetrag.",
+      "unknownKey": "Unbekannter Preisschlüssel: {{key}}"
+    },
+    "unauthorized": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
+    "user": {
+      "blockedFlagRequired": "Ein Wert für gesperrt/entsperrt ist erforderlich.",
+      "notFound": "Nutzer nicht gefunden.",
+      "selfBlock": "Sie können Ihr eigenes Konto nicht sperren."
+    }
+  },
+  "appwrite": {
+    "generalArgumentInvalid": "Eines der Felder ist ungültig. Bitte überprüfen Sie Ihre Eingabe.",
+    "generalRateLimitExceeded": "Zu viele Versuche. Bitte warten Sie einen Moment und versuchen Sie es erneut.",
+    "passwordPersonalData": "Das Passwort darf keine persönlichen Daten enthalten.",
+    "passwordRecentlyUsed": "Dieses Passwort wurde kürzlich verwendet. Bitte wählen Sie ein anderes.",
+    "phoneInvalid": "Ungültiges Format der Telefonnummer.",
+    "userAlreadyExists": "Mit dieser E-Mail-Adresse besteht bereits ein Konto.",
+    "userInvalidCode": "Der Bestätigungscode ist falsch oder abgelaufen.",
+    "userInvalidCredentials": "E-Mail-Adresse oder Passwort ist falsch.",
+    "userNotFound": "Es wurde kein Konto mit dieser E-Mail-Adresse gefunden.",
+    "userPhoneNotFound": "Es ist keine Telefonnummer hinterlegt. Bitte fügen Sie eine hinzu, um fortzufahren.",
+    "userSessionAlreadyExists": "Sie sind bereits angemeldet.",
+    "userSessionNotFound": "Die Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
+    "userUnauthorized": "Sie sind nicht berechtigt. Bitte melden Sie sich erneut an."
+  },
+  "auth": {
+    "forbidden": "Zugriff verweigert",
+    "initSessionFailed": "Sitzung konnte nicht initialisiert werden",
+    "noActiveSession": "Keine aktive Sitzung",
+    "noSession": {
+      "error": "Kein angemeldeter Benutzer"
+    },
+    "setPhoneFailed": "Telefonnummer konnte nicht gespeichert werden",
+    "syncFailed": "Nutzerdaten konnten nicht synchronisiert werden",
+    "unauthorized": "Nicht autorisiert"
+  },
+  "call": {
+    "noPhoneNumber": "Für diesen Umzugsprofi ist keine Telefonnummer hinterlegt."
+  },
+  "card": {
+    "add": {
+      "failed": "Die Karte konnte nicht hinzugefügt werden. Bitte versuchen Sie es erneut.",
+      "initFailed": "Die Karteneinrichtung konnte nicht gestartet werden. Bitte versuchen Sie es erneut.",
+      "notSaved": "Die Karte wurde nicht gespeichert. Bitte versuchen Sie es erneut."
+    },
+    "remove": {
+      "detachFailed": "Unser Zahlungsanbieter konnte die Karte nicht entfernen. Bitte versuchen Sie es erneut.",
+      "forbidden": "Diese Karte gehört nicht zu Ihrem Konto.",
+      "internal": "Beim Entfernen der Karte ist etwas schiefgelaufen. Bitte versuchen Sie es erneut.",
+      "misconfigured": "Das Entfernen von Karten ist vorübergehend nicht möglich. Bitte versuchen Sie es später erneut.",
+      "noStripeCustomer": "Für Ihr Konto wurde kein Zahlungsprofil gefunden.",
+      "paymentMethodNotFound": "Diese Karte ist bei unserem Zahlungsanbieter nicht mehr vorhanden.",
+      "unauthenticated": "Bitte melden Sie sich erneut an, um diese Karte zu entfernen.",
+      "userNotFound": "Ihr Konto konnte nicht geladen werden. Bitte melden Sie sich erneut an."
+    }
+  },
+  "crew": {
+    "fieldsRequired": "Name und Telefonnummer sind erforderlich",
+    "memberNotFound": "Teammitglied nicht gefunden",
+    "notOwner": {
+      "error": "Nicht Ihr Teammitglied"
+    }
+  },
+  "generic": {
+    "fallback": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+    "internal": "Interner Serverfehler",
+    "retry": {
+      "body": "Bitte versuchen Sie es erneut.",
+      "error": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+    },
+    "saveFailed": "Speichern fehlgeschlagen",
+    "title": "Etwas ist schiefgelaufen",
+    "unknown": "Unbekannter Fehler"
+  },
+  "geo": {
+    "denied": {
+      "error": "Zugriff auf den Standort verweigert. Bitte erlauben Sie ihn in Ihren Browsereinstellungen."
+    },
+    "unavailable": {
+      "error": "Ihr Standort konnte nicht ermittelt werden. Bitte versuchen Sie es erneut."
+    },
+    "unsupported": {
+      "error": "Ihr Browser unterstützt keine Standortbestimmung"
+    }
+  },
+  "geocode": {
+    "searchFailed": "Orte konnten nicht geladen werden"
+  },
+  "google": {
+    "cancelled": {
+      "error": "Die Anmeldung mit Google wurde abgebrochen."
+    },
+    "noCachedAccount": {
+      "error": "Es wurde kein gespeichertes Google-Konto gefunden."
+    },
+    "noCredentials": {
+      "error": "Die Anmeldung mit Google war erfolgreich, aber der Server hat keine Zugangsdaten zurückgegeben."
+    },
+    "noIdToken": {
+      "error": "Die Anmeldung mit Google hat kein ID-Token zurückgegeben. Bitte versuchen Sie es erneut."
+    }
+  },
+  "instant": {
+    "moverUnavailable": {
+      "error": "Der ausgewählte Umzugsprofi ist nicht mehr verfügbar"
+    },
+    "submitStage": {
+      "error": "Das Senden ist bei {{stage}} fehlgeschlagen. Bitte versuchen Sie es erneut.",
+      "short": {
+        "error": "Das Senden ist bei {{stage}} fehlgeschlagen"
+      }
+    }
+  },
+  "location": {
+    "unavailable": {
+      "error": "Ihr Standort konnte nicht ermittelt werden."
+    }
+  },
+  "mapbox": {
+    "unreachable": {
+      "error": "Mapbox ist nicht erreichbar, bitte prüfen Sie Ihre Verbindung"
+    }
+  },
+  "message": {
+    "empty": "Die Nachricht ist leer",
+    "sendFailed": "Die Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
+    "tooLong": "Die Nachricht ist zu lang. Das Limit beträgt {{max}} Zeichen."
+  },
+  "move": {
+    "alreadyAssigned": "Diesem Umzug ist bereits ein Umzugsprofi zugewiesen",
+    "cancelFailed": "Dieser Umzug konnte nicht storniert werden. Bitte versuchen Sie es erneut.",
+    "cancelRetry": "Stornierung fehlgeschlagen. Bitte versuchen Sie es erneut.",
+    "createFailed": "Umzug konnte nicht angelegt werden",
+    "dateInPast": "Der Umzugstermin muss in der Zukunft liegen",
+    "invalidTransition": "Diese Statusänderung ist für diesen Umzug nicht mehr gültig. Bitte laden Sie den Umzug neu und versuchen Sie es erneut.",
+    "loadFailed": "Umzugsdaten konnten nicht geladen werden",
+    "noLongerAcceptable": "Dieser Umzug kann nicht mehr angenommen werden. Der Status hat sich geändert — bitte laden Sie die Liste neu.",
+    "notAssigned": "Sie sind diesem Umzug nicht zugewiesen",
+    "notAuthorized": "Keine Berechtigung für diesen Umzug",
+    "notAvailable": "Dieser Umzug kann nicht angenommen werden",
+    "notCancellable": "Dieser Umzug kann nicht mehr storniert werden ({{stage}}). Ihre Sachen sind möglicherweise bereits unterwegs — bitte wenden Sie sich direkt an Ihren Umzugsprofi.",
+    "notCancellableUnknownStage": "Dieser Umzug kann nicht mehr storniert werden. Ihre Sachen sind möglicherweise bereits unterwegs — bitte wenden Sie sich direkt an Ihren Umzugsprofi.",
+    "notFound": "Umzug nicht gefunden",
+    "notReschedulable": "Der Termin dieses Umzugs kann nicht mehr geändert werden. Der Status hat sich geändert — bitte laden Sie den Umzug neu.",
+    "rescheduleFailed": "Termin konnte nicht geändert werden",
+    "rescheduleRetry": "Terminänderung fehlgeschlagen. Bitte versuchen Sie es erneut.",
+    "scheduledOnly": "Auf diesem Weg können nur geplante Umzüge angenommen werden",
+    "statusUpdateFailed": "Status konnte nicht aktualisiert werden",
+    "tooEarly": "Dieser Umzug kann nicht vor dem geplanten Termin gestartet werden.",
+    "withdrawTooLate": "Nach dem Start des Umzugs ist kein Rücktritt mehr möglich"
+  },
+  "mover": {
+    "acceptFailed": {
+      "error": "Umzug konnte nicht angenommen werden"
+    },
+    "acceptRetry": "Umzug konnte nicht angenommen werden. Bitte versuchen Sie es erneut.",
+    "clientCannotConvert": "Ihr Konto ist als Kundenkonto registriert. Kundenkonten können nicht in Umzugsprofi-Konten umgewandelt werden. Bitte erstellen Sie ein neues Konto, um sich als Umzugsprofi zu registrieren.",
+    "earningsFetchFailed": "Verdienst konnte nicht abgerufen werden",
+    "earningsLoadFailed": "Verdienst konnte nicht geladen werden",
+    "licenseUploadFailed": "Das Foto des Führerscheins konnte nicht hochgeladen werden",
+    "noLocation": "Kein Standort verfügbar. Bitte aktivieren Sie die Standortdienste oder aktualisieren Sie Ihren Standort.",
+    "notVerified": "Ihr Umzugsprofi-Profil ist noch nicht verifiziert",
+    "notVerifiedPendingApproval": "Ihr Umzugsprofi-Profil ist noch nicht verifiziert. Bitte warten Sie auf die Freigabe durch die Administration.",
+    "profileNotFound": "Umzugsprofi-Profil nicht gefunden",
+    "profileSubmitFailed": "Profil konnte nicht übermittelt werden",
+    "selfieRequired": "Für die Identitätsprüfung ist ein Selfie erforderlich",
+    "selfieUploadFailed": "Das Selfie konnte nicht hochgeladen werden",
+    "startRouteFailed": "Route konnte nicht gestartet werden",
+    "startRouteRetry": "Route konnte nicht gestartet werden. Bitte versuchen Sie es erneut.",
+    "withdrawFailed": "Rücktritt vom Umzug fehlgeschlagen",
+    "withdrawRetry": "Rücktritt fehlgeschlagen. Bitte versuchen Sie es erneut."
+  },
+  "movers": {
+    "fetchFailed": "Umzugsprofis konnten nicht abgerufen werden",
+    "findFailed": "Es konnten keine Umzugsprofis gefunden werden"
+  },
+  "moves": {
+    "fetchFailed": "Umzüge konnten nicht abgerufen werden",
+    "loadFailed": "Umzüge konnten nicht geladen werden",
+    "scheduledLoadFailed": "Geplante Umzüge konnten nicht geladen werden"
+  },
+  "network": {
+    "generic": {
+      "error": "Netzwerkfehler. Bitte versuchen Sie es erneut."
+    },
+    "unreachable": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut."
+  },
+  "payment": {
+    "cardDeclined": "Ihre Karte wurde abgelehnt. Bitte versuchen Sie eine andere Zahlungsmethode.",
+    "charge": {
+      "failed": "Die Zahlung konnte nicht abgeschlossen werden. Bitte versuchen Sie es erneut.",
+      "initFailed": "Die Zahlung konnte nicht gestartet werden. Bitte versuchen Sie es erneut."
+    },
+    "confirmFailed": "Zahlung konnte nicht bestätigt werden",
+    "notAwaiting": "Für diesen Umzug steht keine Zahlung aus. Bitte laden Sie den Umzug neu und versuchen Sie es erneut."
+  },
+  "profile": {
+    "emailChangeFailed": "E-Mail-Adresse konnte nicht geändert werden",
+    "emailTaken": "Diese E-Mail-Adresse wird bereits von einem anderen Konto verwendet",
+    "nameUpdateFailed": "Name konnte nicht aktualisiert werden",
+    "phoneChangeFailed": "Telefonnummer konnte nicht geändert werden",
+    "phoneTaken": "Diese Telefonnummer wird bereits von einem anderen Konto verwendet"
+  },
+  "request": {
+    "moveMismatch": "Die Anfrage gehört nicht zu diesem Umzug",
+    "notOwned": "Die Anfrage gehört nicht zu diesem Umzugsprofi",
+    "notPending": "Die Anfrage ist nicht mehr offen"
+  },
+  "review": {
+    "moveNotCompleted": "Der Umzug ist nicht abgeschlossen",
+    "noMover": "Diesem Umzug ist kein Umzugsprofi zugewiesen",
+    "ratingRange": "Die Bewertung muss zwischen 1 und 5 liegen",
+    "submitFailed": "Bewertung konnte nicht gesendet werden"
+  },
+  "tax": {
+    "listFailed": "Steuerbescheinigungen konnten nicht geladen werden",
+    "pdfLoadFailed": "PDF konnte nicht geladen werden",
+    "pdfNotReady": "Die PDF-Bescheinigung ist noch nicht verfügbar"
+  },
+  "taxDocs": {
+    "downloadFailed": {
+      "error": "Die Steuerbescheinigung konnte nicht heruntergeladen werden. Bitte versuchen Sie es erneut."
+    },
+    "pdfNotReady": {
+      "error": "Die PDF-Bescheinigung ist noch nicht verfügbar"
+    }
+  },
+  "update": {
+    "failed": {
+      "title": "Aktualisierung fehlgeschlagen"
+    }
+  },
+  "upload": {
+    "failed": "Upload fehlgeschlagen",
+    "noFile": "Keine Datei ausgewählt",
+    "notAnImage": "Bitte wählen Sie eine Bilddatei aus",
+    "notAnImage2": "Die Datei muss ein Bild sein",
+    "photoFailed": "Foto konnte nicht hochgeladen werden",
+    "photosFailed": "Fotos konnten nicht hochgeladen werden",
+    "tooLarge": "Das Bild muss kleiner als {{limit}} sein"
+  },
+  "validation": {
+    "emailFormat": "Ungültiges E-Mail-Format",
+    "emailRequired": "E-Mail-Adresse ist erforderlich",
+    "noFields": "Keine gültigen Felder zum Aktualisieren",
+    "phoneFormat": "Ungültige Telefonnummer. Verwenden Sie das internationale Format (z. B. +491234567890)",
+    "phoneRequired2": "Telefonnummer ist erforderlich"
+  },
+  "vehicle": {
+    "fieldsRequired": "Bitte füllen Sie alle Pflichtfelder zum Fahrzeug aus",
+    "saveFailed": "Fahrzeugdaten konnten nicht gespeichert werden",
+    "updateFailed": "Fahrzeugdaten konnten nicht aktualisiert werden"
+  }
+}

@@ -4,7 +4,6 @@ import { ButtonCircle } from '@/shared/Button'
 import ButtonPrimary from '@/shared/ButtonPrimary'
 import ButtonThird from '@/shared/ButtonThird'
 import { useMoveSearch } from '@/context/moveSearch'
-import T from '@/utils/getT'
 import { CloseButton, Dialog, DialogPanel } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/solid'
 import {
@@ -15,16 +14,12 @@ import {
 import { HugeiconsIcon } from '@hugeicons/react'
 import clsx from 'clsx'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useTimeoutFn } from 'react-use'
 import StaySearchFormMobile from './stay-search-form/StaySearchFormMobile'
 
-const MOVE_TYPE_LABELS: Record<string, string> = {
-  light: 'Light',
-  regular: 'Regular',
-  premium: 'Premium',
-}
-
 const HeroSearchFormMobile = ({ className }: { className?: string }) => {
+  const { t } = useTranslation()
   const [showModal, setShowModal] = useState(false)
   const {
     pickupLocation,
@@ -60,11 +55,12 @@ const HeroSearchFormMobile = ({ className }: { className?: string }) => {
   const getSummaryText = () => {
     const parts: string[] = []
     if (pickupLocation) parts.push(getShortLocation(pickupLocation))
-    else parts.push('From')
+    else parts.push(t('web:search.from.label'))
     if (dropoffLocation) parts.push(getShortLocation(dropoffLocation))
-    else parts.push('To')
-    if (moveType) parts.push(MOVE_TYPE_LABELS[moveType] || 'Move type')
-    else parts.push('Move type')
+    else parts.push(t('web:search.to.label'))
+    // i18n-keys: booking:moveType.light.short, booking:moveType.regular.short, booking:moveType.premium.short
+    if (moveType) parts.push(t(`booking:moveType.${moveType}.short`))
+    else parts.push(t('booking:field.moveType.label'))
     return parts.join(' • ')
   }
 
@@ -87,7 +83,7 @@ const HeroSearchFormMobile = ({ className }: { className?: string }) => {
         <HugeiconsIcon icon={Search01Icon} size={20} color="currentColor" strokeWidth={1.5} />
 
         <div className="ms-3 flex-1 overflow-hidden text-start">
-          <span className="block text-sm font-medium">Plan your move</span>
+          <span className="block text-sm font-medium">{t('web:search.mobile.collapsed.label')}</span>
           <span className="mt-0.5 block text-xs font-light text-neutral-500 dark:text-neutral-400">
             <span className="line-clamp-1">{getSummaryText()}</span>
           </span>
@@ -122,7 +118,7 @@ const HeroSearchFormMobile = ({ className }: { className?: string }) => {
                   <div className="flex justify-center pt-10 pb-5">
                     <div className="flex items-center gap-2 text-neutral-900 dark:text-neutral-100">
                       <HugeiconsIcon icon={TruckIcon} size={26} />
-                      <span className="text-lg font-semibold">Plan Your Move</span>
+                      <span className="text-lg font-semibold">{t('web:search.mobile.title')}</span>
                     </div>
                   </div>
 
@@ -134,11 +130,11 @@ const HeroSearchFormMobile = ({ className }: { className?: string }) => {
 
                   <div className="flex justify-between border-t border-neutral-200 bg-white px-4 py-3 dark:border-neutral-700 dark:bg-neutral-900">
                     <ButtonThird onClick={handleClearAll}>
-                      {T['HeroSearchForm']['Clear all']}
+                      {t('common:action.clearAll.cta')}
                     </ButtonThird>
                     <ButtonPrimary type="submit" form="form-hero-search-form-mobile">
                       <HugeiconsIcon icon={Search01Icon} size={16} />
-                      <span>{T['HeroSearchForm']['search']}</span>
+                      <span>{t('common:action.search.cta')}</span>
                     </ButtonPrimary>
                   </div>
                 </div>

@@ -1,0 +1,69 @@
+{
+  "accept": {
+    "privacy": "Confirmo que he leído la <0>política de privacidad</0> (RGPD)",
+    "required": {
+      "error": "Acepta los términos y la política de privacidad para continuar"
+    },
+    "terms": "Confirmo los datos y acepto los <0>términos y condiciones</0>"
+  },
+  "governingLanguage": {
+    "notice": "Este documento es una traducción. Se ofrece únicamente a título informativo; en caso de discrepancia, prevalecerá la versión en inglés."
+  },
+  "help": {
+    "faq": {
+      "contactSupport": {
+        "answer": "Puedes ponerte en contacto con nuestro equipo de soporte a través de la opción «Contacto» disponible en la aplicación.",
+        "question": "¿Cómo contacto con el soporte?"
+      },
+      "manageNotifications": {
+        "answer": "Abre Perfil → Notificaciones para controlar qué avisos recibes.",
+        "question": "¿Cómo gestiono las notificaciones?"
+      },
+      "reportIssue": {
+        "answer": "Usa la sección «Ayuda y soporte» de tu perfil para informar de cualquier problema que encuentres.",
+        "question": "¿Cómo informo de un problema?"
+      },
+      "resetPassword": {
+        "answer": "Toca «He olvidado mi contraseña» en la pantalla de inicio de sesión y sigue las instrucciones para restablecerla por correo electrónico.",
+        "question": "¿Cómo restablezco mi contraseña?"
+      },
+      "updateInfo": {
+        "answer": "Abre Perfil → Editar perfil para actualizar tus datos personales en cualquier momento.",
+        "question": "¿Cómo puedo actualizar mis datos?"
+      }
+    }
+  },
+  "insuranceClaims": {
+    "title": "Seguros y reclamaciones"
+  },
+  "privacy": {
+    "effectiveDate": {
+      "label": "Fecha de entrada en vigor: {{date}}",
+      "value": "20 de diciembre de 2024"
+    },
+    "section": {
+      "informationCollection": {
+        "body": "Recopilamos la información esencial para mejorar tu experiencia. Esto incluye los datos que facilitas directamente, como los de tu cuenta, así como la información obtenida mediante análisis de uso y cookies.",
+        "title": "1. Recopilación de información"
+      },
+      "informationSetting": {
+        "body": "Tienes el control total de tus datos. Gestiona tus preferencias de privacidad, actualiza tus datos personales y adapta la configuración a tus necesidades.",
+        "title": "3. Configuración de la información"
+      },
+      "informationUsage": {
+        "body": "La información recopilada se utiliza para mejorar nuestros servicios, ofrecer recomendaciones personalizadas y garantizar una experiencia fluida. No compartimos tus datos sin tu consentimiento explícito.",
+        "title": "2. Uso de la información"
+      },
+      "securityMeasures": {
+        "body": "Damos prioridad a la seguridad de tus datos con protocolos de seguridad avanzados, métodos de cifrado y auditorías periódicas para protegerlos frente a accesos no autorizados o filtraciones.",
+        "title": "4. Medidas de seguridad"
+      }
+    }
+  },
+  "privacyPolicy": {
+    "title": "Política de privacidad"
+  },
+  "termsOfService": {
+    "title": "Términos del servicio"
+  }
+}

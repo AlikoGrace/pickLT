@@ -18,6 +18,11 @@ import {
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { getMapboxDirections } from '@/utils/mapbox-directions'
+import { formatMoney } from '@/lib/format'
+import { useTranslation } from 'react-i18next'
+import type { TFunction } from 'i18next'
+import { formatDistanceM } from '@/lib/format'
+import { ARRIVAL_GEOFENCE_M } from '@/lib/service-limits'
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || ''
 const MOVES_COLLECTION = process.env.NEXT_PUBLIC_COLLECTION_MOVES || ''
@@ -30,20 +35,24 @@ interface MoverCoordinates {
 
 type MovePhase = 'en_route' | 'arrived_pickup' | 'loading' | 'in_transit' | 'arrived_dropoff' | 'unloading' | 'awaiting_payment' | 'completed'
 
-const PHASE_LABELS: Record<MovePhase, { label: string; description: string }> = {
-  en_route: { label: 'En Route to Pickup', description: 'Head to the pickup location' },
-  arrived_pickup: { label: 'At Pickup', description: 'You have arrived. Start loading items.' },
-  loading: { label: 'Loading', description: 'Loading items onto your vehicle' },
-  in_transit: { label: 'In Transit', description: 'Driving to the drop-off location' },
-  arrived_dropoff: { label: 'At Drop-off', description: 'You have arrived at the destination' },
-  unloading: { label: 'Unloading', description: 'Unloading items at the destination' },
-  awaiting_payment: { label: 'Awaiting Payment', description: 'Waiting for payment confirmation' },
-  completed: { label: 'Completed', description: 'Move completed successfully!' },
-}
+// Built per render from `t`. A module-scope literal map would freeze at the
+// boot language and never follow a language switch.
+const buildPhaseLabels = (t: TFunction): Record<MovePhase, { label: string; description: string }> => ({
+  en_route: { label: t('track:moverPhase.enRoute.title'), description: t('track:moverPhase.enRoute.subtitle') },
+  arrived_pickup: { label: t('track:moverPhase.atPickup.title'), description: t('track:moverPhase.atPickup.subtitle') },
+  loading: { label: t('track:moverPhase.loading.title'), description: t('track:moverPhase.loading.subtitle') },
+  in_transit: { label: t('track:moverPhase.inTransit.title'), description: t('track:moverPhase.inTransit.subtitle') },
+  arrived_dropoff: { label: t('track:moverPhase.atDropoff.title'), description: t('track:moverPhase.atDropoff.subtitle') },
+  unloading: { label: t('track:moverPhase.unloading.title'), description: t('track:moverPhase.unloading.subtitle') },
+  awaiting_payment: { label: t('track:moverPhase.awaitingPayment.title'), description: t('track:moverPhase.awaitingPayment.subtitle') },
+  completed: { label: t('track:moverPhase.completed.title'), description: t('track:moverPhase.completed.subtitle') },
+})
 
 const PHASE_ORDER: MovePhase[] = ['en_route', 'arrived_pickup', 'loading', 'in_transit', 'arrived_dropoff', 'unloading', 'awaiting_payment', 'completed']
 
 export default function ActiveMovePage() {
+  const { t } = useTranslation()
+  const PHASE_LABELS = buildPhaseLabels(t)
   const { user } = useAuth()
   const router = useRouter()
 
@@ -314,12 +323,12 @@ export default function ActiveMovePage() {
       })
       if (!res.ok) {
         const err = await res.json().catch(() => ({}))
-        alert(err.error || 'Failed to update status')
+        alert(err.error || t('errors:move.statusUpdateFailed'))
         return
       }
       setPhase(nextPhase)
     } catch {
-      alert('Failed to update status')
+      alert(t('errors:move.statusUpdateFailed'))
     } finally {
       setIsUpdating(false)
     }
@@ -359,22 +368,25 @@ export default function ActiveMovePage() {
       })
       if (!res.ok) {
         const err = await res.json()
-        alert(err.error || 'Failed to confirm payment')
+        alert(err.error || t('errors:payment.confirmFailed'))
         return
       }
       const data = await res.json()
       setPaymentConfirmed(true)
       if (data.moveCompleted) setPhase('completed')
     } catch {
-      alert('Failed to confirm payment')
+      alert(t('errors:payment.confirmFailed'))
     } finally {
       setIsConfirmingPayment(false)
     }
   }
 
-  const nextPhaseLabel = PHASE_ORDER[PHASE_ORDER.indexOf(phase) + 1]
-    ? PHASE_LABELS[PHASE_ORDER[PHASE_ORDER.indexOf(phase) + 1]].label
-    : null
+  // Only whether a next phase exists — the button no longer names it. The CTA
+  // used to be `"Mark as: {{phase}}"` with a translated phase noun in the slot,
+  // which cannot be made grammatical (de/pl case, tr suffix harmony, fr/it
+  // article); the mover app settled the same question by replacing its twin
+  // with a generic "Update status", and this is that copy.
+  const hasNextPhase = Boolean(PHASE_ORDER[PHASE_ORDER.indexOf(phase) + 1])
 
   const pickupCoords = useMemo(
     () => move?.pickupLatitude && move?.pickupLongitude
@@ -397,7 +409,7 @@ export default function ActiveMovePage() {
     return Math.sqrt(dLat * dLat + dLng * dLng) * 111_000 // approx meters
   }, [moverCoords, pickupCoords])
 
-  const isNearPickup = distanceToPickup !== null && distanceToPickup <= 100
+  const isNearPickup = distanceToPickup !== null && distanceToPickup <= ARRIVAL_GEOFENCE_M
 
   // ── Real ETA via Mapbox Directions ─────────────────────
   const [moverEtaMinutes, setMoverEtaMinutes] = useState(0)
@@ -441,9 +453,9 @@ export default function ActiveMovePage() {
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30">
                 <ExclamationTriangleIcon className="h-6 w-6 text-red-600 dark:text-red-400" />
               </div>
-              <h2 className="text-lg font-semibold text-red-700 dark:text-red-300">Move Cancelled by Client</h2>
+              <h2 className="text-lg font-semibold text-red-700 dark:text-red-300">{t('web:mover.activeMove.cancelledByClient.title')}</h2>
               <p className="text-sm text-red-600 dark:text-red-400">
-                The client has cancelled this move.
+                {t('moves:notify.cancelledByClient.body')}
                 {cancelledMoveRef.current?.pickupLocation ? (
                   <>
                     <br />
@@ -461,7 +473,7 @@ export default function ActiveMovePage() {
                 }}
                 className="mt-2 rounded-xl bg-red-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-700"
               >
-                Dismiss
+                {t('common:action.dismiss.cta')}
               </button>
             </div>
           </div>
@@ -471,11 +483,11 @@ export default function ActiveMovePage() {
         {!cancelledByClient && (
           <>
             <TruckIcon className="h-12 w-12 text-neutral-400" />
-            <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">No active move</h2>
+            <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">{t('web:mover.activeMove.empty.title')}</h2>
             <p className="text-sm text-neutral-500 dark:text-neutral-400">
-              Accept a move request to start tracking here.
+              {t('web:mover.activeMove.empty.subtitle')}
             </p>
-            <ButtonPrimary href="/available-moves">Browse available moves</ButtonPrimary>
+            <ButtonPrimary href="/available-moves">{t('web:mover.browseAvailable.cta')}</ButtonPrimary>
           </>
         )}
       </div>
@@ -529,7 +541,7 @@ export default function ActiveMovePage() {
                       : `${Math.round(moverDistanceKm * 1000)} m`}
                   </p>
                   <p className="text-[10px] text-neutral-500">
-                    ~{moverEtaMinutes} min to pickup
+                    {t('web:mover.activeMove.etaToPickup.label', { minutes: moverEtaMinutes })}
                   </p>
                 </div>
               )}
@@ -541,7 +553,7 @@ export default function ActiveMovePage() {
                       : `${Math.round(routeInfo.distance)} m`}
                   </p>
                   <p className="text-[10px] text-neutral-500">
-                    ~{Math.ceil(routeInfo.duration / 60)} min
+                    {t('common:unit.approxMinutes.label', { minutes: Math.ceil(routeInfo.duration / 60) })}
                   </p>
                 </div>
               )}
@@ -556,10 +568,10 @@ export default function ActiveMovePage() {
               </div>
               <div className="flex-1 min-w-0 space-y-1">
                 <p className="text-xs text-neutral-900 dark:text-white truncate">
-                  {(move.pickupLocation as string)?.split(',')[0] || 'Pickup'}
+                  {(move.pickupLocation as string)?.split(',')[0] || t('booking:field.pickup.label')}
                 </p>
                 <p className="text-xs text-neutral-500 dark:text-neutral-400 truncate">
-                  {(move.dropoffLocation as string)?.split(',')[0] || 'Drop-off'}
+                  {(move.dropoffLocation as string)?.split(',')[0] || t('booking:field.dropoff.label')}
                 </p>
               </div>
             </div>
@@ -575,18 +587,23 @@ export default function ActiveMovePage() {
             <div className="rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 p-3 flex items-center gap-2">
               <ExclamationTriangleIcon className="h-5 w-5 text-amber-500 shrink-0" />
               <p className="text-xs text-amber-700 dark:text-amber-300">
-                You must be within 100m of the pickup location to mark as arrived ({Math.round(distanceToPickup)}m away)
+                {t('web:mover.activeMove.proximity.helper', {
+                  radius: formatDistanceM(ARRIVAL_GEOFENCE_M),
+                  distance: formatDistanceM(distanceToPickup),
+                })}
               </p>
             </div>
           )}
           {/* Normal phase advancement (NOT during awaiting_payment or completed) */}
-          {phase !== 'completed' && phase !== 'awaiting_payment' && nextPhaseLabel && (
+          {phase !== 'completed' && phase !== 'awaiting_payment' && hasNextPhase && (
             <ButtonPrimary
               onClick={advancePhase}
               disabled={isUpdating || (phase === 'en_route' && !isNearPickup)}
               className="w-full shadow-lg boder border-black"
             >
-              {isUpdating ? 'Updating...' : `Mark as: ${nextPhaseLabel}`}
+              {isUpdating
+                ? t('common:state.updating.label')
+                : t('web:mover.activeMove.advance.cta')}
             </ButtonPrimary>
           )}
 
@@ -595,34 +612,34 @@ export default function ActiveMovePage() {
             <div className="rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 p-4 space-y-3 shadow-lg">
               <div className="text-center space-y-1">
                 <p className="text-sm font-semibold text-neutral-900 dark:text-white">
-                  Payment Confirmation
+                  {t('booking:payment.confirmation.title')}
                 </p>
                 {paymentAmount && (
                   <p className="text-2xl font-bold text-primary-600">
-                     €{paymentAmount.toLocaleString()}
+                     {formatMoney(paymentAmount, { compact: true })}
                   </p>
                 )}
                 <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                  Confirm once the client has paid you
+                  {t('booking:payment.moverConfirm.helper')}
                 </p>
               </div>
 
               {/* Status indicators */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-neutral-600 dark:text-neutral-300">Client confirmed</span>
+                  <span className="text-neutral-600 dark:text-neutral-300">{t('booking:payment.clientConfirmed.label')}</span>
                   {clientConfirmed ? (
-                    <span className="flex items-center gap-1 text-green-600"><CheckCircleIcon className="h-4 w-4" /> Yes</span>
+                    <span className="flex items-center gap-1 text-green-600"><CheckCircleIcon className="h-4 w-4" /> {t('common:answer.yes.label')}</span>
                   ) : (
-                    <span className="flex items-center gap-1 text-amber-500"><ArrowPathIcon className="h-4 w-4 animate-spin" /> Waiting</span>
+                    <span className="flex items-center gap-1 text-amber-500"><ArrowPathIcon className="h-4 w-4 animate-spin" /> {t('common:state.waiting.label')}</span>
                   )}
                 </div>
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-neutral-600 dark:text-neutral-300">Your confirmation</span>
+                  <span className="text-neutral-600 dark:text-neutral-300">{t('booking:payment.yourConfirmation.label')}</span>
                   {paymentConfirmed ? (
-                    <span className="flex items-center gap-1 text-green-600"><CheckCircleIcon className="h-4 w-4" /> Confirmed</span>
+                    <span className="flex items-center gap-1 text-green-600"><CheckCircleIcon className="h-4 w-4" /> {t('common:state.confirmed.label')}</span>
                   ) : (
-                    <span className="text-neutral-400">Pending</span>
+                    <span className="text-neutral-400">{t('moves:status.pending.label')}</span>
                   )}
                 </div>
               </div>
@@ -633,12 +650,12 @@ export default function ActiveMovePage() {
                   disabled={isConfirmingPayment}
                   className="w-full"
                 >
-                  {isConfirmingPayment ? 'Confirming…' : 'Confirm Payment Received'}
+                  {isConfirmingPayment ? t('booking:payment.confirming.cta') : t('booking:payment.moverConfirm.cta')}
                 </ButtonPrimary>
               ) : !clientConfirmed ? (
                 <div className="rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 p-3 text-center">
                   <p className="text-xs text-amber-700 dark:text-amber-300">
-                    Waiting for client to confirm payment…
+                    {t('booking:payment.awaitingClient.label')}
                   </p>
                 </div>
               ) : null}
@@ -647,7 +664,7 @@ export default function ActiveMovePage() {
 
           {phase === 'completed' && (
             <ButtonPrimary href="/dashboard" className="w-full shadow-lg">
-              Back to Dashboard
+              {t('web:mover.backToDashboard.cta')}
             </ButtonPrimary>
           )}
         </div>

@@ -19,6 +19,9 @@
  * planned in `capability-pricing-design.md` sub-plan 7 are what will pin that.
  */
 
+import type { TFunction } from 'i18next'
+import { vehicleCapacityLabel, type VehicleTierKey } from '@/lib/vehicle-capacity'
+
 export const PRICING_DEFAULTS: Record<string, number> = {
   // ── Instant / route pricing (calculateprice) ──
   'instant.baseRatePerKm': 1.5,
@@ -78,17 +81,40 @@ export type VehicleType = 'small_van' | 'medium_truck' | 'large_truck'
 
 export const VEHICLE_TYPES: VehicleType[] = ['small_van', 'medium_truck', 'large_truck']
 
-export const VEHICLE_LABELS: Record<VehicleType, string> = {
-  small_van: 'Small Van',
-  medium_truck: 'Medium Truck',
-  large_truck: 'Large Truck',
+const VEHICLE_LABEL_KEYS: Record<VehicleType, string> = {
+  small_van: 'booking:vehicle.smallVan.label',
+  medium_truck: 'booking:vehicle.mediumTruck.label',
+  large_truck: 'booking:vehicle.largeTruck.label',
+}
+
+/** Wire value → the capacity-band key segment in `lib/vehicle-capacity.ts`. */
+const VEHICLE_TIER_KEY: Record<VehicleType, VehicleTierKey> = {
+  small_van: 'smallVan',
+  medium_truck: 'mediumTruck',
+  large_truck: 'largeTruck',
 }
 
 /** Capacity blurbs mirror the mover app's VEHICLE_TYPE_OPTIONS descriptions. */
-export const VEHICLE_CAPACITY: Record<VehicleType, string> = {
-  small_van: 'Up to 10 m³ — small moves, single items',
-  medium_truck: '10–25 m³ — apartment moves',
-  large_truck: '25+ m³ — house moves, large loads',
+const VEHICLE_CAPACITY_KEYS: Record<VehicleType, string> = {
+  small_van: 'booking:vehicle.smallVan.helper',
+  medium_truck: 'booking:vehicle.mediumTruck.helper',
+  large_truck: 'booking:vehicle.largeTruck.helper',
+}
+
+/**
+ * Labels take `t` rather than importing one. This module is imported by client
+ * pages (which still render once on the server) and by server-side pricing
+ * code, so a module-level `t` would either freeze the boot language or leak one
+ * request's locale into another's render. Resolved at render, never at import.
+ */
+export function vehicleLabel(t: TFunction, v: VehicleType): string {
+  return t(VEHICLE_LABEL_KEYS[v])
+}
+
+export function vehicleCapacity(t: TFunction, v: VehicleType): string {
+  // The band itself ("Up to 10 m³") is a business constant formatted at call
+  // time, not a literal typed into eight translations of the blurb.
+  return t(VEHICLE_CAPACITY_KEYS[v], { capacity: vehicleCapacityLabel(t, VEHICLE_TIER_KEY[v]) })
 }
 
 /** Narrows an arbitrary stored value to a known class, defaulting to the smallest. */

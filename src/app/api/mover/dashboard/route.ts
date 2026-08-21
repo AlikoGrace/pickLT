@@ -1,3 +1,4 @@
+import { getTranslations } from '@/lib/i18n-server'
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
@@ -9,10 +10,11 @@ import { getSessionUserId } from '@/lib/auth-session'
  * Aggregated dashboard data for a mover
  */
 export async function GET() {
+  const { t } = await getTranslations()
   try {
     const userId = await getSessionUserId()
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
     }
 
     const { databases } = createAdminClient()
@@ -25,7 +27,7 @@ export async function GET() {
     )
 
     if (profiles.documents.length === 0) {
-      return NextResponse.json({ error: 'Mover profile not found' }, { status: 404 })
+      return NextResponse.json({ error: t('errors:mover.profileNotFound') }, { status: 404 })
     }
 
     const moverProfile = profiles.documents[0]
@@ -142,6 +144,6 @@ export async function GET() {
     })
   } catch (err) {
     console.error('GET /api/mover/dashboard error:', err)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: t('errors:generic.internal') }, { status: 500 })
   }
 }

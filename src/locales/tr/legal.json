@@ -1,0 +1,69 @@
+{
+  "accept": {
+    "privacy": "<0>Gizlilik politikasını</0> (GDPR) okuduğumu kabul ediyorum",
+    "required": {
+      "error": "Devam etmek için lütfen şartları ve gizlilik politikasını kabul edin"
+    },
+    "terms": "Bilgilerin doğruluğunu onaylıyor, <0>şartlar ve koşulları</0> kabul ediyorum"
+  },
+  "governingLanguage": {
+    "notice": "Bu belge bir çeviridir. Yalnızca bilgilendirme amaçlıdır; herhangi bir uyuşmazlık durumunda İngilizce sürüm geçerlidir."
+  },
+  "help": {
+    "faq": {
+      "contactSupport": {
+        "answer": "Destek ekibimize uygulamadaki “Bize ulaşın” seçeneğinden ulaşabilirsiniz.",
+        "question": "Destek ekibine nasıl ulaşırım?"
+      },
+      "manageNotifications": {
+        "answer": "Hangi uyarıları alacağınızı belirlemek için Profil → Bildirimler bölümünü açın.",
+        "question": "Bildirimleri nasıl yönetirim?"
+      },
+      "reportIssue": {
+        "answer": "Karşılaştığınız sorunları bildirmek için profilinizdeki “Yardım ve destek” bölümünü kullanın.",
+        "question": "Bir sorunu nasıl bildiririm?"
+      },
+      "resetPassword": {
+        "answer": "Giriş ekranında “Şifremi unuttum” seçeneğine dokunun ve şifrenizi e-posta ile sıfırlamak için yönergeleri izleyin.",
+        "question": "Şifremi nasıl sıfırlarım?"
+      },
+      "updateInfo": {
+        "answer": "Kişisel bilgilerinizi istediğiniz zaman güncellemek için Profil → Profili düzenle bölümünü açın.",
+        "question": "Bilgilerimi nasıl güncellerim?"
+      }
+    }
+  },
+  "insuranceClaims": {
+    "title": "Sigorta ve hasar talepleri"
+  },
+  "privacy": {
+    "effectiveDate": {
+      "label": "Yürürlük tarihi: {{date}}",
+      "value": "20 Aralık 2024"
+    },
+    "section": {
+      "informationCollection": {
+        "body": "Deneyiminizi geliştirmek için gerekli bilgileri topluyoruz. Buna hesap bilgileri gibi doğrudan sağladığınız bilgilerin yanı sıra kullanım analizleri ve çerezler yoluyla elde edilen bilgiler dâhildir.",
+        "title": "1. Bilgi toplama"
+      },
+      "informationSetting": {
+        "body": "Verileriniz üzerinde tam denetime sahipsiniz. Gizlilik tercihlerinizi yönetebilir, kişisel bilgilerinizi güncelleyebilir ve ayarlarınızı ihtiyaçlarınıza göre özelleştirebilirsiniz.",
+        "title": "3. Bilgi ayarları"
+      },
+      "informationUsage": {
+        "body": "Toplanan bilgiler hizmetlerimizi iyileştirmek, kişiselleştirilmiş öneriler sunmak ve kesintisiz bir deneyim sağlamak için kullanılır. Verilerinizi açık rızanız olmadan paylaşmayız.",
+        "title": "2. Bilgilerin kullanımı"
+      },
+      "securityMeasures": {
+        "body": "Verilerinizin güvenliğine öncelik veriyoruz: yetkisiz erişime ve ihlallere karşı korumak için gelişmiş güvenlik protokolleri, şifreleme yöntemleri ve düzenli denetimler kullanıyoruz.",
+        "title": "4. Güvenlik önlemleri"
+      }
+    }
+  },
+  "privacyPolicy": {
+    "title": "Gizlilik politikası"
+  },
+  "termsOfService": {
+    "title": "Hizmet şartları"
+  }
+}

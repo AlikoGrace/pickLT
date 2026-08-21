@@ -1,9 +1,11 @@
+import { getTranslations } from '@/lib/i18n-server'
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
 import { getSessionUserId } from '@/lib/auth-session'
 import { sanctionedCountryRejection } from '@/lib/sanctions'
-import { moverProfilePermissions, notificationPermissions } from '@/lib/doc-permissions'
+import { writeNotification } from '@/lib/notify'
+import { moverProfilePermissions } from '@/lib/doc-permissions'
 import { ID, Query } from 'node-appwrite'
 
 /**
@@ -16,10 +18,11 @@ import { ID, Query } from 'node-appwrite'
  * exists and upsert accordingly.
  */
 export async function POST(req: NextRequest) {
+  const { t } = await getTranslations()
   try {
     const userId = await getSessionUserId()
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
     }
 
     const body = await req.json()
@@ -68,7 +71,7 @@ export async function POST(req: NextRequest) {
 
     if (userDoc?.userType === 'client') {
       return NextResponse.json(
-        { error: 'Your account is registered as a client. Client accounts cannot be converted to mover accounts. Please create a new account to register as a mover.' },
+        { error: t('errors:mover.clientCannotConvert') },
         { status: 403 }
       )
     }
@@ -159,31 +162,26 @@ export async function POST(req: NextRequest) {
       userUpdates
     )
 
-    // Create a notification for the user
-    try {
-      await databases.createDocument(
-        APPWRITE.DATABASE_ID,
-        APPWRITE.COLLECTIONS.NOTIFICATIONS,
-        ID.unique(),
-        {
-          userId,
-          type: 'system',
-          title: 'Profile Submitted',
-          body: 'Your mover profile is under review. We will notify you once it is verified.',
-          data: JSON.stringify({ moverProfileId: profile.$id }),
-          isRead: false,
-        },
-        notificationPermissions(userId)
-      )
-    } catch {
-      // Notification is non-critical
-    }
+    // Create a notification for the user. Routed through `writeNotification`
+    // rather than an inline createDocument so this row carries the same
+    // `data.i18nKey` contract as every other notification on the platform —
+    // an inline write here was the reason this one sentence could not follow a
+    // language switch. `writeNotification` is itself best-effort and never
+    // throws, which is what the bare try/catch here was doing by hand.
+    await writeNotification({
+      userId,
+      type: 'system',
+      title: 'Profile Submitted',
+      body: 'Your mover profile is under review. We will notify you once it is verified.',
+      data: { moverProfileId: profile.$id },
+      i18n: { key: 'verification.submitted' },
+    })
 
     return NextResponse.json({ success: true, profile })
   } catch (err) {
     console.error('POST /api/mover/submit-profile error:', err)
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Internal server error' },
+      { error: err instanceof Error ? err.message : t('errors:generic.internal') },
       { status: 500 }
     )
   }
