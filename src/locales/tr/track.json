@@ -6,7 +6,7 @@
   },
   "address": {
     "dropoff": {
-      "title": "Teslimat adresi"
+      "title": "Teslim adresi"
     },
     "floor": {
       "label": "Kat {{floor}}"
@@ -15,7 +15,7 @@
       "label": "Kat {{floor}} · Asansör"
     },
     "pickup": {
-      "title": "Alım adresi"
+      "title": "Alış adresi"
     }
   },
   "banner": {
@@ -26,11 +26,8 @@
     "assigned": {
       "label": "Tahmini varış saati"
     },
-    "distance": {
-      "footnote": "{{distance}} km uzaklıkta"
-    },
     "distanceAway": {
-      "label": "{{distance}} km uzaklıkta"
+      "label": "{{distance}} uzaklıkta"
     },
     "minutes": {
       "label_one": "{{count}} dk",
@@ -68,8 +65,8 @@
       "searching": "Nakliyeci iptal etti. Başka bir nakliyeci aranıyor…"
     },
     "moveCount": {
-      "label_one": "{{count}} taşıma",
-      "label_other": "{{count}} taşıma"
+      "label_one": "{{count}} taşınma",
+      "label_other": "{{count}} taşınma"
     },
     "noPhone": {
       "error": "Nakliyecinin telefon numarası bulunamadı"
@@ -181,7 +178,7 @@
       "label": "{{qty}} × {{label}}"
     },
     "items": {
-      "empty": "Bu taşıma için kayıtlı eşya yok."
+      "empty": "Bu taşınma için kayıtlı eşya yok."
     }
   },
   "payment": {
@@ -189,7 +186,7 @@
       "label": "Ödenecek tutar"
     },
     "cashNote": {
-      "body": "Lütfen nakliyeciye doğrudan ödeme yapın (nakit veya havale), ardından aşağıdaki <0>{{cta}}</0> düğmesine dokunun. Taşımanın tamamlandı sayılması için nakliyecinin de ödemeyi onaylaması gerekir."
+      "body": "Lütfen nakliyeciye doğrudan ödeme yapın (nakit veya havale), ardından aşağıdaki <0>{{cta}}</0> düğmesine dokunun. Taşınmanın tamamlandı sayılması için nakliyecinin de ödemeyi onaylaması gerekir."
     },
     "confirm": {
       "cta": "Ödemeyi yaptım"
@@ -212,7 +209,7 @@
       "title": "Nakliyeciniz geldi!"
     },
     "arrivedDestination": {
-      "subtitle": "Nakliyeciniz teslimat adresine ulaştı",
+      "subtitle": "Nakliyeciniz teslim adresine ulaştı",
       "title": "Varış noktasına ulaşıldı!"
     },
     "awaitingAccept": {
@@ -221,20 +218,20 @@
     },
     "awaitingPayment": {
       "subtitle": "Lütfen nakliyeciye ödeme yapın ve aşağıda onaylayın",
-      "title": "Taşıma tamamlandı — ödeme gerekiyor"
+      "title": "Taşınma tamamlandı — ödeme gerekiyor"
     },
     "broadcasting": {
       "subtitle": "En yakın nakliyeci aranıyor"
     },
     "cancelled": {
-      "label": "Taşıma iptal edildi",
+      "label": "Taşınma iptal edildi",
       "subtitle": "İptal edildi"
     },
     "cancelledByMover": {
       "subtitle": "Nakliyeci tarafından iptal edildi"
     },
     "completed": {
-      "label": "Taşıma tamamlandı",
+      "label": "Taşınma tamamlandı",
       "title": "Taşınma tamamlandı!"
     },
     "inTransit": {
@@ -247,14 +244,14 @@
       "title": "Eşyalarınız yükleniyor"
     },
     "moverArrived": {
-      "subtitle": "Onunla alım adresinde buluşun",
+      "subtitle": "Onunla alış adresinde buluşun",
       "title": "Nakliyeciniz geldi!"
     },
     "moverEnRoute": {
       "title": "Nakliyeci yolda"
     },
     "paid": {
-      "subtitle": "Nakliyecinin taşımayı kapatması bekleniyor",
+      "subtitle": "Nakliyecinin taşınmayı kapatması bekleniyor",
       "title": "Ödeme alındı"
     },
     "unloading": {
@@ -275,13 +272,13 @@
   },
   "step": {
     "completed": {
-      "label": "Taşıma tamamlandı"
+      "label": "Taşınma tamamlandı"
     },
     "inTransit": {
       "label": "Yolda"
     },
     "moverArrived": {
-      "label": "Nakliyeci alım adresinde"
+      "label": "Nakliyeci alış adresinde"
     },
     "moverAssigned": {
       "label": "Nakliyeci atandı"

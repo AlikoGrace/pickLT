@@ -16,8 +16,11 @@ import MoverMapboxMap from '@/components/MoverMapboxMap'
 import { Badge } from '@/shared/Badge'
 import Image from 'next/image'
 import Link from 'next/link'
-import { formatDayMonth, formatMoneyRounded } from '@/lib/format'
+import { formatDayMonth, formatDistanceKm, formatMoneyRounded, formatSeconds } from '@/lib/format'
+import { AVAILABLE_MOVES_POLL_SECONDS, NEARBY_MOVES_RADIUS_KM } from '@/lib/service-limits'
+import { homeTypeAndMoveTypeBadge, moveTypeLabel } from '@/lib/move-subtitle'
 import { useTranslation } from 'react-i18next'
+import { arrivalWindowLabel, vehicleTypeLabel } from '@/lib/enum-labels'
 
 const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || ''
 const PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || ''
@@ -68,16 +71,6 @@ interface NearbyMove {
 
 const AvailableMovesPage = () => {
   const { t } = useTranslation()
-
-  // Defined inside the component so the fallback copy re-resolves on a
-  // language change instead of freezing at module-import time.
-  const formatLabel = (value: string | null | undefined): string => {
-    if (!value) return t('common:value.notSpecified.empty')
-    return value
-      .split('_')
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ')
-  }
 
   const formatDate = (dateStr: string | null) => {
     if (!dateStr) return t('common:value.notSelected.empty')
@@ -184,7 +177,7 @@ const AvailableMovesPage = () => {
   useEffect(() => {
     if (!profileCoordsLoaded && !hasBrowserGeo) return
     fetchMoves()
-    const interval = setInterval(fetchMoves, 30_000)
+    const interval = setInterval(fetchMoves, AVAILABLE_MOVES_POLL_SECONDS * 1000)
     return () => clearInterval(interval)
   }, [fetchMoves, profileCoordsLoaded, hasBrowserGeo])
 
@@ -246,7 +239,10 @@ const AvailableMovesPage = () => {
               {t('web:moverNav.availableMoves.label')}
             </h1>
             <p className="text-sm text-neutral-500 dark:text-neutral-400">
-              {t('moves:available.withinRadiusCount', { count: moves.length })}
+              {t('moves:available.withinRadiusCount', {
+                count: moves.length,
+                radius: formatDistanceKm(NEARBY_MOVES_RADIUS_KM, { maximumFractionDigits: 0 }),
+              })}
               {isLoading && (
                 <ArrowPathIcon className="w-3 h-3 inline ml-1 animate-spin" />
               )}
@@ -299,7 +295,10 @@ const AvailableMovesPage = () => {
             {t('web:mover.availableMoves.empty.title')}
           </p>
           <p className="text-neutral-500 dark:text-neutral-400 text-sm text-center">
-            {t('web:mover.availableMoves.empty.subtitle')}
+            {t('web:mover.availableMoves.empty.subtitle', {
+              radius: formatDistanceKm(NEARBY_MOVES_RADIUS_KM, { maximumFractionDigits: 0 }),
+              interval: formatSeconds(AVAILABLE_MOVES_POLL_SECONDS, { unitDisplay: 'long' }),
+            })}
           </p>
         </div>
       )}
@@ -348,10 +347,10 @@ const AvailableMovesPage = () => {
                         <TruckIcon className="h-12 w-12 text-neutral-400" />
                       )}
                       <Badge color="yellow" className="absolute top-2 left-2 text-xs">
-                        {t('web:mover.moveTypeBadge.label', { type: formatLabel(selectedMove.moveType) })}
+                        {moveTypeLabel(t, selectedMove.moveType)}
                       </Badge>
                       <span className="absolute top-2 right-2 bg-black/60 text-white text-xs px-2 py-0.5 rounded-full">
-                        {t('track:eta.distance.footnote', { distance: selectedMove.distanceFromMover.toFixed(1) })}
+                        {t('track:eta.distanceAway.label', { distance: formatDistanceKm(selectedMove.distanceFromMover) })}
                       </span>
                     </div>
                     {/* Content */}
@@ -364,7 +363,7 @@ const AvailableMovesPage = () => {
                           </h3>
                           <p className="text-sm text-neutral-500 dark:text-neutral-400">
                             {formatDate(selectedMove.moveDate)} &middot;{' '}
-                            {formatLabel(selectedMove.arrivalWindow)}
+                            {arrivalWindowLabel(t, selectedMove.arrivalWindow)}
                           </p>
                         </div>
                         <span className="text-xl font-bold text-neutral-900 dark:text-neutral-100 ml-3 shrink-0">
@@ -380,7 +379,7 @@ const AvailableMovesPage = () => {
                         </span>
                         {selectedMove.vehicleType && (
                           <span className="text-xs px-2 py-0.5 bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 rounded-full">
-                            {formatLabel(selectedMove.vehicleType)}
+                            {vehicleTypeLabel(t, selectedMove.vehicleType)}
                           </span>
                         )}
                         {selectedMove.pickupElevator && (
@@ -420,13 +419,10 @@ const AvailableMovesPage = () => {
                       <TruckIcon className="h-16 w-16 text-neutral-400" />
                     )}
                     <Badge color="yellow" className="absolute top-3 left-3 z-10">
-                      {t('web:mover.homeTypeMoveType.label', {
-                        homeType: formatLabel(move.homeType),
-                        moveType: formatLabel(move.moveType),
-                      })}
+                      {homeTypeAndMoveTypeBadge(t, move.homeType, move.moveType)}
                     </Badge>
                     <span className="absolute top-3 right-3 bg-black/60 text-white text-xs px-2 py-0.5 rounded-full z-10">
-                      {t('track:eta.distance.footnote', { distance: move.distanceFromMover.toFixed(1) })}
+                      {t('track:eta.distanceAway.label', { distance: formatDistanceKm(move.distanceFromMover) })}
                     </span>
                   </div>
 
@@ -436,7 +432,7 @@ const AvailableMovesPage = () => {
                       <div className="min-w-0 flex-1">
                         <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-1">
                           {formatDate(move.moveDate)} &middot;{' '}
-                          {formatLabel(move.arrivalWindow)}
+                          {arrivalWindowLabel(t, move.arrivalWindow)}
                         </p>
                         <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 truncate">
                           {pickupDisplay(move).split(',')[0]} &rarr;{' '}
@@ -496,7 +492,7 @@ const AvailableMovesPage = () => {
                       {move.vehicleType && (
                         <span className="text-xs px-2.5 py-1 bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 rounded-full flex items-center gap-1">
                           <TruckIcon className="w-3 h-3" />
-                          {formatLabel(move.vehicleType)}
+                          {vehicleTypeLabel(t, move.vehicleType)}
                         </span>
                       )}
                       {move.pickupElevator && (

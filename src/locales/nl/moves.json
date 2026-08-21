@@ -8,8 +8,8 @@
     }
   },
   "available": {
-    "withinRadiusCount_one": "{{count}} verhuizing binnen 30 km",
-    "withinRadiusCount_other": "{{count}} verhuizingen binnen 30 km"
+    "withinRadiusCount_one": "{{count}} verhuizing binnen {{radius}}",
+    "withinRadiusCount_other": "{{count}} verhuizingen binnen {{radius}}"
   },
   "booking": {
     "code": {
@@ -42,7 +42,7 @@
     },
     "route": {
       "dropoffFallback": {
-        "label": "Bezorglocatie"
+        "label": "Afleverlocatie"
       },
       "pickupFallback": {
         "label": "Ophaallocatie"
@@ -157,10 +157,10 @@
       "label": "Afstand"
     },
     "dropoff": {
-      "label": "Bezorgen"
+      "label": "Afleveren"
     },
     "dropoffAddress": {
-      "title": "Bezorgadres"
+      "title": "Afleveradres"
     },
     "duration": {
       "label": "Duur"
@@ -310,7 +310,7 @@
   },
   "status": {
     "arrivedDestination": {
-      "label": "Aangekomen"
+      "label": "Aangekomen op bestemming"
     },
     "assigned": {
       "label": "Toegewezen"
@@ -376,7 +376,7 @@
       "label": "Onbekend"
     },
     "unloading": {
-      "label": "Uitladen"
+      "label": "Lossen"
     }
   },
   "summary": {

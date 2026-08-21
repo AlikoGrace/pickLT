@@ -20,7 +20,7 @@
       "title": "Log in om je account te bekijken"
     },
     "version": {
-      "label": "pickLT v{{version}}"
+      "label": "PickLT v{{version}}"
     }
   },
   "authGate": {
@@ -49,7 +49,7 @@
       "helper": "Klik op een sectie om je verhuisgegevens te bewerken."
     },
     "pay": {
-      "title": "Bevestigen en betaling"
+      "title": "Bevestigen en betalen"
     },
     "title": "Bevestig je verhuizing",
     "yourMove": {
@@ -120,7 +120,20 @@
     },
     "moves": {
       "empty": "Nog geen verhuizingen. Boek je eerste verhuizing!",
-      "emptyFiltered": "Geen verhuizingen gevonden onder {{status}}.",
+      "emptyFiltered": {
+        "cancelled": {
+          "label": "Geen geannuleerde verhuizingen gevonden."
+        },
+        "completed": {
+          "label": "Geen afgeronde verhuizingen gevonden."
+        },
+        "inProgress": {
+          "label": "Geen lopende verhuizingen gevonden."
+        },
+        "pending": {
+          "label": "Geen openstaande verhuizingen gevonden."
+        }
+      },
       "emptyScheduled": "Geen geplande verhuizingen gevonden.",
       "signedOut": {
         "cta": "Log in om te beginnen",
@@ -258,9 +271,6 @@
     "title": "Hoe wil je verhuizen?"
   },
   "moveDetails": {
-    "header": {
-      "subtitle": "Verhuizing: {{moveType}} · {{date}}"
-    },
     "mover": {
       "title": "Je verhuizer"
     },
@@ -285,7 +295,7 @@
     },
     "activeMove": {
       "advance": {
-        "cta": "Markeren als: {{phase}}"
+        "cta": "Status bijwerken"
       },
       "cancelledByClient": {
         "title": "Verhuizing geannuleerd door klant"
@@ -298,14 +308,14 @@
         "label": "~{{minutes}} min tot ophaaladres"
       },
       "proximity": {
-        "helper": "Je moet binnen 100m van het ophaaladres zijn om je aankomst te melden ({{distance}}m verderop)"
+        "helper": "Je moet binnen {{radius}} van het ophaaladres zijn om je aankomst te melden ({{distance}} verderop)"
       }
     },
     "additionalServicesCount_one": "+{{count}} dienst",
     "additionalServicesCount_other": "+{{count}} diensten",
     "availableMoves": {
       "empty": {
-        "subtitle": "Op dit moment geen geplande verhuizingen binnen 30 km. We kijken automatisch elke 30 seconden opnieuw.",
+        "subtitle": "Op dit moment geen geplande verhuizingen binnen {{radius}}. We kijken automatisch elke {{interval}} opnieuw.",
         "title": "Geen verhuizingen beschikbaar"
       },
       "error": {
@@ -413,14 +423,14 @@
         "helper": "De stad waar je hoofdzakelijk als verhuizer werkt"
       },
       "experience": {
-        "label": "Jaren ervaring *",
+        "label": "Jaren ervaring",
         "placeholder": "bijv. 5"
       },
       "languages": {
-        "label": "Talen die je spreekt *"
+        "label": "Talen die je spreekt"
       },
       "licenseNumber": {
-        "label": "Rijbewijsnummer *",
+        "label": "Rijbewijsnummer",
         "placeholder": "Voer je rijbewijsnummer in"
       },
       "licensePhoto": {
@@ -440,19 +450,19 @@
         "a11y": "Voorbeeld selfie",
         "cta": "Maak of upload een duidelijke selfie",
         "helper": "Een duidelijke selfie is nodig voor identiteitsverificatie",
-        "label": "Selfie *",
+        "label": "Selfie",
         "retake": {
           "cta": "Selfie opnieuw maken"
         }
       },
       "ssn": {
         "helper": "Versleuteld en alleen gebruikt voor belastingverificatie",
-        "label": "Sociaalzekerheidsnummer *",
+        "label": "Sociaalzekerheidsnummer",
         "placeholder": "Voer je sociaalzekerheidsnummer in"
       },
       "taxId": {
         "helper": "Vereist voor het aanmaken van facturen en de belastingrapportage",
-        "label": "Fiscaal identificatienummer *",
+        "label": "Fiscaal identificatienummer",
         "placeholder": "bijv. DE123456789"
       },
       "vatId": {
@@ -465,18 +475,55 @@
       "cta": "Naar actieve verhuizing"
     },
     "homeTypeMoveType": {
-      "label": "{{homeType}} · {{moveType}}"
+      "apartment": {
+        "light": {
+          "label": "Appartement · Klein"
+        },
+        "premium": {
+          "label": "Appartement · Premium"
+        },
+        "regular": {
+          "label": "Appartement · Gewoon"
+        }
+      },
+      "house": {
+        "light": {
+          "label": "Huis · Klein"
+        },
+        "premium": {
+          "label": "Huis · Premium"
+        },
+        "regular": {
+          "label": "Huis · Gewoon"
+        }
+      },
+      "office": {
+        "light": {
+          "label": "Kantoor · Klein"
+        },
+        "premium": {
+          "label": "Kantoor · Premium"
+        },
+        "regular": {
+          "label": "Kantoor · Gewoon"
+        }
+      },
+      "storage": {
+        "light": {
+          "label": "Opslag · Klein"
+        },
+        "premium": {
+          "label": "Opslag · Premium"
+        },
+        "regular": {
+          "label": "Opslag · Gewoon"
+        }
+      }
     },
     "jobDetails": {
       "notFound": {
         "subtitle": "Deze verhuizing is mogelijk verwijderd of de link klopt niet."
-      },
-      "subheading": {
-        "label": "Verhuizing: {{moveType}} · {{date}}"
       }
-    },
-    "moveTypeBadge": {
-      "label": "Verhuizing: {{type}}"
     },
     "notStartable": {
       "body": "<0>Deze verhuizing kan nog niet starten.</0> Je kunt deze route starten op <1>{{when}}</1> (Route starten komt 5 minuten van tevoren vrij)."
@@ -586,7 +633,7 @@
         "label": "Jouw verdiensten"
       },
       "respondWithin": {
-        "label": "Reageer binnen <1>{{seconds}}s</1>"
+        "label": "Reageer binnen <1>{{seconds}}</1>"
       },
       "services": {
         "label": "Diensten: {{list}}"
@@ -620,7 +667,7 @@
       },
       "subtitle": "Beheer je account en voorkeuren",
       "version": {
-        "label": "pickLT Mover App v{{version}}"
+        "label": "PickLT Mover App v{{version}}"
       }
     },
     "startRoute": {
@@ -685,7 +732,12 @@
     },
     "recentMoves": {
       "moveType": {
-        "label": "Verhuizing: {{type}}"
+        "instant": {
+          "label": "Directe verhuizing"
+        },
+        "scheduled": {
+          "label": "Geplande verhuizing"
+        }
       },
       "title": "Recente verhuizingen"
     },
@@ -755,7 +807,18 @@
     },
     "empty": {
       "filtered": {
-        "title": "Geen verhuizingen met status {{status}}"
+        "cancelled": {
+          "title": "Geen geannuleerde verhuizingen"
+        },
+        "completed": {
+          "title": "Geen afgeronde verhuizingen"
+        },
+        "inProgress": {
+          "title": "Geen lopende verhuizingen"
+        },
+        "pending": {
+          "title": "Geen openstaande verhuizingen"
+        }
       },
       "subtitle": "Boek je eerste verhuizing, dan verschijnt die hier.",
       "title": "Nog geen verhuizingen"
@@ -857,9 +920,6 @@
     },
     "editPhotos": {
       "cta": "Foto's bewerken"
-    },
-    "moveTypeBadge": {
-      "label": "Verhuizing: {{moveType}}"
     }
   },
   "scheduledMoves": {
@@ -868,7 +928,18 @@
     },
     "empty": {
       "filtered": {
-        "title": "Geen geplande verhuizingen met status {{status}}"
+        "cancelled": {
+          "title": "Geen geannuleerde geplande verhuizingen"
+        },
+        "completed": {
+          "title": "Geen afgeronde geplande verhuizingen"
+        },
+        "inProgress": {
+          "title": "Geen lopende geplande verhuizingen"
+        },
+        "pending": {
+          "title": "Geen openstaande geplande verhuizingen"
+        }
       },
       "subtitle": "Boek een geplande verhuizing, dan verschijnt die hier.",
       "title": "Nog geen geplande verhuizingen"
@@ -909,7 +980,7 @@
       "title_other": "Beschikbare verhuizers ({{count}})"
     },
     "capacity": {
-      "label": "{{volume}} m³ capaciteit"
+      "label": "{{volume}} capaciteit"
     },
     "confirm": {
       "cta": "Bevestigen · {{amount}}"

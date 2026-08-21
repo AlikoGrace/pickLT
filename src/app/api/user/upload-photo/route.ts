@@ -7,6 +7,9 @@ import { ID, Permission, Role } from 'node-appwrite'
 import { InputFile } from 'node-appwrite/file'
 import sharp from 'sharp'
 
+import { formatFileSizeMb } from '@/lib/format'
+import { UPLOAD_MAX_MB } from '@/lib/service-limits'
+
 /**
  * POST /api/user/upload-photo
  * 
@@ -16,7 +19,9 @@ import sharp from 'sharp'
  * Returns the public URL of the uploaded file.
  */
 export async function POST(req: NextRequest) {
-  const { t } = await getTranslations()
+  // `locale` is threaded into the formatter explicitly: this is a route
+  // handler, so there is no browser-scoped active locale to read.
+  const { t, locale } = await getTranslations()
   try {
     const userId = await getSessionUserId()
     if (!userId) {
@@ -36,9 +41,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: t('errors:upload.notAnImage2') }, { status: 400 })
     }
 
-    // Max 10MB raw (will be compressed)
-    if (file.size > 10 * 1024 * 1024) {
-      return NextResponse.json({ error: t('errors:upload.tooLarge2') }, { status: 400 })
+    // The ceiling on the *raw* upload; the route compresses below.
+    if (file.size > UPLOAD_MAX_MB * 1024 * 1024) {
+      return NextResponse.json(
+        { error: t('errors:upload.tooLarge', { limit: formatFileSizeMb(UPLOAD_MAX_MB, { locale }) }) },
+        { status: 400 }
+      )
     }
 
     const { storage, databases } = createAdminClient()

@@ -70,6 +70,27 @@ export function moveUiCategoryLabel(category: MoveUiCategory, t?: TFunction): st
   return t(`web:home.moves.tab.${MOVE_UI_CATEGORY_KEY_SEGMENT[category]}.label`)
 }
 
+/**
+ * The categories that reach the *filtered* empty state. `all` and `scheduled`
+ * have their own empty sentences at the call site and never get here.
+ */
+export type MoveUiFilterCategory = Exclude<MoveUiCategory, 'all' | 'scheduled'>
+
+/**
+ * "No pending moves found." — one whole sentence per category.
+ *
+ * Was `web:home.moves.emptyFiltered` = `"No moves found under {{status}}."`
+ * with the tab caption posted into the slot. English tolerates that because
+ * its adjectives do not inflect; German needs *Keine ausstehenden Umzüge*,
+ * Polish the genitive plural after *Brak*, and Turkish a suffix it cannot
+ * attach to an interpolated value. Four categories, four sentences.
+ */
+// i18n-keys: web.home.moves.emptyFiltered.pending.label, web.home.moves.emptyFiltered.inProgress.label
+// i18n-keys: web.home.moves.emptyFiltered.completed.label, web.home.moves.emptyFiltered.cancelled.label
+export function moveUiCategoryEmptyFilteredText(category: MoveUiFilterCategory, t: TFunction): string {
+  return t(`web:home.moves.emptyFiltered.${MOVE_UI_CATEGORY_KEY_SEGMENT[category]}.label`)
+}
+
 /** Key or legacy English tab label → key. Null when it is neither. */
 export function toMoveUiCategory(input: string | null | undefined): MoveUiCategory | null {
   if (!input) return null

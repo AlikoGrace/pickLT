@@ -24,6 +24,8 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState, useRef } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
+import { formatFileSizeMb } from '@/lib/format'
+import { AVATAR_UPLOAD_MAX_MB } from '@/lib/service-limits'
 
 const APP_VERSION = '1.0.0'
 const OTP_DIGITS = 6
@@ -62,8 +64,8 @@ export default function AccountPage() {
       setError(t('errors:upload.notAnImage'))
       return
     }
-    if (file.size > 5 * 1024 * 1024) {
-      setError(t('errors:upload.tooLarge', { limit: '5MB' }))
+    if (file.size > AVATAR_UPLOAD_MAX_MB * 1024 * 1024) {
+      setError(t('errors:upload.tooLarge', { limit: formatFileSizeMb(AVATAR_UPLOAD_MAX_MB) }))
       return
     }
 
@@ -175,7 +177,7 @@ export default function AccountPage() {
       await account.createPhoneVerification()
       setPhoneStep('verify')
     } catch (err) {
-      setError(err instanceof Error ? err.message : t('errors:profile.phoneNumberChangeFailed'))
+      setError(err instanceof Error ? err.message : t('errors:profile.phoneChangeFailed'))
     } finally {
       setIsSaving(false)
     }

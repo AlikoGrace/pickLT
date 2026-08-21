@@ -56,16 +56,19 @@
   },
   "arrivalWindow": {
     "afternoon": {
-      "label": "Öğleden sonra (12:00–17:00)"
+      "label": "Öğleden sonra"
     },
     "evening": {
-      "label": "Akşam (17:00–21:00)"
+      "label": "Akşam"
     },
     "label": "Varış zaman aralığı",
     "morning": {
-      "label": "Sabah (08:00–12:00)"
+      "label": "Sabah"
     },
-    "optionalLabel": "Varış zaman aralığı (isteğe bağlı)"
+    "optionalLabel": "Varış zaman aralığı (isteğe bağlı)",
+    "withRange": {
+      "label": "{{window}} ({{range}})"
+    }
   },
   "business": {
     "company": {
@@ -136,7 +139,7 @@
       "label": "Puan"
     },
     "summary": {
-      "label": "{{items}} · ~{{weight}} kg · {{points}}"
+      "label": "{{items}} · ~{{weight}} · {{points}}"
     },
     "title": "Taşıma sınıflandırması",
     "upgrade": {
@@ -397,7 +400,7 @@
       "value": "Park yeri: {{parking}}"
     },
     "pickup": {
-      "label": "Alım"
+      "label": "Alış"
     },
     "pickupLocation": {
       "label": "Alış konumu"
@@ -420,8 +423,7 @@
       "label": "Araç"
     },
     "weight": {
-      "label": "Ağırlık",
-      "value": "{{weight}} kg"
+      "label": "Ağırlık"
     }
   },
   "flexibility": {
@@ -638,7 +640,7 @@
       "placeholder": "Teslim konumu"
     },
     "pickup": {
-      "placeholder": "Alım konumu"
+      "placeholder": "Alış konumu"
     },
     "preview": {
       "empty": "Harita önizlemesi"
@@ -729,15 +731,42 @@
       "option": "Kırılacak eşyaları paketle"
     },
     "unpacking": {
-      "helper": "Nakliyeciler alımda paketler VE varışta paketleri açar",
+      "helper": "Nakliyeciler alışta paketler VE varışta paketleri açar",
       "option": "Paketleme ve açma"
     }
   },
   "packingMaterials": {
+    "bubbleWrap": {
+      "option": "Balonlu naylon"
+    },
+    "dishInserts": {
+      "option": "Bulaşık ayracı"
+    },
+    "furnitureBlankets": {
+      "option": "Mobilya battaniyeleri"
+    },
     "label": "Paketleme malzemeleri",
+    "mattressCovers": {
+      "option": "Yatak kılıfları"
+    },
+    "movingBoxes": {
+      "option": "Taşıma kolileri"
+    },
+    "packingPaper": {
+      "option": "Ambalaj kağıdı"
+    },
+    "packingTape": {
+      "option": "Koli bandı"
+    },
     "selectedCount": {
       "label_one": "{{count}} seçildi",
       "label_other": "{{count}} seçildi"
+    },
+    "tvProtection": {
+      "option": "TV koruması"
+    },
+    "wardrobeBoxes": {
+      "option": "Gardırop kolileri"
     }
   },
   "packingNotes": {
@@ -823,7 +852,7 @@
       "title": "Nakliyecinize doğrudan ödeyin"
     },
     "cashHandshake": {
-      "helper": "Lütfen nakliyeciye doğrudan ödeme yapın (nakit veya havale), ardından aşağıdaki \"Ödemeyi yaptım\" düğmesine dokunun."
+      "helper": "Lütfen nakliyeciye doğrudan ödeme yapın (nakit veya havale), ardından aşağıdaki \"{{cta}}\" düğmesine dokunun."
     },
     "cashLong": {
       "label": "Nakit (nakliyeciye doğrudan ödeme)"
@@ -928,14 +957,6 @@
     "countSummary": {
       "label": "{{main}} • {{additional}}"
     },
-    "cover": {
-      "a11y": "Kapak fotoğrafı",
-      "helper": "Eşyalarınızı veya alanı gösteren bir ana fotoğraf yükleyin",
-      "label": "Kapak fotoğrafı"
-    },
-    "formatHint": {
-      "subtitle": "PNG, JPG en fazla 3 MB"
-    },
     "gallery": {
       "a11y": "Taşınma fotoğrafları",
       "helper": "Mobilyaların, odaların veya eşyaların ek fotoğraflarını yükleyin",
@@ -954,6 +975,7 @@
       "a11y": "Taşınma fotoğrafı {{n}}"
     },
     "main": {
+      "a11y": "Ana fotoğraf",
       "cta": "Ana fotoğrafı yüklemek için dokunun",
       "helper": "Eşyalarınızı veya alanı gösteren bir ana fotoğraf yükleyin",
       "label": "Ana fotoğraf"
@@ -1019,10 +1041,32 @@
       "label": "Temel ücret"
     },
     "baseRate": {
-      "label": "Temel ücret ({{moveType}})"
+      "fallback": {
+        "label": "Temel ücret"
+      },
+      "light": {
+        "label": "Temel ücret (Hafif taşıma)"
+      },
+      "premium": {
+        "label": "Temel ücret (Premium taşıma)"
+      },
+      "regular": {
+        "label": "Temel ücret (Standart taşıma)"
+      }
     },
     "baseRateWithDistance": {
-      "label": "Temel ücret ({{moveType}}, {{distance}})"
+      "fallback": {
+        "label": "Temel ücret ({{distance}})"
+      },
+      "light": {
+        "label": "Temel ücret (Hafif taşıma, {{distance}})"
+      },
+      "premium": {
+        "label": "Temel ücret (Premium taşıma, {{distance}})"
+      },
+      "regular": {
+        "label": "Temel ücret (Standart taşıma, {{distance}})"
+      }
     },
     "crew": {
       "label": "Ekip ({{crew}})"
@@ -1144,7 +1188,7 @@
       "option": "Mobilya sökümü"
     },
     "moveoutCleaning": {
-      "helper": "Yüklemeden sonra alım adresinde temizlik hizmeti",
+      "helper": "Yüklemeden sonra alış adresinde temizlik hizmeti",
       "label": "Çıkış temizliği",
       "option": "Çıkış temizliği"
     },
@@ -1153,7 +1197,7 @@
     },
     "subtitle": "Seçtiğiniz ek hizmetler",
     "temporaryStorage": {
-      "helper": "Eşyaları alım ve teslim tarihleri arasında depolarız",
+      "helper": "Eşyaları alış ve teslim tarihleri arasında depolarız",
       "label": "Geçici depolama",
       "option": "Geçici depolama"
     },
@@ -1163,7 +1207,7 @@
     },
     "title": "Ek hizmetler",
     "tvMountRemove": {
-      "helper": "Alım adresinde duvara monte televizyonları sökeriz",
+      "helper": "Alış adresinde duvara monte televizyonları sökeriz",
       "label": "TV askısı sökümü",
       "option": "TV askısı sökümü"
     }
@@ -1177,11 +1221,9 @@
   },
   "storageWeekCount_one": "{{count}} hafta",
   "storageWeekCount_other": "{{count}} hafta",
-  "storageWeeks_one": "{{count}} hafta",
-  "storageWeeks_other": "{{count}} hafta",
   "streetAddress": {
     "dropoff": {
-      "helper": "Teslimat adresinin tamamını girin",
+      "helper": "Teslim adresinin tamamını girin",
       "placeholder": "örn. Berliner Straße 12"
     },
     "label": "Açık adres",
@@ -1216,7 +1258,7 @@
     },
     "helper": "Varsa ek zamanlama tercihlerinizi seçin.",
     "noEvening": {
-      "label": "Akşam teslimatından kaçının"
+      "label": "Akşam tesliminden kaçının"
     },
     "noLunchGap": {
       "label": "Öğle arası molasından kaçının"
@@ -1237,19 +1279,19 @@
     "capacity": {
       "label": "Kapasite (m³)",
       "placeholder": "örn. 15",
-      "value": "{{capacity}} m³"
+      "upTo": {
+        "value": "{{capacity}}'e kadar"
+      }
     },
     "edit": {
       "title": "Araç bilgilerini düzenle"
     },
     "largeTruck": {
-      "capacity": "25+ m³",
-      "helper": "25+ m³ — ev taşımaları, büyük yükler",
+      "helper": "{{capacity}} — ev taşımaları, büyük yükler",
       "label": "Büyük kamyon"
     },
     "mediumTruck": {
-      "capacity": "10–25 m³",
-      "helper": "10–25 m³ — daire taşımaları",
+      "helper": "{{capacity}} — daire taşımaları",
       "label": "Orta boy kamyon"
     },
     "model": {
@@ -1270,8 +1312,7 @@
       "label": "Plaka *"
     },
     "smallVan": {
-      "capacity": "10 m³'e kadar",
-      "helper": "10 m³'e kadar — küçük taşımalar, tek parça eşyalar",
+      "helper": "{{capacity}} — küçük taşımalar, tek parça eşyalar",
       "label": "Küçük panelvan"
     },
     "title": "Araç bilgileri",

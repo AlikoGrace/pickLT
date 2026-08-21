@@ -21,6 +21,8 @@ import { getMapboxDirections } from '@/utils/mapbox-directions'
 import { formatMoney } from '@/lib/format'
 import { useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
+import { formatDistanceM } from '@/lib/format'
+import { ARRIVAL_GEOFENCE_M } from '@/lib/service-limits'
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || ''
 const MOVES_COLLECTION = process.env.NEXT_PUBLIC_COLLECTION_MOVES || ''
@@ -379,9 +381,12 @@ export default function ActiveMovePage() {
     }
   }
 
-  const nextPhaseLabel = PHASE_ORDER[PHASE_ORDER.indexOf(phase) + 1]
-    ? PHASE_LABELS[PHASE_ORDER[PHASE_ORDER.indexOf(phase) + 1]].label
-    : null
+  // Only whether a next phase exists — the button no longer names it. The CTA
+  // used to be `"Mark as: {{phase}}"` with a translated phase noun in the slot,
+  // which cannot be made grammatical (de/pl case, tr suffix harmony, fr/it
+  // article); the mover app settled the same question by replacing its twin
+  // with a generic "Update status", and this is that copy.
+  const hasNextPhase = Boolean(PHASE_ORDER[PHASE_ORDER.indexOf(phase) + 1])
 
   const pickupCoords = useMemo(
     () => move?.pickupLatitude && move?.pickupLongitude
@@ -404,7 +409,7 @@ export default function ActiveMovePage() {
     return Math.sqrt(dLat * dLat + dLng * dLng) * 111_000 // approx meters
   }, [moverCoords, pickupCoords])
 
-  const isNearPickup = distanceToPickup !== null && distanceToPickup <= 100
+  const isNearPickup = distanceToPickup !== null && distanceToPickup <= ARRIVAL_GEOFENCE_M
 
   // ── Real ETA via Mapbox Directions ─────────────────────
   const [moverEtaMinutes, setMoverEtaMinutes] = useState(0)
@@ -582,12 +587,15 @@ export default function ActiveMovePage() {
             <div className="rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 p-3 flex items-center gap-2">
               <ExclamationTriangleIcon className="h-5 w-5 text-amber-500 shrink-0" />
               <p className="text-xs text-amber-700 dark:text-amber-300">
-                {t('web:mover.activeMove.proximity.helper', { distance: Math.round(distanceToPickup) })}
+                {t('web:mover.activeMove.proximity.helper', {
+                  radius: formatDistanceM(ARRIVAL_GEOFENCE_M),
+                  distance: formatDistanceM(distanceToPickup),
+                })}
               </p>
             </div>
           )}
           {/* Normal phase advancement (NOT during awaiting_payment or completed) */}
-          {phase !== 'completed' && phase !== 'awaiting_payment' && nextPhaseLabel && (
+          {phase !== 'completed' && phase !== 'awaiting_payment' && hasNextPhase && (
             <ButtonPrimary
               onClick={advancePhase}
               disabled={isUpdating || (phase === 'en_route' && !isNearPickup)}
@@ -595,7 +603,7 @@ export default function ActiveMovePage() {
             >
               {isUpdating
                 ? t('common:state.updating.label')
-                : t('web:mover.activeMove.advance.cta', { phase: nextPhaseLabel })}
+                : t('web:mover.activeMove.advance.cta')}
             </ButtonPrimary>
           )}
 

@@ -56,16 +56,19 @@
   },
   "arrivalWindow": {
     "afternoon": {
-      "label": "Tarde (12:00–17:00)"
+      "label": "Tarde"
     },
     "evening": {
-      "label": "Noche (17:00–21:00)"
+      "label": "Noche"
     },
     "label": "Franja de llegada",
     "morning": {
-      "label": "Mañana (8:00–12:00)"
+      "label": "Mañana"
     },
-    "optionalLabel": "Franja de llegada (opcional)"
+    "optionalLabel": "Franja de llegada (opcional)",
+    "withRange": {
+      "label": "{{window}} ({{range}})"
+    }
   },
   "business": {
     "company": {
@@ -136,7 +139,7 @@
       "label": "Puntos"
     },
     "summary": {
-      "label": "{{items}} · ~{{weight}} kg · {{points}}"
+      "label": "{{items}} · ~{{weight}} · {{points}}"
     },
     "title": "Clasificación de la mudanza",
     "upgrade": {
@@ -420,8 +423,7 @@
       "label": "Vehículo"
     },
     "weight": {
-      "label": "Peso",
-      "value": "{{weight}} kg"
+      "label": "Peso"
     }
   },
   "flexibility": {
@@ -734,10 +736,37 @@
     }
   },
   "packingMaterials": {
+    "bubbleWrap": {
+      "option": "Plástico de burbujas"
+    },
+    "dishInserts": {
+      "option": "Separadores para vajilla"
+    },
+    "furnitureBlankets": {
+      "option": "Mantas para muebles"
+    },
     "label": "Material de embalaje",
+    "mattressCovers": {
+      "option": "Fundas de colchón"
+    },
+    "movingBoxes": {
+      "option": "Cajas de mudanza"
+    },
+    "packingPaper": {
+      "option": "Papel de embalaje"
+    },
+    "packingTape": {
+      "option": "Cinta de embalar"
+    },
     "selectedCount": {
       "label_one": "{{count}} seleccionado",
       "label_other": "{{count}} seleccionados"
+    },
+    "tvProtection": {
+      "option": "Protección para TV"
+    },
+    "wardrobeBoxes": {
+      "option": "Cajas armario"
     }
   },
   "packingNotes": {
@@ -823,7 +852,7 @@
       "title": "Paga directamente a tu transportista"
     },
     "cashHandshake": {
-      "helper": "Paga al transportista directamente (en efectivo o por transferencia) y luego pulsa «Ya he pagado» abajo."
+      "helper": "Paga al transportista directamente (en efectivo o por transferencia) y luego pulsa «{{cta}}» abajo."
     },
     "cashLong": {
       "label": "Efectivo (pago directo al transportista)"
@@ -928,14 +957,6 @@
     "countSummary": {
       "label": "{{main}} • {{additional}}"
     },
-    "cover": {
-      "a11y": "Foto de portada",
-      "helper": "Sube una foto principal que muestre tus cosas o el espacio",
-      "label": "Foto de portada"
-    },
-    "formatHint": {
-      "subtitle": "PNG, JPG hasta 3 MB"
-    },
     "gallery": {
       "a11y": "Fotos de la mudanza",
       "helper": "Sube más fotos de los muebles, las habitaciones o los objetos",
@@ -954,6 +975,7 @@
       "a11y": "Foto {{n}} de la mudanza"
     },
     "main": {
+      "a11y": "Foto principal",
       "cta": "Toca para subir la foto principal",
       "helper": "Sube una foto principal que muestre tus cosas o el espacio",
       "label": "Foto principal"
@@ -1019,10 +1041,32 @@
       "label": "Tarifa base"
     },
     "baseRate": {
-      "label": "Tarifa base ({{moveType}})"
+      "fallback": {
+        "label": "Tarifa base"
+      },
+      "light": {
+        "label": "Tarifa base (Mudanza ligera)"
+      },
+      "premium": {
+        "label": "Tarifa base (Mudanza premium)"
+      },
+      "regular": {
+        "label": "Tarifa base (Mudanza estándar)"
+      }
     },
     "baseRateWithDistance": {
-      "label": "Tarifa base ({{moveType}}, {{distance}})"
+      "fallback": {
+        "label": "Tarifa base ({{distance}})"
+      },
+      "light": {
+        "label": "Tarifa base (Mudanza ligera, {{distance}})"
+      },
+      "premium": {
+        "label": "Tarifa base (Mudanza premium, {{distance}})"
+      },
+      "regular": {
+        "label": "Tarifa base (Mudanza estándar, {{distance}})"
+      }
     },
     "crew": {
       "label": "Equipo ({{crew}})"
@@ -1177,8 +1221,6 @@
   },
   "storageWeekCount_one": "{{count}} semana",
   "storageWeekCount_other": "{{count}} semanas",
-  "storageWeeks_one": "{{count}} semana",
-  "storageWeeks_other": "{{count}} semanas",
   "streetAddress": {
     "dropoff": {
       "helper": "Introduce la dirección completa de entrega",
@@ -1237,19 +1279,19 @@
     "capacity": {
       "label": "Capacidad (m³)",
       "placeholder": "p. ej., 15",
-      "value": "{{capacity}} m³"
+      "upTo": {
+        "value": "Hasta {{capacity}}"
+      }
     },
     "edit": {
       "title": "Editar la información del vehículo"
     },
     "largeTruck": {
-      "capacity": "25+ m³",
-      "helper": "25+ m³: mudanzas de casas, cargas grandes",
+      "helper": "{{capacity}}: mudanzas de casas, cargas grandes",
       "label": "Camión grande"
     },
     "mediumTruck": {
-      "capacity": "10–25 m³",
-      "helper": "10–25 m³: mudanzas de pisos",
+      "helper": "{{capacity}}: mudanzas de pisos",
       "label": "Camión mediano"
     },
     "model": {
@@ -1270,8 +1312,7 @@
       "label": "Matrícula *"
     },
     "smallVan": {
-      "capacity": "Hasta 10 m³",
-      "helper": "Hasta 10 m³: mudanzas pequeñas, objetos sueltos",
+      "helper": "{{capacity}}: mudanzas pequeñas, objetos sueltos",
       "label": "Furgoneta pequeña"
     },
     "title": "Información del vehículo",

@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true })
   } catch (err: unknown) {
     console.error('[change-email] Error:', err)
-    const message = err instanceof Error ? err.message : t('errors:profile.changeEmailFailed')
+    const message = err instanceof Error ? err.message : t('errors:profile.emailChangeFailed')
 
     // Handle Appwrite-specific errors
     if (message.includes('A user with the same email already exists')) {

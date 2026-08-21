@@ -1,4 +1,3 @@
-import { moveStatusLabel } from '@/lib/move-status-label'
 import { getTranslations } from '@/lib/i18n-server'
 import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
@@ -68,11 +67,10 @@ export async function POST(request: NextRequest) {
     // Move must be in awaiting_payment status
     if (move.status !== 'awaiting_payment') {
       return NextResponse.json(
-        {
-          error: t('errors:payment.notAwaiting', {
-            status: moveStatusLabel(t, move.status),
-          }),
-        },
+        // `(current: {{status}})` dropped a translated status label into a
+        // parenthesis; see `accept-move/route.ts` for why the slot went away
+        // rather than becoming a 17-key family.
+        { error: t('errors:payment.notAwaiting') },
         { status: 400 }
       )
     }
@@ -163,6 +161,7 @@ export async function POST(request: NextRequest) {
           title: 'Move Completed',
           body: 'Your move has been completed! Please leave a review.',
           data: { moveId, handle: move.handle, status: 'completed' },
+          i18n: { key: 'status.completed', params: { handle: move.handle ?? '' } },
         })
       }
 

@@ -56,16 +56,19 @@
   },
   "arrivalWindow": {
     "afternoon": {
-      "label": "Popołudnie (12:00–17:00)"
+      "label": "Popołudnie"
     },
     "evening": {
-      "label": "Wieczór (17:00–21:00)"
+      "label": "Wieczór"
     },
     "label": "Przedział czasowy przyjazdu",
     "morning": {
-      "label": "Rano (8:00–12:00)"
+      "label": "Rano"
     },
-    "optionalLabel": "Przedział czasowy przyjazdu (opcjonalnie)"
+    "optionalLabel": "Przedział czasowy przyjazdu (opcjonalnie)",
+    "withRange": {
+      "label": "{{window}} ({{range}})"
+    }
   },
   "business": {
     "company": {
@@ -138,7 +141,7 @@
       "label": "Punkty"
     },
     "summary": {
-      "label": "{{items}} · ~{{weight}} kg · {{points}}"
+      "label": "{{items}} · ~{{weight}} · {{points}}"
     },
     "title": "Klasyfikacja przeprowadzki",
     "upgrade": {
@@ -422,8 +425,7 @@
       "label": "Pojazd"
     },
     "weight": {
-      "label": "Waga",
-      "value": "{{weight}} kg"
+      "label": "Waga"
     }
   },
   "flexibility": {
@@ -743,12 +745,39 @@
     }
   },
   "packingMaterials": {
+    "bubbleWrap": {
+      "option": "Folia bąbelkowa"
+    },
+    "dishInserts": {
+      "option": "Wkłady na naczynia"
+    },
+    "furnitureBlankets": {
+      "option": "Koce meblowe"
+    },
     "label": "Materiały do pakowania",
+    "mattressCovers": {
+      "option": "Pokrowce na materace"
+    },
+    "movingBoxes": {
+      "option": "Kartony przeprowadzkowe"
+    },
+    "packingPaper": {
+      "option": "Papier pakowy"
+    },
+    "packingTape": {
+      "option": "Taśma pakowa"
+    },
     "selectedCount": {
       "label_few": "Wybrano: {{count}}",
       "label_many": "Wybrano: {{count}}",
       "label_one": "Wybrano: {{count}}",
       "label_other": "Wybrano: {{count}}"
+    },
+    "tvProtection": {
+      "option": "Ochrona telewizora"
+    },
+    "wardrobeBoxes": {
+      "option": "Kartony na ubrania"
     }
   },
   "packingNotes": {
@@ -834,7 +863,7 @@
       "title": "Zapłać przewoźnikowi bezpośrednio"
     },
     "cashHandshake": {
-      "helper": "Zapłać przewoźnikowi bezpośrednio (gotówką lub przelewem), a następnie dotknij „Zapłaciłem” poniżej."
+      "helper": "Zapłać przewoźnikowi bezpośrednio (gotówką lub przelewem), a następnie dotknij „{{cta}}” poniżej."
     },
     "cashLong": {
       "label": "Gotówka (płatność bezpośrednio przewoźnikowi)"
@@ -941,14 +970,6 @@
     "countSummary": {
       "label": "{{main}} • {{additional}}"
     },
-    "cover": {
-      "a11y": "Zdjęcie główne",
-      "helper": "Prześlij zdjęcie główne pokazujące Twoje rzeczy lub przestrzeń",
-      "label": "Zdjęcie główne"
-    },
-    "formatHint": {
-      "subtitle": "PNG, JPG do 3 MB"
-    },
     "gallery": {
       "a11y": "Zdjęcia przeprowadzki",
       "helper": "Prześlij dodatkowe zdjęcia mebli, pomieszczeń lub rzeczy",
@@ -967,6 +988,7 @@
       "a11y": "Zdjęcie przeprowadzki {{n}}"
     },
     "main": {
+      "a11y": "Zdjęcie główne",
       "cta": "Dotknij, aby przesłać zdjęcie główne",
       "helper": "Prześlij zdjęcie główne pokazujące Twoje rzeczy lub przestrzeń",
       "label": "Zdjęcie główne"
@@ -1038,10 +1060,32 @@
       "label": "Opłata podstawowa"
     },
     "baseRate": {
-      "label": "Stawka podstawowa ({{moveType}})"
+      "fallback": {
+        "label": "Stawka podstawowa"
+      },
+      "light": {
+        "label": "Stawka podstawowa (Mała przeprowadzka)"
+      },
+      "premium": {
+        "label": "Stawka podstawowa (Przeprowadzka premium)"
+      },
+      "regular": {
+        "label": "Stawka podstawowa (Standardowa przeprowadzka)"
+      }
     },
     "baseRateWithDistance": {
-      "label": "Stawka podstawowa ({{moveType}}, {{distance}})"
+      "fallback": {
+        "label": "Stawka podstawowa ({{distance}})"
+      },
+      "light": {
+        "label": "Stawka podstawowa (Mała przeprowadzka, {{distance}})"
+      },
+      "premium": {
+        "label": "Stawka podstawowa (Przeprowadzka premium, {{distance}})"
+      },
+      "regular": {
+        "label": "Stawka podstawowa (Standardowa przeprowadzka, {{distance}})"
+      }
     },
     "crew": {
       "label": "Ekipa ({{crew}})"
@@ -1204,10 +1248,6 @@
   "storageWeekCount_many": "{{count}} tygodni",
   "storageWeekCount_one": "{{count}} tydzień",
   "storageWeekCount_other": "{{count}} tygodnia",
-  "storageWeeks_few": "{{count}} tygodnie",
-  "storageWeeks_many": "{{count}} tygodni",
-  "storageWeeks_one": "{{count}} tydzień",
-  "storageWeeks_other": "{{count}} tygodnia",
   "streetAddress": {
     "dropoff": {
       "helper": "Podaj pełny adres dostawy",
@@ -1266,19 +1306,19 @@
     "capacity": {
       "label": "Ładowność (m³)",
       "placeholder": "np. 15",
-      "value": "{{capacity}} m³"
+      "upTo": {
+        "value": "Do {{capacity}}"
+      }
     },
     "edit": {
       "title": "Edytuj dane pojazdu"
     },
     "largeTruck": {
-      "capacity": "25+ m³",
-      "helper": "25+ m³ — przeprowadzki domów, duże ładunki",
+      "helper": "{{capacity}} — przeprowadzki domów, duże ładunki",
       "label": "Duża ciężarówka"
     },
     "mediumTruck": {
-      "capacity": "10–25 m³",
-      "helper": "10–25 m³ — przeprowadzki mieszkań",
+      "helper": "{{capacity}} — przeprowadzki mieszkań",
       "label": "Średnia ciężarówka"
     },
     "model": {
@@ -1299,8 +1339,7 @@
       "label": "Rejestracja *"
     },
     "smallVan": {
-      "capacity": "Do 10 m³",
-      "helper": "Do 10 m³ — małe przeprowadzki, pojedyncze rzeczy",
+      "helper": "{{capacity}} — małe przeprowadzki, pojedyncze rzeczy",
       "label": "Mały bus"
     },
     "title": "Dane pojazdu",

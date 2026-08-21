@@ -24,7 +24,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { getMapboxDirections } from '@/utils/mapbox-directions'
-import { formatMoney } from '@/lib/format'
+import { formatDistanceKm, formatMoney } from '@/lib/format'
 import { useTranslation } from 'react-i18next'
 
 // ─── Types ──────────────────────────────────────────────
@@ -652,7 +652,7 @@ const InstantMovePage = () => {
                   {t('track:eta.minutes.label', { count: moverEtaMinutes })}
                 </p>
                 <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                  {t('track:eta.distanceAway.label', { distance: moverDistanceKm.toFixed(1) })}
+                  {t('track:eta.distanceAway.label', { distance: formatDistanceKm(moverDistanceKm) })}
                 </p>
               </div>
             )}
@@ -956,7 +956,12 @@ const InstantMovePage = () => {
               </div>
               <div className="rounded-xl bg-amber-50 dark:bg-amber-900/20 p-3">
                 <p className="text-xs text-amber-700 dark:text-amber-300 text-center">
-                  {t('booking:payment.cashHandshake.helper')}{' '}
+                  {/* The note names the button below it. Interpolated from the
+                      same key the button renders, so a copy edit to one cannot
+                      leave the other quoting a CTA that no longer exists. */}
+                  {t('booking:payment.cashHandshake.helper', {
+                    cta: t('booking:payment.iHavePaid.cta'),
+                  })}{' '}
                   {t('booking:payment.dualConfirm.helper')}
                 </p>
               </div>

@@ -29,9 +29,12 @@ import {
   parseInventoryLines,
   useInventoryNames,
 } from '@/lib/inventory-labels'
-import { formatDateWith, formatMoney } from '@/lib/format'
+import { formatDateWith, formatMoney, formatVolumeM3 } from '@/lib/format'
+import { homeTypeLabel, moveSubtitle, moveTypeLabel } from '@/lib/move-subtitle'
 import { useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
+import { ARRIVAL_WINDOW_SLUGS } from '@/lib/service-limits'
+import { additionalServiceLabel, arrivalWindowLabel, arrivalWindowOptionLabel, dropoffParkingLabel, flexibilityLabel, floorLevelLabel, joinLabels, packingLevelLabel, packingMaterialLabel, parkingLabel, paymentMethodLabel, vehicleTypeLabel } from '@/lib/enum-labels'
 
 const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || ''
 const PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || ''
@@ -62,14 +65,6 @@ interface MoverInfo {
   yearsExperience: number
   languages: string[]
   isVerified: boolean
-}
-
-const formatLabel = (value: string | null | undefined, t: TFunction): string => {
-  if (!value) return t('common:value.notSpecified.empty')
-  return value
-    .split('_')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ')
 }
 
 const formatDate = (dateStr: string | null, t: TFunction) => {
@@ -565,10 +560,7 @@ export default function MoveDetailsPage() {
             {pickupDisplay.split(',')[0]} &rarr; {dropoffDisplay.split(',')[0]}
           </h1>
           <p className="text-neutral-500 dark:text-neutral-400 mt-1">
-            {t('web:moveDetails.header.subtitle', {
-              moveType: formatLabel(moveType, t),
-              date: formatDate(moveDate, t),
-            })}
+            {moveSubtitle(t, moveType, null, formatDate(moveDate, t))}
           </p>
         </div>
         <div className="text-right">
@@ -627,7 +619,7 @@ export default function MoveDetailsPage() {
                     <p className="text-sm text-neutral-500">{t('booking:address.aptUnit.label', { unit: pickupApartmentUnit })}</p>
                   )}
                   {floorLevel && (
-                    <p className="text-sm text-neutral-500">{t('booking:address.floor.label', { floor: formatLabel(floorLevel, t) })}</p>
+                    <p className="text-sm text-neutral-500">{t('booking:address.floor.label', { floor: floorLevelLabel(t, floorLevel) })}</p>
                   )}
                   {elevatorAvailable && (
                     <p className="text-sm text-green-600 flex items-center gap-1">
@@ -635,7 +627,7 @@ export default function MoveDetailsPage() {
                     </p>
                   )}
                   {parkingSituation && (
-                    <p className="text-sm text-neutral-500">{t('booking:address.parking.label', { value: formatLabel(parkingSituation, t) })}</p>
+                    <p className="text-sm text-neutral-500">{t('booking:address.parking.label', { value: parkingLabel(t, parkingSituation) })}</p>
                   )}
                   {pickupAccessNotes && (
                     <p className="text-sm text-neutral-500">{t('booking:address.accessNotes.label', { notes: pickupAccessNotes })}</p>
@@ -661,7 +653,7 @@ export default function MoveDetailsPage() {
                     <p className="text-sm text-neutral-500">{t('booking:address.aptUnit.label', { unit: dropoffApartmentUnit })}</p>
                   )}
                   {dropoffFloorLevel && (
-                    <p className="text-sm text-neutral-500">{t('booking:address.floor.label', { floor: formatLabel(dropoffFloorLevel, t) })}</p>
+                    <p className="text-sm text-neutral-500">{t('booking:address.floor.label', { floor: floorLevelLabel(t, dropoffFloorLevel) })}</p>
                   )}
                   {dropoffElevatorAvailable && (
                     <p className="text-sm text-green-600 flex items-center gap-1">
@@ -669,7 +661,7 @@ export default function MoveDetailsPage() {
                     </p>
                   )}
                   {dropoffParkingSituation && (
-                    <p className="text-sm text-neutral-500">{t('booking:address.parking.label', { value: formatLabel(dropoffParkingSituation, t) })}</p>
+                    <p className="text-sm text-neutral-500">{t('booking:address.parking.label', { value: dropoffParkingLabel(t, dropoffParkingSituation) })}</p>
                   )}
                   {dropoffHaltverbot && (
                     <p className="text-sm text-amber-600 dark:text-amber-400">{t('booking:haltverbot.requested.label')}</p>
@@ -684,7 +676,7 @@ export default function MoveDetailsPage() {
             <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
               {t('moves:detail.moveDetails.title')}
             </h2>
-            <InfoRow icon={TruckIcon} label={t('booking:field.moveType.label')} value={formatLabel(moveType, t)} />
+            <InfoRow icon={TruckIcon} label={t('booking:field.moveType.label')} value={moveTypeLabel(t, moveType)} />
             {/* Instant starts immediately and carries no moveDate — show when it
                 was requested instead. */}
             {isInstant ? (
@@ -696,7 +688,7 @@ export default function MoveDetailsPage() {
                 instant client is never asked, so "Not specified" would be a
                 statement about data we never sought. */}
             {!isInstant && (
-              <InfoRow icon={HomeIcon} label={t('booking:homeType.label')} value={formatLabel(homeType, t)} />
+              <InfoRow icon={HomeIcon} label={t('booking:homeType.label')} value={homeTypeLabel(t, homeType)} />
             )}
             <InfoRow icon={CubeIcon} label={t('booking:inventory.items.label')} value={(() => {
               if (inventoryLines.length === 0) return t('moves:itemCount', { count: inventoryCount })
@@ -711,16 +703,16 @@ export default function MoveDetailsPage() {
               )
             })()} />
             {!isInstant && (
-              <InfoRow icon={TruckIcon} label={t('booking:field.vehicle.label')} value={formatLabel(vehicleType, t)} />
+              <InfoRow icon={TruckIcon} label={t('booking:field.vehicle.label')} value={vehicleTypeLabel(t, vehicleType)} />
             )}
             {!isInstant && (
               <InfoRow icon={UsersIcon} label={t('booking:crew.label')} value={crewSize ? t('moves:moverCount', { count: crewSize }) : t('common:value.standard.label')} />
             )}
             {arrivalWindow && (
-              <InfoRow icon={CalendarIcon} label={t('booking:arrivalWindow.label')} value={formatLabel(arrivalWindow, t)} />
+              <InfoRow icon={CalendarIcon} label={t('booking:arrivalWindow.label')} value={arrivalWindowLabel(t, arrivalWindow)} />
             )}
             {flexibility && (
-              <InfoRow icon={ClockIcon} label={t('booking:flexibility.label')} value={formatLabel(flexibility, t)} />
+              <InfoRow icon={ClockIcon} label={t('booking:flexibility.label')} value={flexibilityLabel(t, flexibility)} />
             )}
             {routeDistanceMeters != null && routeDistanceMeters > 0 && (
               <InfoRow icon={MapPinIcon} label={t('booking:field.distance.label')} value={`${(routeDistanceMeters / 1000).toFixed(1)} km`} />
@@ -737,10 +729,10 @@ export default function MoveDetailsPage() {
                 {t('booking:services.title')}
               </h2>
               {packingServiceLevel && (
-                <InfoRow label={t('booking:packing.label')} value={formatLabel(packingServiceLevel, t)} />
+                <InfoRow label={t('booking:packing.label')} value={packingLevelLabel(t, packingServiceLevel)} />
               )}
               {packingMaterials && packingMaterials.length > 0 && (
-                <InfoRow label={t('booking:packingMaterials.label')} value={packingMaterials.map((m) => formatLabel(m, t)).join(', ')} />
+                <InfoRow label={t('booking:packingMaterials.label')} value={joinLabels(packingMaterials.map((m) => packingMaterialLabel(t, m)))} />
               )}
               {packingNotes && (
                 <InfoRow label={t('booking:packingNotes.label')} value={packingNotes} />
@@ -748,7 +740,7 @@ export default function MoveDetailsPage() {
               {additionalServices.length > 0 && (
                 <InfoRow
                   label={t('booking:services.additional.label')}
-                  value={additionalServices.map((s) => formatLabel(s, t)).join(', ')}
+                  value={joinLabels(additionalServices.map((s) => additionalServiceLabel(t, s)))}
                 />
               )}
               {storageWeeks > 0 && (
@@ -793,7 +785,7 @@ export default function MoveDetailsPage() {
               {paymentMethod && (
                 <div className="flex justify-between mt-2">
                   <span className="text-neutral-500 dark:text-neutral-400">{t('booking:payment.section.title')}</span>
-                  <span className="font-medium text-neutral-900 dark:text-neutral-100">{formatLabel(paymentMethod, t)}</span>
+                  <span className="font-medium text-neutral-900 dark:text-neutral-100">{paymentMethodLabel(t, paymentMethod)}</span>
                 </div>
               )}
             </div>
@@ -871,9 +863,15 @@ export default function MoveDetailsPage() {
                         className="mt-1 block w-full rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 px-3 py-2 text-sm"
                       >
                         <option value="">{t('common:action.keepCurrent.label')}</option>
-                        <option value="morning">{t('booking:arrivalWindow.morning.label')}</option>
-                        <option value="afternoon">{t('booking:arrivalWindow.afternoon.label')}</option>
-                        <option value="evening">{t('booking:arrivalWindow.evening.label')}</option>
+                        {/* The hours come from `ARRIVAL_WINDOW_HOURS`, formatted for
+                            the reader's clock — they used to be typed into the
+                            translated label, which is how eight catalogs ended up
+                            disagreeing about 12- versus 24-hour. */}
+                        {ARRIVAL_WINDOW_SLUGS.map((slug) => (
+                          <option key={slug} value={slug}>
+                            {arrivalWindowOptionLabel(t, slug)}
+                          </option>
+                        ))}
                       </select>
                     </label>
                     <div className="flex gap-2">
@@ -973,11 +971,11 @@ export default function MoveDetailsPage() {
                 } />
               )}
               {moverInfo.vehicleType && (
-                <InfoRow label={t('booking:vehicle.type.label')} value={formatLabel(moverInfo.vehicleType, t)} />
+                <InfoRow label={t('booking:vehicle.type.label')} value={vehicleTypeLabel(t, moverInfo.vehicleType)} />
               )}
               {moverInfo.vehicleCapacity && (
                 /* m³, not kg — movers are asked for "Capacity in m³" at onboarding. */
-                <InfoRow label={t('booking:vehicle.capacity.label')} value={`${moverInfo.vehicleCapacity} m³`} />
+                <InfoRow label={t('booking:vehicle.capacity.label')} value={formatVolumeM3(Number(moverInfo.vehicleCapacity))} />
               )}
 
               {/* Crew */}

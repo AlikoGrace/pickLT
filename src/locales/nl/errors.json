@@ -200,23 +200,21 @@
     "tooLong": "Het bericht is te lang. De limiet is {{max}} tekens."
   },
   "move": {
-    "alreadyAssigned": "De verhuizing is al toegewezen",
-    "alreadyAssigned2": "Aan deze verhuizing is al een verhuizer toegewezen",
+    "alreadyAssigned": "Aan deze verhuizing is al een verhuizer toegewezen",
     "cancelFailed": "Deze verhuizing kon niet worden geannuleerd. Probeer het opnieuw.",
     "cancelRetry": "Annuleren mislukt. Probeer het opnieuw.",
     "createFailed": "Verhuizing kon niet worden aangemaakt",
     "dateInPast": "De verhuisdatum moet in de toekomst liggen",
-    "invalidTransition": "Ongeldige overgang van “{{from}}” naar “{{to}}”",
+    "invalidTransition": "Deze statuswijziging is niet meer geldig voor deze verhuizing. Laad de verhuizing opnieuw en probeer het nog eens.",
     "loadFailed": "Verhuisgegevens konden niet worden geladen",
-    "notAcceptableInStatus": "De verhuizing kan niet worden geaccepteerd met status {{status}}",
-    "notAssigned": "Niet aan deze verhuizing toegewezen",
-    "notAssigned2": "Je bent niet aan deze verhuizing toegewezen",
+    "noLongerAcceptable": "Deze verhuizing kan niet meer worden geaccepteerd. De status is gewijzigd — laad de lijst opnieuw.",
+    "notAssigned": "Je bent niet aan deze verhuizing toegewezen",
     "notAuthorized": "Geen rechten voor deze verhuizing",
     "notAvailable": "Deze verhuizing kan niet worden geaccepteerd",
     "notCancellable": "Deze verhuizing kan niet meer worden geannuleerd ({{stage}}). Je spullen zijn mogelijk al onderweg — neem rechtstreeks contact op met je verhuizer.",
     "notCancellableUnknownStage": "Deze verhuizing kan niet meer worden geannuleerd. Je spullen zijn mogelijk al onderweg — neem rechtstreeks contact op met je verhuizer.",
     "notFound": "Verhuizing niet gevonden",
-    "notReschedulable": "Een verhuizing met status “{{status}}” kan niet worden verzet",
+    "notReschedulable": "Deze verhuizing kan niet meer worden verzet. De status is gewijzigd — laad de verhuizing opnieuw.",
     "rescheduleFailed": "Verzetten mislukt",
     "rescheduleRetry": "Verzetten mislukt. Probeer het opnieuw.",
     "scheduledOnly": "Alleen geplande verhuizingen kunnen op deze manier worden geaccepteerd",
@@ -267,16 +265,13 @@
       "initFailed": "Betaling kon niet worden gestart. Probeer het opnieuw."
     },
     "confirmFailed": "Betaling kon niet worden bevestigd",
-    "notAwaiting": "Deze verhuizing wacht niet op betaling (huidige status: {{status}})"
+    "notAwaiting": "Deze verhuizing wacht niet op betaling. Laad de verhuizing opnieuw en probeer het nog eens."
   },
   "profile": {
-    "changeEmailFailed": "E-mailadres wijzigen mislukt",
-    "changePhoneFailed": "Telefoonnummer wijzigen mislukt",
     "emailChangeFailed": "E-mailadres wijzigen mislukt",
     "emailTaken": "Dit e-mailadres is al in gebruik bij een ander account",
     "nameUpdateFailed": "Naam bijwerken mislukt",
     "phoneChangeFailed": "Telefoonnummer wijzigen mislukt",
-    "phoneNumberChangeFailed": "Telefoonnummer wijzigen mislukt",
     "phoneTaken": "Dit telefoonnummer is al in gebruik bij een ander account"
   },
   "request": {
@@ -315,8 +310,7 @@
     "notAnImage2": "Het bestand moet een afbeelding zijn",
     "photoFailed": "Foto kon niet worden geüpload",
     "photosFailed": "Foto's konden niet worden geüpload",
-    "tooLarge": "De afbeelding moet kleiner zijn dan {{limit}}",
-    "tooLarge2": "Het bestand moet kleiner zijn dan 10 MB"
+    "tooLarge": "De afbeelding moet kleiner zijn dan {{limit}}"
   },
   "validation": {
     "emailFormat": "Ongeldig e-mailadres",

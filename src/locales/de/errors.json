@@ -108,7 +108,7 @@
     "unauthorized": "Nicht autorisiert"
   },
   "call": {
-    "noPhoneNumber": "Für diesen Umzugshelfer ist keine Telefonnummer hinterlegt."
+    "noPhoneNumber": "Für diesen Umzugsprofi ist keine Telefonnummer hinterlegt."
   },
   "card": {
     "add": {
@@ -175,7 +175,7 @@
   },
   "instant": {
     "moverUnavailable": {
-      "error": "Der ausgewählte Umzugshelfer ist nicht mehr verfügbar"
+      "error": "Der ausgewählte Umzugsprofi ist nicht mehr verfügbar"
     },
     "submitStage": {
       "error": "Das Senden ist bei {{stage}} fehlgeschlagen. Bitte versuchen Sie es erneut.",
@@ -200,23 +200,21 @@
     "tooLong": "Die Nachricht ist zu lang. Das Limit beträgt {{max}} Zeichen."
   },
   "move": {
-    "alreadyAssigned": "Der Umzug ist bereits zugewiesen",
-    "alreadyAssigned2": "Diesem Umzug ist bereits ein Umzugsprofi zugewiesen",
+    "alreadyAssigned": "Diesem Umzug ist bereits ein Umzugsprofi zugewiesen",
     "cancelFailed": "Dieser Umzug konnte nicht storniert werden. Bitte versuchen Sie es erneut.",
     "cancelRetry": "Stornierung fehlgeschlagen. Bitte versuchen Sie es erneut.",
     "createFailed": "Umzug konnte nicht angelegt werden",
     "dateInPast": "Der Umzugstermin muss in der Zukunft liegen",
-    "invalidTransition": "Ungültiger Wechsel von „{{from}}“ zu „{{to}}“",
+    "invalidTransition": "Diese Statusänderung ist für diesen Umzug nicht mehr gültig. Bitte laden Sie den Umzug neu und versuchen Sie es erneut.",
     "loadFailed": "Umzugsdaten konnten nicht geladen werden",
-    "notAcceptableInStatus": "Der Umzug kann im Status {{status}} nicht angenommen werden",
-    "notAssigned": "Diesem Umzug nicht zugewiesen",
-    "notAssigned2": "Sie sind diesem Umzug nicht zugewiesen",
+    "noLongerAcceptable": "Dieser Umzug kann nicht mehr angenommen werden. Der Status hat sich geändert — bitte laden Sie die Liste neu.",
+    "notAssigned": "Sie sind diesem Umzug nicht zugewiesen",
     "notAuthorized": "Keine Berechtigung für diesen Umzug",
     "notAvailable": "Dieser Umzug kann nicht angenommen werden",
     "notCancellable": "Dieser Umzug kann nicht mehr storniert werden ({{stage}}). Ihre Sachen sind möglicherweise bereits unterwegs — bitte wenden Sie sich direkt an Ihren Umzugsprofi.",
     "notCancellableUnknownStage": "Dieser Umzug kann nicht mehr storniert werden. Ihre Sachen sind möglicherweise bereits unterwegs — bitte wenden Sie sich direkt an Ihren Umzugsprofi.",
     "notFound": "Umzug nicht gefunden",
-    "notReschedulable": "Ein Umzug mit dem Status „{{status}}“ kann nicht verschoben werden",
+    "notReschedulable": "Der Termin dieses Umzugs kann nicht mehr geändert werden. Der Status hat sich geändert — bitte laden Sie den Umzug neu.",
     "rescheduleFailed": "Termin konnte nicht geändert werden",
     "rescheduleRetry": "Terminänderung fehlgeschlagen. Bitte versuchen Sie es erneut.",
     "scheduledOnly": "Auf diesem Weg können nur geplante Umzüge angenommen werden",
@@ -267,16 +265,13 @@
       "initFailed": "Die Zahlung konnte nicht gestartet werden. Bitte versuchen Sie es erneut."
     },
     "confirmFailed": "Zahlung konnte nicht bestätigt werden",
-    "notAwaiting": "Für diesen Umzug steht keine Zahlung aus (aktuell: {{status}})"
+    "notAwaiting": "Für diesen Umzug steht keine Zahlung aus. Bitte laden Sie den Umzug neu und versuchen Sie es erneut."
   },
   "profile": {
-    "changeEmailFailed": "E-Mail-Adresse konnte nicht geändert werden",
-    "changePhoneFailed": "Telefonnummer konnte nicht geändert werden",
     "emailChangeFailed": "E-Mail-Adresse konnte nicht geändert werden",
     "emailTaken": "Diese E-Mail-Adresse wird bereits von einem anderen Konto verwendet",
     "nameUpdateFailed": "Name konnte nicht aktualisiert werden",
     "phoneChangeFailed": "Telefonnummer konnte nicht geändert werden",
-    "phoneNumberChangeFailed": "Telefonnummer konnte nicht geändert werden",
     "phoneTaken": "Diese Telefonnummer wird bereits von einem anderen Konto verwendet"
   },
   "request": {
@@ -315,8 +310,7 @@
     "notAnImage2": "Die Datei muss ein Bild sein",
     "photoFailed": "Foto konnte nicht hochgeladen werden",
     "photosFailed": "Fotos konnten nicht hochgeladen werden",
-    "tooLarge": "Das Bild muss kleiner als {{limit}} sein",
-    "tooLarge2": "Die Datei darf höchstens 10 MB groß sein"
+    "tooLarge": "Das Bild muss kleiner als {{limit}} sein"
   },
   "validation": {
     "emailFormat": "Ungültiges E-Mail-Format",

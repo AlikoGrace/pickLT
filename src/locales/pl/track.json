@@ -26,11 +26,8 @@
     "assigned": {
       "label": "Szacowany czas przyjazdu"
     },
-    "distance": {
-      "footnote": "{{distance}} km stąd"
-    },
     "distanceAway": {
-      "label": "{{distance}} km stąd"
+      "label": "{{distance}} stąd"
     },
     "minutes": {
       "label_few": "{{count}} min",
@@ -39,12 +36,12 @@
       "label_other": "{{count}} min"
     },
     "moverArriving": {
-      "label": "Przeprowadzkowiec w drodze"
+      "label": "Przewoźnik w drodze"
     },
     "moverQueued": {
       "body": "Kończy inne zlecenie",
       "footnote": "Ruszy do Ciebie, gdy tylko skończy.",
-      "label": "Przydzielono przeprowadzkowca"
+      "label": "Przewoźnik przydzielony"
     }
   },
   "hint": {
@@ -193,7 +190,7 @@
       "label": "Kwota do zapłaty"
     },
     "cashNote": {
-      "body": "Zapłać przeprowadzkowcowi bezpośrednio (gotówką lub przelewem), a następnie dotknij <0>{{cta}}</0> poniżej. Przeprowadzkowiec musi też potwierdzić otrzymanie zapłaty, zanim przeprowadzka zostanie oznaczona jako zakończona."
+      "body": "Zapłać przewoźnikowi bezpośrednio (gotówką lub przelewem), a następnie dotknij <0>{{cta}}</0> poniżej. Przewoźnik musi też potwierdzić otrzymanie zapłaty, zanim przeprowadzka zostanie oznaczona jako zakończona."
     },
     "confirm": {
       "cta": "Zapłaciłem"
@@ -216,7 +213,7 @@
       "title": "Twój przewoźnik dotarł na miejsce!"
     },
     "arrivedDestination": {
-      "subtitle": "Przeprowadzkowiec dotarł pod adres dostawy",
+      "subtitle": "Przewoźnik dotarł pod adres dostawy",
       "title": "Na miejscu docelowym!"
     },
     "awaitingAccept": {
@@ -224,18 +221,18 @@
       "title": "Czekamy na potwierdzenie przewoźnika"
     },
     "awaitingPayment": {
-      "subtitle": "Zapłać przeprowadzkowcowi i potwierdź poniżej",
+      "subtitle": "Zapłać przewoźnikowi i potwierdź poniżej",
       "title": "Przeprowadzka zakończona — wymagana płatność"
     },
     "broadcasting": {
-      "subtitle": "Szukamy najbliższego przeprowadzkowca"
+      "subtitle": "Szukamy najbliższego przewoźnika"
     },
     "cancelled": {
       "label": "Przeprowadzka anulowana",
       "subtitle": "Anulowana"
     },
     "cancelledByMover": {
-      "subtitle": "Anulowana przez przeprowadzkowca"
+      "subtitle": "Anulowana przez przewoźnika"
     },
     "completed": {
       "label": "Przeprowadzka zakończona",
@@ -252,13 +249,13 @@
     },
     "moverArrived": {
       "subtitle": "Spotkaj się z nim pod adresem odbioru",
-      "title": "Przeprowadzkowiec dotarł na miejsce!"
+      "title": "Przewoźnik dotarł na miejsce!"
     },
     "moverEnRoute": {
       "title": "Przewoźnik jest w drodze"
     },
     "paid": {
-      "subtitle": "Czekamy, aż przeprowadzkowiec zamknie przeprowadzkę",
+      "subtitle": "Czekamy, aż przewoźnik zamknie przeprowadzkę",
       "title": "Płatność otrzymana"
     },
     "unloading": {
@@ -266,7 +263,7 @@
       "title": "Rozładunek Twoich rzeczy"
     },
     "waitingPriority": {
-      "subtitle": "Wysyłamy prośbę do Twojego przeprowadzkowca"
+      "subtitle": "Wysyłamy prośbę do Twojego przewoźnika"
     }
   },
   "pricing": {
@@ -282,16 +279,16 @@
       "label": "Przeprowadzka zakończona"
     },
     "inTransit": {
-      "label": "W transporcie"
+      "label": "W trasie"
     },
     "moverArrived": {
-      "label": "Przeprowadzkowiec pod adresem odbioru"
+      "label": "Przewoźnik pod adresem odbioru"
     },
     "moverAssigned": {
-      "label": "Przydzielono przeprowadzkowca"
+      "label": "Przewoźnik przydzielony"
     },
     "moverEnRoute": {
-      "label": "Przeprowadzkowiec w drodze"
+      "label": "Przewoźnik w drodze"
     },
     "orderPlaced": {
       "label": "Zamówienie złożone"

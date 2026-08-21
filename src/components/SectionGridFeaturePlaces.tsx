@@ -8,7 +8,7 @@ import { TruckIcon } from '@heroicons/react/24/outline'
 import { FC, ReactNode, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-  moveUiCategoryLabel,
+  moveUiCategoryEmptyFilteredText,
   moveUiCategoryOptions,
   moveUiCategoryStatus,
   toMoveUiCategory,
@@ -185,9 +185,7 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
               ? t('web:home.moves.empty')
               : activeTab === 'scheduled'
                 ? t('web:home.moves.emptyScheduled')
-                : t('web:home.moves.emptyFiltered', {
-                    status: moveUiCategoryLabel(activeTab, t),
-                  })}
+                : moveUiCategoryEmptyFilteredText(activeTab, t)}
           </p>
         </div>
       )}

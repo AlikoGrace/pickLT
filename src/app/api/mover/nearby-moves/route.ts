@@ -4,8 +4,11 @@ import { requireVerifiedMover, isErrorResponse } from '@/lib/mover-auth'
 import { APPWRITE } from '@/lib/constants'
 import { Query } from 'node-appwrite'
 import { NextRequest, NextResponse } from 'next/server'
+import { NEARBY_MOVES_RADIUS_KM } from '@/lib/service-limits'
 
-const RADIUS_KM = 30
+// The radius the empty state and the result count both quote. One constant, so
+// the sentence on screen cannot drift from the query that produced it.
+const RADIUS_KM = NEARBY_MOVES_RADIUS_KM
 
 // ~1.1 km of precision — enough to place an approximate pin and judge
 // distance, not enough to identify a specific building before the job is won.

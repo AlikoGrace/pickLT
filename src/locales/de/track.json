@@ -26,23 +26,20 @@
     "assigned": {
       "label": "Voraussichtliche Ankunft"
     },
-    "distance": {
-      "footnote": "{{distance}} km entfernt"
-    },
     "distanceAway": {
-      "label": "{{distance}} km entfernt"
+      "label": "{{distance}} entfernt"
     },
     "minutes": {
       "label_one": "{{count}} Min.",
       "label_other": "{{count}} Min."
     },
     "moverArriving": {
-      "label": "Umzugshelfer unterwegs"
+      "label": "Umzugsprofi unterwegs"
     },
     "moverQueued": {
       "body": "Beendet einen anderen Auftrag",
       "footnote": "Er macht sich auf den Weg, sobald er fertig ist.",
-      "label": "Umzugshelfer zugewiesen"
+      "label": "Umzugsprofi zugewiesen"
     }
   },
   "hint": {
@@ -189,7 +186,7 @@
       "label": "Zu zahlender Betrag"
     },
     "cashNote": {
-      "body": "Bitte zahlen Sie direkt an den Umzugshelfer (bar oder per Überweisung) und tippen Sie dann unten auf <0>{{cta}}</0>. Der Umzugshelfer muss den Erhalt ebenfalls bestätigen, bevor der Umzug als abgeschlossen gilt."
+      "body": "Bitte zahlen Sie direkt an den Umzugsprofi (bar oder per Überweisung) und tippen Sie dann unten auf <0>{{cta}}</0>. Der Umzugsprofi muss den Erhalt ebenfalls bestätigen, bevor der Umzug als abgeschlossen gilt."
     },
     "confirm": {
       "cta": "Ich habe bezahlt"
@@ -212,7 +209,7 @@
       "title": "Ihr Umzugsprofi ist da!"
     },
     "arrivedDestination": {
-      "subtitle": "Ihr Umzugshelfer hat die Zieladresse erreicht",
+      "subtitle": "Ihr Umzugsprofi hat die Zieladresse erreicht",
       "title": "Am Ziel angekommen!"
     },
     "awaitingAccept": {
@@ -220,18 +217,18 @@
       "title": "Warten auf Zusage des Umzugsprofis"
     },
     "awaitingPayment": {
-      "subtitle": "Bitte zahlen Sie den Umzugshelfer und bestätigen Sie unten",
+      "subtitle": "Bitte zahlen Sie den Umzugsprofi und bestätigen Sie unten",
       "title": "Umzug abgeschlossen — Zahlung erforderlich"
     },
     "broadcasting": {
-      "subtitle": "Nächstgelegener Umzugshelfer wird gesucht"
+      "subtitle": "Nächstgelegener Umzugsprofi wird gesucht"
     },
     "cancelled": {
       "label": "Umzug storniert",
       "subtitle": "Storniert"
     },
     "cancelledByMover": {
-      "subtitle": "Vom Umzugshelfer storniert"
+      "subtitle": "Vom Umzugsprofi storniert"
     },
     "completed": {
       "label": "Umzug abgeschlossen",
@@ -248,13 +245,13 @@
     },
     "moverArrived": {
       "subtitle": "Treffen Sie ihn an der Abholadresse",
-      "title": "Ihr Umzugshelfer ist da!"
+      "title": "Ihr Umzugsprofi ist da!"
     },
     "moverEnRoute": {
       "title": "Umzugsprofi unterwegs"
     },
     "paid": {
-      "subtitle": "Warten auf den Abschluss durch den Umzugshelfer",
+      "subtitle": "Warten auf den Abschluss durch den Umzugsprofi",
       "title": "Zahlung erhalten"
     },
     "unloading": {
@@ -262,7 +259,7 @@
       "title": "Ihre Sachen werden entladen"
     },
     "waitingPriority": {
-      "subtitle": "Anfrage wird an Ihren Umzugshelfer gesendet"
+      "subtitle": "Anfrage wird an Ihren Umzugsprofi gesendet"
     }
   },
   "pricing": {
@@ -281,13 +278,13 @@
       "label": "Unterwegs"
     },
     "moverArrived": {
-      "label": "Umzugshelfer an der Abholadresse"
+      "label": "Umzugsprofi an der Abholadresse"
     },
     "moverAssigned": {
-      "label": "Umzugshelfer zugewiesen"
+      "label": "Umzugsprofi zugewiesen"
     },
     "moverEnRoute": {
-      "label": "Umzugshelfer unterwegs"
+      "label": "Umzugsprofi unterwegs"
     },
     "orderPlaced": {
       "label": "Auftrag erteilt"

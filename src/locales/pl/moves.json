@@ -8,10 +8,10 @@
     }
   },
   "available": {
-    "withinRadiusCount_few": "{{count}} przeprowadzki w promieniu 30 km",
-    "withinRadiusCount_many": "{{count}} przeprowadzek w promieniu 30 km",
-    "withinRadiusCount_one": "{{count}} przeprowadzka w promieniu 30 km",
-    "withinRadiusCount_other": "{{count}} przeprowadzki w promieniu 30 km"
+    "withinRadiusCount_few": "{{count}} przeprowadzki w promieniu {{radius}}",
+    "withinRadiusCount_many": "{{count}} przeprowadzek w promieniu {{radius}}",
+    "withinRadiusCount_one": "{{count}} przeprowadzka w promieniu {{radius}}",
+    "withinRadiusCount_other": "{{count}} przeprowadzki w promieniu {{radius}}"
   },
   "booking": {
     "code": {
@@ -318,7 +318,7 @@
   },
   "status": {
     "arrivedDestination": {
-      "label": "Na miejscu"
+      "label": "Na miejscu docelowym"
     },
     "assigned": {
       "label": "Przydzielona"
@@ -354,7 +354,7 @@
       "label": "W trakcie"
     },
     "inTransit": {
-      "label": "W transporcie"
+      "label": "W trasie"
     },
     "loading": {
       "label": "Załadunek"
@@ -363,19 +363,19 @@
       "label": "Przewoźnik potwierdził"
     },
     "moverArrived": {
-      "label": "Przeprowadzkowiec na miejscu"
+      "label": "Przewoźnik na miejscu"
     },
     "moverAssigned": {
-      "label": "Przydzielono przeprowadzkowca"
+      "label": "Przewoźnik przydzielony"
     },
     "moverEnRoute": {
-      "label": "Przeprowadzkowiec w drodze"
+      "label": "Przewoźnik w drodze"
     },
     "paid": {
       "label": "Opłacona"
     },
     "pending": {
-      "label": "Oczekuje"
+      "label": "Oczekująca"
     },
     "pendingPayment": {
       "label": "Oczekuje na płatność"

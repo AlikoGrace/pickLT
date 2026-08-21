@@ -20,7 +20,7 @@
       "title": "Accedi per vedere il tuo account"
     },
     "version": {
-      "label": "pickLT v{{version}}"
+      "label": "PickLT v{{version}}"
     }
   },
   "authGate": {
@@ -120,7 +120,20 @@
     },
     "moves": {
       "empty": "Nessun trasloco. Inizia prenotando il tuo primo trasloco!",
-      "emptyFiltered": "Nessun trasloco trovato in {{status}}.",
+      "emptyFiltered": {
+        "cancelled": {
+          "label": "Nessun trasloco annullato trovato."
+        },
+        "completed": {
+          "label": "Nessun trasloco completato trovato."
+        },
+        "inProgress": {
+          "label": "Nessun trasloco in corso trovato."
+        },
+        "pending": {
+          "label": "Nessun trasloco in attesa trovato."
+        }
+      },
       "emptyScheduled": "Nessun trasloco programmato trovato.",
       "signedOut": {
         "cta": "Accedi per iniziare",
@@ -258,9 +271,6 @@
     "title": "Come vuoi traslocare?"
   },
   "moveDetails": {
-    "header": {
-      "subtitle": "Trasloco {{moveType}} · {{date}}"
-    },
     "mover": {
       "title": "Il tuo traslocatore"
     },
@@ -285,7 +295,7 @@
     },
     "activeMove": {
       "advance": {
-        "cta": "Segna come: {{phase}}"
+        "cta": "Aggiorna stato"
       },
       "cancelledByClient": {
         "title": "Trasloco annullato dal cliente"
@@ -298,14 +308,14 @@
         "label": "~{{minutes}} min al ritiro"
       },
       "proximity": {
-        "helper": "Devi essere entro 100m dal luogo di ritiro per segnalare l’arrivo (sei a {{distance}}m)"
+        "helper": "Devi essere entro {{radius}} dal luogo di ritiro per segnalare l’arrivo (sei a {{distance}})"
       }
     },
     "additionalServicesCount_one": "+{{count}} servizio",
     "additionalServicesCount_other": "+{{count}} servizi",
     "availableMoves": {
       "empty": {
-        "subtitle": "Al momento non ci sono traslochi programmati entro 30 km. Controlliamo automaticamente ogni 30 secondi.",
+        "subtitle": "Al momento non ci sono traslochi programmati entro {{radius}}. Controlliamo automaticamente ogni {{interval}}.",
         "title": "Nessun trasloco disponibile"
       },
       "error": {
@@ -413,14 +423,14 @@
         "helper": "La città in cui operi principalmente come traslocatore"
       },
       "experience": {
-        "label": "Anni di esperienza *",
+        "label": "Anni di esperienza",
         "placeholder": "es. 5"
       },
       "languages": {
-        "label": "Lingue parlate *"
+        "label": "Lingue parlate"
       },
       "licenseNumber": {
-        "label": "Numero della patente *",
+        "label": "Numero della patente",
         "placeholder": "Inserisci il numero della tua patente"
       },
       "licensePhoto": {
@@ -440,19 +450,19 @@
         "a11y": "Anteprima del selfie",
         "cta": "Scatta o carica un selfie nitido",
         "helper": "Per la verifica dell’identità serve un selfie nitido",
-        "label": "Foto selfie *",
+        "label": "Foto selfie",
         "retake": {
           "cta": "Scatta di nuovo il selfie"
         }
       },
       "ssn": {
         "helper": "Cifrato e usato solo per la verifica fiscale",
-        "label": "Numero di previdenza sociale *",
+        "label": "Numero di previdenza sociale",
         "placeholder": "Inserisci il tuo numero di previdenza sociale"
       },
       "taxId": {
         "helper": "Necessario per l’emissione delle fatture e per la comunicazione fiscale",
-        "label": "Numero di identificazione fiscale *",
+        "label": "Numero di identificazione fiscale",
         "placeholder": "es. DE123456789"
       },
       "vatId": {
@@ -465,18 +475,55 @@
       "cta": "Vai al trasloco attivo"
     },
     "homeTypeMoveType": {
-      "label": "{{homeType}} · {{moveType}}"
+      "apartment": {
+        "light": {
+          "label": "Appartamento · Leggero"
+        },
+        "premium": {
+          "label": "Appartamento · Premium"
+        },
+        "regular": {
+          "label": "Appartamento · Standard"
+        }
+      },
+      "house": {
+        "light": {
+          "label": "Casa · Leggero"
+        },
+        "premium": {
+          "label": "Casa · Premium"
+        },
+        "regular": {
+          "label": "Casa · Standard"
+        }
+      },
+      "office": {
+        "light": {
+          "label": "Ufficio · Leggero"
+        },
+        "premium": {
+          "label": "Ufficio · Premium"
+        },
+        "regular": {
+          "label": "Ufficio · Standard"
+        }
+      },
+      "storage": {
+        "light": {
+          "label": "Deposito · Leggero"
+        },
+        "premium": {
+          "label": "Deposito · Premium"
+        },
+        "regular": {
+          "label": "Deposito · Standard"
+        }
+      }
     },
     "jobDetails": {
       "notFound": {
         "subtitle": "Questo trasloco potrebbe essere stato rimosso oppure il link non è valido."
-      },
-      "subheading": {
-        "label": "Trasloco {{moveType}} · {{date}}"
       }
-    },
-    "moveTypeBadge": {
-      "label": "Trasloco {{type}}"
     },
     "notStartable": {
       "body": "<0>Trasloco non ancora avviabile.</0> Puoi avviare questo percorso il <1>{{when}}</1> (l’avvio del percorso si sblocca 5 minuti prima)."
@@ -586,7 +633,7 @@
         "label": "I tuoi guadagni"
       },
       "respondWithin": {
-        "label": "Rispondi entro <1>{{seconds}}s</1>"
+        "label": "Rispondi entro <1>{{seconds}}</1>"
       },
       "services": {
         "label": "Servizi: {{list}}"
@@ -620,7 +667,7 @@
       },
       "subtitle": "Gestisci il tuo account e le tue preferenze",
       "version": {
-        "label": "pickLT Mover App v{{version}}"
+        "label": "PickLT Mover App v{{version}}"
       }
     },
     "startRoute": {
@@ -685,7 +732,12 @@
     },
     "recentMoves": {
       "moveType": {
-        "label": "Trasloco {{type}}"
+        "instant": {
+          "label": "Trasloco immediato"
+        },
+        "scheduled": {
+          "label": "Trasloco programmato"
+        }
       },
       "title": "Traslochi recenti"
     },
@@ -755,7 +807,18 @@
     },
     "empty": {
       "filtered": {
-        "title": "Nessun trasloco {{status}}"
+        "cancelled": {
+          "title": "Nessun trasloco annullato"
+        },
+        "completed": {
+          "title": "Nessun trasloco completato"
+        },
+        "inProgress": {
+          "title": "Nessun trasloco in corso"
+        },
+        "pending": {
+          "title": "Nessun trasloco in attesa"
+        }
       },
       "subtitle": "Prenota il tuo primo trasloco e comparirà qui.",
       "title": "Nessun trasloco"
@@ -857,9 +920,6 @@
     },
     "editPhotos": {
       "cta": "Modifica le foto"
-    },
-    "moveTypeBadge": {
-      "label": "Trasloco {{moveType}}"
     }
   },
   "scheduledMoves": {
@@ -868,7 +928,18 @@
     },
     "empty": {
       "filtered": {
-        "title": "Nessun trasloco programmato {{status}}"
+        "cancelled": {
+          "title": "Nessun trasloco programmato annullato"
+        },
+        "completed": {
+          "title": "Nessun trasloco programmato completato"
+        },
+        "inProgress": {
+          "title": "Nessun trasloco programmato in corso"
+        },
+        "pending": {
+          "title": "Nessun trasloco programmato in attesa"
+        }
       },
       "subtitle": "Prenota un trasloco programmato e comparirà qui.",
       "title": "Nessun trasloco programmato"
@@ -909,7 +980,7 @@
       "title_other": "Traslocatori disponibili ({{count}})"
     },
     "capacity": {
-      "label": "capacità di {{volume}} m³"
+      "label": "capacità di {{volume}}"
     },
     "confirm": {
       "cta": "Conferma · {{amount}}"

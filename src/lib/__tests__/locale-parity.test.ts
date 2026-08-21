@@ -143,6 +143,31 @@ describe.each(NAMESPACES)('%s.json', (ns) => {
     expect(empties).toEqual([])
   })
 
+  /**
+   * A unit typed next to a placeholder is a double-render waiting to happen.
+   *
+   * `track:eta.distanceAway.label` read `"{{distance}} km away"` while
+   * `formatDistanceKm` **already appends the unit** — the two only stayed
+   * consistent because every call site happened to pass a bare `.toFixed(1)`
+   * instead, which is its own bug (`12.3` where a German reader must see
+   * `12,3`). Either half can be "fixed" in isolation and produce `12,3 km km`.
+   * A measurement placeholder arrives fully formatted; no locale may append a
+   * unit to one.
+   */
+  it.each(LOCALES)('%s appends no unit to a formatted measurement', (locale) => {
+    const FORMATTED = ['distance', 'radius', 'capacity', 'volume', 'weight', 'limit', 'interval']
+    const UNIT = String.raw`(?:km|m|m³|kg|MB|Mo|s|sn|Sek\.?|min)`
+    const offenders: string[] = []
+    for (const [key, value] of Object.entries(readCatalog(locale, ns))) {
+      for (const name of FORMATTED) {
+        if (new RegExp(String.raw`\{\{${name}\}\}\s*${UNIT}\b`).test(value)) {
+          offenders.push(`${key} = ${value}`)
+        }
+      }
+    }
+    expect(offenders).toEqual([])
+  })
+
   it.each(OTHER_LOCALES)('%s preserves every interpolation placeholder', (locale) => {
     const actual = readCatalog(locale, ns)
     const mismatches: { key: string; expected: string[]; actual: string[] }[] = []

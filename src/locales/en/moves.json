@@ -8,8 +8,8 @@
     }
   },
   "available": {
-    "withinRadiusCount_one": "{{count}} move within 30 km",
-    "withinRadiusCount_other": "{{count}} moves within 30 km"
+    "withinRadiusCount_one": "{{count}} move within {{radius}}",
+    "withinRadiusCount_other": "{{count}} moves within {{radius}}"
   },
   "booking": {
     "code": {

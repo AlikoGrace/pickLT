@@ -1,4 +1,3 @@
-import { moveStatusLabel } from '@/lib/move-status-label'
 import { getTranslations } from '@/lib/i18n-server'
 import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
@@ -60,11 +59,9 @@ export async function POST(request: NextRequest) {
     // Verify the move is in a reschedulable state
     if (!RESCHEDULABLE_STATUSES.includes(move.status as string)) {
       return NextResponse.json(
-        {
-          error: t('errors:move.notReschedulable', {
-            status: moveStatusLabel(t, move.status),
-          }),
-        },
+        // Was `…a move with status “{{status}}”`; see
+        // `mover/accept-move/route.ts` for why the quoted slot is gone.
+        { error: t('errors:move.notReschedulable') },
         { status: 400 },
       )
     }

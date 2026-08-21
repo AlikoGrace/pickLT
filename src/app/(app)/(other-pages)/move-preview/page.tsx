@@ -27,6 +27,8 @@ import { Trans, useTranslation } from 'react-i18next'
 import { SectionHeading, SectionSubheading } from '@/components/listings/SectionHeading'
 import { formatInventoryLabel, useInventoryNames } from '@/lib/inventory-labels'
 import { formatDateWith, formatDistanceKm, formatMoney } from '@/lib/format'
+import { baseRateWithDistanceLabel, homeTypeLabel, moveTypeLabel } from '@/lib/move-subtitle'
+import { additionalServiceLabel, arrivalWindowLabel, dropoffParkingLabel, flexibilityLabel, floorLevelLabel, packingLevelLabel, parkingLabel, paymentMethodLabel, vehicleTypeLabel } from '@/lib/enum-labels'
 
 const SummaryRow = ({ label, value }: { label: string; value: React.ReactNode }) => (
   <div className="flex justify-between py-1">
@@ -38,16 +40,6 @@ const SummaryRow = ({ label, value }: { label: string; value: React.ReactNode })
 const Page = () => {
   const router = useRouter()
   const { t } = useTranslation()
-
-  // Both helpers live inside the component: they read `t`, so a module-scope
-  // definition would freeze the boot language for every fallback below.
-  const formatLabel = (value: string | null | undefined): string => {
-    if (!value) return t('common:value.notSpecified.empty')
-    return value
-      .split('_')
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ')
-  }
 
   const formatDate = (dateStr: string | null) => {
     if (!dateStr) return t('common:value.notSelected.empty')
@@ -427,14 +419,14 @@ const Page = () => {
           <div>
             <div className="flex items-center gap-2">
               <span className="inline-flex items-center rounded-full bg-primary-100 px-3 py-1 text-sm font-medium text-primary-800 dark:bg-primary-900/30 dark:text-primary-300">
-                {t('web:preview.moveTypeBadge.label', { moveType: formatLabel(moveType) })}
+                {moveTypeLabel(t, moveType)}
               </span>
             </div>
             <h1 className="mt-3 text-2xl font-semibold sm:text-3xl">
               {pickupStreetAddress || pickupLocation || t('booking:pickup.location.label')} → {dropoffStreetAddress || t('booking:dropoff.location.label')}
             </h1>
             <p className="mt-2 text-neutral-500 dark:text-neutral-400">
-              {formatDate(moveDate)} · {formatLabel(arrivalWindow)}
+              {formatDate(moveDate)} · {arrivalWindowLabel(t, arrivalWindow)}
             </p>
           </div>
           <Link
@@ -451,7 +443,7 @@ const Page = () => {
         <div className="grid grid-cols-2 gap-4 text-sm sm:grid-cols-4">
           <div className="flex items-center gap-x-3">
             <HomeIcon className="h-6 w-6 text-neutral-600 dark:text-neutral-400" />
-            <span>{formatLabel(homeType)}</span>
+            <span>{homeTypeLabel(t, homeType)}</span>
           </div>
           <div className="flex items-center gap-x-3">
             <MapPinIcon className="h-6 w-6 text-neutral-600 dark:text-neutral-400" />
@@ -495,9 +487,9 @@ const Page = () => {
           <div className="space-y-1 text-sm">
             <SummaryRow label={t('moves:detail.address.label')} value={pickupStreetAddress || t('common:value.notSpecified.empty')} />
             {pickupApartmentUnit && <SummaryRow label={t('moves:detail.unit.label')} value={pickupApartmentUnit} />}
-            <SummaryRow label={t('moves:detail.floor.label')} value={formatLabel(floorLevel)} />
+            <SummaryRow label={t('moves:detail.floor.label')} value={floorLevelLabel(t, floorLevel)} />
             <SummaryRow label={t('moves:detail.elevator.label')} value={elevatorAvailable ? t('common:answer.yes.label') : t('common:answer.no.label')} />
-            <SummaryRow label={t('moves:detail.parking.label')} value={formatLabel(parkingSituation)} />
+            <SummaryRow label={t('moves:detail.parking.label')} value={parkingLabel(t, parkingSituation)} />
             {pickupLoadingZoneRequired && (
               <SummaryRow
                 label={t('booking:haltverbot.label')}
@@ -520,9 +512,9 @@ const Page = () => {
           <div className="space-y-1 text-sm">
             <SummaryRow label={t('moves:detail.address.label')} value={dropoffStreetAddress || t('common:value.notSpecified.empty')} />
             {dropoffApartmentUnit && <SummaryRow label={t('moves:detail.unit.label')} value={dropoffApartmentUnit} />}
-            <SummaryRow label={t('moves:detail.floor.label')} value={formatLabel(dropoffFloorLevel)} />
+            <SummaryRow label={t('moves:detail.floor.label')} value={floorLevelLabel(t, dropoffFloorLevel)} />
             <SummaryRow label={t('moves:detail.elevator.label')} value={dropoffElevatorAvailable ? t('common:answer.yes.label') : t('common:answer.no.label')} />
-            <SummaryRow label={t('moves:detail.parking.label')} value={formatLabel(dropoffParkingSituation)} />
+            <SummaryRow label={t('moves:detail.parking.label')} value={dropoffParkingLabel(t, dropoffParkingSituation)} />
             {dropoffArrangeHaltverbot && <SummaryRow label={t('booking:haltverbot.label')} value={t('common:value.required.label')} />}
           </div>
         </div>
@@ -558,7 +550,7 @@ const Page = () => {
           </Fragment>
           <Fragment>
             <DescriptionTerm>{t('moves:detail.packingService.label')}</DescriptionTerm>
-            <DescriptionDetails>{formatLabel(packingServiceLevel)}</DescriptionDetails>
+            <DescriptionDetails>{packingLevelLabel(t, packingServiceLevel)}</DescriptionDetails>
           </Fragment>
           {packingMaterials.length > 0 && (
             <Fragment>
@@ -570,12 +562,12 @@ const Page = () => {
           )}
           <Fragment>
             <DescriptionTerm>{t('moves:detail.arrivalWindow.label')}</DescriptionTerm>
-            <DescriptionDetails>{formatLabel(arrivalWindow)}</DescriptionDetails>
+            <DescriptionDetails>{arrivalWindowLabel(t, arrivalWindow)}</DescriptionDetails>
           </Fragment>
           {flexibility && (
             <Fragment>
               <DescriptionTerm>{t('booking:flexibility.label')}</DescriptionTerm>
-              <DescriptionDetails>{formatLabel(flexibility)}</DescriptionDetails>
+              <DescriptionDetails>{flexibilityLabel(t, flexibility)}</DescriptionDetails>
             </Fragment>
           )}
           <Fragment>
@@ -588,7 +580,7 @@ const Page = () => {
           </Fragment>
           <Fragment>
             <DescriptionTerm>{t('booking:field.vehicle.label')}</DescriptionTerm>
-            <DescriptionDetails>{formatLabel(vehicleType)}</DescriptionDetails>
+            <DescriptionDetails>{vehicleTypeLabel(t, vehicleType)}</DescriptionDetails>
           </Fragment>
         </DescriptionList>
       </div>
@@ -618,7 +610,7 @@ const Page = () => {
           {additionalServices.map((service) => (
             <div key={service} className="flex items-center gap-x-3">
               <CheckCircleIcon className="h-5 w-5 text-green-500" />
-              <span>{formatLabel(service)}</span>
+              <span>{additionalServiceLabel(t, service)}</span>
             </div>
           ))}
           {storageWeeks > 0 && (
@@ -741,10 +733,7 @@ const Page = () => {
         {/* Price breakdown */}
         <DescriptionList>
           <DescriptionTerm>
-            {t('booking:pricing.baseRateWithDistance.label', {
-              moveType: formatLabel(moveType),
-              distance: formatDistanceKm(distanceKm),
-            })}
+            {baseRateWithDistanceLabel(t, moveType, formatDistanceKm(distanceKm))}
           </DescriptionTerm>
           <DescriptionDetails className="sm:text-right">{formatMoney(basePrice)}</DescriptionDetails>
           {floorSurcharge > 0 && (
@@ -792,7 +781,7 @@ const Page = () => {
             <Divider />
             <div className="flex justify-between text-sm">
               <span className="text-neutral-500 dark:text-neutral-400">{t('moves:payment.method.label')}</span>
-              <span className="font-medium text-neutral-900 dark:text-neutral-100">{formatLabel(paymentMethod)}</span>
+              <span className="font-medium text-neutral-900 dark:text-neutral-100">{paymentMethodLabel(t, paymentMethod)}</span>
             </div>
           </>
         )}

@@ -8,8 +8,8 @@
     }
   },
   "available": {
-    "withinRadiusCount_one": "{{count}} Umzug im Umkreis von 30 km",
-    "withinRadiusCount_other": "{{count}} Umzüge im Umkreis von 30 km"
+    "withinRadiusCount_one": "{{count}} Umzug im Umkreis von {{radius}}",
+    "withinRadiusCount_other": "{{count}} Umzüge im Umkreis von {{radius}}"
   },
   "booking": {
     "code": {
@@ -157,10 +157,10 @@
       "label": "Entfernung"
     },
     "dropoff": {
-      "label": "Zustellung"
+      "label": "Zielort"
     },
     "dropoffAddress": {
-      "title": "Zustelladresse"
+      "title": "Zieladresse"
     },
     "duration": {
       "label": "Dauer"
@@ -310,7 +310,7 @@
   },
   "status": {
     "arrivedDestination": {
-      "label": "Angekommen"
+      "label": "Am Zielort"
     },
     "assigned": {
       "label": "Zugewiesen"
@@ -337,7 +337,7 @@
       "label": "Bestätigt – später bezahlen"
     },
     "disputed": {
-      "label": "Strittig"
+      "label": "In Klärung"
     },
     "draft": {
       "label": "Entwurf"
@@ -355,13 +355,13 @@
       "label": "Umzugsprofi bestätigt"
     },
     "moverArrived": {
-      "label": "Umzugshelfer eingetroffen"
+      "label": "Umzugsprofi eingetroffen"
     },
     "moverAssigned": {
-      "label": "Umzugshelfer zugewiesen"
+      "label": "Umzugsprofi zugewiesen"
     },
     "moverEnRoute": {
-      "label": "Umzugshelfer unterwegs"
+      "label": "Umzugsprofi unterwegs"
     },
     "paid": {
       "label": "Bezahlt"

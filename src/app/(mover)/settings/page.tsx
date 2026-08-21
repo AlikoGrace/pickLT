@@ -23,6 +23,9 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState, useRef } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
+import { formatFileSizeMb } from '@/lib/format'
+import { AVATAR_UPLOAD_MAX_MB } from '@/lib/service-limits'
+import { vehicleCapacityLabel } from '@/lib/vehicle-capacity'
 
 type ModalType = 'editName' | 'changeEmail' | 'changePhone' | 'editVehicle' | null
 
@@ -79,8 +82,8 @@ const SettingsPage = () => {
       return
     }
 
-    if (file.size > 5 * 1024 * 1024) {
-      setError(t('errors:upload.tooLarge', { limit: '5MB' }))
+    if (file.size > AVATAR_UPLOAD_MAX_MB * 1024 * 1024) {
+      setError(t('errors:upload.tooLarge', { limit: formatFileSizeMb(AVATAR_UPLOAD_MAX_MB) }))
       return
     }
 
@@ -814,7 +817,7 @@ const SettingsPage = () => {
                       {t('booking:vehicle.type.label')}
                     </label>
                     <div className="space-y-2">
-                      {/* i18n-keys: booking:vehicle.smallVan.label, booking:vehicle.smallVan.capacity, booking:vehicle.mediumTruck.label, booking:vehicle.mediumTruck.capacity, booking:vehicle.largeTruck.label, booking:vehicle.largeTruck.capacity */}
+                      {/* i18n-keys: booking:vehicle.smallVan.label, booking:vehicle.mediumTruck.label, booking:vehicle.largeTruck.label */}
                       {VEHICLE_TYPE_SLUGS.map((v) => (
                         <label
                           key={v.value}
@@ -838,7 +841,7 @@ const SettingsPage = () => {
                               {t(`booking:vehicle.${v.key}.label`)}
                             </p>
                             <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                              {t(`booking:vehicle.${v.key}.capacity`)}
+                              {vehicleCapacityLabel(t, v.key)}
                             </p>
                           </div>
                         </label>

@@ -80,7 +80,18 @@ const STATUS_TABS: { key: string; value: MoveStatus | undefined }[] = [
   { key: 'cancelled', value: 'cancelled' },
 ]
 
-/** Stored status enum → the `moves:category.*` segment that labels it. */
+/**
+ * Stored status enum → the key segment that names it.
+ *
+ * The empty state used to be one key, `"No {{status}} moves"`, with the status
+ * word posted in from `moves:category.*`. English survives that because its
+ * adjectives are invariant; nothing else does — German needs *Keine
+ * ausstehenden Umzüge* (adjective inflected by the negative article), Polish
+ * needs the genitive plural, and Turkish cannot attach a suffix to an
+ * interpolated value at all. So there is now one whole sentence per status.
+ */
+// i18n-keys: web:scheduledMoves.empty.filtered.pending.title, web:scheduledMoves.empty.filtered.inProgress.title
+// i18n-keys: web:scheduledMoves.empty.filtered.completed.title, web:scheduledMoves.empty.filtered.cancelled.title
 const STATUS_LABEL_KEY: Record<MoveStatus, string> = {
   pending: 'pending',
   in_progress: 'inProgress',
@@ -216,9 +227,7 @@ function ScheduledMovesContent() {
           <CalendarDaysIcon className="w-16 h-16 text-neutral-300 dark:text-neutral-600 mb-4" />
           <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-2">
             {activeTab
-              ? t('web:scheduledMoves.empty.filtered.title', {
-                  status: t(`moves:category.${STATUS_LABEL_KEY[activeTab]}.label`),
-                })
+              ? t(`web:scheduledMoves.empty.filtered.${STATUS_LABEL_KEY[activeTab]}.title`)
               : t('web:scheduledMoves.empty.title')}
           </h3>
           <p className="text-neutral-500 dark:text-neutral-400 mb-6 max-w-sm">

@@ -56,16 +56,19 @@
   },
   "arrivalWindow": {
     "afternoon": {
-      "label": "Middag (12:00–17:00)"
+      "label": "Middag"
     },
     "evening": {
-      "label": "Avond (17:00–21:00)"
+      "label": "Avond"
     },
     "label": "Aankomsttijdvak",
     "morning": {
-      "label": "Ochtend (08:00–12:00)"
+      "label": "Ochtend"
     },
-    "optionalLabel": "Aankomsttijdvak (optioneel)"
+    "optionalLabel": "Aankomsttijdvak (optioneel)",
+    "withRange": {
+      "label": "{{window}} ({{range}})"
+    }
   },
   "business": {
     "company": {
@@ -136,7 +139,7 @@
       "label": "Punten"
     },
     "summary": {
-      "label": "{{items}} · ~{{weight}} kg · {{points}}"
+      "label": "{{items}} · ~{{weight}} · {{points}}"
     },
     "title": "Indeling van de verhuizing",
     "upgrade": {
@@ -420,8 +423,7 @@
       "label": "Voertuig"
     },
     "weight": {
-      "label": "Gewicht",
-      "value": "{{weight}} kg"
+      "label": "Gewicht"
     }
   },
   "flexibility": {
@@ -695,7 +697,7 @@
       "helper": "Verhuizing met volledige service",
       "label": "Premium verhuizing",
       "short": "Premium",
-      "subtitle": "Volledige service voor grote woningen — inpakken, laden, vervoer en uitladen.",
+      "subtitle": "Volledige service voor grote woningen — inpakken, laden, vervoer en lossen.",
       "title": "Premium verhuizing"
     },
     "regular": {
@@ -734,10 +736,37 @@
     }
   },
   "packingMaterials": {
+    "bubbleWrap": {
+      "option": "Bubbeltjesfolie"
+    },
+    "dishInserts": {
+      "option": "Serviesinzetstukken"
+    },
+    "furnitureBlankets": {
+      "option": "Meubeldekens"
+    },
     "label": "Verpakkingsmateriaal",
+    "mattressCovers": {
+      "option": "Matrashoezen"
+    },
+    "movingBoxes": {
+      "option": "Verhuisdozen"
+    },
+    "packingPaper": {
+      "option": "Inpakpapier"
+    },
+    "packingTape": {
+      "option": "Verpakkingstape"
+    },
     "selectedCount": {
       "label_one": "{{count}} geselecteerd",
       "label_other": "{{count}} geselecteerd"
+    },
+    "tvProtection": {
+      "option": "Tv-bescherming"
+    },
+    "wardrobeBoxes": {
+      "option": "Kledingdozen"
     }
   },
   "packingNotes": {
@@ -823,7 +852,7 @@
       "title": "Betaal je verhuizer rechtstreeks"
     },
     "cashHandshake": {
-      "helper": "Betaal de verhuizer rechtstreeks (contant of per overschrijving) en tik daarna hieronder op “Ik heb betaald”."
+      "helper": "Betaal de verhuizer rechtstreeks (contant of per overschrijving) en tik daarna hieronder op “{{cta}}”."
     },
     "cashLong": {
       "label": "Contant (rechtstreeks aan de verhuizer)"
@@ -928,14 +957,6 @@
     "countSummary": {
       "label": "{{main}} • {{additional}}"
     },
-    "cover": {
-      "a11y": "Omslagfoto",
-      "helper": "Upload een hoofdfoto van je spullen of ruimte",
-      "label": "Omslagfoto"
-    },
-    "formatHint": {
-      "subtitle": "PNG, JPG tot 3 MB"
-    },
     "gallery": {
       "a11y": "Foto's van de verhuizing",
       "helper": "Upload extra foto's van meubels, kamers of spullen",
@@ -954,6 +975,7 @@
       "a11y": "Foto {{n}} van de verhuizing"
     },
     "main": {
+      "a11y": "Hoofdfoto",
       "cta": "Tik om de hoofdfoto te uploaden",
       "helper": "Upload een hoofdfoto van je spullen of de ruimte",
       "label": "Hoofdfoto"
@@ -1019,10 +1041,32 @@
       "label": "Basistarief"
     },
     "baseRate": {
-      "label": "Basistarief ({{moveType}})"
+      "fallback": {
+        "label": "Basistarief"
+      },
+      "light": {
+        "label": "Basistarief (Kleine verhuizing)"
+      },
+      "premium": {
+        "label": "Basistarief (Premium verhuizing)"
+      },
+      "regular": {
+        "label": "Basistarief (Gewone verhuizing)"
+      }
     },
     "baseRateWithDistance": {
-      "label": "Basistarief ({{moveType}}, {{distance}})"
+      "fallback": {
+        "label": "Basistarief ({{distance}})"
+      },
+      "light": {
+        "label": "Basistarief (Kleine verhuizing, {{distance}})"
+      },
+      "premium": {
+        "label": "Basistarief (Premium verhuizing, {{distance}})"
+      },
+      "regular": {
+        "label": "Basistarief (Gewone verhuizing, {{distance}})"
+      }
     },
     "crew": {
       "label": "Team ({{crew}})"
@@ -1177,8 +1221,6 @@
   },
   "storageWeekCount_one": "{{count}} week",
   "storageWeekCount_other": "{{count}} weken",
-  "storageWeeks_one": "{{count}} week",
-  "storageWeeks_other": "{{count}} weken",
   "streetAddress": {
     "dropoff": {
       "helper": "Voer het volledige afleveradres in",
@@ -1216,7 +1258,7 @@
     },
     "helper": "Kies eventuele extra voorkeuren voor het tijdstip.",
     "noEvening": {
-      "label": "Geen bezorging in de avond"
+      "label": "Geen aflevering in de avond"
     },
     "noLunchGap": {
       "label": "Geen onderbreking voor de lunch"
@@ -1237,19 +1279,19 @@
     "capacity": {
       "label": "Laadvermogen (m³)",
       "placeholder": "bijv. 15",
-      "value": "{{capacity}} m³"
+      "upTo": {
+        "value": "Tot {{capacity}}"
+      }
     },
     "edit": {
       "title": "Voertuiggegevens bewerken"
     },
     "largeTruck": {
-      "capacity": "25+ m³",
-      "helper": "25+ m³ — woningverhuizingen, grote ladingen",
+      "helper": "{{capacity}} — woningverhuizingen, grote ladingen",
       "label": "Grote vrachtwagen"
     },
     "mediumTruck": {
-      "capacity": "10–25 m³",
-      "helper": "10–25 m³ — appartementverhuizingen",
+      "helper": "{{capacity}} — appartementverhuizingen",
       "label": "Middelgrote vrachtwagen"
     },
     "model": {
@@ -1270,8 +1312,7 @@
       "label": "Kenteken *"
     },
     "smallVan": {
-      "capacity": "Tot 10 m³",
-      "helper": "Tot 10 m³ — kleine verhuizingen, losse spullen",
+      "helper": "{{capacity}} — kleine verhuizingen, losse spullen",
       "label": "Kleine bestelbus"
     },
     "title": "Voertuiggegevens",

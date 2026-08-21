@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true })
   } catch (err: unknown) {
     console.error('[change-phone] Error:', err)
-    const message = err instanceof Error ? err.message : t('errors:profile.changePhoneFailed')
+    const message = err instanceof Error ? err.message : t('errors:profile.phoneChangeFailed')
 
     if (message.includes('A user with the same phone already exists')) {
       return NextResponse.json(

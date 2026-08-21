@@ -8,8 +8,8 @@
     }
   },
   "available": {
-    "withinRadiusCount_one": "{{count}} trasloco entro 30 km",
-    "withinRadiusCount_other": "{{count}} traslochi entro 30 km"
+    "withinRadiusCount_one": "{{count}} trasloco entro {{radius}}",
+    "withinRadiusCount_other": "{{count}} traslochi entro {{radius}}"
   },
   "booking": {
     "code": {
@@ -310,7 +310,7 @@
   },
   "status": {
     "arrivedDestination": {
-      "label": "Arrivato"
+      "label": "Arrivato a destinazione"
     },
     "assigned": {
       "label": "Assegnato"

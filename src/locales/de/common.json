@@ -196,11 +196,11 @@
   },
   "field": {
     "city": {
-      "label": "Stadt *",
+      "label": "Stadt",
       "placeholder": "z. B. Berlin"
     },
     "country": {
-      "label": "Land *",
+      "label": "Land",
       "placeholder": "Land auswählen"
     },
     "email": {
@@ -209,10 +209,7 @@
     },
     "fullName": {
       "label": "Vollständiger Name",
-      "placeholder": "Ihr vollständiger Name",
-      "required": {
-        "label": "Vollständiger Name *"
-      }
+      "placeholder": "Ihr vollständiger Name"
     },
     "name": {
       "label": "Name",
@@ -225,9 +222,6 @@
     "phone": {
       "label": "Telefonnummer",
       "placeholder": "Telefonnummer eingeben",
-      "required": {
-        "label": "Telefonnummer *"
-      },
       "shortLabel": "Telefon"
     },
     "quantity": {
@@ -287,7 +281,7 @@
       "label": "Name des Umzugsprofis"
     },
     "unnamed": {
-      "label": "Umzugshelfer"
+      "label": "Umzugsprofi"
     }
   },
   "nav": {
@@ -395,7 +389,7 @@
         "body": "Zahlung bestätigt. Wir warten auf die Bestätigung des Kunden, bevor der Umzug abgeschlossen wird."
       },
       "forMover": {
-        "body": "Zahlung bestätigt. Wir warten auf die Bestätigung Ihres Umzugshelfers, bevor der Umzug abgeschlossen wird."
+        "body": "Zahlung bestätigt. Wir warten auf die Bestätigung Ihres Umzugsprofis, bevor der Umzug abgeschlossen wird."
       }
     }
   },
@@ -535,10 +529,10 @@
   },
   "upload": {
     "constraints": {
-      "helper": "PNG, JPG, GIF bis zu 10 MB"
+      "helper": "PNG, JPG, GIF bis zu {{limit}}"
     },
     "constraintsNoGif": {
-      "helper": "PNG, JPG bis zu 10 MB"
+      "helper": "PNG, JPG bis zu {{limit}}"
     },
     "dragDrop": {
       "label": "oder hierher ziehen"
@@ -554,6 +548,9 @@
     }
   },
   "value": {
+    "lessThan": {
+      "label": "<{{value}}"
+    },
     "noEmail": {
       "empty": "Keine E-Mail"
     },

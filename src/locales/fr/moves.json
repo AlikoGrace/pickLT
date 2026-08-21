@@ -8,8 +8,8 @@
     }
   },
   "available": {
-    "withinRadiusCount_one": "{{count}} déménagement dans un rayon de 30 km",
-    "withinRadiusCount_other": "{{count}} déménagements dans un rayon de 30 km"
+    "withinRadiusCount_one": "{{count}} déménagement dans un rayon de {{radius}}",
+    "withinRadiusCount_other": "{{count}} déménagements dans un rayon de {{radius}}"
   },
   "booking": {
     "code": {
@@ -310,7 +310,7 @@
   },
   "status": {
     "arrivedDestination": {
-      "label": "Arrivé"
+      "label": "Arrivé à destination"
     },
     "assigned": {
       "label": "Assigné"

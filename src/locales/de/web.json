@@ -20,7 +20,7 @@
       "title": "Melden Sie sich an, um Ihr Konto zu sehen"
     },
     "version": {
-      "label": "pickLT v{{version}}"
+      "label": "PickLT v{{version}}"
     }
   },
   "authGate": {
@@ -120,7 +120,20 @@
     },
     "moves": {
       "empty": "Noch keine Umzüge. Buchen Sie Ihren ersten Umzug!",
-      "emptyFiltered": "Keine Umzüge unter {{status}} gefunden.",
+      "emptyFiltered": {
+        "cancelled": {
+          "label": "Keine stornierten Umzüge gefunden."
+        },
+        "completed": {
+          "label": "Keine abgeschlossenen Umzüge gefunden."
+        },
+        "inProgress": {
+          "label": "Keine laufenden Umzüge gefunden."
+        },
+        "pending": {
+          "label": "Keine ausstehenden Umzüge gefunden."
+        }
+      },
       "emptyScheduled": "Keine geplanten Umzüge gefunden.",
       "signedOut": {
         "cta": "Anmelden und loslegen",
@@ -258,9 +271,6 @@
     "title": "Wie möchten Sie umziehen?"
   },
   "moveDetails": {
-    "header": {
-      "subtitle": "{{moveType}}-Umzug · {{date}}"
-    },
     "mover": {
       "title": "Ihr Umzugsprofi"
     },
@@ -285,7 +295,7 @@
     },
     "activeMove": {
       "advance": {
-        "cta": "Markieren als: {{phase}}"
+        "cta": "Status aktualisieren"
       },
       "cancelledByClient": {
         "title": "Umzug vom Kunden storniert"
@@ -298,14 +308,14 @@
         "label": "~{{minutes}} Min. bis zur Abholung"
       },
       "proximity": {
-        "helper": "Sie müssen sich im Umkreis von 100 m der Abholadresse befinden, um die Ankunft zu melden ({{distance}} m entfernt)"
+        "helper": "Sie müssen sich im Umkreis von {{radius}} der Abholadresse befinden, um die Ankunft zu melden ({{distance}} entfernt)"
       }
     },
     "additionalServicesCount_one": "+{{count}} Leistung",
     "additionalServicesCount_other": "+{{count}} Leistungen",
     "availableMoves": {
       "empty": {
-        "subtitle": "Derzeit keine geplanten Umzüge im Umkreis von 30 km. Wir prüfen automatisch alle 30 Sekunden.",
+        "subtitle": "Derzeit keine geplanten Umzüge im Umkreis von {{radius}}. Wir prüfen automatisch alle {{interval}}.",
         "title": "Keine Umzüge verfügbar"
       },
       "error": {
@@ -413,14 +423,14 @@
         "helper": "Die Stadt, in der Sie überwiegend als Umzugsprofi tätig sind"
       },
       "experience": {
-        "label": "Jahre Berufserfahrung *",
+        "label": "Jahre Berufserfahrung",
         "placeholder": "z. B. 5"
       },
       "languages": {
-        "label": "Gesprochene Sprachen *"
+        "label": "Gesprochene Sprachen"
       },
       "licenseNumber": {
-        "label": "Führerscheinnummer *",
+        "label": "Führerscheinnummer",
         "placeholder": "Geben Sie Ihre Führerscheinnummer ein"
       },
       "licensePhoto": {
@@ -440,19 +450,19 @@
         "a11y": "Vorschau des Selfies",
         "cta": "Machen Sie ein scharfes Selfie oder laden Sie eines hoch",
         "helper": "Für die Identitätsprüfung ist ein scharfes Selfie erforderlich",
-        "label": "Selfie *",
+        "label": "Selfie",
         "retake": {
           "cta": "Selfie erneut aufnehmen"
         }
       },
       "ssn": {
         "helper": "Verschlüsselt und ausschließlich zur steuerlichen Überprüfung verwendet",
-        "label": "Sozialversicherungsnummer *",
+        "label": "Sozialversicherungsnummer",
         "placeholder": "Geben Sie Ihre Sozialversicherungsnummer ein"
       },
       "taxId": {
         "helper": "Erforderlich für die Rechnungsstellung und die steuerliche Meldung",
-        "label": "Steuerliche Identifikationsnummer *",
+        "label": "Steuerliche Identifikationsnummer",
         "placeholder": "z. B. DE123456789"
       },
       "vatId": {
@@ -465,18 +475,55 @@
       "cta": "Zum aktiven Umzug"
     },
     "homeTypeMoveType": {
-      "label": "{{homeType}} · {{moveType}}"
+      "apartment": {
+        "light": {
+          "label": "Wohnung · Klein"
+        },
+        "premium": {
+          "label": "Wohnung · Premium"
+        },
+        "regular": {
+          "label": "Wohnung · Normal"
+        }
+      },
+      "house": {
+        "light": {
+          "label": "Haus · Klein"
+        },
+        "premium": {
+          "label": "Haus · Premium"
+        },
+        "regular": {
+          "label": "Haus · Normal"
+        }
+      },
+      "office": {
+        "light": {
+          "label": "Büro · Klein"
+        },
+        "premium": {
+          "label": "Büro · Premium"
+        },
+        "regular": {
+          "label": "Büro · Normal"
+        }
+      },
+      "storage": {
+        "light": {
+          "label": "Lager · Klein"
+        },
+        "premium": {
+          "label": "Lager · Premium"
+        },
+        "regular": {
+          "label": "Lager · Normal"
+        }
+      }
     },
     "jobDetails": {
       "notFound": {
         "subtitle": "Dieser Umzug wurde möglicherweise entfernt oder der Link ist ungültig."
-      },
-      "subheading": {
-        "label": "{{moveType}}-Umzug · {{date}}"
       }
-    },
-    "moveTypeBadge": {
-      "label": "{{type}}-Umzug"
     },
     "notStartable": {
       "body": "<0>Umzug noch nicht startbar.</0> Sie können diese Route am <1>{{when}}</1> starten (Route starten wird 5 Minuten vorher freigeschaltet)."
@@ -586,7 +633,7 @@
         "label": "Ihr Verdienst"
       },
       "respondWithin": {
-        "label": "Antworten Sie innerhalb von <1>{{seconds}} s</1>"
+        "label": "Antworten Sie innerhalb von <1>{{seconds}}</1>"
       },
       "services": {
         "label": "Leistungen: {{list}}"
@@ -620,7 +667,7 @@
       },
       "subtitle": "Verwalten Sie Ihr Konto und Ihre Einstellungen",
       "version": {
-        "label": "pickLT Mover App v{{version}}"
+        "label": "PickLT Mover App v{{version}}"
       }
     },
     "startRoute": {
@@ -685,7 +732,12 @@
     },
     "recentMoves": {
       "moveType": {
-        "label": "{{type}}-Umzug"
+        "instant": {
+          "label": "Sofort-Umzug"
+        },
+        "scheduled": {
+          "label": "Geplanter Umzug"
+        }
       },
       "title": "Letzte Umzüge"
     },
@@ -755,7 +807,18 @@
     },
     "empty": {
       "filtered": {
-        "title": "Keine Umzüge: {{status}}"
+        "cancelled": {
+          "title": "Keine stornierten Umzüge"
+        },
+        "completed": {
+          "title": "Keine abgeschlossenen Umzüge"
+        },
+        "inProgress": {
+          "title": "Keine laufenden Umzüge"
+        },
+        "pending": {
+          "title": "Keine ausstehenden Umzüge"
+        }
       },
       "subtitle": "Buchen Sie Ihren ersten Umzug, dann erscheint er hier.",
       "title": "Noch keine Umzüge"
@@ -857,9 +920,6 @@
     },
     "editPhotos": {
       "cta": "Fotos bearbeiten"
-    },
-    "moveTypeBadge": {
-      "label": "{{moveType}}-Umzug"
     }
   },
   "scheduledMoves": {
@@ -868,7 +928,18 @@
     },
     "empty": {
       "filtered": {
-        "title": "Keine geplanten Umzüge: {{status}}"
+        "cancelled": {
+          "title": "Keine stornierten geplanten Umzüge"
+        },
+        "completed": {
+          "title": "Keine abgeschlossenen geplanten Umzüge"
+        },
+        "inProgress": {
+          "title": "Keine laufenden geplanten Umzüge"
+        },
+        "pending": {
+          "title": "Keine ausstehenden geplanten Umzüge"
+        }
       },
       "subtitle": "Buchen Sie einen geplanten Umzug, dann erscheint er hier.",
       "title": "Noch keine geplanten Umzüge"
@@ -909,7 +980,7 @@
       "title_other": "Verfügbare Umzugsprofis ({{count}})"
     },
     "capacity": {
-      "label": "{{volume}} m³ Ladevolumen"
+      "label": "{{volume}} Ladevolumen"
     },
     "confirm": {
       "cta": "Bestätigen · {{amount}}"

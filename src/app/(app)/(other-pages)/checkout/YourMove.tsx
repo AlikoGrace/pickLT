@@ -16,15 +16,7 @@ import Link from 'next/link'
 import { formatDateWith } from '@/lib/format'
 import { useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
-
-// Helper to format labels
-const formatLabel = (value: string | null | undefined, t: TFunction): string => {
-  if (!value) return t('common:value.notSpecified.empty')
-  return value
-    .split('_')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ')
-}
+import { arrivalWindowLabel } from '@/lib/enum-labels'
 
 const formatDate = (dateStr: string | null, t: TFunction) => {
   if (!dateStr) return t('common:value.notSelected.empty')
@@ -143,7 +135,7 @@ const YourMove = ({ routeDistance, routeDuration }: YourMoveProps) => {
                   {formatDate(moveDate, t)}
                 </span>
                 <span className="text-sm text-neutral-500 dark:text-neutral-400">
-                  {t('booking:field.arrivalWindow.value.label', { window: formatLabel(arrivalWindow, t) })}
+                  {t('booking:field.arrivalWindow.value.label', { window: arrivalWindowLabel(t, arrivalWindow) })}
                 </span>
               </div>
             </div>

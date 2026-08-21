@@ -20,7 +20,7 @@
       "title": "Zaloguj się, aby zobaczyć swoje konto"
     },
     "version": {
-      "label": "pickLT v{{version}}"
+      "label": "PickLT v{{version}}"
     }
   },
   "authGate": {
@@ -120,7 +120,20 @@
     },
     "moves": {
       "empty": "Brak przeprowadzek. Zacznij od zarezerwowania pierwszej!",
-      "emptyFiltered": "Brak przeprowadzek o statusie: {{status}}.",
+      "emptyFiltered": {
+        "cancelled": {
+          "label": "Nie znaleziono anulowanych przeprowadzek."
+        },
+        "completed": {
+          "label": "Nie znaleziono zakończonych przeprowadzek."
+        },
+        "inProgress": {
+          "label": "Nie znaleziono przeprowadzek w trakcie."
+        },
+        "pending": {
+          "label": "Nie znaleziono oczekujących przeprowadzek."
+        }
+      },
       "emptyScheduled": "Brak zaplanowanych przeprowadzek.",
       "signedOut": {
         "cta": "Zaloguj się, aby zacząć",
@@ -193,9 +206,9 @@
       "prompt": "Jak oceniasz współpracę z {{name}}?",
       "promptUnnamed": "Jak oceniasz współpracę ze swoim przewoźnikiem?",
       "star": {
-        "a11y_one": "Oceń na {{count}} gwiazdkę",
         "a11y_few": "Oceń na {{count}} gwiazdki",
         "a11y_many": "Oceń na {{count}} gwiazdek",
+        "a11y_one": "Oceń na {{count}} gwiazdkę",
         "a11y_other": "Oceń na {{count}} gwiazdki"
       },
       "submit": {
@@ -260,9 +273,6 @@
     "title": "Jak chcesz się przeprowadzić?"
   },
   "moveDetails": {
-    "header": {
-      "subtitle": "Przeprowadzka: {{moveType}} · {{date}}"
-    },
     "mover": {
       "title": "Twój przewoźnik"
     },
@@ -287,7 +297,7 @@
     },
     "activeMove": {
       "advance": {
-        "cta": "Oznacz jako: {{phase}}"
+        "cta": "Aktualizuj status"
       },
       "cancelledByClient": {
         "title": "Przeprowadzka anulowana przez klienta"
@@ -300,16 +310,16 @@
         "label": "~{{minutes}} min do miejsca odbioru"
       },
       "proximity": {
-        "helper": "Aby oznaczyć przyjazd, musisz znaleźć się w promieniu 100 m od miejsca odbioru (odległość: {{distance}} m)"
+        "helper": "Aby oznaczyć przyjazd, musisz znaleźć się w promieniu {{radius}} od miejsca odbioru (odległość: {{distance}})"
       }
     },
-    "additionalServicesCount_one": "+{{count}} usługa",
     "additionalServicesCount_few": "+{{count}} usługi",
     "additionalServicesCount_many": "+{{count}} usług",
+    "additionalServicesCount_one": "+{{count}} usługa",
     "additionalServicesCount_other": "+{{count}} usługi",
     "availableMoves": {
       "empty": {
-        "subtitle": "Brak zaplanowanych przeprowadzek w promieniu 30 km. Sprawdzamy automatycznie co 30 sekund.",
+        "subtitle": "Brak zaplanowanych przeprowadzek w promieniu {{radius}}. Sprawdzamy automatycznie co {{interval}}.",
         "title": "Brak dostępnych przeprowadzek"
       },
       "error": {
@@ -406,9 +416,9 @@
         "label": "Zarobki łącznie"
       }
     },
-    "experienceYears_one": "{{count}} rok",
     "experienceYears_few": "{{count}} lata",
     "experienceYears_many": "{{count}} lat",
+    "experienceYears_one": "{{count}} rok",
     "experienceYears_other": "{{count}} roku",
     "field": {
       "businessStreet": {
@@ -419,14 +429,14 @@
         "helper": "Miasto, w którym głównie działasz jako przewoźnik"
       },
       "experience": {
-        "label": "Lata doświadczenia *",
+        "label": "Lata doświadczenia",
         "placeholder": "np. 5"
       },
       "languages": {
-        "label": "Znane języki *"
+        "label": "Znane języki"
       },
       "licenseNumber": {
-        "label": "Numer prawa jazdy *",
+        "label": "Numer prawa jazdy",
         "placeholder": "Podaj numer prawa jazdy"
       },
       "licensePhoto": {
@@ -446,19 +456,19 @@
         "a11y": "Podgląd selfie",
         "cta": "Zrób lub wgraj wyraźne selfie",
         "helper": "Wyraźne selfie jest wymagane do weryfikacji tożsamości",
-        "label": "Zdjęcie selfie *",
+        "label": "Zdjęcie selfie",
         "retake": {
           "cta": "Zrób selfie ponownie"
         }
       },
       "ssn": {
         "helper": "Szyfrowany i używany wyłącznie do weryfikacji podatkowej",
-        "label": "Numer ubezpieczenia społecznego *",
+        "label": "Numer ubezpieczenia społecznego",
         "placeholder": "Podaj numer ubezpieczenia społecznego"
       },
       "taxId": {
         "helper": "Wymagany do wystawiania faktur i sprawozdawczości podatkowej",
-        "label": "Numer identyfikacji podatkowej *",
+        "label": "Numer identyfikacji podatkowej",
         "placeholder": "np. DE123456789"
       },
       "vatId": {
@@ -471,18 +481,55 @@
       "cta": "Przejdź do aktywnej przeprowadzki"
     },
     "homeTypeMoveType": {
-      "label": "{{homeType}} · {{moveType}}"
+      "apartment": {
+        "light": {
+          "label": "Mieszkanie · Mała"
+        },
+        "premium": {
+          "label": "Mieszkanie · Premium"
+        },
+        "regular": {
+          "label": "Mieszkanie · Standardowa"
+        }
+      },
+      "house": {
+        "light": {
+          "label": "Dom · Mała"
+        },
+        "premium": {
+          "label": "Dom · Premium"
+        },
+        "regular": {
+          "label": "Dom · Standardowa"
+        }
+      },
+      "office": {
+        "light": {
+          "label": "Biuro · Mała"
+        },
+        "premium": {
+          "label": "Biuro · Premium"
+        },
+        "regular": {
+          "label": "Biuro · Standardowa"
+        }
+      },
+      "storage": {
+        "light": {
+          "label": "Magazyn · Mała"
+        },
+        "premium": {
+          "label": "Magazyn · Premium"
+        },
+        "regular": {
+          "label": "Magazyn · Standardowa"
+        }
+      }
     },
     "jobDetails": {
       "notFound": {
         "subtitle": "Ta przeprowadzka mogła zostać usunięta lub link jest nieprawidłowy."
-      },
-      "subheading": {
-        "label": "Przeprowadzka: {{moveType}} · {{date}}"
       }
-    },
-    "moveTypeBadge": {
-      "label": "Przeprowadzka: {{type}}"
     },
     "notStartable": {
       "body": "<0>Nie można jeszcze rozpocząć przeprowadzki.</0> Trasę możesz rozpocząć <1>{{when}}</1> (przycisk odblokowuje się 5 minut wcześniej)."
@@ -502,9 +549,9 @@
       "review": {
         "experience": {
           "title": "Doświadczenie",
-          "value_one": "{{count}} rok",
           "value_few": "{{count}} lata",
           "value_many": "{{count}} lat",
+          "value_one": "{{count}} rok",
           "value_other": "{{count}} roku"
         },
         "languages": {
@@ -594,7 +641,7 @@
         "label": "Twoje zarobki"
       },
       "respondWithin": {
-        "label": "Odpowiedz w ciągu <1>{{seconds}} s</1>"
+        "label": "Odpowiedz w ciągu <1>{{seconds}}</1>"
       },
       "services": {
         "label": "Usługi: {{list}}"
@@ -628,7 +675,7 @@
       },
       "subtitle": "Zarządzaj kontem i preferencjami",
       "version": {
-        "label": "pickLT Mover App v{{version}}"
+        "label": "PickLT Mover App v{{version}}"
       }
     },
     "startRoute": {
@@ -651,9 +698,9 @@
         "label": "Przygotowywanie…"
       },
       "row": {
-        "summary_one": "{{count}} przeprowadzka · brutto {{gross}} · netto {{net}}",
         "summary_few": "{{count}} przeprowadzki · brutto {{gross}} · netto {{net}}",
         "summary_many": "{{count}} przeprowadzek · brutto {{gross}} · netto {{net}}",
+        "summary_one": "{{count}} przeprowadzka · brutto {{gross}} · netto {{net}}",
         "summary_other": "{{count}} przeprowadzki · brutto {{gross}} · netto {{net}}"
       },
       "title": "Dokumenty podatkowe i zarobkowe"
@@ -695,7 +742,12 @@
     },
     "recentMoves": {
       "moveType": {
-        "label": "Przeprowadzka: {{type}}"
+        "instant": {
+          "label": "Przeprowadzka natychmiastowa"
+        },
+        "scheduled": {
+          "label": "Przeprowadzka zaplanowana"
+        }
       },
       "title": "Ostatnie przeprowadzki"
     },
@@ -765,7 +817,18 @@
     },
     "empty": {
       "filtered": {
-        "title": "Brak przeprowadzek: {{status}}"
+        "cancelled": {
+          "title": "Brak anulowanych przeprowadzek"
+        },
+        "completed": {
+          "title": "Brak zakończonych przeprowadzek"
+        },
+        "inProgress": {
+          "title": "Brak przeprowadzek w trakcie"
+        },
+        "pending": {
+          "title": "Brak oczekujących przeprowadzek"
+        }
       },
       "subtitle": "Zarezerwuj pierwszą przeprowadzkę, a pojawi się tutaj.",
       "title": "Brak przeprowadzek"
@@ -867,9 +930,6 @@
     },
     "editPhotos": {
       "cta": "Edytuj zdjęcia"
-    },
-    "moveTypeBadge": {
-      "label": "Przeprowadzka: {{moveType}}"
     }
   },
   "scheduledMoves": {
@@ -878,7 +938,18 @@
     },
     "empty": {
       "filtered": {
-        "title": "Brak zaplanowanych przeprowadzek: {{status}}"
+        "cancelled": {
+          "title": "Brak anulowanych zaplanowanych przeprowadzek"
+        },
+        "completed": {
+          "title": "Brak zakończonych zaplanowanych przeprowadzek"
+        },
+        "inProgress": {
+          "title": "Brak zaplanowanych przeprowadzek w trakcie"
+        },
+        "pending": {
+          "title": "Brak oczekujących zaplanowanych przeprowadzek"
+        }
       },
       "subtitle": "Zarezerwuj zaplanowaną przeprowadzkę, a pojawi się tutaj.",
       "title": "Brak zaplanowanych przeprowadzek"
@@ -915,13 +986,13 @@
   },
   "selectMover": {
     "available": {
-      "title_one": "Dostępny przewoźnik ({{count}})",
       "title_few": "Dostępni przewoźnicy ({{count}})",
       "title_many": "Dostępni przewoźnicy ({{count}})",
+      "title_one": "Dostępny przewoźnik ({{count}})",
       "title_other": "Dostępni przewoźnicy ({{count}})"
     },
     "capacity": {
-      "label": "pojemność {{volume}} m³"
+      "label": "pojemność {{volume}}"
     },
     "confirm": {
       "cta": "Potwierdź · {{amount}}"
@@ -937,23 +1008,23 @@
       "title": "Nie można znaleźć przewoźników"
     },
     "eta": {
-      "label_one": "~{{count}} min stąd",
       "label_few": "~{{count}} min stąd",
       "label_many": "~{{count}} min stąd",
+      "label_one": "~{{count}} min stąd",
       "label_other": "~{{count}} min stąd"
     },
-    "experienceYears_one": "{{count}} rok dośw.",
     "experienceYears_few": "{{count}} lata dośw.",
     "experienceYears_many": "{{count}} lat dośw.",
+    "experienceYears_one": "{{count}} rok dośw.",
     "experienceYears_other": "{{count}} roku dośw.",
     "languages": {
       "label": "Języki: {{languages}}"
     },
     "pricing": {
       "disclaimer": "Cena końcowa może się różnić w zależności od rzeczywistych warunków.",
-      "helper_one": "Ceny obejmują opłatę podstawową, dystans ({{distance}}), wielkość ekipy, pojemność pojazdu oraz obsługę {{count}} przedmiotu.",
       "helper_few": "Ceny obejmują opłatę podstawową, dystans ({{distance}}), wielkość ekipy, pojemność pojazdu oraz obsługę {{count}} przedmiotów.",
       "helper_many": "Ceny obejmują opłatę podstawową, dystans ({{distance}}), wielkość ekipy, pojemność pojazdu oraz obsługę {{count}} przedmiotów.",
+      "helper_one": "Ceny obejmują opłatę podstawową, dystans ({{distance}}), wielkość ekipy, pojemność pojazdu oraz obsługę {{count}} przedmiotu.",
       "helper_other": "Ceny obejmują opłatę podstawową, dystans ({{distance}}), wielkość ekipy, pojemność pojazdu oraz obsługę {{count}} przedmiotu.",
       "title": "Jak działa wycena:"
     },

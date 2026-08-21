@@ -27,8 +27,10 @@ import {
   useInventoryNames,
 } from '@/lib/inventory-labels'
 import { formatDateWith, formatMoney } from '@/lib/format'
+import { homeTypeLabel, moveSubtitle, moveTypeLabel } from '@/lib/move-subtitle'
 import { Trans, useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
+import { additionalServiceLabel, arrivalWindowLabel, dropoffParkingLabel, flexibilityLabel, floorLevelLabel, joinLabels, packingLevelLabel, packingMaterialLabel, parkingLabel, paymentMethodLabel, vehicleTypeLabel } from '@/lib/enum-labels'
 
 const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || ''
 const PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || ''
@@ -111,15 +113,8 @@ interface MoveData {
 
 // ─── Helpers ────────────────────────────────────────────
 // `t` is threaded through rather than captured at module scope: a module-level
-// label map would freeze at the boot language and never follow a switch.
-const formatLabel = (value: string | null | undefined, t: TFunction): string => {
-  if (!value) return t('common:value.notSpecified.empty')
-  return value
-    .split('_')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ')
-}
-
+// formatter would freeze at the boot language and never follow a switch. The
+// enum labels on this page come from `lib/enum-labels.ts` for the same reason.
 const formatDate = (dateStr: string | null, t: TFunction) => {
   if (!dateStr) return t('common:value.notSelected.empty')
   try {
@@ -538,10 +533,7 @@ export default function MoverMoveDetailsPage() {
             {pickupDisplay.split(',')[0]} &rarr; {dropoffDisplay.split(',')[0]}
           </h1>
           <p className="text-neutral-500 dark:text-neutral-400 mt-1">
-            {t('web:mover.jobDetails.subheading.label', {
-              moveType: formatLabel(moveType, t),
-              date: formatDate(moveDate, t),
-            })}
+            {moveSubtitle(t, moveType, null, formatDate(moveDate, t))}
           </p>
         </div>
         <div className="text-right">
@@ -600,7 +592,7 @@ export default function MoverMoveDetailsPage() {
                     <p className="text-sm text-neutral-500">{t('booking:field.apartmentUnit.value', { unit: pickupApartmentUnit })}</p>
                   )}
                   {floorLevel && (
-                    <p className="text-sm text-neutral-500">{t('booking:field.floor.value', { floor: formatLabel(floorLevel, t) })}</p>
+                    <p className="text-sm text-neutral-500">{t('booking:field.floor.value', { floor: floorLevelLabel(t, floorLevel) })}</p>
                   )}
                   {elevatorAvailable && (
                     <p className="text-sm text-green-600 flex items-center gap-1">
@@ -608,7 +600,7 @@ export default function MoverMoveDetailsPage() {
                     </p>
                   )}
                   {parkingSituation && (
-                    <p className="text-sm text-neutral-500">{t('booking:field.parking.value', { parking: formatLabel(parkingSituation, t) })}</p>
+                    <p className="text-sm text-neutral-500">{t('booking:field.parking.value', { parking: parkingLabel(t, parkingSituation) })}</p>
                   )}
                   {pickupAccessNotes && (
                     <p className="text-sm text-neutral-500">{t('booking:field.accessNotes.value', { notes: pickupAccessNotes })}</p>
@@ -634,7 +626,7 @@ export default function MoverMoveDetailsPage() {
                     <p className="text-sm text-neutral-500">{t('booking:field.apartmentUnit.value', { unit: dropoffApartmentUnit })}</p>
                   )}
                   {dropoffFloorLevel && (
-                    <p className="text-sm text-neutral-500">{t('booking:field.floor.value', { floor: formatLabel(dropoffFloorLevel, t) })}</p>
+                    <p className="text-sm text-neutral-500">{t('booking:field.floor.value', { floor: floorLevelLabel(t, dropoffFloorLevel) })}</p>
                   )}
                   {dropoffElevatorAvailable && (
                     <p className="text-sm text-green-600 flex items-center gap-1">
@@ -642,7 +634,7 @@ export default function MoverMoveDetailsPage() {
                     </p>
                   )}
                   {dropoffParkingSituation && (
-                    <p className="text-sm text-neutral-500">{t('booking:field.parking.value', { parking: formatLabel(dropoffParkingSituation, t) })}</p>
+                    <p className="text-sm text-neutral-500">{t('booking:field.parking.value', { parking: dropoffParkingLabel(t, dropoffParkingSituation) })}</p>
                   )}
                   {dropoffHaltverbot && (
                     <p className="text-sm text-amber-600 dark:text-amber-400">{t('booking:haltverbot.requested.label')}</p>
@@ -657,7 +649,7 @@ export default function MoverMoveDetailsPage() {
             <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
               {t('moves:detail.moveDetails.title')}
             </h2>
-            <InfoRow icon={TruckIcon} label={t('booking:field.moveType.label')} value={formatLabel(moveType, t)} />
+            <InfoRow icon={TruckIcon} label={t('booking:field.moveType.label')} value={moveTypeLabel(t, moveType)} />
             {/* Instant starts immediately and carries no moveDate — when the job
                 was requested is what a mover actually needs to judge it. */}
             {isInstant ? (
@@ -668,7 +660,7 @@ export default function MoverMoveDetailsPage() {
             {/* Home type, vehicle and crew are scheduled-wizard questions — the
                 instant client is never asked, so there is nothing to report. */}
             {!isInstant && (
-              <InfoRow icon={HomeIcon} label={t('booking:field.homeType.label')} value={formatLabel(homeType, t)} />
+              <InfoRow icon={HomeIcon} label={t('booking:field.homeType.label')} value={homeTypeLabel(t, homeType)} />
             )}
             <InfoRow icon={CubeIcon} label={t('booking:field.items.label')} value={(() => {
               if (inventoryLines.length === 0) return t('moves:itemCount', { count: inventoryCount })
@@ -683,16 +675,16 @@ export default function MoverMoveDetailsPage() {
               )
             })()} />
             {!isInstant && (
-              <InfoRow icon={TruckIcon} label={t('booking:field.vehicle.label')} value={formatLabel(vehicleType, t)} />
+              <InfoRow icon={TruckIcon} label={t('booking:field.vehicle.label')} value={vehicleTypeLabel(t, vehicleType)} />
             )}
             {!isInstant && (
               <InfoRow icon={UsersIcon} label={t('booking:field.crew.label')} value={crewSize ? t('web:mover.crewSize.label', { crew: crewSize }) : t('common:value.standard.label')} />
             )}
             {arrivalWindow && (
-              <InfoRow icon={CalendarIcon} label={t('booking:field.arrivalWindow.label')} value={formatLabel(arrivalWindow, t)} />
+              <InfoRow icon={CalendarIcon} label={t('booking:field.arrivalWindow.label')} value={arrivalWindowLabel(t, arrivalWindow)} />
             )}
             {flexibility && (
-              <InfoRow icon={ClockIcon} label={t('booking:field.flexibility.label')} value={formatLabel(flexibility, t)} />
+              <InfoRow icon={ClockIcon} label={t('booking:field.flexibility.label')} value={flexibilityLabel(t, flexibility)} />
             )}
             {routeDistanceMeters != null && routeDistanceMeters > 0 && (
               <InfoRow icon={MapPinIcon} label={t('booking:field.distance.label')} value={`${(routeDistanceMeters / 1000).toFixed(1)} km`} />
@@ -709,10 +701,10 @@ export default function MoverMoveDetailsPage() {
                 {t('booking:services.title')}
               </h2>
               {packingServiceLevel && (
-                <InfoRow label={t('booking:field.packingService.label')} value={formatLabel(packingServiceLevel, t)} />
+                <InfoRow label={t('booking:field.packingService.label')} value={packingLevelLabel(t, packingServiceLevel)} />
               )}
               {packingMaterials.length > 0 && (
-                <InfoRow label={t('booking:field.packingMaterials.label')} value={packingMaterials.map((v) => formatLabel(v, t)).join(', ')} />
+                <InfoRow label={t('booking:field.packingMaterials.label')} value={joinLabels(packingMaterials.map((v) => packingMaterialLabel(t, v)))} />
               )}
               {packingNotes && (
                 <InfoRow label={t('booking:field.packingNotes.label')} value={packingNotes} />
@@ -720,11 +712,11 @@ export default function MoverMoveDetailsPage() {
               {additionalServices.length > 0 && (
                 <InfoRow
                   label={t('booking:field.additionalServices.label')}
-                  value={additionalServices.map((v) => formatLabel(v, t)).join(', ')}
+                  value={joinLabels(additionalServices.map((v) => additionalServiceLabel(t, v)))}
                 />
               )}
               {storageWeeks > 0 && (
-                <InfoRow label={t('booking:pricing.storage.label')} value={t('booking:storageWeeks', { count: storageWeeks })} />
+                <InfoRow label={t('booking:pricing.storage.label')} value={t('booking:storageWeekCount', { count: storageWeeks })} />
               )}
               {disposalItems && (
                 <InfoRow label={t('booking:field.disposalItems.label')} value={disposalItems} />
@@ -765,7 +757,7 @@ export default function MoverMoveDetailsPage() {
               {paymentMethod && (
                 <div className="flex justify-between mt-2">
                   <span className="text-neutral-500 dark:text-neutral-400">{t('booking:payment.section.title')}</span>
-                  <span className="font-medium text-neutral-900 dark:text-neutral-100">{formatLabel(paymentMethod, t)}</span>
+                  <span className="font-medium text-neutral-900 dark:text-neutral-100">{paymentMethodLabel(t, paymentMethod)}</span>
                 </div>
               )}
             </div>

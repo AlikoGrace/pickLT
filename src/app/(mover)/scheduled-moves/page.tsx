@@ -14,6 +14,7 @@ import Link from 'next/link'
 import { client } from '@/lib/appwrite'
 import { formatDateWith, formatMoney } from '@/lib/format'
 import { useTranslation } from 'react-i18next'
+import { arrivalWindowLabel, vehicleTypeLabel } from '@/lib/enum-labels'
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || ''
 const MOVES_COLLECTION = process.env.NEXT_PUBLIC_COLLECTION_MOVES || ''
@@ -36,16 +37,6 @@ interface ScheduledMove {
 
 const ScheduledMovesPage = () => {
   const { t } = useTranslation()
-
-  // Defined inside the component so the fallback copy re-resolves on a
-  // language change instead of freezing at module-import time.
-  const formatLabel = (value: string | null | undefined): string => {
-    if (!value) return t('common:value.notSpecified.empty')
-    return value
-      .split('_')
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ')
-  }
 
   const formatDate = (dateStr: string | null) => {
     if (!dateStr) return t('common:value.notSelected.empty')
@@ -211,13 +202,13 @@ const ScheduledMovesPage = () => {
                 {move.arrivalWindow && (
                   <span className="flex items-center gap-1">
                     <ClockIcon className="w-3.5 h-3.5" />
-                    {formatLabel(move.arrivalWindow)}
+                    {arrivalWindowLabel(t, move.arrivalWindow)}
                   </span>
                 )}
                 {move.vehicleType && (
                   <span className="flex items-center gap-1">
                     <TruckIcon className="w-3.5 h-3.5" />
-                    {formatLabel(move.vehicleType)}
+                    {vehicleTypeLabel(t, move.vehicleType)}
                   </span>
                 )}
                 {move.totalItemCount > 0 && (

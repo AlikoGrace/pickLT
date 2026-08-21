@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
         : (move.moverProfileId as Record<string, string>)?.$id || null
 
     if (existingMoverProfileId) {
-      return NextResponse.json({ error: t('errors:move.alreadyAssigned2') }, { status: 409 })
+      return NextResponse.json({ error: t('errors:move.alreadyAssigned') }, { status: 409 })
     }
 
     // Verify the move is in a state that can be accepted (draft, booked, or paid)

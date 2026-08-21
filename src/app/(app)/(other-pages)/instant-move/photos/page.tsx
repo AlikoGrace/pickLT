@@ -17,6 +17,8 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { formatFileSizeMb } from '@/lib/format'
+import { UPLOAD_MAX_MB } from '@/lib/service-limits'
 
 const InstantMovePhotosPage = () => {
   const { t } = useTranslation()
@@ -168,7 +170,7 @@ const InstantMovePhotosPage = () => {
               <div className="relative rounded-2xl overflow-hidden">
                 <Image
                   src={coverPhotoId}
-                  alt={t('booking:photos.cover.a11y')}
+                  alt={t('booking:photos.main.a11y')}
                   width={600}
                   height={400}
                   className="w-full h-64 object-cover"
@@ -196,7 +198,7 @@ const InstantMovePhotosPage = () => {
                   {t('booking:photos.main.cta')}
                 </p>
                 <p className="text-xs text-neutral-500 mt-1">
-                  {t('common:upload.constraintsNoGif.helper')}
+                  {t('common:upload.constraintsNoGif.helper', { limit: formatFileSizeMb(UPLOAD_MAX_MB) })}
                 </p>
                 <input
                   ref={coverInputRef}

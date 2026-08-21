@@ -142,6 +142,12 @@ export async function POST(request: NextRequest) {
         title: 'New Review',
         body: `You received a ${Math.round(rating)}-star review.`,
         data: { moveId, handle: move.handle },
+        // `{{count}}` is i18next's plural selector, so "star" pluralises per
+        // locale (`_one`/`_other`, and `_few`/`_many` in Polish) rather than by
+        // an English `s`. The review comment is deliberately not carried: this
+        // route has never put it in the body, and this is a message-channel
+        // change, not a copy change.
+        i18n: { key: 'review.received', params: { count: Math.round(rating) } },
       })
     }
 

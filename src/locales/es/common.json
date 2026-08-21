@@ -196,11 +196,11 @@
   },
   "field": {
     "city": {
-      "label": "Ciudad *",
+      "label": "Ciudad",
       "placeholder": "p. ej., Berlín"
     },
     "country": {
-      "label": "País *",
+      "label": "País",
       "placeholder": "Selecciona tu país"
     },
     "email": {
@@ -209,10 +209,7 @@
     },
     "fullName": {
       "label": "Nombre completo",
-      "placeholder": "Tu nombre completo",
-      "required": {
-        "label": "Nombre completo *"
-      }
+      "placeholder": "Tu nombre completo"
     },
     "name": {
       "label": "Nombre",
@@ -225,9 +222,6 @@
     "phone": {
       "label": "Número de teléfono",
       "placeholder": "Introduce el número de teléfono",
-      "required": {
-        "label": "Número de teléfono *"
-      },
       "shortLabel": "Teléfono"
     },
     "quantity": {
@@ -535,10 +529,10 @@
   },
   "upload": {
     "constraints": {
-      "helper": "PNG, JPG o GIF de hasta 10 MB"
+      "helper": "PNG, JPG o GIF de hasta {{limit}}"
     },
     "constraintsNoGif": {
-      "helper": "PNG o JPG de hasta 10 MB"
+      "helper": "PNG o JPG de hasta {{limit}}"
     },
     "dragDrop": {
       "label": "o arrastra y suelta"
@@ -554,6 +548,9 @@
     }
   },
   "value": {
+    "lessThan": {
+      "label": "<{{value}}"
+    },
     "noEmail": {
       "empty": "Sin correo electrónico"
     },

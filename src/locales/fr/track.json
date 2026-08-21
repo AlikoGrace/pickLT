@@ -26,11 +26,8 @@
     "assigned": {
       "label": "Heure d’arrivée estimée"
     },
-    "distance": {
-      "footnote": "À {{distance}} km"
-    },
     "distanceAway": {
-      "label": "À {{distance}} km"
+      "label": "À {{distance}}"
     },
     "minutes": {
       "label_one": "{{count}} min",

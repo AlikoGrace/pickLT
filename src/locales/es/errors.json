@@ -200,23 +200,21 @@
     "tooLong": "El mensaje es demasiado largo. El límite es de {{max}} caracteres."
   },
   "move": {
-    "alreadyAssigned": "La mudanza ya está asignada",
-    "alreadyAssigned2": "Esta mudanza ya tiene un transportista asignado",
+    "alreadyAssigned": "Esta mudanza ya tiene un transportista asignado",
     "cancelFailed": "No se ha podido cancelar esta mudanza. Inténtalo de nuevo.",
     "cancelRetry": "No se ha podido cancelar. Inténtalo de nuevo.",
     "createFailed": "No se ha podido crear la mudanza",
     "dateInPast": "La fecha de la mudanza debe ser futura",
-    "invalidTransition": "Transición no válida de «{{from}}» a «{{to}}»",
+    "invalidTransition": "Esa actualización de estado ya no es válida para esta mudanza. Vuelve a cargar la mudanza e inténtalo de nuevo.",
     "loadFailed": "No se han podido cargar los datos de la mudanza",
-    "notAcceptableInStatus": "No se puede aceptar la mudanza mientras está en {{status}}",
+    "noLongerAcceptable": "Esta mudanza ya no se puede aceptar. Su estado ha cambiado; vuelve a cargar la lista.",
     "notAssigned": "No estás asignado a esta mudanza",
-    "notAssigned2": "No estás asignado a esta mudanza",
     "notAuthorized": "No tienes autorización para esta mudanza",
     "notAvailable": "Esta mudanza no está disponible para aceptarla",
     "notCancellable": "Esta mudanza ya no se puede cancelar ({{stage}}). Puede que tus objetos ya estén en tránsito; ponte en contacto directamente con tu transportista.",
     "notCancellableUnknownStage": "Esta mudanza ya no se puede cancelar. Puede que tus objetos ya estén en tránsito; ponte en contacto directamente con tu transportista.",
     "notFound": "Mudanza no encontrada",
-    "notReschedulable": "No se puede reprogramar una mudanza con el estado «{{status}}»",
+    "notReschedulable": "Esta mudanza ya no se puede reprogramar. Su estado ha cambiado; vuelve a cargar la mudanza.",
     "rescheduleFailed": "No se ha podido reprogramar",
     "rescheduleRetry": "No se ha podido reprogramar. Inténtalo de nuevo.",
     "scheduledOnly": "Solo las mudanzas programadas se pueden aceptar de esta forma",
@@ -267,16 +265,13 @@
       "initFailed": "No se pudo iniciar el pago. Inténtalo de nuevo."
     },
     "confirmFailed": "No se ha podido confirmar el pago",
-    "notAwaiting": "La mudanza no está a la espera de pago (estado actual: {{status}})"
+    "notAwaiting": "Esta mudanza no está a la espera de pago. Vuelve a cargar la mudanza e inténtalo de nuevo."
   },
   "profile": {
-    "changeEmailFailed": "No se ha podido cambiar el correo electrónico",
-    "changePhoneFailed": "No se ha podido cambiar el teléfono",
     "emailChangeFailed": "No se ha podido cambiar el correo electrónico",
     "emailTaken": "Este correo electrónico ya lo utiliza otra cuenta",
     "nameUpdateFailed": "No se ha podido actualizar el nombre",
-    "phoneChangeFailed": "No se ha podido cambiar el teléfono",
-    "phoneNumberChangeFailed": "No se ha podido cambiar el número de teléfono",
+    "phoneChangeFailed": "No se ha podido cambiar el número de teléfono",
     "phoneTaken": "Este número de teléfono ya lo utiliza otra cuenta"
   },
   "request": {
@@ -315,8 +310,7 @@
     "notAnImage2": "El archivo debe ser una imagen",
     "photoFailed": "No se ha podido subir la foto",
     "photosFailed": "No se han podido subir las fotos",
-    "tooLarge": "La imagen debe pesar menos de {{limit}}",
-    "tooLarge2": "El archivo debe pesar menos de 10 MB"
+    "tooLarge": "La imagen debe pesar menos de {{limit}}"
   },
   "validation": {
     "emailFormat": "El formato del correo electrónico no es válido",

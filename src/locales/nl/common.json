@@ -196,11 +196,11 @@
   },
   "field": {
     "city": {
-      "label": "Plaats *",
+      "label": "Plaats",
       "placeholder": "bijv. Berlijn"
     },
     "country": {
-      "label": "Land *",
+      "label": "Land",
       "placeholder": "Kies je land"
     },
     "email": {
@@ -209,10 +209,7 @@
     },
     "fullName": {
       "label": "Volledige naam",
-      "placeholder": "Je volledige naam",
-      "required": {
-        "label": "Volledige naam *"
-      }
+      "placeholder": "Je volledige naam"
     },
     "name": {
       "label": "Naam",
@@ -225,9 +222,6 @@
     "phone": {
       "label": "Telefoonnummer",
       "placeholder": "Voer een telefoonnummer in",
-      "required": {
-        "label": "Telefoonnummer *"
-      },
       "shortLabel": "Telefoon"
     },
     "quantity": {
@@ -535,10 +529,10 @@
   },
   "upload": {
     "constraints": {
-      "helper": "PNG, JPG, GIF tot 10 MB"
+      "helper": "PNG, JPG, GIF tot {{limit}}"
     },
     "constraintsNoGif": {
-      "helper": "PNG, JPG tot 10 MB"
+      "helper": "PNG, JPG tot {{limit}}"
     },
     "dragDrop": {
       "label": "of sleep hierheen"
@@ -554,6 +548,9 @@
     }
   },
   "value": {
+    "lessThan": {
+      "label": "<{{value}}"
+    },
     "noEmail": {
       "empty": "Geen e-mailadres"
     },

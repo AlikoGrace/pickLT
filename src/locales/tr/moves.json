@@ -8,8 +8,8 @@
     }
   },
   "available": {
-    "withinRadiusCount_one": "30 km içinde {{count}} taşınma",
-    "withinRadiusCount_other": "30 km içinde {{count}} taşınma"
+    "withinRadiusCount_one": "{{radius}} içinde {{count}} taşınma",
+    "withinRadiusCount_other": "{{radius}} içinde {{count}} taşınma"
   },
   "booking": {
     "code": {
@@ -45,12 +45,12 @@
         "label": "Teslim noktası"
       },
       "pickupFallback": {
-        "label": "Alım noktası"
+        "label": "Alış noktası"
       }
     },
     "title": {
       "generic": {
-        "label": "Taşıma"
+        "label": "Taşınma"
       }
     },
     "typeAndCategory": {
@@ -187,7 +187,7 @@
       "label": "Taşınma tarihi"
     },
     "moveDetails": {
-      "title": "Taşıma detayları"
+      "title": "Taşınma detayları"
     },
     "moveItems": {
       "title": "Taşınacak eşyalar"
@@ -202,10 +202,10 @@
       "label": "Otopark"
     },
     "pickup": {
-      "label": "Alım"
+      "label": "Alış"
     },
     "pickupAddress": {
-      "title": "Alım adresi"
+      "title": "Alış adresi"
     },
     "requestedAt": {
       "label": "Talep edildi"
@@ -262,7 +262,7 @@
   "list": {
     "loadError": {
       "body": "Yenilemek için aşağı çekin.",
-      "title": "Taşımalar yüklenemedi"
+      "title": "Taşınmalar yüklenemedi"
     }
   },
   "moveCategory": {
@@ -316,7 +316,7 @@
       "label": "Atandı"
     },
     "awaitingPayment": {
-      "label": "Ödeme bekleniyor"
+      "label": "Tahsilat bekleniyor"
     },
     "booked": {
       "label": "Rezerve edildi"
@@ -346,7 +346,7 @@
       "label": "Devam ediyor"
     },
     "inTransit": {
-      "label": "Taşınıyor"
+      "label": "Yolda"
     },
     "loading": {
       "label": "Yükleniyor"
@@ -367,10 +367,10 @@
       "label": "Ödendi"
     },
     "pending": {
-      "label": "Bekliyor"
+      "label": "Beklemede"
     },
     "pendingPayment": {
-      "label": "Ödeme gerekiyor"
+      "label": "Ödeme bekleniyor"
     },
     "unknown": {
       "label": "Bilinmiyor"

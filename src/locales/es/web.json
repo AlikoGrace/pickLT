@@ -20,7 +20,7 @@
       "title": "Inicia sesión para ver tu cuenta"
     },
     "version": {
-      "label": "pickLT v{{version}}"
+      "label": "PickLT v{{version}}"
     }
   },
   "authGate": {
@@ -120,7 +120,20 @@
     },
     "moves": {
       "empty": "Aún no hay mudanzas. ¡Empieza reservando la primera!",
-      "emptyFiltered": "No se han encontrado mudanzas en {{status}}.",
+      "emptyFiltered": {
+        "cancelled": {
+          "label": "No se han encontrado mudanzas canceladas."
+        },
+        "completed": {
+          "label": "No se han encontrado mudanzas completadas."
+        },
+        "inProgress": {
+          "label": "No se han encontrado mudanzas en curso."
+        },
+        "pending": {
+          "label": "No se han encontrado mudanzas pendientes."
+        }
+      },
       "emptyScheduled": "No se han encontrado mudanzas programadas.",
       "signedOut": {
         "cta": "Inicia sesión para empezar",
@@ -258,9 +271,6 @@
     "title": "¿Cómo quieres hacer tu mudanza?"
   },
   "moveDetails": {
-    "header": {
-      "subtitle": "Mudanza {{moveType}} · {{date}}"
-    },
     "mover": {
       "title": "Tu transportista"
     },
@@ -285,7 +295,7 @@
     },
     "activeMove": {
       "advance": {
-        "cta": "Marcar como: {{phase}}"
+        "cta": "Actualizar estado"
       },
       "cancelledByClient": {
         "title": "Mudanza cancelada por el cliente"
@@ -298,14 +308,14 @@
         "label": "~{{minutes}} min hasta la recogida"
       },
       "proximity": {
-        "helper": "Tienes que estar a menos de 100 m del punto de recogida para marcar la llegada (estás a {{distance}} m)"
+        "helper": "Tienes que estar a menos de {{radius}} del punto de recogida para marcar la llegada (estás a {{distance}})"
       }
     },
     "additionalServicesCount_one": "+{{count}} servicio",
     "additionalServicesCount_other": "+{{count}} servicios",
     "availableMoves": {
       "empty": {
-        "subtitle": "Ahora mismo no hay mudanzas programadas a menos de 30 km. Lo comprobamos automáticamente cada 30 segundos.",
+        "subtitle": "Ahora mismo no hay mudanzas programadas a menos de {{radius}}. Lo comprobamos automáticamente cada {{interval}}.",
         "title": "No hay mudanzas disponibles"
       },
       "error": {
@@ -413,14 +423,14 @@
         "helper": "La ciudad en la que trabajas principalmente como transportista"
       },
       "experience": {
-        "label": "Años de experiencia *",
+        "label": "Años de experiencia",
         "placeholder": "p. ej., 5"
       },
       "languages": {
-        "label": "Idiomas que hablas *"
+        "label": "Idiomas que hablas"
       },
       "licenseNumber": {
-        "label": "Número del permiso de conducir *",
+        "label": "Número del permiso de conducir",
         "placeholder": "Introduce el número de tu permiso de conducir"
       },
       "licensePhoto": {
@@ -440,19 +450,19 @@
         "a11y": "Vista previa del selfie",
         "cta": "Hazte o sube un selfie nítido",
         "helper": "Se necesita un selfie nítido para verificar tu identidad",
-        "label": "Foto tipo selfie *",
+        "label": "Foto tipo selfie",
         "retake": {
           "cta": "Repetir el selfie"
         }
       },
       "ssn": {
         "helper": "Se cifra y solo se usa para la verificación fiscal",
-        "label": "Número de la seguridad social *",
+        "label": "Número de la seguridad social",
         "placeholder": "Introduce tu número de la seguridad social"
       },
       "taxId": {
         "helper": "Necesario para emitir facturas y para la declaración fiscal",
-        "label": "Número de identificación fiscal *",
+        "label": "Número de identificación fiscal",
         "placeholder": "p. ej., DE123456789"
       },
       "vatId": {
@@ -465,18 +475,55 @@
       "cta": "Ir a la mudanza activa"
     },
     "homeTypeMoveType": {
-      "label": "{{homeType}} · {{moveType}}"
+      "apartment": {
+        "light": {
+          "label": "Piso · Ligera"
+        },
+        "premium": {
+          "label": "Piso · Premium"
+        },
+        "regular": {
+          "label": "Piso · Estándar"
+        }
+      },
+      "house": {
+        "light": {
+          "label": "Casa · Ligera"
+        },
+        "premium": {
+          "label": "Casa · Premium"
+        },
+        "regular": {
+          "label": "Casa · Estándar"
+        }
+      },
+      "office": {
+        "light": {
+          "label": "Oficina · Ligera"
+        },
+        "premium": {
+          "label": "Oficina · Premium"
+        },
+        "regular": {
+          "label": "Oficina · Estándar"
+        }
+      },
+      "storage": {
+        "light": {
+          "label": "Trastero · Ligera"
+        },
+        "premium": {
+          "label": "Trastero · Premium"
+        },
+        "regular": {
+          "label": "Trastero · Estándar"
+        }
+      }
     },
     "jobDetails": {
       "notFound": {
         "subtitle": "Puede que esta mudanza se haya eliminado o que el enlace no sea válido."
-      },
-      "subheading": {
-        "label": "Mudanza {{moveType}} · {{date}}"
       }
-    },
-    "moveTypeBadge": {
-      "label": "Mudanza {{type}}"
     },
     "notStartable": {
       "body": "<0>Todavía no puedes iniciar la mudanza.</0> Podrás iniciar esta ruta el <1>{{when}}</1> («Iniciar la ruta» se activa 5 minutos antes)."
@@ -586,7 +633,7 @@
         "label": "Tus ganancias"
       },
       "respondWithin": {
-        "label": "Responde en <1>{{seconds}}s</1>"
+        "label": "Responde en <1>{{seconds}}</1>"
       },
       "services": {
         "label": "Servicios: {{list}}"
@@ -620,7 +667,7 @@
       },
       "subtitle": "Gestiona tu cuenta y tus preferencias",
       "version": {
-        "label": "pickLT Mover App v{{version}}"
+        "label": "PickLT Mover App v{{version}}"
       }
     },
     "startRoute": {
@@ -685,7 +732,12 @@
     },
     "recentMoves": {
       "moveType": {
-        "label": "Mudanza {{type}}"
+        "instant": {
+          "label": "Mudanza inmediata"
+        },
+        "scheduled": {
+          "label": "Mudanza programada"
+        }
       },
       "title": "Mudanzas recientes"
     },
@@ -755,7 +807,18 @@
     },
     "empty": {
       "filtered": {
-        "title": "No hay mudanzas {{status}}"
+        "cancelled": {
+          "title": "No hay mudanzas canceladas"
+        },
+        "completed": {
+          "title": "No hay mudanzas completadas"
+        },
+        "inProgress": {
+          "title": "No hay mudanzas en curso"
+        },
+        "pending": {
+          "title": "No hay mudanzas pendientes"
+        }
       },
       "subtitle": "Reserva tu primera mudanza y aparecerá aquí.",
       "title": "Aún no hay mudanzas"
@@ -857,9 +920,6 @@
     },
     "editPhotos": {
       "cta": "Editar las fotos"
-    },
-    "moveTypeBadge": {
-      "label": "Mudanza {{moveType}}"
     }
   },
   "scheduledMoves": {
@@ -868,7 +928,18 @@
     },
     "empty": {
       "filtered": {
-        "title": "No hay mudanzas programadas {{status}}"
+        "cancelled": {
+          "title": "No hay mudanzas programadas canceladas"
+        },
+        "completed": {
+          "title": "No hay mudanzas programadas completadas"
+        },
+        "inProgress": {
+          "title": "No hay mudanzas programadas en curso"
+        },
+        "pending": {
+          "title": "No hay mudanzas programadas pendientes"
+        }
       },
       "subtitle": "Reserva una mudanza programada y aparecerá aquí.",
       "title": "Aún no hay mudanzas programadas"
@@ -909,7 +980,7 @@
       "title_other": "Transportistas disponibles ({{count}})"
     },
     "capacity": {
-      "label": "{{volume}} m³ de capacidad"
+      "label": "{{volume}} de capacidad"
     },
     "confirm": {
       "cta": "Confirmar · {{amount}}"

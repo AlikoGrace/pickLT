@@ -71,7 +71,7 @@
       "title": "{{prefix}}: {{tier}}"
     },
     "chosen": {
-      "label": "Taşımanız"
+      "label": "Taşınmanız"
     },
     "suggested": {
       "label": "Önerilen"
@@ -83,10 +83,10 @@
   },
   "upgrade": {
     "headline": {
-      "title": "Bu taşıma artık şunu gerektiriyor"
+      "title": "Bu taşınma artık şunu gerektiriyor"
     },
     "reason": {
-      "body": "“{{item}}” eklenmesi taşımanızı {{tier}} kademesine taşıdı — {{explanation}}"
+      "body": "“{{item}}” eklenmesi taşınmanızı {{tier}} kademesine taşıdı — {{explanation}}"
     },
     "warnings": {
       "title": "Bu kademeyi gerektiren eşyalar:"

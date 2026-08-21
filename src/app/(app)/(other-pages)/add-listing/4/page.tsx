@@ -14,6 +14,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { categoryLabel, categoryTranslator } from '@/lib/inventory-i18n'
 import { upgradeCta } from '@/lib/move-subtitle'
+import { formatWeightKg } from '@/lib/format'
 
 // Inventory item definitions with internal metadata for move estimation
 type InventoryItemDef = {
@@ -522,7 +523,7 @@ const Page = () => {
               <p className="text-xs text-neutral-500 dark:text-neutral-500 mb-6">
                 {t('booking:classification.summary.label', {
                   items: t('moves:itemCount', { count: classification.totalItems }),
-                  weight: classification.totalWeightKg.toFixed(0),
+                  weight: formatWeightKg(classification.totalWeightKg),
                   points: t('booking:classification.pointCount', {
                     count: classification.totalPoints,
                   }),

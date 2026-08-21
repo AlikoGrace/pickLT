@@ -20,21 +20,13 @@ import React, { Suspense, useEffect, useState } from 'react'
 import PayWith, { PaymentMethod } from './PayWith'
 import YourMove from './YourMove'
 import { formatDateWith, formatMoney, formatPercent } from '@/lib/format'
-import { moveSubtitle } from '@/lib/move-subtitle'
+import { baseRateLabel, moveSubtitle } from '@/lib/move-subtitle'
 import { useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
+import { arrivalWindowLabel, vehicleTypeLabel } from '@/lib/enum-labels'
 
 /** VAT rate applied to the subtotal. Single source for the maths and the label. */
 const VAT_RATE = 0.19
-
-// Helper to format labels
-const formatLabel = (value: string | null | undefined, t: TFunction): string => {
-  if (!value) return t('common:value.notSpecified.empty')
-  return value
-    .split('_')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ')
-}
 
 const formatDate = (dateStr: string | null, t: TFunction) => {
   if (!dateStr) return t('common:value.notSelected.empty')
@@ -389,7 +381,7 @@ const CheckoutContent = () => {
             <p className="block text-sm text-neutral-500 dark:text-neutral-400">
               {t('moves:itemCount', { count: inventoryCount })}
               {!isInstantMove && crewSize && ` · ${t('moves:moverCount', { count: Number(crewSize) })}`}
-              {!isInstantMove && vehicleType && ` · ${formatLabel(vehicleType, t)}`}
+              {!isInstantMove && vehicleType && ` · ${vehicleTypeLabel(t, vehicleType)}`}
             </p>
             
             {/* Route info for instant moves */}
@@ -411,7 +403,7 @@ const CheckoutContent = () => {
                 </span>
               ) : (
                 <span className="inline-flex items-center rounded-full bg-primary-100 px-2 py-0.5 text-xs font-medium text-primary-700 dark:bg-primary-900/30 dark:text-primary-300">
-                  {formatLabel(arrivalWindow, t)}
+                  {arrivalWindowLabel(t, arrivalWindow)}
                 </span>
               )}
             </div>
@@ -437,7 +429,7 @@ const CheckoutContent = () => {
             </>
           ) : (
             <>
-              <DescriptionTerm>{t('booking:pricing.baseRate.label', { moveType: formatLabel(moveType, t) })}</DescriptionTerm>
+              <DescriptionTerm>{baseRateLabel(t, moveType)}</DescriptionTerm>
               <DescriptionDetails className="sm:text-right">{formatMoney(basePrice)}</DescriptionDetails>
               
               {packingPrice > 0 && (

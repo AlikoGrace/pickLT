@@ -200,23 +200,21 @@
     "tooLong": "Le message est trop long. La limite est de {{max}} caractères."
   },
   "move": {
-    "alreadyAssigned": "Le déménagement est déjà attribué",
-    "alreadyAssigned2": "Un déménageur est déjà assigné à ce déménagement",
+    "alreadyAssigned": "Un déménageur est déjà assigné à ce déménagement",
     "cancelFailed": "Impossible d’annuler ce déménagement. Veuillez réessayer.",
     "cancelRetry": "Échec de l’annulation. Veuillez réessayer.",
     "createFailed": "Échec de la création du déménagement",
     "dateInPast": "La date du déménagement doit être ultérieure à aujourd’hui",
-    "invalidTransition": "Transition non valide de « {{from}} » vers « {{to}} »",
+    "invalidTransition": "Cette mise à jour de statut n’est plus valable pour ce déménagement. Veuillez recharger le déménagement et réessayer.",
     "loadFailed": "Échec du chargement des données du déménagement",
-    "notAcceptableInStatus": "Le déménagement ne peut pas être accepté tant qu’il est au statut {{status}}",
-    "notAssigned": "Non assigné à ce déménagement",
-    "notAssigned2": "Vous n’êtes pas assigné à ce déménagement",
+    "noLongerAcceptable": "Ce déménagement ne peut plus être accepté. Son statut a changé — veuillez recharger la liste.",
+    "notAssigned": "Vous n’êtes pas assigné à ce déménagement",
     "notAuthorized": "Non autorisé pour ce déménagement",
     "notAvailable": "Ce déménagement n’est pas disponible à l’acceptation",
     "notCancellable": "Ce déménagement ne peut plus être annulé ({{stage}}). Vos affaires sont peut-être déjà en cours de transport — contactez directement votre déménageur.",
     "notCancellableUnknownStage": "Ce déménagement ne peut plus être annulé. Vos affaires sont peut-être déjà en cours de transport — contactez directement votre déménageur.",
     "notFound": "Déménagement introuvable",
-    "notReschedulable": "Impossible de reprogrammer un déménagement au statut « {{status}} »",
+    "notReschedulable": "Ce déménagement ne peut plus être reprogrammé. Son statut a changé — veuillez recharger le déménagement.",
     "rescheduleFailed": "Échec de la reprogrammation",
     "rescheduleRetry": "Échec de la reprogrammation. Veuillez réessayer.",
     "scheduledOnly": "Seuls les déménagements planifiés peuvent être acceptés de cette façon",
@@ -267,16 +265,13 @@
       "initFailed": "Impossible de démarrer le paiement. Réessayez."
     },
     "confirmFailed": "Échec de la confirmation du paiement",
-    "notAwaiting": "Le déménagement n’est pas en attente de paiement (statut actuel : {{status}})"
+    "notAwaiting": "Ce déménagement n’est pas en attente de paiement. Veuillez recharger le déménagement et réessayer."
   },
   "profile": {
-    "changeEmailFailed": "Échec de la modification de l’adresse e-mail",
-    "changePhoneFailed": "Échec de la modification du téléphone",
     "emailChangeFailed": "Échec de la modification de l’adresse e-mail",
     "emailTaken": "Cette adresse e-mail est déjà utilisée par un autre compte",
     "nameUpdateFailed": "Échec de la mise à jour du nom",
-    "phoneChangeFailed": "Échec de la modification du téléphone",
-    "phoneNumberChangeFailed": "Échec de la modification du numéro de téléphone",
+    "phoneChangeFailed": "Échec de la modification du numéro de téléphone",
     "phoneTaken": "Ce numéro de téléphone est déjà utilisé par un autre compte"
   },
   "request": {
@@ -315,8 +310,7 @@
     "notAnImage2": "Le fichier doit être une image",
     "photoFailed": "Échec de l’envoi de la photo",
     "photosFailed": "Échec de l’envoi des photos",
-    "tooLarge": "L’image doit faire moins de {{limit}}",
-    "tooLarge2": "La taille du fichier doit être inférieure à 10 Mo"
+    "tooLarge": "L’image doit faire moins de {{limit}}"
   },
   "validation": {
     "emailFormat": "Format d’adresse e-mail non valide",

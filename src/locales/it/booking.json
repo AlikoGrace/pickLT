@@ -56,16 +56,19 @@
   },
   "arrivalWindow": {
     "afternoon": {
-      "label": "Pomeriggio (12:00-17:00)"
+      "label": "Pomeriggio"
     },
     "evening": {
-      "label": "Sera (17:00-21:00)"
+      "label": "Sera"
     },
     "label": "Fascia oraria di arrivo",
     "morning": {
-      "label": "Mattina (8:00-12:00)"
+      "label": "Mattina"
     },
-    "optionalLabel": "Fascia oraria di arrivo (facoltativa)"
+    "optionalLabel": "Fascia oraria di arrivo (facoltativa)",
+    "withRange": {
+      "label": "{{window}} ({{range}})"
+    }
   },
   "business": {
     "company": {
@@ -136,7 +139,7 @@
       "label": "Punti"
     },
     "summary": {
-      "label": "{{items}} · ~{{weight}} kg · {{points}}"
+      "label": "{{items}} · ~{{weight}} · {{points}}"
     },
     "title": "Classificazione del trasloco",
     "upgrade": {
@@ -420,8 +423,7 @@
       "label": "Veicolo"
     },
     "weight": {
-      "label": "Peso",
-      "value": "{{weight}} kg"
+      "label": "Peso"
     }
   },
   "flexibility": {
@@ -734,10 +736,37 @@
     }
   },
   "packingMaterials": {
+    "bubbleWrap": {
+      "option": "Pluriball"
+    },
+    "dishInserts": {
+      "option": "Divisori per stoviglie"
+    },
+    "furnitureBlankets": {
+      "option": "Coperte per mobili"
+    },
     "label": "Materiale da imballaggio",
+    "mattressCovers": {
+      "option": "Coprimaterassi"
+    },
+    "movingBoxes": {
+      "option": "Scatole per trasloco"
+    },
+    "packingPaper": {
+      "option": "Carta da imballaggio"
+    },
+    "packingTape": {
+      "option": "Nastro adesivo"
+    },
     "selectedCount": {
       "label_one": "{{count}} selezionato",
       "label_other": "{{count}} selezionati"
+    },
+    "tvProtection": {
+      "option": "Protezione TV"
+    },
+    "wardrobeBoxes": {
+      "option": "Scatole armadio"
     }
   },
   "packingNotes": {
@@ -823,7 +852,7 @@
       "title": "Paga direttamente il tuo traslocatore"
     },
     "cashHandshake": {
-      "helper": "Paga il traslocatore direttamente (contanti o bonifico), poi tocca «Ho pagato» qui sotto."
+      "helper": "Paga il traslocatore direttamente (contanti o bonifico), poi tocca «{{cta}}» qui sotto."
     },
     "cashLong": {
       "label": "Contanti (paghi direttamente il traslocatore)"
@@ -928,14 +957,6 @@
     "countSummary": {
       "label": "{{main}} • {{additional}}"
     },
-    "cover": {
-      "a11y": "Foto di copertina",
-      "helper": "Carica una foto principale che mostri i tuoi oggetti o lo spazio",
-      "label": "Foto di copertina"
-    },
-    "formatHint": {
-      "subtitle": "PNG, JPG fino a 3 MB"
-    },
     "gallery": {
       "a11y": "Foto del trasloco",
       "helper": "Carica altre foto di mobili, stanze o oggetti",
@@ -954,6 +975,7 @@
       "a11y": "Foto del trasloco {{n}}"
     },
     "main": {
+      "a11y": "Foto principale",
       "cta": "Tocca per caricare la foto principale",
       "helper": "Carica una foto principale che mostri i tuoi oggetti o lo spazio",
       "label": "Foto principale"
@@ -1019,10 +1041,32 @@
       "label": "Tariffa base"
     },
     "baseRate": {
-      "label": "Tariffa base ({{moveType}})"
+      "fallback": {
+        "label": "Tariffa base"
+      },
+      "light": {
+        "label": "Tariffa base (Trasloco leggero)"
+      },
+      "premium": {
+        "label": "Tariffa base (Trasloco premium)"
+      },
+      "regular": {
+        "label": "Tariffa base (Trasloco standard)"
+      }
     },
     "baseRateWithDistance": {
-      "label": "Tariffa base ({{moveType}}, {{distance}})"
+      "fallback": {
+        "label": "Tariffa base ({{distance}})"
+      },
+      "light": {
+        "label": "Tariffa base (Trasloco leggero, {{distance}})"
+      },
+      "premium": {
+        "label": "Tariffa base (Trasloco premium, {{distance}})"
+      },
+      "regular": {
+        "label": "Tariffa base (Trasloco standard, {{distance}})"
+      }
     },
     "crew": {
       "label": "Squadra ({{crew}})"
@@ -1177,8 +1221,6 @@
   },
   "storageWeekCount_one": "{{count}} settimana",
   "storageWeekCount_other": "{{count}} settimane",
-  "storageWeeks_one": "{{count}} settimana",
-  "storageWeeks_other": "{{count}} settimane",
   "streetAddress": {
     "dropoff": {
       "helper": "Inserisci l’indirizzo completo di consegna",
@@ -1237,19 +1279,19 @@
     "capacity": {
       "label": "Capacità (m³)",
       "placeholder": "es. 15",
-      "value": "{{capacity}} m³"
+      "upTo": {
+        "value": "Fino a {{capacity}}"
+      }
     },
     "edit": {
       "title": "Modifica i dati del veicolo"
     },
     "largeTruck": {
-      "capacity": "25+ m³",
-      "helper": "25+ m³ — traslochi di case, carichi grandi",
+      "helper": "{{capacity}} — traslochi di case, carichi grandi",
       "label": "Camion grande"
     },
     "mediumTruck": {
-      "capacity": "10–25 m³",
-      "helper": "10–25 m³ — traslochi di appartamenti",
+      "helper": "{{capacity}} — traslochi di appartamenti",
       "label": "Camion medio"
     },
     "model": {
@@ -1270,8 +1312,7 @@
       "label": "Targa *"
     },
     "smallVan": {
-      "capacity": "Fino a 10 m³",
-      "helper": "Fino a 10 m³ — piccoli traslochi, singoli oggetti",
+      "helper": "{{capacity}} — piccoli traslochi, singoli oggetti",
       "label": "Furgone piccolo"
     },
     "title": "Dati del veicolo",

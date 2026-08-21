@@ -25,6 +25,7 @@ import { formatDateWith, formatMoney } from '@/lib/format'
 import { moveSubtitle, moveTypeAndCategoryValue, requestCategoryAndType } from '@/lib/move-subtitle'
 import { Trans, useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
+import { formatSeconds, formatWeightKg } from '@/lib/format'
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || ''
 const MOVE_REQUESTS_COLLECTION = process.env.NEXT_PUBLIC_COLLECTION_MOVE_REQUESTS || ''
@@ -541,7 +542,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
               <span className="text-sm opacity-90">
                 <Trans
                   i18nKey="web:mover.request.respondWithin.label"
-                  values={{ seconds: countdown }}
+                  values={{ seconds: formatSeconds(countdown) }}
                   components={{ 1: <span className="font-bold text-lg" /> }}
                 />
               </span>
@@ -725,7 +726,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                 <p className="text-xs text-neutral-500">
                   <Trans
                     i18nKey="web:mover.request.respondWithin.label"
-                    values={{ seconds: countdown }}
+                    values={{ seconds: formatSeconds(countdown) }}
                     components={{ 1: <span className="font-bold text-red-500" /> }}
                   />
                 </p>
@@ -840,7 +841,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                       <InfoRow icon={CubeIcon} label={t('booking:field.items.label')} value={t('moves:itemCount', { count: move.totalItemCount })} />
                     )}
                     {move.totalWeightKg != null && move.totalWeightKg > 0 && (
-                      <InfoRow icon={CubeIcon} label={t('booking:field.weight.label')} value={t('booking:field.weight.value', { weight: move.totalWeightKg })} />
+                      <InfoRow icon={CubeIcon} label={t('booking:field.weight.label')} value={formatWeightKg(move.totalWeightKg)} />
                     )}
                     {move.vehicleType && <InfoRow icon={TruckIcon} label={t('booking:field.vehicle.label')} value={vehicleLabel(t, move.vehicleType)} />}
                     {move.crewSize && <InfoRow icon={UserGroupIcon} label={t('booking:field.crew.label')} value={t('moves:moverCount', { count: Number(move.crewSize) + 1 })} />}

@@ -20,7 +20,7 @@
       "title": "Connectez-vous pour accéder à votre compte"
     },
     "version": {
-      "label": "pickLT v{{version}}"
+      "label": "PickLT v{{version}}"
     }
   },
   "authGate": {
@@ -120,7 +120,20 @@
     },
     "moves": {
       "empty": "Aucun déménagement pour l'instant. Commencez par réserver votre premier déménagement !",
-      "emptyFiltered": "Aucun déménagement dans la catégorie {{status}}.",
+      "emptyFiltered": {
+        "cancelled": {
+          "label": "Aucun déménagement annulé trouvé."
+        },
+        "completed": {
+          "label": "Aucun déménagement terminé trouvé."
+        },
+        "inProgress": {
+          "label": "Aucun déménagement en cours trouvé."
+        },
+        "pending": {
+          "label": "Aucun déménagement en attente trouvé."
+        }
+      },
       "emptyScheduled": "Aucun déménagement planifié.",
       "signedOut": {
         "cta": "Connectez-vous pour commencer",
@@ -258,9 +271,6 @@
     "title": "Comment souhaitez-vous déménager ?"
   },
   "moveDetails": {
-    "header": {
-      "subtitle": "Déménagement {{moveType}} · {{date}}"
-    },
     "mover": {
       "title": "Votre déménageur"
     },
@@ -285,7 +295,7 @@
     },
     "activeMove": {
       "advance": {
-        "cta": "Marquer comme : {{phase}}"
+        "cta": "Mettre à jour le statut"
       },
       "cancelledByClient": {
         "title": "Déménagement annulé par le client"
@@ -298,14 +308,14 @@
         "label": "~{{minutes}} min jusqu'à l'enlèvement"
       },
       "proximity": {
-        "helper": "Vous devez être à moins de 100 m du lieu d'enlèvement pour signaler votre arrivée (à {{distance}} m)"
+        "helper": "Vous devez être à moins de {{radius}} du lieu d'enlèvement pour signaler votre arrivée (à {{distance}})"
       }
     },
     "additionalServicesCount_one": "+{{count}} service",
     "additionalServicesCount_other": "+{{count}} services",
     "availableMoves": {
       "empty": {
-        "subtitle": "Aucun déménagement planifié dans un rayon de 30 km pour le moment. Nous vérifions automatiquement toutes les 30 secondes.",
+        "subtitle": "Aucun déménagement planifié dans un rayon de {{radius}} pour le moment. Nous vérifions automatiquement toutes les {{interval}}.",
         "title": "Aucun déménagement disponible"
       },
       "error": {
@@ -413,14 +423,14 @@
         "helper": "La ville où vous exercez principalement comme déménageur"
       },
       "experience": {
-        "label": "Années d'expérience *",
+        "label": "Années d'expérience",
         "placeholder": "ex. 5"
       },
       "languages": {
-        "label": "Langues parlées *"
+        "label": "Langues parlées"
       },
       "licenseNumber": {
-        "label": "Numéro de permis de conduire *",
+        "label": "Numéro de permis de conduire",
         "placeholder": "Saisissez votre numéro de permis de conduire"
       },
       "licensePhoto": {
@@ -440,19 +450,19 @@
         "a11y": "Aperçu du selfie",
         "cta": "Prenez ou importez un selfie net",
         "helper": "Un selfie net est obligatoire pour la vérification d'identité",
-        "label": "Photo selfie *",
+        "label": "Photo selfie",
         "retake": {
           "cta": "Reprendre le selfie"
         }
       },
       "ssn": {
         "helper": "Chiffré et utilisé uniquement pour la vérification fiscale",
-        "label": "Numéro de sécurité sociale *",
+        "label": "Numéro de sécurité sociale",
         "placeholder": "Saisissez votre numéro de sécurité sociale"
       },
       "taxId": {
         "helper": "Nécessaire pour l'émission des factures et les déclarations fiscales",
-        "label": "Numéro d'identification fiscale *",
+        "label": "Numéro d'identification fiscale",
         "placeholder": "ex. DE123456789"
       },
       "vatId": {
@@ -465,18 +475,55 @@
       "cta": "Aller au déménagement en cours"
     },
     "homeTypeMoveType": {
-      "label": "{{homeType}} · {{moveType}}"
+      "apartment": {
+        "light": {
+          "label": "Appartement · Léger"
+        },
+        "premium": {
+          "label": "Appartement · Premium"
+        },
+        "regular": {
+          "label": "Appartement · Standard"
+        }
+      },
+      "house": {
+        "light": {
+          "label": "Maison · Léger"
+        },
+        "premium": {
+          "label": "Maison · Premium"
+        },
+        "regular": {
+          "label": "Maison · Standard"
+        }
+      },
+      "office": {
+        "light": {
+          "label": "Bureau · Léger"
+        },
+        "premium": {
+          "label": "Bureau · Premium"
+        },
+        "regular": {
+          "label": "Bureau · Standard"
+        }
+      },
+      "storage": {
+        "light": {
+          "label": "Garde-meuble · Léger"
+        },
+        "premium": {
+          "label": "Garde-meuble · Premium"
+        },
+        "regular": {
+          "label": "Garde-meuble · Standard"
+        }
+      }
     },
     "jobDetails": {
       "notFound": {
         "subtitle": "Ce déménagement a peut-être été supprimé ou le lien est invalide."
-      },
-      "subheading": {
-        "label": "Déménagement {{moveType}} · {{date}}"
       }
-    },
-    "moveTypeBadge": {
-      "label": "Déménagement {{type}}"
     },
     "notStartable": {
       "body": "<0>Ce déménagement ne peut pas encore démarrer.</0> Vous pourrez lancer cet itinéraire le <1>{{when}}</1> (le démarrage de l'itinéraire se débloque 5 minutes avant)."
@@ -586,7 +633,7 @@
         "label": "Vos revenus"
       },
       "respondWithin": {
-        "label": "Répondez sous <1>{{seconds}} s</1>"
+        "label": "Répondez sous <1>{{seconds}}</1>"
       },
       "services": {
         "label": "Services : {{list}}"
@@ -620,7 +667,7 @@
       },
       "subtitle": "Gérez votre compte et vos préférences",
       "version": {
-        "label": "pickLT Mover App v{{version}}"
+        "label": "PickLT Mover App v{{version}}"
       }
     },
     "startRoute": {
@@ -685,7 +732,12 @@
     },
     "recentMoves": {
       "moveType": {
-        "label": "Déménagement {{type}}"
+        "instant": {
+          "label": "Déménagement immédiat"
+        },
+        "scheduled": {
+          "label": "Déménagement planifié"
+        }
       },
       "title": "Déménagements récents"
     },
@@ -755,7 +807,18 @@
     },
     "empty": {
       "filtered": {
-        "title": "Aucun déménagement {{status}}"
+        "cancelled": {
+          "title": "Aucun déménagement annulé"
+        },
+        "completed": {
+          "title": "Aucun déménagement terminé"
+        },
+        "inProgress": {
+          "title": "Aucun déménagement en cours"
+        },
+        "pending": {
+          "title": "Aucun déménagement en attente"
+        }
       },
       "subtitle": "Réservez votre premier déménagement et il apparaîtra ici.",
       "title": "Aucun déménagement pour l'instant"
@@ -857,9 +920,6 @@
     },
     "editPhotos": {
       "cta": "Modifier les photos"
-    },
-    "moveTypeBadge": {
-      "label": "Déménagement {{moveType}}"
     }
   },
   "scheduledMoves": {
@@ -868,7 +928,18 @@
     },
     "empty": {
       "filtered": {
-        "title": "Aucun déménagement planifié {{status}}"
+        "cancelled": {
+          "title": "Aucun déménagement planifié annulé"
+        },
+        "completed": {
+          "title": "Aucun déménagement planifié terminé"
+        },
+        "inProgress": {
+          "title": "Aucun déménagement planifié en cours"
+        },
+        "pending": {
+          "title": "Aucun déménagement planifié en attente"
+        }
       },
       "subtitle": "Réservez un déménagement planifié et il apparaîtra ici.",
       "title": "Aucun déménagement planifié pour l'instant"
@@ -909,7 +980,7 @@
       "title_other": "Déménageurs disponibles ({{count}})"
     },
     "capacity": {
-      "label": "{{volume}} m³ de capacité"
+      "label": "{{volume}} de capacité"
     },
     "confirm": {
       "cta": "Confirmer · {{amount}}"

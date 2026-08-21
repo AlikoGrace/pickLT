@@ -56,16 +56,19 @@
   },
   "arrivalWindow": {
     "afternoon": {
-      "label": "Après-midi (12h-17h)"
+      "label": "Après-midi"
     },
     "evening": {
-      "label": "Soirée (17h-21h)"
+      "label": "Soirée"
     },
     "label": "Créneau d'arrivée",
     "morning": {
-      "label": "Matin (8h-12h)"
+      "label": "Matin"
     },
-    "optionalLabel": "Créneau d'arrivée (facultatif)"
+    "optionalLabel": "Créneau d'arrivée (facultatif)",
+    "withRange": {
+      "label": "{{window}} ({{range}})"
+    }
   },
   "business": {
     "company": {
@@ -136,7 +139,7 @@
       "label": "Points"
     },
     "summary": {
-      "label": "{{items}} · ~{{weight}} kg · {{points}}"
+      "label": "{{items}} · ~{{weight}} · {{points}}"
     },
     "title": "Classification du déménagement",
     "upgrade": {
@@ -420,8 +423,7 @@
       "label": "Véhicule"
     },
     "weight": {
-      "label": "Poids",
-      "value": "{{weight}} kg"
+      "label": "Poids"
     }
   },
   "flexibility": {
@@ -736,10 +738,37 @@
     }
   },
   "packingMaterials": {
+    "bubbleWrap": {
+      "option": "Papier bulle"
+    },
+    "dishInserts": {
+      "option": "Croisillons pour vaisselle"
+    },
+    "furnitureBlankets": {
+      "option": "Couvertures de protection"
+    },
     "label": "Matériel d'emballage",
+    "mattressCovers": {
+      "option": "Housses de matelas"
+    },
+    "movingBoxes": {
+      "option": "Cartons de déménagement"
+    },
+    "packingPaper": {
+      "option": "Papier d'emballage"
+    },
+    "packingTape": {
+      "option": "Ruban adhésif"
+    },
     "selectedCount": {
       "label_one": "{{count}} sélectionné",
       "label_other": "{{count}} sélectionnés"
+    },
+    "tvProtection": {
+      "option": "Protection TV"
+    },
+    "wardrobeBoxes": {
+      "option": "Cartons-penderie"
     }
   },
   "packingNotes": {
@@ -825,7 +854,7 @@
       "title": "Réglez votre déménageur directement"
     },
     "cashHandshake": {
-      "helper": "Réglez le déménageur directement (espèces ou virement), puis appuyez sur « J'ai payé » ci-dessous."
+      "helper": "Réglez le déménageur directement (espèces ou virement), puis appuyez sur « {{cta}} » ci-dessous."
     },
     "cashLong": {
       "label": "Espèces (paiement direct au déménageur)"
@@ -930,14 +959,6 @@
     "countSummary": {
       "label": "{{main}} • {{additional}}"
     },
-    "cover": {
-      "a11y": "Photo principale",
-      "helper": "Ajoutez une photo principale montrant vos objets ou votre espace",
-      "label": "Photo principale"
-    },
-    "formatHint": {
-      "subtitle": "PNG, JPG jusqu’à 3 Mo"
-    },
     "gallery": {
       "a11y": "Photos du déménagement",
       "helper": "Ajoutez d'autres photos des meubles, des pièces ou des objets",
@@ -956,6 +977,7 @@
       "a11y": "Photo du déménagement {{n}}"
     },
     "main": {
+      "a11y": "Photo principale",
       "cta": "Appuyez pour ajouter la photo principale",
       "helper": "Ajoutez une photo principale montrant vos objets ou l'espace",
       "label": "Photo principale"
@@ -1021,10 +1043,32 @@
       "label": "Tarif de base"
     },
     "baseRate": {
-      "label": "Tarif de base ({{moveType}})"
+      "fallback": {
+        "label": "Tarif de base"
+      },
+      "light": {
+        "label": "Tarif de base (Déménagement léger)"
+      },
+      "premium": {
+        "label": "Tarif de base (Déménagement premium)"
+      },
+      "regular": {
+        "label": "Tarif de base (Déménagement standard)"
+      }
     },
     "baseRateWithDistance": {
-      "label": "Tarif de base ({{moveType}}, {{distance}})"
+      "fallback": {
+        "label": "Tarif de base ({{distance}})"
+      },
+      "light": {
+        "label": "Tarif de base (Déménagement léger, {{distance}})"
+      },
+      "premium": {
+        "label": "Tarif de base (Déménagement premium, {{distance}})"
+      },
+      "regular": {
+        "label": "Tarif de base (Déménagement standard, {{distance}})"
+      }
     },
     "crew": {
       "label": "Équipe ({{crew}})"
@@ -1179,8 +1223,6 @@
   },
   "storageWeekCount_one": "{{count}} semaine",
   "storageWeekCount_other": "{{count}} semaines",
-  "storageWeeks_one": "{{count}} semaine",
-  "storageWeeks_other": "{{count}} semaines",
   "streetAddress": {
     "dropoff": {
       "helper": "Saisissez l'adresse de livraison complète",
@@ -1239,19 +1281,19 @@
     "capacity": {
       "label": "Capacité (m³)",
       "placeholder": "ex. 15",
-      "value": "{{capacity}} m³"
+      "upTo": {
+        "value": "Jusqu'à {{capacity}}"
+      }
     },
     "edit": {
       "title": "Modifier les informations du véhicule"
     },
     "largeTruck": {
-      "capacity": "25+ m³",
-      "helper": "25+ m³ — déménagements de maison, gros volumes",
+      "helper": "{{capacity}} — déménagements de maison, gros volumes",
       "label": "Grand camion"
     },
     "mediumTruck": {
-      "capacity": "10–25 m³",
-      "helper": "10–25 m³ — déménagements d'appartement",
+      "helper": "{{capacity}} — déménagements d'appartement",
       "label": "Camion moyen"
     },
     "model": {
@@ -1272,8 +1314,7 @@
       "label": "Immatriculation *"
     },
     "smallVan": {
-      "capacity": "Jusqu'à 10 m³",
-      "helper": "Jusqu'à 10 m³ — petits déménagements, objets isolés",
+      "helper": "{{capacity}} — petits déménagements, objets isolés",
       "label": "Petite camionnette"
     },
     "title": "Informations sur le véhicule",

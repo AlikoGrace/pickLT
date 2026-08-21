@@ -41,9 +41,16 @@ import type { TFunction } from 'i18next'
 
 const MOVE_TYPES = ['light', 'regular', 'premium'] as const
 const MOVE_CATEGORIES = ['instant', 'scheduled'] as const
+/**
+ * The home types that can actually be stored. `lib/home-type.ts` offers a
+ * fifth option, `other`, which `toHomeType` maps to null rather than to a
+ * column value — so no move ever comes back carrying it.
+ */
+const HOME_TYPES = ['apartment', 'house', 'office', 'storage'] as const
 
 type MoveType = (typeof MOVE_TYPES)[number]
 type MoveCategory = (typeof MOVE_CATEGORIES)[number]
+type HomeType = (typeof HOME_TYPES)[number]
 
 function asType(value: unknown): MoveType | null {
   return typeof value === 'string' && (MOVE_TYPES as readonly string[]).includes(value)
@@ -54,6 +61,12 @@ function asType(value: unknown): MoveType | null {
 function asCategory(value: unknown): MoveCategory | null {
   return typeof value === 'string' && (MOVE_CATEGORIES as readonly string[]).includes(value)
     ? (value as MoveCategory)
+    : null
+}
+
+function asHomeType(value: unknown): HomeType | null {
+  return typeof value === 'string' && (HOME_TYPES as readonly string[]).includes(value)
+    ? (value as HomeType)
     : null
 }
 
@@ -103,6 +116,52 @@ export function moveSubtitle(
     hasDate ? date : null,
   ].filter(Boolean) as string[]
   return parts.length ? parts.join(' · ') : t('common:value.notSpecified.empty')
+}
+
+/**
+ * Just "Light Move" — the badge on a move card, and the header subtitle's
+ * degraded form.
+ *
+ * Was `web:mover.moveTypeBadge.label` / `web:preview.moveTypeBadge.label`,
+ * both `"{{type}} Move"` fed with a *capitalised slug* — the English word
+ * "Light" reached the German and Turkish badges untranslated, and even once it
+ * was translated the slot could only ever hold an uninflected adjective. There
+ * is already a whole, translated noun phrase per tier in `booking:moveType`,
+ * so the badges point at that instead of restating it.
+ */
+// i18n-keys: booking:moveType.light.label, booking:moveType.regular.label, booking:moveType.premium.label
+export function moveTypeLabel(t: TFunction, moveType: unknown): string {
+  const type = asType(moveType)
+  return type ? t(`booking:moveType.${type}.label`) : t('common:value.notSpecified.empty')
+}
+
+/**
+ * The "Apartment · Light" badge on an available-move card.
+ *
+ * Was `web:mover.homeTypeMoveType.label` = `"{{homeType}} · {{moveType}}"`,
+ * with both slots filled by `formatLabel` — i.e. by capitalised English slugs
+ * that never went through the catalog at all. Both halves are translated
+ * words, so both leave the template: home type (`lib/home-type.ts`, four
+ * stored values — `other` is offered in the picker but is never written to the
+ * column) × move type is a 12-cell closed cross product, and a translator gets
+ * twelve whole badges to inflect. Same shape as
+ * `moves:detail.typeAndCategory.*`, which this line sits next to on screen.
+ */
+// i18n-keys: web:mover.homeTypeMoveType.apartment.light.label, web:mover.homeTypeMoveType.apartment.regular.label
+// i18n-keys: web:mover.homeTypeMoveType.apartment.premium.label, web:mover.homeTypeMoveType.house.light.label
+// i18n-keys: web:mover.homeTypeMoveType.house.regular.label, web:mover.homeTypeMoveType.house.premium.label
+// i18n-keys: web:mover.homeTypeMoveType.office.light.label, web:mover.homeTypeMoveType.office.regular.label
+// i18n-keys: web:mover.homeTypeMoveType.office.premium.label, web:mover.homeTypeMoveType.storage.light.label
+// i18n-keys: web:mover.homeTypeMoveType.storage.regular.label, web:mover.homeTypeMoveType.storage.premium.label
+// i18n-keys: booking:homeType.apartment.option, booking:homeType.house.option
+// i18n-keys: booking:homeType.office.option, booking:homeType.storage.option
+export function homeTypeAndMoveTypeBadge(t: TFunction, homeType: unknown, moveType: unknown): string {
+  const home = asHomeType(homeType)
+  const type = asType(moveType)
+
+  if (home && type) return t(`web:mover.homeTypeMoveType.${home}.${type}.label`)
+  if (home) return t(`booking:homeType.${home}.option`)
+  return moveTypeLabel(t, moveType)
 }
 
 /**
@@ -163,4 +222,61 @@ export function requestCategoryAndType(t: TFunction, moveCategory: unknown, move
 export function upgradeCta(t: TFunction, upgradeTo: unknown): string {
   const tier = asType(upgradeTo)
   return t(`booking:classification.upgrade.${tier ?? 'fallback'}.cta`)
+}
+
+/**
+ * The "Base rate (Light Move)" row in a price breakdown.
+ *
+ * Was `booking:pricing.baseRate.label` = `"Base rate ({{moveType}})"`, fed on
+ * both web call sites by the local `formatLabel()` — a helper that title-cases
+ * the database slug. So the tier word never reached the catalog at all and
+ * `move-preview` rendered **"Basistarif (Light, 12 km)"** in German: not a
+ * grammar problem, an untranslated string on screen. (`checkout` had the same
+ * bug; mobile passed a translated title and so only had the grammar half.)
+ *
+ * Even translated, the slot could not work. German writes the tier as a
+ * compound (*Premium-Umzug*), Polish inflects it for the case the surrounding
+ * phrase governs, and Turkish picks the suffix from the sounds of the
+ * preceding word — none of which a fragment frozen in another key can carry.
+ * Three tiers (`MoveType`, `classify-move.ts`) is a closed enumeration, so it
+ * is three whole labels, exactly as `moveSubtitle` above.
+ *
+ * `{{distance}}` stays a placeholder: it is data, pre-formatted for the locale
+ * by `formatDistanceKm`, not a translated word (conventions §3.4).
+ *
+ * `fallback` covers a move with no type — the old shape rendered an empty
+ * parenthesis there.
+ */
+// i18n-keys: booking:pricing.baseRate.light.label, booking:pricing.baseRate.regular.label
+// i18n-keys: booking:pricing.baseRate.premium.label, booking:pricing.baseRate.fallback.label
+export function baseRateLabel(t: TFunction, moveType: unknown): string {
+  const type = asType(moveType)
+  return t(`booking:pricing.baseRate.${type ?? 'fallback'}.label`)
+}
+
+/** `baseRateLabel` with the route distance appended. Same argument, same shape. */
+// i18n-keys: booking:pricing.baseRateWithDistance.light.label, booking:pricing.baseRateWithDistance.regular.label
+// i18n-keys: booking:pricing.baseRateWithDistance.premium.label, booking:pricing.baseRateWithDistance.fallback.label
+export function baseRateWithDistanceLabel(
+  t: TFunction,
+  moveType: unknown,
+  distance: string
+): string {
+  const type = asType(moveType)
+  return t(`booking:pricing.baseRateWithDistance.${type ?? 'fallback'}.label`, { distance })
+}
+
+/**
+ * "Apartment" / "Storage unit" on its own.
+ *
+ * Same root cause as `moveTypeLabel`: the detail pages fed their home-type row
+ * from a local `formatLabel()`, so the stored slug reached the screen
+ * title-cased and in English. `booking:homeType.*.option` already holds the
+ * translated word for every storable value.
+ */
+// i18n-keys: booking:homeType.apartment.option, booking:homeType.house.option
+// i18n-keys: booking:homeType.office.option, booking:homeType.storage.option
+export function homeTypeLabel(t: TFunction, homeType: unknown): string {
+  const home = asHomeType(homeType)
+  return home ? t(`booking:homeType.${home}.option`) : t('common:value.notSpecified.empty')
 }

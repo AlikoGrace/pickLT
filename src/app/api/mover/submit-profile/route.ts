@@ -4,7 +4,8 @@ import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
 import { getSessionUserId } from '@/lib/auth-session'
 import { sanctionedCountryRejection } from '@/lib/sanctions'
-import { moverProfilePermissions, notificationPermissions } from '@/lib/doc-permissions'
+import { writeNotification } from '@/lib/notify'
+import { moverProfilePermissions } from '@/lib/doc-permissions'
 import { ID, Query } from 'node-appwrite'
 
 /**
@@ -161,25 +162,20 @@ export async function POST(req: NextRequest) {
       userUpdates
     )
 
-    // Create a notification for the user
-    try {
-      await databases.createDocument(
-        APPWRITE.DATABASE_ID,
-        APPWRITE.COLLECTIONS.NOTIFICATIONS,
-        ID.unique(),
-        {
-          userId,
-          type: 'system',
-          title: 'Profile Submitted',
-          body: 'Your mover profile is under review. We will notify you once it is verified.',
-          data: JSON.stringify({ moverProfileId: profile.$id }),
-          isRead: false,
-        },
-        notificationPermissions(userId)
-      )
-    } catch {
-      // Notification is non-critical
-    }
+    // Create a notification for the user. Routed through `writeNotification`
+    // rather than an inline createDocument so this row carries the same
+    // `data.i18nKey` contract as every other notification on the platform —
+    // an inline write here was the reason this one sentence could not follow a
+    // language switch. `writeNotification` is itself best-effort and never
+    // throws, which is what the bare try/catch here was doing by hand.
+    await writeNotification({
+      userId,
+      type: 'system',
+      title: 'Profile Submitted',
+      body: 'Your mover profile is under review. We will notify you once it is verified.',
+      data: { moverProfileId: profile.$id },
+      i18n: { key: 'verification.submitted' },
+    })
 
     return NextResponse.json({ success: true, profile })
   } catch (err) {

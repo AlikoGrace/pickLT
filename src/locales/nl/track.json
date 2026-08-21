@@ -26,11 +26,8 @@
     "assigned": {
       "label": "Verwachte aankomsttijd"
     },
-    "distance": {
-      "footnote": "{{distance}} km verderop"
-    },
     "distanceAway": {
-      "label": "{{distance}} km verderop"
+      "label": "{{distance}} verderop"
     },
     "minutes": {
       "label_one": "{{count}} min",
@@ -46,7 +43,7 @@
     }
   },
   "hint": {
-    "arrivedDestination": "Aangekomen! Het uitladen begint zo.",
+    "arrivedDestination": "Aangekomen! Het lossen begint zo.",
     "inTransit": "Onderweg naar je bestemming…",
     "loading": "Je spullen worden geladen…",
     "loadingSoon": "Je verhuizer begint zo met laden",
@@ -105,7 +102,7 @@
       "title": "Laden"
     },
     "unloading": {
-      "subtitle": "Spullen uitladen op de bestemming",
+      "subtitle": "Spullen lossen op de bestemming",
       "title": "Lossen"
     }
   },

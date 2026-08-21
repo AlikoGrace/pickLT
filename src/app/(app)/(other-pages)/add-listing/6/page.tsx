@@ -15,6 +15,8 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { formatFileSizeMb } from '@/lib/format'
+import { UPLOAD_MAX_MB } from '@/lib/service-limits'
 
 /**
  * `id` is the persisted value and never changes. `key` is the catalog segment —
@@ -108,16 +110,16 @@ const Page = () => {
       <Form id="add-listing-form" action={handleSubmitForm} className="flex flex-col gap-y-8">
         {/* Cover Photo Upload */}
         <div>
-          <span className="text-lg font-semibold">{t('booking:photos.cover.label')}</span>
+          <span className="text-lg font-semibold">{t('booking:photos.main.label')}</span>
           <span className="mt-1 block text-sm text-neutral-500 dark:text-neutral-400">
-            {t('booking:photos.cover.helper')}
+            {t('booking:photos.main.helper')}
           </span>
           <div className="mt-5">
             {coverPhotoId ? (
               <div className="relative rounded-2xl overflow-hidden">
                 <Image
                   src={coverPhotoId}
-                  alt={t('booking:photos.cover.a11y')}
+                  alt={t('booking:photos.main.a11y')}
                   width={600}
                   height={400}
                   className="w-full h-64 object-cover"
@@ -161,7 +163,7 @@ const Page = () => {
                     <p className="ps-1">{t('common:upload.dragDrop.label')}</p>
                   </div>
                   <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                    {t('common:upload.constraints.helper')}
+                    {t('common:upload.constraints.helper', { limit: formatFileSizeMb(UPLOAD_MAX_MB) })}
                   </p>
                 </div>
               </div>
@@ -229,7 +231,7 @@ const Page = () => {
                   <p className="ps-1">{t('common:upload.dragDrop.label')}</p>
                 </div>
                 <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                  {t('common:upload.constraints.helper')}
+                  {t('common:upload.constraints.helper', { limit: formatFileSizeMb(UPLOAD_MAX_MB) })}
                 </p>
               </div>
             </div>

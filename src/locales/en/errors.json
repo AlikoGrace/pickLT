@@ -200,23 +200,21 @@
     "tooLong": "Message is too long. The limit is {{max}} characters."
   },
   "move": {
-    "alreadyAssigned": "Move is already assigned",
-    "alreadyAssigned2": "This move already has a mover assigned",
+    "alreadyAssigned": "This move already has a mover assigned",
     "cancelFailed": "Couldn’t cancel this move. Please try again.",
     "cancelRetry": "Failed to cancel. Please try again.",
     "createFailed": "Failed to create move",
     "dateInPast": "Move date must be in the future",
-    "invalidTransition": "Invalid transition from “{{from}}” to “{{to}}”",
+    "invalidTransition": "That status update is no longer valid for this move. Please reload the move and try again.",
     "loadFailed": "Failed to load move data",
-    "notAcceptableInStatus": "Move cannot be accepted while it is {{status}}",
-    "notAssigned": "Not assigned to this move",
-    "notAssigned2": "You are not assigned to this move",
+    "noLongerAcceptable": "This move can no longer be accepted. Its status has changed — please reload the list.",
+    "notAssigned": "You are not assigned to this move",
     "notAuthorized": "Not authorized for this move",
     "notAvailable": "This move is not available for acceptance",
     "notCancellable": "This move can no longer be cancelled ({{stage}}). Your items may already be in transit — please contact your mover directly.",
     "notCancellableUnknownStage": "This move can no longer be cancelled. Your items may already be in transit — please contact your mover directly.",
     "notFound": "Move not found",
-    "notReschedulable": "Cannot reschedule a move with status “{{status}}”",
+    "notReschedulable": "This move can no longer be rescheduled. Its status has changed — please reload the move.",
     "rescheduleFailed": "Failed to reschedule",
     "rescheduleRetry": "Failed to reschedule. Please try again.",
     "scheduledOnly": "Only scheduled moves can be accepted this way",
@@ -267,16 +265,13 @@
       "initFailed": "Could not start payment. Try again."
     },
     "confirmFailed": "Failed to confirm payment",
-    "notAwaiting": "Move is not awaiting payment (current: {{status}})"
+    "notAwaiting": "This move is not awaiting payment. Please reload the move and try again."
   },
   "profile": {
-    "changeEmailFailed": "Failed to change email",
-    "changePhoneFailed": "Failed to change phone",
     "emailChangeFailed": "Failed to change email",
     "emailTaken": "This email is already in use by another account",
     "nameUpdateFailed": "Failed to update name",
-    "phoneChangeFailed": "Failed to change phone",
-    "phoneNumberChangeFailed": "Failed to change phone number",
+    "phoneChangeFailed": "Failed to change phone number",
     "phoneTaken": "This phone number is already in use by another account"
   },
   "request": {
@@ -315,8 +310,7 @@
     "notAnImage2": "File must be an image",
     "photoFailed": "Failed to upload photo",
     "photosFailed": "Failed to upload photos",
-    "tooLarge": "Image must be under {{limit}}",
-    "tooLarge2": "File size must be under 10MB"
+    "tooLarge": "Image must be under {{limit}}"
   },
   "validation": {
     "emailFormat": "Invalid email format",

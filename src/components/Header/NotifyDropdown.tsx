@@ -1,5 +1,6 @@
 'use client'
 
+import { resolveNotificationText } from '@/lib/notification-i18n'
 import type { NotificationDoc } from '@/lib/types'
 import { CloseButton, Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
 import { BellIcon } from '@heroicons/react/24/outline'
@@ -15,6 +16,16 @@ import { useTranslation } from 'react-i18next'
  * This used to render three hardcoded fake notifications from the marketplace
  * template ("John Doe — Measure actions your users take"). They were shown to
  * every signed-in and signed-out visitor on every desktop page.
+ *
+ * Copy is re-resolved at RENDER time from `data.i18nKey`
+ * (`@/lib/notification-i18n`), exactly as the two React Native notification
+ * lists do. A row stores a key plus params rather than a finished sentence, so
+ * that notification *history* follows a language switch instead of staying
+ * frozen in the language it was sent in. Rows with no key — everything written
+ * before the contract existed — keep rendering their stored `title`/`body`.
+ *
+ * This is a client component, so resolution goes through the `useTranslation()`
+ * hook, never `@/lib/i18n-server`.
  */
 
 interface Props {
@@ -94,23 +105,26 @@ const NotifyDropdown: FC<Props> = ({ className = '' }) => {
               <p className="text-sm text-gray-500 dark:text-gray-400">{t('web:notify.empty')}</p>
             )}
 
-            {notifications.map((item) => (
-              <CloseButton
-                as={Link}
-                key={item.$id}
-                href="/account"
-                className="relative -m-3 flex rounded-lg p-2 pe-8 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-hidden focus-visible:ring-3 focus-visible:ring-orange-500/50 dark:hover:bg-gray-700"
-              >
-                <div className="space-y-1">
-                  <p className="text-sm font-medium text-gray-900 dark:text-gray-200">{item.title}</p>
-                  {item.body && <p className="text-xs text-gray-500 sm:text-sm dark:text-gray-400">{item.body}</p>}
-                  <p className="text-xs text-gray-400 dark:text-gray-400">{relativeTime(item.$createdAt, t)}</p>
-                </div>
-                {!item.isRead && (
-                  <span className="absolute end-1 top-1/2 h-2 w-2 -translate-y-1/2 transform rounded-full bg-blue-500"></span>
-                )}
-              </CloseButton>
-            ))}
+            {notifications.map((item) => {
+              const { title, body } = resolveNotificationText(item, t)
+              return (
+                <CloseButton
+                  as={Link}
+                  key={item.$id}
+                  href="/account"
+                  className="relative -m-3 flex rounded-lg p-2 pe-8 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-hidden focus-visible:ring-3 focus-visible:ring-orange-500/50 dark:hover:bg-gray-700"
+                >
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-200">{title}</p>
+                    {body && <p className="text-xs text-gray-500 sm:text-sm dark:text-gray-400">{body}</p>}
+                    <p className="text-xs text-gray-400 dark:text-gray-400">{relativeTime(item.$createdAt, t)}</p>
+                  </div>
+                  {!item.isRead && (
+                    <span className="absolute end-1 top-1/2 h-2 w-2 -translate-y-1/2 transform rounded-full bg-blue-500"></span>
+                  )}
+                </CloseButton>
+              )
+            })}
           </div>
         </PopoverPanel>
       </>

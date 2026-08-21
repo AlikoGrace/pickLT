@@ -25,15 +25,7 @@ import { formatDateWith, formatMoney } from '@/lib/format'
 import { moveSubtitle } from '@/lib/move-subtitle'
 import { Trans, useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
-
-// Helper to format labels
-const formatLabel = (value: string | null | undefined, t: TFunction): string => {
-  if (!value) return t('common:value.notSpecified.empty')
-  return value
-    .split('_')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ')
-}
+import { vehicleTypeLabel } from '@/lib/enum-labels'
 
 const formatDate = (dateStr: string | null, t: TFunction) => {
   if (!dateStr) return t('common:value.notSelected.empty')
@@ -204,7 +196,7 @@ const PayDoneContent = () => {
               <span className="block text-sm text-neutral-500 dark:text-neutral-400">
                 {t('moves:itemCount', { count: move?.inventoryCount || 0 })}
                 {!isInstantMove && move?.crewSize && ` · ${t('moves:moverCount', { count: Number(move.crewSize) })}`}
-                {!isInstantMove && move?.vehicleType && ` · ${formatLabel(move.vehicleType, t)}`}
+                {!isInstantMove && move?.vehicleType && ` · ${vehicleTypeLabel(t, move.vehicleType)}`}
               </span>
               <Divider className="w-10!" />
               {getStatusBadge()}

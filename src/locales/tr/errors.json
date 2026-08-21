@@ -200,23 +200,21 @@
     "tooLong": "Mesaj çok uzun. Sınır {{max}} karakter."
   },
   "move": {
-    "alreadyAssigned": "Taşınma zaten atanmış",
-    "alreadyAssigned2": "Bu taşınmaya zaten bir nakliyeci atanmış",
+    "alreadyAssigned": "Bu taşınmaya zaten bir nakliyeci atanmış",
     "cancelFailed": "Bu taşınma iptal edilemedi. Lütfen tekrar deneyin.",
     "cancelRetry": "İptal edilemedi. Lütfen tekrar deneyin.",
     "createFailed": "Taşınma oluşturulamadı",
     "dateInPast": "Taşınma tarihi gelecekte olmalıdır",
-    "invalidTransition": "“{{from}}” durumundan “{{to}}” durumuna geçiş geçersiz",
+    "invalidTransition": "Bu durum güncellemesi bu taşınma için artık geçerli değil. Lütfen taşınmayı yeniden yükleyip tekrar deneyin.",
     "loadFailed": "Taşınma bilgileri yüklenemedi",
-    "notAcceptableInStatus": "Taşınma {{status}} durumundayken kabul edilemez",
-    "notAssigned": "Bu taşınmaya atanmadınız",
-    "notAssigned2": "Bu taşınmaya atanmış değilsiniz",
+    "noLongerAcceptable": "Bu taşınma artık kabul edilemez. Durumu değişti — lütfen listeyi yenileyin.",
+    "notAssigned": "Bu taşınmaya atanmış değilsiniz",
     "notAuthorized": "Bu taşınma için yetkiniz yok",
     "notAvailable": "Bu taşınma kabul edilebilir durumda değil",
     "notCancellable": "Bu taşınma artık iptal edilemez ({{stage}}). Eşyalarınız yola çıkmış olabilir — lütfen doğrudan nakliyecinizle iletişime geçin.",
     "notCancellableUnknownStage": "Bu taşınma artık iptal edilemez. Eşyalarınız yola çıkmış olabilir — lütfen doğrudan nakliyecinizle iletişime geçin.",
     "notFound": "Taşınma bulunamadı",
-    "notReschedulable": "“{{status}}” durumundaki bir taşınmanın tarihi değiştirilemez",
+    "notReschedulable": "Bu taşınmanın tarihi artık değiştirilemez. Durumu değişti — lütfen taşınmayı yeniden yükleyin.",
     "rescheduleFailed": "Tarih değiştirilemedi",
     "rescheduleRetry": "Tarih değiştirilemedi. Lütfen tekrar deneyin.",
     "scheduledOnly": "Bu şekilde yalnızca planlı taşınmalar kabul edilebilir",
@@ -267,16 +265,13 @@
       "initFailed": "Ödeme başlatılamadı. Tekrar deneyin."
     },
     "confirmFailed": "Ödeme onaylanamadı",
-    "notAwaiting": "Taşınma için ödeme beklenmiyor (mevcut durum: {{status}})"
+    "notAwaiting": "Bu taşınma için ödeme beklenmiyor. Lütfen taşınmayı yeniden yükleyip tekrar deneyin."
   },
   "profile": {
-    "changeEmailFailed": "E-posta adresi değiştirilemedi",
-    "changePhoneFailed": "Telefon numarası değiştirilemedi",
     "emailChangeFailed": "E-posta adresi değiştirilemedi",
     "emailTaken": "Bu e-posta adresi başka bir hesap tarafından kullanılıyor",
     "nameUpdateFailed": "Ad güncellenemedi",
     "phoneChangeFailed": "Telefon numarası değiştirilemedi",
-    "phoneNumberChangeFailed": "Telefon numarası değiştirilemedi",
     "phoneTaken": "Bu telefon numarası başka bir hesap tarafından kullanılıyor"
   },
   "request": {
@@ -315,8 +310,7 @@
     "notAnImage2": "Dosya bir görsel olmalıdır",
     "photoFailed": "Fotoğraf yüklenemedi",
     "photosFailed": "Fotoğraflar yüklenemedi",
-    "tooLarge": "Görsel {{limit}} boyutunun altında olmalıdır",
-    "tooLarge2": "Dosya boyutu 10 MB'ın altında olmalıdır"
+    "tooLarge": "Görsel {{limit}} boyutunun altında olmalıdır"
   },
   "validation": {
     "emailFormat": "Geçersiz e-posta biçimi",

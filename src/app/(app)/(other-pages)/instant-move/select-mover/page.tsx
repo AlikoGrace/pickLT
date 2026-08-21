@@ -30,6 +30,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState, useMemo } from 'react'
 import { formatMoney } from '@/lib/format'
 import { useTranslation } from 'react-i18next'
+import { formatVolumeM3 } from '@/lib/format'
 
 // Mover types - matches API response from /api/movers/nearby
 interface Mover {
@@ -583,7 +584,7 @@ const SelectMoverPage = () => {
                   <div className="flex items-center gap-4 mt-2 text-xs text-neutral-500 dark:text-neutral-400">
                     <span className="flex items-center gap-1">
                       <HugeiconsIcon icon={WeightScale01Icon} size={14} strokeWidth={1.5} />
-                      {t('web:selectMover.capacity.label', { volume: mover.capacityM3 })}
+                      {t('web:selectMover.capacity.label', { volume: formatVolumeM3(mover.capacityM3) })}
                     </span>
                     <span className="flex items-center gap-1">
                       <HugeiconsIcon icon={UserMultiple02Icon} size={14} strokeWidth={1.5} />

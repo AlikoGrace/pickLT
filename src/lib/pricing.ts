@@ -20,6 +20,7 @@
  */
 
 import type { TFunction } from 'i18next'
+import { vehicleCapacityLabel, type VehicleTierKey } from '@/lib/vehicle-capacity'
 
 export const PRICING_DEFAULTS: Record<string, number> = {
   // ── Instant / route pricing (calculateprice) ──
@@ -86,6 +87,13 @@ const VEHICLE_LABEL_KEYS: Record<VehicleType, string> = {
   large_truck: 'booking:vehicle.largeTruck.label',
 }
 
+/** Wire value → the capacity-band key segment in `lib/vehicle-capacity.ts`. */
+const VEHICLE_TIER_KEY: Record<VehicleType, VehicleTierKey> = {
+  small_van: 'smallVan',
+  medium_truck: 'mediumTruck',
+  large_truck: 'largeTruck',
+}
+
 /** Capacity blurbs mirror the mover app's VEHICLE_TYPE_OPTIONS descriptions. */
 const VEHICLE_CAPACITY_KEYS: Record<VehicleType, string> = {
   small_van: 'booking:vehicle.smallVan.helper',
@@ -104,7 +112,9 @@ export function vehicleLabel(t: TFunction, v: VehicleType): string {
 }
 
 export function vehicleCapacity(t: TFunction, v: VehicleType): string {
-  return t(VEHICLE_CAPACITY_KEYS[v])
+  // The band itself ("Up to 10 m³") is a business constant formatted at call
+  // time, not a literal typed into eight translations of the blurb.
+  return t(VEHICLE_CAPACITY_KEYS[v], { capacity: vehicleCapacityLabel(t, VEHICLE_TIER_KEY[v]) })
 }
 
 /** Narrows an arbitrary stored value to a known class, defaulting to the smallest. */

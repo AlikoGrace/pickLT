@@ -183,6 +183,123 @@ export function formatDistanceKm(km: Amount, options: NumberOptions = {}): strin
   }).format(km)
 }
 
+/**
+ * The cubic-metre symbol.
+ *
+ * `Intl` cannot format this one: ECMA-402's sanctioned unit list has
+ * `kilometer`, `megabyte` and `liter` but stops short of `cubic-meter`, so the
+ * symbol is appended here instead of by the engine. It is still appended in
+ * exactly **one** place, and the number still goes through the locale
+ * formatter — which is the half a catalog value gets wrong. `"{{n}} m³"` typed
+ * into eight JSON files renders `12.5 m³` to a German reader who must see
+ * `12,5 m³`.
+ */
+const VOLUME_UNIT_M3 = 'm³'
+
+/** A volume in cubic metres: `15 m³` in en, `12,5 m³` in de. */
+export function formatVolumeM3(value: Amount, options: NumberOptions = {}): string {
+  if (!isRenderable(value)) return options.fallback ?? EMPTY_VALUE
+  const text = formatNumber(value, { maximumFractionDigits: 1, ...options })
+  return `${text} ${VOLUME_UNIT_M3}`
+}
+
+/**
+ * A closed volume range: `10–25 m³`.
+ *
+ * The separator is **not** a hyphen typed by hand — `Intl.NumberFormat`'s
+ * `formatRange` knows that most European locales want an en dash and Spanish,
+ * Italian and Dutch want a plain hyphen. Older engines (Hermes ships a partial
+ * ECMA-402) may not implement it, so a joined fallback keeps the call site
+ * total rather than throwing on a phone.
+ */
+export function formatVolumeRangeM3(
+  min: number,
+  max: number,
+  options: NumberOptions = {},
+): string {
+  const locale = options.locale ?? getLocale()
+  const fmt = numberFormatter(locale, { maximumFractionDigits: 1 })
+  let range: string
+  try {
+    range = fmt.formatRange(min, max)
+  } catch {
+    range = `${fmt.format(min)}–${fmt.format(max)}`
+  }
+  return `${range} ${VOLUME_UNIT_M3}`
+}
+
+/**
+ * An open-ended volume floor: `25+ m³`.
+ *
+ * `+` is a mathematical sign, not a word, and reads the same in all eight
+ * markets — but the number in front of it is data and is formatted.
+ */
+export function formatVolumeAtLeastM3(min: Amount, options: NumberOptions = {}): string {
+  if (!isRenderable(min)) return options.fallback ?? EMPTY_VALUE
+  return `${formatNumber(min, { maximumFractionDigits: 1, ...options })}+ ${VOLUME_UNIT_M3}`
+}
+
+/** A mass in kilograms: `120 kg` in en, `120 kg` in de with the locale's own digits. */
+export function formatWeightKg(value: Amount, options: NumberOptions = {}): string {
+  if (!isRenderable(value)) return options.fallback ?? EMPTY_VALUE
+  return numberFormatter(options.locale ?? getLocale(), {
+    style: 'unit',
+    unit: 'kilogram',
+    unitDisplay: 'short',
+    maximumFractionDigits: options.maximumFractionDigits ?? 0,
+  }).format(value)
+}
+
+/**
+ * An upload ceiling in megabytes: `10 MB` — and `10 Mo` in French, which is
+ * the reason this is not a catalog literal. Eight translators cannot be
+ * expected to know CLDR's byte-unit abbreviations, and seven of them
+ * copied `10MB` verbatim.
+ */
+export function formatFileSizeMb(megabytes: Amount, options: NumberOptions = {}): string {
+  if (!isRenderable(megabytes)) return options.fallback ?? EMPTY_VALUE
+  return numberFormatter(options.locale ?? getLocale(), {
+    style: 'unit',
+    unit: 'megabyte',
+    unitDisplay: 'short',
+    maximumFractionDigits: options.maximumFractionDigits ?? 0,
+  }).format(megabytes)
+}
+
+/**
+ * A short duration in seconds: `12s` in en, `12 Sek.` in de, `12sn` in tr.
+ *
+ * The bare `s` suffix is English abbreviation, not a symbol — German, Polish
+ * and Turkish all write it differently, and `{{count}}s` in the catalog gave
+ * all three the English one.
+ */
+export function formatSeconds(
+  value: Amount,
+  options: NumberOptions & { unitDisplay?: 'narrow' | 'short' | 'long' } = {},
+): string {
+  if (!isRenderable(value)) return options.fallback ?? EMPTY_VALUE
+  return numberFormatter(options.locale ?? getLocale(), {
+    style: 'unit',
+    unit: 'second',
+    unitDisplay: options.unitDisplay ?? 'narrow',
+    maximumFractionDigits: options.maximumFractionDigits ?? 0,
+  }).format(value)
+}
+
+/**
+ * A distance in metres — the geofence radius and the last few hundred metres
+ * of an approach, where kilometres would read as `0.1 km`.
+ */
+export function formatDistanceM(meters: Amount, options: NumberOptions = {}): string {
+  if (!isRenderable(meters)) return options.fallback ?? EMPTY_VALUE
+  return numberFormatter(options.locale ?? getLocale(), {
+    style: 'unit',
+    unit: 'meter',
+    unitDisplay: 'short',
+    maximumFractionDigits: options.maximumFractionDigits ?? 0,
+  }).format(meters)
+}
+
 /** A percentage from a *rate* (0.19 → "19 %" in de, "19%" in en). */
 export function formatPercent(rate: Amount, options: NumberOptions = {}): string {
   if (!isRenderable(rate)) return options.fallback ?? EMPTY_VALUE
@@ -233,6 +350,33 @@ export function formatDateLong(value: DateInput, options: DateOptions = {}): str
 /** Time of day, in the locale's own 12/24-hour convention. */
 export function formatTime(value: DateInput, options: DateOptions = {}): string {
   return formatDateWith(value, { hour: '2-digit', minute: '2-digit', ...options })
+}
+
+/**
+ * A range of times of day: `8:00 AM – 12:00 PM` in en, `08:00–12:00 Uhr` in
+ * de, `08:00 – 12:00` in fr.
+ *
+ * This exists because `booking:arrivalWindow.*` shipped `Morning (8am-12pm)`
+ * and **all seven translators independently rewrote it to a 24-hour clock** —
+ * no European market reads am/pm — so the same three time ranges lived in
+ * eight catalogs and disagreed about their own format. The hours are a
+ * business constant; the clock convention, the separator and the trailing
+ * `Uhr` are the engine's job.
+ *
+ * `formatRange` is absent from partial ECMA-402 builds, so a joined fallback
+ * keeps the call site total.
+ */
+export function formatTimeRange(start: DateInput, end: DateInput, options: DateOptions = {}): string {
+  const from = toDate(start)
+  const to = toDate(end)
+  if (!from || !to) return options.fallback ?? EMPTY_VALUE
+  const { locale, fallback: _fallback, ...rest } = options
+  const fmt = dateFormatter(locale ?? getLocale(), { hour: '2-digit', minute: '2-digit', ...rest })
+  try {
+    return fmt.formatRange(from, to)
+  } catch {
+    return `${fmt.format(from)}–${fmt.format(to)}`
+  }
 }
 
 /** Date and time together. */

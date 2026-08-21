@@ -20,7 +20,7 @@
       "title": "Hesabınızı görmek için giriş yapın"
     },
     "version": {
-      "label": "pickLT v{{version}}"
+      "label": "PickLT v{{version}}"
     }
   },
   "authGate": {
@@ -120,7 +120,20 @@
     },
     "moves": {
       "empty": "Henüz taşınma yok. İlk taşınmanızı ayırtarak başlayın!",
-      "emptyFiltered": "„{{status}}” durumunda taşınma bulunamadı.",
+      "emptyFiltered": {
+        "cancelled": {
+          "label": "İptal edilen taşınma bulunamadı."
+        },
+        "completed": {
+          "label": "Tamamlanan taşınma bulunamadı."
+        },
+        "inProgress": {
+          "label": "Devam eden taşınma bulunamadı."
+        },
+        "pending": {
+          "label": "Bekleyen taşınma bulunamadı."
+        }
+      },
       "emptyScheduled": "Planlı taşınma bulunamadı.",
       "signedOut": {
         "cta": "Başlamak için giriş yapın",
@@ -258,9 +271,6 @@
     "title": "Nasıl taşınmak istersiniz?"
   },
   "moveDetails": {
-    "header": {
-      "subtitle": "{{moveType}} taşıma · {{date}}"
-    },
     "mover": {
       "title": "Nakliyeciniz"
     },
@@ -285,7 +295,7 @@
     },
     "activeMove": {
       "advance": {
-        "cta": "Durumu güncelle: {{phase}}"
+        "cta": "Durumu güncelle"
       },
       "cancelledByClient": {
         "title": "Taşınma müşteri tarafından iptal edildi"
@@ -298,14 +308,14 @@
         "label": "Alışa ~{{minutes}} dk"
       },
       "proximity": {
-        "helper": "Varış olarak işaretlemek için alış noktasının 100 m yakınında olmalısınız ({{distance}} m uzakta)"
+        "helper": "Varış olarak işaretlemek için alış noktasının {{radius}} yakınında olmalısınız ({{distance}} uzakta)"
       }
     },
     "additionalServicesCount_one": "+{{count}} hizmet",
     "additionalServicesCount_other": "+{{count}} hizmet",
     "availableMoves": {
       "empty": {
-        "subtitle": "Şu anda 30 km içinde planlı taşınma yok. Her 30 saniyede bir otomatik olarak kontrol ediyoruz.",
+        "subtitle": "Şu anda {{radius}} içinde planlı taşınma yok. Her {{interval}}de bir otomatik olarak kontrol ediyoruz.",
         "title": "Uygun taşınma yok"
       },
       "error": {
@@ -413,14 +423,14 @@
         "helper": "Nakliyeci olarak ağırlıklı çalıştığınız şehir"
       },
       "experience": {
-        "label": "Deneyim yılı *",
+        "label": "Deneyim yılı",
         "placeholder": "örn. 5"
       },
       "languages": {
-        "label": "Konuşulan diller *"
+        "label": "Konuşulan diller"
       },
       "licenseNumber": {
-        "label": "Ehliyet numarası *",
+        "label": "Ehliyet numarası",
         "placeholder": "Ehliyet numaranızı girin"
       },
       "licensePhoto": {
@@ -440,19 +450,19 @@
         "a11y": "Selfie önizlemesi",
         "cta": "Net bir selfie çekin veya yükleyin",
         "helper": "Kimlik doğrulaması için net bir selfie gereklidir",
-        "label": "Selfie fotoğrafı *",
+        "label": "Selfie fotoğrafı",
         "retake": {
           "cta": "Selfie'yi yeniden çek"
         }
       },
       "ssn": {
         "helper": "Şifrelenir ve yalnızca vergi doğrulaması için kullanılır",
-        "label": "Sosyal güvenlik numarası *",
+        "label": "Sosyal güvenlik numarası",
         "placeholder": "Sosyal güvenlik numaranızı girin"
       },
       "taxId": {
         "helper": "Fatura oluşturma ve vergi bildirimi için gereklidir",
-        "label": "Vergi kimlik numarası *",
+        "label": "Vergi kimlik numarası",
         "placeholder": "örn. DE123456789"
       },
       "vatId": {
@@ -465,18 +475,55 @@
       "cta": "Aktif taşınmaya git"
     },
     "homeTypeMoveType": {
-      "label": "{{homeType}} · {{moveType}}"
+      "apartment": {
+        "light": {
+          "label": "Daire · Hafif"
+        },
+        "premium": {
+          "label": "Daire · Premium"
+        },
+        "regular": {
+          "label": "Daire · Standart"
+        }
+      },
+      "house": {
+        "light": {
+          "label": "Müstakil ev · Hafif"
+        },
+        "premium": {
+          "label": "Müstakil ev · Premium"
+        },
+        "regular": {
+          "label": "Müstakil ev · Standart"
+        }
+      },
+      "office": {
+        "light": {
+          "label": "Ofis · Hafif"
+        },
+        "premium": {
+          "label": "Ofis · Premium"
+        },
+        "regular": {
+          "label": "Ofis · Standart"
+        }
+      },
+      "storage": {
+        "light": {
+          "label": "Depo · Hafif"
+        },
+        "premium": {
+          "label": "Depo · Premium"
+        },
+        "regular": {
+          "label": "Depo · Standart"
+        }
+      }
     },
     "jobDetails": {
       "notFound": {
         "subtitle": "Bu taşınma kaldırılmış olabilir veya bağlantı geçersiz."
-      },
-      "subheading": {
-        "label": "{{moveType}} taşıma · {{date}}"
       }
-    },
-    "moveTypeBadge": {
-      "label": "{{type}} taşıma"
     },
     "notStartable": {
       "body": "<0>Taşınma henüz başlatılamaz.</0> Bu rotayı <1>{{when}}</1> tarihinde başlatabilirsiniz (Rotayı başlat, 5 dakika önce açılır)."
@@ -586,7 +633,7 @@
         "label": "Kazancınız"
       },
       "respondWithin": {
-        "label": "<1>{{seconds}} sn</1> içinde yanıtlayın"
+        "label": "<1>{{seconds}}</1> içinde yanıtlayın"
       },
       "services": {
         "label": "Hizmetler: {{list}}"
@@ -620,7 +667,7 @@
       },
       "subtitle": "Hesabınızı ve tercihlerinizi yönetin",
       "version": {
-        "label": "pickLT Nakliyeci Uygulaması v{{version}}"
+        "label": "PickLT Nakliyeci Uygulaması v{{version}}"
       }
     },
     "startRoute": {
@@ -685,7 +732,12 @@
     },
     "recentMoves": {
       "moveType": {
-        "label": "{{type}} taşıma"
+        "instant": {
+          "label": "Anında taşınma"
+        },
+        "scheduled": {
+          "label": "Planlı taşınma"
+        }
       },
       "title": "Son taşınmalar"
     },
@@ -755,7 +807,18 @@
     },
     "empty": {
       "filtered": {
-        "title": "„{{status}}” durumunda taşınma yok"
+        "cancelled": {
+          "title": "İptal edilen taşınma yok"
+        },
+        "completed": {
+          "title": "Tamamlanan taşınma yok"
+        },
+        "inProgress": {
+          "title": "Devam eden taşınma yok"
+        },
+        "pending": {
+          "title": "Bekleyen taşınma yok"
+        }
       },
       "subtitle": "İlk taşınmanızı ayırtın, burada görünsün.",
       "title": "Henüz taşınma yok"
@@ -857,9 +920,6 @@
     },
     "editPhotos": {
       "cta": "Fotoğrafları düzenle"
-    },
-    "moveTypeBadge": {
-      "label": "{{moveType}} taşıma"
     }
   },
   "scheduledMoves": {
@@ -868,7 +928,18 @@
     },
     "empty": {
       "filtered": {
-        "title": "„{{status}}” durumunda planlı taşınma yok"
+        "cancelled": {
+          "title": "İptal edilen planlı taşınma yok"
+        },
+        "completed": {
+          "title": "Tamamlanan planlı taşınma yok"
+        },
+        "inProgress": {
+          "title": "Devam eden planlı taşınma yok"
+        },
+        "pending": {
+          "title": "Bekleyen planlı taşınma yok"
+        }
       },
       "subtitle": "Planlı bir taşınma ayırtın, burada görünsün.",
       "title": "Henüz planlı taşınma yok"
@@ -909,7 +980,7 @@
       "title_other": "Uygun nakliyeciler ({{count}})"
     },
     "capacity": {
-      "label": "{{volume}} m³ kapasite"
+      "label": "{{volume}} kapasite"
     },
     "confirm": {
       "cta": "Onayla · {{amount}}"

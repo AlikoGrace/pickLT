@@ -1,10 +1,11 @@
 'use client'
 
 import { useAuth } from '@/context/auth'
-import { languageName, regionName } from '@/lib/format'
+import { formatVolumeM3, languageName, regionName } from '@/lib/format'
+import { vehicleCapacityLabel } from '@/lib/vehicle-capacity'
 import { compressImage } from '@/utils/compressImage'
 import { useRouter } from 'next/navigation'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   TruckIcon,
@@ -95,6 +96,39 @@ const STEPS: { key: Step; icon: typeof TruckIcon }[] = [
   { key: 'experience', icon: ClipboardDocumentCheckIcon },
   { key: 'review', icon: CheckCircleIcon },
 ]
+
+/**
+ * The required marker lives here rather than in the catalog (catalog
+ * conventions §5a, rule S4: "the asterisk is a property of the field, not of
+ * the word"). This page is where that property is actually known — `canGoNext`
+ * below refuses to advance the wizard without exactly the fields that use this
+ * label, so the marker and the gate cannot drift apart.
+ *
+ * The marker is `aria-hidden` wherever the control itself carries
+ * `aria-required`, which is what assistive tech announces; a bare "*" read
+ * aloud as "star" is noise on top of it. Two fields have no single control to
+ * put `aria-required` on — the selfie upload (the file input is visually
+ * hidden) and the languages chip group — so there the marker stays in the
+ * accessibility tree, exactly as the "*" in the old label text did.
+ */
+function RequiredLabel({
+  children,
+  className = 'mb-1',
+  markerHiddenFromAT = true,
+}: {
+  children: ReactNode
+  className?: string
+  markerHiddenFromAT?: boolean
+}) {
+  return (
+    <label className={`${className} block text-sm font-medium text-neutral-700 dark:text-neutral-300`}>
+      {children}
+      <span aria-hidden={markerHiddenFromAT || undefined} className="ml-0.5 text-red-500">
+        *
+      </span>
+    </label>
+  )
+}
 
 export default function CompleteProfilePage() {
   const { user, refreshProfile, updateUser } = useAuth()
@@ -387,36 +421,39 @@ export default function CompleteProfilePage() {
               {t('profile:section.personal.title')}
             </h2>
             <div>
-              <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                {t('common:field.fullName.required.label')}
-              </label>
+              <RequiredLabel>
+                {t('common:field.fullName.label')}
+              </RequiredLabel>
               <input
                 type="text"
                 value={form.fullName}
+                aria-required="true"
                 onChange={(e) => updateForm({ fullName: e.target.value })}
                 placeholder={t('common:field.fullName.placeholder')}
                 className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
               />
             </div>
             <div>
-              <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                {t('common:field.phone.required.label')}
-              </label>
+              <RequiredLabel>
+                {t('common:field.phone.label')}
+              </RequiredLabel>
               <input
                 type="tel"
                 value={form.phone}
+                aria-required="true"
                 onChange={(e) => updateForm({ phone: e.target.value })}
                 placeholder={t('web:mover.field.phone.placeholder')}
                 className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
               />
             </div>
             <div>
-              <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+              <RequiredLabel>
                 {t('web:mover.field.licenseNumber.label')}
-              </label>
+              </RequiredLabel>
               <input
                 type="text"
                 value={form.driversLicense}
+                aria-required="true"
                 onChange={(e) => updateForm({ driversLicense: e.target.value })}
                 placeholder={t('web:mover.field.licenseNumber.placeholder')}
                 className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
@@ -487,12 +524,13 @@ export default function CompleteProfilePage() {
 
             {/* SSN */}
             <div>
-              <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+              <RequiredLabel>
                 {t('web:mover.field.ssn.label')}
-              </label>
+              </RequiredLabel>
               <input
                 type="password"
                 value={form.socialSecurityNumber}
+                aria-required="true"
                 onChange={(e) => updateForm({ socialSecurityNumber: e.target.value })}
                 placeholder={t('web:mover.field.ssn.placeholder')}
                 autoComplete="off"
@@ -505,12 +543,13 @@ export default function CompleteProfilePage() {
 
             {/* Tax Number */}
             <div>
-              <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+              <RequiredLabel>
                 {t('web:mover.field.taxId.label')}
-              </label>
+              </RequiredLabel>
               <input
                 type="text"
                 value={form.taxNumber}
+                aria-required="true"
                 onChange={(e) => updateForm({ taxNumber: e.target.value })}
                 placeholder={t('web:mover.field.taxId.placeholder')}
                 className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
@@ -566,9 +605,9 @@ export default function CompleteProfilePage() {
 
             {/* Selfie Upload */}
             <div>
-              <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+              <RequiredLabel markerHiddenFromAT={false}>
                 {t('web:mover.field.selfie.label')}
-              </label>
+              </RequiredLabel>
               <input
                 ref={selfiePhotoRef}
                 type="file"
@@ -617,11 +656,12 @@ export default function CompleteProfilePage() {
 
             {/* Country */}
             <div>
-              <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+              <RequiredLabel>
                 {t('common:field.country.label')}
-              </label>
+              </RequiredLabel>
               <select
                 value={form.primaryCountry}
+                aria-required="true"
                 onChange={(e) => updateForm({ primaryCountry: e.target.value })}
                 className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
               >
@@ -634,12 +674,13 @@ export default function CompleteProfilePage() {
 
             {/* City */}
             <div>
-              <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+              <RequiredLabel>
                 {t('common:field.city.label')}
-              </label>
+              </RequiredLabel>
               <input
                 type="text"
                 value={form.primaryCity}
+                aria-required="true"
                 onChange={(e) => updateForm({ primaryCity: e.target.value })}
                 placeholder={t('common:field.city.placeholder')}
                 className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
@@ -736,7 +777,11 @@ export default function CompleteProfilePage() {
                   // i18n-keys: booking:vehicle.smallVan.label, booking:vehicle.mediumTruck.label, booking:vehicle.largeTruck.label
                   const typeLabel = t(`booking:vehicle.${v.key}.label`)
                   // i18n-keys: booking:vehicle.smallVan.helper, booking:vehicle.mediumTruck.helper, booking:vehicle.largeTruck.helper
-                  const typeHelper = t(`booking:vehicle.${v.key}.helper`)
+                  // The band ("Up to 10 m³") is a business constant, formatted
+                  // here rather than typed into eight translations of the blurb.
+                  const typeHelper = t(`booking:vehicle.${v.key}.helper`, {
+                    capacity: vehicleCapacityLabel(t, v.key),
+                  })
                   return (
                   <label
                     key={v.value}
@@ -778,14 +823,15 @@ export default function CompleteProfilePage() {
               {t('web:mover.section.experience.title')}
             </h2>
             <div>
-              <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+              <RequiredLabel>
                 {t('web:mover.field.experience.label')}
-              </label>
+              </RequiredLabel>
               <input
                 type="number"
                 min="0"
                 max="50"
                 value={form.yearsExperience}
+                aria-required="true"
                 onChange={(e) => updateForm({ yearsExperience: e.target.value })}
                 placeholder={t('web:mover.field.experience.placeholder')}
                 className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
@@ -800,9 +846,9 @@ export default function CompleteProfilePage() {
                 telling them it set their earnings. See
                 `.agent/plans/capability-pricing-design.md` §4.3. */}
             <div>
-              <label className="mb-2 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+              <RequiredLabel className="mb-2" markerHiddenFromAT={false}>
                 {t('web:mover.field.languages.label')}
-              </label>
+              </RequiredLabel>
               <div className="flex flex-wrap gap-2">
                 {LANGUAGES_OPTIONS.map((lang) => {
                   const isSelected = form.languages.includes(lang.value)
@@ -908,9 +954,7 @@ export default function CompleteProfilePage() {
                       ? t('web:mover.onboarding.review.vehicle.capacity.value', {
                           vehicleType,
                           registration: form.vehicleRegistration,
-                          capacity: t('booking:vehicle.capacity.value', {
-                            capacity: form.vehicleCapacity,
-                          }),
+                          capacity: formatVolumeM3(parseFloat(form.vehicleCapacity)),
                         })
                       : t('web:mover.onboarding.review.vehicle.value', {
                           vehicleType,

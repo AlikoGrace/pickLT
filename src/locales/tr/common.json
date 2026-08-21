@@ -196,11 +196,11 @@
   },
   "field": {
     "city": {
-      "label": "Şehir *",
+      "label": "Şehir",
       "placeholder": "örn. Berlin"
     },
     "country": {
-      "label": "Ülke *",
+      "label": "Ülke",
       "placeholder": "Ülkenizi seçin"
     },
     "email": {
@@ -209,10 +209,7 @@
     },
     "fullName": {
       "label": "Ad soyad",
-      "placeholder": "Ad ve soyadınız",
-      "required": {
-        "label": "Ad soyad *"
-      }
+      "placeholder": "Ad ve soyadınız"
     },
     "name": {
       "label": "Ad",
@@ -225,9 +222,6 @@
     "phone": {
       "label": "Telefon numarası",
       "placeholder": "Telefon numarası girin",
-      "required": {
-        "label": "Telefon numarası *"
-      },
       "shortLabel": "Telefon"
     },
     "quantity": {
@@ -392,10 +386,10 @@
         "body": "Ödeme onaylandı."
       },
       "forClient": {
-        "body": "Ödeme onaylandı. Taşıma kapatılmadan önce müşterinin onayı bekleniyor."
+        "body": "Ödeme onaylandı. Taşınma kapatılmadan önce müşterinin onayı bekleniyor."
       },
       "forMover": {
-        "body": "Ödeme onaylandı. Taşıma kapatılmadan önce nakliyecinizin onayı bekleniyor."
+        "body": "Ödeme onaylandı. Taşınma kapatılmadan önce nakliyecinizin onayı bekleniyor."
       }
     }
   },
@@ -535,10 +529,10 @@
   },
   "upload": {
     "constraints": {
-      "helper": "10 MB'a kadar PNG, JPG, GIF"
+      "helper": "{{limit}}'a kadar PNG, JPG, GIF"
     },
     "constraintsNoGif": {
-      "helper": "10 MB'a kadar PNG, JPG"
+      "helper": "{{limit}}'a kadar PNG, JPG"
     },
     "dragDrop": {
       "label": "veya sürükleyip bırakın"
@@ -554,6 +548,9 @@
     }
   },
   "value": {
+    "lessThan": {
+      "label": "<{{value}}"
+    },
     "noEmail": {
       "empty": "E-posta yok"
     },

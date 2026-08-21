@@ -125,6 +125,14 @@ export async function POST(request: NextRequest) {
           title: 'Move Cancelled',
           body: 'The client has cancelled this move.',
           data: { moveId, handle: move.handle, status: 'cancelled_by_client' },
+          // `bodyWithHandle` only when there IS a handle — the handle-less
+          // variant is a separate key, never a `{{handle}}` interpolated with
+          // an empty string, which would leave "move ." in every locale.
+          i18n: {
+            key: 'cancel.byClient',
+            ...(move.handle ? { bodyKey: 'cancel.byClient.bodyWithHandle' } : {}),
+            params: { handle: move.handle ?? '' },
+          },
         })
       }
     }

@@ -1,4 +1,3 @@
-import { moveStatusLabel } from '@/lib/move-status-label'
 import { getTranslations } from '@/lib/i18n-server'
 import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
@@ -79,12 +78,10 @@ export async function POST(request: NextRequest) {
     const allowedNext = VALID_TRANSITIONS[move.status as string]
     if (!allowedNext || !allowedNext.includes(status)) {
       return NextResponse.json(
-        {
-          error: t('errors:move.invalidTransition', {
-            from: moveStatusLabel(t, move.status),
-            to: moveStatusLabel(t, status),
-          }),
-        },
+        // Two status slots, so a per-value family would have been 17 × 17.
+        // The transition is developer diagnostics — the server log still has
+        // both statuses — and the user needs the outcome, not the enum pair.
+        { error: t('errors:move.invalidTransition') },
         { status: 400 }
       )
     }
@@ -147,7 +144,7 @@ export async function POST(request: NextRequest) {
     // Notify the client of the status change (pushable statuses fan out an OS
     // push via sendpush; granular in-progress steps stay silent).
     const clientId = relId(move.clientId)
-    const notif = statusNotification(status as string, t)
+    const notif = statusNotification(status as string)
     if (clientId && notif) {
       await writeNotification({
         userId: clientId,
@@ -155,6 +152,7 @@ export async function POST(request: NextRequest) {
         title: notif.title,
         body: notif.body,
         data: { moveId, handle: move.handle, status },
+        i18n: { key: notif.i18nKey, params: { handle: move.handle ?? '' } },
       })
     }
 

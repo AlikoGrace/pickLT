@@ -56,16 +56,19 @@
   },
   "arrivalWindow": {
     "afternoon": {
-      "label": "Afternoon (12pm-5pm)"
+      "label": "Afternoon"
     },
     "evening": {
-      "label": "Evening (5pm-9pm)"
+      "label": "Evening"
     },
     "label": "Arrival Window",
     "morning": {
-      "label": "Morning (8am-12pm)"
+      "label": "Morning"
     },
-    "optionalLabel": "Arrival Window (optional)"
+    "optionalLabel": "Arrival Window (optional)",
+    "withRange": {
+      "label": "{{window}} ({{range}})"
+    }
   },
   "business": {
     "company": {
@@ -136,7 +139,7 @@
       "label": "Points"
     },
     "summary": {
-      "label": "{{items}} · ~{{weight}} kg · {{points}}"
+      "label": "{{items}} · ~{{weight}} · {{points}}"
     },
     "title": "Move classification",
     "upgrade": {
@@ -420,8 +423,7 @@
       "label": "Vehicle"
     },
     "weight": {
-      "label": "Weight",
-      "value": "{{weight}} kg"
+      "label": "Weight"
     }
   },
   "flexibility": {
@@ -737,10 +739,37 @@
     }
   },
   "packingMaterials": {
+    "bubbleWrap": {
+      "option": "Bubble wrap"
+    },
+    "dishInserts": {
+      "option": "Dish inserts"
+    },
+    "furnitureBlankets": {
+      "option": "Furniture blankets"
+    },
     "label": "Packing materials",
+    "mattressCovers": {
+      "option": "Mattress covers"
+    },
+    "movingBoxes": {
+      "option": "Moving boxes"
+    },
+    "packingPaper": {
+      "option": "Packing paper"
+    },
+    "packingTape": {
+      "option": "Packing tape"
+    },
     "selectedCount": {
       "label_one": "{{count}} selected",
       "label_other": "{{count}} selected"
+    },
+    "tvProtection": {
+      "option": "TV protection"
+    },
+    "wardrobeBoxes": {
+      "option": "Wardrobe boxes"
     }
   },
   "packingNotes": {
@@ -826,7 +855,7 @@
       "title": "Pay your mover directly"
     },
     "cashHandshake": {
-      "helper": "Please pay the mover directly (cash or transfer), then tap \"I Have Paid\" below."
+      "helper": "Please pay the mover directly (cash or transfer), then tap \"{{cta}}\" below."
     },
     "cashLong": {
       "label": "Cash (pay mover directly)"
@@ -931,14 +960,6 @@
     "countSummary": {
       "label": "{{main}} • {{additional}}"
     },
-    "cover": {
-      "a11y": "Cover photo",
-      "helper": "Upload a main photo showing your items or space",
-      "label": "Cover photo"
-    },
-    "formatHint": {
-      "subtitle": "PNG, JPG up to 3MB"
-    },
     "gallery": {
       "a11y": "Move photos",
       "helper": "Upload additional photos of furniture, rooms, or items",
@@ -957,6 +978,7 @@
       "a11y": "Move photo {{n}}"
     },
     "main": {
+      "a11y": "Main photo",
       "cta": "Tap to upload main photo",
       "helper": "Upload a main photo showing your items or the space",
       "label": "Main photo"
@@ -1022,10 +1044,32 @@
       "label": "Base fare"
     },
     "baseRate": {
-      "label": "Base rate ({{moveType}})"
+      "fallback": {
+        "label": "Base rate"
+      },
+      "light": {
+        "label": "Base rate (Light Move)"
+      },
+      "premium": {
+        "label": "Base rate (Premium Move)"
+      },
+      "regular": {
+        "label": "Base rate (Regular Move)"
+      }
     },
     "baseRateWithDistance": {
-      "label": "Base rate ({{moveType}}, {{distance}})"
+      "fallback": {
+        "label": "Base rate ({{distance}})"
+      },
+      "light": {
+        "label": "Base rate (Light Move, {{distance}})"
+      },
+      "premium": {
+        "label": "Base rate (Premium Move, {{distance}})"
+      },
+      "regular": {
+        "label": "Base rate (Regular Move, {{distance}})"
+      }
     },
     "crew": {
       "label": "Crew ({{crew}})"
@@ -1180,8 +1224,6 @@
   },
   "storageWeekCount_one": "{{count}} week",
   "storageWeekCount_other": "{{count}} weeks",
-  "storageWeeks_one": "{{count}} week",
-  "storageWeeks_other": "{{count}} weeks",
   "streetAddress": {
     "dropoff": {
       "helper": "Enter the full delivery street address",
@@ -1240,19 +1282,19 @@
     "capacity": {
       "label": "Capacity (m³)",
       "placeholder": "e.g. 15",
-      "value": "{{capacity}} m³"
+      "upTo": {
+        "value": "Up to {{capacity}}"
+      }
     },
     "edit": {
       "title": "Edit Vehicle Information"
     },
     "largeTruck": {
-      "capacity": "25+ m³",
-      "helper": "25+ m³ — house moves, large loads",
+      "helper": "{{capacity}} — house moves, large loads",
       "label": "Large Truck"
     },
     "mediumTruck": {
-      "capacity": "10–25 m³",
-      "helper": "10–25 m³ — apartment moves",
+      "helper": "{{capacity}} — apartment moves",
       "label": "Medium Truck"
     },
     "model": {
@@ -1273,8 +1315,7 @@
       "label": "Registration *"
     },
     "smallVan": {
-      "capacity": "Up to 10 m³",
-      "helper": "Up to 10 m³ — small moves, single items",
+      "helper": "{{capacity}} — small moves, single items",
       "label": "Small Van"
     },
     "title": "Vehicle Information",

@@ -20,7 +20,7 @@
       "title": "Sign in to view your account"
     },
     "version": {
-      "label": "pickLT v{{version}}"
+      "label": "PickLT v{{version}}"
     }
   },
   "authGate": {
@@ -49,7 +49,7 @@
       "helper": "Click on any section to edit your move details."
     },
     "pay": {
-      "title": "Confirm and payment"
+      "title": "Confirm and pay"
     },
     "title": "Confirm your move",
     "yourMove": {
@@ -120,7 +120,20 @@
     },
     "moves": {
       "empty": "No moves yet. Start by booking your first move!",
-      "emptyFiltered": "No moves found under {{status}}.",
+      "emptyFiltered": {
+        "cancelled": {
+          "label": "No cancelled moves found."
+        },
+        "completed": {
+          "label": "No completed moves found."
+        },
+        "inProgress": {
+          "label": "No moves in progress found."
+        },
+        "pending": {
+          "label": "No pending moves found."
+        }
+      },
       "emptyScheduled": "No scheduled moves found.",
       "signedOut": {
         "cta": "Sign in to get started",
@@ -258,9 +271,6 @@
     "title": "How would you like to move?"
   },
   "moveDetails": {
-    "header": {
-      "subtitle": "{{moveType}} Move · {{date}}"
-    },
     "mover": {
       "title": "Your Mover"
     },
@@ -285,7 +295,7 @@
     },
     "activeMove": {
       "advance": {
-        "cta": "Mark as: {{phase}}"
+        "cta": "Update status"
       },
       "cancelledByClient": {
         "title": "Move Cancelled by Client"
@@ -298,14 +308,14 @@
         "label": "~{{minutes}} min to pickup"
       },
       "proximity": {
-        "helper": "You must be within 100m of the pickup location to mark as arrived ({{distance}}m away)"
+        "helper": "You must be within {{radius}} of the pickup location to mark as arrived ({{distance}} away)"
       }
     },
     "additionalServicesCount_one": "+{{count}} service",
     "additionalServicesCount_other": "+{{count}} services",
     "availableMoves": {
       "empty": {
-        "subtitle": "No scheduled moves within 30 km right now. We check automatically every 30 seconds.",
+        "subtitle": "No scheduled moves within {{radius}} right now. We check automatically every {{interval}}.",
         "title": "No moves available"
       },
       "error": {
@@ -413,14 +423,14 @@
         "helper": "The city where you primarily operate as a mover"
       },
       "experience": {
-        "label": "Years of Experience *",
+        "label": "Years of Experience",
         "placeholder": "e.g. 5"
       },
       "languages": {
-        "label": "Languages Spoken *"
+        "label": "Languages Spoken"
       },
       "licenseNumber": {
-        "label": "Driver's License Number *",
+        "label": "Driver's License Number",
         "placeholder": "Enter your driver's license number"
       },
       "licensePhoto": {
@@ -440,19 +450,19 @@
         "a11y": "Selfie preview",
         "cta": "Take or upload a clear selfie",
         "helper": "A clear selfie is required for identity verification",
-        "label": "Selfie Photo *",
+        "label": "Selfie Photo",
         "retake": {
           "cta": "Retake selfie"
         }
       },
       "ssn": {
         "helper": "Encrypted and only used for tax verification",
-        "label": "Social Security Number *",
+        "label": "Social Security Number",
         "placeholder": "Enter your SSN"
       },
       "taxId": {
         "helper": "Required for invoice generation and tax reporting",
-        "label": "Tax Identification Number *",
+        "label": "Tax Identification Number",
         "placeholder": "e.g. DE123456789"
       },
       "vatId": {
@@ -465,18 +475,55 @@
       "cta": "Go to Active Move"
     },
     "homeTypeMoveType": {
-      "label": "{{homeType}} · {{moveType}}"
+      "apartment": {
+        "light": {
+          "label": "Apartment · Light"
+        },
+        "premium": {
+          "label": "Apartment · Premium"
+        },
+        "regular": {
+          "label": "Apartment · Regular"
+        }
+      },
+      "house": {
+        "light": {
+          "label": "House · Light"
+        },
+        "premium": {
+          "label": "House · Premium"
+        },
+        "regular": {
+          "label": "House · Regular"
+        }
+      },
+      "office": {
+        "light": {
+          "label": "Office · Light"
+        },
+        "premium": {
+          "label": "Office · Premium"
+        },
+        "regular": {
+          "label": "Office · Regular"
+        }
+      },
+      "storage": {
+        "light": {
+          "label": "Storage · Light"
+        },
+        "premium": {
+          "label": "Storage · Premium"
+        },
+        "regular": {
+          "label": "Storage · Regular"
+        }
+      }
     },
     "jobDetails": {
       "notFound": {
         "subtitle": "This move may have been removed or the link is invalid."
-      },
-      "subheading": {
-        "label": "{{moveType}} Move · {{date}}"
       }
-    },
-    "moveTypeBadge": {
-      "label": "{{type}} Move"
     },
     "notStartable": {
       "body": "<0>Move not startable yet.</0> You can start this route on <1>{{when}}</1> (Start Route unlocks 5 minutes before)."
@@ -586,7 +633,7 @@
         "label": "Your earnings"
       },
       "respondWithin": {
-        "label": "Respond within <1>{{seconds}}s</1>"
+        "label": "Respond within <1>{{seconds}}</1>"
       },
       "services": {
         "label": "Services: {{list}}"
@@ -620,7 +667,7 @@
       },
       "subtitle": "Manage your account and preferences",
       "version": {
-        "label": "pickLT Mover App v{{version}}"
+        "label": "PickLT Mover App v{{version}}"
       }
     },
     "startRoute": {
@@ -685,7 +732,12 @@
     },
     "recentMoves": {
       "moveType": {
-        "label": "{{type}} Move"
+        "instant": {
+          "label": "Instant Move"
+        },
+        "scheduled": {
+          "label": "Scheduled Move"
+        }
       },
       "title": "Recent Moves"
     },
@@ -755,7 +807,18 @@
     },
     "empty": {
       "filtered": {
-        "title": "No {{status}} moves"
+        "cancelled": {
+          "title": "No cancelled moves"
+        },
+        "completed": {
+          "title": "No completed moves"
+        },
+        "inProgress": {
+          "title": "No moves in progress"
+        },
+        "pending": {
+          "title": "No pending moves"
+        }
       },
       "subtitle": "Book your first move and it will show up here.",
       "title": "No moves yet"
@@ -816,7 +879,7 @@
     }
   },
   "notFound": {
-    "cta": "Return Home Page",
+    "cta": "Back to home page",
     "image": {
       "a11y": "Page not found"
     },
@@ -836,7 +899,7 @@
       "title": "Move confirmed and paid!"
     },
     "congrats": {
-      "title": "Congratulation 🎉"
+      "title": "Congratulations 🎉"
     },
     "instant": {
       "subtitle": "Your Instant Move"
@@ -857,9 +920,6 @@
     },
     "editPhotos": {
       "cta": "Edit photos"
-    },
-    "moveTypeBadge": {
-      "label": "{{moveType}} Move"
     }
   },
   "scheduledMoves": {
@@ -868,7 +928,18 @@
     },
     "empty": {
       "filtered": {
-        "title": "No {{status}} scheduled moves"
+        "cancelled": {
+          "title": "No cancelled scheduled moves"
+        },
+        "completed": {
+          "title": "No completed scheduled moves"
+        },
+        "inProgress": {
+          "title": "No scheduled moves in progress"
+        },
+        "pending": {
+          "title": "No pending scheduled moves"
+        }
       },
       "subtitle": "Book a scheduled move and it will appear here.",
       "title": "No scheduled moves yet"
@@ -909,7 +980,7 @@
       "title_other": "Available movers ({{count}})"
     },
     "capacity": {
-      "label": "{{volume}} m³ capacity"
+      "label": "{{volume}} capacity"
     },
     "confirm": {
       "cta": "Confirm · {{amount}}"

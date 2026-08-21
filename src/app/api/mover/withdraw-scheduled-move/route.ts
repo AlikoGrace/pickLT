@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
         : (move.moverProfileId as Record<string, string>)?.$id || null
 
     if (existingMoverProfileId !== moverProfile.$id) {
-      return NextResponse.json({ error: t('errors:move.notAssigned2') }, { status: 403 })
+      return NextResponse.json({ error: t('errors:move.notAssigned') }, { status: 403 })
     }
 
     // Only allow withdrawal before en_route phase begins
@@ -97,6 +97,7 @@ export async function POST(request: NextRequest) {
         title: 'Mover Withdrew',
         body: 'Your mover withdrew. We are finding you another mover.',
         data: { moveId, handle: move.handle, status: 'booked' },
+        i18n: { key: 'status.moverWithdrew', params: { handle: move.handle ?? '' } },
       })
     }
 

@@ -1,4 +1,3 @@
-import { moveStatusLabel } from '@/lib/move-status-label'
 import { getTranslations } from '@/lib/i18n-server'
 import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
@@ -96,11 +95,15 @@ export async function POST(request: NextRequest) {
     }
     if (!ASSIGNABLE_STATUSES.has(targetMove.status)) {
       return NextResponse.json(
-        {
-          error: t('errors:move.notAcceptableInStatus', {
-            status: moveStatusLabel(t, targetMove.status),
-          }),
-        },
+        // No status word is injected. `"…while it is {{status}}"` put a
+        // `moves:status.*` label in a predicative slot: fr/es/it need it to
+        // agree in gender with "move", de/pl govern its case, and Turkish
+        // built "{{status}} durumundayken" around a label that is often a
+        // whole finite clause ("Nakliyeci yolda"). Seventeen statuses × four
+        // sentences is not a proportionate key family for a diagnostic the
+        // reader cannot act on, so the sentence loses the slot instead —
+        // the same repair `errors:move.notCancellableUnknownStage` already is.
+        { error: t('errors:move.noLongerAcceptable') },
         { status: 409 }
       )
     }
@@ -137,6 +140,7 @@ export async function POST(request: NextRequest) {
         title: 'Mover Accepted',
         body: 'A mover has accepted your move request!',
         data: { moveId, handle: move.handle, status: 'mover_accepted' },
+        i18n: { key: 'status.moverAccepted', params: { handle: move.handle ?? '' } },
       })
     }
 

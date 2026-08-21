@@ -56,16 +56,19 @@
   },
   "arrivalWindow": {
     "afternoon": {
-      "label": "Nachmittag (12–17 Uhr)"
+      "label": "Nachmittag"
     },
     "evening": {
-      "label": "Abend (17–21 Uhr)"
+      "label": "Abend"
     },
     "label": "Zeitfenster",
     "morning": {
-      "label": "Vormittag (8–12 Uhr)"
+      "label": "Vormittag"
     },
-    "optionalLabel": "Zeitfenster (optional)"
+    "optionalLabel": "Zeitfenster (optional)",
+    "withRange": {
+      "label": "{{window}} ({{range}})"
+    }
   },
   "business": {
     "company": {
@@ -136,7 +139,7 @@
       "label": "Punkte"
     },
     "summary": {
-      "label": "{{items}} · ~{{weight}} kg · {{points}}"
+      "label": "{{items}} · ~{{weight}} · {{points}}"
     },
     "title": "Umzugseinstufung",
     "upgrade": {
@@ -420,8 +423,7 @@
       "label": "Fahrzeug"
     },
     "weight": {
-      "label": "Gewicht",
-      "value": "{{weight}} kg"
+      "label": "Gewicht"
     }
   },
   "flexibility": {
@@ -735,10 +737,37 @@
     }
   },
   "packingMaterials": {
+    "bubbleWrap": {
+      "option": "Luftpolsterfolie"
+    },
+    "dishInserts": {
+      "option": "Geschirreinsätze"
+    },
+    "furnitureBlankets": {
+      "option": "Möbeldecken"
+    },
     "label": "Packmaterial",
+    "mattressCovers": {
+      "option": "Matratzenhüllen"
+    },
+    "movingBoxes": {
+      "option": "Umzugskartons"
+    },
+    "packingPaper": {
+      "option": "Packpapier"
+    },
+    "packingTape": {
+      "option": "Klebeband"
+    },
     "selectedCount": {
       "label_one": "{{count}} ausgewählt",
       "label_other": "{{count}} ausgewählt"
+    },
+    "tvProtection": {
+      "option": "TV-Schutz"
+    },
+    "wardrobeBoxes": {
+      "option": "Kleiderboxen"
     }
   },
   "packingNotes": {
@@ -824,7 +853,7 @@
       "title": "Direkt an Ihren Umzugsprofi zahlen"
     },
     "cashHandshake": {
-      "helper": "Bitte zahlen Sie direkt an den Umzugsprofi (bar oder per Überweisung) und tippen Sie dann unten auf „Ich habe bezahlt“."
+      "helper": "Bitte zahlen Sie direkt an den Umzugsprofi (bar oder per Überweisung) und tippen Sie dann unten auf „{{cta}}“."
     },
     "cashLong": {
       "label": "Barzahlung (direkt an den Umzugsprofi)"
@@ -929,14 +958,6 @@
     "countSummary": {
       "label": "{{main}} • {{additional}}"
     },
-    "cover": {
-      "a11y": "Titelfoto",
-      "helper": "Laden Sie ein Hauptfoto hoch, das Ihre Gegenstände oder Räume zeigt",
-      "label": "Titelfoto"
-    },
-    "formatHint": {
-      "subtitle": "PNG, JPG bis 3 MB"
-    },
     "gallery": {
       "a11y": "Umzugsfotos",
       "helper": "Laden Sie weitere Fotos von Möbeln, Räumen oder Gegenständen hoch",
@@ -955,6 +976,7 @@
       "a11y": "Umzugsfoto {{n}}"
     },
     "main": {
+      "a11y": "Hauptfoto",
       "cta": "Tippen, um das Hauptfoto hochzuladen",
       "helper": "Laden Sie ein Hauptfoto hoch, das Ihre Gegenstände oder den Raum zeigt",
       "label": "Hauptfoto"
@@ -1020,10 +1042,32 @@
       "label": "Grundpreis"
     },
     "baseRate": {
-      "label": "Grundpreis ({{moveType}})"
+      "fallback": {
+        "label": "Grundpreis"
+      },
+      "light": {
+        "label": "Grundpreis (Kleiner Umzug)"
+      },
+      "premium": {
+        "label": "Grundpreis (Premium-Umzug)"
+      },
+      "regular": {
+        "label": "Grundpreis (Normaler Umzug)"
+      }
     },
     "baseRateWithDistance": {
-      "label": "Grundpreis ({{moveType}}, {{distance}})"
+      "fallback": {
+        "label": "Grundpreis ({{distance}})"
+      },
+      "light": {
+        "label": "Grundpreis (Kleiner Umzug, {{distance}})"
+      },
+      "premium": {
+        "label": "Grundpreis (Premium-Umzug, {{distance}})"
+      },
+      "regular": {
+        "label": "Grundpreis (Normaler Umzug, {{distance}})"
+      }
     },
     "crew": {
       "label": "Team ({{crew}})"
@@ -1178,8 +1222,6 @@
   },
   "storageWeekCount_one": "{{count}} Woche",
   "storageWeekCount_other": "{{count}} Wochen",
-  "storageWeeks_one": "{{count}} Woche",
-  "storageWeeks_other": "{{count}} Wochen",
   "streetAddress": {
     "dropoff": {
       "helper": "Geben Sie die vollständige Zieladresse ein",
@@ -1238,19 +1280,19 @@
     "capacity": {
       "label": "Ladevolumen (m³)",
       "placeholder": "z. B. 15",
-      "value": "{{capacity}} m³"
+      "upTo": {
+        "value": "Bis {{capacity}}"
+      }
     },
     "edit": {
       "title": "Fahrzeugdaten bearbeiten"
     },
     "largeTruck": {
-      "capacity": "25+ m³",
-      "helper": "25+ m³ — Hausumzüge, große Mengen",
+      "helper": "{{capacity}} — Hausumzüge, große Mengen",
       "label": "Großer Lkw"
     },
     "mediumTruck": {
-      "capacity": "10–25 m³",
-      "helper": "10–25 m³ — Wohnungsumzüge",
+      "helper": "{{capacity}} — Wohnungsumzüge",
       "label": "Mittlerer Lkw"
     },
     "model": {
@@ -1271,8 +1313,7 @@
       "label": "Kennzeichen *"
     },
     "smallVan": {
-      "capacity": "Bis 10 m³",
-      "helper": "Bis 10 m³ — kleine Umzüge, Einzelstücke",
+      "helper": "{{capacity}} — kleine Umzüge, Einzelstücke",
       "label": "Kleiner Transporter"
     },
     "title": "Fahrzeugdaten",

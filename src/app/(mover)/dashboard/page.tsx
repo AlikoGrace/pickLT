@@ -100,18 +100,18 @@ const DashboardPage = () => {
     : '?'
 
 
-  // "Instant Move" / "Scheduled Move" — built as one interpolated sentence so the
-  // word order stays translatable. `moveCategory` is only ever 'instant' | 'scheduled'.
+  // "Instant Move" / "Scheduled Move" — one whole phrase per category, not
+  // `"{{type}} Move"` with the category word posted into the slot. That older
+  // shape could not be made grammatical: de needs *Geplanter Umzug* (an
+  // inflected adjective, not "Geplant" + " Umzug"), and fr/es/it/pl put the
+  // modifier after the noun and agree it with the noun's gender.
+  // `moveCategory` is only ever 'instant' | 'scheduled'.
   const moveTypeLabelFor = (moveCategory: string): string => {
     if (moveCategory === 'instant') {
-      return t('web:moverDashboard.recentMoves.moveType.label', {
-        type: t('moves:moveCategory.instant.label'),
-      })
+      return t('web:moverDashboard.recentMoves.moveType.instant.label')
     }
     if (moveCategory === 'scheduled') {
-      return t('web:moverDashboard.recentMoves.moveType.label', {
-        type: t('moves:moveCategory.scheduled.label'),
-      })
+      return t('web:moverDashboard.recentMoves.moveType.scheduled.label')
     }
     return t('moves:card.title.generic.label')
   }

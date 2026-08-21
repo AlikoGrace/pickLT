@@ -8,8 +8,8 @@
     }
   },
   "available": {
-    "withinRadiusCount_one": "{{count}} mudanza a menos de 30 km",
-    "withinRadiusCount_other": "{{count}} mudanzas a menos de 30 km"
+    "withinRadiusCount_one": "{{count}} mudanza a menos de {{radius}}",
+    "withinRadiusCount_other": "{{count}} mudanzas a menos de {{radius}}"
   },
   "booking": {
     "code": {
@@ -310,7 +310,7 @@
   },
   "status": {
     "arrivedDestination": {
-      "label": "Ha llegado"
+      "label": "Llegada a destino"
     },
     "assigned": {
       "label": "Asignada"

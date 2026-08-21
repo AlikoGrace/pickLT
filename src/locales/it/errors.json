@@ -200,23 +200,21 @@
     "tooLong": "Il messaggio è troppo lungo. Il limite è di {{max}} caratteri."
   },
   "move": {
-    "alreadyAssigned": "Il trasloco è già stato assegnato",
-    "alreadyAssigned2": "Questo trasloco ha già un traslocatore assegnato",
+    "alreadyAssigned": "Questo trasloco ha già un traslocatore assegnato",
     "cancelFailed": "Impossibile annullare questo trasloco. Riprova.",
     "cancelRetry": "Annullamento non riuscito. Riprova.",
     "createFailed": "Impossibile creare il trasloco",
     "dateInPast": "La data del trasloco deve essere futura",
-    "invalidTransition": "Passaggio non valido da «{{from}}» a «{{to}}»",
+    "invalidTransition": "Questo aggiornamento di stato non è più valido per questo trasloco. Ricarica il trasloco e riprova.",
     "loadFailed": "Impossibile caricare i dati del trasloco",
-    "notAcceptableInStatus": "Il trasloco non può essere accettato mentre è {{status}}",
+    "noLongerAcceptable": "Questo trasloco non può più essere accettato. Il suo stato è cambiato: ricarica l’elenco.",
     "notAssigned": "Non sei assegnato a questo trasloco",
-    "notAssigned2": "Non sei assegnato a questo trasloco",
     "notAuthorized": "Non autorizzato per questo trasloco",
     "notAvailable": "Questo trasloco non è disponibile per l’accettazione",
     "notCancellable": "Questo trasloco non può più essere annullato ({{stage}}). Le tue cose potrebbero essere già in viaggio: contatta direttamente il tuo traslocatore.",
     "notCancellableUnknownStage": "Questo trasloco non può più essere annullato. Le tue cose potrebbero essere già in viaggio: contatta direttamente il tuo traslocatore.",
     "notFound": "Trasloco non trovato",
-    "notReschedulable": "Impossibile riprogrammare un trasloco con stato «{{status}}»",
+    "notReschedulable": "Questo trasloco non può più essere riprogrammato. Il suo stato è cambiato: ricarica il trasloco.",
     "rescheduleFailed": "Riprogrammazione non riuscita",
     "rescheduleRetry": "Riprogrammazione non riuscita. Riprova.",
     "scheduledOnly": "Solo i traslochi programmati possono essere accettati in questo modo",
@@ -267,16 +265,13 @@
       "initFailed": "Impossibile avviare il pagamento. Riprova."
     },
     "confirmFailed": "Impossibile confermare il pagamento",
-    "notAwaiting": "Il trasloco non è in attesa di pagamento (attuale: {{status}})"
+    "notAwaiting": "Questo trasloco non è in attesa di pagamento. Ricarica il trasloco e riprova."
   },
   "profile": {
-    "changeEmailFailed": "Impossibile cambiare l’e-mail",
-    "changePhoneFailed": "Impossibile cambiare il telefono",
     "emailChangeFailed": "Impossibile cambiare l’e-mail",
     "emailTaken": "Questa e-mail è già utilizzata da un altro account",
     "nameUpdateFailed": "Impossibile aggiornare il nome",
-    "phoneChangeFailed": "Impossibile cambiare il telefono",
-    "phoneNumberChangeFailed": "Impossibile cambiare il numero di telefono",
+    "phoneChangeFailed": "Impossibile cambiare il numero di telefono",
     "phoneTaken": "Questo numero di telefono è già utilizzato da un altro account"
   },
   "request": {
@@ -315,8 +310,7 @@
     "notAnImage2": "Il file deve essere un’immagine",
     "photoFailed": "Impossibile caricare la foto",
     "photosFailed": "Impossibile caricare le foto",
-    "tooLarge": "L’immagine deve essere inferiore a {{limit}}",
-    "tooLarge2": "La dimensione del file deve essere inferiore a 10 MB"
+    "tooLarge": "L’immagine deve essere inferiore a {{limit}}"
   },
   "validation": {
     "emailFormat": "Formato e-mail non valido",

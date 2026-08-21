@@ -204,23 +204,21 @@
     "tooLong": "Wiadomość jest za długa. Limit to {{max}} znaków."
   },
   "move": {
-    "alreadyAssigned": "Przeprowadzka jest już przydzielona",
-    "alreadyAssigned2": "Do tej przeprowadzki przydzielono już przewoźnika",
+    "alreadyAssigned": "Do tej przeprowadzki przydzielono już przewoźnika",
     "cancelFailed": "Nie udało się anulować tej przeprowadzki. Spróbuj ponownie.",
     "cancelRetry": "Nie udało się anulować. Spróbuj ponownie.",
     "createFailed": "Nie udało się utworzyć przeprowadzki",
     "dateInPast": "Data przeprowadzki musi być datą przyszłą",
-    "invalidTransition": "Nieprawidłowa zmiana statusu z „{{from}}” na „{{to}}”",
+    "invalidTransition": "Ta zmiana statusu nie jest już możliwa dla tej przeprowadzki. Odśwież przeprowadzkę i spróbuj ponownie.",
     "loadFailed": "Nie udało się wczytać danych przeprowadzki",
-    "notAcceptableInStatus": "Przeprowadzki nie można przyjąć, gdy ma status {{status}}",
-    "notAssigned": "Brak przydziału do tej przeprowadzki",
-    "notAssigned2": "Nie jesteś przydzielony do tej przeprowadzki",
+    "noLongerAcceptable": "Tej przeprowadzki nie można już przyjąć. Jej status się zmienił — odśwież listę.",
+    "notAssigned": "Nie jesteś przydzielony do tej przeprowadzki",
     "notAuthorized": "Brak uprawnień do tej przeprowadzki",
     "notAvailable": "Tej przeprowadzki nie można przyjąć",
     "notCancellable": "Tej przeprowadzki nie można już anulować ({{stage}}). Twoje rzeczy mogą być już w transporcie — skontaktuj się bezpośrednio ze swoim przewoźnikiem.",
     "notCancellableUnknownStage": "Tej przeprowadzki nie można już anulować. Twoje rzeczy mogą być już w transporcie — skontaktuj się bezpośrednio ze swoim przewoźnikiem.",
     "notFound": "Nie znaleziono przeprowadzki",
-    "notReschedulable": "Nie można zmienić terminu przeprowadzki o statusie „{{status}}”",
+    "notReschedulable": "Nie można już zmienić terminu tej przeprowadzki. Jej status się zmienił — odśwież przeprowadzkę.",
     "rescheduleFailed": "Nie udało się zmienić terminu",
     "rescheduleRetry": "Nie udało się zmienić terminu. Spróbuj ponownie.",
     "scheduledOnly": "W ten sposób można przyjąć tylko zaplanowane przeprowadzki",
@@ -271,16 +269,13 @@
       "initFailed": "Nie udało się rozpocząć płatności. Spróbuj ponownie."
     },
     "confirmFailed": "Nie udało się potwierdzić płatności",
-    "notAwaiting": "Przeprowadzka nie oczekuje na płatność (obecny status: {{status}})"
+    "notAwaiting": "Ta przeprowadzka nie oczekuje na płatność. Odśwież przeprowadzkę i spróbuj ponownie."
   },
   "profile": {
-    "changeEmailFailed": "Nie udało się zmienić adresu e-mail",
-    "changePhoneFailed": "Nie udało się zmienić numeru telefonu",
     "emailChangeFailed": "Nie udało się zmienić adresu e-mail",
     "emailTaken": "Ten adres e-mail jest już używany przez inne konto",
     "nameUpdateFailed": "Nie udało się zaktualizować imienia i nazwiska",
     "phoneChangeFailed": "Nie udało się zmienić numeru telefonu",
-    "phoneNumberChangeFailed": "Nie udało się zmienić numeru telefonu",
     "phoneTaken": "Ten numer telefonu jest już używany przez inne konto"
   },
   "request": {
@@ -319,8 +314,7 @@
     "notAnImage2": "Plik musi być obrazem",
     "photoFailed": "Nie udało się przesłać zdjęcia",
     "photosFailed": "Nie udało się przesłać zdjęć",
-    "tooLarge": "Obraz musi być mniejszy niż {{limit}}",
-    "tooLarge2": "Plik musi być mniejszy niż 10 MB"
+    "tooLarge": "Obraz musi być mniejszy niż {{limit}}"
   },
   "validation": {
     "emailFormat": "Nieprawidłowy format adresu e-mail",
