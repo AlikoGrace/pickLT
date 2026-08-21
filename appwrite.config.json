@@ -1761,6 +1761,14 @@
                     "encrypt": false
                 },
                 {
+                    "key": "nameTranslations",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
                     "key": "category",
                     "type": "text",
                     "required": false,
