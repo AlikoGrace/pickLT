@@ -1,3 +1,4 @@
+import { getTranslations } from '@/lib/i18n-server'
 import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
@@ -15,10 +16,11 @@ import { NextRequest, NextResponse } from 'next/server'
  * - Recalculates and updates the mover's average rating
  */
 export async function POST(request: NextRequest) {
+  const { t } = await getTranslations()
   try {
     const userId = await getSessionUserId()
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
     }
 
     const body = await request.json()
@@ -29,7 +31,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (typeof rating !== 'number' || rating < 1 || rating > 5) {
-      return NextResponse.json({ error: 'Rating must be between 1 and 5' }, { status: 400 })
+      return NextResponse.json({ error: t('errors:review.ratingRange') }, { status: 400 })
     }
 
     const { databases } = createAdminClient()
@@ -44,12 +46,12 @@ export async function POST(request: NextRequest) {
     // Verify the client owns this move
     const clientId = typeof move.clientId === 'string' ? move.clientId : move.clientId?.$id
     if (clientId !== userId) {
-      return NextResponse.json({ error: 'Not authorized for this move' }, { status: 403 })
+      return NextResponse.json({ error: t('errors:move.notAuthorized') }, { status: 403 })
     }
 
     // Move must be completed
     if (move.status !== 'completed') {
-      return NextResponse.json({ error: 'Move is not completed' }, { status: 400 })
+      return NextResponse.json({ error: t('errors:review.moveNotCompleted') }, { status: 400 })
     }
 
     // Check if a review already exists for this move
@@ -64,6 +66,10 @@ export async function POST(request: NextRequest) {
     )
 
     if (existingReviews.documents.length > 0) {
+      // NOT translatable yet: `instant-move/page.tsx` branches on this exact
+      // sentence (`data.error === 'Review already submitted for this move'`).
+      // Translating it silently breaks that branch. Needs the error-code
+      // refactor (11.server-messages.md, S3) before it can be keyed.
       return NextResponse.json({ error: 'Review already submitted for this move' }, { status: 409 })
     }
 
@@ -72,7 +78,7 @@ export async function POST(request: NextRequest) {
       : move.moverProfileId?.$id
 
     if (!moverProfileId) {
-      return NextResponse.json({ error: 'No mover assigned to this move' }, { status: 400 })
+      return NextResponse.json({ error: t('errors:review.noMover') }, { status: 400 })
     }
 
     // The reviewed mover's auth id — `moverProfileId` is a mover_profiles $id,
@@ -149,6 +155,6 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     console.error('POST /api/reviews error:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: t('errors:generic.internal') }, { status: 500 })
   }
 }

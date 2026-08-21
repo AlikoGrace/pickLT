@@ -1,6 +1,7 @@
 'use client'
 
 import { useAuth } from '@/context/auth'
+import { Trans, useTranslation } from 'react-i18next'
 import Logo from '@/shared/Logo'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -26,6 +27,7 @@ import { HugeiconsIcon } from '@hugeicons/react'
 type Step = 'choice' | 'email' | 'phone-enter' | 'phone-verify'
 
 function LoginContent() {
+  const { t } = useTranslation()
   const searchParams = useSearchParams()
   const router = useRouter()
   const userType = searchParams.get('type') || 'client'
@@ -63,7 +65,7 @@ function LoginContent() {
     if (!isLoading && isAuthenticated && user?.phoneVerified) {
       // Block client accounts from accessing the mover portal
       if (isMover && user.userType === 'client') {
-        setError('Your account is registered as a client. Client accounts cannot access the mover portal. Please create a separate account to register as a mover.')
+        setError(t('auth:login.clientInMoverPortal.error'))
         logout()
         return
       }
@@ -84,7 +86,7 @@ function LoginContent() {
       <div className="flex min-h-[50vh] items-center justify-center">
         <div className="text-center space-y-2">
           <HugeiconsIcon icon={CheckmarkCircle02Icon} size={40} className="mx-auto text-green-500" />
-          <p className="text-sm text-neutral-500">Redirecting...</p>
+          <p className="text-sm text-neutral-500">{t('common:state.redirecting.label')}</p>
         </div>
       </div>
     )
@@ -103,11 +105,11 @@ function LoginContent() {
       // After login, auth context reloads. If phone not verified,
       // the useEffect above will push to phone-enter step.
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Login failed'
+      const message = err instanceof Error ? err.message : t('auth:login.failed.error')
       if (message.includes('Invalid credentials')) {
-        setError('Invalid email or password. Please try again.')
+        setError(t('auth:login.invalidCredentials.error'))
       } else if (message.includes('Rate limit')) {
-        setError('Too many attempts. Please wait a moment.')
+        setError(t('auth:login.rateLimited.error'))
       } else {
         setError(message)
       }
@@ -128,9 +130,9 @@ function LoginContent() {
       await sendPhoneVerification()
       setStep('phone-verify')
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Failed to send OTP'
+      const message = err instanceof Error ? err.message : t('auth:otp.sendFailed.error')
       if (message.includes('Invalid phone')) {
-        setError('Please enter a valid phone number with country code (e.g. +233241234567)')
+        setError(t('auth:phone.invalid.error'))
       } else {
         setError(message)
       }
@@ -148,7 +150,7 @@ function LoginContent() {
       // After verification, auth context reloads with phoneVerified = true
       // The useEffect will handle the redirect
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Invalid verification code'
+      const message = err instanceof Error ? err.message : t('auth:otp.invalid.error')
       setError(message)
     } finally {
       setIsSubmitting(false)
@@ -162,7 +164,7 @@ function LoginContent() {
       await sendPhoneVerification()
       setOtp('')
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Failed to resend code'
+      const message = err instanceof Error ? err.message : t('auth:otp.resendFailed.error')
       setError(message)
     } finally {
       setIsSubmitting(false)
@@ -172,7 +174,7 @@ function LoginContent() {
   if (isLoading) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center">
-        <p className="text-sm text-neutral-500">Loading...</p>
+        <p className="text-sm text-neutral-500">{t('common:state.loading.label')}</p>
       </div>
     )
   }
@@ -188,7 +190,7 @@ function LoginContent() {
         {redirectPath && step === 'choice' && (
           <div className="rounded-xl bg-primary-50 dark:bg-primary-900/20 border border-primary-100 dark:border-primary-800 p-4 text-center">
             <p className="text-sm text-primary-700 dark:text-primary-300">
-              Sign in to continue with your move. Your progress has been saved.
+              {t('web:login.resumeMove.helper')}
             </p>
           </div>
         )}
@@ -202,7 +204,7 @@ function LoginContent() {
                 : 'bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300'
             }`}
           >
-            {isMover ? '🚚 Mover Account' : '👤 Client Account'}
+            {isMover ? t('web:login.moverBadge.label') : t('web:login.clientBadge.label')}
           </span>
         </div>
 
@@ -217,7 +219,7 @@ function LoginContent() {
         {step === 'choice' && (
           <div className="space-y-3">
             <h2 className="text-center text-xl font-semibold text-neutral-900 dark:text-white">
-              Sign in to your account
+              {t('auth:login.title')}
             </h2>
 
             {/* Google OAuth */}
@@ -226,7 +228,7 @@ function LoginContent() {
               className="flex w-full items-center justify-center gap-3 rounded-xl border border-neutral-200 bg-white px-4 py-3 text-sm font-medium text-neutral-900 transition hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700"
             >
               <HugeiconsIcon icon={GoogleIcon} size={20} strokeWidth={1.5} />
-              Continue with Google
+              {t('auth:login.google.cta')}
             </button>
 
             <div className="relative my-4">
@@ -235,7 +237,7 @@ function LoginContent() {
               </div>
               <div className="relative flex justify-center text-sm">
                 <span className="bg-white px-4 text-neutral-500 dark:bg-neutral-900 dark:text-neutral-400">
-                  or
+                  {t('common:separator.or.label')}
                 </span>
               </div>
             </div>
@@ -246,11 +248,11 @@ function LoginContent() {
               className="flex w-full items-center justify-center gap-3 rounded-xl border border-neutral-200 bg-white px-4 py-3 text-sm font-medium text-neutral-900 transition hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700"
             >
               <HugeiconsIcon icon={Mail01Icon} size={20} strokeWidth={1.5} />
-              Sign in with Email
+              {t('auth:login.email.cta')}
             </button>
 
             <p className="text-center text-xs text-neutral-400 dark:text-neutral-500">
-              Phone verification will be required after sign-in
+              {t('web:login.phoneRequired.helper')}
             </p>
           </div>
         )}
@@ -263,17 +265,17 @@ function LoginContent() {
               className="flex items-center gap-1 text-sm text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200"
             >
               <HugeiconsIcon icon={ArrowLeft02Icon} size={16} strokeWidth={1.5} />
-              Back
+              {t('common:action.back.cta')}
             </button>
 
             <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">
-              Sign in with email
+              {t('auth:login.emailStep.title')}
             </h2>
 
             <form onSubmit={handleEmailLogin} className="space-y-4">
               <div>
                 <label htmlFor="email" className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                  Email address
+                  {t('auth:field.email.label')}
                 </label>
                 <input
                   id="email"
@@ -283,13 +285,13 @@ function LoginContent() {
                   required
                   autoComplete="email"
                   className="w-full rounded-xl border border-neutral-200 bg-white px-4 py-3 text-sm text-neutral-900 placeholder-neutral-400 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white dark:placeholder-neutral-500"
-                  placeholder="you@example.com"
+                  placeholder={t('auth:field.email.placeholder')}
                 />
               </div>
 
               <div>
                 <label htmlFor="password" className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                  Password
+                  {t('auth:field.password.label')}
                 </label>
                 <div className="relative">
                   <input
@@ -317,7 +319,7 @@ function LoginContent() {
                 disabled={isSubmitting}
                 className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary-600 px-4 py-3 text-sm font-medium text-white transition hover:bg-primary-700 disabled:opacity-50"
               >
-                {isSubmitting ? 'Signing in...' : 'Sign in'}
+                {isSubmitting ? t('auth:login.submitting.cta') : t('auth:login.submit.cta')}
                 {!isSubmitting && <HugeiconsIcon icon={ArrowRight01Icon} size={16} strokeWidth={1.5} />}
               </button>
             </form>
@@ -330,17 +332,17 @@ function LoginContent() {
             <div className="rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 p-4 text-center">
               <HugeiconsIcon icon={SmartPhone01Icon} size={24} className="mx-auto mb-2 text-amber-600" />
               <p className="text-sm font-medium text-amber-700 dark:text-amber-300">
-                Phone verification required
+                {t('auth:phone.required.title')}
               </p>
               <p className="mt-1 text-xs text-amber-600 dark:text-amber-400">
-                We need to verify your phone number to complete sign-in.
+                {t('web:login.phoneVerify.subtitle')}
               </p>
             </div>
 
             <form onSubmit={handleSetPhoneAndSendOTP} className="space-y-4">
               <div>
                 <label htmlFor="phone" className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                  Phone number (with country code)
+                  {t('auth:field.phone.label')}
                 </label>
                 <input
                   id="phone"
@@ -350,7 +352,7 @@ function LoginContent() {
                   required
                   autoComplete="tel"
                   className="w-full rounded-xl border border-neutral-200 bg-white px-4 py-3 text-sm text-neutral-900 placeholder-neutral-400 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white dark:placeholder-neutral-500"
-                  placeholder="+233 24 123 4567"
+                  placeholder={t('auth:field.phone.placeholder')}
                 />
               </div>
 
@@ -359,7 +361,7 @@ function LoginContent() {
                 disabled={isSubmitting}
                 className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary-600 px-4 py-3 text-sm font-medium text-white transition hover:bg-primary-700 disabled:opacity-50"
               >
-                {isSubmitting ? 'Sending code...' : 'Send verification code'}
+                {isSubmitting ? t('auth:otp.sending.cta') : t('auth:otp.send.cta')}
                 {!isSubmitting && <HugeiconsIcon icon={ArrowRight01Icon} size={16} strokeWidth={1.5} />}
               </button>
             </form>
@@ -374,15 +376,20 @@ function LoginContent() {
               className="flex items-center gap-1 text-sm text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200"
             >
               <HugeiconsIcon icon={ArrowLeft02Icon} size={16} strokeWidth={1.5} />
-              Change number
+              {t('auth:otp.changeNumber.cta')}
             </button>
 
             <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">
-              Enter verification code
+              {t('auth:otp.title')}
             </h2>
             <p className="text-sm text-neutral-500 dark:text-neutral-400">
-              We sent a 6-digit code to{' '}
-              <span className="font-medium text-neutral-700 dark:text-neutral-200">{phone}</span>
+              <Trans
+                i18nKey="auth:otp.sentTo.subtitle"
+                values={{ phone }}
+                components={[
+                  <span key="phone" className="font-medium text-neutral-700 dark:text-neutral-200" />,
+                ]}
+              />
             </p>
 
             <form onSubmit={handleVerifyOTP} className="space-y-4">
@@ -405,7 +412,7 @@ function LoginContent() {
                 disabled={isSubmitting || otp.length !== 6}
                 className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary-600 px-4 py-3 text-sm font-medium text-white transition hover:bg-primary-700 disabled:opacity-50"
               >
-                {isSubmitting ? 'Verifying...' : 'Verify & sign in'}
+                {isSubmitting ? t('auth:otp.verifying.cta') : t('web:login.verifyAndSignIn.cta')}
               </button>
 
               <button
@@ -414,7 +421,7 @@ function LoginContent() {
                 disabled={isSubmitting}
                 className="w-full text-center text-sm text-primary-600 hover:underline disabled:opacity-50 dark:text-primary-400"
               >
-                Resend code
+                {t('auth:otp.resend.cta')}
               </button>
             </form>
           </div>
@@ -424,7 +431,7 @@ function LoginContent() {
         {(step === 'choice' || step === 'email') && (
           <>
             <div className="block text-center text-sm text-neutral-500 dark:text-neutral-400">
-              {isMover ? 'Are you a client?' : 'Are you a mover?'}{' '}
+              {isMover ? t('web:login.switchToClient.label') : t('web:login.switchToMover.label')}{' '}
               <Link
                 href={
                   isMover
@@ -433,17 +440,17 @@ function LoginContent() {
                 }
                 className="font-medium text-primary-600 hover:underline"
               >
-                {isMover ? 'Login as Client' : 'Login as Mover'}
+                {isMover ? t('web:login.asClient.cta') : t('web:login.asMover.cta')}
               </Link>
             </div>
 
             <div className="block text-center text-sm text-neutral-700 dark:text-neutral-300">
-              Don&apos;t have an account?{' '}
+              {t('auth:login.noAccount.label')}{' '}
               <Link
                 href={`/signup?type=${userType}${redirectPath ? `&redirect=${encodeURIComponent(redirectPath)}` : ''}`}
                 className="font-medium underline"
               >
-                Sign up
+                {t('auth:signup.cta')}
               </Link>
             </div>
           </>
@@ -453,13 +460,18 @@ function LoginContent() {
   )
 }
 
+function LoginFallback() {
+  const { t } = useTranslation()
+  return (
+    <div className="flex min-h-[50vh] items-center justify-center">
+      {t('common:state.loading.label')}
+    </div>
+  )
+}
+
 export default function Page() {
   return (
-    <Suspense
-      fallback={
-        <div className="flex min-h-[50vh] items-center justify-center">Loading...</div>
-      }
-    >
+    <Suspense fallback={<LoginFallback />}>
       <LoginContent />
     </Suspense>
   )

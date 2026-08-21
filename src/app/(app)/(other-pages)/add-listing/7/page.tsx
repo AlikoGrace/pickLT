@@ -11,8 +11,17 @@ import Form from 'next/form'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import FormItem from '../FormItem'
+import { useTranslation } from 'react-i18next'
+
+/** Persisted payment values; `key` is the catalog segment (ids carry `_`). */
+const PAYMENT_METHODS = [
+  { value: 'cash', key: 'cash' },
+  { value: 'bank_transfer', key: 'bankTransfer' },
+  { value: 'card', key: 'card' },
+] as const
 
 const Page = () => {
+  const { t } = useTranslation()
   const router = useRouter()
   const [formErrors, setFormErrors] = useState<Record<string, string>>({})
   const { user } = useAuth()
@@ -42,15 +51,15 @@ const Page = () => {
     // Basic validation
     const errors: Record<string, string> = {}
     if (!contactInfo.fullName.trim()) {
-      errors.fullName = 'Please enter your full name'
+      errors.fullName = t('booking:contact.name.required.error')
     }
     if (!contactInfo.phoneNumber.trim()) {
-      errors.phoneNumber = 'Please enter your phone number'
+      errors.phoneNumber = t('booking:contact.phone.required.error')
     }
     if (!contactInfo.email.trim()) {
-      errors.email = 'Please enter your email address'
+      errors.email = t('booking:contact.email.required.error')
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactInfo.email)) {
-      errors.email = 'Please enter a valid email address'
+      errors.email = t('booking:contact.email.invalid.error')
     }
 
     if (Object.keys(errors).length > 0) {
@@ -65,9 +74,9 @@ const Page = () => {
   return (
     <>
       <div>
-        <h2 className="text-2xl font-semibold">Contact information</h2>
+        <h2 className="text-2xl font-semibold">{t('booking:contact.title')}</h2>
         <span className="mt-2 block text-neutral-500 dark:text-neutral-400">
-          We&apos;ll use this information to confirm your booking and coordinate the move.
+          {t('booking:contact.subtitle')}
         </span>
       </div>
 
@@ -75,10 +84,10 @@ const Page = () => {
 
       <Form id="add-listing-form" action={handleSubmitForm} className="flex flex-col gap-y-8">
         {/* Full Name */}
-        <FormItem label="Full name" desccription="Your first and last name">
+        <FormItem label={t('common:field.fullName.label')} desccription={t('booking:contact.name.helper')}>
           <Input
             name="fullName"
-            placeholder="e.g., Max Mustermann"
+            placeholder={t('booking:contact.name.placeholder')}
             value={contactInfo.fullName}
             onChange={(e) => updateContactInfo({ fullName: e.target.value })}
           />
@@ -88,11 +97,11 @@ const Page = () => {
         </FormItem>
 
         {/* Phone Number */}
-        <FormItem label="Phone number" desccription="We may call to confirm details">
+        <FormItem label={t('common:field.phone.label')} desccription={t('booking:contact.phone.helper')}>
           <Input
             name="phoneNumber"
             type="tel"
-            placeholder="e.g., +49 170 1234567"
+            placeholder={t('booking:contact.phone.placeholder')}
             value={contactInfo.phoneNumber}
             onChange={(e) => updateContactInfo({ phoneNumber: e.target.value })}
           />
@@ -102,11 +111,11 @@ const Page = () => {
         </FormItem>
 
         {/* Email */}
-        <FormItem label="Email address" desccription="For booking confirmation and updates">
+        <FormItem label={t('auth:field.email.label')} desccription={t('booking:contact.email.helper')}>
           <Input
             name="email"
             type="email"
-            placeholder="e.g., max@example.com"
+            placeholder={t('booking:contact.email.placeholder')}
             value={contactInfo.email}
             onChange={(e) => updateContactInfo({ email: e.target.value })}
           />
@@ -116,10 +125,10 @@ const Page = () => {
         </FormItem>
 
         {/* Notes for Movers */}
-        <FormItem label="Notes for movers (optional)" desccription="Any special instructions or requests">
+        <FormItem label={t('booking:contact.notes.label')} desccription={t('booking:contact.notes.helper')}>
           <Textarea
             name="notesForMovers"
-            placeholder="e.g., Please call 30 minutes before arrival, fragile items in bedroom..."
+            placeholder={t('booking:contact.notes.placeholder')}
             value={contactInfo.notesForMovers}
             onChange={(e) => updateContactInfo({ notesForMovers: e.target.value })}
             rows={3}
@@ -129,13 +138,13 @@ const Page = () => {
         <Divider />
 
         {/* Payment Method */}
-        <FormItem label="Preferred payment method" desccription="How would you like to pay for the move?">
+        <FormItem
+          label={t('booking:payment.method.label')}
+          desccription={t('booking:payment.method.helper')}
+        >
           <div className="flex flex-col gap-3">
-            {([
-              { value: 'cash', label: 'Cash' },
-              { value: 'bank_transfer', label: 'Bank transfer' },
-              { value: 'card', label: 'Card' },
-            ] as const).map((option) => (
+            {/* i18n-keys: booking.payment.cash.label, booking.payment.bankTransfer.label, booking.payment.card.label */}
+            {PAYMENT_METHODS.map((option) => (
               <label
                 key={option.value}
                 className={`flex items-center gap-3 cursor-pointer rounded-xl border p-4 transition-colors ${
@@ -152,7 +161,7 @@ const Page = () => {
                   onChange={() => setPaymentMethod(option.value)}
                   className="accent-primary-600"
                 />
-                <span className="text-sm font-medium">{option.label}</span>
+                <span className="text-sm font-medium">{t(`booking:payment.${option.key}.label`)}</span>
               </label>
             ))}
           </div>
@@ -169,7 +178,7 @@ const Page = () => {
                 checked={contactInfo.isBusinessMove}
                 onChange={(checked) => updateContactInfo({ isBusinessMove: checked })}
               />
-              <Label>This is a business move (I need an invoice with VAT)</Label>
+              <Label>{t('booking:business.isBusiness.label')}</Label>
             </CheckboxField>
           </CheckboxGroup>
         </Fieldset>
@@ -177,21 +186,21 @@ const Page = () => {
         {/* Conditional: Business Details */}
         {contactInfo.isBusinessMove && (
           <div className="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-2xl border border-neutral-200 dark:border-neutral-700 space-y-6">
-            <p className="text-lg font-semibold">Business details</p>
+            <p className="text-lg font-semibold">{t('booking:business.title')}</p>
             
-            <FormItem label="Company name">
+            <FormItem label={t('booking:business.company.label')}>
               <Input
                 name="companyName"
-                placeholder="e.g., Mustermann GmbH"
+                placeholder={t('booking:business.company.placeholder')}
                 value={contactInfo.companyName || ''}
                 onChange={(e) => updateContactInfo({ companyName: e.target.value })}
               />
             </FormItem>
 
-            <FormItem label="VAT ID (USt-IdNr.)" desccription="For EU business invoices">
+            <FormItem label={t('booking:business.vatId.label')} desccription={t('booking:business.vatId.helper')}>
               <Input
                 name="vatId"
-                placeholder="e.g., DE123456789"
+                placeholder={t('booking:business.vatId.placeholder')}
                 value={contactInfo.vatId || ''}
                 onChange={(e) => updateContactInfo({ vatId: e.target.value })}
               />

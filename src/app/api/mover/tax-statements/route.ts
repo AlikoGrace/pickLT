@@ -1,3 +1,4 @@
+import { getTranslations } from '@/lib/i18n-server'
 import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
@@ -10,9 +11,10 @@ import { NextResponse } from 'next/server'
  * the collection has document security, but this route must never rely on it.
  */
 export async function GET() {
+  const { t } = await getTranslations()
   try {
     const userId = await getSessionUserId()
-    if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    if (!userId) return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
 
     const { databases } = createAdminClient()
     const res = await databases.listDocuments(
@@ -23,6 +25,6 @@ export async function GET() {
     return NextResponse.json({ statements: res.documents })
   } catch (err) {
     console.error('[tax-statements] list failed', err)
-    return NextResponse.json({ error: 'Failed to load statements' }, { status: 500 })
+    return NextResponse.json({ error: t('errors:tax.listFailed') }, { status: 500 })
   }
 }

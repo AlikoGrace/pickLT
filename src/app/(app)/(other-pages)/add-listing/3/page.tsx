@@ -9,8 +9,13 @@ import Form from 'next/form'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import FormItem from '../FormItem'
+import { useTranslation } from 'react-i18next'
+
+/** Floor values persisted as-is; the caption is a locale ordinal (§ 5.5). */
+const NUMBERED_FLOORS = Array.from({ length: 12 }, (_, i) => i + 1)
 
 const Page = () => {
+  const { t } = useTranslation()
   const router = useRouter()
   const [formErrors, setFormErrors] = useState<Record<string, string>>({})
 
@@ -53,13 +58,13 @@ const Page = () => {
     // Basic validation
     const errors: Record<string, string> = {}
     if (!formObject['streetAddress'] || String(formObject['streetAddress']).trim() === '') {
-      errors.streetAddress = 'Please enter a street address'
+      errors.streetAddress = t('booking:streetAddress.required.error')
     }
     if (!formObject['floorLevel']) {
-      errors.floorLevel = 'Please select a floor level'
+      errors.floorLevel = t('booking:floorLevel.required.error')
     }
     if (!formObject['parkingSituation']) {
-      errors.parkingSituation = 'Please select a parking situation'
+      errors.parkingSituation = t('booking:parking.required.error')
     }
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors)
@@ -82,16 +87,19 @@ const Page = () => {
 
   return (
     <>
-      <h1 className="text-2xl font-semibold">Drop-Off Address</h1>
+      <h1 className="text-2xl font-semibold">{t('web:wizard.step3.title')}</h1>
       <Divider className="w-14!" />
 
       {/* FORM */}
       <Form id="add-listing-form" action={handleSubmitForm} className="flex flex-col gap-y-8">
         {/* Street Address */}
-        <FormItem label="Street address" desccription="Enter the full delivery street address">
+        <FormItem
+          label={t('booking:streetAddress.label')}
+          desccription={t('booking:streetAddress.dropoff.helper')}
+        >
           <AddressAutocompleteInput
             name="streetAddress"
-            placeholder="e.g., Berliner Straße 12"
+            placeholder={t('booking:streetAddress.dropoff.placeholder')}
             value={dropoffStreetAddress}
             onChangeText={setDropoffStreetAddress}
             proximity={dropoffCoordinates}
@@ -102,17 +110,23 @@ const Page = () => {
         </FormItem>
 
         {/* Apartment/Unit */}
-        <FormItem label="Apartment / Unit (optional)" desccription="Floor, apartment number, or unit name">
+        <FormItem
+          label={t('booking:apartmentUnit.label')}
+          desccription={t('booking:apartmentUnit.helper')}
+        >
           <Input
             name="apartmentUnit"
-            placeholder="e.g., 2nd floor, Apt 5"
+            placeholder={t('booking:apartmentUnit.dropoff.placeholder')}
             value={dropoffApartmentUnit}
             onChange={(e) => setDropoffApartmentUnit(e.target.value)}
           />
         </FormItem>
 
         {/* Floor Level */}
-        <FormItem label="Floor level" desccription="Which floor is the drop-off address on?">
+        <FormItem
+          label={t('booking:floorLevel.label')}
+          desccription={t('booking:floorLevel.dropoff.helper')}
+        >
           <Select
             name="floorLevel"
             defaultValue={dropoffFloorLevel ?? ''}
@@ -120,20 +134,14 @@ const Page = () => {
               setDropoffFloorLevel(e.target.value ? (e.target.value as FloorLevelKey) : null)
             }
           >
-            <option value="">Select floor</option>
-            <option value="ground">Ground floor</option>
-            <option value="1">1st floor</option>
-            <option value="2">2nd floor</option>
-            <option value="3">3rd floor</option>
-            <option value="4">4th floor</option>
-            <option value="5">5th floor</option>
-            <option value="6">6th floor</option>
-            <option value="7">7th floor</option>
-            <option value="8">8th floor</option>
-            <option value="9">9th floor</option>
-            <option value="10">10th floor</option>
-            <option value="11">11th floor</option>
-            <option value="12">12th floor</option>
+            <option value="">{t('booking:floorLevel.placeholder')}</option>
+            <option value="ground">{t('booking:floorLevel.ground.label')}</option>
+            {/* Ordinal morphology is `Intl.PluralRules`' job, not 12 catalog keys (§ 5.5). */}
+            {NUMBERED_FLOORS.map((n) => (
+              <option key={n} value={String(n)}>
+                {t('booking:floorLevel.numbered.label', { count: n, ordinal: true })}
+              </option>
+            ))}
           </Select>
           {formErrors.floorLevel && (
             <div className="text-sm text-red-600 mt-2">{formErrors.floorLevel}</div>
@@ -141,7 +149,10 @@ const Page = () => {
         </FormItem>
 
         {/* Elevator Available */}
-        <FormItem label="Elevator available?" desccription="Is there an elevator at the drop-off location?">
+        <FormItem
+          label={t('booking:elevator.question.label')}
+          desccription={t('booking:elevator.dropoff.helper')}
+        >
           <div className="flex items-center gap-6 mt-2">
             <label className="flex items-center gap-2 cursor-pointer">
               <input
@@ -152,7 +163,7 @@ const Page = () => {
                 onChange={() => setDropoffElevatorAvailable(true)}
                 className="w-4 h-4 text-primary-600"
               />
-              <span className="text-sm">Yes</span>
+              <span className="text-sm">{t('common:answer.yes.label')}</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input
@@ -163,7 +174,7 @@ const Page = () => {
                 onChange={() => setDropoffElevatorAvailable(false)}
                 className="w-4 h-4 text-primary-600"
               />
-              <span className="text-sm">No</span>
+              <span className="text-sm">{t('common:answer.no.label')}</span>
             </label>
           </div>
         </FormItem>
@@ -171,7 +182,7 @@ const Page = () => {
         <Divider />
 
         {/* Parking Situation */}
-        <FormItem label="Parking situation" desccription="Availability of parking near the building for the moving truck">
+        <FormItem label={t('booking:parking.label')} desccription={t('booking:parking.helper')}>
           <Select
             name="parkingSituation"
             defaultValue={dropoffParkingSituation ?? ''}
@@ -179,12 +190,12 @@ const Page = () => {
               setDropoffParkingSituation(e.target.value ? (e.target.value as DropoffParkingKey) : null)
             }
           >
-            <option value="">Select parking situation</option>
-            <option value="directly_in_front">Parking directly in front</option>
-            <option value="limited">Limited parking</option>
-            <option value="street_only">No parking / street only</option>
-            <option value="underground">Underground garage access</option>
-            <option value="loading_zone">Need loading zone (Haltverbot)</option>
+            <option value="">{t('booking:parking.placeholder')}</option>
+            <option value="directly_in_front">{t('booking:dropoffParking.directlyInFront.label')}</option>
+            <option value="limited">{t('booking:dropoffParking.limited.label')}</option>
+            <option value="street_only">{t('booking:dropoffParking.streetOnly.label')}</option>
+            <option value="underground">{t('booking:dropoffParking.underground.label')}</option>
+            <option value="loading_zone">{t('booking:dropoffParking.loadingZone.label')}</option>
           </Select>
           {formErrors.parkingSituation && (
             <div className="text-sm text-red-600 mt-2">{formErrors.parkingSituation}</div>
@@ -195,8 +206,8 @@ const Page = () => {
         {needsLoadingZone && (
           <div className="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-2xl border border-neutral-200 dark:border-neutral-700">
             <FormItem
-              label="Should we arrange the Haltverbot permit for the drop-off location?"
-              desccription="We'll handle the permit application with the local municipality"
+              label={t('booking:haltverbot.arrangeDropoff.label')}
+              desccription={t('booking:haltverbot.arrangeDropoff.helper')}
             >
               <div className="flex items-center gap-6 mt-2">
                 <label className="flex items-center gap-2 cursor-pointer">
@@ -208,7 +219,7 @@ const Page = () => {
                     onChange={() => setDropoffArrangeHaltverbot(true)}
                     className="w-4 h-4 text-primary-600"
                   />
-                  <span className="text-sm">Yes, arrange it for me</span>
+                  <span className="text-sm">{t('booking:haltverbot.arrangeYes.label')}</span>
                 </label>
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
@@ -219,7 +230,7 @@ const Page = () => {
                     onChange={() => setDropoffArrangeHaltverbot(false)}
                     className="w-4 h-4 text-primary-600"
                   />
-                  <span className="text-sm">No, I&apos;ll handle it</span>
+                  <span className="text-sm">{t('booking:haltverbot.arrangeNo.label')}</span>
                 </label>
               </div>
             </FormItem>

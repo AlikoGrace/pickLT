@@ -1,5 +1,45 @@
 {
+  "action": {
+    "cancel": {
+      "cta": "Cancel move"
+    },
+    "reschedule": {
+      "cta": "Reschedule Move"
+    }
+  },
+  "available": {
+    "withinRadiusCount_one": "{{count}} move within 30 km",
+    "withinRadiusCount_other": "{{count}} moves within 30 km"
+  },
+  "booking": {
+    "code": {
+      "label": "Booking code"
+    },
+    "title": "Booking Details"
+  },
+  "cancelConfirm": {
+    "cancelling": {
+      "cta": "Cancelling…"
+    },
+    "confirm": {
+      "cta": "Yes, cancel"
+    },
+    "keep": {
+      "cta": "Keep move"
+    },
+    "subtitle": "Your mover is already on the way. Are you sure you want to cancel? This action cannot be undone.",
+    "title": "Cancel this move?",
+    "window": "Are you sure you want to cancel this move? This cannot be undone."
+  },
   "card": {
+    "category": {
+      "instant": {
+        "label": "Instant"
+      },
+      "scheduled": {
+        "label": "Scheduled"
+      }
+    },
     "route": {
       "dropoffFallback": {
         "label": "Dropoff"
@@ -12,6 +52,15 @@
       "generic": {
         "label": "Move"
       }
+    },
+    "typeAndCategory": {
+      "subtitle": "{{type}} Move · {{category}}"
+    },
+    "typeAndDate": {
+      "subtitle": "{{type}} Move · {{date}}"
+    },
+    "typeCategoryDate": {
+      "subtitle": "{{type}} Move · {{category}} · {{date}}"
     }
   },
   "category": {
@@ -31,6 +80,9 @@
       "label": "Pending"
     }
   },
+  "createdAt": {
+    "label": "Created"
+  },
   "detail": {
     "additionalServices": {
       "title": "Additional services"
@@ -40,6 +92,12 @@
     },
     "arrivalWindow": {
       "label": "Arrival window"
+    },
+    "category": {
+      "label": "Category"
+    },
+    "client": {
+      "title": "Client"
     },
     "distance": {
       "label": "Distance"
@@ -62,6 +120,15 @@
     "itemLine": {
       "label": "{{qty}} x {{label}}"
     },
+    "itemLineReversed": {
+      "label": "{{label}} × {{qty}}"
+    },
+    "itemQuantity": {
+      "label": "{{label}} × {{qty}}"
+    },
+    "items": {
+      "label": "Items"
+    },
     "moveDate": {
       "label": "Move date"
     },
@@ -70,6 +137,9 @@
     },
     "moveItems": {
       "title": "Move Items"
+    },
+    "moveStatus": {
+      "label": "Move Status"
     },
     "packingService": {
       "label": "Packing service"
@@ -95,8 +165,19 @@
     "type": {
       "label": "Type"
     },
+    "typeAndCategory": {
+      "value": "{{type}} · {{category}}"
+    },
     "unit": {
       "label": "Unit"
+    }
+  },
+  "filter": {
+    "count": {
+      "badge": "({{value}})"
+    },
+    "empty": {
+      "helper": "Try selecting a different filter."
     }
   },
   "itemCount_one": "{{count}} item",
@@ -115,6 +196,31 @@
       "label": "Scheduled"
     }
   },
+  "moveCount_one": "{{count}} move",
+  "moveCount_other": "{{count}} moves",
+  "mover": {
+    "experience": {
+      "label": "Experience"
+    },
+    "languages": {
+      "label": "Languages"
+    },
+    "verified": {
+      "badge": "Verified mover"
+    }
+  },
+  "moverCount_one": "{{count}} mover",
+  "moverCount_other": "{{count}} movers",
+  "notify": {
+    "cancelledByClient": {
+      "body": "The client has cancelled this move.",
+      "title": "Move cancelled by client ❌"
+    },
+    "moverWithdrawn": {
+      "body": "The assigned mover has withdrawn from this move.",
+      "title": "Mover Withdrawn"
+    }
+  },
   "payment": {
     "method": {
       "label": "Payment method"
@@ -129,8 +235,17 @@
     "arrivedDestination": {
       "label": "Arrived"
     },
+    "assigned": {
+      "label": "Assigned"
+    },
     "awaitingPayment": {
       "label": "Awaiting Payment"
+    },
+    "booked": {
+      "label": "Booked"
+    },
+    "cancelled": {
+      "label": "Cancelled"
     },
     "cancelledByClient": {
       "label": "Cancelled"
@@ -141,14 +256,29 @@
     "completed": {
       "label": "Completed"
     },
+    "confirmedPayLater": {
+      "label": "Confirmed - Pay Later"
+    },
+    "currentStage": {
+      "label": "its current stage"
+    },
     "disputed": {
       "label": "Disputed"
     },
+    "draft": {
+      "label": "Draft"
+    },
+    "inProgress": {
+      "label": "In Progress"
+    },
     "inTransit": {
-      "label": "In Transit"
+      "label": "In transit"
     },
     "loading": {
       "label": "Loading"
+    },
+    "moverAccepted": {
+      "label": "Mover Accepted"
     },
     "moverArrived": {
       "label": "Mover Arrived"
@@ -165,8 +295,17 @@
     "pending": {
       "label": "Pending"
     },
+    "pendingPayment": {
+      "label": "Pending Payment"
+    },
+    "unknown": {
+      "label": "Unknown"
+    },
     "unloading": {
       "label": "Unloading"
     }
+  },
+  "summary": {
+    "title": "Summary"
   }
 }

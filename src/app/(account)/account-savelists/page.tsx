@@ -6,6 +6,7 @@ import { Divider } from '@/shared/divider'
 import { ArrowLeftIcon, TruckIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { useCallback, useEffect, useState, Suspense } from 'react'
+import { useTranslation } from 'react-i18next'
 import { client } from '@/lib/appwrite'
 
 /** Map database status → display‑level MoveStatus */
@@ -66,13 +67,26 @@ function docToStoredMove(doc: any): StoredMove {
   }
 }
 
-const STATUS_TABS = [
-  { label: 'All', value: undefined as MoveStatus | undefined },
-  { label: 'Pending', value: 'pending' as MoveStatus },
-  { label: 'In Progress', value: 'in_progress' as MoveStatus },
-  { label: 'Completed', value: 'completed' as MoveStatus },
-  { label: 'Cancelled', value: 'cancelled' as MoveStatus },
+/**
+ * Status filter tabs. Built from `t` at render time so a language change
+ * re-labels them; the `value` is the stored enum and is never translated.
+ */
+// i18n-keys: moves:category.all.label, moves:category.pending.label, moves:category.inProgress.label, moves:category.completed.label, moves:category.cancelled.label
+const STATUS_TABS: { key: string; value: MoveStatus | undefined }[] = [
+  { key: 'all', value: undefined },
+  { key: 'pending', value: 'pending' },
+  { key: 'inProgress', value: 'in_progress' },
+  { key: 'completed', value: 'completed' },
+  { key: 'cancelled', value: 'cancelled' },
 ]
+
+/** Stored status enum → the `moves:category.*` segment that labels it. */
+const STATUS_LABEL_KEY: Record<MoveStatus, string> = {
+  pending: 'pending',
+  in_progress: 'inProgress',
+  completed: 'completed',
+  cancelled: 'cancelled',
+}
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || ''
 const MOVES_COLLECTION = process.env.NEXT_PUBLIC_COLLECTION_MOVES || ''
@@ -86,6 +100,7 @@ export default function MyMovesPage() {
 }
 
 function MyMovesContent() {
+  const { t } = useTranslation()
   const [moves, setMoves] = useState<StoredMove[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -96,16 +111,16 @@ function MyMovesContent() {
       setLoading(true)
       setError(null)
       const res = await fetch('/api/moves?limit=100')
-      if (!res.ok) throw new Error('Failed to fetch moves')
+      if (!res.ok) throw new Error(t('errors:moves.fetchFailed'))
       const data = await res.json()
       const mapped = (data.documents ?? []).map(docToStoredMove)
       setMoves(mapped)
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Something went wrong')
+      setError(err instanceof Error ? err.message : t('errors:generic.title'))
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [t])
 
   useEffect(() => {
     fetchMoves()
@@ -136,11 +151,11 @@ function MyMovesContent() {
         className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors"
       >
         <ArrowLeftIcon className="h-4 w-4" />
-        Back to home
+        {t('common:action.backToHome.cta')}
       </Link>
-      <h1 className="text-3xl font-semibold">My Moves</h1>
+      <h1 className="text-3xl font-semibold">{t('web:myMoves.title')}</h1>
       <p className="mt-2 text-neutral-500 dark:text-neutral-400">
-        Track and manage all your moves in one place.
+        {t('web:myMoves.subtitle')}
       </p>
 
       <Divider className="my-8 w-14!" />
@@ -152,7 +167,7 @@ function MyMovesContent() {
           const count = tab.value ? counts[tab.value] ?? 0 : moves.length
           return (
             <button
-              key={tab.label}
+              key={tab.key}
               onClick={() => setActiveTab(tab.value)}
               className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
                 isActive
@@ -160,12 +175,12 @@ function MyMovesContent() {
                   : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700'
               }`}
             >
-              {tab.label}
+              {t(`moves:category.${tab.key}.label`)}
               {count > 0 && (
                 <span
                   className={`ml-1.5 text-xs ${isActive ? 'text-white/80' : 'text-neutral-400'}`}
                 >
-                  ({count})
+                  {t('moves:filter.count.badge', { value: count })}
                 </span>
               )}
             </button>
@@ -186,7 +201,7 @@ function MyMovesContent() {
             onClick={fetchMoves}
             className="px-6 py-2.5 bg-primary-600 text-white rounded-full text-sm font-medium hover:bg-primary-700 transition-colors"
           >
-            Retry
+            {t('common:action.retry.cta')}
           </button>
         </div>
       ) : filteredMoves.length > 0 ? (
@@ -199,19 +214,23 @@ function MyMovesContent() {
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <TruckIcon className="w-16 h-16 text-neutral-300 dark:text-neutral-600 mb-4" />
           <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-2">
-            {activeTab ? `No ${activeTab.replace('_', ' ')} moves` : 'No moves yet'}
+            {activeTab
+              ? t('web:myMoves.empty.filtered.title', {
+                  status: t(`moves:category.${STATUS_LABEL_KEY[activeTab]}.label`),
+                })
+              : t('web:myMoves.empty.title')}
           </h3>
           <p className="text-neutral-500 dark:text-neutral-400 mb-6 max-w-sm">
             {activeTab
-              ? 'Try selecting a different filter.'
-              : 'Book your first move and it will show up here.'}
+              ? t('moves:filter.empty.helper')
+              : t('web:myMoves.empty.subtitle')}
           </p>
           {!activeTab && (
             <Link
               href="/"
               className="px-6 py-2.5 bg-primary-600 text-white rounded-full text-sm font-medium hover:bg-primary-700 transition-colors"
             >
-              Book a Move
+              {t('web:myMoves.book.cta')}
             </Link>
           )}
         </div>

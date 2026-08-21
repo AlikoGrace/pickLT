@@ -3,6 +3,7 @@
 import { ReactNode, useEffect, useRef, useCallback } from 'react'
 import { useAuth } from '@/context/auth'
 import { client } from '@/lib/appwrite'
+import { useTranslation } from 'react-i18next'
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || ''
 const MOVES_COLLECTION = process.env.NEXT_PUBLIC_COLLECTION_MOVES || ''
@@ -152,6 +153,7 @@ interface NotificationWrapperProps {
 }
 
 export default function NotificationWrapper({ children, role }: NotificationWrapperProps) {
+  const { t } = useTranslation()
   const { user } = useAuth()
   const permissionRequested = useRef(false)
   const processedEvents = useRef<Set<string>>(new Set())
@@ -189,57 +191,57 @@ export default function NotificationWrapper({ children, role }: NotificationWrap
       if (payload.status === 'mover_accepted') {
         playChime(5000)
         showBrowserNotification(
-          'Mover accepted your move! ✅',
-          'A mover has accepted your scheduled move. They will start the route soon.',
+          t('track:notify.accepted.title'),
+          t('track:notify.accepted.body'),
         )
       } else if (payload.status === 'mover_arrived') {
         playChime(5000)
         showBrowserNotification(
-          'Your mover has arrived! 🚛',
-          `Your mover has arrived at the pickup location. Please meet them at the entrance.`,
+          t('track:notify.arrived.title'),
+          t('track:notify.arrived.body'),
         )
       } else if (payload.status === 'mover_en_route') {
         showBrowserNotification(
-          'Mover is on the way! 🚚',
-          'Your mover is heading to the pickup location.',
+          t('track:notify.enRoute.title'),
+          t('track:notify.enRoute.body'),
         )
       } else if (payload.status === 'loading') {
         showBrowserNotification(
-          'Loading in progress 📦',
-          'Your mover has started loading your items.',
+          t('track:notify.loading.title'),
+          t('track:notify.loading.body'),
         )
       } else if (payload.status === 'in_transit') {
         showBrowserNotification(
-          'On the move! 🛣️',
-          'Your items are being transported to the destination.',
+          t('track:notify.inTransit.title'),
+          t('track:notify.inTransit.body'),
         )
       } else if (payload.status === 'arrived_destination') {
         playChime(5000)
         showBrowserNotification(
-          'Arrived at destination! 🏠',
-          'Your mover has arrived at the drop-off location.',
+          t('track:notify.arrivedDestination.title'),
+          t('track:notify.arrivedDestination.body'),
         )
       } else if (payload.status === 'unloading') {
         showBrowserNotification(
-          'Unloading your items 📦',
-          'Your items are being unloaded at the destination.',
+          t('track:notify.unloading.title'),
+          t('track:notify.unloading.body'),
         )
       } else if (payload.status === 'awaiting_payment') {
         playChime(5000)
         showBrowserNotification(
-          'Payment due 💶',
-          'Your move is finishing up — please complete the payment.',
+          t('track:notify.paymentDue.title'),
+          t('track:notify.paymentDue.body'),
         )
       } else if (payload.status === 'completed') {
         showBrowserNotification(
-          'Move completed! ✅',
-          'Your move has been completed successfully.',
+          t('track:notify.completed.title'),
+          t('track:notify.completed.body'),
         )
       }
     })
 
     return unsubscribe
-  }, [user, role])
+  }, [user, role, t])
 
   // ─── Mover-side: listen for new move_requests ──────────
   const handleMoverRequestNotification = useCallback(() => {
@@ -261,14 +263,14 @@ export default function NotificationWrapper({ children, role }: NotificationWrap
 
       if (payload.status === 'pending') {
         showBrowserNotification(
-          'New move request! 📋',
-          'You have a new move request. Open the app to view details and accept.',
+          t('web:mover.notify.newRequest.title'),
+          t('web:mover.notify.newRequest.body'),
         )
       }
     })
 
     return unsubscribe
-  }, [user, role])
+  }, [user, role, t])
 
   // ─── Mover-side: listen for move status changes (scheduled moves) ──
   const handleMoverMoveNotification = useCallback(() => {
@@ -294,14 +296,14 @@ export default function NotificationWrapper({ children, role }: NotificationWrap
       if (payload.status === 'cancelled_by_client') {
         playChime(5000)
         showBrowserNotification(
-          'Move Cancelled by Client ❌',
-          'The client has cancelled this move.',
+          t('moves:notify.cancelledByClient.title'),
+          t('moves:notify.cancelledByClient.body'),
         )
       }
     })
 
     return unsubscribe
-  }, [user, role])
+  }, [user, role, t])
 
   useEffect(() => {
     const unsubs: (() => void)[] = []

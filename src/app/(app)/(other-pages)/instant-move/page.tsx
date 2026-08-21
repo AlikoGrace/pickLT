@@ -119,7 +119,7 @@ const InstantMovePage = () => {
         const res = await fetch(`/api/moves/${activeMoveId}/full`)
         if (!res.ok) {
           const err = await res.json().catch(() => ({}))
-          throw new Error(err.error || 'Failed to load move data')
+          throw new Error(err.error || t('errors:move.loadFailed'))
         }
         const data = await res.json()
         setMoveData(data.move as MoveData)
@@ -127,7 +127,7 @@ const InstantMovePage = () => {
         console.log(data)
       } catch (err) {
         console.error('Failed to fetch move data:', err)
-        setLoadError(err instanceof Error ? err.message : 'Failed to load move')
+        setLoadError(err instanceof Error ? err.message : t('errors:move.loadFailed'))
       } finally {
         setIsLoadingData(false)
       }
@@ -385,7 +385,7 @@ const InstantMovePage = () => {
               setPhase('completed')
               break
             case 'cancelled_by_mover':
-              alert('The mover has cancelled. Searching for another mover...')
+              alert(t('track:mover.cancelled.searching'))
               router.push('/instant-move/select-mover')
               break
             case 'cancelled_by_client':
@@ -466,7 +466,7 @@ const InstantMovePage = () => {
         // Backend refused (e.g. items already in transit). Surface the reason
         // and keep the user on the tracking screen — never fake a cancel.
         const data = await res.json().catch(() => ({}))
-        setCancelError(data.error || 'Couldn’t cancel this move. Please try again.')
+        setCancelError(data.error || t('errors:move.cancelFailed'))
         return
       }
 
@@ -479,7 +479,7 @@ const InstantMovePage = () => {
       router.push('/')
     } catch (err) {
       console.error('Cancel move error:', err)
-      setCancelError('Couldn’t reach the server. Check your connection and try again.')
+      setCancelError(t('errors:network.unreachable'))
     } finally {
       setIsCancelling(false)
     }
@@ -489,12 +489,12 @@ const InstantMovePage = () => {
     if (mover?.phone) {
       window.open(`tel:${mover.phone}`)
     } else {
-      alert('Mover phone number not available')
+      alert(t('track:mover.noPhone.error'))
     }
   }
 
   const handleMessageMover = () => {
-    alert('Chat feature coming soon!')
+    alert(t('web:instant.chat.comingSoon'))
   }
 
   // ─── Payment confirmation state ───────────────────────
@@ -532,10 +532,10 @@ const InstantMovePage = () => {
           setPhase('completed')
         }
       } else {
-        alert(data.error || 'Failed to confirm payment')
+        alert(data.error || t('errors:payment.confirmFailed'))
       }
     } catch {
-      alert('Failed to confirm payment')
+      alert(t('errors:payment.confirmFailed'))
     } finally {
       setIsConfirmingPayment(false)
     }
@@ -564,14 +564,17 @@ const InstantMovePage = () => {
         setReviewSubmitted(true)
       } else {
         const data = await res.json()
+        // NOT a t() call on purpose: this compares the server's response body,
+        // which is emitted in English by the API route. Translating it here
+        // would silently break the branch in seven locales.
         if (data.error === 'Review already submitted for this move') {
           setReviewSubmitted(true)
         } else {
-          alert(data.error || 'Failed to submit review')
+          alert(data.error || t('errors:review.submitFailed'))
         }
       }
     } catch {
-      alert('Failed to submit review')
+      alert(t('errors:review.submitFailed'))
     } finally {
       setIsSubmittingReview(false)
     }
@@ -591,8 +594,8 @@ const InstantMovePage = () => {
 
   const estimatedPrice = moveData?.estimatedPrice || 0
   const itemCount = moveData?.totalItemCount || 0
-  const pickupDisplay = moveData?.pickupLocation || 'Pickup location'
-  const dropoffDisplay = moveData?.dropoffLocation || 'Drop-off location'
+  const pickupDisplay = moveData?.pickupLocation || t('booking:pickup.label')
+  const dropoffDisplay = moveData?.dropoffLocation || t('booking:dropoff.label')
 
   const renderMoverCard = () => {
     // Show waiting state while mover hasn't accepted yet
@@ -604,9 +607,9 @@ const InstantMovePage = () => {
               <div className="w-6 h-6 border-2 border-primary-600 border-t-transparent rounded-full animate-spin" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-neutral-900 dark:text-white">Waiting for mover to accept</p>
+              <p className="text-sm font-semibold text-neutral-900 dark:text-white">{t('track:phase.awaitingAccept.title')}</p>
               <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-                Your request has been sent. The mover will respond shortly.
+                {t('track:phase.awaitingAccept.subtitle')}
               </p>
             </div>
           </div>
@@ -638,19 +641,25 @@ const InstantMovePage = () => {
               <div className="flex items-center gap-1.5 mt-0.5">
                 <HugeiconsIcon icon={StarIcon} size={12} strokeWidth={1.5} className="text-amber-500 fill-current" />
                 <span className="text-xs font-medium text-neutral-900 dark:text-white">{mover.rating}</span>
-                <span className="text-xs text-neutral-500 dark:text-neutral-400">· {mover.totalMoves} moves</span>
+                <span className="text-xs text-neutral-500 dark:text-neutral-400">
+                  · {t('moves:moveCount', { count: mover.totalMoves })}
+                </span>
               </div>
             </div>
             {phase === 'mover_arriving' && (
               <div className="text-right shrink-0">
-                <p className="text-lg font-semibold text-neutral-900 dark:text-white">{moverEtaMinutes} min</p>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400">{moverDistanceKm.toFixed(1)} km away</p>
+                <p className="text-lg font-semibold text-neutral-900 dark:text-white">
+                  {t('track:eta.minutes.label', { count: moverEtaMinutes })}
+                </p>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                  {t('track:eta.distanceAway.label', { distance: moverDistanceKm.toFixed(1) })}
+                </p>
               </div>
             )}
             {phase === 'mover_arrived' && (
               <div className="text-right shrink-0">
                 <p className="text-lg font-semibold text-primary-600">{formatMoney(estimatedPrice, { compact: true })}</p>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400">Estimated price</p>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">{t('booking:price.estimated.label')}</p>
               </div>
             )}
             {phase === 'loading' && (
@@ -660,14 +669,14 @@ const InstantMovePage = () => {
             )}
             {phase === 'in_transit' && (
               <div className="text-right shrink-0">
-                <p className="text-lg font-semibold text-primary-600">In transit</p>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400">To destination</p>
+                <p className="text-lg font-semibold text-primary-600">{t('moves:status.inTransit.label')}</p>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">{t('track:phase.inTransit.subtitle')}</p>
               </div>
             )}
             {(phase === 'arrived_destination' || phase === 'unloading' || phase === 'awaiting_payment') && (
               <div className="text-right shrink-0">
                 <p className="text-lg font-semibold text-primary-600">{formatMoney(moveData?.finalPrice || estimatedPrice, { compact: true })}</p>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400">Final price</p>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">{t('booking:price.final.label')}</p>
               </div>
             )}
           </div>
@@ -678,8 +687,8 @@ const InstantMovePage = () => {
             <div className="flex items-center gap-2">
               <HugeiconsIcon icon={CheckmarkCircle02Icon} size={20} strokeWidth={1.5} className="text-green-500 shrink-0" />
               <div>
-                <p className="text-sm font-semibold text-neutral-900 dark:text-white">Your mover has arrived!</p>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400">Meet them at the pickup location</p>
+                <p className="text-sm font-semibold text-neutral-900 dark:text-white">{t('track:phase.arrived.title')}</p>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">{t('track:phase.arrived.subtitle')}</p>
               </div>
             </div>
           </div>
@@ -690,8 +699,8 @@ const InstantMovePage = () => {
             <div className="flex items-center gap-2">
               <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin shrink-0" />
               <div>
-                <p className="text-sm font-semibold text-neutral-900 dark:text-white">Loading your items</p>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400">Your items are being loaded onto the vehicle</p>
+                <p className="text-sm font-semibold text-neutral-900 dark:text-white">{t('track:phase.loading.title')}</p>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">{t('track:phase.loading.subtitle')}</p>
               </div>
             </div>
           </div>
@@ -702,8 +711,8 @@ const InstantMovePage = () => {
             <div className="flex items-center gap-2">
               <HugeiconsIcon icon={DeliveryTruck01Icon} size={20} strokeWidth={1.5} className="text-primary-600 shrink-0" />
               <div>
-                <p className="text-sm font-semibold text-neutral-900 dark:text-white">On the way to destination</p>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400">Your items are being transported</p>
+                <p className="text-sm font-semibold text-neutral-900 dark:text-white">{t('track:phase.inTransit.title')}</p>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">{t('track:phase.inTransit.body')}</p>
               </div>
             </div>
           </div>
@@ -714,8 +723,8 @@ const InstantMovePage = () => {
             <div className="flex items-center gap-2">
               <HugeiconsIcon icon={CheckmarkCircle02Icon} size={20} strokeWidth={1.5} className="text-green-500 shrink-0" />
               <div>
-                <p className="text-sm font-semibold text-neutral-900 dark:text-white">Arrived at destination!</p>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400">Your mover has reached the drop-off location</p>
+                <p className="text-sm font-semibold text-neutral-900 dark:text-white">{t('track:phase.arrivedDestination.title')}</p>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">{t('track:phase.arrivedDestination.subtitle')}</p>
               </div>
             </div>
           </div>
@@ -726,8 +735,8 @@ const InstantMovePage = () => {
             <div className="flex items-center gap-2">
               <div className="w-5 h-5 border-2 border-amber-500 border-t-transparent rounded-full animate-spin shrink-0" />
               <div>
-                <p className="text-sm font-semibold text-neutral-900 dark:text-white">Unloading your items</p>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400">Your items are being unloaded at the destination</p>
+                <p className="text-sm font-semibold text-neutral-900 dark:text-white">{t('track:phase.unloading.title')}</p>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">{t('track:phase.unloading.subtitle')}</p>
               </div>
             </div>
           </div>
@@ -738,8 +747,8 @@ const InstantMovePage = () => {
             <div className="flex items-center gap-2">
               <HugeiconsIcon icon={CheckmarkCircle02Icon} size={20} strokeWidth={1.5} className="text-green-500 shrink-0" />
               <div>
-                <p className="text-sm font-semibold text-neutral-900 dark:text-white">Move completed — Payment required</p>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400">Please pay the mover and confirm below</p>
+                <p className="text-sm font-semibold text-neutral-900 dark:text-white">{t('track:phase.awaitingPayment.title')}</p>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">{t('track:phase.awaitingPayment.subtitle')}</p>
               </div>
             </div>
           </div>
@@ -777,11 +786,11 @@ const InstantMovePage = () => {
           <div className="px-4 pb-4 flex gap-2">
             <ButtonSecondary onClick={handleCallMover} className="flex-1 !py-2">
               <HugeiconsIcon icon={Call02Icon} size={16} strokeWidth={1.5} className="mr-1.5" />
-              Call
+              {t('common:action.call.cta')}
             </ButtonSecondary>
             <ButtonSecondary onClick={handleMessageMover} className="flex-1 !py-2">
               <HugeiconsIcon icon={Message01Icon} size={16} strokeWidth={1.5} className="mr-1.5" />
-              Message
+              {t('common:action.message.cta')}
             </ButtonSecondary>
           </div>
         )}
@@ -799,11 +808,11 @@ const InstantMovePage = () => {
         </div>
         <div className="flex-1 min-w-0 space-y-2">
           <div>
-            <p className="text-[10px] text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Pickup</p>
+            <p className="text-[10px] text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">{t('booking:pickup.short.label')}</p>
             <p className="text-xs font-medium text-neutral-900 dark:text-white truncate">{pickupDisplay}</p>
           </div>
           <div>
-            <p className="text-[10px] text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Drop-off</p>
+            <p className="text-[10px] text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">{t('booking:dropoff.short.label')}</p>
             <p className="text-xs font-medium text-neutral-900 dark:text-white truncate">{dropoffDisplay}</p>
           </div>
         </div>
@@ -822,7 +831,7 @@ const InstantMovePage = () => {
       <div className="fixed inset-0 bg-white dark:bg-neutral-900 flex items-center justify-center p-4">
         <div className="text-center">
           <Logo className="w-24 mx-auto mb-6" />
-          <p className="text-neutral-500 dark:text-neutral-400">Loading move details...</p>
+          <p className="text-neutral-500 dark:text-neutral-400">{t('web:instant.loading.label')}</p>
         </div>
       </div>
     )
@@ -834,10 +843,10 @@ const InstantMovePage = () => {
         <div className="text-center max-w-sm">
           <Logo className="w-24 mx-auto mb-6" />
           <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-2">
-            {loadError || 'Move data not found'}
+            {loadError || t('errors:move.notFound')}
           </h2>
-          <p className="text-neutral-500 dark:text-neutral-400 mb-6">Could not load move details from the server.</p>
-          <ButtonPrimary href="/" className="w-full">Go home</ButtonPrimary>
+          <p className="text-neutral-500 dark:text-neutral-400 mb-6">{t('web:instant.loadFailed.subtitle')}</p>
+          <ButtonPrimary href="/" className="w-full">{t('common:action.goHome.cta')}</ButtonPrimary>
         </div>
       </div>
     )
@@ -848,9 +857,9 @@ const InstantMovePage = () => {
       <div className="fixed inset-0 bg-white dark:bg-neutral-900 flex items-center justify-center p-4">
         <div className="text-center max-w-sm">
           <Logo className="w-24 mx-auto mb-6" />
-          <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-2">Missing location details</h2>
-          <p className="text-neutral-500 dark:text-neutral-400 mb-6">Please select your pickup and drop-off locations to continue.</p>
-          <ButtonPrimary href="/move-choice" className="w-full">Go back</ButtonPrimary>
+          <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-2">{t('web:instant.missingLocations.title')}</h2>
+          <p className="text-neutral-500 dark:text-neutral-400 mb-6">{t('web:instant.missingLocations.subtitle')}</p>
+          <ButtonPrimary href="/move-choice" className="w-full">{t('common:action.goBack.cta')}</ButtonPrimary>
         </div>
       </div>
     )
@@ -881,41 +890,41 @@ const InstantMovePage = () => {
 
           {/* Cancel allowed during mover_arriving, mover_arrived, and loading */}
           {(phase === 'mover_arriving' || phase === 'mover_arrived' || phase === 'loading') && (
-            <ButtonSecondary onClick={confirmCancel} className="w-full shadow-lg">Cancel move</ButtonSecondary>
+            <ButtonSecondary onClick={confirmCancel} className="w-full shadow-lg">{t('moves:action.cancel.cta')}</ButtonSecondary>
           )}
 
           {/* Phase: mover_arrived — wait for mover to start loading */}
           {phase === 'mover_arrived' && (
             <div className="rounded-xl bg-primary-50 dark:bg-primary-900/20 p-3 text-center">
-              <p className="text-sm text-primary-700 dark:text-primary-300">Your mover will begin loading soon</p>
+              <p className="text-sm text-primary-700 dark:text-primary-300">{t('track:hint.loadingSoon')}</p>
             </div>
           )}
 
           {/* Phase: loading — items being loaded */}
           {phase === 'loading' && (
             <div className="rounded-xl bg-blue-50 dark:bg-blue-900/20 p-3 text-center">
-              <p className="text-sm text-blue-700 dark:text-blue-300">Your items are being loaded…</p>
+              <p className="text-sm text-blue-700 dark:text-blue-300">{t('track:hint.loading')}</p>
             </div>
           )}
 
           {/* Phase: in_transit — driving to destination */}
           {phase === 'in_transit' && (
             <div className="rounded-xl bg-primary-50 dark:bg-primary-900/20 p-3 text-center">
-              <p className="text-sm text-primary-700 dark:text-primary-300">Driving to your destination…</p>
+              <p className="text-sm text-primary-700 dark:text-primary-300">{t('track:hint.inTransit')}</p>
             </div>
           )}
 
           {/* Phase: arrived_destination */}
           {phase === 'arrived_destination' && (
             <div className="rounded-xl bg-green-50 dark:bg-green-900/20 p-3 text-center">
-              <p className="text-sm text-green-700 dark:text-green-300">Arrived! Unloading will begin shortly.</p>
+              <p className="text-sm text-green-700 dark:text-green-300">{t('track:hint.arrivedDestination')}</p>
             </div>
           )}
 
           {/* Phase: unloading */}
           {phase === 'unloading' && (
             <div className="rounded-xl bg-amber-50 dark:bg-amber-900/20 p-3 text-center">
-              <p className="text-sm text-amber-700 dark:text-amber-300">Your items are being unloaded…</p>
+              <p className="text-sm text-amber-700 dark:text-amber-300">{t('track:hint.unloading')}</p>
             </div>
           )}
 
@@ -928,12 +937,11 @@ const InstantMovePage = () => {
                 <p className="text-lg font-bold text-neutral-900 dark:text-white">
                   {formatMoney(paymentAmount || moveData?.finalPrice || estimatedPrice, { compact: true })}
                 </p>
-                <p className="text-sm text-neutral-500 dark:text-neutral-400">Amount to pay by card</p>
+                <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('booking:payment.amountCard.label')}</p>
               </div>
               <div className="rounded-xl bg-blue-50 dark:bg-blue-900/20 p-3">
                 <p className="text-xs text-blue-700 dark:text-blue-300 text-center">
-                  This move is paid by card. Open the PickLT app to complete the payment —
-                  your saved card is charged there, nothing is due in cash.
+                  {t('web:instant.cardInApp.helper')}
                 </p>
               </div>
             </div>
@@ -944,12 +952,12 @@ const InstantMovePage = () => {
                 <p className="text-lg font-bold text-neutral-900 dark:text-white">
                   {formatMoney(paymentAmount || moveData?.finalPrice || estimatedPrice, { compact: true })}
                 </p>
-                <p className="text-sm text-neutral-500 dark:text-neutral-400">Amount to pay</p>
+                <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('booking:payment.amount.label')}</p>
               </div>
               <div className="rounded-xl bg-amber-50 dark:bg-amber-900/20 p-3">
                 <p className="text-xs text-amber-700 dark:text-amber-300 text-center">
-                  Please pay the mover directly (cash or transfer), then tap &quot;I Have Paid&quot; below.
-                  The mover must also confirm receipt before the move is marked complete.
+                  {t('booking:payment.cashHandshake.helper')}{' '}
+                  {t('booking:payment.dualConfirm.helper')}
                 </p>
               </div>
               <ButtonPrimary
@@ -957,7 +965,7 @@ const InstantMovePage = () => {
                 disabled={isConfirmingPayment}
                 className="w-full shadow-lg"
               >
-                {isConfirmingPayment ? 'Confirming…' : 'I Have Paid'}
+                {isConfirmingPayment ? t('booking:payment.confirming.cta') : t('booking:payment.iHavePaid.cta')}
               </ButtonPrimary>
             </div>
           )}
@@ -968,7 +976,7 @@ const InstantMovePage = () => {
               <div className="flex items-center justify-center gap-2">
                 <HugeiconsIcon icon={CheckmarkCircle02Icon} size={20} strokeWidth={1.5} className="text-green-500" />
                 <p className="text-sm font-medium text-neutral-900 dark:text-white">
-                  Payment confirmed! Waiting for mover to confirm receipt…
+                  {t('booking:payment.awaitingMover.label')}
                 </p>
               </div>
             </div>
@@ -981,8 +989,12 @@ const InstantMovePage = () => {
                 <div className="w-12 h-12 mx-auto mb-2 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
                   <HugeiconsIcon icon={CheckmarkCircle02Icon} size={24} strokeWidth={1.5} className="text-green-500" />
                 </div>
-                <p className="text-lg font-bold text-neutral-900 dark:text-white">Move Completed!</p>
-                <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">How was your experience with {mover?.name || 'the mover'}?</p>
+                <p className="text-lg font-bold text-neutral-900 dark:text-white">{t('track:phase.completed.title')}</p>
+                <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
+                  {t('web:instant.review.prompt', {
+                    name: mover?.name || t('common:person.theMover'),
+                  })}
+                </p>
               </div>
               {/* Star rating */}
               <div className="flex justify-center gap-2">
@@ -991,6 +1003,7 @@ const InstantMovePage = () => {
                     key={star}
                     onClick={() => setReviewRating(star)}
                     className="transition-transform hover:scale-110"
+                    aria-label={t('web:instant.review.star.a11y', { count: star })}
                   >
                     <HugeiconsIcon
                       icon={StarIcon}
@@ -1005,20 +1018,20 @@ const InstantMovePage = () => {
               <textarea
                 value={reviewComment}
                 onChange={(e) => setReviewComment(e.target.value)}
-                placeholder="Add a comment (optional)"
+                placeholder={t('web:instant.review.comment.placeholder')}
                 className="w-full rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 p-3 text-sm text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
                 rows={3}
               />
               <div className="flex gap-3">
                 <ButtonSecondary onClick={handleGoHome} className="flex-1">
-                  Skip
+                  {t('common:action.skip.cta')}
                 </ButtonSecondary>
                 <ButtonPrimary
                   onClick={handleSubmitReview}
                   disabled={reviewRating === 0 || isSubmittingReview}
                   className="flex-1"
                 >
-                  {isSubmittingReview ? 'Submitting…' : 'Submit Review'}
+                  {isSubmittingReview ? t('common:state.submitting.label') : t('web:instant.review.submit.cta')}
                 </ButtonPrimary>
               </div>
             </div>
@@ -1031,11 +1044,11 @@ const InstantMovePage = () => {
                 <div className="w-12 h-12 mx-auto mb-2 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
                   <HugeiconsIcon icon={CheckmarkCircle02Icon} size={24} strokeWidth={1.5} className="text-green-500" />
                 </div>
-                <p className="text-lg font-bold text-neutral-900 dark:text-white">Thank you!</p>
-                <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">Your review has been submitted.</p>
+                <p className="text-lg font-bold text-neutral-900 dark:text-white">{t('web:instant.review.thanks.title')}</p>
+                <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">{t('web:instant.review.thanks.subtitle')}</p>
               </div>
               <ButtonPrimary onClick={handleGoHome} className="w-full">
-                Back to Home
+                {t('common:action.backToHome.cta')}
               </ButtonPrimary>
             </div>
           )}
@@ -1048,9 +1061,9 @@ const InstantMovePage = () => {
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30">
               <HugeiconsIcon icon={Cancel01Icon} size={24} strokeWidth={1.5} className="text-red-600 dark:text-red-400" />
             </div>
-            <h3 className="text-lg font-semibold text-neutral-900 dark:text-white">Cancel this move?</h3>
+            <h3 className="text-lg font-semibold text-neutral-900 dark:text-white">{t('moves:cancelConfirm.title')}</h3>
             <p className="mt-1.5 text-sm text-neutral-500 dark:text-neutral-400">
-              Your mover is already on the way. Are you sure you want to cancel? This action cannot be undone.
+              {t('moves:cancelConfirm.subtitle')}
             </p>
             {cancelError && (
               <p className="mt-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
@@ -1058,14 +1071,14 @@ const InstantMovePage = () => {
               </p>
             )}
             <div className="mt-6 flex gap-3">
-              <ButtonSecondary onClick={() => { setShowCancelConfirm(false); setCancelError(null) }} disabled={isCancelling} className="flex-1">Keep move</ButtonSecondary>
+              <ButtonSecondary onClick={() => { setShowCancelConfirm(false); setCancelError(null) }} disabled={isCancelling} className="flex-1">{t('moves:cancelConfirm.keep.cta')}</ButtonSecondary>
               <button
                 type="button"
                 onClick={handleCancel}
                 disabled={isCancelling}
                 className="flex-1 rounded-xl bg-red-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-red-700 active:scale-[.98] disabled:opacity-60"
               >
-                {isCancelling ? 'Cancelling…' : 'Yes, cancel'}
+                {isCancelling ? t('moves:cancelConfirm.cancelling.cta') : t('moves:cancelConfirm.confirm.cta')}
               </button>
             </div>
           </div>
@@ -1077,7 +1090,11 @@ const InstantMovePage = () => {
         onClose={() => setLocationPickerOpen(false)}
         onSelect={handleLocationPicked}
         initialCoordinates={editingLocationType === 'pickup' ? pickupCoordinates : dropoffCoordinates}
-        label={editingLocationType === 'pickup' ? 'Edit pickup location' : 'Edit drop-off location'}
+        label={
+          editingLocationType === 'pickup'
+            ? t('booking:pickup.edit.a11y')
+            : t('booking:dropoff.edit.a11y')
+        }
       />
     </div>
   )

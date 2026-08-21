@@ -11,9 +11,14 @@ import {
 } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+
+/** Stored slugs. Persisted verbatim; labels are looked up, never derived back. */
+const CREW_ROLE_SLUGS: Array<'helper' | 'driver'> = ['helper', 'driver']
 
 const MyCrewPage = () => {
   const { crewMembers, addCrewMember, removeCrewMember, updateCrewMember } = useAuth()
+  const { t } = useTranslation()
   const [isAddingMember, setIsAddingMember] = useState(false)
   const [editingMember, setEditingMember] = useState<CrewMember | null>(null)
   const [viewingMember, setViewingMember] = useState<CrewMember | null>(null)
@@ -97,10 +102,10 @@ const MyCrewPage = () => {
     }
   }
 
-  const roles: Array<{ value: 'driver' | 'helper'; label: string }> = [
-    { value: 'helper', label: 'Helper' },
-    { value: 'driver', label: 'Driver' },
-  ]
+  // i18n-keys: booking:crewRole.helper.label, booking:crewRole.driver.label
+  const roleLabel = (slug: string) => t(`booking:crewRole.${slug}.label`)
+
+  const roles = CREW_ROLE_SLUGS.map((value) => ({ value, label: roleLabel(value) }))
 
   return (
     <div className="p-4 lg:p-6 pb-24 lg:pb-6 max-w-3xl mx-auto">
@@ -108,10 +113,10 @@ const MyCrewPage = () => {
       <div className="flex flex-wrap items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
-            My Crew
+            {t('web:mover.crew.title')}
           </h1>
           <p className="text-neutral-500 dark:text-neutral-400">
-            Manage your team members
+            {t('web:mover.crew.subtitle')}
           </p>
         </div>
         <button
@@ -119,7 +124,7 @@ const MyCrewPage = () => {
           className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-full text-sm font-medium hover:bg-primary-700 transition-colors"
         >
           <PlusIcon className="w-4 h-4" />
-          Add Member
+          {t('web:mover.crew.addMember.cta')}
         </button>
       </div>
 
@@ -127,12 +132,12 @@ const MyCrewPage = () => {
       {isAddingMember && (
         <div className="bg-white dark:bg-neutral-800 rounded-2xl p-4 shadow-sm mb-6">
           <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
-            Add New Crew Member
+            {t('web:mover.crew.addModal.title')}
           </h3>
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                Name
+                {t('common:field.name.label')}
               </label>
               <input
                 type="text"
@@ -140,13 +145,13 @@ const MyCrewPage = () => {
                 onChange={(e) =>
                   setNewMember({ ...newMember, name: e.target.value })
                 }
-                placeholder="Enter name"
+                placeholder={t('common:field.name.placeholder')}
                 className="w-full px-4 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-transparent focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none"
               />
             </div>
             <div>
               <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                Phone Number
+                {t('common:field.phone.label')}
               </label>
               <input
                 type="tel"
@@ -154,13 +159,13 @@ const MyCrewPage = () => {
                 onChange={(e) =>
                   setNewMember({ ...newMember, phone: e.target.value })
                 }
-                placeholder="Enter phone number"
+                placeholder={t('common:field.phone.placeholder')}
                 className="w-full px-4 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-transparent focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none"
               />
             </div>
             <div>
               <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                Role
+                {t('web:mover.crew.role.label')}
               </label>
               <select
                 value={newMember.role}
@@ -181,14 +186,14 @@ const MyCrewPage = () => {
                 onClick={() => setIsAddingMember(false)}
                 className="flex-1 px-4 py-2 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-full text-sm font-medium hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
               >
-                Cancel
+                {t('common:action.cancel.cta')}
               </button>
               <button
                 onClick={handleAddMember}
                 disabled={isSaving}
                 className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-full text-sm font-medium hover:bg-primary-700 transition-colors disabled:opacity-50"
               >
-                {isSaving ? 'Adding...' : 'Add Member'}
+                {isSaving ? t('common:state.adding.label') : t('web:mover.crew.addMember.cta')}
               </button>
             </div>
           </div>
@@ -199,12 +204,12 @@ const MyCrewPage = () => {
       {editingMember && (
         <div className="bg-white dark:bg-neutral-800 rounded-2xl p-4 shadow-sm mb-6">
           <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
-            Edit Crew Member
+            {t('web:mover.crew.editModal.title')}
           </h3>
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                Name
+                {t('common:field.name.label')}
               </label>
               <input
                 type="text"
@@ -212,13 +217,13 @@ const MyCrewPage = () => {
                 onChange={(e) =>
                   setEditingMember({ ...editingMember, name: e.target.value })
                 }
-                placeholder="Enter name"
+                placeholder={t('common:field.name.placeholder')}
                 className="w-full px-4 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-transparent focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none"
               />
             </div>
             <div>
               <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                Phone Number
+                {t('common:field.phone.label')}
               </label>
               <input
                 type="tel"
@@ -226,13 +231,13 @@ const MyCrewPage = () => {
                 onChange={(e) =>
                   setEditingMember({ ...editingMember, phone: e.target.value })
                 }
-                placeholder="Enter phone number"
+                placeholder={t('common:field.phone.placeholder')}
                 className="w-full px-4 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-transparent focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none"
               />
             </div>
             <div>
               <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                Role
+                {t('web:mover.crew.role.label')}
               </label>
               <select
                 value={editingMember.role}
@@ -253,14 +258,14 @@ const MyCrewPage = () => {
                 onClick={() => setEditingMember(null)}
                 className="flex-1 px-4 py-2 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-full text-sm font-medium hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
               >
-                Cancel
+                {t('common:action.cancel.cta')}
               </button>
               <button
                 onClick={handleUpdateMember}
                 disabled={isSaving}
                 className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-full text-sm font-medium hover:bg-primary-700 transition-colors disabled:opacity-50"
               >
-                {isSaving ? 'Saving...' : 'Save Changes'}
+                {isSaving ? t('common:state.saving.label') : t('common:action.saveChanges.cta')}
               </button>
             </div>
           </div>
@@ -293,8 +298,8 @@ const MyCrewPage = () => {
                   <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 truncate">
                     {member.name}
                   </h3>
-                  <p className="text-sm text-neutral-500 dark:text-neutral-400 capitalize">
-                    {member.role}
+                  <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                    {roleLabel(member.role)}
                   </p>
                   <div className="flex items-center gap-1 text-sm text-neutral-500 dark:text-neutral-400">
                     <PhoneIcon className="w-3.5 h-3.5" />
@@ -322,17 +327,17 @@ const MyCrewPage = () => {
           <div className="bg-white dark:bg-neutral-800 rounded-2xl p-8 shadow-sm text-center">
             <UserCircleIcon className="w-16 h-16 mx-auto text-neutral-300 dark:text-neutral-600 mb-4" />
             <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-2">
-              No Crew Members Yet
+              {t('web:mover.crew.empty.title')}
             </h3>
             <p className="text-neutral-500 dark:text-neutral-400 mb-4">
-              Add your first crew member to start managing your team.
+              {t('web:mover.crew.empty.subtitle')}
             </p>
             <button
               onClick={() => setIsAddingMember(true)}
               className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-full text-sm font-medium hover:bg-primary-700 transition-colors"
             >
               <PlusIcon className="w-4 h-4" />
-              Add First Member
+              {t('web:mover.crew.addFirst.cta')}
             </button>
           </div>
         )}
@@ -373,8 +378,8 @@ const MyCrewPage = () => {
                 <h3 className="text-xl font-bold text-neutral-900 dark:text-neutral-100">
                   {viewingMember.name}
                 </h3>
-                <span className="inline-block mt-1 px-3 py-0.5 rounded-full text-xs font-medium capitalize bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300">
-                  {viewingMember.role}
+                <span className="inline-block mt-1 px-3 py-0.5 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300">
+                  {roleLabel(viewingMember.role)}
                 </span>
               </div>
 
@@ -385,7 +390,7 @@ const MyCrewPage = () => {
                     <PhoneIcon className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
                   </div>
                   <div>
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400">Phone</p>
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400">{t('common:field.phone.shortLabel')}</p>
                     <p className="font-medium text-neutral-900 dark:text-neutral-100">
                       {viewingMember.phone}
                     </p>
@@ -402,9 +407,9 @@ const MyCrewPage = () => {
                     />
                   </div>
                   <div>
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400">Status</p>
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400">{t('common:field.status.label')}</p>
                     <p className="font-medium text-neutral-900 dark:text-neutral-100">
-                      {viewingMember.isActive ? 'Active' : 'Inactive'}
+                      {viewingMember.isActive ? t('common:status.active.label') : t('common:status.inactive.label')}
                     </p>
                   </div>
                 </div>
@@ -417,7 +422,7 @@ const MyCrewPage = () => {
                   className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-full text-sm font-medium hover:bg-primary-700 transition-colors"
                 >
                   <PhoneIcon className="w-4 h-4" />
-                  Call
+                  {t('common:action.call.cta')}
                 </a>
                 <button
                   onClick={() => {
@@ -427,7 +432,7 @@ const MyCrewPage = () => {
                   className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-full text-sm font-medium hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
                 >
                   <PencilIcon className="w-4 h-4" />
-                  Edit
+                  {t('common:action.edit.cta')}
                 </button>
               </div>
             </div>

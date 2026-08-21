@@ -66,25 +66,27 @@ interface NearbyMove {
   distanceFromMover: number
 }
 
-const formatLabel = (value: string | null | undefined): string => {
-  if (!value) return 'Not specified'
-  return value
-    .split('_')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ')
-}
-
-const formatDate = (dateStr: string | null) => {
-  if (!dateStr) return 'Not selected'
-  try {
-    return formatDayMonth(dateStr)
-  } catch {
-    return dateStr
-  }
-}
-
 const AvailableMovesPage = () => {
   const { t } = useTranslation()
+
+  // Defined inside the component so the fallback copy re-resolves on a
+  // language change instead of freezing at module-import time.
+  const formatLabel = (value: string | null | undefined): string => {
+    if (!value) return t('common:value.notSpecified.empty')
+    return value
+      .split('_')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ')
+  }
+
+  const formatDate = (dateStr: string | null) => {
+    if (!dateStr) return t('common:value.notSelected.empty')
+    try {
+      return formatDayMonth(dateStr)
+    } catch {
+      return dateStr
+    }
+  }
   const [viewMode, setViewMode] = useState<'map' | 'list'>('map')
   const [selectedMove, setSelectedMove] = useState<NearbyMove | null>(null)
   const [moves, setMoves] = useState<NearbyMove[]>([])
@@ -166,17 +168,17 @@ const AvailableMovesPage = () => {
       const res = await fetch(`/api/mover/nearby-moves${params}`)
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}))
-        throw new Error(errData.error || 'Failed to fetch moves')
+        throw new Error(errData.error || t('errors:moves.fetchFailed'))
       }
       const data = await res.json()
       setMoves(data.moves || [])
     } catch (err) {
       console.error('Failed to fetch nearby moves:', err)
-      setError(err instanceof Error ? err.message : 'Failed to load moves')
+      setError(err instanceof Error ? err.message : t('errors:moves.loadFailed'))
     } finally {
       setIsLoading(false)
     }
-  }, [moverCoords])
+  }, [moverCoords, t])
 
   // Fetch once profile coords are loaded or browser geo arrives, then poll every 30s
   useEffect(() => {
@@ -197,9 +199,9 @@ const AvailableMovesPage = () => {
     }))
 
   const pickupDisplay = (m: NearbyMove) =>
-    m.pickupStreetAddress || m.pickupLocation || 'Pickup'
+    m.pickupStreetAddress || m.pickupLocation || t('booking:field.pickup.label')
   const dropoffDisplay = (m: NearbyMove) =>
-    m.dropoffStreetAddress || m.dropoffLocation || 'Drop-off'
+    m.dropoffStreetAddress || m.dropoffLocation || t('booking:field.dropoff.label')
 
   // Loading state
   if (isLoading && moves.length === 0) {
@@ -207,7 +209,7 @@ const AvailableMovesPage = () => {
       <div className="h-screen flex flex-col items-center justify-center">
         <ArrowPathIcon className="w-8 h-8 text-primary-500 animate-spin mb-4" />
         <p className="text-neutral-600 dark:text-neutral-400 font-medium">
-          Finding available moves near you...
+          {t('web:mover.availableMoves.loading.label')}
         </p>
       </div>
     )
@@ -219,7 +221,7 @@ const AvailableMovesPage = () => {
       <div className="h-screen flex flex-col items-center justify-center p-6">
         <ExclamationTriangleIcon className="w-12 h-12 text-amber-500 mb-4" />
         <p className="text-neutral-900 dark:text-neutral-100 font-semibold mb-2">
-          Unable to load moves
+          {t('web:mover.availableMoves.error.title')}
         </p>
         <p className="text-neutral-500 dark:text-neutral-400 text-sm text-center mb-4">
           {error}
@@ -228,7 +230,7 @@ const AvailableMovesPage = () => {
           onClick={fetchMoves}
           className="px-4 py-2 bg-primary-600 text-white rounded-full text-sm font-medium hover:bg-primary-700 transition-colors"
         >
-          Try Again
+          {t('common:action.tryAgain.cta')}
         </button>
       </div>
     )
@@ -241,7 +243,7 @@ const AvailableMovesPage = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-xl font-bold text-neutral-900 dark:text-neutral-100">
-              Available Moves
+              {t('web:moverNav.availableMoves.label')}
             </h1>
             <p className="text-sm text-neutral-500 dark:text-neutral-400">
               {t('moves:available.withinRadiusCount', { count: moves.length })}
@@ -255,7 +257,7 @@ const AvailableMovesPage = () => {
               onClick={fetchMoves}
               disabled={isLoading}
               className="p-2 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors disabled:opacity-50"
-              title="Refresh"
+              title={t('common:action.refresh.a11y')}
             >
               <ArrowPathIcon
                 className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`}
@@ -271,7 +273,7 @@ const AvailableMovesPage = () => {
                 }`}
               >
                 <MapIcon className="w-4 h-4" />
-                Map
+                {t('common:view.map.label')}
               </button>
               <button
                 onClick={() => setViewMode('list')}
@@ -282,7 +284,7 @@ const AvailableMovesPage = () => {
                 }`}
               >
                 <ListBulletIcon className="w-4 h-4" />
-                List
+                {t('common:view.list.label')}
               </button>
             </div>
           </div>
@@ -294,10 +296,10 @@ const AvailableMovesPage = () => {
         <div className="flex-1 flex flex-col items-center justify-center p-6">
           <TruckIcon className="w-16 h-16 text-neutral-300 dark:text-neutral-600 mb-4" />
           <p className="text-neutral-900 dark:text-neutral-100 font-semibold mb-1">
-            No moves available
+            {t('web:mover.availableMoves.empty.title')}
           </p>
           <p className="text-neutral-500 dark:text-neutral-400 text-sm text-center">
-            No scheduled moves within 30 km right now. We check automatically every 30 seconds.
+            {t('web:mover.availableMoves.empty.subtitle')}
           </p>
         </div>
       )}
@@ -337,7 +339,7 @@ const AvailableMovesPage = () => {
                       {selectedMove.coverPhotoId ? (
                         <Image
                           src={getPhotoUrl(selectedMove.coverPhotoId)}
-                          alt="Move photo"
+                          alt={t('booking:photos.item.a11y')}
                           fill
                           className="object-cover"
                           unoptimized
@@ -346,10 +348,10 @@ const AvailableMovesPage = () => {
                         <TruckIcon className="h-12 w-12 text-neutral-400" />
                       )}
                       <Badge color="yellow" className="absolute top-2 left-2 text-xs">
-                        {formatLabel(selectedMove.moveType)} Move
+                        {t('web:mover.moveTypeBadge.label', { type: formatLabel(selectedMove.moveType) })}
                       </Badge>
                       <span className="absolute top-2 right-2 bg-black/60 text-white text-xs px-2 py-0.5 rounded-full">
-                        {selectedMove.distanceFromMover.toFixed(1)} km away
+                        {t('track:eta.distance.footnote', { distance: selectedMove.distanceFromMover.toFixed(1) })}
                       </span>
                     </div>
                     {/* Content */}
@@ -371,10 +373,10 @@ const AvailableMovesPage = () => {
                       </div>
                       <div className="flex flex-wrap gap-1.5">
                         <span className="text-xs px-2 py-0.5 bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 rounded-full">
-                          {selectedMove.totalItemCount} items
+                          {t('moves:itemCount', { count: selectedMove.totalItemCount })}
                         </span>
                         <span className="text-xs px-2 py-0.5 bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 rounded-full">
-                          {selectedMove.crewSize || '—'} movers
+                          {t('web:mover.crewSize.label', { crew: selectedMove.crewSize || '—' })}
                         </span>
                         {selectedMove.vehicleType && (
                           <span className="text-xs px-2 py-0.5 bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 rounded-full">
@@ -383,12 +385,12 @@ const AvailableMovesPage = () => {
                         )}
                         {selectedMove.pickupElevator && (
                           <span className="text-xs px-2 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full">
-                            Elevator
+                            {t('moves:detail.elevator.label')}
                           </span>
                         )}
                       </div>
                       <p className="mt-2 text-xs text-primary-600 dark:text-primary-400 font-medium">
-                        Tap to view details &rarr;
+                        {t('web:mover.tapForDetails.helper')} &rarr;
                       </p>
                     </div>
                   </Link>
@@ -409,7 +411,7 @@ const AvailableMovesPage = () => {
                     {move.coverPhotoId ? (
                       <Image
                         src={getPhotoUrl(move.coverPhotoId)}
-                        alt="Move"
+                        alt={t('booking:photos.item.a11y')}
                         fill
                         className="object-cover"
                         unoptimized
@@ -418,10 +420,13 @@ const AvailableMovesPage = () => {
                       <TruckIcon className="h-16 w-16 text-neutral-400" />
                     )}
                     <Badge color="yellow" className="absolute top-3 left-3 z-10">
-                      {formatLabel(move.homeType)} &middot; {formatLabel(move.moveType)}
+                      {t('web:mover.homeTypeMoveType.label', {
+                        homeType: formatLabel(move.homeType),
+                        moveType: formatLabel(move.moveType),
+                      })}
                     </Badge>
                     <span className="absolute top-3 right-3 bg-black/60 text-white text-xs px-2 py-0.5 rounded-full z-10">
-                      {move.distanceFromMover.toFixed(1)} km away
+                      {t('track:eta.distance.footnote', { distance: move.distanceFromMover.toFixed(1) })}
                     </span>
                   </div>
 
@@ -453,8 +458,9 @@ const AvailableMovesPage = () => {
                           </p>
                           {move.pickupFloorLevel && (
                             <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                              Floor {move.pickupFloorLevel}
-                              {move.pickupElevator ? ' · Elevator' : ''}
+                              {move.pickupElevator
+                                ? t('track:address.floorWithElevator.label', { floor: move.pickupFloorLevel })
+                                : t('track:address.floor.label', { floor: move.pickupFloorLevel })}
                             </p>
                           )}
                         </div>
@@ -468,8 +474,9 @@ const AvailableMovesPage = () => {
                           </p>
                           {move.dropoffFloorLevel && (
                             <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                              Floor {move.dropoffFloorLevel}
-                              {move.dropoffElevator ? ' · Elevator' : ''}
+                              {move.dropoffElevator
+                                ? t('track:address.floorWithElevator.label', { floor: move.dropoffFloorLevel })
+                                : t('track:address.floor.label', { floor: move.dropoffFloorLevel })}
                             </p>
                           )}
                         </div>
@@ -480,11 +487,11 @@ const AvailableMovesPage = () => {
                     <div className="flex flex-wrap gap-2 mb-3">
                       <span className="text-xs px-2.5 py-1 bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 rounded-full flex items-center gap-1">
                         <CubeIcon className="w-3 h-3" />
-                        {move.totalItemCount} items
+                        {t('moves:itemCount', { count: move.totalItemCount })}
                       </span>
                       <span className="text-xs px-2.5 py-1 bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 rounded-full flex items-center gap-1">
                         <UsersIcon className="w-3 h-3" />
-                        {move.crewSize || '—'} movers
+                        {t('web:mover.crewSize.label', { crew: move.crewSize || '—' })}
                       </span>
                       {move.vehicleType && (
                         <span className="text-xs px-2.5 py-1 bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 rounded-full flex items-center gap-1">
@@ -494,12 +501,12 @@ const AvailableMovesPage = () => {
                       )}
                       {move.pickupElevator && (
                         <span className="text-xs px-2.5 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full">
-                          Elevator
+                          {t('moves:detail.elevator.label')}
                         </span>
                       )}
                       {move.additionalServices.length > 0 && (
                         <span className="text-xs px-2.5 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full">
-                          +{move.additionalServices.length} services
+                          {t('web:mover.additionalServicesCount', { count: move.additionalServices.length })}
                         </span>
                       )}
                     </div>
@@ -525,7 +532,7 @@ const AvailableMovesPage = () => {
                         )}
                       </div>
                       <span className="text-sm font-medium text-primary-600 dark:text-primary-400">
-                        View details &rarr;
+                        {t('web:mover.viewDetails.cta')} &rarr;
                       </span>
                     </div>
                   </div>

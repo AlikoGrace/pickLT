@@ -1,7 +1,9 @@
+import { moveStatusLabel } from '@/lib/move-status-label'
+import { getTranslations } from '@/lib/i18n-server'
 import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
-import { relId, writeNotification, STATUS_NOTIFICATION } from '@/lib/notify'
+import { relId, writeNotification, statusNotification } from '@/lib/notify'
 import { paymentPermissions } from '@/lib/doc-permissions'
 import { Query, ID } from 'node-appwrite'
 import { NextRequest, NextResponse } from 'next/server'
@@ -22,10 +24,11 @@ const VALID_TRANSITIONS: Record<string, string[]> = {
 
 // POST /api/mover/update-move-status — Update the status of an active move
 export async function POST(request: NextRequest) {
+  const { t } = await getTranslations()
   try {
     const userId = await getSessionUserId()
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
     }
 
     const body = await request.json()
@@ -45,13 +48,13 @@ export async function POST(request: NextRequest) {
     )
     const moverProfile = profiles.documents[0]
     if (!moverProfile) {
-      return NextResponse.json({ error: 'Mover profile not found' }, { status: 404 })
+      return NextResponse.json({ error: t('errors:mover.profileNotFound') }, { status: 404 })
     }
 
     // Require verified mover to update move status
     if (moverProfile.verificationStatus !== 'verified') {
       return NextResponse.json(
-        { error: 'Your mover profile has not been verified yet' },
+        { error: t('errors:mover.notVerified') },
         { status: 403 }
       )
     }
@@ -69,14 +72,19 @@ export async function POST(request: NextRequest) {
         ? move.moverProfileId
         : (move.moverProfileId as Record<string, string>)?.$id || null
     if (moveMoverProfileId !== moverProfile.$id) {
-      return NextResponse.json({ error: 'Not assigned to this move' }, { status: 403 })
+      return NextResponse.json({ error: t('errors:move.notAssigned') }, { status: 403 })
     }
 
     // Validate status transition
     const allowedNext = VALID_TRANSITIONS[move.status as string]
     if (!allowedNext || !allowedNext.includes(status)) {
       return NextResponse.json(
-        { error: `Invalid transition from "${move.status}" to "${status}"` },
+        {
+          error: t('errors:move.invalidTransition', {
+            from: moveStatusLabel(t, move.status),
+            to: moveStatusLabel(t, status),
+          }),
+        },
         { status: 400 }
       )
     }
@@ -89,7 +97,7 @@ export async function POST(request: NextRequest) {
       const moveDateOnly = new Date(moveDateObj.getFullYear(), moveDateObj.getMonth(), moveDateObj.getDate())
       if (moveDateOnly > todayDate) {
         return NextResponse.json(
-          { error: 'This move cannot be started before its scheduled date.' },
+          { error: t('errors:move.tooEarly') },
           { status: 400 }
         )
       }
@@ -139,7 +147,7 @@ export async function POST(request: NextRequest) {
     // Notify the client of the status change (pushable statuses fan out an OS
     // push via sendpush; granular in-progress steps stay silent).
     const clientId = relId(move.clientId)
-    const notif = STATUS_NOTIFICATION[status as string]
+    const notif = statusNotification(status as string, t)
     if (clientId && notif) {
       await writeNotification({
         userId: clientId,
@@ -153,6 +161,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true, moveId, status })
   } catch (error) {
     console.error('Error updating move status:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: t('errors:generic.internal') }, { status: 500 })
   }
 }

@@ -2,6 +2,7 @@
 
 import { DocumentTextIcon } from '@heroicons/react/24/outline'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { formatMoney, formatMonthYear } from '@/lib/format'
 
 /**
@@ -31,6 +32,7 @@ function periodLabel(period: string): string {
 }
 
 export default function TaxDocumentsPage() {
+  const { t } = useTranslation()
   const [statements, setStatements] = useState<Statement[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -46,11 +48,10 @@ export default function TaxDocumentsPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-semibold text-neutral-900 dark:text-white">
-          Tax &amp; Earnings Documents
+          {t('web:mover.tax.title')}
         </h1>
         <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-          Your monthly statement is generated on the 1st of each month, covering the month before.
-          Keep them for your accountant or tax office.
+          {t('web:mover.tax.helper1')} {t('web:mover.tax.helper2')}
         </p>
       </div>
 
@@ -61,9 +62,9 @@ export default function TaxDocumentsPage() {
       ) : statements.length === 0 ? (
         <div className="rounded-2xl border border-neutral-200 dark:border-neutral-700 p-10 text-center">
           <DocumentTextIcon className="mx-auto h-10 w-10 text-neutral-300" />
-          <p className="mt-3 font-medium text-neutral-900 dark:text-white">No statements yet</p>
+          <p className="mt-3 font-medium text-neutral-900 dark:text-white">{t('web:mover.tax.empty.title')}</p>
           <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-            Complete moves this month and your first statement appears on the 1st.
+            {t('web:mover.tax.empty.subtitle')}
           </p>
         </div>
       ) : (
@@ -79,8 +80,11 @@ export default function TaxDocumentsPage() {
                 </p>
                 <p className="text-xs text-neutral-500 dark:text-neutral-400">{st.number}</p>
                 <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-300">
-                  {st.moves} moves · gross {formatMoney(st.grossTotal ?? 0)} · net{' '}
-                  {formatMoney(st.net ?? 0)}
+                  {t('web:mover.tax.row.summary', {
+                    count: st.moves ?? 0,
+                    gross: formatMoney(st.grossTotal ?? 0),
+                    net: formatMoney(st.net ?? 0),
+                  })}
                 </p>
               </div>
               {st.fileId ? (
@@ -90,10 +94,10 @@ export default function TaxDocumentsPage() {
                   rel="noopener noreferrer"
                   className="rounded-xl bg-primary-6000 px-4 py-2 text-sm font-semibold text-white hover:bg-primary-700"
                 >
-                  Open PDF
+                  {t('web:mover.tax.openPdf.cta')}
                 </a>
               ) : (
-                <span className="text-sm text-neutral-400">Preparing…</span>
+                <span className="text-sm text-neutral-400">{t('web:mover.tax.preparing.label')}</span>
               )}
             </div>
           ))}

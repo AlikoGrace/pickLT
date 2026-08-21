@@ -14,8 +14,10 @@ import TimePicker from 'react-time-picker'
 import 'react-time-picker/dist/TimePicker.css'
 import 'react-clock/dist/Clock.css'
 import { formatDateWith } from '@/lib/format'
+import { useTranslation } from 'react-i18next'
 
 const PageAddListing6 = () => {
+  const { t } = useTranslation()
   const router = useRouter()
 
   const {
@@ -47,7 +49,7 @@ const PageAddListing6 = () => {
 
   // Format move date for display
   const formatDate = (dateStr: string | null) => {
-    if (!dateStr) return 'Not selected'
+    if (!dateStr) return t('common:value.notSelected.empty')
     try {
       const date = new Date(dateStr)
       return formatDateWith(date, {
@@ -62,7 +64,7 @@ const PageAddListing6 = () => {
   }
 
   const formatTimeDisplay = () => {
-    if (!arrivalWindow) return 'Select time'
+    if (!arrivalWindow) return t('booking:arrivalTime.placeholder')
     // Convert 24h to 12h format for display
     const [hours, minutes] = arrivalWindow.split(':').map(Number)
     const period = hours >= 12 ? 'PM' : 'AM'
@@ -75,9 +77,9 @@ const PageAddListing6 = () => {
   return (
     <>
       <div>
-        <h2 className="text-2xl font-semibold">Move timing</h2>
+        <h2 className="text-2xl font-semibold">{t('booking:timing.title')}</h2>
         <span className="mt-2 block text-neutral-500 dark:text-neutral-400">
-          Choose when the movers should arrive.
+          {t('web:wizard.step5.subtitle')}
         </span>
       </div>
 
@@ -86,14 +88,14 @@ const PageAddListing6 = () => {
       <Form id="add-listing-form" action={handleSubmitForm} className="flex flex-col gap-y-8">
         {/* Move Date Display */}
         <div>
-          <p className="text-lg font-semibold">Move date</p>
+          <p className="text-lg font-semibold">{t('booking:moveDate.label')}</p>
           <div className="mt-2 p-4 bg-neutral-50 dark:bg-neutral-800 rounded-2xl">
             <p className="text-neutral-900 dark:text-neutral-100 font-medium">
               {formatDate(moveDate)}
             </p>
             {!moveDate && (
               <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
-                You can set your move date in Step 1
+                {t('web:wizard.step5.dateInStep1.helper', { step: 1 })}
               </p>
             )}
           </div>
@@ -103,9 +105,9 @@ const PageAddListing6 = () => {
 
         {/* Arrival Window - Time Picker */}
         <div>
-          <p className="text-lg font-semibold">Preferred arrival time</p>
+          <p className="text-lg font-semibold">{t('booking:arrivalTime.label')}</p>
           <span className="mt-1 block text-sm text-neutral-500 dark:text-neutral-400">
-            Select when you&apos;d like the movers to arrive.
+            {t('booking:arrivalTime.helper')}
           </span>
           
           <div className="mt-4">
@@ -113,7 +115,7 @@ const PageAddListing6 = () => {
               <ClockIcon className="h-6 w-6 text-neutral-400 dark:text-neutral-500" />
               <div className="flex-1">
                 <span className="block text-sm text-neutral-500 dark:text-neutral-400 mb-2">
-                  Arrival time
+                  {t('booking:arrivalTime.fieldLabel')}
                 </span>
                 <div className="time-picker-container">
                   <TimePicker
@@ -137,7 +139,7 @@ const PageAddListing6 = () => {
         {showFlexibilityOption && (
           <div className="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-2xl border border-neutral-200 dark:border-neutral-700">
             <Fieldset>
-              <Legend className="text-base!">Flexibility</Legend>
+              <Legend className="text-base!">{t('booking:flexibility.label')}</Legend>
               <RadioGroup
                 name="flexibility"
                 value={flexibility || ''}
@@ -145,11 +147,11 @@ const PageAddListing6 = () => {
               >
                 <RadioField>
                   <Radio value="flexible_1hr" />
-                  <Label>I&apos;m flexible by up to 1 hour</Label>
+                  <Label>{t('booking:flexibility.flexible1hr.label')}</Label>
                 </RadioField>
                 <RadioField>
                   <Radio value="not_flexible" />
-                  <Label>Not flexible</Label>
+                  <Label>{t('booking:flexibility.notFlexible.label')}</Label>
                 </RadioField>
               </RadioGroup>
             </Fieldset>
@@ -160,9 +162,9 @@ const PageAddListing6 = () => {
 
         {/* Optional Add-ons */}
         <div>
-          <p className="text-lg font-semibold">Optional preferences</p>
+          <p className="text-lg font-semibold">{t('booking:timingPrefs.title')}</p>
           <span className="mt-1 block text-sm text-neutral-500 dark:text-neutral-400">
-            Select any additional timing preferences.
+            {t('booking:timingPrefs.helper')}
           </span>
           <Fieldset className="mt-4">
             <CheckboxGroup className="space-y-4">
@@ -172,7 +174,7 @@ const PageAddListing6 = () => {
                   checked={preferEarliestArrival}
                   onChange={(checked) => setPreferEarliestArrival(checked)}
                 />
-                <Label>Prefer earliest possible arrival</Label>
+                <Label>{t('booking:timingPrefs.earliest.label')}</Label>
               </CheckboxField>
               <CheckboxField>
                 <Checkbox
@@ -180,7 +182,7 @@ const PageAddListing6 = () => {
                   checked={avoidLunchBreak}
                   onChange={(checked) => setAvoidLunchBreak(checked)}
                 />
-                <Label>Avoid lunch break gap</Label>
+                <Label>{t('booking:timingPrefs.noLunchGap.label')}</Label>
               </CheckboxField>
               <CheckboxField>
                 <Checkbox
@@ -189,7 +191,7 @@ const PageAddListing6 = () => {
                   onChange={(checked) => setAvoidEveningDelivery(checked)}
                 />
 
-                <Label>Avoid evening delivery</Label>
+                <Label>{t('booking:timingPrefs.noEvening.label')}</Label>
               </CheckboxField>
             </CheckboxGroup>
           </Fieldset>

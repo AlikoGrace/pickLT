@@ -15,18 +15,19 @@ import { HugeiconsIcon } from '@hugeicons/react'
 import Link from 'next/link'
 import { formatDateWith } from '@/lib/format'
 import { useTranslation } from 'react-i18next'
+import type { TFunction } from 'i18next'
 
 // Helper to format labels
-const formatLabel = (value: string | null | undefined): string => {
-  if (!value) return 'Not specified'
+const formatLabel = (value: string | null | undefined, t: TFunction): string => {
+  if (!value) return t('common:value.notSpecified.empty')
   return value
     .split('_')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ')
 }
 
-const formatDate = (dateStr: string | null) => {
-  if (!dateStr) return 'Not selected'
+const formatDate = (dateStr: string | null, t: TFunction) => {
+  if (!dateStr) return t('common:value.notSelected.empty')
   try {
     const date = new Date(dateStr)
     return formatDateWith(date, {
@@ -85,6 +86,11 @@ const YourMove = ({ routeDistance, routeDuration }: YourMoveProps) => {
 
   const inventoryCount = Object.values(inventory).reduce((sum, qty) => sum + qty, 0) + customItems.length
 
+  const addressWithUnit = (address: string | null | undefined, unit: string | null | undefined) => {
+    const base = address || t('common:value.notSpecified.empty')
+    return unit ? t('booking:address.withUnit.label', { address: base, unit }) : base
+  }
+
   // For instant move, don't show edit links (move is already in progress)
   const EditIcon = ({ show = true }: { show?: boolean }) =>
     show ? (
@@ -98,7 +104,7 @@ const YourMove = ({ routeDistance, routeDuration }: YourMoveProps) => {
 
   return (
     <div>
-      <h3 className="text-2xl font-semibold">Your move</h3>
+      <h3 className="text-2xl font-semibold">{t('web:checkout.yourMove.title')}</h3>
       
       {/* Instant Move Badge */}
       {isInstantMove && (
@@ -110,7 +116,7 @@ const YourMove = ({ routeDistance, routeDuration }: YourMoveProps) => {
             className="text-neutral-700 dark:text-neutral-300"
           />
           <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-            Instant Move
+            {t('booking:category.instant.label')}
           </span>
         </div>
       )}
@@ -132,12 +138,12 @@ const YourMove = ({ routeDistance, routeDuration }: YourMoveProps) => {
                 />
               </div>
               <div className="flex flex-col">
-                <span className="text-sm text-neutral-400">Move date & time</span>
+                <span className="text-sm text-neutral-400">{t('booking:field.moveDateTime.label')}</span>
                 <span className="mt-1 text-base font-semibold text-neutral-900 dark:text-white">
-                  {formatDate(moveDate)}
+                  {formatDate(moveDate, t)}
                 </span>
                 <span className="text-sm text-neutral-500 dark:text-neutral-400">
-                  {formatLabel(arrivalWindow)} arrival
+                  {t('booking:field.arrivalWindow.value.label', { window: formatLabel(arrivalWindow, t) })}
                 </span>
               </div>
             </div>
@@ -158,12 +164,12 @@ const YourMove = ({ routeDistance, routeDuration }: YourMoveProps) => {
                 />
               </div>
               <div className="flex flex-col">
-                <span className="text-sm text-neutral-400">Move timing</span>
+                <span className="text-sm text-neutral-400">{t('booking:timing.title')}</span>
                 <span className="mt-1 text-base font-semibold text-neutral-900 dark:text-white">
-                  Now
+                  {t('booking:timing.now.label')}
                 </span>
                 <span className="text-sm text-neutral-500 dark:text-neutral-400">
-                  Mover is on the way
+                  {t('track:phase.moverEnRoute.title')}
                 </span>
               </div>
             </div>
@@ -183,7 +189,7 @@ const YourMove = ({ routeDistance, routeDuration }: YourMoveProps) => {
                 />
               </div>
               <div className="flex flex-col">
-                <span className="text-sm text-neutral-400">Route details</span>
+                <span className="text-sm text-neutral-400">{t('booking:route.title')}</span>
                 <div className="mt-1 flex items-center gap-3">
                   {routeDistance && (
                     <span className="text-base font-semibold text-neutral-900 dark:text-white">
@@ -195,7 +201,7 @@ const YourMove = ({ routeDistance, routeDuration }: YourMoveProps) => {
                   )}
                   {routeDuration && (
                     <span className="text-sm text-neutral-500 dark:text-neutral-400">
-                      ~{formatDuration(routeDuration)} drive
+                      {t('booking:route.driveTime.label', { duration: formatDuration(routeDuration) })}
                     </span>
                   )}
                 </div>
@@ -217,14 +223,13 @@ const YourMove = ({ routeDistance, routeDuration }: YourMoveProps) => {
                 />
               </div>
               <div className="flex flex-col">
-                <span className="text-sm text-neutral-400">Pickup</span>
+                <span className="text-sm text-neutral-400">{t('booking:field.pickup.label')}</span>
                 <span className="mt-1 text-base font-semibold text-neutral-900 dark:text-white">
-                  {pickupStreetAddress || pickupLocation || 'Not specified'}
-                  {pickupApartmentUnit && `, Unit ${pickupApartmentUnit}`}
+                  {addressWithUnit(pickupStreetAddress || pickupLocation, pickupApartmentUnit)}
                 </span>
                 {floorLevel && (
                   <span className="text-sm text-neutral-500 dark:text-neutral-400">
-                    Floor {floorLevel}
+                    {t('track:address.floor.label', { floor: floorLevel })}
                   </span>
                 )}
               </div>
@@ -245,13 +250,12 @@ const YourMove = ({ routeDistance, routeDuration }: YourMoveProps) => {
                 />
               </div>
               <div className="flex flex-col">
-                <span className="text-sm text-neutral-400">Pickup address</span>
+                <span className="text-sm text-neutral-400">{t('track:address.pickup.title')}</span>
                 <span className="mt-1 text-base font-semibold text-neutral-900 dark:text-white">
-                  {pickupStreetAddress || pickupLocation || 'Not specified'}
-                  {pickupApartmentUnit && `, Unit ${pickupApartmentUnit}`}
+                  {addressWithUnit(pickupStreetAddress || pickupLocation, pickupApartmentUnit)}
                 </span>
                 <span className="text-sm text-neutral-500 dark:text-neutral-400">
-                  Floor {floorLevel || 'N/A'}
+                  {t('track:address.floor.label', { floor: floorLevel || t('common:value.notAvailable.label') })}
                 </span>
               </div>
             </div>
@@ -272,14 +276,13 @@ const YourMove = ({ routeDistance, routeDuration }: YourMoveProps) => {
                 />
               </div>
               <div className="flex flex-col">
-                <span className="text-sm text-neutral-400">Drop-off</span>
+                <span className="text-sm text-neutral-400">{t('booking:field.dropoff.label')}</span>
                 <span className="mt-1 text-base font-semibold text-neutral-900 dark:text-white">
-                  {dropoffStreetAddress || dropoffLocation || 'Not specified'}
-                  {dropoffApartmentUnit && `, Unit ${dropoffApartmentUnit}`}
+                  {addressWithUnit(dropoffStreetAddress || dropoffLocation, dropoffApartmentUnit)}
                 </span>
                 {dropoffFloorLevel && (
                   <span className="text-sm text-neutral-500 dark:text-neutral-400">
-                    Floor {dropoffFloorLevel}
+                    {t('track:address.floor.label', { floor: dropoffFloorLevel })}
                   </span>
                 )}
               </div>
@@ -300,13 +303,12 @@ const YourMove = ({ routeDistance, routeDuration }: YourMoveProps) => {
                 />
               </div>
               <div className="flex flex-col">
-                <span className="text-sm text-neutral-400">Drop-off address</span>
+                <span className="text-sm text-neutral-400">{t('track:address.dropoff.title')}</span>
                 <span className="mt-1 text-base font-semibold text-neutral-900 dark:text-white">
-                  {dropoffStreetAddress || dropoffLocation || 'Not specified'}
-                  {dropoffApartmentUnit && `, Unit ${dropoffApartmentUnit}`}
+                  {addressWithUnit(dropoffStreetAddress || dropoffLocation, dropoffApartmentUnit)}
                 </span>
                 <span className="text-sm text-neutral-500 dark:text-neutral-400">
-                  Floor {dropoffFloorLevel || 'N/A'}
+                  {t('track:address.floor.label', { floor: dropoffFloorLevel || t('common:value.notAvailable.label') })}
                 </span>
               </div>
             </div>
@@ -328,7 +330,7 @@ const YourMove = ({ routeDistance, routeDuration }: YourMoveProps) => {
                   />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-sm text-neutral-400">Items to move</span>
+                  <span className="text-sm text-neutral-400">{t('booking:inventory.itemsToMove.title')}</span>
                   <span className="mt-1 text-base font-semibold text-neutral-900 dark:text-white">
                     {t('moves:itemCount', { count: inventoryCount })}
                   </span>
@@ -350,7 +352,7 @@ const YourMove = ({ routeDistance, routeDuration }: YourMoveProps) => {
                   />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-sm text-neutral-400">Items to move</span>
+                  <span className="text-sm text-neutral-400">{t('booking:inventory.itemsToMove.title')}</span>
                   <span className="mt-1 text-base font-semibold text-neutral-900 dark:text-white">
                     {t('moves:itemCount', { count: inventoryCount })}
                   </span>
@@ -375,12 +377,12 @@ const YourMove = ({ routeDistance, routeDuration }: YourMoveProps) => {
                   />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-sm text-neutral-400">Contact information</span>
+                  <span className="text-sm text-neutral-400">{t('booking:contact.title')}</span>
                   <span className="mt-1 text-base font-semibold text-neutral-900 dark:text-white">
-                    {contactInfo.fullName || 'Not provided'}
+                    {contactInfo.fullName || t('common:value.notProvided.empty')}
                   </span>
                   <span className="text-sm text-neutral-500 dark:text-neutral-400">
-                    {contactInfo.phoneNumber || 'No phone'}
+                    {contactInfo.phoneNumber || t('common:value.noPhone.empty')}
                   </span>
                 </div>
               </div>
@@ -400,12 +402,15 @@ const YourMove = ({ routeDistance, routeDuration }: YourMoveProps) => {
                   />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-sm text-neutral-400">Contact information</span>
+                  <span className="text-sm text-neutral-400">{t('booking:contact.title')}</span>
                   <span className="mt-1 text-base font-semibold text-neutral-900 dark:text-white">
-                    {contactInfo.fullName || 'Not provided'}
+                    {contactInfo.fullName || t('common:value.notProvided.empty')}
                   </span>
                   <span className="text-sm text-neutral-500 dark:text-neutral-400">
-                    {contactInfo.email || 'No email'} · {contactInfo.phoneNumber || 'No phone'}
+                    {t('booking:contact.emailPhone.label', {
+                      email: contactInfo.email || t('common:value.noEmail.empty'),
+                      phone: contactInfo.phoneNumber || t('common:value.noPhone.empty'),
+                    })}
                   </span>
                 </div>
               </div>
@@ -417,7 +422,7 @@ const YourMove = ({ routeDistance, routeDuration }: YourMoveProps) => {
 
       {!isInstantMove && (
         <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
-          Click on any section to edit your move details.
+          {t('web:checkout.editHint.helper')}
         </p>
       )}
 

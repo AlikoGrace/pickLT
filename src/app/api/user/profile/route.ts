@@ -1,3 +1,4 @@
+import { getTranslations } from '@/lib/i18n-server'
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
@@ -8,10 +9,11 @@ import { getSessionUserId } from '@/lib/auth-session'
  * Get the authenticated user's profile from Appwrite
  */
 export async function GET() {
+  const { t } = await getTranslations()
   try {
     const userId = await getSessionUserId()
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
     }
 
     const { databases } = createAdminClient()
@@ -25,7 +27,7 @@ export async function GET() {
     return NextResponse.json({ user: userDoc })
   } catch (err) {
     console.error('GET /api/user/profile error:', err)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: t('errors:generic.internal') }, { status: 500 })
   }
 }
 
@@ -37,10 +39,11 @@ export async function GET() {
  * - email/phone: NOT allowed here. Use dedicated /api/user/change-email or /api/user/change-phone.
  */
 export async function PATCH(req: NextRequest) {
+  const { t } = await getTranslations()
   try {
     const userId = await getSessionUserId()
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
     }
 
     const body = await req.json()
@@ -55,7 +58,7 @@ export async function PATCH(req: NextRequest) {
     }
 
     if (Object.keys(updates).length === 0) {
-      return NextResponse.json({ error: 'No valid fields to update' }, { status: 400 })
+      return NextResponse.json({ error: t('errors:validation.noFields') }, { status: 400 })
     }
 
     const { databases, users } = createAdminClient()
@@ -80,6 +83,6 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ user: updatedUser })
   } catch (err) {
     console.error('PATCH /api/user/profile error:', err)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: t('errors:generic.internal') }, { status: 500 })
   }
 }

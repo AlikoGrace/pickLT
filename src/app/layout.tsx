@@ -8,7 +8,7 @@ import MoveSearchProvider from '@/context/moveSearch'
 import { AuthProvider } from '@/context/auth'
 import I18nProvider from './i18n-provider'
 import { getResources } from '@/lib/i18n-catalog'
-import { resolveLocale } from '@/lib/i18n-server'
+import { getTranslations, resolveLocale } from '@/lib/i18n-server'
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -16,13 +16,25 @@ const poppins = Poppins({
   weight: ['300', '400', '500', '600', '700'],
 })
 
-export const metadata: Metadata = {
-  title: {
-    template: '%s - PickLT',
-    default: 'PickLT - Move smarter with PickLT',
-  },
-  description: 'PickLT - Your trusted moving service platform',
-  keywords: ['PickLT', 'Moving', 'Movers', 'Relocation', 'Umzug'],
+// `export const metadata` is evaluated at module scope and cannot read the
+// request, so it cannot see the negotiated locale. `generateMetadata()` can.
+// This costs no render mode here: RootLayout below already awaits
+// `resolveLocale()`, so this subtree is dynamic either way.
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getTranslations()
+  return {
+    title: {
+      template: t('web:seo.titleTemplate'),
+      default: t('web:seo.default.title'),
+    },
+    description: t('web:seo.default.description'),
+    // A comma-separated string, not an array: a catalog value is one string, and
+    // a translator needs to be able to drop or add a term per language.
+    keywords: t('web:seo.default.keywords')
+      .split(',')
+      .map((k) => k.trim())
+      .filter(Boolean),
+  }
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {

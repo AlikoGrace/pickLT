@@ -1,4 +1,129 @@
 {
+  "appearance": {
+    "dark": {
+      "label": "Dark Mode",
+      "subtitle": "Easier on the eyes at night"
+    },
+    "light": {
+      "label": "Light Mode",
+      "subtitle": "Classic light appearance"
+    },
+    "system": {
+      "label": "System Default",
+      "subtitle": "Follows your device settings"
+    },
+    "title": "Appearance"
+  },
+  "changeEmail": {
+    "cta": "Update Email",
+    "current": {
+      "label": "Current: {{email}}"
+    },
+    "failed": {
+      "title": "Could not change email"
+    },
+    "googleNotice": {
+      "body": "Your account uses Google sign-in. The email address can't be changed from inside PickLT — update it in your Google Account.",
+      "title": "Email is managed by Google"
+    },
+    "helper": "Update your email address",
+    "helperLong": "A verification email will be sent to the new address.",
+    "label": "Change Email",
+    "sent": {
+      "body": "A verification email has been sent. Please check your inbox."
+    },
+    "sentLong": "A verification email has been sent. Please check your inbox and click the verification link.",
+    "title": "Change Email",
+    "updatedTo": {
+      "body": "Email updated to <1>{{email}}</1>"
+    }
+  },
+  "changePassword": {
+    "failed": {
+      "title": "Could not update password"
+    },
+    "googleNotice": {
+      "body": "Your account doesn't have a password yet. To set one, sign out and use “Forgot password” from the login screen.",
+      "cta": "Sign out and reset password",
+      "title": "Account uses Google sign-in"
+    },
+    "mismatch": {
+      "error": "Passwords do not match."
+    },
+    "success": {
+      "message": "Your password has been changed.",
+      "title": "Password updated"
+    },
+    "title": "Change Password"
+  },
+  "changePhone": {
+    "current": {
+      "label": "Current: {{phone}}"
+    },
+    "failed": {
+      "title": "Could not change phone"
+    },
+    "helper": "Update your phone number",
+    "helperLong": "An OTP code will be sent to verify the new number.",
+    "label": "Change Phone",
+    "title": "Change Phone Number"
+  },
+  "deleteAccount": {
+    "confirm": {
+      "body": "This action is permanent and cannot be undone. All your data, moves, and preferences will be lost.",
+      "title": "Are you sure you want to delete your account?"
+    }
+  },
+  "dobSheet": {
+    "title": "Select Date of Birth"
+  },
+  "editName": {
+    "helper": "Update your name",
+    "label": "Edit Name",
+    "name": {
+      "placeholder": "Your full name"
+    },
+    "title": "Edit Name"
+  },
+  "field": {
+    "confirmPassword": {
+      "label": "Confirm new password",
+      "placeholder": "Re-enter new password"
+    },
+    "currentPassword": {
+      "label": "Current password",
+      "placeholder": "Enter your current password"
+    },
+    "dateOfBirth": {
+      "label": "Date of Birth",
+      "placeholder": "Select your date of birth"
+    },
+    "email": {
+      "label": "Email"
+    },
+    "fullName": {
+      "label": "Full Name"
+    },
+    "gender": {
+      "label": "Gender",
+      "placeholder": "Select gender"
+    },
+    "newEmail": {
+      "label": "New email",
+      "placeholder": "you@example.com"
+    },
+    "newPassword": {
+      "label": "New password"
+    },
+    "password": {
+      "minHelper": "At least 8 characters"
+    },
+    "phone": {
+      "label": "Phone Number",
+      "numberPlaceholder": "123 456 7890",
+      "placeholder": "Add a phone number"
+    }
+  },
   "gender": {
     "female": {
       "option": "Female"
@@ -10,13 +135,20 @@
       "option": "Other"
     }
   },
+  "genderSheet": {
+    "title": "Select Gender"
+  },
+  "help": {
+    "helper": "Get help and support"
+  },
   "helpCenter": {
     "header": {
       "title": "Help Center"
     },
+    "helper": "Get help and support",
     "search": {
-      "a11y": "Search help articles",
-      "placeholder": "Search location.."
+      "a11y": "Search help topics",
+      "placeholder": "Search help topics"
     }
   },
   "language": {
@@ -29,12 +161,24 @@
     "suggested": "Suggested",
     "title": "Language"
   },
+  "logout": {
+    "confirm": {
+      "body": "Make sure you’ve saved your work or completed any ongoing tasks before logging out.",
+      "title": "Are you sure you want to logout?"
+    }
+  },
   "menu": {
     "appearance": {
       "label": "Appearance"
     },
+    "changeEmail": {
+      "label": "Change Email"
+    },
     "changePassword": {
       "label": "Change Password"
+    },
+    "changePhone": {
+      "label": "Change Phone"
     },
     "deleteAccount": {
       "label": "Delete Account"
@@ -67,20 +211,134 @@
       "label": "Your Card"
     }
   },
+  "name": {
+    "updated": {
+      "success": "Name updated successfully"
+    }
+  },
+  "newEmail": {
+    "label": "New Email Address",
+    "placeholder": "new@example.com"
+  },
+  "newPhone": {
+    "label": "New Phone Number",
+    "placeholder": "+491234567890"
+  },
+  "notifications": {
+    "helper": "Configure alerts and notifications",
+    "rows": {
+      "appUpdates": {
+        "label": "App Updates"
+      },
+      "cashback": {
+        "label": "Cashback"
+      },
+      "notifications": {
+        "label": "Notifications"
+      },
+      "payments": {
+        "label": "Payments"
+      },
+      "sound": {
+        "label": "Sound"
+      },
+      "specialOffers": {
+        "label": "Special Offers"
+      },
+      "vibrate": {
+        "label": "Vibrate"
+      }
+    },
+    "title": "Notifications"
+  },
+  "password": {
+    "confirm": {
+      "label": "Confirm password"
+    },
+    "current": {
+      "label": "Current password"
+    },
+    "new": {
+      "label": "New password"
+    },
+    "submit": {
+      "cta": "Update password"
+    },
+    "title": "Update your password"
+  },
+  "paymentMethods": {
+    "helper": "Manage your payment options",
+    "label": "Payment Methods"
+  },
+  "personalData": {
+    "nameRequired": {
+      "message": "Please enter your name.",
+      "title": "Full name required"
+    },
+    "saveFailed": {
+      "title": "Could not save profile"
+    },
+    "title": "Personal Data"
+  },
+  "phone": {
+    "updated": {
+      "success": "Phone number updated and verified"
+    }
+  },
+  "photo": {
+    "updated": {
+      "success": "Photo updated successfully"
+    }
+  },
+  "privacy": {
+    "helper": "Manage your data and security",
+    "label": "Privacy & Security"
+  },
   "privacyPolicy": {
     "header": {
       "title": "Privacy & Policy"
     }
   },
+  "privacySecurity": {
+    "helper": "Manage your data and security",
+    "label": "Privacy & Security"
+  },
   "section": {
+    "account": {
+      "title": "Account"
+    },
     "general": {
       "title": "General"
+    },
+    "moves": {
+      "title": "Moves"
     },
     "payments": {
       "title": "Payments"
     },
+    "personal": {
+      "title": "Personal Information"
+    },
     "preferences": {
       "title": "Preferences"
+    },
+    "support": {
+      "title": "Support"
     }
+  },
+  "security": {
+    "biometricId": {
+      "label": "Biometric ID"
+    },
+    "faceId": {
+      "label": "Face ID"
+    },
+    "googleAuthenticator": {
+      "label": "Google Authenticator"
+    },
+    "rememberPassword": {
+      "label": "Remember Password"
+    },
+    "title": "Security"
   }
 }

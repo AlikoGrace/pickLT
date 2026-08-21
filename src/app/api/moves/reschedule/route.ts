@@ -1,3 +1,5 @@
+import { moveStatusLabel } from '@/lib/move-status-label'
+import { getTranslations } from '@/lib/i18n-server'
 import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
@@ -15,10 +17,11 @@ const RESCHEDULABLE_STATUSES = ['draft', 'booked']
  * Body: { moveId: string, moveDate: string, arrivalWindow?: string }
  */
 export async function POST(request: NextRequest) {
+  const { t } = await getTranslations()
   try {
     const userId = await getSessionUserId()
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
     }
 
     const body = await request.json()
@@ -34,7 +37,7 @@ export async function POST(request: NextRequest) {
     // Validate moveDate is in the future
     if (new Date(moveDate) <= new Date()) {
       return NextResponse.json(
-        { error: 'Move date must be in the future' },
+        { error: t('errors:move.dateInPast') },
         { status: 400 },
       )
     }
@@ -51,13 +54,17 @@ export async function POST(request: NextRequest) {
     const clientId =
       typeof move.clientId === 'string' ? move.clientId : move.clientId?.$id
     if (clientId !== userId) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+      return NextResponse.json({ error: t('errors:auth.forbidden') }, { status: 403 })
     }
 
     // Verify the move is in a reschedulable state
     if (!RESCHEDULABLE_STATUSES.includes(move.status as string)) {
       return NextResponse.json(
-        { error: `Cannot reschedule a move with status "${move.status}"` },
+        {
+          error: t('errors:move.notReschedulable', {
+            status: moveStatusLabel(t, move.status),
+          }),
+        },
         { status: 400 },
       )
     }
@@ -79,7 +86,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('POST /api/moves/reschedule error:', error)
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: t('errors:generic.internal') },
       { status: 500 },
     )
   }

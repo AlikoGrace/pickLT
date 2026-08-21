@@ -1,3 +1,4 @@
+import { getTranslations } from '@/lib/i18n-server'
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient, withRetry } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
@@ -13,10 +14,11 @@ import { ID, Query } from 'node-appwrite'
  *  2. mover_profiles currentLatitude/currentLongitude
  */
 export async function POST(req: NextRequest) {
+  const { t } = await getTranslations()
   try {
     const userId = await getSessionUserId()
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
     }
 
     const { latitude, longitude, heading, speed, moveId } = await req.json()
@@ -40,7 +42,7 @@ export async function POST(req: NextRequest) {
     )
 
     if (profiles.total === 0) {
-      return NextResponse.json({ error: 'Mover profile not found' }, { status: 404 })
+      return NextResponse.json({ error: t('errors:mover.profileNotFound') }, { status: 404 })
     }
 
     const moverProfileId = profiles.documents[0].$id
@@ -101,7 +103,7 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     console.error('POST /api/mover/update-location error:', err)
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Internal server error' },
+      { error: err instanceof Error ? err.message : t('errors:generic.internal') },
       { status: 500 }
     )
   }

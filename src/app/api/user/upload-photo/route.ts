@@ -1,3 +1,4 @@
+import { getTranslations } from '@/lib/i18n-server'
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE, APPWRITE_ENDPOINT } from '@/lib/constants'
@@ -15,10 +16,11 @@ import sharp from 'sharp'
  * Returns the public URL of the uploaded file.
  */
 export async function POST(req: NextRequest) {
+  const { t } = await getTranslations()
   try {
     const userId = await getSessionUserId()
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
     }
 
     const formData = await req.formData()
@@ -26,17 +28,17 @@ export async function POST(req: NextRequest) {
     const purpose = (formData.get('purpose') as string) || 'selfie'
 
     if (!file) {
-      return NextResponse.json({ error: 'No file provided' }, { status: 400 })
+      return NextResponse.json({ error: t('errors:upload.noFile') }, { status: 400 })
     }
 
     // Validate file type
     if (!file.type.startsWith('image/')) {
-      return NextResponse.json({ error: 'File must be an image' }, { status: 400 })
+      return NextResponse.json({ error: t('errors:upload.notAnImage2') }, { status: 400 })
     }
 
     // Max 10MB raw (will be compressed)
     if (file.size > 10 * 1024 * 1024) {
-      return NextResponse.json({ error: 'File size must be under 10MB' }, { status: 400 })
+      return NextResponse.json({ error: t('errors:upload.tooLarge2') }, { status: 400 })
     }
 
     const { storage, databases } = createAdminClient()
@@ -93,7 +95,7 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     console.error('POST /api/user/upload-photo error:', err)
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Failed to upload photo' },
+      { error: err instanceof Error ? err.message : t('errors:upload.photoFailed') },
       { status: 500 }
     )
   }

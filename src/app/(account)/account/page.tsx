@@ -23,10 +23,15 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState, useRef } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
+
+const APP_VERSION = '1.0.0'
+const OTP_DIGITS = 6
 
 type ModalType = 'editName' | 'changeEmail' | 'changePhone' | null
 
 export default function AccountPage() {
+  const { t } = useTranslation()
   const { user, updateUser, logout, refreshProfile, isAuthenticated, isLoading } = useAuth()
   const router = useRouter()
   const [activeModal, setActiveModal] = useState<ModalType>(null)
@@ -54,11 +59,11 @@ export default function AccountPage() {
     if (!file) return
 
     if (!file.type.startsWith('image/')) {
-      setError('Please select an image file')
+      setError(t('errors:upload.notAnImage'))
       return
     }
     if (file.size > 5 * 1024 * 1024) {
-      setError('Image must be under 5MB')
+      setError(t('errors:upload.tooLarge', { limit: '5MB' }))
       return
     }
 
@@ -75,14 +80,14 @@ export default function AccountPage() {
       })
       if (!res.ok) {
         const data = await res.json()
-        throw new Error(data.error || 'Upload failed')
+        throw new Error(data.error || t('errors:upload.failed'))
       }
       const { photoUrl } = await res.json()
       updateUser({ profilePhoto: photoUrl })
-      setSuccess('Photo updated successfully')
+      setSuccess(t('profile:photo.updated.success'))
       setTimeout(() => setSuccess(''), 3000)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to upload photo')
+      setError(err instanceof Error ? err.message : t('errors:upload.photoFailed'))
     } finally {
       setIsUploading(false)
     }
@@ -110,15 +115,15 @@ export default function AccountPage() {
       })
       if (!res.ok) {
         const data = await res.json()
-        throw new Error(data.error || 'Failed to update name')
+        throw new Error(data.error || t('errors:profile.nameUpdateFailed'))
       }
       updateUser({ fullName: fullName.trim() })
       await refreshProfile()
       setActiveModal(null)
-      setSuccess('Name updated successfully')
+      setSuccess(t('profile:name.updated.success'))
       setTimeout(() => setSuccess(''), 3000)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save')
+      setError(err instanceof Error ? err.message : t('errors:generic.saveFailed'))
     } finally {
       setIsSaving(false)
     }
@@ -136,7 +141,7 @@ export default function AccountPage() {
       })
       if (!res.ok) {
         const data = await res.json()
-        throw new Error(data.error || 'Failed to change email')
+        throw new Error(data.error || t('errors:profile.emailChangeFailed'))
       }
       try {
         const origin = typeof window !== 'undefined' ? window.location.origin : ''
@@ -146,7 +151,7 @@ export default function AccountPage() {
       }
       setEmailStep('sent')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to change email')
+      setError(err instanceof Error ? err.message : t('errors:profile.emailChangeFailed'))
     } finally {
       setIsSaving(false)
     }
@@ -165,12 +170,12 @@ export default function AccountPage() {
       })
       if (!res.ok) {
         const data = await res.json()
-        throw new Error(data.error || 'Failed to change phone')
+        throw new Error(data.error || t('errors:profile.phoneChangeFailed'))
       }
       await account.createPhoneVerification()
       setPhoneStep('verify')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to change phone number')
+      setError(err instanceof Error ? err.message : t('errors:profile.phoneNumberChangeFailed'))
     } finally {
       setIsSaving(false)
     }
@@ -184,10 +189,10 @@ export default function AccountPage() {
       await account.updatePhoneVerification(user.authId, phoneOtp.trim())
       await refreshProfile()
       setActiveModal(null)
-      setSuccess('Phone number updated and verified')
+      setSuccess(t('profile:phone.updated.success'))
       setTimeout(() => setSuccess(''), 3000)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Invalid verification code')
+      setError(err instanceof Error ? err.message : t('auth:otp.invalid.error'))
     } finally {
       setIsSaving(false)
     }
@@ -214,16 +219,16 @@ export default function AccountPage() {
       <div className="flex flex-col items-center justify-center py-20 text-center">
         <UserCircleIcon className="w-16 h-16 text-neutral-300 mb-4" />
         <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100 mb-2">
-          Sign in to view your account
+          {t('web:account.signedOut.title')}
         </h2>
         <p className="text-neutral-500 dark:text-neutral-400 mb-6 max-w-sm">
-          Log in to manage your profile, view your moves, and more.
+          {t('web:account.signedOut.subtitle')}
         </p>
         <Link
           href="/login"
           className="px-6 py-2.5 bg-primary-600 text-white rounded-full text-sm font-medium hover:bg-primary-700 transition-colors"
         >
-          Sign In
+          {t('auth:action.signIn.cta')}
         </Link>
       </div>
     )
@@ -231,12 +236,12 @@ export default function AccountPage() {
 
   const settingsSections = [
     {
-      title: 'Account',
+      title: t('profile:section.account.title'),
       items: [
         {
           icon: PencilSquareIcon,
-          label: 'Edit Name',
-          description: user?.fullName || 'Update your name',
+          label: t('profile:editName.label'),
+          description: user?.fullName || t('profile:editName.helper'),
           action: () => {
             setFullName(user?.fullName || '')
             setError('')
@@ -245,8 +250,8 @@ export default function AccountPage() {
         },
         {
           icon: EnvelopeIcon,
-          label: 'Change Email',
-          description: user?.email || 'Update your email address',
+          label: t('profile:changeEmail.label'),
+          description: user?.email || t('profile:changeEmail.helper'),
           action: () => {
             setNewEmail('')
             setEmailStep('input')
@@ -256,8 +261,8 @@ export default function AccountPage() {
         },
         {
           icon: PhoneIcon,
-          label: 'Change Phone',
-          description: user?.phone || 'Update your phone number',
+          label: t('profile:changePhone.label'),
+          description: user?.phone || t('profile:changePhone.helper'),
           action: () => {
             setNewPhone('')
             setPhoneOtp('')
@@ -268,47 +273,47 @@ export default function AccountPage() {
         },
         {
           icon: CreditCardIcon,
-          label: 'Payment Methods',
-          description: 'Manage your payment options',
+          label: t('profile:paymentMethods.label'),
+          description: t('profile:paymentMethods.helper'),
           action: () => {},
         },
       ],
     },
     {
-      title: 'Moves',
+      title: t('profile:section.moves.title'),
       items: [
         {
           icon: ClipboardDocumentListIcon,
-          label: 'My Moves',
-          description: 'View and track all your moves',
+          label: t('web:nav.myMoves.label'),
+          description: t('web:account.myMoves.helper'),
           action: () => router.push('/account-savelists'),
         },
       ],
     },
     {
-      title: 'Preferences',
+      title: t('profile:section.preferences.title'),
       items: [
         {
           icon: BellIcon,
-          label: 'Notifications',
-          description: 'Configure alerts and notifications',
+          label: t('profile:menu.notifications.label'),
+          description: t('profile:notifications.helper'),
           action: () => {},
         },
         {
           icon: ShieldCheckIcon,
-          label: 'Privacy & Security',
-          description: 'Manage your data and security',
+          label: t('profile:privacy.label'),
+          description: t('profile:privacy.helper'),
           action: () => {},
         },
       ],
     },
     {
-      title: 'Support',
+      title: t('profile:section.support.title'),
       items: [
         {
           icon: QuestionMarkCircleIcon,
-          label: 'Help Center',
-          description: 'Get help and support',
+          label: t('profile:helpCenter.header.title'),
+          description: t('profile:help.helper'),
           action: () => {},
         },
       ],
@@ -364,7 +369,7 @@ export default function AccountPage() {
           </div>
           <div className="flex-1">
             <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-              {user?.fullName || 'Your Name'}
+              {user?.fullName || t('common:person.unnamed.label')}
             </h2>
             <p className="text-sm text-neutral-500 dark:text-neutral-400">
               {user?.email || 'email@example.com'}
@@ -421,11 +426,11 @@ export default function AccountPage() {
         className="w-full mt-10 flex items-center justify-center gap-2 p-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-2xl font-medium hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors"
       >
         <ArrowRightOnRectangleIcon className="w-5 h-5" />
-        Sign Out
+        {t('common:action.signOut.cta')}
       </button>
 
       <p className="text-center text-xs text-neutral-400 dark:text-neutral-500 mt-6 mb-8">
-        pickLT v1.0.0
+        {t('web:account.version.label', { version: APP_VERSION })}
       </p>
 
       {/* ─── MODALS ────────────────────────────────────────── */}
@@ -443,18 +448,18 @@ export default function AccountPage() {
             {activeModal === 'editName' && (
               <>
                 <h3 className="text-xl font-bold text-neutral-900 dark:text-neutral-100 mb-4">
-                  Edit Name
+                  {t('profile:editName.title')}
                 </h3>
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                      Full Name
+                      {t('auth:field.fullName.label')}
                     </label>
                     <input
                       type="text"
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
-                      placeholder="Your full name"
+                      placeholder={t('profile:editName.name.placeholder')}
                       className="w-full px-4 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-transparent focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none"
                     />
                   </div>
@@ -464,14 +469,14 @@ export default function AccountPage() {
                       onClick={closeModal}
                       className="flex-1 px-4 py-2 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-full font-medium hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
                     >
-                      Cancel
+                      {t('common:action.cancel.cta')}
                     </button>
                     <button
                       onClick={handleSaveName}
                       disabled={isSaving || !fullName.trim()}
                       className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-full font-medium hover:bg-primary-700 transition-colors disabled:opacity-50"
                     >
-                      {isSaving ? 'Saving...' : 'Save'}
+                      {isSaving ? t('common:state.saving.label') : t('common:action.save.cta')}
                     </button>
                   </div>
                 </div>
@@ -482,42 +487,42 @@ export default function AccountPage() {
             {activeModal === 'changeEmail' && (
               <>
                 <h3 className="text-xl font-bold text-neutral-900 dark:text-neutral-100 mb-1">
-                  Change Email
+                  {t('profile:changeEmail.title')}
                 </h3>
                 <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
-                  Current: {user?.email}
+                  {t('profile:changeEmail.current.label', { email: user?.email })}
                 </p>
                 {emailStep === 'input' && (
                   <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                        New Email Address
+                        {t('profile:newEmail.label')}
                       </label>
                       <input
                         type="email"
                         value={newEmail}
                         onChange={(e) => setNewEmail(e.target.value)}
-                        placeholder="new@example.com"
+                        placeholder={t('profile:newEmail.placeholder')}
                         className="w-full px-4 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-transparent focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none"
                       />
                     </div>
                     {error && <p className="text-sm text-red-500">{error}</p>}
                     <p className="text-xs text-neutral-400">
-                      A verification email will be sent to the new address.
+                      {t('profile:changeEmail.helperLong')}
                     </p>
                     <div className="flex gap-3">
                       <button
                         onClick={closeModal}
                         className="flex-1 px-4 py-2 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-full font-medium hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
                       >
-                        Cancel
+                        {t('common:action.cancel.cta')}
                       </button>
                       <button
                         onClick={handleChangeEmail}
                         disabled={isSaving || !newEmail.trim()}
                         className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-full font-medium hover:bg-primary-700 transition-colors disabled:opacity-50"
                       >
-                        {isSaving ? 'Updating...' : 'Update Email'}
+                        {isSaving ? t('common:state.updating.label') : t('profile:changeEmail.cta')}
                       </button>
                     </div>
                   </div>
@@ -528,10 +533,14 @@ export default function AccountPage() {
                       <EnvelopeIcon className="w-6 h-6 text-green-600 dark:text-green-400" />
                     </div>
                     <p className="text-neutral-700 dark:text-neutral-300">
-                      Email updated to <strong>{newEmail}</strong>
+                      <Trans
+                        i18nKey="profile:changeEmail.updatedTo.body"
+                        values={{ email: newEmail }}
+                        components={{ 1: <strong /> }}
+                      />
                     </p>
                     <p className="text-sm text-neutral-500 dark:text-neutral-400">
-                      A verification email has been sent. Please check your inbox.
+                      {t('profile:changeEmail.sent.body')}
                     </p>
                     <button
                       onClick={async () => {
@@ -540,7 +549,7 @@ export default function AccountPage() {
                       }}
                       className="px-6 py-2 bg-primary-600 text-white rounded-full font-medium hover:bg-primary-700 transition-colors"
                     >
-                      Done
+                      {t('common:action.done.cta')}
                     </button>
                   </div>
                 )}
@@ -551,16 +560,18 @@ export default function AccountPage() {
             {activeModal === 'changePhone' && (
               <>
                 <h3 className="text-xl font-bold text-neutral-900 dark:text-neutral-100 mb-1">
-                  Change Phone Number
+                  {t('profile:changePhone.title')}
                 </h3>
                 <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
-                  Current: {user?.phone || 'Not set'}
+                  {t('profile:changePhone.current.label', {
+                    phone: user?.phone || t('common:value.notSet.empty'),
+                  })}
                 </p>
                 {phoneStep === 'input' && (
                   <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                        New Phone Number
+                        {t('profile:newPhone.label')}
                       </label>
                       <input
                         type="tel"
@@ -572,21 +583,21 @@ export default function AccountPage() {
                     </div>
                     {error && <p className="text-sm text-red-500">{error}</p>}
                     <p className="text-xs text-neutral-400">
-                      An OTP code will be sent to verify the new number.
+                      {t('profile:changePhone.helperLong')}
                     </p>
                     <div className="flex gap-3">
                       <button
                         onClick={closeModal}
                         className="flex-1 px-4 py-2 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-full font-medium hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
                       >
-                        Cancel
+                        {t('common:action.cancel.cta')}
                       </button>
                       <button
                         onClick={handleChangePhone}
                         disabled={isSaving || !newPhone.trim()}
                         className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-full font-medium hover:bg-primary-700 transition-colors disabled:opacity-50"
                       >
-                        {isSaving ? 'Sending OTP...' : 'Send OTP'}
+                        {isSaving ? t('auth:otp.sending.cta') : t('auth:otp.sendCode.cta')}
                       </button>
                     </div>
                   </div>
@@ -597,14 +608,18 @@ export default function AccountPage() {
                       <PhoneIcon className="w-6 h-6 text-primary-600 dark:text-primary-400" />
                     </div>
                     <p className="text-center text-sm text-neutral-500 dark:text-neutral-400">
-                      Enter the verification code sent to <strong>{newPhone}</strong>
+                      <Trans
+                        i18nKey="auth:otp.sentTo.body"
+                        values={{ phone: newPhone }}
+                        components={{ 1: <strong /> }}
+                      />
                     </p>
                     <input
                       type="text"
                       value={phoneOtp}
                       onChange={(e) => setPhoneOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                      placeholder="Enter 6-digit code"
-                      maxLength={6}
+                      placeholder={t('auth:otp.input.placeholder', { digits: OTP_DIGITS })}
+                      maxLength={OTP_DIGITS}
                       className="w-full px-4 py-3 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-transparent text-center text-lg tracking-widest focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none"
                     />
                     {error && <p className="text-sm text-red-500 text-center">{error}</p>}
@@ -613,14 +628,14 @@ export default function AccountPage() {
                         onClick={() => { setPhoneStep('input'); setError('') }}
                         className="flex-1 px-4 py-2 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-full font-medium hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
                       >
-                        Back
+                        {t('common:action.back.cta')}
                       </button>
                       <button
                         onClick={handleVerifyPhoneOtp}
                         disabled={isSaving || phoneOtp.length < 6}
                         className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-full font-medium hover:bg-primary-700 transition-colors disabled:opacity-50"
                       >
-                        {isSaving ? 'Verifying...' : 'Verify'}
+                        {isSaving ? t('auth:otp.verifying.cta') : t('auth:otp.verify.cta')}
                       </button>
                     </div>
                     <button
@@ -628,7 +643,7 @@ export default function AccountPage() {
                       disabled={isSaving}
                       className="w-full text-center text-sm text-primary-600 dark:text-primary-400 hover:underline disabled:opacity-50"
                     >
-                      Resend code
+                      {t('auth:otp.resend.cta')}
                     </button>
                   </div>
                 )}

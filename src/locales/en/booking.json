@@ -1,5 +1,290 @@
 {
+  "accessNotes": {
+    "helper": "Any details that will help our team access the location",
+    "label": "Access notes (optional)",
+    "placeholder": "e.g., narrow corridor, steep stairs, construction at entrance",
+    "shortLabel": "Access notes"
+  },
+  "address": {
+    "accessNotes": {
+      "label": "Access notes: {{notes}}"
+    },
+    "aptUnit": {
+      "label": "Apt/Unit: {{unit}}"
+    },
+    "elevatorAvailable": {
+      "label": "Elevator available"
+    },
+    "floor": {
+      "label": "Floor: {{floor}}"
+    },
+    "label": "Location",
+    "noResults": {
+      "empty": "No locations found"
+    },
+    "parking": {
+      "label": "Parking: {{value}}"
+    },
+    "suggestions": {
+      "label": "Suggested locations"
+    },
+    "typeToSearch": {
+      "empty": "Type to search for locations"
+    },
+    "useCurrent": {
+      "cta": "Use my current location"
+    },
+    "withUnit": {
+      "label": "{{address}}, Unit {{unit}}"
+    }
+  },
+  "apartmentUnit": {
+    "dropoff": {
+      "placeholder": "e.g., 2nd floor, Apt 5"
+    },
+    "helper": "Floor, apartment number, or unit name",
+    "label": "Apartment / Unit (optional)",
+    "pickup": {
+      "placeholder": "e.g., 3rd floor, Apt 12"
+    }
+  },
+  "arrivalTime": {
+    "fieldLabel": "Arrival time",
+    "helper": "Select when you'd like the movers to arrive.",
+    "label": "Preferred arrival time",
+    "placeholder": "Select time"
+  },
+  "arrivalWindow": {
+    "afternoon": {
+      "label": "Afternoon (12pm-5pm)"
+    },
+    "evening": {
+      "label": "Evening (5pm-9pm)"
+    },
+    "label": "Arrival Window",
+    "morning": {
+      "label": "Morning (8am-12pm)"
+    },
+    "optionalLabel": "Arrival Window (optional)"
+  },
+  "business": {
+    "company": {
+      "label": "Company name",
+      "placeholder": "e.g., Mustermann GmbH",
+      "shortLabel": "Company"
+    },
+    "companyName": {
+      "label": "Company"
+    },
+    "isBusiness": {
+      "label": "This is a business move (I need an invoice with VAT)"
+    },
+    "title": "Business details",
+    "type": {
+      "business": {
+        "label": "Business move"
+      },
+      "personal": {
+        "label": "Personal move"
+      }
+    },
+    "vatId": {
+      "helper": "For EU business invoices",
+      "label": "VAT ID (USt-IdNr.)",
+      "placeholder": "e.g., DE123456789",
+      "shortLabel": "VAT ID"
+    }
+  },
+  "card": {
+    "cvc": {
+      "label": "CVC"
+    },
+    "expiry": {
+      "label": "Expiration date"
+    },
+    "holder": {
+      "label": "Card holder",
+      "placeholder": "JOHN DOE"
+    },
+    "number": {
+      "label": "Card number"
+    }
+  },
+  "category": {
+    "instant": {
+      "label": "Instant Move"
+    }
+  },
+  "classification": {
+    "itemMinimum": {
+      "premium": "\"{{item}}\" requires at least a Premium move",
+      "regular": "\"{{item}}\" requires at least a Regular move"
+    },
+    "keepCurrent": {
+      "cta": "Keep current"
+    },
+    "nearLimit": {
+      "light": "You are approaching the limit for a Light move",
+      "regular": "You are approaching the limit for a Regular move"
+    },
+    "notice": {
+      "title": "Move classification notice"
+    },
+    "pointCount_one": "{{count}} point",
+    "pointCount_other": "{{count}} points",
+    "points": {
+      "label": "Points"
+    },
+    "summary": {
+      "label": "{{items}} · ~{{weight}} kg · {{points}}"
+    },
+    "title": "Move classification",
+    "upgrade": {
+      "cta": "Upgrade to {{tier}}",
+      "subtitle": "Based on your selected items, we recommend upgrading from <0>{{from}}</0> to <1>{{to}}</1>.",
+      "title": "Move type upgrade recommended"
+    },
+    "weight": {
+      "label": "Est. weight"
+    }
+  },
+  "contact": {
+    "email": {
+      "helper": "For booking confirmation and updates",
+      "invalid": {
+        "error": "Please enter a valid email address"
+      },
+      "label": "Email",
+      "placeholder": "e.g., max@example.com",
+      "required": {
+        "error": "Please enter your email address"
+      }
+    },
+    "emailPhone": {
+      "label": "{{email}} · {{phone}}"
+    },
+    "name": {
+      "helper": "Your first and last name",
+      "label": "Name",
+      "placeholder": "e.g., Max Mustermann",
+      "required": {
+        "error": "Please enter your full name"
+      },
+      "shortLabel": "Contact Name"
+    },
+    "notes": {
+      "helper": "Any special instructions or requests",
+      "label": "Notes for movers (optional)",
+      "placeholder": "e.g., Please call 30 minutes before arrival, fragile items in bedroom…",
+      "shortLabel": "Notes for movers"
+    },
+    "phone": {
+      "helper": "We may call to confirm details",
+      "label": "Phone",
+      "placeholder": "e.g., +49 170 1234567",
+      "required": {
+        "error": "Please enter your phone number"
+      }
+    },
+    "subtitle": "We'll use this information to confirm your booking and coordinate the move.",
+    "title": "Contact information"
+  },
+  "crew": {
+    "label": "Crew",
+    "size": {
+      "label": "Crew Size"
+    },
+    "tbd": {
+      "label": "Crew TBD"
+    }
+  },
+  "crewRole": {
+    "driver": {
+      "label": "Driver"
+    },
+    "helper": {
+      "label": "Helper"
+    }
+  },
+  "details": {
+    "title": "Move details"
+  },
+  "disposal": {
+    "helper": "List the furniture or items you want us to dispose of.",
+    "items": {
+      "label": "Disposal Items"
+    },
+    "placeholder": "e.g., Old sofa, broken bookshelf, mattress...",
+    "title": "Items for disposal"
+  },
+  "dropoff": {
+    "edit": {
+      "a11y": "Edit drop-off location"
+    },
+    "fallback": {
+      "label": "Drop-off location"
+    },
+    "label": "Drop-off location",
+    "location": {
+      "label": "Drop-off Location"
+    },
+    "required": {
+      "error": "Please select a drop-off location"
+    },
+    "short": {
+      "label": "Drop-off"
+    },
+    "tapToSelect": {
+      "placeholder": "Tap to select drop-off"
+    },
+    "tapToSelectLong": {
+      "placeholder": "Tap to select drop-off location"
+    }
+  },
+  "dropoffAddress": {
+    "label": "Drop-off Address"
+  },
+  "dropoffParking": {
+    "directlyInFront": {
+      "label": "Parking directly in front"
+    },
+    "limited": {
+      "label": "Limited parking"
+    },
+    "loadingZone": {
+      "label": "Need loading zone (Haltverbot)"
+    },
+    "streetOnly": {
+      "label": "No parking / street only"
+    },
+    "underground": {
+      "label": "Underground garage access"
+    }
+  },
+  "duration": {
+    "estimated": {
+      "label": "Est. Duration"
+    }
+  },
+  "elevator": {
+    "dropoff": {
+      "helper": "Is there an elevator at the drop-off location?"
+    },
+    "label": "Elevator available",
+    "question": {
+      "label": "Elevator available?"
+    }
+  },
   "field": {
+    "accessNotes": {
+      "value": "Access notes: {{notes}}"
+    },
+    "additionalServices": {
+      "label": "Additional Services"
+    },
+    "apartmentUnit": {
+      "value": "Apt/Unit: {{unit}}"
+    },
     "arrivalTime": {
       "hour": {
         "label": "Hour"
@@ -14,11 +299,23 @@
         "title": "Preferred Arrival Time"
       }
     },
+    "arrivalWindow": {
+      "label": "Arrival Window",
+      "value": {
+        "label": "{{window}} arrival"
+      }
+    },
     "contact": {
       "label": "Contact"
     },
+    "crew": {
+      "label": "Crew"
+    },
     "crewSize": {
       "label": "Crew size"
+    },
+    "disposalItems": {
+      "label": "Disposal Items"
     },
     "distance": {
       "label": "Distance"
@@ -26,11 +323,32 @@
     "dropoff": {
       "label": "Drop-off"
     },
+    "dropoffLocation": {
+      "label": "Drop-off location"
+    },
     "elevator": {
       "label": "Elevator available?"
     },
+    "elevatorAvailable": {
+      "label": "Elevator available"
+    },
+    "estimatedDuration": {
+      "label": "Est. Duration"
+    },
+    "flexibility": {
+      "label": "Flexibility"
+    },
+    "floor": {
+      "value": "Floor: {{floor}}"
+    },
+    "homeType": {
+      "label": "Home Type"
+    },
     "inventory": {
       "label": "Inventory"
+    },
+    "items": {
+      "label": "Items"
     },
     "moveDate": {
       "label": "Move Date",
@@ -39,15 +357,39 @@
         "title": "Select Move Date"
       }
     },
+    "moveDateTime": {
+      "label": "Move date & time"
+    },
     "moveType": {
-      "label": "Move Type",
+      "label": "Move type",
       "placeholder": "Select move type",
       "sheet": {
         "title": "Select Move Type"
       }
     },
+    "name": {
+      "label": "Name"
+    },
+    "notesForMovers": {
+      "label": "Notes for Movers"
+    },
+    "packingMaterials": {
+      "label": "Packing Materials"
+    },
+    "packingNotes": {
+      "label": "Packing Notes"
+    },
+    "packingService": {
+      "label": "Packing Service"
+    },
+    "parking": {
+      "value": "Parking: {{parking}}"
+    },
     "pickup": {
       "label": "Pickup"
+    },
+    "pickupLocation": {
+      "label": "Pickup location"
     },
     "preferredTime": {
       "label": "Preferred Time",
@@ -65,9 +407,25 @@
     },
     "vehicle": {
       "label": "Vehicle"
+    },
+    "weight": {
+      "label": "Weight",
+      "value": "{{weight}} kg"
+    }
+  },
+  "flexibility": {
+    "flexible1hr": {
+      "label": "I'm flexible by up to 1 hour"
+    },
+    "label": "Flexibility",
+    "notFlexible": {
+      "label": "Not flexible"
     }
   },
   "floorLevel": {
+    "dropoff": {
+      "helper": "Which floor is the drop-off address on?"
+    },
     "floor1": {
       "option": "1st Floor"
     },
@@ -84,28 +442,146 @@
       "option": "5th+ Floor"
     },
     "ground": {
+      "label": "Ground floor",
       "option": "Ground Floor"
     },
+    "label": "Floor level",
     "numbered": {
+      "label_ordinal_few": "{{count}}rd floor",
+      "label_ordinal_one": "{{count}}st floor",
+      "label_ordinal_other": "{{count}}th floor",
+      "label_ordinal_two": "{{count}}nd floor",
       "option": "Floor {{n}}"
+    },
+    "pickup": {
+      "helper": "Which floor is the pickup address on?"
+    },
+    "placeholder": "Select floor",
+    "required": {
+      "error": "Please select a floor level"
+    }
+  },
+  "haltverbot": {
+    "arrange": {
+      "helper": "We'll handle the permit application with your local municipality",
+      "label": "Do you want us to arrange the Haltverbot permit for you?"
+    },
+    "arrangeDropoff": {
+      "helper": "We'll handle the permit application with the local municipality",
+      "label": "Should we arrange the Haltverbot permit for the drop-off location?"
+    },
+    "arrangeNo": {
+      "label": "No, I'll handle it"
+    },
+    "arrangeYes": {
+      "label": "Yes, arrange it for me"
+    },
+    "customerArranges": {
+      "label": "Customer arranges"
+    },
+    "helper": "A Haltverbot zone reserves parking space for the moving truck",
+    "label": "Loading zone required? (German Haltverbot permit)",
+    "requested": {
+      "label": "Haltverbot (no-parking zone) requested"
+    },
+    "weArrange": {
+      "label": "We arrange"
     }
   },
   "homeType": {
     "apartment": {
+      "label": "Apartment",
       "option": "Apartment"
     },
+    "helper": "Select the type of home or space to move",
     "house": {
+      "label": "House",
       "option": "House"
     },
+    "label": "Home type",
     "office": {
+      "label": "Office",
       "option": "Office"
     },
     "other": {
       "option": "Other"
     },
+    "placeholder": "Select a type",
+    "required": {
+      "error": "Please select a home type"
+    },
     "storage": {
+      "label": "Storage unit",
       "option": "Storage"
     }
+  },
+  "inventory": {
+    "addCustom": {
+      "cta": "Add custom item"
+    },
+    "addItem": {
+      "cta": "Add Item"
+    },
+    "custom": {
+      "name": {
+        "label": "Item name *",
+        "placeholder": "e.g., Grandfather clock"
+      },
+      "qty": {
+        "label_one": "Qty: {{count}}",
+        "label_other": "Qty: {{count}}"
+      },
+      "size": {
+        "label": "• Size: {{size}}"
+      },
+      "sizeField": {
+        "label": "Approximate size",
+        "placeholder": "e.g., 100x50x200 cm"
+      },
+      "weight": {
+        "label": "• Weight: {{weight}}"
+      },
+      "weightField": {
+        "label": "Approximate weight",
+        "placeholder": "e.g., 50 kg"
+      }
+    },
+    "customItems": {
+      "empty": "No custom items added yet. Click the button above to add items not listed.",
+      "title": "Custom Items"
+    },
+    "customModal": {
+      "title": "Add Custom Item"
+    },
+    "emptyCatalog": {
+      "subtitle": "Our movable-items list is being set up. Please try again shortly.",
+      "title": "No items available yet"
+    },
+    "heavyItems": {
+      "label": "Heavy items requiring special handling"
+    },
+    "items": {
+      "label": "Items"
+    },
+    "itemsCount": {
+      "label": "Items"
+    },
+    "itemsToMove": {
+      "title": "Items to move"
+    },
+    "loadFailed": {
+      "title": "Couldn't load the item list"
+    },
+    "required": {
+      "error": "Please add at least one item to your inventory before continuing."
+    },
+    "selectedCount_one": "{{count}} item selected",
+    "selectedCount_other": "{{count}} items selected",
+    "specialItems": {
+      "helper": "These items require special handling and may affect pricing.",
+      "title": "Special Items"
+    },
+    "title": "Inventory"
   },
   "location": {
     "gpsFailed": {
@@ -118,6 +594,9 @@
     "noResults": {
       "empty": "No locations found"
     },
+    "noResultsLong": {
+      "empty": "No locations found. Try a different search."
+    },
     "permissionDenied": {
       "error": "Location permission denied. Enable it in Settings."
     },
@@ -127,15 +606,24 @@
     "searchIdle": {
       "empty": "Start typing to search for an address."
     },
+    "section": {
+      "title": "Locations"
+    },
     "selectPlaceholder": {
       "placeholder": "Select {{field}} location"
     },
     "sheet": {
-      "title": "{{field}} Location"
+      "title": "{{field}} location"
+    },
+    "suggestions": {
+      "label": "Suggested locations"
     },
     "useCurrent": {
       "cta": "Use current location"
     }
+  },
+  "locations": {
+    "title": "Locations"
   },
   "map": {
     "dropoff": {
@@ -164,6 +652,9 @@
     "search": {
       "placeholder": "Search for a location…"
     },
+    "selected": {
+      "label": "Selected Location"
+    },
     "tapHint": {
       "helper": "Tap the map to select a location"
     },
@@ -171,25 +662,53 @@
       "cta": "Use my current location"
     }
   },
+  "moveDate": {
+    "helper": "When would you like to move?",
+    "label": "Move date",
+    "placeholder": "Select your move date",
+    "required": {
+      "error": "Please select a move date"
+    }
+  },
   "moveType": {
+    "a11y": "Select move type",
+    "label": "Type of move",
     "light": {
       "body": "Light moves use a small van.",
+      "helper": "Small load — few items",
+      "label": "Light Move",
       "short": "Light",
       "subtitle": "Perfect for small loads — boxes, single furniture pieces, or a studio apartment.",
       "title": "Light Move"
     },
+    "placeholder": "Choose a move type",
     "premium": {
       "body": "Premium moves use larger vehicles and a 2+ person crew.",
+      "helper": "Full-service move",
+      "label": "Premium Move",
       "short": "Premium",
       "subtitle": "Full-service move for large homes — packing, loading, transport, and unloading.",
       "title": "Premium Move"
     },
     "regular": {
       "body": "Regular moves use a medium vehicle and a 2-person crew.",
+      "helper": "Standard household move",
+      "label": "Regular Move",
       "short": "Regular",
       "subtitle": "Ideal for 1–2 bedroom apartments with standard furniture and appliances.",
       "title": "Regular Move"
+    },
+    "section": {
+      "title": "Type of Move"
+    },
+    "selectHelper": "Select the type of move",
+    "selectPlaceholder": "Select type",
+    "suffixed": {
+      "label": "{{type}} Move"
     }
+  },
+  "packing": {
+    "label": "Packing Service"
   },
   "packingLevel": {
     "full": {
@@ -209,8 +728,19 @@
       "option": "Pack and unpack"
     }
   },
+  "packingMaterials": {
+    "label": "Packing materials",
+    "selectedCount": {
+      "label_one": "{{count}} selected",
+      "label_other": "{{count}} selected"
+    }
+  },
+  "packingNotes": {
+    "label": "Packing Notes"
+  },
   "parking": {
     "atBuilding": {
+      "label": "Parking directly at building",
       "option": "Parking directly at building"
     },
     "directlyInFront": {
@@ -219,6 +749,8 @@
     "driveway": {
       "option": "Driveway"
     },
+    "helper": "Availability of parking near the building for the moving truck",
+    "label": "Parking situation",
     "limited": {
       "option": "Limited parking"
     },
@@ -229,10 +761,18 @@
       "option": "Parking Lot"
     },
     "nearby": {
+      "label": "Parking nearby (0–20 m)",
       "option": "Parking nearby (0–20 m)"
+    },
+    "noParking": {
+      "label": "No parking / long carry"
     },
     "none": {
       "option": "No Parking Available"
+    },
+    "placeholder": "Select parking situation",
+    "required": {
+      "error": "Please select a parking situation"
     },
     "street": {
       "option": "Street Parking"
@@ -242,21 +782,186 @@
     }
   },
   "payment": {
+    "amount": {
+      "label": "Amount to pay"
+    },
+    "amountCard": {
+      "label": "Amount to pay by card"
+    },
+    "awaitingClient": {
+      "label": "Waiting for client to confirm payment…"
+    },
+    "awaitingMover": {
+      "label": "Payment confirmed! Waiting for mover to confirm receipt…"
+    },
+    "bankTransfer": {
+      "label": "Bank transfer"
+    },
+    "card": {
+      "helper": "Your card is charged when the move is completed. Nothing is charged now.",
+      "label": "Card"
+    },
+    "cash": {
+      "body": "When you choose cash payment, you'll pay the mover directly after your move is completed. Please have the exact amount ready.",
+      "footnote": "You'll pay your mover directly after the move is complete.",
+      "helper": "Pay the mover on arrival in cash. No card charge.",
+      "label": "Cash",
+      "noUpfront": {
+        "label": "No upfront payment required"
+      },
+      "payAfter": {
+        "label": "Pay after move is complete"
+      },
+      "receipt": {
+        "label": "Receipt provided by mover"
+      },
+      "title": "Pay your mover directly"
+    },
+    "cashHandshake": {
+      "helper": "Please pay the mover directly (cash or transfer), then tap \"I Have Paid\" below."
+    },
+    "cashLong": {
+      "label": "Cash (pay mover directly)"
+    },
+    "cashReminder": {
+      "helper": "Please have {{amount}} ready to pay your mover after the move is complete."
+    },
+    "cashSelected": {
+      "title": "Cash payment selected"
+    },
+    "clientConfirmed": {
+      "label": "Client confirmed",
+      "success": "Client payment confirmed. Waiting for mover confirmation."
+    },
+    "confirmation": {
+      "title": "Payment Confirmation"
+    },
+    "confirming": {
+      "cta": "Confirming…"
+    },
+    "creditCard": {
+      "label": "Credit card"
+    },
+    "dualConfirm": {
+      "helper": "The mover must also confirm receipt before the move is marked complete."
+    },
+    "iHavePaid": {
+      "cta": "I Have Paid"
+    },
     "method": {
+      "card": {
+        "label": "Card"
+      },
       "cash": {
         "label": "Cash"
+      },
+      "helper": "How would you like to pay for the move?",
+      "label": "Preferred payment method"
+    },
+    "moverConfirm": {
+      "cta": "Confirm Payment Received",
+      "helper": "Confirm once the client has paid you"
+    },
+    "moverConfirmed": {
+      "success": "Mover payment confirmed. Waiting for client confirmation."
+    },
+    "paidOn": {
+      "label": "Paid on"
+    },
+    "payCard": {
+      "cta": "Pay by Card"
+    },
+    "payCash": {
+      "cta": "Pay Cash"
+    },
+    "payWith": {
+      "title": "Pay with"
+    },
+    "reminder": {
+      "body": "Please have <0>{{amount}}</0> ready to pay your mover directly {{when}}.",
+      "title": "Payment reminder",
+      "whenInstant": {
+        "label": "after the move is complete"
+      },
+      "whenScheduled": {
+        "label": "on move day"
       }
     },
     "section": {
       "title": "Payment"
+    },
+    "title": "Payment",
+    "yourConfirmation": {
+      "label": "Your confirmation"
+    }
+  },
+  "paypal": {
+    "email": {
+      "label": "PayPal email",
+      "placeholder": "your@email.com"
+    },
+    "redirect": {
+      "helper": "You'll be redirected to PayPal to complete your payment securely."
     }
   },
   "photos": {
+    "addMore": {
+      "cta": "Add more photos"
+    },
+    "additional": {
+      "helper": "Upload more photos of furniture, rooms, or specific items",
+      "label": "Additional photos"
+    },
+    "additionalCount_one": "{{count}} additional photo",
+    "additionalCount_other": "{{count}} additional photos",
+    "all": {
+      "title": "All Photos"
+    },
     "chooseGallery": {
       "cta": "Choose from gallery"
     },
+    "countSummary": {
+      "label": "{{main}} • {{additional}}"
+    },
+    "cover": {
+      "a11y": "Cover photo",
+      "helper": "Upload a main photo showing your items or space",
+      "label": "Cover photo"
+    },
     "formatHint": {
       "subtitle": "PNG, JPG up to 3MB"
+    },
+    "gallery": {
+      "a11y": "Move photos",
+      "helper": "Upload additional photos of furniture, rooms, or items",
+      "item": {
+        "a11y": "Gallery photo {{index}}"
+      },
+      "label": "Gallery photos"
+    },
+    "item": {
+      "a11y": "Move photo"
+    },
+    "itemIndexed": {
+      "a11y": "Move photo {{index}}"
+    },
+    "itemNumbered": {
+      "a11y": "Move photo {{n}}"
+    },
+    "main": {
+      "cta": "Tap to upload main photo",
+      "helper": "Upload a main photo showing your items or the space",
+      "label": "Main photo"
+    },
+    "mainCount_one": "{{count}} main photo",
+    "mainCount_other": "{{count}} main photos",
+    "photoCount_one": "{{count}} photo",
+    "photoCount_other": "{{count}} photos",
+    "preview": {
+      "a11y": "Move preview"
+    },
+    "required": {
+      "error": "Please add at least one photo of your items before continuing."
     },
     "sourceSheet": {
       "title": "Add a photo"
@@ -265,12 +970,83 @@
       "cta": "Take a photo"
     }
   },
+  "pickup": {
+    "edit": {
+      "a11y": "Edit pickup location"
+    },
+    "fallback": {
+      "label": "Pickup location"
+    },
+    "label": "Pickup location",
+    "location": {
+      "label": "Pickup Location"
+    },
+    "required": {
+      "error": "Please select a pickup location"
+    },
+    "short": {
+      "label": "Pickup"
+    },
+    "tapToSelect": {
+      "placeholder": "Tap to select pickup"
+    },
+    "tapToSelectLong": {
+      "placeholder": "Tap to select pickup location"
+    }
+  },
+  "pickupAddress": {
+    "label": "Pickup Address"
+  },
+  "price": {
+    "estimated": {
+      "label": "Estimated price"
+    },
+    "final": {
+      "label": "Final price"
+    }
+  },
   "pricing": {
+    "additionalServicesCount": {
+      "label_one": "Additional services ({{count}})",
+      "label_other": "Additional services ({{count}})"
+    },
+    "baseFare": {
+      "label": "Base fare"
+    },
     "baseRate": {
       "label": "Base rate ({{moveType}})"
     },
+    "baseRateWithDistance": {
+      "label": "Base rate ({{moveType}}, {{distance}})"
+    },
+    "crew": {
+      "label": "Crew ({{crew}})"
+    },
+    "estimatedTotal": {
+      "label": "Estimated total"
+    },
+    "finalAfterReview": {
+      "helper": "Final price confirmed after review"
+    },
+    "floorSurcharge": {
+      "label": "Floor surcharge"
+    },
+    "itemsCount": {
+      "label_one": "Items ({{count}})",
+      "label_other": "Items ({{count}})"
+    },
+    "moverFare": {
+      "label": "Mover fare"
+    },
+    "packingService": {
+      "label": "Packing service"
+    },
     "storage": {
       "label": "Storage"
+    },
+    "storageWeeks": {
+      "label_one": "Storage ({{count}} week)",
+      "label_other": "Storage ({{count}} weeks)"
     },
     "subtotal": {
       "label": "Subtotal"
@@ -282,7 +1058,56 @@
       "label": "VAT ({{rate}})"
     }
   },
+  "route": {
+    "driveTime": {
+      "label": "~{{duration}} drive"
+    },
+    "from": {
+      "label": "From"
+    },
+    "title": "Route details",
+    "to": {
+      "label": "To"
+    }
+  },
+  "service": {
+    "applianceConnect": {
+      "helper": "Reconnect appliances at the new address",
+      "label": "Appliance connect"
+    },
+    "applianceDisconnect": {
+      "helper": "Disconnect washing machine, dishwasher, dryer",
+      "label": "Appliance disconnect"
+    },
+    "assembly": {
+      "helper": "We reassemble furniture at the new location",
+      "label": "Furniture assembly"
+    },
+    "cleaning": {
+      "helper": "Professional cleaning of your old apartment",
+      "label": "Move-out cleaning"
+    },
+    "disassembly": {
+      "helper": "We disassemble beds, wardrobes, tables before loading",
+      "label": "Furniture disassembly"
+    },
+    "disposal": {
+      "helper": "Dispose of unwanted furniture and items",
+      "label": "Disposal (Entsorgung)"
+    },
+    "storage": {
+      "helper": "Store items securely between moves",
+      "label": "Temporary storage"
+    },
+    "tvMount": {
+      "helper": "Mount or remove wall-mounted TVs",
+      "label": "TV mount / remove"
+    }
+  },
   "services": {
+    "additional": {
+      "label": "Additional Services"
+    },
     "applianceConnect": {
       "helper": "Reconnect appliances at new location",
       "label": "Appliance Connect",
@@ -293,10 +1118,15 @@
       "label": "Appliance Disconnect",
       "option": "Appliance disconnect"
     },
+    "detailsSubtitle": "Your selected services and preferences",
+    "detailsTitle": "Service details",
     "disposal": {
       "helper": "Dispose of unwanted items at the city Wertstoffhof",
       "label": "Disposal (Entsorgung)",
       "option": "Disposal (Entsorgung)"
+    },
+    "disposalItems": {
+      "label": "Disposal items: {{items}}"
     },
     "furnitureAssembly": {
       "helper": "We assemble furniture at new location",
@@ -313,15 +1143,49 @@
       "label": "Move-out Cleaning",
       "option": "Move-out cleaning"
     },
+    "section": {
+      "title": "Services"
+    },
+    "subtitle": "Extra services you've selected",
     "temporaryStorage": {
       "helper": "Store items between pickup and dropoff dates",
       "label": "Temporary Storage",
       "option": "Temporary storage"
     },
+    "temporaryStorageWeeks": {
+      "label_one": "Temporary storage: {{count}} week",
+      "label_other": "Temporary storage: {{count}} weeks"
+    },
+    "title": "Additional services",
     "tvMountRemove": {
       "helper": "Detach wall-mounted TVs at pickup",
       "label": "TV Mount Removal",
       "option": "TV mount removal"
+    }
+  },
+  "storage": {
+    "helper": "Standard storage units are climate-controlled and insured.",
+    "title": "Storage details",
+    "weeks": {
+      "label": "How many weeks of storage?"
+    }
+  },
+  "storageWeekCount_one": "{{count}} week",
+  "storageWeekCount_other": "{{count}} weeks",
+  "storageWeeks_one": "{{count}} week",
+  "storageWeeks_other": "{{count}} weeks",
+  "streetAddress": {
+    "dropoff": {
+      "helper": "Enter the full delivery street address",
+      "placeholder": "e.g., Berliner Straße 12"
+    },
+    "label": "Street address",
+    "pickup": {
+      "helper": "Enter the full pickup street address",
+      "placeholder": "e.g., Hauptstraße 45"
+    },
+    "required": {
+      "error": "Please enter a street address"
     }
   },
   "timeSlot": {
@@ -335,15 +1199,89 @@
       "label": "Morning"
     }
   },
+  "timing": {
+    "now": {
+      "label": "Now"
+    },
+    "title": "Move timing"
+  },
+  "timingPrefs": {
+    "earliest": {
+      "label": "Prefer earliest possible arrival"
+    },
+    "helper": "Select any additional timing preferences.",
+    "noEvening": {
+      "label": "Avoid evening delivery"
+    },
+    "noLunchGap": {
+      "label": "Avoid lunch break gap"
+    },
+    "title": "Optional preferences"
+  },
   "vehicle": {
+    "addDetails": {
+      "helper": "Add your vehicle details"
+    },
+    "brand": {
+      "label": "Vehicle Brand *",
+      "placeholder": "e.g. Mercedes-Benz"
+    },
+    "brandShort": {
+      "label": "Brand *"
+    },
+    "capacity": {
+      "label": "Capacity (m³)",
+      "placeholder": "e.g. 15",
+      "value": "{{capacity}} m³"
+    },
+    "edit": {
+      "title": "Edit Vehicle Information"
+    },
     "largeTruck": {
+      "capacity": "25+ m³",
+      "helper": "25+ m³ — house moves, large loads",
       "label": "Large Truck"
     },
     "mediumTruck": {
+      "capacity": "10–25 m³",
+      "helper": "10–25 m³ — apartment moves",
       "label": "Medium Truck"
     },
+    "model": {
+      "label": "Vehicle Model *",
+      "placeholder": "e.g. Sprinter"
+    },
+    "modelShort": {
+      "label": "Model *"
+    },
+    "multiple": {
+      "label": "Multiple"
+    },
+    "registration": {
+      "label": "Vehicle Registration *",
+      "placeholder": "e.g. B-AB 1234"
+    },
+    "registrationShort": {
+      "label": "Registration *"
+    },
     "smallVan": {
+      "capacity": "Up to 10 m³",
+      "helper": "Up to 10 m³ — small moves, single items",
       "label": "Small Van"
+    },
+    "title": "Vehicle Information",
+    "type": {
+      "label": "Vehicle type"
+    },
+    "updated": {
+      "success": "Vehicle information updated successfully"
+    },
+    "year": {
+      "label": "Year *",
+      "placeholder": "e.g. 2022"
+    },
+    "yearShort": {
+      "label": "Year"
     }
   }
 }

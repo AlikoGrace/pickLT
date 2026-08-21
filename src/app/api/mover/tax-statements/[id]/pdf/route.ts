@@ -1,3 +1,4 @@
+import { getTranslations } from '@/lib/i18n-server'
 import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
@@ -10,9 +11,10 @@ import { NextRequest, NextResponse } from 'next/server'
  * ownership server-side and streams the bytes with the server key.
  */
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { t } = await getTranslations()
   try {
     const userId = await getSessionUserId()
-    if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    if (!userId) return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
 
     const { id } = await params
     const { databases, storage } = createAdminClient()
@@ -23,10 +25,10 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
       id,
     )
     if (statement.driverUserId !== userId) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+      return NextResponse.json({ error: t('errors:auth.forbidden') }, { status: 403 })
     }
     if (!statement.fileId) {
-      return NextResponse.json({ error: 'Statement PDF not ready yet' }, { status: 404 })
+      return NextResponse.json({ error: t('errors:tax.pdfNotReady') }, { status: 404 })
     }
 
     const bytes = await storage.getFileDownload(APPWRITE.BUCKETS.TAX_STATEMENTS, statement.fileId)
@@ -39,6 +41,6 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
     })
   } catch (err) {
     console.error('[tax-statements] pdf failed', err)
-    return NextResponse.json({ error: 'Failed to load PDF' }, { status: 500 })
+    return NextResponse.json({ error: t('errors:tax.pdfLoadFailed') }, { status: 500 })
   }
 }

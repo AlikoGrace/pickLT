@@ -1,3 +1,4 @@
+import { getTranslations } from '@/lib/i18n-server'
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
@@ -16,22 +17,23 @@ import { getSessionUserId } from '@/lib/auth-session'
  * Body: { email: string }
  */
 export async function POST(req: NextRequest) {
+  const { t } = await getTranslations()
   try {
     const userId = await getSessionUserId()
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
     }
 
     const { email } = await req.json()
 
     if (!email || typeof email !== 'string') {
-      return NextResponse.json({ error: 'Email is required' }, { status: 400 })
+      return NextResponse.json({ error: t('errors:validation.emailRequired') }, { status: 400 })
     }
 
     // Basic email format validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
-      return NextResponse.json({ error: 'Invalid email format' }, { status: 400 })
+      return NextResponse.json({ error: t('errors:validation.emailFormat') }, { status: 400 })
     }
 
     const { users, databases } = createAdminClient()
@@ -53,12 +55,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true })
   } catch (err: unknown) {
     console.error('[change-email] Error:', err)
-    const message = err instanceof Error ? err.message : 'Failed to change email'
+    const message = err instanceof Error ? err.message : t('errors:profile.changeEmailFailed')
 
     // Handle Appwrite-specific errors
     if (message.includes('A user with the same email already exists')) {
       return NextResponse.json(
-        { error: 'This email is already in use by another account' },
+        { error: t('errors:profile.emailTaken') },
         { status: 409 }
       )
     }

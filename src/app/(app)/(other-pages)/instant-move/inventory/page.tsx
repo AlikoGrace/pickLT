@@ -22,7 +22,7 @@ import {
 import { HugeiconsIcon } from '@hugeicons/react'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { categoryLabel, categoryTranslator } from '@/lib/inventory-i18n'
 
 // Inventory item definitions with internal metadata for move estimation
@@ -262,10 +262,10 @@ const InstantMoveInventoryPage = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-2xl font-semibold text-neutral-900 dark:text-white sm:text-3xl">
-            What are you moving?
+            {t('web:instant.inventory.title')}
           </h1>
           <p className="mt-2 text-neutral-500 dark:text-neutral-400">
-            Select the items you need to move. This helps us find the right mover for you.
+            {t('web:instant.inventory.subtitle')}
           </p>
         </div>
 
@@ -299,9 +299,9 @@ const InstantMoveInventoryPage = () => {
                     onClick={() => handleEditLocation('pickup')}
                     className="block w-full text-left rounded-lg px-2 py-1 -mx-2 hover:bg-neutral-100 dark:hover:bg-neutral-700/60 transition"
                   >
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400">From</p>
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400">{t('booking:route.from.label')}</p>
                     <p className="text-sm font-medium text-neutral-900 dark:text-white truncate">
-                      {pickupLocation || 'Tap to select pickup'}
+                      {pickupLocation || t('booking:pickup.tapToSelect.placeholder')}
                     </p>
                   </button>
                   <button
@@ -309,9 +309,9 @@ const InstantMoveInventoryPage = () => {
                     onClick={() => handleEditLocation('dropoff')}
                     className="block w-full text-left rounded-lg px-2 py-1 -mx-2 hover:bg-neutral-100 dark:hover:bg-neutral-700/60 transition"
                   >
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400">To</p>
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400">{t('booking:route.to.label')}</p>
                     <p className="text-sm font-medium text-neutral-900 dark:text-white truncate">
-                      {dropoffLocation || 'Tap to select drop-off'}
+                      {dropoffLocation || t('booking:dropoff.tapToSelect.placeholder')}
                     </p>
                   </button>
                 </div>
@@ -352,7 +352,7 @@ const InstantMoveInventoryPage = () => {
           <div className="rounded-2xl border border-neutral-200 bg-white p-4 dark:border-neutral-700 dark:bg-neutral-800 mb-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
-                Move classification
+                {t('booking:classification.title')}
               </span>
               <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
                 classification.recommendedType === 'premium'
@@ -361,29 +361,30 @@ const InstantMoveInventoryPage = () => {
                   ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
                   : 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
               }`}>
-                {classification.recommendedType === 'premium' ? 'Premium' : classification.recommendedType === 'regular' ? 'Regular' : 'Light'} Move
+                {/* i18n-keys: booking.moveType.light.label, booking.moveType.regular.label, booking.moveType.premium.label */}
+                {t(`booking:moveType.${classification.recommendedType}.label`)}
               </span>
             </div>
             <div className="grid grid-cols-3 gap-3 text-center">
               <div>
                 <p className="text-lg font-bold text-neutral-900 dark:text-white">{classification.totalItems}</p>
-                <p className="text-xs text-neutral-500">Items</p>
+                <p className="text-xs text-neutral-500">{t('booking:inventory.itemsCount.label')}</p>
               </div>
               <div>
                 <p className="text-lg font-bold text-neutral-900 dark:text-white">{classification.totalWeightKg.toFixed(0)} kg</p>
-                <p className="text-xs text-neutral-500">Est. weight</p>
+                <p className="text-xs text-neutral-500">{t('booking:classification.weight.label')}</p>
               </div>
               <div>
                 <p className="text-lg font-bold text-neutral-900 dark:text-white">{classification.totalPoints}</p>
-                <p className="text-xs text-neutral-500">Points</p>
+                <p className="text-xs text-neutral-500">{t('booking:classification.points.label')}</p>
               </div>
             </div>
             {/* Progress bar */}
             <div className="mt-3">
               <div className="flex items-center justify-between text-xs text-neutral-500 mb-1">
-                <span>Light</span>
-                <span>Regular</span>
-                <span>Premium</span>
+                <span>{t('booking:moveType.light.short')}</span>
+                <span>{t('booking:moveType.regular.short')}</span>
+                <span>{t('booking:moveType.premium.short')}</span>
               </div>
               <div className="h-2 w-full rounded-full bg-neutral-100 dark:bg-neutral-700 overflow-hidden">
                 <div
@@ -402,7 +403,7 @@ const InstantMoveInventoryPage = () => {
         )}
 
         {/* ─── Classification Warnings ─── */}
-        {classification.warnings.length > 0 && (
+        {classification.warningKeys.length > 0 && (
           <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-900/20 mb-4">
             <div className="flex items-start gap-3">
               <HugeiconsIcon
@@ -413,12 +414,13 @@ const InstantMoveInventoryPage = () => {
               />
               <div>
                 <p className="text-sm font-medium text-amber-800 dark:text-amber-200 mb-1">
-                  Move classification notice
+                  {t('booking:classification.notice.title')}
                 </p>
                 <ul className="space-y-1">
-                  {classification.warnings.map((warning, i) => (
-                    <li key={i} className="text-sm text-amber-700 dark:text-amber-300">
-                      • {warning}
+                  {/* i18n-keys: booking:classification.nearLimit.light, booking:classification.nearLimit.regular, booking:classification.itemMinimum.premium, booking:classification.itemMinimum.regular */}
+                  {classification.warningKeys.map((warning) => (
+                    <li key={warning.key} className="text-sm text-amber-700 dark:text-amber-300">
+                      • {t(warning.key, warning.params)}
                     </li>
                   ))}
                 </ul>
@@ -435,20 +437,20 @@ const InstantMoveInventoryPage = () => {
           <div className="mb-4 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-700/60 dark:bg-amber-900/20 dark:text-amber-200">
             <p className="font-medium">
               {catalogState === 'empty'
-                ? 'No items available yet'
-                : "Couldn't load the item list"}
+                ? t('booking:inventory.emptyCatalog.title')
+                : t('booking:inventory.loadFailed.title')}
             </p>
             <p className="mt-1">
               {catalogState === 'empty'
-                ? 'Our movable-items list is being set up. Please try again shortly.'
-                : 'Check your connection and try again.'}
+                ? t('booking:inventory.emptyCatalog.subtitle')
+                : t('common:error.checkConnection')}
             </p>
             <button
               type="button"
               onClick={() => setCatalogAttempt((n) => n + 1)}
               className="mt-2 rounded-md bg-amber-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-amber-800 dark:bg-amber-200 dark:text-amber-950 dark:hover:bg-amber-100"
             >
-              Try again
+              {t('common:action.tryAgain.cta')}
             </button>
           </div>
         )}
@@ -491,9 +493,9 @@ const InstantMoveInventoryPage = () => {
 
         {/* Special Items Section */}
         <div className="mb-8">
-          <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-2">Special Items</h2>
+          <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-2">{t('booking:inventory.specialItems.title')}</h2>
           <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-6">
-            These items require special handling and may affect pricing.
+            {t('booking:inventory.specialItems.helper')}
           </p>
           <div className="space-y-4">
             {specialItems.map((item) => (
@@ -516,14 +518,14 @@ const InstantMoveInventoryPage = () => {
         {/* Custom Items Section */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Custom Items</h2>
+            <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">{t('booking:inventory.customItems.title')}</h2>
             <ButtonSecondary 
               type="button" 
               onClick={() => setIsModalOpen(true)}
               className="!px-4 !py-2"
             >
               <HugeiconsIcon icon={Add01Icon} size={18} strokeWidth={1.5} />
-              <span>Add custom item</span>
+              <span>{t('booking:inventory.addCustom.cta')}</span>
             </ButtonSecondary>
           </div>
 
@@ -537,9 +539,11 @@ const InstantMoveInventoryPage = () => {
                   <div>
                     <p className="font-medium text-neutral-900 dark:text-white">{item.name}</p>
                     <p className="text-sm text-neutral-500 dark:text-neutral-400">
-                      Qty: {item.quantity}
-                      {item.approxSize && ` • Size: ${item.approxSize}`}
-                      {item.approxWeight && ` • Weight: ${item.approxWeight}`}
+                      {t('booking:inventory.custom.qty.label', { count: item.quantity })}
+                      {item.approxSize &&
+                        ` ${t('booking:inventory.custom.size.label', { size: item.approxSize })}`}
+                      {item.approxWeight &&
+                        ` ${t('booking:inventory.custom.weight.label', { weight: item.approxWeight })}`}
                     </p>
                   </div>
                   <button
@@ -554,7 +558,7 @@ const InstantMoveInventoryPage = () => {
             </div>
           ) : (
             <p className="text-sm text-neutral-500 dark:text-neutral-400">
-              No custom items added yet. Click the button above to add items not listed.
+              {t('booking:inventory.customItems.empty')}
             </p>
           )}
         </div>
@@ -565,7 +569,7 @@ const InstantMoveInventoryPage = () => {
         <div className="mx-auto max-w-3xl flex items-center justify-between gap-4">
           <ButtonSecondary onClick={handleBack} className="flex items-center gap-2">
             <HugeiconsIcon icon={ArrowLeft02Icon} size={18} strokeWidth={1.5} />
-            Back
+            {t('common:action.back.cta')}
           </ButtonSecondary>
           <div className="flex items-center gap-4">
             {totalItems > 0 && (
@@ -578,7 +582,7 @@ const InstantMoveInventoryPage = () => {
               disabled={totalItems === 0}
               className="disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Add photos
+              {t('web:instant.inventory.next.cta')}
             </ButtonPrimary>
           </div>
         </div>
@@ -590,16 +594,16 @@ const InstantMoveInventoryPage = () => {
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <DialogPanel className="w-full max-w-md bg-white dark:bg-neutral-900 rounded-2xl p-6 shadow-xl">
             <DialogTitle className="text-lg font-semibold text-neutral-900 dark:text-white mb-4">
-              Add Custom Item
+              {t('booking:inventory.customModal.title')}
             </DialogTitle>
 
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
-                  Item name *
+                  {t('booking:inventory.custom.name.label')}
                 </label>
                 <Input
-                  placeholder="e.g., Grandfather clock"
+                  placeholder={t('booking:inventory.custom.name.placeholder')}
                   value={customItemForm.name}
                   onChange={(e) => setCustomItemForm({ ...customItemForm, name: e.target.value })}
                 />
@@ -607,7 +611,7 @@ const InstantMoveInventoryPage = () => {
 
               <div>
                 <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
-                  Quantity
+                  {t('common:field.quantity.label')}
                 </label>
                 <Input
                   type="number"
@@ -621,10 +625,10 @@ const InstantMoveInventoryPage = () => {
 
               <div>
                 <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
-                  Approximate size
+                  {t('booking:inventory.custom.sizeField.label')}
                 </label>
                 <Input
-                  placeholder="e.g., 100x50x200 cm"
+                  placeholder={t('booking:inventory.custom.sizeField.placeholder')}
                   value={customItemForm.approxSize}
                   onChange={(e) => setCustomItemForm({ ...customItemForm, approxSize: e.target.value })}
                 />
@@ -632,10 +636,10 @@ const InstantMoveInventoryPage = () => {
 
               <div>
                 <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
-                  Approximate weight
+                  {t('booking:inventory.custom.weightField.label')}
                 </label>
                 <Input
-                  placeholder="e.g., 50 kg"
+                  placeholder={t('booking:inventory.custom.weightField.placeholder')}
                   value={customItemForm.approxWeight}
                   onChange={(e) => setCustomItemForm({ ...customItemForm, approxWeight: e.target.value })}
                 />
@@ -644,7 +648,7 @@ const InstantMoveInventoryPage = () => {
 
             <div className="flex justify-end gap-3 mt-6">
               <ButtonSecondary type="button" onClick={() => setIsModalOpen(false)}>
-                Cancel
+                {t('common:action.cancel.cta')}
               </ButtonSecondary>
               <button
                 type="button"
@@ -652,7 +656,7 @@ const InstantMoveInventoryPage = () => {
                 disabled={!customItemForm.name.trim()}
                 className="px-4 py-2 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-full font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-colors"
               >
-                Add Item
+                {t('booking:inventory.addItem.cta')}
               </button>
             </div>
           </DialogPanel>
@@ -674,15 +678,34 @@ const InstantMoveInventoryPage = () => {
                 />
               </div>
               <DialogTitle className="text-lg font-semibold text-neutral-900 dark:text-white mb-2">
-                Move type upgrade recommended
+                {t('booking:classification.upgrade.title')}
               </DialogTitle>
               <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">
-                Based on your selected items, we recommend upgrading from{' '}
-                <span className="font-semibold">{classification.upgradeFrom}</span> to{' '}
-                <span className="font-semibold">{classification.upgradeTo}</span>.
+                {/* i18n-keys: booking.moveType.light.label, booking.moveType.regular.label, booking.moveType.premium.label */}
+                <Trans
+                  i18nKey="booking:classification.upgrade.subtitle"
+                  values={{
+                    from: classification.upgradeFrom
+                      ? t(`booking:moveType.${classification.upgradeFrom}.label`)
+                      : '',
+                    to: classification.upgradeTo
+                      ? t(`booking:moveType.${classification.upgradeTo}.label`)
+                      : '',
+                  }}
+                  components={[
+                    <span key="from" className="font-semibold" />,
+                    <span key="to" className="font-semibold" />,
+                  ]}
+                />
               </p>
               <p className="text-xs text-neutral-500 dark:text-neutral-500 mb-6">
-                {classification.totalItems} items · ~{classification.totalWeightKg.toFixed(0)} kg · {classification.totalPoints} points
+                {t('booking:classification.summary.label', {
+                  items: t('moves:itemCount', { count: classification.totalItems }),
+                  weight: classification.totalWeightKg.toFixed(0),
+                  points: t('booking:classification.pointCount', {
+                    count: classification.totalPoints,
+                  }),
+                })}
               </p>
             </div>
 
@@ -692,14 +715,18 @@ const InstantMoveInventoryPage = () => {
                 onClick={handleDismissUpgrade}
                 className="flex-1"
               >
-                Keep current
+                {t('booking:classification.keepCurrent.cta')}
               </ButtonSecondary>
               <ButtonPrimary
                 type="button"
                 onClick={handleAcceptUpgrade}
                 className="flex-1"
               >
-                Upgrade to {classification.upgradeTo}
+                {t('booking:classification.upgrade.cta', {
+                  tier: classification.upgradeTo
+                    ? t(`booking:moveType.${classification.upgradeTo}.label`)
+                    : '',
+                })}
               </ButtonPrimary>
             </div>
           </DialogPanel>
@@ -714,7 +741,11 @@ const InstantMoveInventoryPage = () => {
         initialCoordinates={
           editingLocationType === 'pickup' ? pickupCoordinates : dropoffCoordinates
         }
-        label={editingLocationType === 'pickup' ? 'Edit pickup location' : 'Edit drop-off location'}
+        label={
+          editingLocationType === 'pickup'
+            ? t('booking:pickup.edit.a11y')
+            : t('booking:dropoff.edit.a11y')
+        }
       />
     </div>
   )

@@ -2,10 +2,10 @@
 
 import ButtonSecondary from '@/shared/ButtonSecondary'
 import Heading from '@/shared/Heading'
-import T from '@/utils/getT'
 import { Tab, TabGroup, TabList } from '@headlessui/react'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
 import { FC, ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 
 /**
  * A tab may be a plain string (caption and identity are the same word) or a
@@ -36,6 +36,7 @@ const SectionTabHeader: FC<Props> = ({
   onChangeTab,
   rightButtonHref = '/account-savelists',
 }) => {
+  const { t } = useTranslation()
   const items = tabs.map(normalizeTab)
 
   return (
@@ -61,7 +62,7 @@ const SectionTabHeader: FC<Props> = ({
           </TabGroup>
         </div>
         <ButtonSecondary className="ml-auto shrink-0" href={rightButtonHref}>
-          <span>{T['common']['View all']}</span>
+          <span>{t('common:action.viewAll.cta')}</span>
           <ArrowRightIcon className="size-5 rtl:rotate-180" />
         </ButtonSecondary>
       </div>

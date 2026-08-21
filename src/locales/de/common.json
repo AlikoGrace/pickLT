@@ -76,6 +76,11 @@
       "body": "Dies kann nicht rückgängig gemacht werden."
     }
   },
+  "date": {
+    "today": {
+      "label": "Heute"
+    }
+  },
   "mover": {
     "unnamed": {
       "label": "Umzugshelfer"
@@ -137,6 +142,12 @@
       "forMover": {
         "body": "Zahlung bestätigt. Wir warten auf die Bestätigung Ihres Umzugshelfers, bevor der Umzug abgeschlossen wird."
       }
+    }
+  },
+  "starRating": {
+    "rate": {
+      "a11y_one": "Mit {{count}} Stern bewerten",
+      "a11y_other": "Mit {{count}} Sternen bewerten"
     }
   },
   "state": {

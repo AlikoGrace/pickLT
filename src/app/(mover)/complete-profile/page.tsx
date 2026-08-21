@@ -1,9 +1,11 @@
 'use client'
 
 import { useAuth } from '@/context/auth'
+import { languageName, regionName } from '@/lib/format'
 import { compressImage } from '@/utils/compressImage'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   TruckIcon,
   IdentificationIcon,
@@ -16,45 +18,89 @@ import {
   CameraIcon,
 } from '@heroicons/react/24/outline'
 
-const VEHICLE_TYPES = [
-  { value: 'small_van', label: 'Small Van', description: 'Up to 10 m³ — small moves, single items' },
-  { value: 'medium_truck', label: 'Medium Truck', description: '10–25 m³ — apartment moves' },
-  { value: 'large_truck', label: 'Large Truck', description: '25+ m³ — house moves, large loads' },
+/**
+ * Option lists persist a stable value and look the label up at render time —
+ * never the other way round (catalog conventions §5). Nothing below derives a
+ * value FROM a label.
+ */
+const VEHICLE_TYPES: { value: string; key: 'smallVan' | 'mediumTruck' | 'largeTruck' }[] = [
+  { value: 'small_van', key: 'smallVan' },
+  { value: 'medium_truck', key: 'mediumTruck' },
+  { value: 'large_truck', key: 'largeTruck' },
 ]
 
-const LANGUAGES_OPTIONS = [
-  'English',
-  'German',
-  'French',
-  'Spanish',
-  'Turkish',
-  'Arabic',
-  'Polish',
-  'Romanian',
-  'Italian',
-  'Portuguese',
+/**
+ * `value` is the English language *name* because that is what
+ * `mover_profiles.languages` already holds and what the client-facing move
+ * pages render straight out of the document. It is a fixed literal, so the wire
+ * format stays stable; `code` exists only to name the option in the reader's
+ * language. Persisting BCP-47 codes instead (and backfilling the legacy rows)
+ * is the proper fix and is tracked outside this change.
+ */
+const LANGUAGES_OPTIONS: { value: string; code: string }[] = [
+  { value: 'English', code: 'en' },
+  { value: 'German', code: 'de' },
+  { value: 'French', code: 'fr' },
+  { value: 'Spanish', code: 'es' },
+  { value: 'Turkish', code: 'tr' },
+  { value: 'Arabic', code: 'ar' },
+  { value: 'Polish', code: 'pl' },
+  { value: 'Romanian', code: 'ro' },
+  { value: 'Italian', code: 'it' },
+  { value: 'Portuguese', code: 'pt' },
 ]
 
-const COUNTRIES = [
-  'Germany', 'Austria', 'Switzerland', 'Netherlands', 'Belgium',
-  'France', 'Luxembourg', 'Denmark', 'Poland', 'Czech Republic',
-  'United Kingdom', 'Ireland', 'Spain', 'Italy', 'Portugal',
-  'Sweden', 'Norway', 'Finland', 'United States', 'Canada',
+/** Same contract as `LANGUAGES_OPTIONS`: `value` is the stored English name
+ *  (`lib/sanctions.ts` maps those spellings to ISO2), `code` is display-only. */
+const COUNTRIES: { value: string; code: string }[] = [
+  { value: 'Germany', code: 'DE' },
+  { value: 'Austria', code: 'AT' },
+  { value: 'Switzerland', code: 'CH' },
+  { value: 'Netherlands', code: 'NL' },
+  { value: 'Belgium', code: 'BE' },
+  { value: 'France', code: 'FR' },
+  { value: 'Luxembourg', code: 'LU' },
+  { value: 'Denmark', code: 'DK' },
+  { value: 'Poland', code: 'PL' },
+  { value: 'Czech Republic', code: 'CZ' },
+  { value: 'United Kingdom', code: 'GB' },
+  { value: 'Ireland', code: 'IE' },
+  { value: 'Spain', code: 'ES' },
+  { value: 'Italy', code: 'IT' },
+  { value: 'Portugal', code: 'PT' },
+  { value: 'Sweden', code: 'SE' },
+  { value: 'Norway', code: 'NO' },
+  { value: 'Finland', code: 'FI' },
+  { value: 'United States', code: 'US' },
+  { value: 'Canada', code: 'CA' },
 ]
+
+/**
+ * Stored value → display name. Value-to-label only; there is deliberately no
+ * label-to-value lookup anywhere in this file.
+ */
+function countryLabel(value: string, locale: string): string {
+  const option = COUNTRIES.find((c) => c.value === value)
+  return option ? regionName(option.code, locale) : value
+}
 
 type Step = 'personal' | 'verification' | 'vehicle' | 'experience' | 'review'
 
-const STEPS: { key: Step; label: string; icon: typeof TruckIcon }[] = [
-  { key: 'personal', label: 'Personal Info', icon: IdentificationIcon },
-  { key: 'verification', label: 'Verification', icon: ShieldCheckIcon },
-  { key: 'vehicle', label: 'Vehicle Details', icon: TruckIcon },
-  { key: 'experience', label: 'Experience', icon: ClipboardDocumentCheckIcon },
-  { key: 'review', label: 'Review & Submit', icon: CheckCircleIcon },
+/** Order + icon only. The label is resolved during render so a language switch
+ *  is picked up (a module-scope label array would freeze the boot language). */
+const STEPS: { key: Step; icon: typeof TruckIcon }[] = [
+  { key: 'personal', icon: IdentificationIcon },
+  { key: 'verification', icon: ShieldCheckIcon },
+  { key: 'vehicle', icon: TruckIcon },
+  { key: 'experience', icon: ClipboardDocumentCheckIcon },
+  { key: 'review', icon: CheckCircleIcon },
 ]
 
 export default function CompleteProfilePage() {
   const { user, refreshProfile, updateUser } = useAuth()
   const router = useRouter()
+  const { t, i18n } = useTranslation()
+  const locale = i18n.resolvedLanguage ?? i18n.language
 
   const [currentStep, setCurrentStep] = useState<Step>('personal')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -175,7 +221,7 @@ export default function CompleteProfilePage() {
         })
         if (!uploadRes.ok) {
           const uploadErr = await uploadRes.json().catch(() => ({}))
-          throw new Error(uploadErr.error || 'Failed to upload driver\'s license photo')
+          throw new Error(uploadErr.error || t('errors:mover.licenseUploadFailed'))
         }
         const uploadData = await uploadRes.json()
         driversLicensePhotoUrl = uploadData.photoUrl
@@ -195,12 +241,12 @@ export default function CompleteProfilePage() {
         })
         if (!selfieRes.ok) {
           const selfieErr = await selfieRes.json().catch(() => ({}))
-          throw new Error(selfieErr.error || 'Failed to upload selfie photo')
+          throw new Error(selfieErr.error || t('errors:mover.selfieUploadFailed'))
         }
         const selfieData = await selfieRes.json()
         selfiePhotoUrl = selfieData.photoUrl
       } else {
-        throw new Error('Selfie photo is required for identity verification')
+        throw new Error(t('errors:mover.selfieRequired'))
       }
 
       // Submit mover profile (includes personal info)
@@ -233,7 +279,7 @@ export default function CompleteProfilePage() {
 
       if (!res.ok) {
         const data = await res.json()
-        throw new Error(data.error || 'Failed to submit profile')
+        throw new Error(data.error || t('errors:mover.profileSubmitFailed'))
       }
 
       // Refresh auth context to pick up the new mover profile
@@ -244,7 +290,7 @@ export default function CompleteProfilePage() {
       // Redirect to dashboard after brief delay
       setTimeout(() => router.push('/dashboard'), 2000)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong')
+      setError(err instanceof Error ? err.message : t('errors:generic.title'))
     } finally {
       setIsSubmitting(false)
     }
@@ -258,11 +304,11 @@ export default function CompleteProfilePage() {
             <CheckCircleIcon className="h-8 w-8 text-green-600 dark:text-green-400" />
           </div>
           <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
-            Profile Submitted!
+            {t('web:mover.onboarding.done.title')}
           </h2>
           <p className="mt-2 text-neutral-500 dark:text-neutral-400">
-            Your mover profile is under review. We&apos;ll notify you once it&apos;s verified.
-            You&apos;re being redirected to your dashboard...
+            {t('web:mover.onboarding.done.subtitle')}{' '}
+            {t('web:mover.onboarding.done.redirect')}
           </p>
         </div>
       </div>
@@ -274,10 +320,10 @@ export default function CompleteProfilePage() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
-          Complete Your Mover Profile
+          {t('web:mover.onboarding.title')}
         </h1>
         <p className="mt-1 text-neutral-500 dark:text-neutral-400">
-          Fill in your details to start accepting moves
+          {t('web:mover.onboarding.subtitle')}
         </p>
       </div>
 
@@ -287,6 +333,8 @@ export default function CompleteProfilePage() {
           {STEPS.map((step, idx) => {
             const isActive = idx === stepIdx
             const isCompleted = idx < stepIdx
+            // i18n-keys: web:mover.onboarding.step.personal.label, web:mover.onboarding.step.verification.label, web:mover.onboarding.step.vehicle.label, web:mover.onboarding.step.experience.label, web:mover.onboarding.step.review.label
+            const stepLabel = t(`web:mover.onboarding.step.${step.key}.label`)
             return (
               <div key={step.key} className="flex flex-1 items-center">
                 <div className="flex flex-col items-center">
@@ -314,7 +362,7 @@ export default function CompleteProfilePage() {
                           : 'text-neutral-400'
                     }`}
                   >
-                    {step.label}
+                    {stepLabel}
                   </span>
                 </div>
                 {idx < STEPS.length - 1 && (
@@ -336,41 +384,41 @@ export default function CompleteProfilePage() {
         {currentStep === 'personal' && (
           <div className="space-y-5">
             <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-              Personal Information
+              {t('profile:section.personal.title')}
             </h2>
             <div>
               <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                Full Name *
+                {t('common:field.fullName.required.label')}
               </label>
               <input
                 type="text"
                 value={form.fullName}
                 onChange={(e) => updateForm({ fullName: e.target.value })}
-                placeholder="Your full name"
+                placeholder={t('common:field.fullName.placeholder')}
                 className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
               />
             </div>
             <div>
               <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                Phone Number *
+                {t('common:field.phone.required.label')}
               </label>
               <input
                 type="tel"
                 value={form.phone}
                 onChange={(e) => updateForm({ phone: e.target.value })}
-                placeholder="+49 123 456 7890"
+                placeholder={t('web:mover.field.phone.placeholder')}
                 className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
               />
             </div>
             <div>
               <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                Driver&apos;s License Number *
+                {t('web:mover.field.licenseNumber.label')}
               </label>
               <input
                 type="text"
                 value={form.driversLicense}
                 onChange={(e) => updateForm({ driversLicense: e.target.value })}
-                placeholder="Enter your driver's license number"
+                placeholder={t('web:mover.field.licenseNumber.placeholder')}
                 className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
               />
             </div>
@@ -381,16 +429,16 @@ export default function CompleteProfilePage() {
         {currentStep === 'verification' && (
           <div className="space-y-5">
             <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-              Verification & Work Location
+              {t('web:mover.section.verification.title')}
             </h2>
             <p className="text-sm text-neutral-500 dark:text-neutral-400">
-              This information is required for identity verification and will be kept secure.
+              {t('web:mover.section.verification.helper')}
             </p>
 
             {/* Driver's License Photo */}
             <div>
               <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                Driver&apos;s License Photo
+                {t('web:mover.field.licensePhoto.label')}
               </label>
               <input
                 ref={licensePhotoRef}
@@ -411,7 +459,7 @@ export default function CompleteProfilePage() {
                 <div className="relative">
                   <img
                     src={form.driversLicensePhotoPreview}
-                    alt="License preview"
+                    alt={t('web:mover.field.licensePhoto.a11y')}
                     className="h-40 w-full rounded-xl object-cover border border-neutral-200 dark:border-neutral-700"
                   />
                   <button
@@ -419,7 +467,7 @@ export default function CompleteProfilePage() {
                     onClick={() => licensePhotoRef.current?.click()}
                     className="absolute bottom-2 right-2 rounded-full bg-white/90 dark:bg-neutral-800/90 px-3 py-1.5 text-xs font-medium shadow transition hover:bg-white"
                   >
-                    Change photo
+                    {t('common:action.changePhoto.cta')}
                   </button>
                 </div>
               ) : (
@@ -429,88 +477,88 @@ export default function CompleteProfilePage() {
                   className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-neutral-300 py-8 text-sm text-neutral-500 transition hover:border-primary-400 hover:text-primary-600 dark:border-neutral-600 dark:hover:border-primary-500"
                 >
                   <CameraIcon className="h-5 w-5" />
-                  Upload a photo of your driver&apos;s license
+                  {t('web:mover.field.licensePhoto.cta')}
                 </button>
               )}
               <p className="mt-1 text-xs text-neutral-400">
-                A clear photo helps speed up verification
+                {t('web:mover.field.licensePhoto.helper')}
               </p>
             </div>
 
             {/* SSN */}
             <div>
               <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                Social Security Number *
+                {t('web:mover.field.ssn.label')}
               </label>
               <input
                 type="password"
                 value={form.socialSecurityNumber}
                 onChange={(e) => updateForm({ socialSecurityNumber: e.target.value })}
-                placeholder="Enter your SSN"
+                placeholder={t('web:mover.field.ssn.placeholder')}
                 autoComplete="off"
                 className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
               />
               <p className="mt-1 text-xs text-neutral-400">
-                Encrypted and only used for tax verification
+                {t('web:mover.field.ssn.helper')}
               </p>
             </div>
 
             {/* Tax Number */}
             <div>
               <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                Tax Identification Number *
+                {t('web:mover.field.taxId.label')}
               </label>
               <input
                 type="text"
                 value={form.taxNumber}
                 onChange={(e) => updateForm({ taxNumber: e.target.value })}
-                placeholder="e.g. DE123456789"
+                placeholder={t('web:mover.field.taxId.placeholder')}
                 className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
               />
               <p className="mt-1 text-xs text-neutral-400">
-                Required for invoice generation and tax reporting
+                {t('web:mover.field.taxId.helper')}
               </p>
             </div>
 
             {/* VAT ID + business address — feed the monthly tax statement header (T8) */}
             <div>
               <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                VAT ID (USt-IdNr., optional)
+                {t('web:mover.field.vatId.label')}
               </label>
               <input
                 type="text"
                 value={form.vatId}
                 onChange={(e) => updateForm({ vatId: e.target.value })}
-                placeholder="e.g. DE123456789"
+                placeholder={t('web:mover.field.vatId.placeholder')}
                 className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
               />
               <p className="mt-1 text-xs text-neutral-400">
-                Leave empty if you are a Kleinunternehmer without a VAT ID
+                {t('web:mover.field.vatId.helper')}
               </p>
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                  Business street address (optional)
+                  {t('web:mover.field.businessStreet.label')}
                 </label>
                 <input
                   type="text"
                   value={form.businessStreet}
                   onChange={(e) => updateForm({ businessStreet: e.target.value })}
-                  placeholder="Street and number"
+                  placeholder={t('web:mover.field.businessStreet.placeholder')}
                   className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
                 />
               </div>
               <div>
                 <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                  Postcode (optional)
+                  {t('web:mover.field.postcode.label')}
                 </label>
                 <input
                   type="text"
                   value={form.businessPostcode}
                   onChange={(e) => updateForm({ businessPostcode: e.target.value })}
-                  placeholder="e.g. 10115"
+                  placeholder={t('web:mover.field.postcode.placeholder')}
                   className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
                 />
               </div>
@@ -519,7 +567,7 @@ export default function CompleteProfilePage() {
             {/* Selfie Upload */}
             <div>
               <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                Selfie Photo *
+                {t('web:mover.field.selfie.label')}
               </label>
               <input
                 ref={selfiePhotoRef}
@@ -541,7 +589,7 @@ export default function CompleteProfilePage() {
                 <div className="relative">
                   <img
                     src={form.selfiePhotoPreview}
-                    alt="Selfie preview"
+                    alt={t('web:mover.field.selfie.a11y')}
                     className="h-48 w-48 rounded-full object-cover border-4 border-primary-500 mx-auto"
                   />
                   <button
@@ -549,7 +597,7 @@ export default function CompleteProfilePage() {
                     onClick={() => selfiePhotoRef.current?.click()}
                     className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 rounded-full bg-white/90 dark:bg-neutral-800/90 px-3 py-1.5 text-xs font-medium shadow transition hover:bg-white"
                   >
-                    Retake selfie
+                    {t('web:mover.field.selfie.retake.cta')}
                   </button>
                 </div>
               ) : (
@@ -559,27 +607,27 @@ export default function CompleteProfilePage() {
                   className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-neutral-300 py-8 text-sm text-neutral-500 transition hover:border-primary-400 hover:text-primary-600 dark:border-neutral-600 dark:hover:border-primary-500"
                 >
                   <CameraIcon className="h-5 w-5" />
-                  Take or upload a clear selfie
+                  {t('web:mover.field.selfie.cta')}
                 </button>
               )}
               <p className="mt-1 text-xs text-neutral-400">
-                A clear selfie is required for identity verification
+                {t('web:mover.field.selfie.helper')}
               </p>
             </div>
 
             {/* Country */}
             <div>
               <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                Country *
+                {t('common:field.country.label')}
               </label>
               <select
                 value={form.primaryCountry}
                 onChange={(e) => updateForm({ primaryCountry: e.target.value })}
                 className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
               >
-                <option value="">Select your country</option>
+                <option value="">{t('common:field.country.placeholder')}</option>
                 {COUNTRIES.map((c) => (
-                  <option key={c} value={c}>{c}</option>
+                  <option key={c.code} value={c.value}>{regionName(c.code, locale)}</option>
                 ))}
               </select>
             </div>
@@ -587,17 +635,17 @@ export default function CompleteProfilePage() {
             {/* City */}
             <div>
               <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                City *
+                {t('common:field.city.label')}
               </label>
               <input
                 type="text"
                 value={form.primaryCity}
                 onChange={(e) => updateForm({ primaryCity: e.target.value })}
-                placeholder="e.g. Berlin"
+                placeholder={t('common:field.city.placeholder')}
                 className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
               />
               <p className="mt-1 text-xs text-neutral-400">
-                The city where you primarily operate as a mover
+                {t('web:mover.field.city.helper')}
               </p>
             </div>
           </div>
@@ -608,30 +656,30 @@ export default function CompleteProfilePage() {
         {currentStep === 'vehicle' && (
           <div className="space-y-5">
             <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-              Vehicle Information
+              {t('booking:vehicle.title')}
             </h2>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                  Vehicle Brand *
+                  {t('booking:vehicle.brand.label')}
                 </label>
                 <input
                   type="text"
                   value={form.vehicleBrand}
                   onChange={(e) => updateForm({ vehicleBrand: e.target.value })}
-                  placeholder="e.g. Mercedes-Benz"
+                  placeholder={t('booking:vehicle.brand.placeholder')}
                   className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
                 />
               </div>
               <div>
                 <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                  Vehicle Model *
+                  {t('booking:vehicle.model.label')}
                 </label>
                 <input
                   type="text"
                   value={form.vehicleModel}
                   onChange={(e) => updateForm({ vehicleModel: e.target.value })}
-                  placeholder="e.g. Sprinter"
+                  placeholder={t('booking:vehicle.model.placeholder')}
                   className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
                 />
               </div>
@@ -639,7 +687,7 @@ export default function CompleteProfilePage() {
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                  Year *
+                  {t('booking:vehicle.year.label')}
                 </label>
                 <input
                   type="text"
@@ -648,7 +696,7 @@ export default function CompleteProfilePage() {
                     const val = e.target.value.replace(/\D/g, '').slice(0, 4)
                     updateForm({ vehicleYear: val })
                   }}
-                  placeholder="e.g. 2022"
+                  placeholder={t('booking:vehicle.year.placeholder')}
                   inputMode="numeric"
                   maxLength={4}
                   className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
@@ -656,35 +704,40 @@ export default function CompleteProfilePage() {
               </div>
               <div>
                 <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                  Capacity (m³)
+                  {t('booking:vehicle.capacity.label')}
                 </label>
                 <input
                   type="text"
                   value={form.vehicleCapacity}
                   onChange={(e) => updateForm({ vehicleCapacity: e.target.value })}
-                  placeholder="e.g. 15"
+                  placeholder={t('booking:vehicle.capacity.placeholder')}
                   className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
                 />
               </div>
             </div>
             <div>
               <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                Vehicle Registration *
+                {t('booking:vehicle.registration.label')}
               </label>
               <input
                 type="text"
                 value={form.vehicleRegistration}
                 onChange={(e) => updateForm({ vehicleRegistration: e.target.value })}
-                placeholder="e.g. B-AB 1234"
+                placeholder={t('booking:vehicle.registration.placeholder')}
                 className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
               />
             </div>
             <div>
               <label className="mb-2 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                Vehicle Type *
+                {t('booking:vehicle.type.label')}
               </label>
               <div className="space-y-3">
-                {VEHICLE_TYPES.map((v) => (
+                {VEHICLE_TYPES.map((v) => {
+                  // i18n-keys: booking:vehicle.smallVan.label, booking:vehicle.mediumTruck.label, booking:vehicle.largeTruck.label
+                  const typeLabel = t(`booking:vehicle.${v.key}.label`)
+                  // i18n-keys: booking:vehicle.smallVan.helper, booking:vehicle.mediumTruck.helper, booking:vehicle.largeTruck.helper
+                  const typeHelper = t(`booking:vehicle.${v.key}.helper`)
+                  return (
                   <label
                     key={v.value}
                     className={`flex cursor-pointer items-center rounded-xl border p-4 transition-colors ${
@@ -703,11 +756,16 @@ export default function CompleteProfilePage() {
                     />
                     <TruckIcon className="mr-3 h-6 w-6 flex-shrink-0 text-neutral-500" />
                     <div>
-                      <p className="font-medium text-neutral-900 dark:text-neutral-100">{v.label}</p>
-                      <p className="text-sm text-neutral-500 dark:text-neutral-400">{v.description}</p>
+                      <p className="font-medium text-neutral-900 dark:text-neutral-100">
+                        {typeLabel}
+                      </p>
+                      <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                        {typeHelper}
+                      </p>
                     </div>
                   </label>
-                ))}
+                  )
+                })}
               </div>
             </div>
           </div>
@@ -717,11 +775,11 @@ export default function CompleteProfilePage() {
         {currentStep === 'experience' && (
           <div className="space-y-5">
             <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-              Experience & Rate
+              {t('web:mover.section.experience.title')}
             </h2>
             <div>
               <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                Years of Experience *
+                {t('web:mover.field.experience.label')}
               </label>
               <input
                 type="number"
@@ -729,7 +787,7 @@ export default function CompleteProfilePage() {
                 max="50"
                 value={form.yearsExperience}
                 onChange={(e) => updateForm({ yearsExperience: e.target.value })}
-                placeholder="e.g. 5"
+                placeholder={t('web:mover.field.experience.placeholder')}
                 className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
               />
             </div>
@@ -743,20 +801,20 @@ export default function CompleteProfilePage() {
                 `.agent/plans/capability-pricing-design.md` §4.3. */}
             <div>
               <label className="mb-2 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                Languages Spoken *
+                {t('web:mover.field.languages.label')}
               </label>
               <div className="flex flex-wrap gap-2">
                 {LANGUAGES_OPTIONS.map((lang) => {
-                  const isSelected = form.languages.includes(lang)
+                  const isSelected = form.languages.includes(lang.value)
                   return (
                     <button
-                      key={lang}
+                      key={lang.code}
                       type="button"
                       onClick={() =>
                         updateForm({
                           languages: isSelected
-                            ? form.languages.filter((l) => l !== lang)
-                            : [...form.languages, lang],
+                            ? form.languages.filter((l) => l !== lang.value)
+                            : [...form.languages, lang.value],
                         })
                       }
                       className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
@@ -765,7 +823,7 @@ export default function CompleteProfilePage() {
                           : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-600'
                       }`}
                     >
-                      {lang}
+                      {languageName(lang.code, locale)}
                     </button>
                   )
                 })}
@@ -778,54 +836,108 @@ export default function CompleteProfilePage() {
         {currentStep === 'review' && (
           <div className="space-y-5">
             <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-              Review Your Profile
+              {t('web:mover.onboarding.review.title')}
             </h2>
             <p className="text-sm text-neutral-500 dark:text-neutral-400">
-              Please review your information before submitting.
+              {t('web:mover.onboarding.review.subtitle')}
             </p>
 
             <div className="space-y-4 rounded-xl bg-neutral-50 p-4 dark:bg-neutral-700/50">
               <div>
-                <p className="text-xs font-medium uppercase text-neutral-400">Personal Info</p>
-                <p className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">
-                  {form.fullName} &middot; {form.phone}
+                <p className="text-xs font-medium uppercase text-neutral-400">
+                  {t('web:mover.onboarding.step.personal.label')}
                 </p>
-                <p className="text-sm text-neutral-500">License: {form.driversLicense}</p>
+                <p className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">
+                  {t('web:mover.onboarding.review.personal.value', {
+                    name: form.fullName,
+                    phone: form.phone,
+                  })}
+                </p>
+                <p className="text-sm text-neutral-500">
+                  {t('web:mover.onboarding.review.license.value', { number: form.driversLicense })}
+                </p>
               </div>
               <hr className="border-neutral-200 dark:border-neutral-600" />
               <div>
-                <p className="text-xs font-medium uppercase text-neutral-400">Verification & Location</p>
+                <p className="text-xs font-medium uppercase text-neutral-400">
+                  {t('web:mover.onboarding.review.verification.title')}
+                </p>
                 <p className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">
-                  {form.primaryCity}, {form.primaryCountry}
+                  {t('web:mover.onboarding.review.location.value', {
+                    city: form.primaryCity,
+                    country: countryLabel(form.primaryCountry, locale),
+                  })}
                 </p>
                 {form.driversLicensePhotoPreview && (
-                  <p className="text-sm text-green-600 dark:text-green-400">✓ License photo uploaded</p>
+                  <p className="text-sm text-green-600 dark:text-green-400">
+                    {t('web:mover.onboarding.review.licenseOk')}
+                  </p>
                 )}
-                <p className="text-sm text-neutral-500">SSN: ••••{form.socialSecurityNumber.slice(-4)}</p>
-                <p className="text-sm text-neutral-500">Tax ID: {form.taxNumber}</p>
+                <p className="text-sm text-neutral-500">
+                  {t('web:mover.onboarding.review.ssn.value', {
+                    last4: form.socialSecurityNumber.slice(-4),
+                  })}
+                </p>
+                <p className="text-sm text-neutral-500">
+                  {t('web:mover.onboarding.review.taxId.value', { taxId: form.taxNumber })}
+                </p>
                 {form.selfiePhotoPreview && (
-                  <p className="text-sm text-green-600 dark:text-green-400">✓ Selfie uploaded</p>
+                  <p className="text-sm text-green-600 dark:text-green-400">
+                    {t('web:mover.onboarding.review.selfieOk')}
+                  </p>
                 )}
               </div>
               <hr className="border-neutral-200 dark:border-neutral-600" />
               <div>
-                <p className="text-xs font-medium uppercase text-neutral-400">Vehicle</p>
+                <p className="text-xs font-medium uppercase text-neutral-400">
+                  {t('booking:field.vehicle.label')}
+                </p>
                 <p className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">
-                  {form.vehicleBrand} {form.vehicleModel} ({form.vehicleYear})
+                  {t('web:mover.onboarding.review.vehicleName.value', {
+                    brand: form.vehicleBrand,
+                    model: form.vehicleModel,
+                    year: form.vehicleYear,
+                  })}
                 </p>
                 <p className="text-sm text-neutral-500">
-                  {VEHICLE_TYPES.find((v) => v.value === form.vehicleType)?.label} &middot; Reg: {form.vehicleRegistration}
-                  {form.vehicleCapacity && ` · ${form.vehicleCapacity} m³`}
+                  {(() => {
+                    const selected = VEHICLE_TYPES.find((v) => v.value === form.vehicleType)
+                    // i18n-keys: booking:vehicle.smallVan.label, booking:vehicle.mediumTruck.label, booking:vehicle.largeTruck.label
+                    const vehicleType = selected ? t(`booking:vehicle.${selected.key}.label`) : ''
+                    return form.vehicleCapacity
+                      ? t('web:mover.onboarding.review.vehicle.capacity.value', {
+                          vehicleType,
+                          registration: form.vehicleRegistration,
+                          capacity: t('booking:vehicle.capacity.value', {
+                            capacity: form.vehicleCapacity,
+                          }),
+                        })
+                      : t('web:mover.onboarding.review.vehicle.value', {
+                          vehicleType,
+                          registration: form.vehicleRegistration,
+                        })
+                  })()}
                 </p>
               </div>
               <hr className="border-neutral-200 dark:border-neutral-600" />
               <div>
-                <p className="text-xs font-medium uppercase text-neutral-400">Experience</p>
+                <p className="text-xs font-medium uppercase text-neutral-400">
+                  {t('web:mover.onboarding.review.experience.title')}
+                </p>
                 <p className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">
-                  {form.yearsExperience} years
+                  {t('web:mover.onboarding.review.experience.value', {
+                    count: Number(form.yearsExperience) || 0,
+                  })}
                 </p>
                 <p className="text-sm text-neutral-500">
-                  Languages: {form.languages.join(', ')}
+                  {t('web:mover.onboarding.review.languages.value', {
+                    languages: form.languages
+                      .map((value) => {
+                        const option = LANGUAGES_OPTIONS.find((o) => o.value === value)
+                        return option ? languageName(option.code, locale) : value
+                      })
+                      .join(', '),
+                  })}
                 </p>
               </div>
             </div>
@@ -848,7 +960,7 @@ export default function CompleteProfilePage() {
             className="flex items-center gap-1 rounded-full px-5 py-2.5 text-sm font-medium text-neutral-600 transition-colors hover:bg-neutral-100 disabled:invisible dark:text-neutral-300 dark:hover:bg-neutral-700"
           >
             <ChevronLeftIcon className="h-4 w-4" />
-            Back
+            {t('common:action.back.cta')}
           </button>
 
           {currentStep === 'review' ? (
@@ -863,10 +975,10 @@ export default function CompleteProfilePage() {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                   </svg>
-                  Submitting...
+                  {t('common:action.submitting.cta')}
                 </>
               ) : (
-                'Submit Profile'
+                t('web:mover.onboarding.submit.cta')
               )}
             </button>
           ) : (
@@ -875,7 +987,7 @@ export default function CompleteProfilePage() {
               disabled={!canGoNext()}
               className="flex items-center gap-1 rounded-full bg-primary-600 px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-700 disabled:opacity-50"
             >
-              Next
+              {t('common:action.next.cta')}
               <ChevronRightIcon className="h-4 w-4" />
             </button>
           )}

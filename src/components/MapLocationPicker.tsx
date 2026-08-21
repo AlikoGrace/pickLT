@@ -10,6 +10,7 @@ import { HugeiconsIcon } from '@hugeicons/react'
 import clsx from 'clsx'
 import ButtonPrimary from '@/shared/ButtonPrimary'
 import { mapboxLanguage } from '@/lib/mapbox-language'
+import { useTranslation } from 'react-i18next'
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || ''
 
@@ -87,7 +88,10 @@ async function reverseGeocode(lat: number, lng: number): Promise<PickedLocation 
 }
 
 // ─────────────────────────────────────────────────────────────
-const MapLocationPicker = ({ open, onClose, onSelect, initialCoordinates, label = 'Select location' }: MapLocationPickerProps) => {
+const MapLocationPicker = ({ open, onClose, onSelect, initialCoordinates, label }: MapLocationPickerProps) => {
+  const { t } = useTranslation()
+  const heading = label ?? t('booking:mapPicker.default.title')
+
   // ── refs ───────────────────────────────────────────────────
   const mapContainerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<mapboxgl.Map | null>(null)
@@ -176,7 +180,7 @@ const MapLocationPicker = ({ open, onClose, onSelect, initialCoordinates, label 
         setReverseLoading(false)
         const resolved: PickedLocation = loc || {
           id: `pin-${Date.now()}`,
-          name: 'Selected Location',
+          name: t('booking:mapPicker.selected.label'),
           fullAddress: `${lat.toFixed(6)}, ${lng.toFixed(6)}`,
           coordinates: { latitude: lat, longitude: lng },
         }
@@ -190,7 +194,7 @@ const MapLocationPicker = ({ open, onClose, onSelect, initialCoordinates, label 
 
     return () => clearTimeout(timerId)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open])
+  }, [open, t])
 
   // ── place initial marker after map ready ───────────────────
   useEffect(() => {
@@ -324,7 +328,7 @@ const MapLocationPicker = ({ open, onClose, onSelect, initialCoordinates, label 
         >
           <HugeiconsIcon icon={Cancel01Icon} size={20} strokeWidth={1.5} className="text-neutral-700 dark:text-neutral-300" />
         </button>
-        <h2 className="truncate text-base font-semibold text-neutral-900 dark:text-white">{label}</h2>
+        <h2 className="truncate text-base font-semibold text-neutral-900 dark:text-white">{heading}</h2>
       </div>
 
       {/* Search */}
@@ -334,7 +338,7 @@ const MapLocationPicker = ({ open, onClose, onSelect, initialCoordinates, label 
             ref={inputRef}
             type="text"
             className="block w-full rounded-xl border border-neutral-300 bg-transparent px-4 py-3 pe-10 text-sm leading-none placeholder-neutral-500 focus:border-primary-300 focus:ring-3 focus:ring-primary-200/50 dark:border-neutral-700 dark:bg-neutral-800 dark:placeholder-neutral-400 dark:focus:ring-primary-600/25"
-            placeholder="Search for a location…"
+            placeholder={t('booking:mapPicker.search.placeholder')}
             value={query}
             onChange={onSearchChange}
             autoComplete="off"
@@ -354,7 +358,7 @@ const MapLocationPicker = ({ open, onClose, onSelect, initialCoordinates, label 
             <HugeiconsIcon icon={Navigation03Icon} size={14} strokeWidth={1.5} className={clsx("text-primary-600 dark:text-primary-400", geoLoading && "animate-pulse")} />
           </span>
           <span className="text-sm font-medium text-primary-600 dark:text-primary-400">
-            {geoLoading ? 'Getting your location...' : 'Use my current location'}
+            {geoLoading ? t('booking:mapPicker.locating.helper') : t('booking:mapPicker.useCurrent.cta')}
           </span>
         </button>
 
@@ -378,7 +382,7 @@ const MapLocationPicker = ({ open, onClose, onSelect, initialCoordinates, label 
           </div>
         )}
 
-        {searching && <p className="mt-2 text-xs text-neutral-500 dark:text-neutral-400">Searching…</p>}
+        {searching && <p className="mt-2 text-xs text-neutral-500 dark:text-neutral-400">{t('common:state.searching.label')}</p>}
       </div>
 
       {/* Map */}
@@ -387,13 +391,13 @@ const MapLocationPicker = ({ open, onClose, onSelect, initialCoordinates, label 
 
         {reverseLoading && (
           <div className="absolute left-1/2 top-4 z-10 -translate-x-1/2 rounded-full bg-white/90 px-4 py-2 shadow-md backdrop-blur-sm dark:bg-neutral-800/90">
-            <p className="animate-pulse text-xs font-medium text-neutral-700 dark:text-neutral-300">Getting address…</p>
+            <p className="animate-pulse text-xs font-medium text-neutral-700 dark:text-neutral-300">{t('booking:mapPicker.reverseGeocoding.helper')}</p>
           </div>
         )}
 
         {!picked && !reverseLoading && mapReady && (
           <div className="absolute left-1/2 top-4 z-10 -translate-x-1/2 rounded-full bg-white/90 px-4 py-2 shadow-md backdrop-blur-sm dark:bg-neutral-800/90">
-            <p className="text-xs font-medium text-neutral-600 dark:text-neutral-400">Tap the map to select a location</p>
+            <p className="text-xs font-medium text-neutral-600 dark:text-neutral-400">{t('booking:mapPicker.tapHint.helper')}</p>
           </div>
         )}
       </div>
@@ -412,7 +416,7 @@ const MapLocationPicker = ({ open, onClose, onSelect, initialCoordinates, label 
           </div>
         )}
         <ButtonPrimary onClick={confirm} disabled={!picked} className="w-full">
-          Confirm location
+          {t('booking:mapPicker.confirm.cta')}
         </ButtonPrimary>
       </div>
     </div>

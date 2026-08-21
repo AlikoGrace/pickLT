@@ -6,6 +6,7 @@ import ButtonSecondary from '@/shared/ButtonSecondary'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
 import { usePathname } from 'next/navigation'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname()
@@ -28,7 +29,10 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   )
 }
 
+const TOTAL_STEPS = 7
+
 const PageHeading = () => {
+  const { t } = useTranslation()
   const pathname = usePathname()
 
   // get the number from the end of pathname
@@ -37,12 +41,16 @@ const PageHeading = () => {
   return (
     <div>
       <span className="text-5xl font-semibold">{index}</span>
-      <span className="text-lg text-neutral-500 dark:text-neutral-400"> /7</span>
+      <span className="text-lg text-neutral-500 dark:text-neutral-400">
+        {' '}
+        {t('web:wizard.stepTotal.label', { total: TOTAL_STEPS })}
+      </span>
     </div>
   )
 }
 
 const Pagination = () => {
+  const { t } = useTranslation()
   const pathname = usePathname() as string
 
   // get the number from the end of pathname
@@ -51,8 +59,11 @@ const Pagination = () => {
   let nextHref = index < 7 ? undefined : undefined
   let backtHref = index > 1 ? `/add-listing/${index - 1}` : '/'
 
-  let nextBtnText = index > 6 ? 'Create Move' : 'Next step ' + (index + 1)
-  let backBtnText = index > 1 ? 'Go back' : 'Back to home'
+  let nextBtnText =
+    index > TOTAL_STEPS - 1
+      ? t('web:wizard.finish.cta')
+      : t('web:wizard.nextStep.cta', { step: index + 1 })
+  let backBtnText = index > 1 ? t('common:action.goBack.cta') : t('common:action.backToHome.cta')
 
   return (
     <div className="mt-10 flex flex-wrap justify-end gap-3">

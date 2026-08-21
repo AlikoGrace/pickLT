@@ -1,3 +1,4 @@
+import { getTranslations } from '@/lib/i18n-server'
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
@@ -20,10 +21,11 @@ export const maxDuration = 60
  * Body: all the move data collected across steps 1–7 and the preview page.
  */
 export async function POST(req: NextRequest) {
+  const { t } = await getTranslations()
   try {
     const userId = await getSessionUserId()
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
     }
 
     const body = await req.json()
@@ -199,7 +201,7 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     console.error('POST /api/moves/create-scheduled error:', err)
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Internal server error' },
+      { error: err instanceof Error ? err.message : t('errors:generic.internal') },
       { status: 500 }
     )
   }

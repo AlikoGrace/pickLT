@@ -1,34 +1,38 @@
 'use client'
 
-import T from '@/utils/getT'
 import { CloseButton, Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/24/solid'
 import { TruckIcon, UserIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import type { TFunction } from 'i18next'
+import { useTranslation } from 'react-i18next'
 
-const solutions = [
+// § 7.6 — built from `t` so the captions follow the language switcher.
+const getSolutions = (t: TFunction) => [
   {
-    name: T['Header']['DropdownTravelers']['Client'],
-    description: 'Sign in or sign up as a client',
+    name: t('web:nav.signInAsClient.label'),
+    description: t('web:nav.signInAsClient.helper'),
     href: '/login?type=client',
     icon: UserIcon,
   },
   {
-    name: T['Header']['DropdownTravelers']['Mover'],
-    description: 'Sign in or sign up as a mover',
+    name: t('web:nav.signInAsMover.label'),
+    description: t('web:nav.signInAsMover.helper'),
     href: '/login?type=mover',
     icon: TruckIcon,
   },
 ]
 
 export default function DropdownTravelers() {
+  const { t } = useTranslation()
+  const solutions = getSolutions(t)
   const pathName = usePathname()
 
   return (
     <Popover className="group">
       <PopoverButton className="-m-2.5 flex items-center p-2.5 text-sm font-medium text-neutral-700 group-hover:text-neutral-950 focus:outline-hidden dark:text-neutral-300 dark:group-hover:text-neutral-100">
-        {T['login']['Sign in']}
+        {t('auth:login.submit.cta')}
         <ChevronDownIcon className="ms-1 size-4 group-data-open:rotate-180" aria-hidden="true" />
       </PopoverButton>
       <PopoverPanel

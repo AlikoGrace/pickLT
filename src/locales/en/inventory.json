@@ -1,36 +1,20 @@
 {
+  "admin": {
+    "nameHelper": "English is the fallback shown wherever a translation is missing.",
+    "nameLabel": "Name",
+    "translationsHelper": "Leave a language blank to fall back to the English name. Item IDs and categories are never translated.",
+    "translationsTitle": "Name translations",
+    "unknownCategoryTitle": "Untranslated category",
+    "unknownCategoryWarning": "“{{slug}}” is not one of the seven translated categories. It will show as “{{label}}” in every language, including to users who do not read English."
+  },
   "category": {
-    "livingRoom": "Living Room",
     "bedroom": "Bedroom",
-    "kitchen": "Kitchen",
-    "office": "Office",
     "boxes": "Boxes",
+    "kitchen": "Kitchen",
+    "livingRoom": "Living Room",
     "miscellaneous": "Miscellaneous",
+    "office": "Office",
     "special": "Special Items"
-  },
-  "section": {
-    "special": {
-      "subtitle": "These items require special handling and may affect pricing."
-    },
-    "custom": {
-      "title": "Custom Items",
-      "empty": "Add items not listed above."
-    }
-  },
-  "item": {
-    "customSuffix": "Custom item",
-    "customName": {
-      "label": "{{name}} (custom)"
-    },
-    "customTag": {
-      "label": "Custom"
-    }
-  },
-  "search": {
-    "placeholder": "Search all items",
-    "noMatch": {
-      "empty": "No items match “{{query}}”. Add it as a custom item below."
-    }
   },
   "customItem": {
     "add": {
@@ -44,41 +28,75 @@
       "label": "Quantity"
     },
     "size": {
+      "extraLarge": {
+        "option": "XL"
+      },
       "label": "Approximate size",
-      "small": {
-        "option": "Small"
+      "large": {
+        "option": "Large"
       },
       "medium": {
         "option": "Medium"
       },
-      "large": {
-        "option": "Large"
-      },
-      "extraLarge": {
-        "option": "XL"
+      "small": {
+        "option": "Small"
       }
+    },
+    "submit": {
+      "cta": "Add Item"
     },
     "weight": {
       "label": "Approximate weight (kg)",
       "placeholder": "e.g. 25"
+    }
+  },
+  "item": {
+    "customName": {
+      "label": "{{name}} (custom)"
     },
-    "submit": {
-      "cta": "Add Item"
+    "customSuffix": "Custom item",
+    "customTag": {
+      "label": "Custom"
     }
   },
   "recommendation": {
-    "headline": {
-      "title": "{{prefix}}: {{tier}}"
-    },
     "chosen": {
       "label": "Your move"
     },
-    "suggested": {
-      "label": "Recommended"
+    "headline": {
+      "title": "{{prefix}}: {{tier}}"
     },
     "itemCount": {
       "label_one": "{{count}} item",
       "label_other": "{{count}} items"
+    },
+    "suggested": {
+      "label": "Recommended"
+    }
+  },
+  "search": {
+    "noMatch": {
+      "empty": "No items match “{{query}}”. Add it as a custom item below."
+    },
+    "placeholder": "Search all items"
+  },
+  "section": {
+    "custom": {
+      "empty": "Add items not listed above.",
+      "title": "Custom Items"
+    },
+    "special": {
+      "subtitle": "These items require special handling and may affect pricing."
+    }
+  },
+  "unavailable": {
+    "empty": {
+      "body": "Our movable-items list is being set up. Please try again shortly — you can still reach us if your move is urgent.",
+      "title": "No items available yet"
+    },
+    "error": {
+      "body": "Check your connection and try again.",
+      "title": "Couldn't load the item list"
     }
   },
   "upgrade": {
@@ -91,23 +109,5 @@
     "warnings": {
       "title": "Items needing this tier:"
     }
-  },
-  "unavailable": {
-    "empty": {
-      "title": "No items available yet",
-      "body": "Our movable-items list is being set up. Please try again shortly — you can still reach us if your move is urgent."
-    },
-    "error": {
-      "title": "Couldn't load the item list",
-      "body": "Check your connection and try again."
-    }
-  },
-  "admin": {
-    "nameLabel": "Name",
-    "nameHelper": "English is the fallback shown wherever a translation is missing.",
-    "translationsTitle": "Name translations",
-    "translationsHelper": "Leave a language blank to fall back to the English name. Item IDs and categories are never translated.",
-    "unknownCategoryTitle": "Untranslated category",
-    "unknownCategoryWarning": "“{{slug}}” is not one of the seven translated categories. It will show as “{{label}}” in every language, including to users who do not read English."
   }
 }

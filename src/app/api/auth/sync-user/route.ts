@@ -1,3 +1,4 @@
+import { getTranslations } from '@/lib/i18n-server'
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient, withRetry } from '@/lib/appwrite-server'
 import { getSessionUserId } from '@/lib/auth-session'
@@ -19,10 +20,11 @@ import { Query } from 'node-appwrite'
  * field, and it is honoured only when creating the document.
  */
 export async function POST(req: NextRequest) {
+  const { t } = await getTranslations()
   try {
     const authId = await getSessionUserId()
     if (!authId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
     }
 
     const body = await req.json().catch(() => ({}))
@@ -137,7 +139,7 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     console.error('sync-user error:', err)
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: t('errors:generic.internal') },
       { status: 500 }
     )
   }

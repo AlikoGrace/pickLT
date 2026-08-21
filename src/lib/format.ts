@@ -307,3 +307,20 @@ export function regionName(code: string | null | undefined, locale: string = get
     return upper
   }
 }
+
+/**
+ * A BCP-47 language tag as a language name in the active locale.
+ *
+ * Sibling of `regionName` above, and for the same reason: the mover onboarding
+ * form offers ten spoken languages, and hand-typing them in the catalog would
+ * have been 80 translations of something `Intl` already knows.
+ */
+export function languageName(code: string | null | undefined, locale: string = getLocale()): string {
+  if (!code) return ''
+  try {
+    return new Intl.DisplayNames([locale], { type: 'language', fallback: 'code' }).of(code) ?? code
+  } catch {
+    // `Intl.DisplayNames` is absent on some older Hermes builds.
+    return code
+  }
+}

@@ -13,6 +13,7 @@ import clsx from 'clsx'
 import Form from 'next/form'
 import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import LanguageDropdown from '../LanguageDropdown'
 
 interface Props {
@@ -22,6 +23,7 @@ interface Props {
 }
 
 const SidebarNavigation: React.FC<Props> = ({ data, currencies, languages }) => {
+  const { t } = useTranslation()
   const handleClose = useClose()
   const router = useRouter()
 
@@ -107,9 +109,9 @@ const SidebarNavigation: React.FC<Props> = ({ data, currencies, languages }) => 
             name="search"
             autoFocus
             autoComplete="off"
-            aria-label="Search for articles"
+            aria-label={t('web:sidebar.search.a11y')}
             data-autofocus
-            placeholder="Type and press enter"
+            placeholder={t('web:sidebar.search.placeholder')}
             className="w-full border-none bg-transparent focus:ring-0 focus:outline-hidden sm:text-sm"
           />
         </div>
@@ -120,7 +122,7 @@ const SidebarNavigation: React.FC<Props> = ({ data, currencies, languages }) => 
 
   return (
     <div>
-      <span>Discover the most outstanding articles on all topics of life. Write your stories and share them</span>
+      <span>{t('web:sidebar.blurb')}</span>
 
       <div className="mt-4 flex items-center justify-between">
         <SocialsList itemClass="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full text-xl" />
@@ -135,7 +137,7 @@ const SidebarNavigation: React.FC<Props> = ({ data, currencies, languages }) => 
         <ButtonPrimary
           href="/"
         >
-          Get Started
+          {t('web:sidebar.getStarted.cta')}
         </ButtonPrimary>
 
         <LanguageDropdown

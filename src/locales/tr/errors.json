@@ -19,6 +19,9 @@
       "error": "Kimliği doğrulanmış kullanıcı yok"
     }
   },
+  "call": {
+    "noPhoneNumber": "Bu taşıyıcı için kayıtlı telefon numarası yok."
+  },
   "card": {
     "add": {
       "failed": "Kart eklenemedi. Tekrar deneyin.",
@@ -73,6 +76,11 @@
     "unreachable": {
       "error": "Mapbox’a ulaşılamadı, bağlantınızı kontrol edin"
     }
+  },
+  "message": {
+    "empty": "Mesaj boş",
+    "sendFailed": "Mesaj gönderilemedi. Lütfen tekrar deneyin.",
+    "tooLong": "Mesaj çok uzun. Sınır {{max}} karakter."
   },
   "payment": {
     "cardDeclined": "Kartınız reddedildi. Lütfen başka bir ödeme yöntemi deneyin.",

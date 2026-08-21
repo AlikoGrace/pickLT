@@ -1,3 +1,4 @@
+import { getTranslations } from '@/lib/i18n-server'
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
@@ -16,10 +17,11 @@ import { ID, Query } from 'node-appwrite'
  * exists and upsert accordingly.
  */
 export async function POST(req: NextRequest) {
+  const { t } = await getTranslations()
   try {
     const userId = await getSessionUserId()
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
     }
 
     const body = await req.json()
@@ -68,7 +70,7 @@ export async function POST(req: NextRequest) {
 
     if (userDoc?.userType === 'client') {
       return NextResponse.json(
-        { error: 'Your account is registered as a client. Client accounts cannot be converted to mover accounts. Please create a new account to register as a mover.' },
+        { error: t('errors:mover.clientCannotConvert') },
         { status: 403 }
       )
     }
@@ -183,7 +185,7 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     console.error('POST /api/mover/submit-profile error:', err)
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Internal server error' },
+      { error: err instanceof Error ? err.message : t('errors:generic.internal') },
       { status: 500 }
     )
   }

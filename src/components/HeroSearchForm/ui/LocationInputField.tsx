@@ -4,7 +4,6 @@ import { reverseGeocodeBest } from '@/lib/reverse-geocode'
 import { composeAddressLabel } from '@/lib/address-label'
 import { useInteractOutside } from '@/hooks/useInteractOutside'
 import { Divider } from '@/shared/divider'
-import T from '@/utils/getT'
 import * as Headless from '@headlessui/react'
 import { MapPinIcon } from '@heroicons/react/24/outline'
 import { Location01Icon, Navigation03Icon } from '@hugeicons/core-free-icons'
@@ -13,6 +12,8 @@ import clsx from 'clsx'
 import { FC, useCallback, useEffect, useRef, useState } from 'react'
 import { ClearDataButton } from './ClearDataButton'
 import { mapboxLanguage } from '@/lib/mapbox-language'
+import { t as runtimeT } from '@/lib/i18n-runtime'
+import { useTranslation } from 'react-i18next'
 
 export type LocationSuggestion = {
   id: string
@@ -82,7 +83,7 @@ async function searchLocations(
       `https://api.mapbox.com/search/geocode/v6/forward?` +
         new URLSearchParams(params)
     )
-    if (!response.ok) throw new Error('Failed to fetch locations')
+    if (!response.ok) throw new Error(runtimeT('errors:geocode.searchFailed'))
 
     const data = await response.json()
 
@@ -119,14 +120,19 @@ async function reverseGeocode(lat: number, lng: number): Promise<LocationSuggest
 }
 
 export const LocationInputField: FC<Props> = ({
-  placeholder = T['HeroSearchForm']['Location'],
-  description = T['HeroSearchForm']['Where are you going?'],
+  placeholder: placeholderProp,
+  description: descriptionProp,
   className = 'flex-1',
   inputName = 'location',
   fieldStyle = 'default',
   onChange,
   defaultValue,
 }) => {
+  const { t } = useTranslation()
+  // Defaults are resolved in render, not as default parameters — a default
+  // parameter cannot call a hook and would freeze at the boot language.
+  const placeholder = placeholderProp ?? t('booking:address.label')
+  const description = descriptionProp ?? t('web:search.location.placeholder')
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const [showPopover, setShowPopover] = useState(false)
@@ -162,7 +168,7 @@ export const LocationInputField: FC<Props> = ({
 
   const handleUseCurrentLocation = useCallback(async () => {
     if (!navigator.geolocation) {
-      setGeoError('Geolocation is not supported by your browser')
+      setGeoError(t('errors:geo.unsupported.error'))
       return
     }
 
@@ -193,8 +199,8 @@ export const LocationInputField: FC<Props> = ({
         setGeoLoading(false)
         setGeoError(
           err.code === 1
-            ? 'Location access denied. Please enable it in your browser settings.'
-            : 'Unable to get your location. Please try again.'
+            ? t('errors:geo.denied.error')
+            : t('errors:geo.unavailable.error')
         )
       },
       { enableHighAccuracy: true, timeout: 10_000, maximumAge: 60_000 }
@@ -294,7 +300,7 @@ export const LocationInputField: FC<Props> = ({
           <div className="grow">
             <Headless.ComboboxInput
               ref={inputRef}
-              aria-label="Search for a location"
+              aria-label={t('web:search.location.a11y')}
               className={clsx(styles.input.base, styles.input[fieldStyle])}
               name={inputName}
               placeholder={placeholder}
@@ -340,7 +346,7 @@ export const LocationInputField: FC<Props> = ({
               </span>
               <div className="min-w-0 flex-1">
                 <span className="block text-sm font-medium text-primary-600 dark:text-primary-400">
-                  {geoLoading ? 'Getting your location...' : 'Use my current location'}
+                  {geoLoading ? t('common:state.locating.label') : t('booking:address.useCurrent.cta')}
                 </span>
                 {geoError && (
                   <span className="block text-xs text-red-500">{geoError}</span>
@@ -351,26 +357,26 @@ export const LocationInputField: FC<Props> = ({
 
             {isLoading && (
               <p className="px-4 py-3 text-sm text-neutral-500 sm:px-8 dark:text-neutral-400">
-                Searching...
+                {t('common:state.searching.label')}
               </p>
             )}
 
             {!isLoading && inputValue.length < 2 && (
               <p className="px-4 py-3 text-sm text-neutral-500 sm:px-8 dark:text-neutral-400">
-                Type to search for locations
+                {t('booking:address.typeToSearch.empty')}
               </p>
             )}
 
             {!isLoading && inputValue.length >= 2 && suggestions.length === 0 && (
               <p className="px-4 py-3 text-sm text-neutral-500 sm:px-8 dark:text-neutral-400">
-                No locations found
+                {t('booking:address.noResults.empty')}
               </p>
             )}
 
             {suggestions.length > 0 && (
               <>
                 <p className="mt-2 mb-3 px-4 text-xs/6 font-normal text-neutral-600 sm:mt-0 sm:px-8 dark:text-neutral-400">
-                  {T['HeroSearchForm']['Suggested locations']}
+                  {t('booking:address.suggestions.label')}
                 </p>
                 <Divider className="opacity-50" />
               </>

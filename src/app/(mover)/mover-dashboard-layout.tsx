@@ -26,97 +26,108 @@ import {
   ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
+import type { TFunction } from 'i18next'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { ReactNode, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
-const MOVER_NAV_ITEMS = [
+// Built per render from `t` — a module-scope array would freeze at the boot language.
+const getMoverNavItems = (t: TFunction) => [
   {
-    name: 'Dashboard',
+    key: 'dashboard',
+    name: t('web:moverNav.dashboard.label'),
     href: '/dashboard',
     icon: HomeIcon,
     requiresVerification: false,
   },
   {
-    name: 'Active Move',
+    key: 'activeMove',
+    name: t('web:moverNav.activeMove.label'),
     href: '/active-move',
     icon: TruckIcon,
     requiresVerification: true,
   },
   {
-    name: 'Available Moves',
+    key: 'availableMoves',
+    name: t('web:moverNav.availableMoves.label'),
     href: '/available-moves',
     icon: MapIcon,
     requiresVerification: true,
   },
   {
-    name: 'Scheduled Moves',
+    key: 'scheduledMoves',
+    name: t('web:moverNav.scheduledMoves.label'),
     href: '/scheduled-moves',
     icon: CalendarDaysIcon,
     requiresVerification: true,
   },
   {
-    name: 'My Crew',
+    key: 'myCrew',
+    name: t('web:moverNav.myCrew.label'),
     href: '/my-crew',
     icon: UserGroupIcon,
     requiresVerification: true,
   },
   {
-    name: 'Earnings',
+    key: 'earnings',
+    name: t('web:moverNav.earnings.label'),
     href: '/earnings',
     icon: BanknotesIcon,
     requiresVerification: true,
   },
   {
-    name: 'Tax Documents',
+    key: 'taxDocuments',
+    name: t('web:moverNav.taxDocuments.label'),
     href: '/tax-documents',
     icon: DocumentTextIcon,
     requiresVerification: true,
   },
   {
-    name: 'Settings',
+    key: 'settings',
+    name: t('common:nav.settings.label'),
     href: '/settings',
     icon: Cog6ToothIcon,
     requiresVerification: false,
   },
 ]
 
-const MOBILE_NAV_ITEMS = [
+const getMobileNavItems = (t: TFunction) => [
   {
-    name: 'Home',
+    key: 'home',
+    name: t('web:moverNav.home.label'),
     href: '/dashboard',
     icon: HomeIcon,
     requiresVerification: false,
   },
   {
-    name: 'Active',
+    key: 'active',
+    name: t('web:moverNav.active.label'),
     href: '/active-move',
     icon: TruckIcon,
     requiresVerification: true,
   },
   {
-    name: 'Moves',
+    key: 'moves',
+    name: t('web:moverNav.moves.label'),
     href: '/available-moves',
     icon: MapIcon,
     requiresVerification: true,
   },
   {
-    name: 'Crew',
+    key: 'crew',
+    name: t('web:moverNav.crew.label'),
     href: '/my-crew',
     icon: UserGroupIcon,
     requiresVerification: true,
   },
   {
-    name: 'Earnings',
+    key: 'earnings',
+    name: t('web:moverNav.earnings.label'),
     href: '/earnings',
     icon: BanknotesIcon,
     requiresVerification: true,
   },
-  // {
-  //   name: 'Profile',
-  //   href: '/settings',
-  //   icon: UserCircleIcon,
-  // },
 ]
 
 interface Props {
@@ -130,7 +141,11 @@ const MoverDashboardLayout = ({ children }: Props) => {
   const pathname = usePathname()
   const router = useRouter()
   const { user, logout, isLoading } = useAuth()
+  const { t } = useTranslation()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  const moverNavItems = getMoverNavItems(t)
+  const mobileNavItems = getMobileNavItems(t)
 
   // Verification state
   const verificationStatus = user?.moverDetails?.verificationStatus
@@ -215,7 +230,7 @@ const MoverDashboardLayout = ({ children }: Props) => {
           <div className="flex h-16 items-center gap-2 border-b border-neutral-200 px-6 dark:border-neutral-700">
             <Logo className="w-24" />
             <span className="rounded-full bg-primary-100 px-2 py-0.5 text-xs font-medium text-primary-700 dark:bg-primary-900/30 dark:text-primary-400">
-              Mover
+              {t('web:mover.roleLabel')}
             </span>
           </div>
 
@@ -229,7 +244,7 @@ const MoverDashboardLayout = ({ children }: Props) => {
               />
               <div className="flex-1 min-w-0">
                 <p className="truncate text-sm font-medium text-neutral-900 dark:text-white">
-                  {user?.fullName || 'Mover Name'}
+                  {user?.fullName || t('common:mover.nameFallback.label')}
                 </p>
                 <p className="truncate text-xs text-neutral-500 dark:text-neutral-400">
                   {user?.email || 'mover@example.com'}
@@ -240,14 +255,14 @@ const MoverDashboardLayout = ({ children }: Props) => {
 
           {/* Navigation */}
           <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
-            {MOVER_NAV_ITEMS.map((item) => {
+            {moverNavItems.map((item) => {
               const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
               const isLocked = item.requiresVerification && !isVerified && hasCompletedProfile
 
               if (isLocked) {
                 return (
                   <div
-                    key={item.name}
+                    key={item.key}
                     className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-neutral-400 dark:text-neutral-500 cursor-not-allowed"
                   >
                     <item.icon className="h-5 w-5" />
@@ -259,7 +274,7 @@ const MoverDashboardLayout = ({ children }: Props) => {
 
               return (
                 <Link
-                  key={item.name}
+                  key={item.key}
                   href={item.href}
                   className={clsx(
                     'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors',
@@ -285,7 +300,7 @@ const MoverDashboardLayout = ({ children }: Props) => {
               className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-neutral-600 transition-colors hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-700"
             >
               <ArrowRightOnRectangleIcon className="h-5 w-5" />
-              Sign out
+              {t('common:action.logout.cta')}
             </button>
           </div>
         </div>
@@ -299,7 +314,7 @@ const MoverDashboardLayout = ({ children }: Props) => {
         <div className="flex items-center gap-2">
           <Logo className="w-20" />
           <span className="rounded-full bg-primary-100 px-2 py-0.5 text-xs font-medium text-primary-700 dark:bg-primary-900/30 dark:text-primary-400">
-            Mover
+            {t('web:mover.roleLabel')}
           </span>
         </div>
         <div className="flex items-center gap-2">
@@ -361,10 +376,10 @@ const MoverDashboardLayout = ({ children }: Props) => {
                       : 'text-amber-800 dark:text-amber-200'
                 )}>
                   {verificationStatus === 'rejected'
-                    ? 'Profile Rejected'
+                    ? t('web:mover.verification.rejected.title')
                     : verificationStatus === 'suspended'
-                      ? 'Account Suspended'
-                      : 'Verification Pending'}
+                      ? t('web:mover.verification.suspended.title')
+                      : t('web:mover.verification.pending.title')}
                 </p>
                 <p className={clsx(
                   'text-sm',
@@ -375,10 +390,10 @@ const MoverDashboardLayout = ({ children }: Props) => {
                       : 'text-amber-700 dark:text-amber-300'
                 )}>
                   {verificationStatus === 'rejected'
-                    ? 'Your mover profile was rejected. Please contact support or update your profile in Settings.'
+                    ? t('web:mover.verification.rejected.body')
                     : verificationStatus === 'suspended'
-                      ? 'Your account has been suspended. Please contact support for more information.'
-                      : 'Your mover profile is under review. You\'ll be able to accept moves and access all features once verified.'}
+                      ? t('web:mover.verification.suspended.body')
+                      : t('web:mover.verification.pending.body')}
                 </p>
               </div>
             </div>
@@ -389,14 +404,14 @@ const MoverDashboardLayout = ({ children }: Props) => {
 
       {/* Mobile Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 z-30 flex items-center justify-around border-t border-neutral-200 bg-white py-2 dark:border-neutral-700 dark:bg-neutral-800 lg:hidden">
-        {MOBILE_NAV_ITEMS.map((item) => {
+        {mobileNavItems.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
           const isLocked = item.requiresVerification && !isVerified && hasCompletedProfile
 
           if (isLocked) {
             return (
               <div
-                key={item.name}
+                key={item.key}
                 className="flex flex-col items-center gap-1 px-3 py-1 text-neutral-300 dark:text-neutral-600 cursor-not-allowed"
               >
                 <item.icon className="h-6 w-6" />
@@ -407,7 +422,7 @@ const MoverDashboardLayout = ({ children }: Props) => {
 
           return (
             <Link
-              key={item.name}
+              key={item.key}
               href={item.href}
               className={clsx(
                 'flex flex-col items-center gap-1 px-3 py-1',

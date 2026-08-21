@@ -5,8 +5,10 @@ import Avatar from '@/shared/Avatar'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
 const HomeAuthBanner = () => {
+  const { t } = useTranslation()
   const { user, isAuthenticated, isLoading } = useAuth()
   const router = useRouter()
 
@@ -45,10 +47,12 @@ const HomeAuthBanner = () => {
           />
           <div className="min-w-0">
             <p className="truncate text-sm font-medium text-neutral-900 dark:text-neutral-100">
-              Welcome back, {user.fullName?.split(' ')[0] || 'there'}!
+              {t('web:home.welcomeBack.label', {
+                name: user.fullName?.split(' ')[0] || t('common:person.fallbackName.label'),
+              })}
             </p>
             <p className="text-xs text-neutral-500 dark:text-neutral-400">
-              {isMover ? 'Mover account' : 'Client account'}
+              {isMover ? t('web:account.moverType.label') : t('web:account.clientType.label')}
             </p>
           </div>
         </div>
@@ -56,7 +60,7 @@ const HomeAuthBanner = () => {
           href={isMover ? '/dashboard' : '/account-savelists'}
           className="shrink-0 rounded-full bg-primary-600 px-4 py-1.5 text-xs font-semibold text-white transition hover:bg-primary-700"
         >
-          {isMover ? 'Dashboard' : 'My Moves'}
+          {isMover ? t('web:nav.dashboard.cta') : t('web:nav.myMoves.cta')}
         </Link>
       </div>
     )
@@ -67,10 +71,10 @@ const HomeAuthBanner = () => {
     <div className="mb-4 flex items-center justify-between gap-3 rounded-2xl bg-orange-50 px-4 py-3 dark:bg-orange-900/20 lg:hidden">
       <div className="min-w-0 flex-1">
         <p className="text-sm font-medium text-orange-800 dark:text-orange-200">
-          Are you a mover?
+          {t('web:home.moverBanner.title')}
         </p>
         <p className="text-xs text-orange-600 dark:text-orange-400">
-          Sign in to start accepting moves
+          {t('web:home.moverBanner.subtitle')}
         </p>
       </div>
       <div className="flex shrink-0 items-center gap-2">
@@ -78,13 +82,13 @@ const HomeAuthBanner = () => {
           href="/login?type=mover"
           className="rounded-full bg-orange-600 px-4 py-1.5 text-xs font-semibold text-white transition hover:bg-orange-700"
         >
-          Sign in
+          {t('auth:login.submit.cta')}
         </Link>
         <Link
           href="/signup?type=mover"
           className="rounded-full border border-orange-300 px-4 py-1.5 text-xs font-semibold text-orange-700 transition hover:bg-orange-100 dark:border-orange-700 dark:text-orange-300 dark:hover:bg-orange-900/30"
         >
-          Sign up
+          {t('auth:signup.cta')}
         </Link>
       </div>
     </div>

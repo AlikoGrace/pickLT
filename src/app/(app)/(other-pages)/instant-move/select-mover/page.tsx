@@ -6,8 +6,8 @@ import {
   asVehicleType,
   instantRouteBase,
   priceForMover,
-  VEHICLE_CAPACITY,
-  VEHICLE_LABELS,
+  vehicleCapacity,
+  vehicleLabel,
   type PricingRates,
 } from '@/lib/pricing'
 import ButtonPrimary from '@/shared/ButtonPrimary'
@@ -186,13 +186,13 @@ const SelectMoverPage = () => {
         const res = await fetch(`/api/movers/nearby?lat=${lat}&lng=${lng}&radiusKm=25`)
         if (!res.ok) {
           const errData = await res.json().catch(() => ({}))
-          throw new Error(errData.error || 'Failed to fetch movers')
+          throw new Error(errData.error || t('errors:movers.fetchFailed'))
         }
         const data = await res.json()
         setApiMovers(data.movers || [])
       } catch (err) {
         console.error('Failed to fetch nearby movers:', err)
-        setFetchError(err instanceof Error ? err.message : 'Failed to find movers')
+        setFetchError(err instanceof Error ? err.message : t('errors:movers.findFailed'))
       } finally {
         setIsLoading(false)
       }
@@ -244,7 +244,7 @@ const SelectMoverPage = () => {
         rating: mover.rating || 0,
         totalMoves: mover.totalMoves || 0,
         vehicleType,
-        vehicleName: [mover.vehicleMake, mover.vehicleModel].filter(Boolean).join(' ') || VEHICLE_LABELS[vehicleType] || 'Vehicle',
+        vehicleName: [mover.vehicleMake, mover.vehicleModel].filter(Boolean).join(' ') || vehicleLabel(t, vehicleType),
         vehiclePlate: mover.vehiclePlateNumber || '',
         crewSize,
         capacityM3: moverCapacityM3({ vehicleType, vehicleCapacity: mover.vehicleCapacity }, pricingRates),
@@ -258,7 +258,7 @@ const SelectMoverPage = () => {
         currentLongitude: mover.currentLongitude || null,
       }
     }).sort((a, b) => a.price - b.price) // Sort by price
-  }, [routeDistance, inventoryCount, apiMovers, pricingRates, moveType])
+  }, [routeDistance, inventoryCount, apiMovers, pricingRates, moveType, t])
 
   const handleSelectMover = (moverId: string) => {
     setSelectedMover(moverId)
@@ -374,10 +374,10 @@ const SelectMoverPage = () => {
           className="text-primary-600 animate-spin mb-4"
         />
         <h2 className="text-xl font-semibold text-neutral-900 dark:text-white mb-2">
-          Finding available movers...
+          {t('web:selectMover.searching.title')}
         </h2>
         <p className="text-neutral-500 dark:text-neutral-400 text-center max-w-sm">
-          We&apos;re searching for verified movers near your pickup location
+          {t('web:selectMover.searching.subtitle')}
         </p>
       </div>
     )
@@ -394,17 +394,17 @@ const SelectMoverPage = () => {
           className="text-amber-500 mb-4"
         />
         <h2 className="text-xl font-semibold text-neutral-900 dark:text-white mb-2">
-          {fetchError ? 'Unable to find movers' : 'No movers available'}
+          {fetchError ? t('web:selectMover.error.title') : t('web:selectMover.empty.title')}
         </h2>
         <p className="text-neutral-500 dark:text-neutral-400 text-center max-w-sm mb-6">
-          {fetchError || 'No verified movers are currently online near your location. Please try again in a few minutes.'}
+          {fetchError || t('web:selectMover.empty.subtitle')}
         </p>
         <div className="flex gap-3">
           <ButtonSecondary href="/instant-move/photos">
-            Go Back
+            {t('common:action.goBack.cta')}
           </ButtonSecondary>
           <ButtonPrimary onClick={() => window.location.reload()}>
-            Try Again
+            {t('common:action.tryAgain.cta')}
           </ButtonPrimary>
         </div>
       </div>
@@ -422,13 +422,15 @@ const SelectMoverPage = () => {
               className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
             >
               <HugeiconsIcon icon={ArrowLeft02Icon} size={20} strokeWidth={1.5} />
-              <span className="text-sm font-medium">Back</span>
+              <span className="text-sm font-medium">{t('common:action.back.cta')}</span>
             </Link>
             <div className="text-center">
               <p className="text-sm font-medium text-neutral-900 dark:text-white">
-                Select Mover
+                {t('web:selectMover.title')}
               </p>
-              <p className="text-xs text-neutral-500">Step 4 of 4</p>
+              <p className="text-xs text-neutral-500">
+                {t('web:wizard.stepOf.label', { current: 4, total: 4 })}
+              </p>
             </div>
             <div className="w-16" />
           </div>
@@ -440,9 +442,9 @@ const SelectMoverPage = () => {
         <div className="rounded-2xl bg-white dark:bg-neutral-800 shadow-sm p-4 mb-6">
           <div className="flex items-center justify-between mb-3">
             <div className="flex-1">
-              <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-1">From</p>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-1">{t('booking:route.from.label')}</p>
               <p className="text-sm font-medium text-neutral-900 dark:text-white line-clamp-1">
-                {pickupLocation?.split(',')[0] || 'Pickup location'}
+                {pickupLocation?.split(',')[0] || t('booking:pickup.label')}
               </p>
             </div>
             <div className="px-4">
@@ -454,9 +456,9 @@ const SelectMoverPage = () => {
               />
             </div>
             <div className="flex-1 text-right">
-              <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-1">To</p>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-1">{t('booking:route.to.label')}</p>
               <p className="text-sm font-medium text-neutral-900 dark:text-white line-clamp-1">
-                {dropoffLocation?.split(',')[0] || 'Drop-off location'}
+                {dropoffLocation?.split(',')[0] || t('booking:dropoff.label')}
               </p>
             </div>
           </div>
@@ -476,18 +478,18 @@ const SelectMoverPage = () => {
             )}
             <span className="text-neutral-300 dark:text-neutral-600">•</span>
             <span className="text-sm text-neutral-600 dark:text-neutral-300">
-              {inventoryCount} items
+              {t('moves:itemCount', { count: inventoryCount })}
             </span>
             <span className="text-neutral-300 dark:text-neutral-600">•</span>
             <span className="text-sm text-neutral-600 dark:text-neutral-300">
-              {photoCount} photos
+              {t('booking:photos.photoCount', { count: photoCount })}
             </span>
           </div>
         </div>
 
         {/* Movers List */}
         <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-4">
-          Available movers ({moversWithPrices.length})
+          {t('web:selectMover.available.title', { count: moversWithPrices.length })}
         </h2>
 
         <div className="space-y-4">
@@ -556,7 +558,7 @@ const SelectMoverPage = () => {
                     {mover.yearsExperience > 0 && (
                       <>
                         <span>•</span>
-                        <span>{mover.yearsExperience}y exp</span>
+                        <span>{t('web:selectMover.experienceYears', { count: mover.yearsExperience })}</span>
                       </>
                     )}
                   </div>
@@ -573,7 +575,7 @@ const SelectMoverPage = () => {
                       {mover.vehicleName}
                     </span>
                     <span className="text-xs bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 px-2 py-0.5 rounded-full">
-                      {VEHICLE_LABELS[mover.vehicleType]}
+                      {vehicleLabel(t, mover.vehicleType)}
                     </span>
                   </div>
 
@@ -581,14 +583,14 @@ const SelectMoverPage = () => {
                   <div className="flex items-center gap-4 mt-2 text-xs text-neutral-500 dark:text-neutral-400">
                     <span className="flex items-center gap-1">
                       <HugeiconsIcon icon={WeightScale01Icon} size={14} strokeWidth={1.5} />
-                      {mover.capacityM3} m³ capacity
+                      {t('web:selectMover.capacity.label', { volume: mover.capacityM3 })}
                     </span>
                     <span className="flex items-center gap-1">
                       <HugeiconsIcon icon={UserMultiple02Icon} size={14} strokeWidth={1.5} />
                       {t('moves:moverCount', { count: mover.crewSize + 1 })}
                     </span>
                     <span className="text-neutral-400">
-                      {VEHICLE_CAPACITY[mover.vehicleType]}
+                      {vehicleCapacity(t, mover.vehicleType)}
                     </span>
                   </div>
                 </div>
@@ -599,7 +601,7 @@ const SelectMoverPage = () => {
                     {formatMoney(mover.price, { compact: true })}
                   </p>
                   <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-                    ~{mover.estimatedArrival} min away
+                    {t('web:selectMover.eta.label', { count: mover.estimatedArrival })}
                   </p>
                 </div>
               </div>
@@ -609,10 +611,12 @@ const SelectMoverPage = () => {
                 <div className="mt-3 pt-3 border-t border-neutral-100 dark:border-neutral-700">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-primary-600 dark:text-primary-400 font-medium">
-                      Selected
+                      {t('common:state.selected.label')}
                     </span>
                     <span className="text-neutral-500 dark:text-neutral-400">
-                      Languages: {mover.languages.join(', ')}
+                      {t('web:selectMover.languages.label', {
+                        languages: mover.languages.join(t('common:list.separator')),
+                      })}
                     </span>
                   </div>
                 </div>
@@ -624,9 +628,12 @@ const SelectMoverPage = () => {
         {/* Pricing Info */}
         <div className="mt-6 rounded-xl bg-neutral-100 dark:bg-neutral-800/50 p-4">
           <p className="text-xs text-neutral-500 dark:text-neutral-400">
-            <strong>How pricing works:</strong> Prices include base fee, distance ({routeDistance ? formatDistance(routeDistance) : '—'}), 
-            crew size, vehicle capacity, and handling for {inventoryCount} items. 
-            Final price may vary based on actual conditions.
+            <strong>{t('web:selectMover.pricing.title')}</strong>{' '}
+            {t('web:selectMover.pricing.helper', {
+              count: inventoryCount,
+              distance: routeDistance ? formatDistance(routeDistance) : '—',
+            })}{' '}
+            {t('web:selectMover.pricing.disclaimer')}
           </p>
         </div>
       </div>
@@ -634,7 +641,7 @@ const SelectMoverPage = () => {
       {/* Payment method — settled at completion, never charged at booking */}
       <div className="container max-w-3xl mx-auto px-4 pb-28">
         <div className="rounded-2xl border border-neutral-200 dark:border-neutral-700 p-4">
-          <p className="font-semibold text-neutral-900 dark:text-neutral-100 mb-3">Payment</p>
+          <p className="font-semibold text-neutral-900 dark:text-neutral-100 mb-3">{t('booking:payment.title')}</p>
           <div className="flex gap-3">
             {(['cash', 'card'] as const).map((method) => (
               <button
@@ -647,14 +654,14 @@ const SelectMoverPage = () => {
                     : 'border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300'
                 }`}
               >
-                {method === 'cash' ? 'Pay Cash' : 'Pay by Card'}
+                {method === 'cash' ? t('booking:payment.payCash.cta') : t('booking:payment.payCard.cta')}
               </button>
             ))}
           </div>
           <p className="mt-3 text-xs text-neutral-500 dark:text-neutral-400">
             {paymentMethod === 'card'
-              ? 'Your card is charged when the move is completed. Nothing is charged now.'
-              : 'Pay the mover on arrival in cash. No card charge.'}
+              ? t('booking:payment.card.helper')
+              : t('booking:payment.cash.helper')}
           </p>
         </div>
       </div>
@@ -666,7 +673,7 @@ const SelectMoverPage = () => {
             href="/instant-move/photos"
             className="flex-1"
           >
-            Back
+            {t('common:action.back.cta')}
           </ButtonSecondary>
           <ButtonPrimary
             onClick={handleConfirmMover}
@@ -674,11 +681,15 @@ const SelectMoverPage = () => {
             disabled={!selectedMover || isConfirming}
           >
             {isConfirming
-              ? 'Creating move...'
-              : selectedMover 
-              ? `Confirm · ${formatMoney(moversWithPrices.find(m => m.id === selectedMover)?.price || 0, { compact: true })}`
-              : 'Select a mover'
-            }
+              ? t('web:selectMover.creating.cta')
+              : selectedMover
+                ? t('web:selectMover.confirm.cta', {
+                    amount: formatMoney(
+                      moversWithPrices.find((m) => m.id === selectedMover)?.price || 0,
+                      { compact: true },
+                    ),
+                  })
+                : t('web:selectMover.selectFirst.cta')}
           </ButtonPrimary>
         </div>
       </div>

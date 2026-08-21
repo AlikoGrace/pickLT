@@ -1,4 +1,86 @@
 {
+  "api": {
+    "admin": {
+      "awaitingApproval": "Your admin account is awaiting approval by an existing administrator.",
+      "noProfile": "No admin profile found for this account.",
+      "notAuthorized": "This account is not authorized for the admin console.",
+      "suspended": "Your admin access has been suspended. Contact another administrator."
+    },
+    "admins": {
+      "alreadyAdmin": "That user is already an active admin.",
+      "invalidStatus": "Status must be one of: {{list}}",
+      "lastAdmin": "This is the last active admin — promote another before removing it.",
+      "notAnAdmin": "That account is not an admin.",
+      "notFound": "Admin not found.",
+      "selfDemote": "You cannot remove your own admin access.",
+      "selfStatus": "You cannot change your own admin status.",
+      "userIdRequired": "A user id is required.",
+      "userNotFound": "User not found."
+    },
+    "auth": {
+      "missingUserId": "Sign in could not be completed. Please try again.",
+      "noSession": "No active session. Please sign in again.",
+      "sessionInitFailed": "Could not start your session. Please try again."
+    },
+    "dac7": {
+      "exportBlocked_one": "{{count}} seller missing a tax number (TIN). Complete their KYC before exporting, or re-request with force=1 for an internal review copy.",
+      "exportBlocked_other": "{{count}} sellers missing a tax number (TIN). Complete their KYC before exporting, or re-request with force=1 for an internal review copy.",
+      "invalidYear": "Invalid year"
+    },
+    "dispute": {
+      "invalidStatus": "The outcome must be one of: {{list}}",
+      "moveIdRequired": "A move id is required."
+    },
+    "forbidden": "You do not have permission to do that.",
+    "functionFailed": {
+      "error": "Function {{functionId}} failed ({{status}})"
+    },
+    "internal": "Something went wrong. Please try again.",
+    "inventory": {
+      "categoryRequired": "Category is required.",
+      "invalidMoveType": "moveTypeMinimum must be one of: {{list}}",
+      "nameRequired": "Name is required.",
+      "notANonNegativeNumber": "{{field}} must be a non-negative number."
+    },
+    "invite": {
+      "accountClash": "An account already exists for this email. Ask an admin to promote it instead.",
+      "alreadyAccepted": "That invitation was already accepted. Suspend the admin account instead.",
+      "emailExists": "That email already has a PickLte account. Promote it from the Users page instead of inviting.",
+      "emailIsAdmin": "That email already belongs to an admin.",
+      "expired": "This invitation has expired. Ask an admin for a new link.",
+      "idRequired": "An invitation id is required.",
+      "invalidEmail": "Enter a valid email address.",
+      "invalidLink": "This invitation link is not valid.",
+      "loadFailed": "Could not load this invitation.",
+      "nameRequired": "Enter the invitee's full name.",
+      "notFound": "Invitation not found.",
+      "passwordTooShort_one": "Password must be at least {{count}} character.",
+      "passwordTooShort_other": "Password must be at least {{count}} characters.",
+      "revoked": "This invitation was revoked.",
+      "signupFailed": "Could not complete signup.",
+      "used": "This invitation has already been used."
+    },
+    "mover": {
+      "invalidStatus": "New status must be one of: {{list}}",
+      "noLicensePhoto": "No licence photo on file.",
+      "notFound": "Mover not found.",
+      "reasonRequired": "A reason is required when rejecting or suspending a mover.",
+      "verifyFailed": "Verification failed (status {{status}}). Please try again."
+    },
+    "pricing": {
+      "keyRequired": "key is required",
+      "negative": "{{label}} cannot be negative.",
+      "notANumber": "{{label}} must be a number.",
+      "ratioTooLarge": "{{label}} looks too large — it is a ratio, not a euro amount.",
+      "unknownKey": "Unknown pricing key: {{key}}"
+    },
+    "unauthorized": "Your session has expired. Please sign in again.",
+    "user": {
+      "blockedFlagRequired": "A blocked/unblocked value is required.",
+      "notFound": "User not found.",
+      "selfBlock": "You cannot block your own account."
+    }
+  },
   "appwrite": {
     "generalArgumentInvalid": "One of the fields is invalid. Please check your input.",
     "generalRateLimitExceeded": "Too many attempts. Please wait a moment and try again.",
@@ -15,9 +97,18 @@
     "userUnauthorized": "You are not authorized. Please sign in again."
   },
   "auth": {
+    "forbidden": "Forbidden",
+    "initSessionFailed": "Failed to initialize session",
+    "noActiveSession": "No active session",
     "noSession": {
       "error": "No authenticated user"
-    }
+    },
+    "setPhoneFailed": "Failed to set phone number",
+    "syncFailed": "Failed to sync user",
+    "unauthorized": "Unauthorized"
+  },
+  "call": {
+    "noPhoneNumber": "No phone number on file for this mover."
   },
   "card": {
     "add": {
@@ -36,13 +127,37 @@
       "userNotFound": "Your account could not be loaded. Please sign in again."
     }
   },
+  "crew": {
+    "fieldsRequired": "Name and phone are required",
+    "memberNotFound": "Crew member not found",
+    "notOwner": {
+      "error": "Not your crew member"
+    }
+  },
   "generic": {
     "fallback": "Something went wrong. Please try again.",
+    "internal": "Internal server error",
     "retry": {
       "body": "Please try again.",
       "error": "Something went wrong. Please try again."
     },
-    "title": "Something went wrong"
+    "saveFailed": "Failed to save",
+    "title": "Something went wrong",
+    "unknown": "Unknown error"
+  },
+  "geo": {
+    "denied": {
+      "error": "Location access denied. Please enable it in your browser settings."
+    },
+    "unavailable": {
+      "error": "Unable to get your location. Please try again."
+    },
+    "unsupported": {
+      "error": "Geolocation is not supported by your browser"
+    }
+  },
+  "geocode": {
+    "searchFailed": "Failed to fetch locations"
   },
   "google": {
     "cancelled": {
@@ -69,16 +184,149 @@
       }
     }
   },
+  "location": {
+    "unavailable": {
+      "error": "Could not determine your location."
+    }
+  },
   "mapbox": {
     "unreachable": {
       "error": "Couldn't reach Mapbox, check connection"
     }
+  },
+  "message": {
+    "empty": "Message is empty",
+    "sendFailed": "Couldn’t send the message. Please try again.",
+    "tooLong": "Message is too long. The limit is {{max}} characters."
+  },
+  "move": {
+    "alreadyAssigned": "Move is already assigned",
+    "alreadyAssigned2": "This move already has a mover assigned",
+    "cancelFailed": "Couldn’t cancel this move. Please try again.",
+    "cancelRetry": "Failed to cancel. Please try again.",
+    "createFailed": "Failed to create move",
+    "dateInPast": "Move date must be in the future",
+    "invalidTransition": "Invalid transition from “{{from}}” to “{{to}}”",
+    "loadFailed": "Failed to load move data",
+    "notAcceptableInStatus": "Move cannot be accepted while it is {{status}}",
+    "notAssigned": "Not assigned to this move",
+    "notAssigned2": "You are not assigned to this move",
+    "notAuthorized": "Not authorized for this move",
+    "notAvailable": "This move is not available for acceptance",
+    "notCancellable": "This move can no longer be cancelled ({{stage}}). Your items may already be in transit — please contact your mover directly.",
+    "notFound": "Move not found",
+    "notReschedulable": "Cannot reschedule a move with status “{{status}}”",
+    "rescheduleFailed": "Failed to reschedule",
+    "rescheduleRetry": "Failed to reschedule. Please try again.",
+    "scheduledOnly": "Only scheduled moves can be accepted this way",
+    "statusUpdateFailed": "Failed to update status",
+    "tooEarly": "This move cannot be started before its scheduled date.",
+    "withdrawTooLate": "Cannot withdraw after the move has started"
+  },
+  "mover": {
+    "acceptFailed": {
+      "error": "Failed to accept move"
+    },
+    "acceptRetry": "Failed to accept move. Please try again.",
+    "clientCannotConvert": "Your account is registered as a client. Client accounts cannot be converted to mover accounts. Please create a new account to register as a mover.",
+    "earningsFetchFailed": "Failed to fetch earnings",
+    "earningsLoadFailed": "Failed to load earnings",
+    "licenseUploadFailed": "Failed to upload driver's license photo",
+    "noLocation": "No location available. Please enable location services or update your location.",
+    "notVerified": "Your mover profile has not been verified yet",
+    "notVerifiedPendingApproval": "Your mover profile has not been verified yet. Please wait for admin approval.",
+    "profileNotFound": "Mover profile not found",
+    "profileSubmitFailed": "Failed to submit profile",
+    "selfieRequired": "Selfie photo is required for identity verification",
+    "selfieUploadFailed": "Failed to upload selfie photo",
+    "startRouteFailed": "Failed to start route",
+    "startRouteRetry": "Failed to start route. Please try again.",
+    "withdrawFailed": "Failed to withdraw from move",
+    "withdrawRetry": "Failed to withdraw. Please try again."
+  },
+  "movers": {
+    "fetchFailed": "Failed to fetch movers",
+    "findFailed": "Failed to find movers"
+  },
+  "moves": {
+    "fetchFailed": "Failed to fetch moves",
+    "loadFailed": "Failed to load moves",
+    "scheduledLoadFailed": "Failed to load scheduled moves"
+  },
+  "network": {
+    "generic": {
+      "error": "Network error. Please try again."
+    },
+    "unreachable": "Couldn’t reach the server. Check your connection and try again."
   },
   "payment": {
     "cardDeclined": "Your card was declined. Please try another payment method.",
     "charge": {
       "failed": "Could not complete payment. Try again.",
       "initFailed": "Could not start payment. Try again."
+    },
+    "confirmFailed": "Failed to confirm payment",
+    "notAwaiting": "Move is not awaiting payment (current: {{status}})"
+  },
+  "profile": {
+    "changeEmailFailed": "Failed to change email",
+    "changePhoneFailed": "Failed to change phone",
+    "emailChangeFailed": "Failed to change email",
+    "emailTaken": "This email is already in use by another account",
+    "nameUpdateFailed": "Failed to update name",
+    "phoneChangeFailed": "Failed to change phone",
+    "phoneNumberChangeFailed": "Failed to change phone number",
+    "phoneTaken": "This phone number is already in use by another account"
+  },
+  "request": {
+    "moveMismatch": "Request does not correspond to this move",
+    "notOwned": "Request does not belong to this mover",
+    "notPending": "Request is no longer pending"
+  },
+  "review": {
+    "moveNotCompleted": "Move is not completed",
+    "noMover": "No mover assigned to this move",
+    "ratingRange": "Rating must be between 1 and 5",
+    "submitFailed": "Failed to submit review"
+  },
+  "tax": {
+    "listFailed": "Failed to load statements",
+    "pdfLoadFailed": "Failed to load PDF",
+    "pdfNotReady": "Statement PDF not ready yet"
+  },
+  "taxDocs": {
+    "downloadFailed": {
+      "error": "Could not download the statement. Please try again."
+    },
+    "pdfNotReady": {
+      "error": "Statement PDF is not ready yet"
     }
+  },
+  "update": {
+    "failed": {
+      "title": "Could not update"
+    }
+  },
+  "upload": {
+    "failed": "Upload failed",
+    "noFile": "No file provided",
+    "notAnImage": "Please select an image file",
+    "notAnImage2": "File must be an image",
+    "photoFailed": "Failed to upload photo",
+    "photosFailed": "Failed to upload photos",
+    "tooLarge": "Image must be under {{limit}}",
+    "tooLarge2": "File size must be under 10MB"
+  },
+  "validation": {
+    "emailFormat": "Invalid email format",
+    "emailRequired": "Email is required",
+    "noFields": "No valid fields to update",
+    "phoneFormat": "Invalid phone number. Use international format (e.g. +491234567890)",
+    "phoneRequired2": "Phone number is required"
+  },
+  "vehicle": {
+    "fieldsRequired": "Please fill in all required vehicle fields",
+    "saveFailed": "Failed to save vehicle info",
+    "updateFailed": "Failed to update vehicle info"
   }
 }

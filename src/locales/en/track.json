@@ -1,4 +1,9 @@
 {
+  "action": {
+    "trackLive": {
+      "cta": "Track Live Move"
+    }
+  },
   "address": {
     "dropoff": {
       "title": "Drop-off address"
@@ -6,9 +11,16 @@
     "floor": {
       "label": "Floor {{floor}}"
     },
+    "floorWithElevator": {
+      "label": "Floor {{floor}} · Elevator"
+    },
     "pickup": {
       "title": "Pickup address"
     }
+  },
+  "banner": {
+    "accepted": "A mover has accepted your move! They will start the route soon.",
+    "awaitingAccept": "Waiting for a mover to accept your move..."
   },
   "eta": {
     "assigned": {
@@ -16,6 +28,13 @@
     },
     "distance": {
       "footnote": "{{distance}} km away"
+    },
+    "distanceAway": {
+      "label": "{{distance}} km away"
+    },
+    "minutes": {
+      "label_one": "{{count}} min",
+      "label_other": "{{count}} min"
     },
     "moverArriving": {
       "label": "Mover on the way"
@@ -26,10 +45,132 @@
       "label": "Mover assigned"
     }
   },
+  "hint": {
+    "arrivedDestination": "Arrived! Unloading will begin shortly.",
+    "inTransit": "Driving to your destination…",
+    "loading": "Your items are being loaded…",
+    "loadingSoon": "Your mover will begin loading soon",
+    "unloading": "Your items are being unloaded…"
+  },
+  "live": {
+    "helper": "Your mover is active — track progress in real time"
+  },
+  "map": {
+    "dropoffPin": {
+      "label": "D"
+    },
+    "pickupPin": {
+      "label": "P"
+    }
+  },
   "mover": {
+    "cancelled": {
+      "searching": "The mover has cancelled. Searching for another mover..."
+    },
     "moveCount": {
       "label_one": "{{count}} move",
       "label_other": "{{count}} moves"
+    },
+    "noPhone": {
+      "error": "Mover phone number not available"
+    }
+  },
+  "moverPhase": {
+    "atDropoff": {
+      "subtitle": "You have arrived at the destination",
+      "title": "At Drop-off"
+    },
+    "atPickup": {
+      "subtitle": "You have arrived. Start loading items.",
+      "title": "At Pickup"
+    },
+    "awaitingPayment": {
+      "subtitle": "Waiting for payment confirmation",
+      "title": "Awaiting Payment"
+    },
+    "completed": {
+      "subtitle": "Move completed successfully!",
+      "title": "Completed"
+    },
+    "enRoute": {
+      "subtitle": "Head to the pickup location",
+      "title": "En Route to Pickup"
+    },
+    "inTransit": {
+      "subtitle": "Driving to the drop-off location",
+      "title": "In Transit"
+    },
+    "loading": {
+      "subtitle": "Loading items onto your vehicle",
+      "title": "Loading"
+    },
+    "unloading": {
+      "subtitle": "Unloading items at the destination",
+      "title": "Unloading"
+    }
+  },
+  "notify": {
+    "accepted": {
+      "body": "A mover has accepted your scheduled move. They will start the route soon.",
+      "shortBody": "A mover has accepted your move request!",
+      "shortTitle": "Mover Accepted",
+      "title": "Mover accepted your move! ✅"
+    },
+    "arrived": {
+      "body": "Your mover has arrived at the pickup location. Please meet them.",
+      "shortBody": "Your mover has arrived at the pickup location.",
+      "shortTitle": "Mover Arrived",
+      "title": "Your mover has arrived! 🚛"
+    },
+    "arrivedDestination": {
+      "body": "Your mover has arrived at the drop-off location.",
+      "shortBody": "Your mover has arrived at the destination.",
+      "shortTitle": "Arrived",
+      "title": "Arrived at destination! 🏠"
+    },
+    "cancelled": {
+      "shortBody": "The mover has cancelled this move.",
+      "shortTitle": "Move Cancelled"
+    },
+    "completed": {
+      "body": "Your move has been completed successfully.",
+      "shortBody": "Your move has been completed! Please leave a review.",
+      "shortTitle": "Move Completed",
+      "title": "Move completed! ✅"
+    },
+    "enRoute": {
+      "body": "Your mover is heading to the pickup location.",
+      "shortBody": "Your mover is on the way to your pickup location.",
+      "shortTitle": "Mover En Route",
+      "title": "Mover is on the way! 🚚"
+    },
+    "inTransit": {
+      "body": "Your items are being transported to the destination.",
+      "shortBody": "Your items are on the way to the destination.",
+      "shortTitle": "In Transit",
+      "title": "On the move! 🛣️"
+    },
+    "loading": {
+      "body": "Your mover has started loading your items.",
+      "shortBody": "Your items are being loaded.",
+      "shortTitle": "Loading Started",
+      "title": "Loading started 📦"
+    },
+    "paymentDue": {
+      "body": "Your move is finishing up — please complete the payment.",
+      "shortBody": "Your move is done — please confirm payment.",
+      "shortTitle": "Payment Due",
+      "title": "Payment due 💶"
+    },
+    "unloading": {
+      "body": "Your items are being unloaded at the destination.",
+      "shortBody": "Your items are being unloaded.",
+      "shortTitle": "Unloading",
+      "title": "Unloading your items 📦"
+    },
+    "withdrawn": {
+      "body": "The mover has withdrawn from your move. It is now available for other movers.",
+      "title": "Mover Withdrawn"
     }
   },
   "order": {
@@ -66,9 +207,17 @@
     }
   },
   "phase": {
+    "arrived": {
+      "subtitle": "Meet them at the pickup location",
+      "title": "Your mover has arrived!"
+    },
     "arrivedDestination": {
       "subtitle": "Your mover has reached the drop-off location",
       "title": "Arrived at destination!"
+    },
+    "awaitingAccept": {
+      "subtitle": "Your request has been sent. The mover will respond shortly.",
+      "title": "Waiting for mover to accept"
     },
     "awaitingPayment": {
       "subtitle": "Please pay the mover and confirm below",
@@ -85,9 +234,11 @@
       "subtitle": "Cancelled by mover"
     },
     "completed": {
-      "label": "Move complete"
+      "label": "Move complete",
+      "title": "Move Completed!"
     },
     "inTransit": {
+      "body": "Your items are being transported",
       "subtitle": "Your items are being transported",
       "title": "On the way to destination"
     },
@@ -98,6 +249,9 @@
     "moverArrived": {
       "subtitle": "Meet them at the pickup location",
       "title": "Your mover has arrived!"
+    },
+    "moverEnRoute": {
+      "title": "Mover is on the way"
     },
     "paid": {
       "subtitle": "Waiting for the mover to close out the move",

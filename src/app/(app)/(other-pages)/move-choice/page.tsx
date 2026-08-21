@@ -15,14 +15,13 @@ import {
 import { HugeiconsIcon } from '@hugeicons/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Suspense, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
-const MOVE_TYPE_LABELS: Record<string, string> = {
-  light: 'Light Move',
-  regular: 'Regular Move',
-  premium: 'Premium Move',
-}
+// The persisted value is the slug; the label is looked up during render.
+const MOVE_TYPE_SLUGS = ['light', 'regular', 'premium'] as const
 
 const MoveChoiceContent = () => {
+  const { t } = useTranslation()
   const router = useRouter()
   const searchParams = useSearchParams()
   const {
@@ -72,17 +71,17 @@ const MoveChoiceContent = () => {
         {/* Header */}
         <div className="text-center mb-10">
           <h1 className="text-2xl font-semibold text-neutral-900 dark:text-white sm:text-3xl">
-            How would you like to move?
+            {t('web:moveChoice.title')}
           </h1>
           <p className="mt-2 text-neutral-500 dark:text-neutral-400">
-            Choose the option that best fits your needs
+            {t('web:moveChoice.subtitle')}
           </p>
         </div>
 
         {/* Move Summary Card */}
         <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-5 dark:border-neutral-700 dark:bg-neutral-800/50 mb-8">
           <p className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-4">
-            Your move details
+            {t('web:moveChoice.summary.title')}
           </p>
           <div className="space-y-4">
             <div className="flex items-start gap-3">
@@ -93,9 +92,9 @@ const MoveChoiceContent = () => {
                 className="mt-0.5 shrink-0 text-neutral-400 dark:text-neutral-500"
               />
               <div className="min-w-0 flex-1">
-                <p className="text-xs text-neutral-500 dark:text-neutral-400">Pickup</p>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">{t('booking:pickup.short.label')}</p>
                 <p className="truncate text-sm font-medium text-neutral-900 dark:text-white">
-                  {pickupLocation || 'Not specified'}
+                  {pickupLocation || t('common:value.notSpecified.empty')}
                 </p>
               </div>
             </div>
@@ -107,9 +106,9 @@ const MoveChoiceContent = () => {
                 className="mt-0.5 shrink-0 text-neutral-400 dark:text-neutral-500"
               />
               <div className="min-w-0 flex-1">
-                <p className="text-xs text-neutral-500 dark:text-neutral-400">Drop-off</p>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">{t('booking:dropoff.short.label')}</p>
                 <p className="truncate text-sm font-medium text-neutral-900 dark:text-white">
-                  {dropoffLocation || 'Not specified'}
+                  {dropoffLocation || t('common:value.notSpecified.empty')}
                 </p>
               </div>
             </div>
@@ -122,9 +121,12 @@ const MoveChoiceContent = () => {
                   className="mt-0.5 shrink-0 text-neutral-400 dark:text-neutral-500"
                 />
                 <div className="min-w-0 flex-1">
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400">Move type</p>
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400">{t('booking:moveType.label')}</p>
                   <p className="text-sm font-medium text-neutral-900 dark:text-white">
-                    {MOVE_TYPE_LABELS[moveType] || moveType}
+                    {/* i18n-keys: booking.moveType.light.label, booking.moveType.regular.label, booking.moveType.premium.label */}
+                    {(MOVE_TYPE_SLUGS as readonly string[]).includes(moveType)
+                      ? t(`booking:moveType.${moveType}.label`)
+                      : moveType}
                   </p>
                 </div>
               </div>
@@ -148,10 +150,10 @@ const MoveChoiceContent = () => {
               />
             </div>
             <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mb-1">
-              Instant Move
+              {t('booking:category.instant.label')}
             </h3>
             <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
-              Need to move right now? We&apos;ll find a mover near you immediately.
+              {t('web:moveChoice.instant.subtitle')}
             </p>
             <ul className="space-y-2 mb-5">
               <li className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-300">
@@ -161,7 +163,7 @@ const MoveChoiceContent = () => {
                   strokeWidth={1.5}
                   className="text-neutral-400"
                 />
-                Mover arrives in 15-30 min
+                {t('web:moveChoice.instant.eta')}
               </li>
               <li className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-300">
                 <HugeiconsIcon
@@ -170,11 +172,11 @@ const MoveChoiceContent = () => {
                   strokeWidth={1.5}
                   className="text-neutral-400"
                 />
-                Real-time tracking
+                {t('web:moveChoice.instant.tracking')}
               </li>
             </ul>
             <div className="flex items-center text-sm font-medium text-neutral-900 group-hover:text-primary-600 dark:text-white dark:group-hover:text-primary-400 transition-colors">
-              Get started
+              {t('web:moveChoice.instant.cta')}
               <HugeiconsIcon
                 icon={ArrowRight01Icon}
                 size={16}
@@ -198,10 +200,10 @@ const MoveChoiceContent = () => {
               />
             </div>
             <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mb-1">
-              Book for Later
+              {t('web:moveChoice.scheduled.title')}
             </h3>
             <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
-              Plan ahead and schedule your move for a specific date and time.
+              {t('web:moveChoice.scheduled.subtitle')}
             </p>
             <ul className="space-y-2 mb-5">
               <li className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-300">
@@ -211,7 +213,7 @@ const MoveChoiceContent = () => {
                   strokeWidth={1.5}
                   className="text-neutral-400"
                 />
-                Choose your preferred date
+                {t('web:moveChoice.scheduled.date')}
               </li>
               <li className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-300">
                 <HugeiconsIcon
@@ -220,11 +222,11 @@ const MoveChoiceContent = () => {
                   strokeWidth={1.5}
                   className="text-neutral-400"
                 />
-                Select arrival time window
+                {t('web:moveChoice.scheduled.window')}
               </li>
             </ul>
             <div className="flex items-center text-sm font-medium text-neutral-900 group-hover:text-primary-600 dark:text-white dark:group-hover:text-primary-400 transition-colors">
-              Schedule move
+              {t('web:moveChoice.scheduled.cta')}
               <HugeiconsIcon
                 icon={ArrowRight01Icon}
                 size={16}
@@ -238,7 +240,7 @@ const MoveChoiceContent = () => {
         {/* Back Button */}
         <div className="mt-10 text-center">
           <ButtonSecondary href="/" className="px-8">
-            Back to home
+            {t('common:action.backToHome.cta')}
           </ButtonSecondary>
         </div>
       </div>
@@ -246,10 +248,19 @@ const MoveChoiceContent = () => {
   )
 }
 
+const MoveChoiceFallback = () => {
+  const { t } = useTranslation()
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      {t('common:state.loading.label')}
+    </div>
+  )
+}
+
 const MoveChoicePage = () => {
   return (
     <AuthGate redirectBack="/move-choice">
-      <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <Suspense fallback={<MoveChoiceFallback />}>
         <MoveChoiceContent />
       </Suspense>
     </AuthGate>

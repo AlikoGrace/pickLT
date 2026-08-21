@@ -1,15 +1,22 @@
 import BgGlassmorphism from '@/components/BgGlassmorphism'
 import SectionSubscribe2 from '@/components/SectionSubscribe2'
 import rightImg from '@/images/about-hero-right.png'
+import { getTranslations } from '@/lib/i18n-server'
 import { Metadata } from 'next'
 import SectionHero from './SectionHero'
 
-export const metadata: Metadata = {
-  title: 'About Us',
-  description: 'PickLT is a moving-services platform for apartments, offices, and belongings across Europe.',
+// § 7.8 — module-scope `metadata` cannot read the request locale.
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getTranslations()
+  return {
+    title: t('web:seo.about.title'),
+    description: t('web:seo.about.description'),
+  }
 }
 
-const PageAbout = () => {
+const PageAbout = async () => {
+  const { t } = await getTranslations()
+
   return (
     <div className="relative overflow-hidden">
       {/* ======== BG GLASS ======== */}
@@ -18,8 +25,8 @@ const PageAbout = () => {
       <div className="container flex flex-col gap-y-16 py-16 lg:gap-y-28 lg:py-28">
         <SectionHero
           rightImg={rightImg}
-          heading="👋 About Us."
-          subHeading="PickLT is a moving-services platform. You describe your move, compare movers, and book the one you want — for apartments, offices, and individual belongings across Europe."
+          heading={t('web:about.hero.title')}
+          subHeading={t('web:about.hero.subtitle')}
         />
 
         <SectionSubscribe2 />

@@ -5,6 +5,7 @@ import clsx from 'clsx'
 import Form from 'next/form'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ButtonSubmit, GuestNumberField, LocationInputField, LocationSuggestion, VerticalDividerLine } from './ui'
 
 interface Props {
@@ -13,6 +14,7 @@ interface Props {
 }
 
 export const StaySearchForm = ({ className, formStyle = 'default' }: Props) => {
+  const { t } = useTranslation()
   const router = useRouter()
   const {
     pickupLocation: contextPickup,
@@ -106,8 +108,8 @@ export const StaySearchForm = ({ className, formStyle = 'default' }: Props) => {
       <LocationInputField
         className="hero-search-form__field-after flex-5/12"
         fieldStyle={formStyle}
-        placeholder="Where are you moving from?"
-        description="Pickup location"
+        placeholder={t('web:search.pickup.placeholder')}
+        description={t('booking:pickup.label')}
         inputName="pickupLocation"
         onChange={handlePickupChange}
         defaultValue={contextPickup}
@@ -116,8 +118,8 @@ export const StaySearchForm = ({ className, formStyle = 'default' }: Props) => {
       <LocationInputField
         className="hero-search-form__field-before hero-search-form__field-after flex-4/12"
         fieldStyle={formStyle}
-        placeholder="Where are you moving to?"
-        description="Drop-off location"
+        placeholder={t('web:search.dropoff.placeholder')}
+        description={t('booking:dropoff.label')}
         inputName="dropoffLocation"
         onChange={handleDropoffChange}
         defaultValue={contextDropoff}

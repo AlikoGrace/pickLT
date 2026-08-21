@@ -5,6 +5,7 @@ import { useMoveSearch } from '@/context/moveSearch'
 import { useMoveStatePersistence } from '@/hooks/useMoveStatePersistence'
 import { useRouter } from 'next/navigation'
 import { useEffect, ReactNode, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface AuthGateProps {
   children: ReactNode
@@ -20,6 +21,7 @@ interface AuthGateProps {
  * and redirects to login. After login, the state is restored.
  */
 export function AuthGate({ children, redirectBack, fallback }: AuthGateProps) {
+  const { t } = useTranslation()
   const { isAuthenticated, isLoading } = useAuth()
   const router = useRouter()
   const moveSearch = useMoveSearch()
@@ -76,7 +78,7 @@ export function AuthGate({ children, redirectBack, fallback }: AuthGateProps) {
         <div className="flex min-h-screen items-center justify-center">
           <div className="text-center">
             <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-neutral-300 border-t-primary-600" />
-            <p className="mt-3 text-sm text-neutral-500">Loading...</p>
+            <p className="mt-3 text-sm text-neutral-500">{t('common:state.loading.label')}</p>
           </div>
         </div>
       )
@@ -89,7 +91,7 @@ export function AuthGate({ children, redirectBack, fallback }: AuthGateProps) {
         <div className="flex min-h-screen items-center justify-center">
           <div className="text-center">
             <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-neutral-300 border-t-primary-600" />
-            <p className="mt-3 text-sm text-neutral-500">Redirecting to sign in...</p>
+            <p className="mt-3 text-sm text-neutral-500">{t('web:authGate.redirecting.label')}</p>
           </div>
         </div>
       )

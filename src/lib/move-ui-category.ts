@@ -16,6 +16,7 @@
  * any bookmarked or in-flight state still holds.
  */
 
+import type { TFunction } from 'i18next'
 import type { MoveStatus } from '@/context/moveSearch'
 
 export type MoveUiCategory =
@@ -35,7 +36,10 @@ export const MOVE_UI_CATEGORY_VALUES: readonly MoveUiCategory[] = [
   'cancelled',
 ] as const
 
-/** Catalog keys are `moves.category.<key>`; replaced by `t()` at extraction. */
+/**
+ * English fallback, used only when no `t` is supplied (tests, and any caller
+ * outside a request/provider scope). The stored value is always the key.
+ */
 const MOVE_UI_CATEGORY_LABELS: Record<MoveUiCategory, string> = {
   all: 'All Moves',
   scheduled: 'Scheduled',
@@ -45,8 +49,25 @@ const MOVE_UI_CATEGORY_LABELS: Record<MoveUiCategory, string> = {
   cancelled: 'Cancelled',
 }
 
-export function moveUiCategoryLabel(category: MoveUiCategory): string {
-  return MOVE_UI_CATEGORY_LABELS[category]
+/**
+ * Catalog segment for a category. `in_progress` cannot be a key segment as-is:
+ * i18next reserves `_` for plural suffixes (catalog conventions § 2).
+ */
+const MOVE_UI_CATEGORY_KEY_SEGMENT: Record<MoveUiCategory, string> = {
+  all: 'all',
+  scheduled: 'scheduled',
+  pending: 'pending',
+  in_progress: 'inProgress',
+  completed: 'completed',
+  cancelled: 'cancelled',
+}
+
+// i18n-keys: web.home.moves.tab.all.label, web.home.moves.tab.scheduled.label,
+// web.home.moves.tab.pending.label, web.home.moves.tab.inProgress.label,
+// web.home.moves.tab.completed.label, web.home.moves.tab.cancelled.label
+export function moveUiCategoryLabel(category: MoveUiCategory, t?: TFunction): string {
+  if (!t) return MOVE_UI_CATEGORY_LABELS[category]
+  return t(`web:home.moves.tab.${MOVE_UI_CATEGORY_KEY_SEGMENT[category]}.label`)
 }
 
 /** Key or legacy English tab label → key. Null when it is neither. */
@@ -82,9 +103,9 @@ export function moveUiCategoryStatus(
   return category
 }
 
-export function moveUiCategoryOptions(): { value: MoveUiCategory; label: string }[] {
+export function moveUiCategoryOptions(t?: TFunction): { value: MoveUiCategory; label: string }[] {
   return MOVE_UI_CATEGORY_VALUES.map((value) => ({
     value,
-    label: MOVE_UI_CATEGORY_LABELS[value],
+    label: moveUiCategoryLabel(value, t),
   }))
 }

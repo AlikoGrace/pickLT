@@ -3,8 +3,10 @@
 import { useAuth } from '@/context/auth'
 import Avatar from '@/shared/Avatar'
 import Link from 'next/link'
+import { useTranslation } from 'react-i18next'
 
 const MobileAuthIndicator = () => {
+  const { t } = useTranslation()
   const { user, isAuthenticated, isLoading } = useAuth()
 
   if (isLoading) {
@@ -28,7 +30,7 @@ const MobileAuthIndicator = () => {
     <Link
       href={user.userType === 'mover' ? '/dashboard' : '/account'}
       className="shrink-0 rounded-full"
-      aria-label="Go to your account"
+      aria-label={t('web:nav.account.a11y')}
     >
       <Avatar
         src={user.profilePhoto || undefined}

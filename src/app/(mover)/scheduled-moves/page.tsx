@@ -13,6 +13,7 @@ import { Badge } from '@/shared/Badge'
 import Link from 'next/link'
 import { client } from '@/lib/appwrite'
 import { formatDateWith, formatMoney } from '@/lib/format'
+import { useTranslation } from 'react-i18next'
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || ''
 const MOVES_COLLECTION = process.env.NEXT_PUBLIC_COLLECTION_MOVES || ''
@@ -33,30 +34,34 @@ interface ScheduledMove {
   createdAt: string
 }
 
-const formatLabel = (value: string | null | undefined): string => {
-  if (!value) return 'Not specified'
-  return value
-    .split('_')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ')
-}
-
-const formatDate = (dateStr: string | null) => {
-  if (!dateStr) return 'Not selected'
-  try {
-    return formatDateWith(dateStr, {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    })
-  } catch {
-    return dateStr
-  }
-}
-
 const ScheduledMovesPage = () => {
+  const { t } = useTranslation()
+
+  // Defined inside the component so the fallback copy re-resolves on a
+  // language change instead of freezing at module-import time.
+  const formatLabel = (value: string | null | undefined): string => {
+    if (!value) return t('common:value.notSpecified.empty')
+    return value
+      .split('_')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ')
+  }
+
+  const formatDate = (dateStr: string | null) => {
+    if (!dateStr) return t('common:value.notSelected.empty')
+    try {
+      return formatDateWith(dateStr, {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      })
+    } catch {
+      return dateStr
+    }
+  }
+
   const [moves, setMoves] = useState<ScheduledMove[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -67,7 +72,7 @@ const ScheduledMovesPage = () => {
       setError(null)
       const res = await fetch('/api/mover/scheduled-moves')
       if (!res.ok) {
-        setError('Failed to load scheduled moves')
+        setError(t('errors:moves.scheduledLoadFailed'))
         return
       }
       const data = await res.json()
@@ -89,11 +94,11 @@ const ScheduledMovesPage = () => {
         })),
       )
     } catch {
-      setError('Failed to load scheduled moves')
+      setError(t('errors:moves.scheduledLoadFailed'))
     } finally {
       setIsLoading(false)
     }
-  }, [])
+  }, [t])
 
   useEffect(() => {
     fetchMoves()
@@ -115,17 +120,17 @@ const ScheduledMovesPage = () => {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
-            Scheduled Moves
+            {t('web:moverNav.scheduledMoves.label')}
           </h1>
           <p className="text-neutral-500 dark:text-neutral-400 text-sm mt-1">
-            Moves you&apos;ve been assigned to that are awaiting their scheduled date
+            {t('web:mover.scheduledMoves.subtitle')}
           </p>
         </div>
         <button
           onClick={fetchMoves}
           disabled={isLoading}
           className="p-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
-          title="Refresh"
+          title={t('common:action.refresh.a11y')}
         >
           <ArrowPathIcon className={`w-5 h-5 text-neutral-600 dark:text-neutral-300 ${isLoading ? 'animate-spin' : ''}`} />
         </button>
@@ -152,16 +157,16 @@ const ScheduledMovesPage = () => {
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <CalendarDaysIcon className="w-16 h-16 text-neutral-300 dark:text-neutral-600 mb-4" />
           <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-2">
-            No scheduled moves
+            {t('web:mover.scheduledMoves.empty.title')}
           </h2>
           <p className="text-neutral-500 dark:text-neutral-400 mb-6 max-w-sm">
-            When you accept scheduled moves, they&apos;ll appear here until their move date.
+            {t('web:mover.scheduledMoves.empty.subtitle')}
           </p>
           <Link
             href="/available-moves"
             className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium"
           >
-            Browse available moves
+            {t('web:mover.browseAvailable.cta')}
           </Link>
         </div>
       )}
@@ -176,7 +181,7 @@ const ScheduledMovesPage = () => {
               className="block bg-white dark:bg-neutral-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow border border-neutral-100 dark:border-neutral-700"
             >
               <div className="flex items-start justify-between mb-3">
-                <Badge color="blue">Assigned</Badge>
+                <Badge color="blue">{t('moves:status.assigned.label')}</Badge>
                 <span className="text-sm text-neutral-500 dark:text-neutral-400">
                   #{move.handle}
                 </span>
@@ -186,12 +191,12 @@ const ScheduledMovesPage = () => {
               <div className="flex items-center gap-2 mb-3">
                 <MapPinIcon className="w-4 h-4 text-green-500 flex-shrink-0" />
                 <span className="text-sm text-neutral-900 dark:text-neutral-100 truncate">
-                  {move.pickupLocation?.split(',')[0] || 'Pickup'}
+                  {move.pickupLocation?.split(',')[0] || t('moves:card.route.pickupFallback.label')}
                 </span>
                 <span className="text-neutral-400 mx-1">&rarr;</span>
                 <MapPinIcon className="w-4 h-4 text-red-500 flex-shrink-0" />
                 <span className="text-sm text-neutral-900 dark:text-neutral-100 truncate">
-                  {move.dropoffLocation?.split(',')[0] || 'Dropoff'}
+                  {move.dropoffLocation?.split(',')[0] || t('moves:card.route.dropoffFallback.label')}
                 </span>
               </div>
 
@@ -218,7 +223,7 @@ const ScheduledMovesPage = () => {
                 {move.totalItemCount > 0 && (
                   <span className="flex items-center gap-1">
                     <CubeIcon className="w-3.5 h-3.5" />
-                    {move.totalItemCount} items
+                    {t('moves:itemCount', { count: move.totalItemCount })}
                   </span>
                 )}
                 {move.routeDistanceMeters && move.routeDistanceMeters > 0 && (

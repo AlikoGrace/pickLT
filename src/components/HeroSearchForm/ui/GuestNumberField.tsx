@@ -1,11 +1,11 @@
 'use client'
 
-import T from '@/utils/getT'
 import { UserPlusIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 import { FC, useState, useRef, useEffect } from 'react'
 import { ClearDataButton } from './ClearDataButton'
 import { useInteractOutside } from '@/hooks/useInteractOutside'
+import { useTranslation } from 'react-i18next'
 
 const styles = {
   button: {
@@ -35,11 +35,9 @@ interface Props {
 
 type MoveTypeKey = 'light' | 'regular' | 'premium'
 
-const MOVE_TYPES: { key: MoveTypeKey; label: string; description: string }[] = [
-  { key: 'light', label: 'Light Move', description: 'Small load — few items' },
-  { key: 'regular', label: 'Regular Move', description: 'Standard household move' },
-  { key: 'premium', label: 'Premium Move', description: 'Full-service move' },
-]
+// The persisted value is the slug; only the label is looked up.
+// § 7.6 — this used to be a module-scope label array, which freezes at import.
+const MOVE_TYPE_KEYS: MoveTypeKey[] = ['light', 'regular', 'premium']
 
 export const GuestNumberField: FC<Props> = ({
   fieldStyle = 'default',
@@ -48,6 +46,15 @@ export const GuestNumberField: FC<Props> = ({
   onChange,
   value,
 }) => {
+  const { t } = useTranslation()
+  // i18n-keys: booking.moveType.light.label, booking.moveType.regular.label,
+  // booking.moveType.premium.label, booking.moveType.light.helper,
+  // booking.moveType.regular.helper, booking.moveType.premium.helper
+  const moveTypes = MOVE_TYPE_KEYS.map((key) => ({
+    key,
+    label: t(`booking:moveType.${key}.label`),
+    description: t(`booking:moveType.${key}.helper`),
+  }))
   const [internalMoveType, setInternalMoveType] = useState<MoveTypeKey | null>(null)
   const [open, setOpen] = useState(false)
   const isControlled = typeof value !== 'undefined'
@@ -56,7 +63,7 @@ export const GuestNumberField: FC<Props> = ({
 
   useInteractOutside(containerRef, () => setOpen(false))
 
-  const selected = MOVE_TYPES.find((m) => m.key === moveType)
+  const selected = moveTypes.find((m) => m.key === moveType)
 
   const handleSelect = (key: MoveTypeKey | null) => {
     if (!isControlled) setInternalMoveType(key)
@@ -84,17 +91,17 @@ export const GuestNumberField: FC<Props> = ({
         {fieldStyle === 'default' && <UserPlusIcon className="size-5 text-neutral-300 lg:size-7 dark:text-neutral-400" />}
 
         <div className="grow">
-          <span className={clsx('block font-semibold', styles.mainText[fieldStyle])}>{selected?.label || 'Type of move'}</span>
-          <span className="mt-1 block text-sm leading-none font-light text-neutral-400">{selected?.description || 'Choose a move type'}</span>
+          <span className={clsx('block font-semibold', styles.mainText[fieldStyle])}>{selected?.label || t('booking:moveType.label')}</span>
+          <span className="mt-1 block text-sm leading-none font-light text-neutral-400">{selected?.description || t('booking:moveType.placeholder')}</span>
         </div>
       </button>
 
       <ClearDataButton className={clsx(!moveType && 'sr-only', clearDataButtonClassName)} onClick={() => handleSelect(null)} />
 
       {open && (
-        <div className={clsx(styles.panel.base, styles.panel[fieldStyle])} role="dialog" aria-label="Select move type">
+        <div className={clsx(styles.panel.base, styles.panel[fieldStyle])} role="dialog" aria-label={t('booking:moveType.a11y')}>
           <div className="flex flex-col gap-3">
-            {MOVE_TYPES.map((opt) => (
+            {moveTypes.map((opt) => (
               <button
                 key={opt.key}
                 type="button"
@@ -109,7 +116,7 @@ export const GuestNumberField: FC<Props> = ({
                     <div className="font-medium">{opt.label}</div>
                     <div className="text-sm text-neutral-500">{opt.description}</div>
                   </div>
-                  {moveType === opt.key && <span className="text-sm font-semibold text-neutral-700">Selected</span>}
+                  {moveType === opt.key && <span className="text-sm font-semibold text-neutral-700">{t('common:state.selected.label')}</span>}
                 </div>
               </button>
             ))}

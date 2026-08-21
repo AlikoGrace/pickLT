@@ -3,13 +3,17 @@
 import { TruckIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 import { FC, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import type { TFunction } from 'i18next'
 
 type MoveTypeKey = 'light' | 'regular' | 'premium'
 
-const MOVE_TYPES: { key: MoveTypeKey; label: string; description: string }[] = [
-  { key: 'light', label: 'Light Move', description: 'Small load — few items' },
-  { key: 'regular', label: 'Regular Move', description: 'Standard household move' },
-  { key: 'premium', label: 'Premium Move', description: 'Full-service move' },
+// Built per render from `t` — a module-scope label array would freeze the
+// language the module was imported in (catalog conventions).
+const moveTypes = (t: TFunction): { key: MoveTypeKey; label: string; description: string }[] => [
+  { key: 'light', label: t('booking:moveType.light.title'), description: t('booking:moveType.light.helper') },
+  { key: 'regular', label: t('booking:moveType.regular.title'), description: t('booking:moveType.regular.helper') },
+  { key: 'premium', label: t('booking:moveType.premium.title'), description: t('booking:moveType.premium.helper') },
 ]
 
 interface Props {
@@ -19,6 +23,7 @@ interface Props {
 }
 
 const MoveTypeInput: FC<Props> = ({ defaultValue = null, onChange, className }) => {
+  const { t } = useTranslation()
   const [selected, setSelected] = useState<MoveTypeKey | null>(defaultValue)
 
   useEffect(() => {
@@ -32,9 +37,9 @@ const MoveTypeInput: FC<Props> = ({ defaultValue = null, onChange, className }) 
 
   return (
     <div className={clsx('relative flex flex-col', className)}>
-      <h3 className="mb-5 block text-xl font-semibold sm:text-2xl">Type of Move</h3>
+      <h3 className="mb-5 block text-xl font-semibold sm:text-2xl">{t('booking:moveType.section.title')}</h3>
       <div className="flex flex-col gap-3">
-        {MOVE_TYPES.map((opt) => (
+        {moveTypes(t).map((opt) => (
           <button
             key={opt.key}
             type="button"

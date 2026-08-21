@@ -19,6 +19,9 @@
       "error": "Geen ingelogde gebruiker"
     }
   },
+  "call": {
+    "noPhoneNumber": "Geen telefoonnummer bekend voor deze verhuizer."
+  },
   "card": {
     "add": {
       "failed": "Kaart kon niet worden toegevoegd. Probeer het opnieuw.",
@@ -73,6 +76,11 @@
     "unreachable": {
       "error": "Mapbox is niet bereikbaar, controleer je verbinding"
     }
+  },
+  "message": {
+    "empty": "Het bericht is leeg",
+    "sendFailed": "Het bericht kon niet worden verzonden. Probeer het opnieuw.",
+    "tooLong": "Het bericht is te lang. De limiet is {{max}} tekens."
   },
   "payment": {
     "cardDeclined": "Je kaart is geweigerd. Probeer een andere betaalmethode.",

@@ -1,3 +1,4 @@
+import type { TFunction } from 'i18next'
 import { ID } from 'node-appwrite'
 
 import { createAdminClient } from './appwrite-server'
@@ -117,16 +118,40 @@ export async function moverUserIdFromProfile(moverProfileId: string): Promise<st
  * updatemovestatus STATUS_PUSH_TYPE, sendpush PUSHABLE_TYPES, and the
  * notifications.type enum (the four step types still need adding there —
  * `writeNotification` falls back to `system` until they are).
+ *
+ * Copy is keyed, not literal. This module is server-only (it opens an admin
+ * Appwrite client), so there is no ambient locale to read — one process serves
+ * every language at once. `statusNotification` therefore takes the caller's
+ * request-scoped `t`; a module-level constant would freeze whichever language
+ * happened to load first into every user's push.
  */
-export const STATUS_NOTIFICATION: Record<string, { type: NotifyType; title: string; body: string }> = {
-  mover_accepted: { type: 'move_accepted', title: 'Mover Accepted', body: 'A mover has accepted your move request!' },
-  mover_en_route: { type: 'mover_en_route', title: 'Mover En Route', body: 'Your mover is on the way to your pickup location.' },
-  mover_arrived: { type: 'mover_arrived', title: 'Mover Arrived', body: 'Your mover has arrived at the pickup location.' },
-  loading: { type: 'loading', title: 'Loading Started', body: 'Your items are being loaded.' },
-  in_transit: { type: 'in_transit', title: 'In Transit', body: 'Your items are on the way to the destination.' },
-  arrived_destination: { type: 'arrived_destination', title: 'Arrived', body: 'Your mover has arrived at the destination.' },
-  unloading: { type: 'unloading', title: 'Unloading', body: 'Your items are being unloaded.' },
-  awaiting_payment: { type: 'payment', title: 'Payment Due', body: 'Your move is done — please confirm payment.' },
-  completed: { type: 'move_completed', title: 'Move Completed', body: 'Your move has been completed! Please leave a review.' },
-  cancelled_by_mover: { type: 'move_cancelled', title: 'Move Cancelled', body: 'The mover has cancelled this move.' },
+const STATUS_NOTIFICATION: Record<string, { type: NotifyType; titleKey: string; bodyKey: string }> = {
+  mover_accepted: { type: 'move_accepted', titleKey: 'track:notify.accepted.shortTitle', bodyKey: 'track:notify.accepted.shortBody' },
+  mover_en_route: { type: 'mover_en_route', titleKey: 'track:notify.enRoute.shortTitle', bodyKey: 'track:notify.enRoute.shortBody' },
+  mover_arrived: { type: 'mover_arrived', titleKey: 'track:notify.arrived.shortTitle', bodyKey: 'track:notify.arrived.shortBody' },
+  loading: { type: 'loading', titleKey: 'track:notify.loading.shortTitle', bodyKey: 'track:notify.loading.shortBody' },
+  in_transit: { type: 'in_transit', titleKey: 'track:notify.inTransit.shortTitle', bodyKey: 'track:notify.inTransit.shortBody' },
+  arrived_destination: { type: 'arrived_destination', titleKey: 'track:notify.arrivedDestination.shortTitle', bodyKey: 'track:notify.arrivedDestination.shortBody' },
+  unloading: { type: 'unloading', titleKey: 'track:notify.unloading.shortTitle', bodyKey: 'track:notify.unloading.shortBody' },
+  awaiting_payment: { type: 'payment', titleKey: 'track:notify.paymentDue.shortTitle', bodyKey: 'track:notify.paymentDue.shortBody' },
+  completed: { type: 'move_completed', titleKey: 'track:notify.completed.shortTitle', bodyKey: 'track:notify.completed.shortBody' },
+  cancelled_by_mover: { type: 'move_cancelled', titleKey: 'track:notify.cancelled.shortTitle', bodyKey: 'track:notify.cancelled.shortBody' },
+}
+
+/**
+ * The notification for a move status, rendered with `t`, or null when the
+ * status carries none.
+ *
+ * TODO (wave 4, D8): the recipient is the *client*, but the only locale a
+ * mover-initiated route can resolve is the *mover's*. Once `users` carries a
+ * language attribute, callers should pass `getTranslationsForLocale(client.language).t`
+ * instead of the request's `t`.
+ */
+export function statusNotification(
+  status: string,
+  t: TFunction
+): { type: NotifyType; title: string; body: string } | null {
+  const spec = STATUS_NOTIFICATION[status]
+  if (!spec) return null
+  return { type: spec.type, title: t(spec.titleKey), body: t(spec.bodyKey) }
 }

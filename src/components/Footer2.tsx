@@ -1,8 +1,11 @@
 import Logo from '@/shared/Logo'
+import { getTranslations } from '@/lib/i18n-server'
+import type { TFunction } from 'i18next'
 
 import type { JSX } from 'react'
 
-const navigation: {
+// § 7.6 — a module-scope label map freezes at import. Built from `t` instead.
+const getNavigation = (t: TFunction): {
   solutions: { name: string; href: string }[]
   support: { name: string; href: string }[]
   company: { name: string; href: string }[]
@@ -12,28 +15,28 @@ const navigation: {
     href: string
     icon: (props: React.SVGProps<SVGSVGElement>) => JSX.Element
   }[]
-} = {
+} => ({
   solutions: [
-    { name: 'Local Moving', href: '#' },
-    { name: 'Long Distance Moving', href: '#' },
-    { name: 'Packing Services', href: '#' },
-    { name: 'Storage Solutions', href: '#' },
-    { name: 'Commercial Moving', href: '#' },
+    { name: t('web:footer.solutions.localMoving'), href: '#' },
+    { name: t('web:footer.solutions.longDistance'), href: '#' },
+    { name: t('web:footer.solutions.packing'), href: '#' },
+    { name: t('web:footer.solutions.storage'), href: '#' },
+    { name: t('web:footer.solutions.commercial'), href: '#' },
   ],
   support: [
-    { name: 'Get a Quote', href: '#' },
-    { name: 'Contact Us', href: '#' },
-    { name: 'FAQs', href: '#' },
+    { name: t('web:footer.support.quote'), href: '#' },
+    { name: t('web:footer.support.contact'), href: '#' },
+    { name: t('web:footer.support.faq'), href: '#' },
   ],
   company: [
-    { name: 'About Us', href: '#' },
-    { name: 'Careers', href: '#' },
-    { name: 'Locations', href: '#' },
+    { name: t('web:footer.company.about'), href: '#' },
+    { name: t('web:footer.company.careers'), href: '#' },
+    { name: t('web:footer.company.locations'), href: '#' },
   ],
   legal: [
-    { name: 'Terms of Service', href: '#' },
-    { name: 'Privacy Policy', href: '#' },
-    { name: 'Insurance & Claims', href: '#' },
+    { name: t('legal:termsOfService.title'), href: '#' },
+    { name: t('legal:privacyPolicy.title'), href: '#' },
+    { name: t('legal:insuranceClaims.title'), href: '#' },
   ],
   social: [
     {
@@ -98,9 +101,12 @@ const navigation: {
       ),
     },
   ],
-}
+})
 
-export default function Footer2() {
+export default async function Footer2() {
+  const { t } = await getTranslations()
+  const navigation = getNavigation(t)
+
   return (
     <footer className="border-t border-neutral-200 dark:border-neutral-700">
       <div className="container pt-16 pb-8 sm:pt-24 lg:pt-32">
@@ -108,7 +114,7 @@ export default function Footer2() {
           <div className="space-y-8">
             <Logo className="w-20" />
             <p className="text-sm/6 text-balance text-gray-600 dark:text-neutral-400">
-              Book movers for apartments, offices, and belongings across Europe.
+              {t('web:footer.tagline')}
             </p>
             <div className="flex gap-x-6">
               {navigation.social.map((item) => (
@@ -122,7 +128,9 @@ export default function Footer2() {
           <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
             <div className="md:grid md:grid-cols-2 md:gap-8">
               <div>
-                <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-neutral-300">Solutions</h3>
+                <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-neutral-300">
+                  {t('web:footer.solutions.title')}
+                </h3>
                 <ul role="list" className="mt-6 space-y-4">
                   {navigation.solutions.map((item) => (
                     <li key={item.name}>
@@ -134,7 +142,9 @@ export default function Footer2() {
                 </ul>
               </div>
               <div className="mt-10 md:mt-0">
-                <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-neutral-300">Support</h3>
+                <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-neutral-300">
+                  {t('web:footer.support.title')}
+                </h3>
                 <ul role="list" className="mt-6 space-y-4">
                   {navigation.support.map((item) => (
                     <li key={item.name}>
@@ -148,7 +158,9 @@ export default function Footer2() {
             </div>
             <div className="md:grid md:grid-cols-2 md:gap-8">
               <div>
-                <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-neutral-300">Company</h3>
+                <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-neutral-300">
+                  {t('web:footer.company.title')}
+                </h3>
                 <ul role="list" className="mt-6 space-y-4">
                   {navigation.company.map((item) => (
                     <li key={item.name}>
@@ -160,7 +172,9 @@ export default function Footer2() {
                 </ul>
               </div>
               <div className="mt-10 md:mt-0">
-                <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-neutral-300">Legal</h3>
+                <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-neutral-300">
+                  {t('web:footer.legal.title')}
+                </h3>
                 <ul role="list" className="mt-6 space-y-4">
                   {navigation.legal.map((item) => (
                     <li key={item.name}>
@@ -176,7 +190,7 @@ export default function Footer2() {
         </div>
         <div className="mt-16 border-t border-gray-900/10 pt-8 sm:mt-20 lg:mt-24 dark:border-gray-700">
           <p className="text-sm/6 text-gray-600 dark:text-neutral-400">
-            &copy; {new Date().getFullYear()} PickLT. All rights reserved.
+            {t('web:footer.copyright', { year: new Date().getFullYear() })}
           </p>
         </div>
       </div>

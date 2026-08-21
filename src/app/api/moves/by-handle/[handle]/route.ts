@@ -1,3 +1,4 @@
+import { getTranslations } from '@/lib/i18n-server'
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
@@ -13,10 +14,11 @@ export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ handle: string }> }
 ) {
+  const { t } = await getTranslations()
   try {
     const userId = await getSessionUserId()
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
     }
 
     const { handle } = await params
@@ -33,7 +35,7 @@ export async function GET(
     )
 
     if (result.documents.length === 0) {
-      return NextResponse.json({ error: 'Move not found' }, { status: 404 })
+      return NextResponse.json({ error: t('errors:move.notFound') }, { status: 404 })
     }
 
     const move = result.documents[0]
@@ -95,7 +97,7 @@ export async function GET(
     // 3. Move is a scheduled move with no mover assigned and user is a mover
     const isUnassignedScheduled = move.moveCategory === 'scheduled' && !moverProfileId
     if (!isOwner && !isMover && !(isUnassignedScheduled && isUserAMover)) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+      return NextResponse.json({ error: t('errors:auth.forbidden') }, { status: 403 })
     }
 
     // ── Enrich with mover profile + user info ────────────────
@@ -164,6 +166,6 @@ export async function GET(
     })
   } catch (err) {
     console.error('GET /api/moves/by-handle/[handle] error:', err)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: t('errors:generic.internal') }, { status: 500 })
   }
 }

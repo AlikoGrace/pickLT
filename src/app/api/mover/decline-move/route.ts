@@ -1,3 +1,4 @@
+import { getTranslations } from '@/lib/i18n-server'
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
@@ -13,10 +14,11 @@ import { Query } from 'node-appwrite'
  * Body: { requestId }
  */
 export async function POST(req: NextRequest) {
+  const { t } = await getTranslations()
   try {
     const userId = await getSessionUserId()
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
     }
 
     const { requestId } = await req.json()
@@ -35,13 +37,13 @@ export async function POST(req: NextRequest) {
     )
     const moverProfile = profiles.documents[0]
     if (!moverProfile) {
-      return NextResponse.json({ error: 'Mover profile not found' }, { status: 404 })
+      return NextResponse.json({ error: t('errors:mover.profileNotFound') }, { status: 404 })
     }
 
     // Require verified mover to decline move requests
     if (moverProfile.verificationStatus !== 'verified') {
       return NextResponse.json(
-        { error: 'Your mover profile has not been verified yet' },
+        { error: t('errors:mover.notVerified') },
         { status: 403 }
       )
     }
@@ -53,11 +55,11 @@ export async function POST(req: NextRequest) {
     )
 
     if (moveRequest.moverProfileId !== moverProfile.$id) {
-      return NextResponse.json({ error: 'Request does not belong to this mover' }, { status: 403 })
+      return NextResponse.json({ error: t('errors:request.notOwned') }, { status: 403 })
     }
 
     if (moveRequest.status !== 'pending') {
-      return NextResponse.json({ error: 'Request is no longer pending' }, { status: 409 })
+      return NextResponse.json({ error: t('errors:request.notPending') }, { status: 409 })
     }
 
     // Mark the request as declined
@@ -75,7 +77,7 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     console.error('POST /api/mover/decline-move error:', err)
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Internal server error' },
+      { error: err instanceof Error ? err.message : t('errors:generic.internal') },
       { status: 500 }
     )
   }

@@ -1,3 +1,4 @@
+import { getTranslations } from '@/lib/i18n-server'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { requireVerifiedMover, isErrorResponse } from '@/lib/mover-auth'
 import { APPWRITE } from '@/lib/constants'
@@ -34,6 +35,7 @@ function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number): nu
  * on pickupLatitude/pickupLongitude, then refines with Haversine.
  */
 export async function GET(req: NextRequest) {
+  const { t } = await getTranslations()
   try {
     // This is a pre-acceptance marketplace feed over other people's homes.
     // A bare session check let any account sweep a coordinate grid and harvest
@@ -62,7 +64,7 @@ export async function GET(req: NextRequest) {
       }
       if (!lat || !lng || Number.isNaN(lat) || Number.isNaN(lng)) {
         return NextResponse.json(
-          { error: 'No location available. Please enable location services or update your location.' },
+          { error: t('errors:mover.noLocation') },
           { status: 400 }
         )
       }
@@ -169,6 +171,6 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ moves: result, total: result.length })
   } catch (error) {
     console.error('Error fetching nearby moves:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: t('errors:generic.internal') }, { status: 500 })
   }
 }

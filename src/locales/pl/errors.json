@@ -19,6 +19,9 @@
       "error": "Brak zalogowanego użytkownika"
     }
   },
+  "call": {
+    "noPhoneNumber": "Brak zapisanego numeru telefonu tego przewoźnika."
+  },
   "card": {
     "add": {
       "failed": "Nie udało się dodać karty. Spróbuj ponownie.",
@@ -73,6 +76,11 @@
     "unreachable": {
       "error": "Nie można połączyć się z Mapbox, sprawdź połączenie"
     }
+  },
+  "message": {
+    "empty": "Wiadomość jest pusta",
+    "sendFailed": "Nie udało się wysłać wiadomości. Spróbuj ponownie.",
+    "tooLong": "Wiadomość jest za długa. Limit to {{max}} znaków."
   },
   "payment": {
     "cardDeclined": "Twoja karta została odrzucona. Spróbuj innej metody płatności.",

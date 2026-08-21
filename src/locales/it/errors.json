@@ -19,6 +19,9 @@
       "error": "Nessun utente autenticato"
     }
   },
+  "call": {
+    "noPhoneNumber": "Nessun numero di telefono registrato per questo trasportatore."
+  },
   "card": {
     "add": {
       "failed": "Impossibile aggiungere la carta. Riprova.",
@@ -73,6 +76,11 @@
     "unreachable": {
       "error": "Impossibile raggiungere Mapbox, controlla la connessione"
     }
+  },
+  "message": {
+    "empty": "Il messaggio è vuoto",
+    "sendFailed": "Impossibile inviare il messaggio. Riprova.",
+    "tooLong": "Il messaggio è troppo lungo. Il limite è di {{max}} caratteri."
   },
   "payment": {
     "cardDeclined": "La tua carta è stata rifiutata. Prova un altro metodo di pagamento.",

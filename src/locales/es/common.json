@@ -76,6 +76,11 @@
       "body": "Esta acción no se puede deshacer."
     }
   },
+  "date": {
+    "today": {
+      "label": "Hoy"
+    }
+  },
   "mover": {
     "unnamed": {
       "label": "Transportista"
@@ -137,6 +142,12 @@
       "forMover": {
         "body": "Pago confirmado. Esperando la confirmación de tu transportista antes de cerrar la mudanza."
       }
+    }
+  },
+  "starRating": {
+    "rate": {
+      "a11y_one": "Valorar con {{count}} estrella",
+      "a11y_other": "Valorar con {{count}} estrellas"
     }
   },
   "state": {

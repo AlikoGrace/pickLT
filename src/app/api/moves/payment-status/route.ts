@@ -1,3 +1,4 @@
+import { getTranslations } from '@/lib/i18n-server'
 import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { getMoveAccess } from '@/lib/move-access'
@@ -10,10 +11,11 @@ import { NextRequest, NextResponse } from 'next/server'
  * Returns the payment status for a given move, including who has confirmed.
  */
 export async function GET(request: NextRequest) {
+  const { t } = await getTranslations()
   try {
     const userId = await getSessionUserId()
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
     }
 
     const moveId = request.nextUrl.searchParams.get('moveId')
@@ -26,7 +28,7 @@ export async function GET(request: NextRequest) {
     // read the platform's transaction ledger.
     const access = await getMoveAccess(moveId, userId)
     if (!access) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+      return NextResponse.json({ error: t('errors:auth.forbidden') }, { status: 403 })
     }
 
     const { databases } = createAdminClient()
@@ -62,6 +64,6 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     console.error('GET /api/moves/payment-status error:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: t('errors:generic.internal') }, { status: 500 })
   }
 }

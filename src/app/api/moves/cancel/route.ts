@@ -1,3 +1,5 @@
+import { moveStatusLabel } from '@/lib/move-status-label'
+import { getTranslations } from '@/lib/i18n-server'
 import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
@@ -23,24 +25,13 @@ const CANCELLABLE_STATUSES = [
   'loading',
 ]
 
-// Human-friendly labels so a rejection never leaks a raw enum token like
-// "mover_en_route" to the user. Mirrors the `cancelmove` function's map.
-const STATUS_LABELS: Record<string, string> = {
-  in_transit: 'In Transit',
-  arrived_destination: 'Arrived',
-  unloading: 'Unloading',
-  completed: 'Completed',
-  cancelled_by_client: 'Cancelled',
-  cancelled_by_mover: 'Cancelled',
-  disputed: 'Disputed',
-}
-
 // POST /api/moves/cancel — Cancel a move on behalf of the client
 export async function POST(request: NextRequest) {
+  const { t } = await getTranslations()
   try {
     const userId = await getSessionUserId()
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
     }
 
     const body = await request.json()
@@ -62,16 +53,16 @@ export async function POST(request: NextRequest) {
     // Verify the requesting user owns this move
     const clientId = typeof move.clientId === 'string' ? move.clientId : move.clientId?.$id
     if (clientId !== userId) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+      return NextResponse.json({ error: t('errors:auth.forbidden') }, { status: 403 })
     }
 
     // Verify the move is in a cancellable state
     if (!CANCELLABLE_STATUSES.includes(move.status)) {
-      const friendly = STATUS_LABELS[move.status] ?? 'its current stage'
+      // Never leak a raw enum token like "mover_en_route" into the message.
+      const friendly =
+        moveStatusLabel(t, move.status) || t('moves:status.currentStage.label')
       return NextResponse.json(
-        {
-          error: `This move can no longer be cancelled (${friendly}). Your items may already be in transit — please contact your mover directly.`,
-        },
+        { error: t('errors:move.notCancellable', { stage: friendly }) },
         { status: 400 }
       )
     }
@@ -154,6 +145,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true, moveId, status: 'cancelled_by_client' })
   } catch (error) {
     console.error('Error cancelling move:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: t('errors:generic.internal') }, { status: 500 })
   }
 }

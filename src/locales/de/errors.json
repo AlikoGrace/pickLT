@@ -19,6 +19,9 @@
       "error": "Kein angemeldeter Benutzer"
     }
   },
+  "call": {
+    "noPhoneNumber": "Für diesen Umzugshelfer ist keine Telefonnummer hinterlegt."
+  },
   "card": {
     "add": {
       "failed": "Die Karte konnte nicht hinzugefügt werden. Bitte versuchen Sie es erneut.",
@@ -73,6 +76,11 @@
     "unreachable": {
       "error": "Mapbox ist nicht erreichbar, bitte prüfen Sie Ihre Verbindung"
     }
+  },
+  "message": {
+    "empty": "Die Nachricht ist leer",
+    "sendFailed": "Die Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
+    "tooLong": "Die Nachricht ist zu lang. Das Limit beträgt {{max}} Zeichen."
   },
   "payment": {
     "cardDeclined": "Ihre Karte wurde abgelehnt. Bitte versuchen Sie eine andere Zahlungsmethode.",

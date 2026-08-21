@@ -76,6 +76,11 @@
       "body": "Cette action est irréversible."
     }
   },
+  "date": {
+    "today": {
+      "label": "Aujourd’hui"
+    }
+  },
   "mover": {
     "unnamed": {
       "label": "Déménageur"
@@ -137,6 +142,12 @@
       "forMover": {
         "body": "Paiement confirmé. En attente de la confirmation de votre déménageur avant la clôture du déménagement."
       }
+    }
+  },
+  "starRating": {
+    "rate": {
+      "a11y_one": "Noter {{count}} étoile",
+      "a11y_other": "Noter {{count}} étoiles"
     }
   },
   "state": {

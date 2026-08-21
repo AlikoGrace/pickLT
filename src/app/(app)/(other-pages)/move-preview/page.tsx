@@ -23,33 +23,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Fragment, useCallback, useEffect, useState } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
 import { SectionHeading, SectionSubheading } from '@/components/listings/SectionHeading'
 import { formatInventoryLabel, useInventoryNames } from '@/lib/inventory-labels'
-import { formatDateWith, formatMoney } from '@/lib/format'
-
-// Helper to format labels
-const formatLabel = (value: string | null | undefined): string => {
-  if (!value) return 'Not specified'
-  return value
-    .split('_')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ')
-}
-
-const formatDate = (dateStr: string | null) => {
-  if (!dateStr) return 'Not selected'
-  try {
-    const date = new Date(dateStr)
-    return formatDateWith(date, {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })
-  } catch {
-    return dateStr
-  }
-}
+import { formatDateWith, formatDistanceKm, formatMoney } from '@/lib/format'
 
 const SummaryRow = ({ label, value }: { label: string; value: React.ReactNode }) => (
   <div className="flex justify-between py-1">
@@ -60,7 +37,33 @@ const SummaryRow = ({ label, value }: { label: string; value: React.ReactNode })
 
 const Page = () => {
   const router = useRouter()
-  
+  const { t } = useTranslation()
+
+  // Both helpers live inside the component: they read `t`, so a module-scope
+  // definition would freeze the boot language for every fallback below.
+  const formatLabel = (value: string | null | undefined): string => {
+    if (!value) return t('common:value.notSpecified.empty')
+    return value
+      .split('_')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ')
+  }
+
+  const formatDate = (dateStr: string | null) => {
+    if (!dateStr) return t('common:value.notSelected.empty')
+    try {
+      const date = new Date(dateStr)
+      return formatDateWith(date, {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+    } catch {
+      return dateStr
+    }
+  }
+
   const {
     // Basic info
     pickupLocation,
@@ -132,6 +135,9 @@ const Page = () => {
   } = useMoveSearch()
 
   const inventoryCount = Object.values(inventory).reduce((sum, qty) => sum + qty, 0) + customItems.length
+  // `crewSize` is a slug ('1'…'4plus'), so parse rather than cast — Number('4plus') is NaN.
+  const crewCount = Number.parseInt(crewSize || '', 10)
+  const hasCrewCount = Number.isFinite(crewCount)
   const selectedHeavyItems = heavyItems.filter(item => item.selected)
 
   // ─── Submission state ─────────────────────────────────────
@@ -324,8 +330,8 @@ const Page = () => {
       })
 
       if (!res.ok) {
-        const errData = await res.json().catch(() => ({ error: 'Unknown error' }))
-        throw new Error(errData.error || 'Failed to create move')
+        const errData = await res.json().catch(() => ({ error: t('errors:generic.unknown') }))
+        throw new Error(errData.error || t('errors:move.createFailed'))
       }
 
       const data = await res.json()
@@ -335,7 +341,7 @@ const Page = () => {
       router.push(`/move-details/${data.handle}`)
     } catch (err) {
       console.error('Failed to create scheduled move:', err)
-      setSubmitError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
+      setSubmitError(err instanceof Error ? err.message : t('errors:generic.retry.error'))
     } finally {
       setIsSubmitting(false)
     }
@@ -348,7 +354,7 @@ const Page = () => {
     dropoffParkingSituation, dropoffArrangeHaltverbot, packingServiceLevel, packingMaterials,
     packingNotes, arrivalWindow, flexibility, crewSize, vehicleType, additionalServices,
     storageWeeks, disposalItems, contactInfo, routeInfo, routeDistanceMeters,
-    routeDurationSeconds, totalPrice, paymentMethod, reset, router,
+    routeDurationSeconds, totalPrice, paymentMethod, reset, router, t,
   ])
 
   // Build gallery images array for header
@@ -375,7 +381,7 @@ const Page = () => {
               fill
               className="rounded-md object-cover sm:rounded-xl"
               src={displayImages[0] || '/images/placeholder-move.jpg'}
-              alt="Move photos"
+              alt={t('booking:photos.gallery.a11y')}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
             />
             <div className="absolute inset-0 bg-neutral-900 bg-opacity-20 opacity-0 transition-opacity hover:opacity-100" />
@@ -406,7 +412,7 @@ const Page = () => {
           >
             <PencilSquareIcon className="h-5 w-5" />
             <span className="ml-2 text-sm font-medium text-neutral-800 dark:text-neutral-200">
-              Edit photos
+              {t('web:preview.editPhotos.cta')}
             </span>
           </button>
         </div>
@@ -421,11 +427,11 @@ const Page = () => {
           <div>
             <div className="flex items-center gap-2">
               <span className="inline-flex items-center rounded-full bg-primary-100 px-3 py-1 text-sm font-medium text-primary-800 dark:bg-primary-900/30 dark:text-primary-300">
-                {formatLabel(moveType)} Move
+                {t('web:preview.moveTypeBadge.label', { moveType: formatLabel(moveType) })}
               </span>
             </div>
             <h1 className="mt-3 text-2xl font-semibold sm:text-3xl">
-              {pickupStreetAddress || pickupLocation || 'Pickup Location'} → {dropoffStreetAddress || 'Drop-off Location'}
+              {pickupStreetAddress || pickupLocation || t('booking:pickup.location.label')} → {dropoffStreetAddress || t('booking:dropoff.location.label')}
             </h1>
             <p className="mt-2 text-neutral-500 dark:text-neutral-400">
               {formatDate(moveDate)} · {formatLabel(arrivalWindow)}
@@ -436,7 +442,7 @@ const Page = () => {
             className="flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700"
           >
             <PencilSquareIcon className="h-4 w-4" />
-            Edit
+            {t('common:action.edit.cta')}
           </Link>
         </div>
 
@@ -449,15 +455,23 @@ const Page = () => {
           </div>
           <div className="flex items-center gap-x-3">
             <MapPinIcon className="h-6 w-6 text-neutral-600 dark:text-neutral-400" />
-            <span>Floor {floorLevel || 'N/A'}</span>
+            <span>
+              {t('booking:floorLevel.numbered.option', {
+                n: floorLevel || t('common:value.notAvailable.label'),
+              })}
+            </span>
           </div>
           <div className="flex items-center gap-x-3">
             <CubeIcon className="h-6 w-6 text-neutral-600 dark:text-neutral-400" />
-            <span>{inventoryCount} items</span>
+            <span>{t('moves:itemCount', { count: inventoryCount })}</span>
           </div>
           <div className="flex items-center gap-x-3">
             <UsersIcon className="h-6 w-6 text-neutral-600 dark:text-neutral-400" />
-            <span>{crewSize ? `${crewSize} movers` : 'Crew TBD'}</span>
+            <span>
+              {hasCrewCount
+                ? t('moves:moverCount', { count: crewCount })
+                : t('booking:crew.tbd.label')}
+            </span>
           </div>
         </div>
       </div>
@@ -467,27 +481,30 @@ const Page = () => {
   const renderSectionInfo = () => {
     return (
       <div className="listingSection__wrap">
-        <SectionHeading>Move details</SectionHeading>
-        
+        <SectionHeading>{t('booking:details.title')}</SectionHeading>
+
         {/* Pickup Address */}
         <div className="rounded-2xl border border-neutral-200 p-4 dark:border-neutral-700">
           <div className="flex items-center justify-between mb-3">
             <h4 className="font-semibold flex items-center gap-2">
               <span className="flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-xs font-bold text-green-600">A</span>
-              Pickup Address
+              {t('booking:pickupAddress.label')}
             </h4>
-            <Link href="/add-listing/2" className="text-sm text-primary-600 hover:underline">Edit</Link>
+            <Link href="/add-listing/2" className="text-sm text-primary-600 hover:underline">{t('common:action.edit.cta')}</Link>
           </div>
           <div className="space-y-1 text-sm">
-            <SummaryRow label="Address" value={pickupStreetAddress || 'Not specified'} />
-            {pickupApartmentUnit && <SummaryRow label="Unit" value={pickupApartmentUnit} />}
-            <SummaryRow label="Floor" value={formatLabel(floorLevel)} />
-            <SummaryRow label="Elevator" value={elevatorAvailable ? 'Yes' : 'No'} />
-            <SummaryRow label="Parking" value={formatLabel(parkingSituation)} />
+            <SummaryRow label={t('moves:detail.address.label')} value={pickupStreetAddress || t('common:value.notSpecified.empty')} />
+            {pickupApartmentUnit && <SummaryRow label={t('moves:detail.unit.label')} value={pickupApartmentUnit} />}
+            <SummaryRow label={t('moves:detail.floor.label')} value={formatLabel(floorLevel)} />
+            <SummaryRow label={t('moves:detail.elevator.label')} value={elevatorAvailable ? t('common:answer.yes.label') : t('common:answer.no.label')} />
+            <SummaryRow label={t('moves:detail.parking.label')} value={formatLabel(parkingSituation)} />
             {pickupLoadingZoneRequired && (
-              <SummaryRow label="Haltverbot" value={pickupArrangeHaltverbot ? 'We arrange' : 'Customer arranges'} />
+              <SummaryRow
+                label={t('booking:haltverbot.label')}
+                value={pickupArrangeHaltverbot ? t('booking:haltverbot.weArrange.label') : t('booking:haltverbot.customerArranges.label')}
+              />
             )}
-            {pickupAccessNotes && <SummaryRow label="Access notes" value={pickupAccessNotes} />}
+            {pickupAccessNotes && <SummaryRow label={t('booking:accessNotes.shortLabel')} value={pickupAccessNotes} />}
           </div>
         </div>
 
@@ -496,36 +513,36 @@ const Page = () => {
           <div className="flex items-center justify-between mb-3">
             <h4 className="font-semibold flex items-center gap-2">
               <span className="flex h-6 w-6 items-center justify-center rounded-full bg-red-100 text-xs font-bold text-red-600">B</span>
-              Drop-off Address
+              {t('booking:dropoffAddress.label')}
             </h4>
-            <Link href="/add-listing/3" className="text-sm text-primary-600 hover:underline">Edit</Link>
+            <Link href="/add-listing/3" className="text-sm text-primary-600 hover:underline">{t('common:action.edit.cta')}</Link>
           </div>
           <div className="space-y-1 text-sm">
-            <SummaryRow label="Address" value={dropoffStreetAddress || 'Not specified'} />
-            {dropoffApartmentUnit && <SummaryRow label="Unit" value={dropoffApartmentUnit} />}
-            <SummaryRow label="Floor" value={formatLabel(dropoffFloorLevel)} />
-            <SummaryRow label="Elevator" value={dropoffElevatorAvailable ? 'Yes' : 'No'} />
-            <SummaryRow label="Parking" value={formatLabel(dropoffParkingSituation)} />
-            {dropoffArrangeHaltverbot && <SummaryRow label="Haltverbot" value="Required" />}
+            <SummaryRow label={t('moves:detail.address.label')} value={dropoffStreetAddress || t('common:value.notSpecified.empty')} />
+            {dropoffApartmentUnit && <SummaryRow label={t('moves:detail.unit.label')} value={dropoffApartmentUnit} />}
+            <SummaryRow label={t('moves:detail.floor.label')} value={formatLabel(dropoffFloorLevel)} />
+            <SummaryRow label={t('moves:detail.elevator.label')} value={dropoffElevatorAvailable ? t('common:answer.yes.label') : t('common:answer.no.label')} />
+            <SummaryRow label={t('moves:detail.parking.label')} value={formatLabel(dropoffParkingSituation)} />
+            {dropoffArrangeHaltverbot && <SummaryRow label={t('booking:haltverbot.label')} value={t('common:value.required.label')} />}
           </div>
         </div>
 
         <Divider className="w-14!" />
 
         <div>
-          <SectionHeading>Service details</SectionHeading>
-          <SectionSubheading>Your selected services and preferences</SectionSubheading>
+          <SectionHeading>{t('booking:services.detailsTitle')}</SectionHeading>
+          <SectionSubheading>{t('booking:services.detailsSubtitle')}</SectionSubheading>
         </div>
-        
+
         <DescriptionList>
           <Fragment>
-            <DescriptionTerm>Inventory</DescriptionTerm>
+            <DescriptionTerm>{t('booking:field.inventory.label')}</DescriptionTerm>
             <DescriptionDetails>
               {(() => {
                 // Labels come from the admin catalog so this preview shows the
                 // same wording the inventory step did.
                 const entries = Object.entries(inventory).filter(([, qty]) => qty > 0)
-                if (entries.length === 0 && customItems.length === 0) return `${inventoryCount} items`
+                if (entries.length === 0 && customItems.length === 0) return t('moves:itemCount', { count: inventoryCount })
                 return (
                   <ul className="list-disc list-inside text-sm space-y-0.5">
                     {entries.map(([id, qty]) => (
@@ -540,31 +557,37 @@ const Page = () => {
             </DescriptionDetails>
           </Fragment>
           <Fragment>
-            <DescriptionTerm>Packing service</DescriptionTerm>
+            <DescriptionTerm>{t('moves:detail.packingService.label')}</DescriptionTerm>
             <DescriptionDetails>{formatLabel(packingServiceLevel)}</DescriptionDetails>
           </Fragment>
           {packingMaterials.length > 0 && (
             <Fragment>
-              <DescriptionTerm>Packing materials</DescriptionTerm>
-              <DescriptionDetails>{packingMaterials.length} selected</DescriptionDetails>
+              <DescriptionTerm>{t('booking:packingMaterials.label')}</DescriptionTerm>
+              <DescriptionDetails>
+                {t('booking:packingMaterials.selectedCount.label', { count: packingMaterials.length })}
+              </DescriptionDetails>
             </Fragment>
           )}
           <Fragment>
-            <DescriptionTerm>Arrival window</DescriptionTerm>
+            <DescriptionTerm>{t('moves:detail.arrivalWindow.label')}</DescriptionTerm>
             <DescriptionDetails>{formatLabel(arrivalWindow)}</DescriptionDetails>
           </Fragment>
           {flexibility && (
             <Fragment>
-              <DescriptionTerm>Flexibility</DescriptionTerm>
+              <DescriptionTerm>{t('booking:flexibility.label')}</DescriptionTerm>
               <DescriptionDetails>{formatLabel(flexibility)}</DescriptionDetails>
             </Fragment>
           )}
           <Fragment>
-            <DescriptionTerm>Crew size</DescriptionTerm>
-            <DescriptionDetails>{crewSize ? `${crewSize} movers` : 'Not specified'}</DescriptionDetails>
+            <DescriptionTerm>{t('booking:field.crewSize.label')}</DescriptionTerm>
+            <DescriptionDetails>
+              {hasCrewCount
+                ? t('moves:moverCount', { count: crewCount })
+                : t('common:value.notSpecified.empty')}
+            </DescriptionDetails>
           </Fragment>
           <Fragment>
-            <DescriptionTerm>Vehicle</DescriptionTerm>
+            <DescriptionTerm>{t('booking:field.vehicle.label')}</DescriptionTerm>
             <DescriptionDetails>{formatLabel(vehicleType)}</DescriptionDetails>
           </Fragment>
         </DescriptionList>
@@ -581,12 +604,12 @@ const Page = () => {
       <div className="listingSection__wrap">
         <div className="flex items-center justify-between">
           <div>
-            <SectionHeading>Additional services</SectionHeading>
-            <SectionSubheading>Extra services you&apos;ve selected</SectionSubheading>
+            <SectionHeading>{t('moves:detail.additionalServices.title')}</SectionHeading>
+            <SectionSubheading>{t('booking:services.subtitle')}</SectionSubheading>
           </div>
           <Link href="/add-listing/6" className="text-sm text-primary-600 hover:underline flex items-center gap-1">
             <PencilSquareIcon className="h-4 w-4" />
-            Edit
+            {t('common:action.edit.cta')}
           </Link>
         </div>
         <Divider className="w-14!" />
@@ -601,13 +624,13 @@ const Page = () => {
           {storageWeeks > 0 && (
             <div className="flex items-center gap-x-3">
               <CheckCircleIcon className="h-5 w-5 text-green-500" />
-              <span>Temporary storage: {storageWeeks} weeks</span>
+              <span>{t('booking:services.temporaryStorageWeeks.label', { count: storageWeeks })}</span>
             </div>
           )}
           {disposalItems && (
             <div className="flex items-center gap-x-3">
               <CheckCircleIcon className="h-5 w-5 text-green-500" />
-              <span>Disposal items: {disposalItems}</span>
+              <span>{t('booking:services.disposalItems.label', { items: disposalItems })}</span>
             </div>
           )}
         </div>
@@ -616,7 +639,7 @@ const Page = () => {
           <>
             <Divider className="w-14!" />
             <div>
-              <h4 className="font-semibold mb-3">Heavy items requiring special handling</h4>
+              <h4 className="font-semibold mb-3">{t('booking:inventory.heavyItems.label')}</h4>
               <div className="flex flex-wrap gap-2">
                 {selectedHeavyItems.map((item) => (
                   <span key={item.id} className="rounded-full bg-amber-100 px-3 py-1 text-sm text-amber-800 dark:bg-amber-900/30 dark:text-amber-200">
@@ -645,15 +668,17 @@ const Page = () => {
               <UserIcon className="h-7 w-7 text-primary-600" />
             </div>
             <div>
-              <h3 className="text-lg font-semibold">{contactInfo.fullName || 'Contact Name'}</h3>
+              <h3 className="text-lg font-semibold">{contactInfo.fullName || t('booking:contact.name.shortLabel')}</h3>
               <p className="text-sm text-neutral-500 dark:text-neutral-400">
-                {contactInfo.isBusinessMove ? 'Business move' : 'Personal move'}
+                {contactInfo.isBusinessMove
+                  ? t('booking:business.type.business.label')
+                  : t('booking:business.type.personal.label')}
               </p>
             </div>
           </div>
           <Link href="/add-listing/9" className="text-sm text-primary-600 hover:underline flex items-center gap-1">
             <PencilSquareIcon className="h-4 w-4" />
-            Edit
+            {t('common:action.edit.cta')}
           </Link>
         </div>
 
@@ -661,22 +686,22 @@ const Page = () => {
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
-            <p className="text-sm text-neutral-500 dark:text-neutral-400">Email</p>
-            <p className="font-medium">{contactInfo.email || 'Not provided'}</p>
+            <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('common:field.email.shortLabel')}</p>
+            <p className="font-medium">{contactInfo.email || t('common:value.notProvided.empty')}</p>
           </div>
           <div>
-            <p className="text-sm text-neutral-500 dark:text-neutral-400">Phone</p>
-            <p className="font-medium">{contactInfo.phoneNumber || 'Not provided'}</p>
+            <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('common:field.phone.shortLabel')}</p>
+            <p className="font-medium">{contactInfo.phoneNumber || t('common:value.notProvided.empty')}</p>
           </div>
           {contactInfo.isBusinessMove && contactInfo.companyName && (
             <div>
-              <p className="text-sm text-neutral-500 dark:text-neutral-400">Company</p>
+              <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('booking:business.company.shortLabel')}</p>
               <p className="font-medium">{contactInfo.companyName}</p>
             </div>
           )}
           {contactInfo.isBusinessMove && contactInfo.vatId && (
             <div>
-              <p className="text-sm text-neutral-500 dark:text-neutral-400">VAT ID</p>
+              <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('booking:business.vatId.shortLabel')}</p>
               <p className="font-medium">{contactInfo.vatId}</p>
             </div>
           )}
@@ -686,7 +711,7 @@ const Page = () => {
           <>
             <Divider />
             <div>
-              <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-2">Notes for movers</p>
+              <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-2">{t('booking:contact.notes.shortLabel')}</p>
               <p className="text-neutral-700 dark:text-neutral-300">{contactInfo.notesForMovers}</p>
             </div>
           </>
@@ -702,12 +727,12 @@ const Page = () => {
       <div className="listingSection__wrap sm:shadow-xl">
         {/* PRICE */}
         <div className="text-center">
-          <p className="text-sm text-neutral-500 dark:text-neutral-400">Estimated total</p>
+          <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('booking:pricing.estimatedTotal.label')}</p>
           <div className="mt-1 text-3xl font-bold text-primary-600">
             {formatMoney(totalPrice, { compact: true })}
           </div>
           <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-            Final price confirmed after review
+            {t('booking:pricing.finalAfterReview.helper')}
           </p>
         </div>
 
@@ -715,39 +740,50 @@ const Page = () => {
 
         {/* Price breakdown */}
         <DescriptionList>
-          <DescriptionTerm>Base rate ({formatLabel(moveType)}, {distanceKm.toFixed(1)} km)</DescriptionTerm>
+          <DescriptionTerm>
+            {t('booking:pricing.baseRateWithDistance.label', {
+              moveType: formatLabel(moveType),
+              distance: formatDistanceKm(distanceKm),
+            })}
+          </DescriptionTerm>
           <DescriptionDetails className="sm:text-right">{formatMoney(basePrice)}</DescriptionDetails>
           {floorSurcharge > 0 && (
             <>
-              <DescriptionTerm>Floor surcharge</DescriptionTerm>
+              <DescriptionTerm>{t('booking:pricing.floorSurcharge.label')}</DescriptionTerm>
               <DescriptionDetails className="sm:text-right">{formatMoney(floorSurcharge)}</DescriptionDetails>
             </>
           )}
           {packingPrice > 0 && (
             <>
-              <DescriptionTerm>Packing service</DescriptionTerm>
+              <DescriptionTerm>{t('moves:detail.packingService.label')}</DescriptionTerm>
               <DescriptionDetails className="sm:text-right">{formatMoney(packingPrice)}</DescriptionDetails>
             </>
           )}
           {crewPrice > 0 && (
             <>
-              <DescriptionTerm>Crew ({crewSize} movers)</DescriptionTerm>
+              <DescriptionTerm>
+                {t('booking:pricing.crew.label', {
+                  crew: hasCrewCount ? t('moves:moverCount', { count: crewCount }) : crewSize,
+                })}
+              </DescriptionTerm>
               <DescriptionDetails className="sm:text-right">{formatMoney(crewPrice)}</DescriptionDetails>
             </>
           )}
           {servicesPrice > 0 && (
             <>
-              <DescriptionTerm>Additional services ({additionalServices.length})</DescriptionTerm>
+              <DescriptionTerm>
+                {t('booking:pricing.additionalServicesCount.label', { count: additionalServices.length })}
+              </DescriptionTerm>
               <DescriptionDetails className="sm:text-right">{formatMoney(servicesPrice)}</DescriptionDetails>
             </>
           )}
           {storagePrice > 0 && (
             <>
-              <DescriptionTerm>Storage ({storageWeeks} weeks)</DescriptionTerm>
+              <DescriptionTerm>{t('booking:pricing.storageWeeks.label', { count: storageWeeks })}</DescriptionTerm>
               <DescriptionDetails className="sm:text-right">{formatMoney(storagePrice)}</DescriptionDetails>
             </>
           )}
-          <DescriptionTerm className="font-semibold text-neutral-900 dark:text-white">Total</DescriptionTerm>
+          <DescriptionTerm className="font-semibold text-neutral-900 dark:text-white">{t('booking:pricing.total.label')}</DescriptionTerm>
           <DescriptionDetails className="font-semibold sm:text-right">{formatMoney(totalPrice)}</DescriptionDetails>
         </DescriptionList>
 
@@ -755,7 +791,7 @@ const Page = () => {
           <>
             <Divider />
             <div className="flex justify-between text-sm">
-              <span className="text-neutral-500 dark:text-neutral-400">Payment method</span>
+              <span className="text-neutral-500 dark:text-neutral-400">{t('moves:payment.method.label')}</span>
               <span className="font-medium text-neutral-900 dark:text-neutral-100">{formatLabel(paymentMethod)}</span>
             </div>
           </>
@@ -773,8 +809,12 @@ const Page = () => {
               className="mt-1 h-4 w-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
             />
             <span className="text-sm text-neutral-700 dark:text-neutral-300">
-              I confirm the details and agree to the{' '}
-              <Link href="/terms" className="text-primary-600 hover:underline">terms & conditions</Link>
+              <Trans
+                i18nKey="legal:accept.terms"
+                components={[
+                  <Link key="terms" href="/terms" className="text-primary-600 hover:underline" />,
+                ]}
+              />
             </span>
           </label>
           <label className="flex items-start gap-3 cursor-pointer">
@@ -785,8 +825,12 @@ const Page = () => {
               className="mt-1 h-4 w-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
             />
             <span className="text-sm text-neutral-700 dark:text-neutral-300">
-              I acknowledge the{' '}
-              <Link href="/privacy" className="text-primary-600 hover:underline">privacy policy</Link> (GDPR)
+              <Trans
+                i18nKey="legal:accept.privacy"
+                components={[
+                  <Link key="privacy" href="/privacy" className="text-primary-600 hover:underline" />,
+                ]}
+              />
             </span>
           </label>
         </div>
@@ -797,7 +841,7 @@ const Page = () => {
           disabled={!canProceed || isSubmitting}
           onClick={handleCreateMove}
         >
-          {isSubmitting ? 'Creating your move...' : 'Complete Move'}
+          {isSubmitting ? t('web:preview.creating.cta') : t('web:preview.complete.cta')}
         </ButtonPrimary>
 
         {submitError && (
@@ -808,7 +852,7 @@ const Page = () => {
 
         {!canProceed && (
           <p className="text-center text-xs text-amber-600 dark:text-amber-400">
-            Please accept terms and privacy policy to continue
+            {t('legal:accept.required.error')}
           </p>
         )}
       </div>
@@ -847,9 +891,9 @@ const Page = () => {
                   onClick={() => handleEditLocation('pickup')}
                   className="block w-full text-left rounded-lg px-2 py-1.5 -mx-2 hover:bg-neutral-100 dark:hover:bg-neutral-700/60 transition"
                 >
-                  <p className="text-[10px] font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Pickup</p>
+                  <p className="text-[10px] font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">{t('booking:field.pickup.label')}</p>
                   <p className="text-sm font-medium text-neutral-900 dark:text-white truncate">
-                    {pickupLocation || 'Tap to select pickup'}
+                    {pickupLocation || t('booking:pickup.tapToSelect.placeholder')}
                   </p>
                 </button>
                 <button
@@ -857,9 +901,9 @@ const Page = () => {
                   onClick={() => handleEditLocation('dropoff')}
                   className="block w-full text-left rounded-lg px-2 py-1.5 -mx-2 hover:bg-neutral-100 dark:hover:bg-neutral-700/60 transition"
                 >
-                  <p className="text-[10px] font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Drop-off</p>
+                  <p className="text-[10px] font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">{t('booking:field.dropoff.label')}</p>
                   <p className="text-sm font-medium text-neutral-900 dark:text-white truncate">
-                    {dropoffLocation || 'Tap to select drop-off'}
+                    {dropoffLocation || t('booking:dropoff.tapToSelect.placeholder')}
                   </p>
                 </button>
               </div>
@@ -885,7 +929,7 @@ const Page = () => {
       {/* If no coordinates, show editable location cards without map */}
       {(!pickupCoordinates || !dropoffCoordinates) && (
         <div className="mt-8 rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 p-4">
-          <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-3">Locations</p>
+          <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-3">{t('booking:locations.title')}</p>
           <div className="space-y-2">
             <button
               type="button"
@@ -894,9 +938,9 @@ const Page = () => {
             >
               <MapPinIcon className="h-5 w-5 shrink-0 text-neutral-400" />
               <div className="min-w-0 flex-1">
-                <p className="text-xs text-neutral-500 dark:text-neutral-400">Pickup</p>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">{t('booking:field.pickup.label')}</p>
                 <p className="text-sm font-medium text-neutral-900 dark:text-white truncate">
-                  {pickupLocation || 'Tap to select pickup location'}
+                  {pickupLocation || t('booking:pickup.tapToSelectLong.placeholder')}
                 </p>
               </div>
               <PencilSquareIcon className="h-4 w-4 shrink-0 text-neutral-400" />
@@ -908,9 +952,9 @@ const Page = () => {
             >
               <MapPinIcon className="h-5 w-5 shrink-0 text-neutral-400" />
               <div className="min-w-0 flex-1">
-                <p className="text-xs text-neutral-500 dark:text-neutral-400">Drop-off</p>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">{t('booking:field.dropoff.label')}</p>
                 <p className="text-sm font-medium text-neutral-900 dark:text-white truncate">
-                  {dropoffLocation || 'Tap to select drop-off location'}
+                  {dropoffLocation || t('booking:dropoff.tapToSelectLong.placeholder')}
                 </p>
               </div>
               <PencilSquareIcon className="h-4 w-4 shrink-0 text-neutral-400" />
@@ -949,7 +993,7 @@ const Page = () => {
         initialCoordinates={
           editingLocationType === 'pickup' ? pickupCoordinates : dropoffCoordinates
         }
-        label={editingLocationType === 'pickup' ? 'Edit pickup location' : 'Edit drop-off location'}
+        label={editingLocationType === 'pickup' ? t('booking:pickup.edit.a11y') : t('booking:dropoff.edit.a11y')}
       />
     </div>
   )

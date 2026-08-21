@@ -19,6 +19,9 @@
       "error": "Aucun utilisateur connecté"
     }
   },
+  "call": {
+    "noPhoneNumber": "Aucun numéro de téléphone enregistré pour ce déménageur."
+  },
   "card": {
     "add": {
       "failed": "Impossible d’ajouter la carte. Réessayez.",
@@ -73,6 +76,11 @@
     "unreachable": {
       "error": "Mapbox est injoignable, vérifiez votre connexion"
     }
+  },
+  "message": {
+    "empty": "Le message est vide",
+    "sendFailed": "Impossible d’envoyer le message. Veuillez réessayer.",
+    "tooLong": "Le message est trop long. La limite est de {{max}} caractères."
   },
   "payment": {
     "cardDeclined": "Votre carte a été refusée. Veuillez essayer un autre moyen de paiement.",

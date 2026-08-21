@@ -27,6 +27,8 @@ import {
   useInventoryNames,
 } from '@/lib/inventory-labels'
 import { formatDateWith, formatMoney } from '@/lib/format'
+import { Trans, useTranslation } from 'react-i18next'
+import type { TFunction } from 'i18next'
 
 const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || ''
 const PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || ''
@@ -108,16 +110,18 @@ interface MoveData {
 }
 
 // ─── Helpers ────────────────────────────────────────────
-const formatLabel = (value: string | null | undefined): string => {
-  if (!value) return 'Not specified'
+// `t` is threaded through rather than captured at module scope: a module-level
+// label map would freeze at the boot language and never follow a switch.
+const formatLabel = (value: string | null | undefined, t: TFunction): string => {
+  if (!value) return t('common:value.notSpecified.empty')
   return value
     .split('_')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ')
 }
 
-const formatDate = (dateStr: string | null) => {
-  if (!dateStr) return 'Not selected'
+const formatDate = (dateStr: string | null, t: TFunction) => {
+  if (!dateStr) return t('common:value.notSelected.empty')
   try {
     const date = new Date(dateStr)
     return formatDateWith(date, {
@@ -141,13 +145,13 @@ const getStatusBadgeColor = (status: MoveStatus): 'green' | 'yellow' | 'red' | '
   }
 }
 
-const getStatusLabel = (status: MoveStatus): string => {
+const getStatusLabel = (status: MoveStatus, t: TFunction): string => {
   switch (status) {
-    case 'completed': return 'Completed'
-    case 'in_progress': return 'In Progress'
-    case 'pending': return 'Pending'
-    case 'cancelled': return 'Cancelled'
-    default: return 'Unknown'
+    case 'completed': return t('moves:status.completed.label')
+    case 'in_progress': return t('moves:status.inProgress.label')
+    case 'pending': return t('moves:status.pending.label')
+    case 'cancelled': return t('moves:status.cancelled.label')
+    default: return t('moves:status.unknown.label')
   }
 }
 
@@ -235,6 +239,7 @@ function docToMoveData(doc: any): MoveData {
 
 
 export default function MoverMoveDetailsPage() {
+  const { t } = useTranslation()
   const params = useParams()
   const router = useRouter()
   const { user } = useAuth()
@@ -323,14 +328,20 @@ export default function MoverMoveDetailsPage() {
 
       // Notify on key status changes
       if (newStatus === 'cancelled_by_client') {
-        showBrowserNotification('Move Cancelled', 'The client has cancelled this move.')
+        showBrowserNotification(
+          t('moves:notify.cancelledByClient.title'),
+          t('moves:notify.cancelledByClient.body'),
+        )
       } else if ((newStatus === 'draft' || newStatus === 'booked') && !newMoverProfileId) {
-        showBrowserNotification('Mover Withdrawn', 'The assigned mover has withdrawn from this move.')
+        showBrowserNotification(
+          t('moves:notify.moverWithdrawn.title'),
+          t('moves:notify.moverWithdrawn.body'),
+        )
       }
     })
 
     return () => unsubscribe()
-  }, [moveDocId, user?.moverDetails?.profileId])
+  }, [moveDocId, user?.moverDetails?.profileId, t])
 
   // ── Accept scheduled move ─────────────────────────────────
   const handleAccept = async () => {
@@ -344,7 +355,7 @@ export default function MoverMoveDetailsPage() {
       })
       if (!res.ok) {
         const data = await res.json()
-        alert(data.error || 'Failed to accept move')
+        alert(data.error || t('errors:mover.acceptFailed.error'))
         return
       }
       setIsAssignedMover(true)
@@ -352,7 +363,7 @@ export default function MoverMoveDetailsPage() {
       setMoverProfileId(user?.moverDetails?.profileId || null)
       setMove((prev) => prev ? { ...prev, status: mapDbStatus('mover_accepted') } : prev)
     } catch {
-      alert('Failed to accept move. Please try again.')
+      alert(t('errors:mover.acceptRetry'))
     } finally {
       setIsAccepting(false)
     }
@@ -370,7 +381,7 @@ export default function MoverMoveDetailsPage() {
       })
       if (!res.ok) {
         const data = await res.json()
-        alert(data.error || 'Failed to withdraw from move')
+        alert(data.error || t('errors:mover.withdrawFailed'))
         return
       }
       setIsAssignedMover(false)
@@ -379,7 +390,7 @@ export default function MoverMoveDetailsPage() {
       setShowWithdrawConfirm(false)
       setMove((prev) => prev ? { ...prev, status: mapDbStatus('draft') } : prev)
     } catch {
-      alert('Failed to withdraw. Please try again.')
+      alert(t('errors:mover.withdrawRetry'))
     } finally {
       setIsWithdrawing(false)
     }
@@ -397,13 +408,13 @@ export default function MoverMoveDetailsPage() {
       })
       if (!res.ok) {
         const data = await res.json()
-        alert(data.error || 'Failed to start route')
+        alert(data.error || t('errors:mover.startRouteFailed'))
         return
       }
       // Navigate to active-move page — the move is now active
       router.push('/active-move')
     } catch {
-      alert('Failed to start route. Please try again.')
+      alert(t('errors:mover.startRouteRetry'))
     } finally {
       setIsStartingRoute(false)
     }
@@ -447,17 +458,17 @@ export default function MoverMoveDetailsPage() {
         <div className="flex flex-col items-center justify-center text-center space-y-4 max-w-md mx-auto">
           <TruckIcon className="w-16 h-16 text-neutral-300" />
           <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
-            Move not found
+            {t('errors:move.notFound')}
           </h2>
           <p className="text-neutral-500 dark:text-neutral-400">
-            This move may have been removed or the link is invalid.
+            {t('web:mover.jobDetails.notFound.subtitle')}
           </p>
           <Link
             href="/dashboard"
             className="mt-4 inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium"
           >
             <ArrowLeftIcon className="w-4 h-4" />
-            Back to Dashboard
+            {t('web:mover.backToDashboard.cta')}
           </Link>
         </div>
       </div>
@@ -486,8 +497,8 @@ export default function MoverMoveDetailsPage() {
   // client picked "Sofa (2-seater)", not "Sofa 2seater".
   const inventoryLines = parseInventoryLines(inventoryItems, customItems, inventoryNames)
 
-  const pickupDisplay = pickupStreetAddress || pickupLocation || 'Pickup location'
-  const dropoffDisplay = dropoffStreetAddress || 'Drop-off location'
+  const pickupDisplay = pickupStreetAddress || pickupLocation || t('booking:field.pickupLocation.label')
+  const dropoffDisplay = dropoffStreetAddress || t('booking:field.dropoffLocation.label')
 
   const galleryImgs: string[] = []
   if (coverPhotoId) {
@@ -509,7 +520,7 @@ export default function MoverMoveDetailsPage() {
         className="inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 mb-6"
       >
         <ArrowLeftIcon className="w-4 h-4" />
-        Back to Dashboard
+        {t('web:mover.backToDashboard.cta')}
       </Link>
 
       {/* Header */}
@@ -517,7 +528,7 @@ export default function MoverMoveDetailsPage() {
         <div className="flex-1">
           <div className="flex items-center gap-3 mb-2">
             <Badge color={getStatusBadgeColor(status)}>
-              {getStatusLabel(status)}
+              {getStatusLabel(status, t)}
             </Badge>
             <span className="text-sm text-neutral-500 dark:text-neutral-400">
               #{bookingCode}
@@ -527,11 +538,14 @@ export default function MoverMoveDetailsPage() {
             {pickupDisplay.split(',')[0]} &rarr; {dropoffDisplay.split(',')[0]}
           </h1>
           <p className="text-neutral-500 dark:text-neutral-400 mt-1">
-            {formatLabel(moveType)} Move &middot; {formatDate(moveDate)}
+            {t('web:mover.jobDetails.subheading.label', {
+              moveType: formatLabel(moveType, t),
+              date: formatDate(moveDate, t),
+            })}
           </p>
         </div>
         <div className="text-right">
-          <p className="text-sm text-neutral-500 dark:text-neutral-400">Earnings</p>
+          <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('web:mover.earnings.label')}</p>
           <p className="text-3xl font-bold text-green-600 dark:text-green-400">
             {formatMoney(totalPrice)}
           </p>
@@ -544,7 +558,7 @@ export default function MoverMoveDetailsPage() {
           <div className="col-span-4 sm:col-span-2 sm:row-span-2 relative aspect-[4/3]">
             <Image
               src={galleryImgs[0]}
-              alt="Move photo"
+              alt={t('booking:photos.item.a11y')}
               fill
               unoptimized
               className="object-cover"
@@ -554,7 +568,7 @@ export default function MoverMoveDetailsPage() {
             <div key={i} className="hidden sm:block relative aspect-[4/3]">
               <Image
                 src={img}
-                alt={`Move photo ${i + 2}`}
+                alt={t('booking:photos.itemIndexed.a11y', { index: i + 2 })}
                 fill
                 unoptimized
                 className="object-cover"
@@ -570,7 +584,7 @@ export default function MoverMoveDetailsPage() {
           {/* Locations */}
           <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm">
             <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
-              Locations
+              {t('booking:locations.title')}
             </h2>
             <div className="space-y-4">
               <div className="flex items-start gap-3">
@@ -578,29 +592,29 @@ export default function MoverMoveDetailsPage() {
                   <MapPinIcon className="w-4 h-4 text-green-600" />
                 </div>
                 <div>
-                  <p className="text-sm text-neutral-500 dark:text-neutral-400">Pickup</p>
+                  <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('booking:field.pickup.label')}</p>
                   <p className="font-medium text-neutral-900 dark:text-neutral-100">
                     {pickupDisplay}
                   </p>
                   {pickupApartmentUnit && (
-                    <p className="text-sm text-neutral-500">Apt/Unit: {pickupApartmentUnit}</p>
+                    <p className="text-sm text-neutral-500">{t('booking:field.apartmentUnit.value', { unit: pickupApartmentUnit })}</p>
                   )}
                   {floorLevel && (
-                    <p className="text-sm text-neutral-500">Floor: {formatLabel(floorLevel)}</p>
+                    <p className="text-sm text-neutral-500">{t('booking:field.floor.value', { floor: formatLabel(floorLevel, t) })}</p>
                   )}
                   {elevatorAvailable && (
                     <p className="text-sm text-green-600 flex items-center gap-1">
-                      <CheckCircleIcon className="w-3.5 h-3.5" /> Elevator available
+                      <CheckCircleIcon className="w-3.5 h-3.5" /> {t('booking:field.elevatorAvailable.label')}
                     </p>
                   )}
                   {parkingSituation && (
-                    <p className="text-sm text-neutral-500">Parking: {formatLabel(parkingSituation)}</p>
+                    <p className="text-sm text-neutral-500">{t('booking:field.parking.value', { parking: formatLabel(parkingSituation, t) })}</p>
                   )}
                   {pickupAccessNotes && (
-                    <p className="text-sm text-neutral-500">Access notes: {pickupAccessNotes}</p>
+                    <p className="text-sm text-neutral-500">{t('booking:field.accessNotes.value', { notes: pickupAccessNotes })}</p>
                   )}
                   {pickupHaltverbot && (
-                    <p className="text-sm text-amber-600 dark:text-amber-400">Haltverbot (no-parking zone) requested</p>
+                    <p className="text-sm text-amber-600 dark:text-amber-400">{t('booking:haltverbot.requested.label')}</p>
                   )}
                 </div>
               </div>
@@ -612,26 +626,26 @@ export default function MoverMoveDetailsPage() {
                   <MapPinIcon className="w-4 h-4 text-red-600" />
                 </div>
                 <div>
-                  <p className="text-sm text-neutral-500 dark:text-neutral-400">Drop-off</p>
+                  <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('booking:field.dropoff.label')}</p>
                   <p className="font-medium text-neutral-900 dark:text-neutral-100">
                     {dropoffDisplay}
                   </p>
                   {dropoffApartmentUnit && (
-                    <p className="text-sm text-neutral-500">Apt/Unit: {dropoffApartmentUnit}</p>
+                    <p className="text-sm text-neutral-500">{t('booking:field.apartmentUnit.value', { unit: dropoffApartmentUnit })}</p>
                   )}
                   {dropoffFloorLevel && (
-                    <p className="text-sm text-neutral-500">Floor: {formatLabel(dropoffFloorLevel)}</p>
+                    <p className="text-sm text-neutral-500">{t('booking:field.floor.value', { floor: formatLabel(dropoffFloorLevel, t) })}</p>
                   )}
                   {dropoffElevatorAvailable && (
                     <p className="text-sm text-green-600 flex items-center gap-1">
-                      <CheckCircleIcon className="w-3.5 h-3.5" /> Elevator available
+                      <CheckCircleIcon className="w-3.5 h-3.5" /> {t('booking:field.elevatorAvailable.label')}
                     </p>
                   )}
                   {dropoffParkingSituation && (
-                    <p className="text-sm text-neutral-500">Parking: {formatLabel(dropoffParkingSituation)}</p>
+                    <p className="text-sm text-neutral-500">{t('booking:field.parking.value', { parking: formatLabel(dropoffParkingSituation, t) })}</p>
                   )}
                   {dropoffHaltverbot && (
-                    <p className="text-sm text-amber-600 dark:text-amber-400">Haltverbot (no-parking zone) requested</p>
+                    <p className="text-sm text-amber-600 dark:text-amber-400">{t('booking:haltverbot.requested.label')}</p>
                   )}
                 </div>
               </div>
@@ -641,50 +655,50 @@ export default function MoverMoveDetailsPage() {
           {/* Move Details */}
           <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm">
             <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
-              Move Details
+              {t('moves:detail.moveDetails.title')}
             </h2>
-            <InfoRow icon={TruckIcon} label="Move Type" value={formatLabel(moveType)} />
+            <InfoRow icon={TruckIcon} label={t('booking:field.moveType.label')} value={formatLabel(moveType, t)} />
             {/* Instant starts immediately and carries no moveDate — when the job
                 was requested is what a mover actually needs to judge it. */}
             {isInstant ? (
-              <InfoRow icon={CalendarIcon} label="Requested" value={formatRequestedAt(createdAt) ?? '—'} />
+              <InfoRow icon={CalendarIcon} label={t('moves:detail.requestedAt.label')} value={formatRequestedAt(createdAt) ?? '—'} />
             ) : (
-              <InfoRow icon={CalendarIcon} label="Move Date" value={formatDate(moveDate)} />
+              <InfoRow icon={CalendarIcon} label={t('booking:field.moveDate.label')} value={formatDate(moveDate, t)} />
             )}
             {/* Home type, vehicle and crew are scheduled-wizard questions — the
                 instant client is never asked, so there is nothing to report. */}
             {!isInstant && (
-              <InfoRow icon={HomeIcon} label="Home Type" value={formatLabel(homeType)} />
+              <InfoRow icon={HomeIcon} label={t('booking:field.homeType.label')} value={formatLabel(homeType, t)} />
             )}
-            <InfoRow icon={CubeIcon} label="Items" value={(() => {
-              if (inventoryLines.length === 0) return `${inventoryCount} items`
+            <InfoRow icon={CubeIcon} label={t('booking:field.items.label')} value={(() => {
+              if (inventoryLines.length === 0) return t('moves:itemCount', { count: inventoryCount })
               return (
                 <ul className="list-disc list-inside text-sm space-y-0.5">
                   {inventoryLines.map((line, i) => (
                     <li key={`${line.custom ? 'custom' : 'item'}-${i}-${line.label}`}>
-                      {line.label} &times; {line.quantity}
+                      {t('moves:detail.itemLineReversed.label', { label: line.label, qty: line.quantity })}
                     </li>
                   ))}
                 </ul>
               )
             })()} />
             {!isInstant && (
-              <InfoRow icon={TruckIcon} label="Vehicle" value={formatLabel(vehicleType)} />
+              <InfoRow icon={TruckIcon} label={t('booking:field.vehicle.label')} value={formatLabel(vehicleType, t)} />
             )}
             {!isInstant && (
-              <InfoRow icon={UsersIcon} label="Crew" value={crewSize ? `${crewSize} movers` : 'Standard'} />
+              <InfoRow icon={UsersIcon} label={t('booking:field.crew.label')} value={crewSize ? t('web:mover.crewSize.label', { crew: crewSize }) : t('common:value.standard.label')} />
             )}
             {arrivalWindow && (
-              <InfoRow icon={CalendarIcon} label="Arrival Window" value={formatLabel(arrivalWindow)} />
+              <InfoRow icon={CalendarIcon} label={t('booking:field.arrivalWindow.label')} value={formatLabel(arrivalWindow, t)} />
             )}
             {flexibility && (
-              <InfoRow icon={ClockIcon} label="Flexibility" value={formatLabel(flexibility)} />
+              <InfoRow icon={ClockIcon} label={t('booking:field.flexibility.label')} value={formatLabel(flexibility, t)} />
             )}
             {routeDistanceMeters != null && routeDistanceMeters > 0 && (
-              <InfoRow icon={MapPinIcon} label="Distance" value={`${(routeDistanceMeters / 1000).toFixed(1)} km`} />
+              <InfoRow icon={MapPinIcon} label={t('booking:field.distance.label')} value={`${(routeDistanceMeters / 1000).toFixed(1)} km`} />
             )}
             {routeDurationSeconds != null && routeDurationSeconds > 0 && (
-              <InfoRow icon={ClockIcon} label="Est. Duration" value={`${Math.round(routeDurationSeconds / 60)} min`} />
+              <InfoRow icon={ClockIcon} label={t('booking:field.estimatedDuration.label')} value={`${Math.round(routeDurationSeconds / 60)} min`} />
             )}
           </div>
 
@@ -692,28 +706,28 @@ export default function MoverMoveDetailsPage() {
           {(packingServiceLevel || additionalServices.length > 0 || storageWeeks > 0 || disposalItems) && (
             <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm">
               <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
-                Services
+                {t('booking:services.title')}
               </h2>
               {packingServiceLevel && (
-                <InfoRow label="Packing Service" value={formatLabel(packingServiceLevel)} />
+                <InfoRow label={t('booking:field.packingService.label')} value={formatLabel(packingServiceLevel, t)} />
               )}
               {packingMaterials.length > 0 && (
-                <InfoRow label="Packing Materials" value={packingMaterials.map(formatLabel).join(', ')} />
+                <InfoRow label={t('booking:field.packingMaterials.label')} value={packingMaterials.map((v) => formatLabel(v, t)).join(', ')} />
               )}
               {packingNotes && (
-                <InfoRow label="Packing Notes" value={packingNotes} />
+                <InfoRow label={t('booking:field.packingNotes.label')} value={packingNotes} />
               )}
               {additionalServices.length > 0 && (
                 <InfoRow
-                  label="Additional Services"
-                  value={additionalServices.map(formatLabel).join(', ')}
+                  label={t('booking:field.additionalServices.label')}
+                  value={additionalServices.map((v) => formatLabel(v, t)).join(', ')}
                 />
               )}
               {storageWeeks > 0 && (
-                <InfoRow label="Storage" value={`${storageWeeks} weeks`} />
+                <InfoRow label={t('booking:pricing.storage.label')} value={t('booking:storageWeeks', { count: storageWeeks })} />
               )}
               {disposalItems && (
-                <InfoRow label="Disposal Items" value={disposalItems} />
+                <InfoRow label={t('booking:field.disposalItems.label')} value={disposalItems} />
               )}
             </div>
           )}
@@ -724,34 +738,34 @@ export default function MoverMoveDetailsPage() {
           {/* Earnings Summary */}
           <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm sticky top-24">
             <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
-              Summary
+              {t('moves:summary.title')}
             </h3>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-neutral-500 dark:text-neutral-400">Booking Code</span>
+                <span className="text-neutral-500 dark:text-neutral-400">{t('moves:booking.code.label')}</span>
                 <span className="font-medium text-neutral-900 dark:text-neutral-100">#{bookingCode}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-neutral-500 dark:text-neutral-400">Status</span>
+                <span className="text-neutral-500 dark:text-neutral-400">{t('moves:detail.status.label')}</span>
                 <Badge color={getStatusBadgeColor(status)} className="text-xs">
-                  {getStatusLabel(status)}
+                  {getStatusLabel(status, t)}
                 </Badge>
               </div>
               <div className="flex justify-between">
-                <span className="text-neutral-500 dark:text-neutral-400">Created</span>
+                <span className="text-neutral-500 dark:text-neutral-400">{t('moves:createdAt.label')}</span>
                 <span className="font-medium text-neutral-900 dark:text-neutral-100">
-                  {formatDate(createdAt)}
+                  {formatDate(createdAt, t)}
                 </span>
               </div>
               <div className="my-4 border-t border-neutral-100 dark:border-neutral-700" />
               <div className="flex justify-between text-base">
-                <span className="font-semibold text-neutral-900 dark:text-neutral-100">Earnings</span>
+                <span className="font-semibold text-neutral-900 dark:text-neutral-100">{t('web:mover.earnings.label')}</span>
                 <span className="font-bold text-green-600 dark:text-green-400">{formatMoney(totalPrice)}</span>
               </div>
               {paymentMethod && (
                 <div className="flex justify-between mt-2">
-                  <span className="text-neutral-500 dark:text-neutral-400">Payment</span>
-                  <span className="font-medium text-neutral-900 dark:text-neutral-100">{formatLabel(paymentMethod)}</span>
+                  <span className="text-neutral-500 dark:text-neutral-400">{t('booking:payment.section.title')}</span>
+                  <span className="font-medium text-neutral-900 dark:text-neutral-100">{formatLabel(paymentMethod, t)}</span>
                 </div>
               )}
             </div>
@@ -767,7 +781,7 @@ export default function MoverMoveDetailsPage() {
                     className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-semibold py-3 px-4 rounded-xl transition-colors"
                   >
                     <CheckCircleIcon className="w-5 h-5" />
-                    {isAccepting ? 'Accepting...' : 'Accept This Move'}
+                    {isAccepting ? t('common:state.accepting.label') : t('web:mover.acceptMove.cta')}
                   </button>
                 )}
 
@@ -779,25 +793,29 @@ export default function MoverMoveDetailsPage() {
                     className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3 px-4 rounded-xl transition-colors"
                   >
                     <PlayIcon className="w-5 h-5" />
-                    {isStartingRoute ? 'Starting...' : 'Start Route — I\'m On My Way'}
+                    {isStartingRoute ? t('common:state.starting.label') : t('web:mover.startRoute.cta')}
                   </button>
                 )}
 
                 {/* Future-dated move — Start Route not available yet */}
                 {isFutureDateMove && (
                   <div className="w-full rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 px-4 py-3 text-sm text-amber-800 dark:text-amber-300">
-                    <span className="font-semibold">Move not startable yet.</span>{' '}
-                    You can start this route on{' '}
-                    <span className="font-semibold">
-                      {formatDateWith(move?.moveDate as string, {
-                        weekday: 'short',
-                        day: 'numeric',
-                        month: 'short',
-                        year: 'numeric',
-                      })}
-                      {move?.arrivalWindow ? ` · ${move.arrivalWindow}` : ''}
-                    </span>{' '}
-                    (Start Route unlocks 5 minutes before).
+                    <Trans
+                      i18nKey="web:mover.notStartable.body"
+                      values={{
+                        when:
+                          formatDateWith(move?.moveDate as string, {
+                            weekday: 'short',
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric',
+                          }) + (move?.arrivalWindow ? ` · ${move.arrivalWindow}` : ''),
+                      }}
+                      components={[
+                        <span className="font-semibold" key="0" />,
+                        <span className="font-semibold" key="1" />,
+                      ]}
+                    />
                   </div>
                 )}
 
@@ -808,7 +826,7 @@ export default function MoverMoveDetailsPage() {
                     className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition-colors"
                   >
                     <TruckIcon className="w-5 h-5" />
-                    Go to Active Move
+                    {t('web:mover.goToActive.cta')}
                   </button>
                 )}
 
@@ -821,12 +839,12 @@ export default function MoverMoveDetailsPage() {
                         className="w-full flex items-center justify-center gap-2 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 font-semibold py-3 px-4 rounded-xl transition-colors border border-red-200 dark:border-red-800"
                       >
                         <XCircleIcon className="w-5 h-5" />
-                        Withdraw from Move
+                        {t('web:mover.withdraw.cta')}
                       </button>
                     ) : (
                       <div className="bg-red-50 dark:bg-red-900/20 rounded-xl p-4 border border-red-200 dark:border-red-800">
                         <p className="text-sm text-red-700 dark:text-red-300 mb-3">
-                          Are you sure? The move will become available for other movers.
+                          {t('web:mover.withdrawConfirm.body')}
                         </p>
                         <div className="flex gap-2">
                           <button
@@ -834,13 +852,13 @@ export default function MoverMoveDetailsPage() {
                             disabled={isWithdrawing}
                             className="flex-1 bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white font-semibold py-2 px-3 rounded-lg text-sm transition-colors"
                           >
-                            {isWithdrawing ? 'Withdrawing...' : 'Yes, Withdraw'}
+                            {isWithdrawing ? t('common:state.withdrawing.label') : t('web:mover.withdrawConfirm.cta')}
                           </button>
                           <button
                             onClick={() => setShowWithdrawConfirm(false)}
                             className="flex-1 bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-700 dark:hover:bg-neutral-600 text-neutral-700 dark:text-neutral-200 font-semibold py-2 px-3 rounded-lg text-sm transition-colors"
                           >
-                            Cancel
+                            {t('common:action.cancel.cta')}
                           </button>
                         </div>
                       </div>
@@ -852,7 +870,7 @@ export default function MoverMoveDetailsPage() {
                 {isAssignedMover && rawStatus === 'mover_accepted' && (
                   <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 border border-blue-200 dark:border-blue-800">
                     <p className="text-sm text-blue-700 dark:text-blue-300 font-medium">
-                      You&apos;ve accepted this move. When you&apos;re ready, tap &quot;Start Route&quot; to let the client know you&apos;re on your way.
+                      {t('web:mover.accepted.helper')}
                     </p>
                   </div>
                 )}
@@ -864,19 +882,19 @@ export default function MoverMoveDetailsPage() {
           {contactInfo && (contactInfo.fullName || contactInfo.email || contactInfo.phoneNumber) && (
             <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm">
               <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
-                Client Contact
+                {t('web:mover.clientContact.title')}
               </h3>
               {contactInfo.fullName && (
-                <InfoRow label="Name" value={contactInfo.fullName} />
+                <InfoRow label={t('common:field.name.label')} value={contactInfo.fullName} />
               )}
               {contactInfo.email && (
-                <InfoRow label="Email" value={contactInfo.email} />
+                <InfoRow label={t('common:field.email.label')} value={contactInfo.email} />
               )}
               {contactInfo.phoneNumber && (
-                <InfoRow label="Phone" value={contactInfo.phoneNumber} />
+                <InfoRow label={t('common:field.phone.label')} value={contactInfo.phoneNumber} />
               )}
               {contactInfo.notesForMovers && (
-                <InfoRow label="Notes for Movers" value={contactInfo.notesForMovers} />
+                <InfoRow label={t('booking:field.notesForMovers.label')} value={contactInfo.notesForMovers} />
               )}
             </div>
           )}
@@ -885,10 +903,10 @@ export default function MoverMoveDetailsPage() {
           {isBusinessMove && (
             <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm">
               <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
-                Business Details
+                {t('booking:business.title')}
               </h3>
-              {companyName && <InfoRow label="Company" value={companyName} />}
-              {vatId && <InfoRow label="VAT ID" value={vatId} />}
+              {companyName && <InfoRow label={t('booking:business.companyName.label')} value={companyName} />}
+              {vatId && <InfoRow label={t('booking:business.vatId.label')} value={vatId} />}
             </div>
           )}
         </div>

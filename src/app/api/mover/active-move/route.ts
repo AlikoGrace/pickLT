@@ -1,3 +1,4 @@
+import { getTranslations } from '@/lib/i18n-server'
 import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
@@ -10,10 +11,11 @@ import { getSessionUserId } from '@/lib/auth-session'
  * Uses admin SDK to bypass permission restrictions on relationship fields.
  */
 export async function GET() {
+  const { t } = await getTranslations()
   try {
     const userId = await getSessionUserId()
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
     }
 
     const { databases } = createAdminClient()
@@ -26,7 +28,7 @@ export async function GET() {
     )
     const moverProfile = profiles.documents[0]
     if (!moverProfile) {
-      return NextResponse.json({ error: 'Mover profile not found' }, { status: 404 })
+      return NextResponse.json({ error: t('errors:mover.profileNotFound') }, { status: 404 })
     }
 
     // Fetch active moves for this mover — only statuses in the physical execution pipeline.
@@ -94,6 +96,6 @@ export async function GET() {
     })
   } catch (err) {
     console.error('GET /api/mover/active-move error:', err)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: t('errors:generic.internal') }, { status: 500 })
   }
 }
