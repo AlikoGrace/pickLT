@@ -72,6 +72,7 @@
       "verifyFailed": "Weryfikacja nie powiodła się (status {{status}}). Spróbuj ponownie."
     },
     "pricing": {
+      "commissionTooLarge": "{{label}} to ułamek, nie procent — wpisz 0.15, aby uzyskać 15%.",
       "keyRequired": "klucz jest wymagany",
       "negative": "{{label}} nie może być ujemna.",
       "notANumber": "{{label}} musi być liczbą.",

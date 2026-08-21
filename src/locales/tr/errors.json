@@ -68,6 +68,7 @@
       "verifyFailed": "Doğrulama başarısız oldu (durum {{status}}). Lütfen tekrar deneyin."
     },
     "pricing": {
+      "commissionTooLarge": "{{label}} yüzde değil, bir kesirdir — %15 için 0.15 girin.",
       "keyRequired": "key alanı gereklidir",
       "negative": "{{label}} negatif olamaz.",
       "notANumber": "{{label}} bir sayı olmalıdır.",

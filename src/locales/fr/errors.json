@@ -68,6 +68,7 @@
       "verifyFailed": "Échec de la vérification (statut {{status}}). Veuillez réessayer."
     },
     "pricing": {
+      "commissionTooLarge": "{{label}} est une fraction, pas un pourcentage : saisissez 0.15 pour 15 %.",
       "keyRequired": "La clé est obligatoire",
       "negative": "{{label}} ne peut pas être négatif.",
       "notANumber": "{{label}} doit être un nombre.",

@@ -68,6 +68,7 @@
       "verifyFailed": "Verification failed (status {{status}}). Please try again."
     },
     "pricing": {
+      "commissionTooLarge": "{{label}} is a fraction, not a percentage — enter 0.15 for 15%.",
       "keyRequired": "key is required",
       "negative": "{{label}} cannot be negative.",
       "notANumber": "{{label}} must be a number.",

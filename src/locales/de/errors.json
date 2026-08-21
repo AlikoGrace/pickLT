@@ -68,6 +68,7 @@
       "verifyFailed": "Verifizierung fehlgeschlagen (Status {{status}}). Bitte versuchen Sie es erneut."
     },
     "pricing": {
+      "commissionTooLarge": "{{label}} ist ein Anteil, kein Prozentwert – geben Sie 0.15 für 15 % ein.",
       "keyRequired": "key ist erforderlich",
       "negative": "{{label}} darf nicht negativ sein.",
       "notANumber": "{{label}} muss eine Zahl sein.",

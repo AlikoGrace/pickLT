@@ -68,6 +68,7 @@
       "verifyFailed": "Verifica non riuscita (stato {{status}}). Riprova."
     },
     "pricing": {
+      "commissionTooLarge": "{{label}} è una frazione, non una percentuale: inserisci 0.15 per il 15%.",
       "keyRequired": "key è obbligatorio",
       "negative": "{{label}} non può essere negativo.",
       "notANumber": "{{label}} deve essere un numero.",

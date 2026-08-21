@@ -68,6 +68,7 @@
       "verifyFailed": "Verificatie mislukt (status {{status}}). Probeer het opnieuw."
     },
     "pricing": {
+      "commissionTooLarge": "{{label}} is een breuk, geen percentage — voer 0.15 in voor 15%.",
       "keyRequired": "key is verplicht",
       "negative": "{{label}} kan niet negatief zijn.",
       "notANumber": "{{label}} moet een getal zijn.",
