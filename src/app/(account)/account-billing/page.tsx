@@ -20,14 +20,7 @@ const AccountBilling = () => {
         <span className="block text-xl font-semibold">{T['accountPage']['Payout methods']}</span>
         <br />
         <span className="block text-neutral-700 dark:text-neutral-300">
-          {` When you receive a payment for a reservation, we call that payment
-              to you a "payout." Our secure payment system supports several
-              payout methods, which can be set up below. Go to FAQ.`}
-          <br />
-          <br />
-          To get paid, you need to set up a payout method Airbnb releases payouts about 24 hours after a guest’s
-          scheduled check-in time. The time it takes for the funds to appear in your account depends on your payout
-          method. Learn more
+          Add a payout method to receive payments from PickLT. Payouts are sent to the method you set up below.
         </span>
         <div className="pt-10">
           <ButtonPrimary>{T['accountPage']['Add payout method']}</ButtonPrimary>

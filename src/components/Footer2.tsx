@@ -108,7 +108,7 @@ export default function Footer2() {
           <div className="space-y-8">
             <Logo className="w-20" />
             <p className="text-sm/6 text-balance text-gray-600 dark:text-neutral-400">
-              Making the world a better place through constructing elegant hierarchies.
+              Book movers for apartments, offices, and belongings across Europe.
             </p>
             <div className="flex gap-x-6">
               {navigation.social.map((item) => (
@@ -176,7 +176,7 @@ export default function Footer2() {
         </div>
         <div className="mt-16 border-t border-gray-900/10 pt-8 sm:mt-20 lg:mt-24 dark:border-gray-700">
           <p className="text-sm/6 text-gray-600 dark:text-neutral-400">
-            &copy; 2025 Your Company, Inc. All rights reserved.
+            &copy; {new Date().getFullYear()} PickLT. All rights reserved.
           </p>
         </div>
       </div>

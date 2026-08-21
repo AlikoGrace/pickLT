@@ -1,44 +1,68 @@
 'use client'
 
-import avatar4 from '@/images/avatars/Image-4.png'
-import avatar5 from '@/images/avatars/Image-5.png'
-import avatar6 from '@/images/avatars/Image-6.png'
-import Avatar from '@/shared/Avatar'
+import type { NotificationDoc } from '@/lib/types'
 import T from '@/utils/getT'
 import { CloseButton, Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
 import { BellIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
-import { FC } from 'react'
+import { FC, useEffect, useState } from 'react'
 
-const notifications = [
-  {
-    name: 'John Doe',
-    description: 'Measure actions your users take',
-    time: '3 minutes ago',
-    href: '#',
-    avatar: avatar4,
-  },
-  {
-    name: 'Jane Smith',
-    description: 'Create your own targeted content',
-    time: '1 minute ago',
-    href: '#',
-    avatar: avatar5,
-  },
-  {
-    name: 'Alice Johnson',
-    description: 'Keep track of your growth',
-    time: '3 minutes ago',
-    href: '#',
-    avatar: avatar6,
-  },
-]
+/**
+ * Reads the real notification feed (`GET /api/notifications`, backed by the
+ * Appwrite `notifications` collection that `src/lib/notify.ts` writes).
+ *
+ * This used to render three hardcoded fake notifications from the marketplace
+ * template ("John Doe — Measure actions your users take"). They were shown to
+ * every signed-in and signed-out visitor on every desktop page.
+ */
 
 interface Props {
   className?: string
 }
 
+function relativeTime(iso: string): string {
+  const deltaMs = Date.now() - new Date(iso).getTime()
+  const minutes = Math.round(deltaMs / 60000)
+  if (minutes < 1) return 'Just now'
+  if (minutes < 60) return `${minutes}m ago`
+  const hours = Math.round(minutes / 60)
+  if (hours < 24) return `${hours}h ago`
+  const days = Math.round(hours / 24)
+  return `${days}d ago`
+}
+
 const NotifyDropdown: FC<Props> = ({ className = '' }) => {
+  const [notifications, setNotifications] = useState<NotificationDoc[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    let cancelled = false
+
+    const load = async () => {
+      try {
+        const res = await fetch('/api/notifications?limit=10')
+        if (!res.ok) {
+          // 401 for a signed-out visitor is expected — show the empty state.
+          if (!cancelled) setNotifications([])
+          return
+        }
+        const json = (await res.json()) as { documents?: NotificationDoc[] }
+        if (!cancelled) setNotifications(json.documents ?? [])
+      } catch {
+        if (!cancelled) setNotifications([])
+      } finally {
+        if (!cancelled) setIsLoading(false)
+      }
+    }
+
+    load()
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const hasUnread = notifications.some((item) => !item.isRead)
+
   return (
     <Popover className={className}>
       <>
@@ -47,7 +71,7 @@ const NotifyDropdown: FC<Props> = ({ className = '' }) => {
             'relative -m-2.5 flex cursor-pointer items-center justify-center rounded-full p-2.5 hover:bg-neutral-100 focus-visible:outline-hidden dark:hover:bg-neutral-800'
           }
         >
-          <span className="absolute end-2 top-2 h-2 w-2 rounded-full bg-blue-500"></span>
+          {hasUnread && <span className="absolute end-2 top-2 h-2 w-2 rounded-full bg-blue-500"></span>}
           <BellIcon className="h-6 w-6" />
         </PopoverButton>
 
@@ -61,20 +85,28 @@ const NotifyDropdown: FC<Props> = ({ className = '' }) => {
         >
           <div className="relative grid gap-8 bg-white p-7 dark:bg-neutral-800">
             <h3 className="text-xl font-semibold">{T['Header']['Notifications']['Notifications']}</h3>
-            {notifications.map((item, index) => (
+
+            {isLoading && <p className="text-sm text-gray-500 dark:text-gray-400">Loading…</p>}
+
+            {!isLoading && notifications.length === 0 && (
+              <p className="text-sm text-gray-500 dark:text-gray-400">You have no notifications.</p>
+            )}
+
+            {notifications.map((item) => (
               <CloseButton
                 as={Link}
-                key={index}
-                href={item.href}
+                key={item.$id}
+                href="/account"
                 className="relative -m-3 flex rounded-lg p-2 pe-8 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-hidden focus-visible:ring-3 focus-visible:ring-orange-500/50 dark:hover:bg-gray-700"
               >
-                <Avatar src={item.avatar.src} className="size-8 sm:size-12" />
-                <div className="ms-3 space-y-1 sm:ms-4">
-                  <p className="text-sm font-medium text-gray-900 dark:text-gray-200">{item.name}</p>
-                  <p className="text-xs text-gray-500 sm:text-sm dark:text-gray-400">{item.description}</p>
-                  <p className="text-xs text-gray-400 dark:text-gray-400">{item.time}</p>
+                <div className="space-y-1">
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-200">{item.title}</p>
+                  {item.body && <p className="text-xs text-gray-500 sm:text-sm dark:text-gray-400">{item.body}</p>}
+                  <p className="text-xs text-gray-400 dark:text-gray-400">{relativeTime(item.$createdAt)}</p>
                 </div>
-                <span className="absolute end-1 top-1/2 h-2 w-2 -translate-y-1/2 transform rounded-full bg-blue-500"></span>
+                {!item.isRead && (
+                  <span className="absolute end-1 top-1/2 h-2 w-2 -translate-y-1/2 transform rounded-full bg-blue-500"></span>
+                )}
               </CloseButton>
             ))}
           </div>

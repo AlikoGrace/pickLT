@@ -1,17 +1,12 @@
-import BackgroundSection from '@/components/BackgroundSection'
 import BgGlassmorphism from '@/components/BgGlassmorphism'
-import SectionClientSay from '@/components/SectionClientSay'
 import SectionSubscribe2 from '@/components/SectionSubscribe2'
 import rightImg from '@/images/about-hero-right.png'
 import { Metadata } from 'next'
-import SectionFounder from './SectionFounder'
 import SectionHero from './SectionHero'
-import SectionStatistic from './SectionStatistic'
 
 export const metadata: Metadata = {
   title: 'About Us',
-  description:
-    'The about us page provides an overview of our mission, values, and the team behind our company. It highlights our commitment to excellence and innovation in our industry.',
+  description: 'PickLT is a moving-services platform for apartments, offices, and belongings across Europe.',
 }
 
 const PageAbout = () => {
@@ -24,16 +19,8 @@ const PageAbout = () => {
         <SectionHero
           rightImg={rightImg}
           heading="👋 About Us."
-          subHeading="We're impartial and independent, and every day we create distinctive, world-class programmes and content which inform, educate and entertain millions of people in the around the world."
+          subHeading="PickLT is a moving-services platform. You describe your move, compare movers, and book the one you want — for apartments, offices, and individual belongings across Europe."
         />
-
-        <SectionFounder />
-        <div className="relative py-20">
-          <BackgroundSection />
-          <SectionClientSay />
-        </div>
-
-        <SectionStatistic />
 
         <SectionSubscribe2 />
       </div>

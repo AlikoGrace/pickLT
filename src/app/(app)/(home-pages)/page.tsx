@@ -4,7 +4,6 @@ import HomeAuthBanner from '@/components/HomeAuthBanner'
 import HeroSectionWithSearchForm1 from '@/components/hero-sections/HeroSectionWithSearchForm1'
 import HeroSearchForm from '@/components/HeroSearchForm/HeroSearchForm'
 import SectionBecomeAnAuthor from '@/components/SectionBecomeAnAuthor'
-import SectionClientSay from '@/components/SectionClientSay'
 import SectionGridAuthorBox from '@/components/SectionGridAuthorBox'
 import SectionGridCategoryBox from '@/components/SectionGridCategoryBox'
 import SectionGridFeaturePlaces from '@/components/SectionGridFeaturePlaces'
@@ -96,9 +95,6 @@ async function Page() {
           />
         </div> */}
         {/* <SectionVideos /> */}
-        <div className="relative py-16">
-          <SectionClientSay />
-        </div>
       </div>
     </main>
   )
