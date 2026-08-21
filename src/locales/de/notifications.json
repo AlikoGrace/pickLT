@@ -1,0 +1,147 @@
+{
+  "cancel": {
+    "byClient": {
+      "body": "Der Kunde hat den Umzug storniert.",
+      "bodyWithHandle": "Der Kunde hat den Umzug {{handle}} storniert.",
+      "title": "Umzug storniert"
+    },
+    "reassigning": {
+      "body": "Ihr Umzugsprofi musste Ihren Umzug abgeben. Wir bieten ihn anderen Umzugsprofis in der Nähe an.",
+      "bodyWithHandle": "Ihr Umzugsprofi musste den Umzug {{handle}} abgeben. Wir bieten ihn anderen Umzugsprofis in der Nähe an.",
+      "title": "Wir suchen einen neuen Umzugsprofi"
+    }
+  },
+  "message": {
+    "new": {
+      "title": "Neue Nachricht"
+    }
+  },
+  "payment": {
+    "clientCharged": {
+      "body": "Ihre Zahlung über {{amount}} wurde verarbeitet. Ihre Buchung ist bestätigt!",
+      "title": "Zahlung bestätigt"
+    },
+    "clientConfirmed": {
+      "body": "Der Kunde hat diesen Umzug als bezahlt markiert. Bestätigen Sie ihn Ihrerseits, um ihn abzuschließen.",
+      "title": "Kunde hat Zahlung bestätigt"
+    },
+    "confirmYours": {
+      "body": "Ihr Umzugsprofi hat die Zahlung bestätigt. Bestätigen Sie sie Ihrerseits, um den Umzug abzuschließen.",
+      "title": "Zahlung bestätigen"
+    },
+    "moverPaid": {
+      "body": "Sie haben {{amount}} erhalten.",
+      "bodyWithHandle": "Sie haben {{amount}} für den Umzug {{handle}} erhalten.",
+      "title": "Zahlung erhalten"
+    }
+  },
+  "reminder": {
+    "starting": {
+      "client": {
+        "body": "Umzug {{handle}} beginnt gleich. Ihr Umzugsprofi bereitet sich vor.",
+        "title": "Ihr Umzug beginnt {{lead}}"
+      },
+      "mover": {
+        "body": "Umzug {{handle}} beginnt {{lead}} — „Route starten“ ist jetzt verfügbar.",
+        "title": "Zeit, Ihren Umzug zu starten"
+      }
+    },
+    "upcoming": {
+      "client": {
+        "body": "Ihr Umzug {{handle}} beginnt {{lead}}.",
+        "bodyWithWindow": "Ihr Umzug {{handle}} beginnt {{lead}} im Zeitfenster {{window}}.",
+        "title": "Umzugserinnerung"
+      },
+      "mover": {
+        "body": "Der geplante Umzug {{handle}} beginnt {{lead}}.",
+        "bodyWithWindow": "Der geplante Umzug {{handle}} beginnt {{lead}} im Zeitfenster {{window}}.",
+        "title": "Umzugserinnerung"
+      }
+    }
+  },
+  "request": {
+    "new": {
+      "body": "Sie haben eine neue Umzugsanfrage in der Nähe. Zum Ansehen und Annehmen tippen.",
+      "bodyRoute": "{{from}} → {{to}}. Zum Ansehen und Annehmen tippen.",
+      "title": "Neue Umzugsanfrage"
+    }
+  },
+  "review": {
+    "received": {
+      "bodyWithComment_one": "Sie haben eine Bewertung mit {{count}} Stern erhalten: „{{comment}}“",
+      "bodyWithComment_other": "Sie haben eine Bewertung mit {{count}} Sternen erhalten: „{{comment}}“",
+      "body_one": "Sie haben eine Bewertung mit {{count}} Stern erhalten.",
+      "body_other": "Sie haben eine Bewertung mit {{count}} Sternen erhalten.",
+      "title": "Neue Bewertung"
+    }
+  },
+  "status": {
+    "arrivedDestination": {
+      "body": "Ihr Umzugsprofi ist am Zielort eingetroffen.",
+      "title": "Am Zielort"
+    },
+    "awaitingPayment": {
+      "body": "Ihr Umzug ist abgeschlossen — bitte bestätigen Sie die Zahlung.",
+      "title": "Zahlung offen"
+    },
+    "cancelledByMover": {
+      "body": "Der Umzugsprofi hat diesen Umzug storniert.",
+      "title": "Umzug storniert"
+    },
+    "completed": {
+      "body": "Ihr Umzug ist abgeschlossen! Bitte hinterlassen Sie eine Bewertung.",
+      "title": "Umzug abgeschlossen"
+    },
+    "inTransit": {
+      "body": "Ihre Gegenstände sind auf dem Weg zum Zielort.",
+      "title": "Unterwegs"
+    },
+    "loading": {
+      "body": "Ihre Gegenstände werden verladen.",
+      "title": "Wird beladen"
+    },
+    "moverAccepted": {
+      "body": "Ein Umzugsprofi hat Ihre Umzugsanfrage angenommen!",
+      "title": "Umzugsprofi bestätigt"
+    },
+    "moverAcceptedScheduled": {
+      "body": "Ein Umzugsprofi hat Ihren geplanten Umzug angenommen!",
+      "title": "Umzugsprofi bestätigt"
+    },
+    "moverArrived": {
+      "body": "Ihr Umzugsprofi ist an der Abholadresse eingetroffen.",
+      "title": "Umzugsprofi eingetroffen"
+    },
+    "moverEnRoute": {
+      "body": "Ihr Umzugsprofi ist auf dem Weg zu Ihrer Abholadresse.",
+      "title": "Umzugsprofi unterwegs"
+    },
+    "moverWithdrew": {
+      "body": "Ihr Umzugsprofi hat abgesagt. Wir suchen einen neuen Umzugsprofi für Sie.",
+      "title": "Umzugsprofi hat abgesagt"
+    },
+    "unloading": {
+      "body": "Ihre Gegenstände werden entladen.",
+      "title": "Wird entladen"
+    }
+  },
+  "verification": {
+    "contactSupport": "Bitte wenden Sie sich für Details an den Support.",
+    "rejected": {
+      "body": "Ihr Antrag auf ein Umzugsprofi-Profil wurde abgelehnt. {{reason}}",
+      "title": "Profil abgelehnt"
+    },
+    "submitted": {
+      "body": "Ihr Umzugsprofi-Profil wird geprüft. Wir benachrichtigen Sie, sobald es verifiziert ist.",
+      "title": "Profil eingereicht"
+    },
+    "suspended": {
+      "body": "Ihr Umzugsprofi-Konto wurde gesperrt. {{reason}}",
+      "title": "Konto gesperrt"
+    },
+    "verified": {
+      "body": "Herzlichen Glückwunsch! Ihr Umzugsprofi-Profil wurde verifiziert. Sie können jetzt Umzüge annehmen.",
+      "title": "Profil verifiziert"
+    }
+  }
+}

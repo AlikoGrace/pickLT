@@ -54,13 +54,67 @@
       }
     },
     "typeAndCategory": {
-      "subtitle": "{{type}} Move · {{category}}"
+      "light": {
+        "instant": {
+          "subtitle": "Light Move · Instant"
+        },
+        "scheduled": {
+          "subtitle": "Light Move · Scheduled"
+        }
+      },
+      "premium": {
+        "instant": {
+          "subtitle": "Premium Move · Instant"
+        },
+        "scheduled": {
+          "subtitle": "Premium Move · Scheduled"
+        }
+      },
+      "regular": {
+        "instant": {
+          "subtitle": "Regular Move · Instant"
+        },
+        "scheduled": {
+          "subtitle": "Regular Move · Scheduled"
+        }
+      }
     },
     "typeAndDate": {
-      "subtitle": "{{type}} Move · {{date}}"
+      "light": {
+        "subtitle": "Light Move · {{date}}"
+      },
+      "premium": {
+        "subtitle": "Premium Move · {{date}}"
+      },
+      "regular": {
+        "subtitle": "Regular Move · {{date}}"
+      }
     },
     "typeCategoryDate": {
-      "subtitle": "{{type}} Move · {{category}} · {{date}}"
+      "light": {
+        "instant": {
+          "subtitle": "Light Move · Instant · {{date}}"
+        },
+        "scheduled": {
+          "subtitle": "Light Move · Scheduled · {{date}}"
+        }
+      },
+      "premium": {
+        "instant": {
+          "subtitle": "Premium Move · Instant · {{date}}"
+        },
+        "scheduled": {
+          "subtitle": "Premium Move · Scheduled · {{date}}"
+        }
+      },
+      "regular": {
+        "instant": {
+          "subtitle": "Regular Move · Instant · {{date}}"
+        },
+        "scheduled": {
+          "subtitle": "Regular Move · Scheduled · {{date}}"
+        }
+      }
     }
   },
   "category": {
@@ -166,7 +220,30 @@
       "label": "Type"
     },
     "typeAndCategory": {
-      "value": "{{type}} · {{category}}"
+      "light": {
+        "instant": {
+          "value": "Light · Instant"
+        },
+        "scheduled": {
+          "value": "Light · Scheduled"
+        }
+      },
+      "premium": {
+        "instant": {
+          "value": "Premium · Instant"
+        },
+        "scheduled": {
+          "value": "Premium · Scheduled"
+        }
+      },
+      "regular": {
+        "instant": {
+          "value": "Regular · Instant"
+        },
+        "scheduled": {
+          "value": "Regular · Scheduled"
+        }
+      }
     },
     "unit": {
       "label": "Unit"
@@ -258,9 +335,6 @@
     },
     "confirmedPayLater": {
       "label": "Confirmed - Pay Later"
-    },
-    "currentStage": {
-      "label": "its current stage"
     },
     "disputed": {
       "label": "Disputed"

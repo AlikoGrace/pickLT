@@ -407,7 +407,6 @@
       "label": "there"
     },
     "fallbackUser": "User",
-    "theMover": "the mover",
     "unnamed": {
       "label": "Your name"
     }
@@ -419,6 +418,10 @@
     "counter": {
       "label": "{{page}} / {{total}}"
     }
+  },
+  "place": {
+    "dropoff": "Drop-off",
+    "pickup": "Pickup"
   },
   "separator": {
     "or": {

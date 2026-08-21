@@ -1,5 +1,45 @@
 {
+  "action": {
+    "cancel": {
+      "cta": "Taşınmayı iptal et"
+    },
+    "reschedule": {
+      "cta": "Taşınma tarihini değiştir"
+    }
+  },
+  "available": {
+    "withinRadiusCount_one": "30 km içinde {{count}} taşınma",
+    "withinRadiusCount_other": "30 km içinde {{count}} taşınma"
+  },
+  "booking": {
+    "code": {
+      "label": "Rezervasyon kodu"
+    },
+    "title": "Rezervasyon detayları"
+  },
+  "cancelConfirm": {
+    "cancelling": {
+      "cta": "İptal ediliyor…"
+    },
+    "confirm": {
+      "cta": "Evet, iptal et"
+    },
+    "keep": {
+      "cta": "Taşınmayı sürdür"
+    },
+    "subtitle": "Nakliyeciniz çoktan yola çıktı. İptal etmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+    "title": "Bu taşınma iptal edilsin mi?",
+    "window": "Bu taşınmayı iptal etmek istediğinizden emin misiniz? Bu işlem geri alınamaz."
+  },
   "card": {
+    "category": {
+      "instant": {
+        "label": "Anında"
+      },
+      "scheduled": {
+        "label": "Planlı"
+      }
+    },
     "route": {
       "dropoffFallback": {
         "label": "Teslim noktası"
@@ -11,6 +51,69 @@
     "title": {
       "generic": {
         "label": "Taşıma"
+      }
+    },
+    "typeAndCategory": {
+      "light": {
+        "instant": {
+          "subtitle": "Hafif taşıma · Anında"
+        },
+        "scheduled": {
+          "subtitle": "Hafif taşıma · Planlı"
+        }
+      },
+      "premium": {
+        "instant": {
+          "subtitle": "Premium taşıma · Anında"
+        },
+        "scheduled": {
+          "subtitle": "Premium taşıma · Planlı"
+        }
+      },
+      "regular": {
+        "instant": {
+          "subtitle": "Standart taşıma · Anında"
+        },
+        "scheduled": {
+          "subtitle": "Standart taşıma · Planlı"
+        }
+      }
+    },
+    "typeAndDate": {
+      "light": {
+        "subtitle": "Hafif taşıma · {{date}}"
+      },
+      "premium": {
+        "subtitle": "Premium taşıma · {{date}}"
+      },
+      "regular": {
+        "subtitle": "Standart taşıma · {{date}}"
+      }
+    },
+    "typeCategoryDate": {
+      "light": {
+        "instant": {
+          "subtitle": "Hafif taşıma · Anında · {{date}}"
+        },
+        "scheduled": {
+          "subtitle": "Hafif taşıma · Planlı · {{date}}"
+        }
+      },
+      "premium": {
+        "instant": {
+          "subtitle": "Premium taşıma · Anında · {{date}}"
+        },
+        "scheduled": {
+          "subtitle": "Premium taşıma · Planlı · {{date}}"
+        }
+      },
+      "regular": {
+        "instant": {
+          "subtitle": "Standart taşıma · Anında · {{date}}"
+        },
+        "scheduled": {
+          "subtitle": "Standart taşıma · Planlı · {{date}}"
+        }
       }
     }
   },
@@ -31,6 +134,9 @@
       "label": "Bekleyen"
     }
   },
+  "createdAt": {
+    "label": "Oluşturulma"
+  },
   "detail": {
     "additionalServices": {
       "title": "Ek hizmetler"
@@ -40,6 +146,12 @@
     },
     "arrivalWindow": {
       "label": "Varış aralığı"
+    },
+    "category": {
+      "label": "Kategori"
+    },
+    "client": {
+      "title": "Müşteri"
     },
     "distance": {
       "label": "Mesafe"
@@ -62,6 +174,15 @@
     "itemLine": {
       "label": "{{qty}} x {{label}}"
     },
+    "itemLineReversed": {
+      "label": "{{label}} × {{qty}}"
+    },
+    "itemQuantity": {
+      "label": "{{label}} × {{qty}}"
+    },
+    "items": {
+      "label": "Eşyalar"
+    },
     "moveDate": {
       "label": "Taşınma tarihi"
     },
@@ -70,6 +191,9 @@
     },
     "moveItems": {
       "title": "Taşınacak eşyalar"
+    },
+    "moveStatus": {
+      "label": "Taşınma durumu"
     },
     "packingService": {
       "label": "Paketleme hizmeti"
@@ -95,8 +219,42 @@
     "type": {
       "label": "Tür"
     },
+    "typeAndCategory": {
+      "light": {
+        "instant": {
+          "value": "Hafif · Anında"
+        },
+        "scheduled": {
+          "value": "Hafif · Planlı"
+        }
+      },
+      "premium": {
+        "instant": {
+          "value": "Premium · Anında"
+        },
+        "scheduled": {
+          "value": "Premium · Planlı"
+        }
+      },
+      "regular": {
+        "instant": {
+          "value": "Standart · Anında"
+        },
+        "scheduled": {
+          "value": "Standart · Planlı"
+        }
+      }
+    },
     "unit": {
       "label": "Daire"
+    }
+  },
+  "filter": {
+    "count": {
+      "badge": "({{value}})"
+    },
+    "empty": {
+      "helper": "Farklı bir filtre seçmeyi deneyin."
     }
   },
   "itemCount_one": "{{count}} eşya",
@@ -115,6 +273,31 @@
       "label": "Planlı"
     }
   },
+  "moveCount_one": "{{count}} taşınma",
+  "moveCount_other": "{{count}} taşınma",
+  "mover": {
+    "experience": {
+      "label": "Deneyim"
+    },
+    "languages": {
+      "label": "Diller"
+    },
+    "verified": {
+      "badge": "Doğrulanmış nakliyeci"
+    }
+  },
+  "moverCount_one": "{{count}} nakliyeci",
+  "moverCount_other": "{{count}} nakliyeci",
+  "notify": {
+    "cancelledByClient": {
+      "body": "Müşteri bu taşınmayı iptal etti.",
+      "title": "Taşınma müşteri tarafından iptal edildi ❌"
+    },
+    "moverWithdrawn": {
+      "body": "Atanan nakliyeci bu taşınmadan çekildi.",
+      "title": "Nakliyeci çekildi"
+    }
+  },
   "payment": {
     "method": {
       "label": "Ödeme yöntemi"
@@ -129,8 +312,17 @@
     "arrivedDestination": {
       "label": "Varış noktasında"
     },
+    "assigned": {
+      "label": "Atandı"
+    },
     "awaitingPayment": {
       "label": "Ödeme bekleniyor"
+    },
+    "booked": {
+      "label": "Rezerve edildi"
+    },
+    "cancelled": {
+      "label": "İptal edildi"
     },
     "cancelledByClient": {
       "label": "İptal edildi"
@@ -141,14 +333,26 @@
     "completed": {
       "label": "Tamamlandı"
     },
+    "confirmedPayLater": {
+      "label": "Onaylandı, ödeme daha sonra"
+    },
     "disputed": {
       "label": "İtirazlı"
+    },
+    "draft": {
+      "label": "Taslak"
+    },
+    "inProgress": {
+      "label": "Devam ediyor"
     },
     "inTransit": {
       "label": "Taşınıyor"
     },
     "loading": {
       "label": "Yükleniyor"
+    },
+    "moverAccepted": {
+      "label": "Nakliyeci onayladı"
     },
     "moverArrived": {
       "label": "Nakliyeci geldi"
@@ -165,8 +369,17 @@
     "pending": {
       "label": "Bekliyor"
     },
+    "pendingPayment": {
+      "label": "Ödeme gerekiyor"
+    },
+    "unknown": {
+      "label": "Bilinmiyor"
+    },
     "unloading": {
       "label": "Boşaltılıyor"
     }
+  },
+  "summary": {
+    "title": "Özet"
   }
 }

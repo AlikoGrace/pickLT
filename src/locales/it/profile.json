@@ -1,4 +1,129 @@
 {
+  "appearance": {
+    "dark": {
+      "label": "Modalità scura",
+      "subtitle": "Più riposante per gli occhi di notte"
+    },
+    "light": {
+      "label": "Modalità chiara",
+      "subtitle": "Aspetto chiaro classico"
+    },
+    "system": {
+      "label": "Impostazione di sistema",
+      "subtitle": "Segue le impostazioni del tuo dispositivo"
+    },
+    "title": "Aspetto"
+  },
+  "changeEmail": {
+    "cta": "Aggiorna e-mail",
+    "current": {
+      "label": "Attuale: {{email}}"
+    },
+    "failed": {
+      "title": "Impossibile cambiare l’e-mail"
+    },
+    "googleNotice": {
+      "body": "Il tuo account usa l’accesso con Google. L’indirizzo e-mail non può essere modificato da PickLT: aggiornalo nel tuo account Google.",
+      "title": "L’e-mail è gestita da Google"
+    },
+    "helper": "Aggiorna il tuo indirizzo e-mail",
+    "helperLong": "Invieremo un’e-mail di verifica al nuovo indirizzo.",
+    "label": "Cambia e-mail",
+    "sent": {
+      "body": "Ti abbiamo inviato un’e-mail di verifica. Controlla la posta in arrivo."
+    },
+    "sentLong": "Ti abbiamo inviato un’e-mail di verifica. Controlla la posta in arrivo e tocca il link di verifica.",
+    "title": "Cambia e-mail",
+    "updatedTo": {
+      "body": "E-mail aggiornata in <1>{{email}}</1>"
+    }
+  },
+  "changePassword": {
+    "failed": {
+      "title": "Impossibile aggiornare la password"
+    },
+    "googleNotice": {
+      "body": "Il tuo account non ha ancora una password. Per impostarne una, esci e usa «Password dimenticata» nella schermata di accesso.",
+      "cta": "Esci e reimposta la password",
+      "title": "L’account usa l’accesso con Google"
+    },
+    "mismatch": {
+      "error": "Le password non coincidono."
+    },
+    "success": {
+      "message": "La tua password è stata modificata.",
+      "title": "Password aggiornata"
+    },
+    "title": "Cambia password"
+  },
+  "changePhone": {
+    "current": {
+      "label": "Attuale: {{phone}}"
+    },
+    "failed": {
+      "title": "Impossibile cambiare il numero di telefono"
+    },
+    "helper": "Aggiorna il tuo numero di telefono",
+    "helperLong": "Invieremo un codice OTP per verificare il nuovo numero.",
+    "label": "Cambia telefono",
+    "title": "Cambia numero di telefono"
+  },
+  "deleteAccount": {
+    "confirm": {
+      "body": "L’operazione è definitiva e non è reversibile. Perderai tutti i tuoi dati, i traslochi e le preferenze.",
+      "title": "Vuoi davvero eliminare il tuo account?"
+    }
+  },
+  "dobSheet": {
+    "title": "Seleziona la data di nascita"
+  },
+  "editName": {
+    "helper": "Aggiorna il tuo nome",
+    "label": "Modifica nome",
+    "name": {
+      "placeholder": "Il tuo nome completo"
+    },
+    "title": "Modifica nome"
+  },
+  "field": {
+    "confirmPassword": {
+      "label": "Conferma nuova password",
+      "placeholder": "Inserisci di nuovo la nuova password"
+    },
+    "currentPassword": {
+      "label": "Password attuale",
+      "placeholder": "Inserisci la password attuale"
+    },
+    "dateOfBirth": {
+      "label": "Data di nascita",
+      "placeholder": "Seleziona la tua data di nascita"
+    },
+    "email": {
+      "label": "E-mail"
+    },
+    "fullName": {
+      "label": "Nome completo"
+    },
+    "gender": {
+      "label": "Genere",
+      "placeholder": "Seleziona il genere"
+    },
+    "newEmail": {
+      "label": "Nuova e-mail",
+      "placeholder": "nome@esempio.com"
+    },
+    "newPassword": {
+      "label": "Nuova password"
+    },
+    "password": {
+      "minHelper": "Almeno 8 caratteri"
+    },
+    "phone": {
+      "label": "Numero di telefono",
+      "numberPlaceholder": "123 456 7890",
+      "placeholder": "Aggiungi un numero di telefono"
+    }
+  },
   "gender": {
     "female": {
       "option": "Donna"
@@ -10,10 +135,17 @@
       "option": "Altro"
     }
   },
+  "genderSheet": {
+    "title": "Seleziona il genere"
+  },
+  "help": {
+    "helper": "Ottieni aiuto e assistenza"
+  },
   "helpCenter": {
     "header": {
       "title": "Centro assistenza"
     },
+    "helper": "Ottieni aiuto e assistenza",
     "search": {
       "a11y": "Cerca articoli di assistenza",
       "placeholder": "Cerca posizione.."
@@ -29,12 +161,24 @@
     "suggested": "Suggerite",
     "title": "Lingua"
   },
+  "logout": {
+    "confirm": {
+      "body": "Prima di uscire, assicurati di aver salvato il tuo lavoro o completato le attività in corso.",
+      "title": "Vuoi davvero uscire?"
+    }
+  },
   "menu": {
     "appearance": {
       "label": "Aspetto"
     },
+    "changeEmail": {
+      "label": "Cambia e-mail"
+    },
     "changePassword": {
       "label": "Cambia password"
+    },
+    "changePhone": {
+      "label": "Cambia telefono"
     },
     "deleteAccount": {
       "label": "Elimina account"
@@ -67,20 +211,134 @@
       "label": "La tua carta"
     }
   },
+  "name": {
+    "updated": {
+      "success": "Nome aggiornato correttamente"
+    }
+  },
+  "newEmail": {
+    "label": "Nuovo indirizzo e-mail",
+    "placeholder": "nuovo@esempio.com"
+  },
+  "newPhone": {
+    "label": "Nuovo numero di telefono",
+    "placeholder": "+491234567890"
+  },
+  "notifications": {
+    "helper": "Configura avvisi e notifiche",
+    "rows": {
+      "appUpdates": {
+        "label": "Aggiornamenti dell’app"
+      },
+      "cashback": {
+        "label": "Cashback"
+      },
+      "notifications": {
+        "label": "Notifiche"
+      },
+      "payments": {
+        "label": "Pagamenti"
+      },
+      "sound": {
+        "label": "Suono"
+      },
+      "specialOffers": {
+        "label": "Offerte speciali"
+      },
+      "vibrate": {
+        "label": "Vibrazione"
+      }
+    },
+    "title": "Notifiche"
+  },
+  "password": {
+    "confirm": {
+      "label": "Conferma password"
+    },
+    "current": {
+      "label": "Password attuale"
+    },
+    "new": {
+      "label": "Nuova password"
+    },
+    "submit": {
+      "cta": "Aggiorna password"
+    },
+    "title": "Aggiorna la tua password"
+  },
+  "paymentMethods": {
+    "helper": "Gestisci le tue opzioni di pagamento",
+    "label": "Metodi di pagamento"
+  },
+  "personalData": {
+    "nameRequired": {
+      "message": "Inserisci il tuo nome.",
+      "title": "Nome completo obbligatorio"
+    },
+    "saveFailed": {
+      "title": "Impossibile salvare il profilo"
+    },
+    "title": "Dati personali"
+  },
+  "phone": {
+    "updated": {
+      "success": "Numero di telefono aggiornato e verificato"
+    }
+  },
+  "photo": {
+    "updated": {
+      "success": "Foto aggiornata correttamente"
+    }
+  },
+  "privacy": {
+    "helper": "Gestisci i tuoi dati e la sicurezza",
+    "label": "Privacy e sicurezza"
+  },
   "privacyPolicy": {
     "header": {
       "title": "Privacy e policy"
     }
   },
+  "privacySecurity": {
+    "helper": "Gestisci i tuoi dati e la sicurezza",
+    "label": "Privacy e sicurezza"
+  },
   "section": {
+    "account": {
+      "title": "Account"
+    },
     "general": {
       "title": "Generale"
+    },
+    "moves": {
+      "title": "Traslochi"
     },
     "payments": {
       "title": "Pagamenti"
     },
+    "personal": {
+      "title": "Informazioni personali"
+    },
     "preferences": {
       "title": "Preferenze"
+    },
+    "support": {
+      "title": "Assistenza"
     }
+  },
+  "security": {
+    "biometricId": {
+      "label": "ID biometrico"
+    },
+    "faceId": {
+      "label": "Face ID"
+    },
+    "googleAuthenticator": {
+      "label": "Google Authenticator"
+    },
+    "rememberPassword": {
+      "label": "Ricorda password"
+    },
+    "title": "Sicurezza"
   }
 }

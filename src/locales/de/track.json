@@ -1,4 +1,9 @@
 {
+  "action": {
+    "trackLive": {
+      "cta": "Umzug live verfolgen"
+    }
+  },
   "address": {
     "dropoff": {
       "title": "Zieladresse"
@@ -6,9 +11,16 @@
     "floor": {
       "label": "Etage {{floor}}"
     },
+    "floorWithElevator": {
+      "label": "Etage {{floor}} · Aufzug"
+    },
     "pickup": {
       "title": "Abholadresse"
     }
+  },
+  "banner": {
+    "accepted": "Ein Umzugsprofi hat Ihren Umzug angenommen! Er macht sich in Kürze auf den Weg.",
+    "awaitingAccept": "Warten auf die Zusage eines Umzugsprofis…"
   },
   "eta": {
     "assigned": {
@@ -16,6 +28,13 @@
     },
     "distance": {
       "footnote": "{{distance}} km entfernt"
+    },
+    "distanceAway": {
+      "label": "{{distance}} km entfernt"
+    },
+    "minutes": {
+      "label_one": "{{count}} Min.",
+      "label_other": "{{count}} Min."
     },
     "moverArriving": {
       "label": "Umzugshelfer unterwegs"
@@ -26,10 +45,132 @@
       "label": "Umzugshelfer zugewiesen"
     }
   },
+  "hint": {
+    "arrivedDestination": "Angekommen! Das Entladen beginnt gleich.",
+    "inTransit": "Unterwegs zu Ihrem Zielort…",
+    "loading": "Ihre Sachen werden beladen…",
+    "loadingSoon": "Ihr Umzugsprofi beginnt gleich mit dem Beladen",
+    "unloading": "Ihre Sachen werden entladen…"
+  },
+  "live": {
+    "helper": "Ihr Umzugsprofi ist aktiv — verfolgen Sie den Fortschritt in Echtzeit"
+  },
+  "map": {
+    "dropoffPin": {
+      "label": "Z"
+    },
+    "pickupPin": {
+      "label": "A"
+    }
+  },
   "mover": {
+    "cancelled": {
+      "searching": "Der Umzugsprofi hat storniert. Es wird nach einem anderen Umzugsprofi gesucht…"
+    },
     "moveCount": {
       "label_one": "{{count}} Umzug",
       "label_other": "{{count}} Umzüge"
+    },
+    "noPhone": {
+      "error": "Telefonnummer des Umzugsprofis nicht verfügbar"
+    }
+  },
+  "moverPhase": {
+    "atDropoff": {
+      "subtitle": "Sie haben den Zielort erreicht",
+      "title": "Am Zielort"
+    },
+    "atPickup": {
+      "subtitle": "Sie sind angekommen. Beginnen Sie mit dem Beladen.",
+      "title": "An der Abholadresse"
+    },
+    "awaitingPayment": {
+      "subtitle": "Warten auf die Zahlungsbestätigung",
+      "title": "Zahlung offen"
+    },
+    "completed": {
+      "subtitle": "Umzug erfolgreich abgeschlossen!",
+      "title": "Abgeschlossen"
+    },
+    "enRoute": {
+      "subtitle": "Fahren Sie zur Abholadresse",
+      "title": "Auf dem Weg zur Abholung"
+    },
+    "inTransit": {
+      "subtitle": "Fahrt zum Zielort",
+      "title": "Unterwegs"
+    },
+    "loading": {
+      "subtitle": "Gegenstände werden in Ihr Fahrzeug geladen",
+      "title": "Wird beladen"
+    },
+    "unloading": {
+      "subtitle": "Gegenstände werden am Zielort entladen",
+      "title": "Wird entladen"
+    }
+  },
+  "notify": {
+    "accepted": {
+      "body": "Ein Umzugsprofi hat Ihren geplanten Umzug angenommen. Er macht sich in Kürze auf den Weg.",
+      "shortBody": "Ein Umzugsprofi hat Ihre Anfrage angenommen!",
+      "shortTitle": "Umzugsprofi bestätigt",
+      "title": "Umzugsprofi hat zugesagt! ✅"
+    },
+    "arrived": {
+      "body": "Ihr Umzugsprofi ist an der Abholadresse eingetroffen. Bitte treffen Sie ihn dort.",
+      "shortBody": "Ihr Umzugsprofi ist an der Abholadresse eingetroffen.",
+      "shortTitle": "Umzugsprofi eingetroffen",
+      "title": "Ihr Umzugsprofi ist da! 🚛"
+    },
+    "arrivedDestination": {
+      "body": "Ihr Umzugsprofi ist an der Zieladresse eingetroffen.",
+      "shortBody": "Ihr Umzugsprofi ist am Zielort eingetroffen.",
+      "shortTitle": "Am Zielort",
+      "title": "Am Zielort angekommen! 🏠"
+    },
+    "cancelled": {
+      "shortBody": "Der Umzugsprofi hat diesen Umzug storniert.",
+      "shortTitle": "Umzug storniert"
+    },
+    "completed": {
+      "body": "Ihr Umzug wurde erfolgreich abgeschlossen.",
+      "shortBody": "Ihr Umzug ist abgeschlossen! Bitte geben Sie eine Bewertung ab.",
+      "shortTitle": "Umzug abgeschlossen",
+      "title": "Umzug abgeschlossen! ✅"
+    },
+    "enRoute": {
+      "body": "Ihr Umzugsprofi ist auf dem Weg zur Abholadresse.",
+      "shortBody": "Ihr Umzugsprofi ist auf dem Weg zu Ihrer Abholadresse.",
+      "shortTitle": "Umzugsprofi unterwegs",
+      "title": "Ihr Umzugsprofi ist unterwegs! 🚚"
+    },
+    "inTransit": {
+      "body": "Ihre Sachen werden zum Zielort transportiert.",
+      "shortBody": "Ihre Sachen sind auf dem Weg zum Zielort.",
+      "shortTitle": "Unterwegs",
+      "title": "Unterwegs! 🛣️"
+    },
+    "loading": {
+      "body": "Ihr Umzugsprofi hat mit dem Beladen begonnen.",
+      "shortBody": "Ihre Sachen werden beladen.",
+      "shortTitle": "Beladen begonnen",
+      "title": "Beladen begonnen 📦"
+    },
+    "paymentDue": {
+      "body": "Ihr Umzug ist gleich abgeschlossen — bitte begleichen Sie die Zahlung.",
+      "shortBody": "Ihr Umzug ist fertig — bitte bestätigen Sie die Zahlung.",
+      "shortTitle": "Zahlung fällig",
+      "title": "Zahlung fällig 💶"
+    },
+    "unloading": {
+      "body": "Ihre Sachen werden am Zielort entladen.",
+      "shortBody": "Ihre Sachen werden entladen.",
+      "shortTitle": "Wird entladen",
+      "title": "Ihre Sachen werden entladen 📦"
+    },
+    "withdrawn": {
+      "body": "Der Umzugsprofi hat Ihren Umzug zurückgegeben. Er steht jetzt wieder anderen Umzugsprofis offen.",
+      "title": "Umzugsprofi hat abgesagt"
     }
   },
   "order": {
@@ -66,9 +207,17 @@
     }
   },
   "phase": {
+    "arrived": {
+      "subtitle": "Treffen Sie ihn an der Abholadresse",
+      "title": "Ihr Umzugsprofi ist da!"
+    },
     "arrivedDestination": {
       "subtitle": "Ihr Umzugshelfer hat die Zieladresse erreicht",
       "title": "Am Ziel angekommen!"
+    },
+    "awaitingAccept": {
+      "subtitle": "Ihre Anfrage ist gesendet. Der Umzugsprofi antwortet in Kürze.",
+      "title": "Warten auf Zusage des Umzugsprofis"
     },
     "awaitingPayment": {
       "subtitle": "Bitte zahlen Sie den Umzugshelfer und bestätigen Sie unten",
@@ -85,9 +234,11 @@
       "subtitle": "Vom Umzugshelfer storniert"
     },
     "completed": {
-      "label": "Umzug abgeschlossen"
+      "label": "Umzug abgeschlossen",
+      "title": "Umzug abgeschlossen!"
     },
     "inTransit": {
+      "body": "Ihre Sachen werden transportiert",
       "subtitle": "Ihre Sachen werden transportiert",
       "title": "Unterwegs zum Ziel"
     },
@@ -98,6 +249,9 @@
     "moverArrived": {
       "subtitle": "Treffen Sie ihn an der Abholadresse",
       "title": "Ihr Umzugshelfer ist da!"
+    },
+    "moverEnRoute": {
+      "title": "Umzugsprofi unterwegs"
     },
     "paid": {
       "subtitle": "Warten auf den Abschluss durch den Umzugshelfer",

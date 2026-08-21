@@ -1,4 +1,9 @@
 {
+  "action": {
+    "trackLive": {
+      "cta": "Segui in tempo reale"
+    }
+  },
   "address": {
     "dropoff": {
       "title": "Indirizzo di consegna"
@@ -6,9 +11,16 @@
     "floor": {
       "label": "Piano {{floor}}"
     },
+    "floorWithElevator": {
+      "label": "Piano {{floor}} · Ascensore"
+    },
     "pickup": {
       "title": "Indirizzo di ritiro"
     }
+  },
+  "banner": {
+    "accepted": "Un traslocatore ha accettato il tuo trasloco! Partirà a breve.",
+    "awaitingAccept": "In attesa che un traslocatore accetti il tuo trasloco…"
   },
   "eta": {
     "assigned": {
@@ -16,6 +28,13 @@
     },
     "distance": {
       "footnote": "A {{distance}} km"
+    },
+    "distanceAway": {
+      "label": "A {{distance}} km"
+    },
+    "minutes": {
+      "label_one": "{{count}} min",
+      "label_other": "{{count}} min"
     },
     "moverArriving": {
       "label": "Traslocatore in arrivo"
@@ -26,10 +45,132 @@
       "label": "Traslocatore assegnato"
     }
   },
+  "hint": {
+    "arrivedDestination": "Arrivato! Lo scarico inizierà a breve.",
+    "inTransit": "In viaggio verso la tua destinazione…",
+    "loading": "Le tue cose vengono caricate…",
+    "loadingSoon": "Il tuo traslocatore inizierà il carico a breve",
+    "unloading": "Le tue cose vengono scaricate…"
+  },
+  "live": {
+    "helper": "Il tuo traslocatore è in attività: segui i progressi in tempo reale"
+  },
+  "map": {
+    "dropoffPin": {
+      "label": "C"
+    },
+    "pickupPin": {
+      "label": "R"
+    }
+  },
   "mover": {
+    "cancelled": {
+      "searching": "Il traslocatore ha annullato. Ricerca di un altro traslocatore in corso…"
+    },
     "moveCount": {
       "label_one": "{{count}} trasloco",
       "label_other": "{{count}} traslochi"
+    },
+    "noPhone": {
+      "error": "Numero di telefono del traslocatore non disponibile"
+    }
+  },
+  "moverPhase": {
+    "atDropoff": {
+      "subtitle": "Sei arrivato a destinazione",
+      "title": "Alla consegna"
+    },
+    "atPickup": {
+      "subtitle": "Sei arrivato. Inizia a caricare gli oggetti.",
+      "title": "Al ritiro"
+    },
+    "awaitingPayment": {
+      "subtitle": "In attesa della conferma di pagamento",
+      "title": "In attesa di pagamento"
+    },
+    "completed": {
+      "subtitle": "Trasloco completato!",
+      "title": "Completato"
+    },
+    "enRoute": {
+      "subtitle": "Dirigiti all’indirizzo di ritiro",
+      "title": "In viaggio verso il ritiro"
+    },
+    "inTransit": {
+      "subtitle": "In viaggio verso l’indirizzo di consegna",
+      "title": "In transito"
+    },
+    "loading": {
+      "subtitle": "Carico degli oggetti sul tuo veicolo",
+      "title": "Carico in corso"
+    },
+    "unloading": {
+      "subtitle": "Scarico degli oggetti a destinazione",
+      "title": "Scarico in corso"
+    }
+  },
+  "notify": {
+    "accepted": {
+      "body": "Un traslocatore ha accettato il tuo trasloco programmato. Partirà a breve.",
+      "shortBody": "Un traslocatore ha accettato la tua richiesta di trasloco!",
+      "shortTitle": "Traslocatore confermato",
+      "title": "Un traslocatore ha accettato il tuo trasloco! ✅"
+    },
+    "arrived": {
+      "body": "Il tuo traslocatore è arrivato all’indirizzo di ritiro. Raggiungilo.",
+      "shortBody": "Il tuo traslocatore è arrivato all’indirizzo di ritiro.",
+      "shortTitle": "Traslocatore arrivato",
+      "title": "Il tuo traslocatore è arrivato! 🚛"
+    },
+    "arrivedDestination": {
+      "body": "Il tuo traslocatore è arrivato all’indirizzo di consegna.",
+      "shortBody": "Il tuo traslocatore è arrivato a destinazione.",
+      "shortTitle": "Arrivato a destinazione",
+      "title": "Arrivato a destinazione! 🏠"
+    },
+    "cancelled": {
+      "shortBody": "Il traslocatore ha annullato questo trasloco.",
+      "shortTitle": "Trasloco annullato"
+    },
+    "completed": {
+      "body": "Il tuo trasloco è stato completato.",
+      "shortBody": "Il tuo trasloco è stato completato! Lascia una recensione.",
+      "shortTitle": "Trasloco completato",
+      "title": "Trasloco completato! ✅"
+    },
+    "enRoute": {
+      "body": "Il tuo traslocatore sta raggiungendo l’indirizzo di ritiro.",
+      "shortBody": "Il tuo traslocatore è in viaggio verso il tuo indirizzo di ritiro.",
+      "shortTitle": "Traslocatore in arrivo",
+      "title": "Il traslocatore è in arrivo! 🚚"
+    },
+    "inTransit": {
+      "body": "Le tue cose vengono trasportate verso la destinazione.",
+      "shortBody": "Le tue cose sono in viaggio verso la destinazione.",
+      "shortTitle": "In transito",
+      "title": "In viaggio! 🛣️"
+    },
+    "loading": {
+      "body": "Il tuo traslocatore ha iniziato a caricare le tue cose.",
+      "shortBody": "Le tue cose vengono caricate.",
+      "shortTitle": "Carico iniziato",
+      "title": "Carico iniziato 📦"
+    },
+    "paymentDue": {
+      "body": "Il tuo trasloco sta per concludersi: completa il pagamento.",
+      "shortBody": "Il tuo trasloco è concluso: conferma il pagamento.",
+      "shortTitle": "Pagamento da effettuare",
+      "title": "Pagamento da effettuare 💶"
+    },
+    "unloading": {
+      "body": "Le tue cose vengono scaricate a destinazione.",
+      "shortBody": "Le tue cose vengono scaricate.",
+      "shortTitle": "Scarico in corso",
+      "title": "Scarico delle tue cose 📦"
+    },
+    "withdrawn": {
+      "body": "Il traslocatore si è ritirato dal tuo trasloco. Ora è disponibile per altri traslocatori.",
+      "title": "Traslocatore ritirato"
     }
   },
   "order": {
@@ -66,9 +207,17 @@
     }
   },
   "phase": {
+    "arrived": {
+      "subtitle": "Incontralo all’indirizzo di ritiro",
+      "title": "Il tuo traslocatore è arrivato!"
+    },
     "arrivedDestination": {
       "subtitle": "Il traslocatore ha raggiunto l’indirizzo di consegna",
       "title": "Arrivato a destinazione!"
+    },
+    "awaitingAccept": {
+      "subtitle": "La tua richiesta è stata inviata. Il traslocatore risponderà a breve.",
+      "title": "In attesa che il traslocatore accetti"
     },
     "awaitingPayment": {
       "subtitle": "Paga il traslocatore e conferma qui sotto",
@@ -85,9 +234,11 @@
       "subtitle": "Annullato dal traslocatore"
     },
     "completed": {
-      "label": "Trasloco completato"
+      "label": "Trasloco completato",
+      "title": "Trasloco completato!"
     },
     "inTransit": {
+      "body": "Le tue cose sono in viaggio",
       "subtitle": "Le tue cose sono in viaggio",
       "title": "In viaggio verso la destinazione"
     },
@@ -98,6 +249,9 @@
     "moverArrived": {
       "subtitle": "Incontralo all’indirizzo di ritiro",
       "title": "Il tuo traslocatore è arrivato!"
+    },
+    "moverEnRoute": {
+      "title": "Il traslocatore è in arrivo"
     },
     "paid": {
       "subtitle": "In attesa che il traslocatore chiuda il trasloco",

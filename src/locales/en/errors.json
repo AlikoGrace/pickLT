@@ -45,7 +45,7 @@
     "invite": {
       "accountClash": "An account already exists for this email. Ask an admin to promote it instead.",
       "alreadyAccepted": "That invitation was already accepted. Suspend the admin account instead.",
-      "emailExists": "That email already has a PickLte account. Promote it from the Users page instead of inviting.",
+      "emailExists": "That email already has a PickLT account. Promote it from the Users page instead of inviting.",
       "emailIsAdmin": "That email already belongs to an admin.",
       "expired": "This invitation has expired. Ask an admin for a new link.",
       "idRequired": "An invitation id is required.",
@@ -214,6 +214,7 @@
     "notAuthorized": "Not authorized for this move",
     "notAvailable": "This move is not available for acceptance",
     "notCancellable": "This move can no longer be cancelled ({{stage}}). Your items may already be in transit — please contact your mover directly.",
+    "notCancellableUnknownStage": "This move can no longer be cancelled. Your items may already be in transit — please contact your mover directly.",
     "notFound": "Move not found",
     "notReschedulable": "Cannot reschedule a move with status “{{status}}”",
     "rescheduleFailed": "Failed to reschedule",

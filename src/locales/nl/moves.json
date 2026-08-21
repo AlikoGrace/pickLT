@@ -1,5 +1,45 @@
 {
+  "action": {
+    "cancel": {
+      "cta": "Verhuizing annuleren"
+    },
+    "reschedule": {
+      "cta": "Verhuizing verzetten"
+    }
+  },
+  "available": {
+    "withinRadiusCount_one": "{{count}} verhuizing binnen 30 km",
+    "withinRadiusCount_other": "{{count}} verhuizingen binnen 30 km"
+  },
+  "booking": {
+    "code": {
+      "label": "Boekingscode"
+    },
+    "title": "Boekingsgegevens"
+  },
+  "cancelConfirm": {
+    "cancelling": {
+      "cta": "Annuleren…"
+    },
+    "confirm": {
+      "cta": "Ja, annuleren"
+    },
+    "keep": {
+      "cta": "Verhuizing behouden"
+    },
+    "subtitle": "Je verhuizer is al onderweg. Weet je zeker dat je wilt annuleren? Deze actie kan niet ongedaan worden gemaakt.",
+    "title": "Deze verhuizing annuleren?",
+    "window": "Weet je zeker dat je deze verhuizing wilt annuleren? Dit kan niet ongedaan worden gemaakt."
+  },
   "card": {
+    "category": {
+      "instant": {
+        "label": "Direct"
+      },
+      "scheduled": {
+        "label": "Gepland"
+      }
+    },
     "route": {
       "dropoffFallback": {
         "label": "Bezorglocatie"
@@ -11,6 +51,69 @@
     "title": {
       "generic": {
         "label": "Verhuizing"
+      }
+    },
+    "typeAndCategory": {
+      "light": {
+        "instant": {
+          "subtitle": "Kleine verhuizing · Direct"
+        },
+        "scheduled": {
+          "subtitle": "Kleine verhuizing · Gepland"
+        }
+      },
+      "premium": {
+        "instant": {
+          "subtitle": "Premium verhuizing · Direct"
+        },
+        "scheduled": {
+          "subtitle": "Premium verhuizing · Gepland"
+        }
+      },
+      "regular": {
+        "instant": {
+          "subtitle": "Gewone verhuizing · Direct"
+        },
+        "scheduled": {
+          "subtitle": "Gewone verhuizing · Gepland"
+        }
+      }
+    },
+    "typeAndDate": {
+      "light": {
+        "subtitle": "Kleine verhuizing · {{date}}"
+      },
+      "premium": {
+        "subtitle": "Premium verhuizing · {{date}}"
+      },
+      "regular": {
+        "subtitle": "Gewone verhuizing · {{date}}"
+      }
+    },
+    "typeCategoryDate": {
+      "light": {
+        "instant": {
+          "subtitle": "Kleine verhuizing · Direct · {{date}}"
+        },
+        "scheduled": {
+          "subtitle": "Kleine verhuizing · Gepland · {{date}}"
+        }
+      },
+      "premium": {
+        "instant": {
+          "subtitle": "Premium verhuizing · Direct · {{date}}"
+        },
+        "scheduled": {
+          "subtitle": "Premium verhuizing · Gepland · {{date}}"
+        }
+      },
+      "regular": {
+        "instant": {
+          "subtitle": "Gewone verhuizing · Direct · {{date}}"
+        },
+        "scheduled": {
+          "subtitle": "Gewone verhuizing · Gepland · {{date}}"
+        }
       }
     }
   },
@@ -31,6 +134,9 @@
       "label": "In afwachting"
     }
   },
+  "createdAt": {
+    "label": "Aangemaakt"
+  },
   "detail": {
     "additionalServices": {
       "title": "Extra diensten"
@@ -40,6 +146,12 @@
     },
     "arrivalWindow": {
       "label": "Aankomsttijdvak"
+    },
+    "category": {
+      "label": "Categorie"
+    },
+    "client": {
+      "title": "Klant"
     },
     "distance": {
       "label": "Afstand"
@@ -62,6 +174,15 @@
     "itemLine": {
       "label": "{{qty}} x {{label}}"
     },
+    "itemLineReversed": {
+      "label": "{{label}} × {{qty}}"
+    },
+    "itemQuantity": {
+      "label": "{{label}} × {{qty}}"
+    },
+    "items": {
+      "label": "Spullen"
+    },
     "moveDate": {
       "label": "Verhuisdatum"
     },
@@ -70,6 +191,9 @@
     },
     "moveItems": {
       "title": "Verhuisspullen"
+    },
+    "moveStatus": {
+      "label": "Status van de verhuizing"
     },
     "packingService": {
       "label": "Inpakservice"
@@ -95,8 +219,42 @@
     "type": {
       "label": "Type"
     },
+    "typeAndCategory": {
+      "light": {
+        "instant": {
+          "value": "Klein · Direct"
+        },
+        "scheduled": {
+          "value": "Klein · Gepland"
+        }
+      },
+      "premium": {
+        "instant": {
+          "value": "Premium · Direct"
+        },
+        "scheduled": {
+          "value": "Premium · Gepland"
+        }
+      },
+      "regular": {
+        "instant": {
+          "value": "Gewoon · Direct"
+        },
+        "scheduled": {
+          "value": "Gewoon · Gepland"
+        }
+      }
+    },
     "unit": {
       "label": "Appartement"
+    }
+  },
+  "filter": {
+    "count": {
+      "badge": "({{value}})"
+    },
+    "empty": {
+      "helper": "Probeer een ander filter."
     }
   },
   "itemCount_one": "{{count}} voorwerp",
@@ -115,6 +273,31 @@
       "label": "Gepland"
     }
   },
+  "moveCount_one": "{{count}} verhuizing",
+  "moveCount_other": "{{count}} verhuizingen",
+  "mover": {
+    "experience": {
+      "label": "Ervaring"
+    },
+    "languages": {
+      "label": "Talen"
+    },
+    "verified": {
+      "badge": "Geverifieerde verhuizer"
+    }
+  },
+  "moverCount_one": "{{count}} verhuizer",
+  "moverCount_other": "{{count}} verhuizers",
+  "notify": {
+    "cancelledByClient": {
+      "body": "De klant heeft deze verhuizing geannuleerd.",
+      "title": "Verhuizing geannuleerd door klant ❌"
+    },
+    "moverWithdrawn": {
+      "body": "De toegewezen verhuizer heeft zich teruggetrokken uit deze verhuizing.",
+      "title": "Verhuizer teruggetrokken"
+    }
+  },
   "payment": {
     "method": {
       "label": "Betaalmethode"
@@ -129,8 +312,17 @@
     "arrivedDestination": {
       "label": "Aangekomen"
     },
+    "assigned": {
+      "label": "Toegewezen"
+    },
     "awaitingPayment": {
       "label": "Wacht op betaling"
+    },
+    "booked": {
+      "label": "Geboekt"
+    },
+    "cancelled": {
+      "label": "Geannuleerd"
     },
     "cancelledByClient": {
       "label": "Geannuleerd"
@@ -141,14 +333,26 @@
     "completed": {
       "label": "Afgerond"
     },
+    "confirmedPayLater": {
+      "label": "Bevestigd - later betalen"
+    },
     "disputed": {
       "label": "Betwist"
+    },
+    "draft": {
+      "label": "Concept"
+    },
+    "inProgress": {
+      "label": "Bezig"
     },
     "inTransit": {
       "label": "Onderweg"
     },
     "loading": {
       "label": "Laden"
+    },
+    "moverAccepted": {
+      "label": "Verhuizer bevestigd"
     },
     "moverArrived": {
       "label": "Verhuizer gearriveerd"
@@ -165,8 +369,17 @@
     "pending": {
       "label": "In afwachting"
     },
+    "pendingPayment": {
+      "label": "Betaling in behandeling"
+    },
+    "unknown": {
+      "label": "Onbekend"
+    },
     "unloading": {
       "label": "Uitladen"
     }
+  },
+  "summary": {
+    "title": "Overzicht"
   }
 }

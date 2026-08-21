@@ -1,4 +1,129 @@
 {
+  "appearance": {
+    "dark": {
+      "label": "Koyu mod",
+      "subtitle": "Gece gözünüzü daha az yorar"
+    },
+    "light": {
+      "label": "Açık mod",
+      "subtitle": "Klasik açık görünüm"
+    },
+    "system": {
+      "label": "Sistem varsayılanı",
+      "subtitle": "Cihaz ayarlarınızı izler"
+    },
+    "title": "Görünüm"
+  },
+  "changeEmail": {
+    "cta": "E-postayı güncelle",
+    "current": {
+      "label": "Mevcut: {{email}}"
+    },
+    "failed": {
+      "title": "E-posta adresi değiştirilemedi"
+    },
+    "googleNotice": {
+      "body": "Hesabınız Google ile giriş kullanıyor. E-posta adresi PickLT içinden değiştirilemez; Google Hesabınızdan güncelleyin.",
+      "title": "E-posta adresi Google tarafından yönetiliyor"
+    },
+    "helper": "E-posta adresinizi güncelleyin",
+    "helperLong": "Yeni adrese bir doğrulama e-postası gönderilecek.",
+    "label": "E-postayı değiştir",
+    "sent": {
+      "body": "Doğrulama e-postası gönderildi. Lütfen gelen kutunuzu kontrol edin."
+    },
+    "sentLong": "Doğrulama e-postası gönderildi. Lütfen gelen kutunuzu kontrol edip doğrulama bağlantısına tıklayın.",
+    "title": "E-postayı değiştir",
+    "updatedTo": {
+      "body": "E-posta adresiniz <1>{{email}}</1> olarak güncellendi"
+    }
+  },
+  "changePassword": {
+    "failed": {
+      "title": "Şifre güncellenemedi"
+    },
+    "googleNotice": {
+      "body": "Hesabınızda henüz bir şifre yok. Şifre belirlemek için oturumu kapatın ve giriş ekranındaki “Şifremi unuttum” seçeneğini kullanın.",
+      "cta": "Oturumu kapat ve şifreyi sıfırla",
+      "title": "Hesap Google ile giriş kullanıyor"
+    },
+    "mismatch": {
+      "error": "Şifreler eşleşmiyor."
+    },
+    "success": {
+      "message": "Şifreniz değiştirildi.",
+      "title": "Şifre güncellendi"
+    },
+    "title": "Şifre değiştir"
+  },
+  "changePhone": {
+    "current": {
+      "label": "Mevcut: {{phone}}"
+    },
+    "failed": {
+      "title": "Telefon numarası değiştirilemedi"
+    },
+    "helper": "Telefon numaranızı güncelleyin",
+    "helperLong": "Yeni numarayı doğrulamak için bir OTP kodu gönderilecek.",
+    "label": "Telefonu değiştir",
+    "title": "Telefon numarasını değiştir"
+  },
+  "deleteAccount": {
+    "confirm": {
+      "body": "Bu işlem kalıcıdır ve geri alınamaz. Tüm verileriniz, taşınmalarınız ve tercihleriniz silinecek.",
+      "title": "Hesabınızı silmek istediğinizden emin misiniz?"
+    }
+  },
+  "dobSheet": {
+    "title": "Doğum tarihini seçin"
+  },
+  "editName": {
+    "helper": "Adınızı güncelleyin",
+    "label": "Adı düzenle",
+    "name": {
+      "placeholder": "Ad ve soyadınız"
+    },
+    "title": "Adı düzenle"
+  },
+  "field": {
+    "confirmPassword": {
+      "label": "Yeni şifreyi onaylayın",
+      "placeholder": "Yeni şifreyi tekrar girin"
+    },
+    "currentPassword": {
+      "label": "Mevcut şifre",
+      "placeholder": "Mevcut şifrenizi girin"
+    },
+    "dateOfBirth": {
+      "label": "Doğum tarihi",
+      "placeholder": "Doğum tarihinizi seçin"
+    },
+    "email": {
+      "label": "E-posta"
+    },
+    "fullName": {
+      "label": "Ad soyad"
+    },
+    "gender": {
+      "label": "Cinsiyet",
+      "placeholder": "Cinsiyet seçin"
+    },
+    "newEmail": {
+      "label": "Yeni e-posta",
+      "placeholder": "ad@ornek.com"
+    },
+    "newPassword": {
+      "label": "Yeni şifre"
+    },
+    "password": {
+      "minHelper": "En az 8 karakter"
+    },
+    "phone": {
+      "label": "Telefon numarası",
+      "numberPlaceholder": "123 456 7890",
+      "placeholder": "Telefon numarası ekleyin"
+    }
+  },
   "gender": {
     "female": {
       "option": "Kadın"
@@ -10,10 +135,17 @@
       "option": "Diğer"
     }
   },
+  "genderSheet": {
+    "title": "Cinsiyet seçin"
+  },
+  "help": {
+    "helper": "Yardım ve destek alın"
+  },
   "helpCenter": {
     "header": {
       "title": "Yardım merkezi"
     },
+    "helper": "Yardım ve destek alın",
     "search": {
       "a11y": "Yardım makalelerinde ara",
       "placeholder": "Konum ara.."
@@ -29,12 +161,24 @@
     "suggested": "Önerilen",
     "title": "Dil"
   },
+  "logout": {
+    "confirm": {
+      "body": "Çıkış yapmadan önce çalışmanızı kaydettiğinizden veya devam eden işlemleri tamamladığınızdan emin olun.",
+      "title": "Çıkış yapmak istediğinizden emin misiniz?"
+    }
+  },
   "menu": {
     "appearance": {
       "label": "Görünüm"
     },
+    "changeEmail": {
+      "label": "E-postayı değiştir"
+    },
     "changePassword": {
       "label": "Şifre değiştir"
+    },
+    "changePhone": {
+      "label": "Telefonu değiştir"
     },
     "deleteAccount": {
       "label": "Hesabı sil"
@@ -67,20 +211,134 @@
       "label": "Kartınız"
     }
   },
+  "name": {
+    "updated": {
+      "success": "Adınız güncellendi"
+    }
+  },
+  "newEmail": {
+    "label": "Yeni e-posta adresi",
+    "placeholder": "yeni@ornek.com"
+  },
+  "newPhone": {
+    "label": "Yeni telefon numarası",
+    "placeholder": "+491234567890"
+  },
+  "notifications": {
+    "helper": "Uyarıları ve bildirimleri yapılandırın",
+    "rows": {
+      "appUpdates": {
+        "label": "Uygulama güncellemeleri"
+      },
+      "cashback": {
+        "label": "Nakit iade"
+      },
+      "notifications": {
+        "label": "Bildirimler"
+      },
+      "payments": {
+        "label": "Ödemeler"
+      },
+      "sound": {
+        "label": "Ses"
+      },
+      "specialOffers": {
+        "label": "Özel fırsatlar"
+      },
+      "vibrate": {
+        "label": "Titreşim"
+      }
+    },
+    "title": "Bildirimler"
+  },
+  "password": {
+    "confirm": {
+      "label": "Şifreyi onaylayın"
+    },
+    "current": {
+      "label": "Mevcut şifre"
+    },
+    "new": {
+      "label": "Yeni şifre"
+    },
+    "submit": {
+      "cta": "Şifreyi güncelle"
+    },
+    "title": "Şifrenizi güncelleyin"
+  },
+  "paymentMethods": {
+    "helper": "Ödeme seçeneklerinizi yönetin",
+    "label": "Ödeme yöntemleri"
+  },
+  "personalData": {
+    "nameRequired": {
+      "message": "Lütfen adınızı girin.",
+      "title": "Ad soyad gerekli"
+    },
+    "saveFailed": {
+      "title": "Profil kaydedilemedi"
+    },
+    "title": "Kişisel veriler"
+  },
+  "phone": {
+    "updated": {
+      "success": "Telefon numarası güncellendi ve doğrulandı"
+    }
+  },
+  "photo": {
+    "updated": {
+      "success": "Fotoğraf güncellendi"
+    }
+  },
+  "privacy": {
+    "helper": "Verilerinizi ve güvenliğinizi yönetin",
+    "label": "Gizlilik ve güvenlik"
+  },
   "privacyPolicy": {
     "header": {
       "title": "Gizlilik ve politika"
     }
   },
+  "privacySecurity": {
+    "helper": "Verilerinizi ve güvenliğinizi yönetin",
+    "label": "Gizlilik ve güvenlik"
+  },
   "section": {
+    "account": {
+      "title": "Hesap"
+    },
     "general": {
       "title": "Genel"
+    },
+    "moves": {
+      "title": "Taşınmalar"
     },
     "payments": {
       "title": "Ödemeler"
     },
+    "personal": {
+      "title": "Kişisel bilgiler"
+    },
     "preferences": {
       "title": "Tercihler"
+    },
+    "support": {
+      "title": "Destek"
     }
+  },
+  "security": {
+    "biometricId": {
+      "label": "Biyometrik kimlik"
+    },
+    "faceId": {
+      "label": "Face ID"
+    },
+    "googleAuthenticator": {
+      "label": "Google Authenticator"
+    },
+    "rememberPassword": {
+      "label": "Şifreyi hatırla"
+    },
+    "title": "Güvenlik"
   }
 }

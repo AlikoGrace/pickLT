@@ -1,1 +1,1052 @@
-{}
+{
+  "about": {
+    "hero": {
+      "subtitle": "PickLT ist eine Plattform für Umzugsdienstleistungen. Sie beschreiben Ihren Umzug, vergleichen Umzugsprofis und buchen den, den Sie möchten — für Wohnungen, Büros und einzelne Gegenstände in ganz Europa.",
+      "title": "👋 Über uns."
+    }
+  },
+  "account": {
+    "clientType": {
+      "label": "Kundenkonto"
+    },
+    "moverType": {
+      "label": "Umzugsprofi-Konto"
+    },
+    "myMoves": {
+      "helper": "Alle Ihre Umzüge ansehen und verfolgen"
+    },
+    "signedOut": {
+      "subtitle": "Melden Sie sich an, um Ihr Profil zu verwalten, Ihre Umzüge zu sehen und mehr.",
+      "title": "Melden Sie sich an, um Ihr Konto zu sehen"
+    },
+    "version": {
+      "label": "pickLT v{{version}}"
+    }
+  },
+  "authGate": {
+    "redirecting": {
+      "label": "Weiterleitung zur Anmeldung…"
+    }
+  },
+  "billing": {
+    "addPayout": {
+      "cta": "Auszahlungsmethode hinzufügen"
+    },
+    "payoutMethods": {
+      "body": "Fügen Sie eine Auszahlungsmethode hinzu, um Zahlungen von PickLT zu erhalten. Auszahlungen gehen an die unten eingerichtete Methode.",
+      "title": "Auszahlungsmethoden"
+    },
+    "title": "Zahlungen & Auszahlungen"
+  },
+  "checkout": {
+    "confirmAndPay": {
+      "cta": "Bestätigen und {{amount}} bezahlen"
+    },
+    "confirmMove": {
+      "cta": "Umzug bestätigen · {{amount}}"
+    },
+    "editHint": {
+      "helper": "Klicken Sie auf einen Abschnitt, um Ihre Umzugsdetails zu bearbeiten."
+    },
+    "pay": {
+      "title": "Bestätigen und bezahlen"
+    },
+    "title": "Umzug bestätigen",
+    "yourMove": {
+      "title": "Ihr Umzug"
+    }
+  },
+  "contact": {
+    "address": {
+      "label": "🗺 ADRESSE",
+      "value": "Photo booth tattooed prism, portland taiyaki hoodie neutra typewriter"
+    },
+    "email": {
+      "label": "💌 E-MAIL"
+    },
+    "fullName": {
+      "placeholder": "Max Mustermann"
+    },
+    "message": {
+      "label": "Nachricht"
+    },
+    "phone": {
+      "label": "☎ TELEFON"
+    },
+    "socials": {
+      "label": "🌏 SOCIAL MEDIA"
+    },
+    "submit": {
+      "cta": "Nachricht senden"
+    },
+    "title": "Kontakt"
+  },
+  "footer": {
+    "company": {
+      "about": "Über uns",
+      "careers": "Karriere",
+      "locations": "Standorte",
+      "title": "Unternehmen"
+    },
+    "copyright": "© {{year}} PickLT. Alle Rechte vorbehalten.",
+    "legal": {
+      "title": "Rechtliches"
+    },
+    "solutions": {
+      "commercial": "Firmenumzüge",
+      "localMoving": "Nahumzüge",
+      "longDistance": "Fernumzüge",
+      "packing": "Packservice",
+      "storage": "Einlagerung",
+      "title": "Leistungen"
+    },
+    "support": {
+      "contact": "Kontakt",
+      "faq": "Häufige Fragen",
+      "quote": "Angebot einholen",
+      "title": "Support"
+    },
+    "tagline": "Umzugsprofis buchen — für Wohnungen, Büros und Umzugsgut in ganz Europa."
+  },
+  "home": {
+    "hero": {
+      "imageAlt": "Umzugsprofis tragen Kartons in ein neues Zuhause",
+      "subtitle": "Geprüfte Umzugsprofis für die großen Momente im Leben.",
+      "title": "Ein stressfreier Umzug – jedes Mal."
+    },
+    "moverBanner": {
+      "subtitle": "Melden Sie sich an, um Umzüge anzunehmen",
+      "title": "Sie sind Umzugsprofi?"
+    },
+    "moves": {
+      "empty": "Noch keine Umzüge. Buchen Sie Ihren ersten Umzug!",
+      "emptyFiltered": "Keine Umzüge unter {{status}} gefunden.",
+      "emptyScheduled": "Keine geplanten Umzüge gefunden.",
+      "signedOut": {
+        "cta": "Anmelden und loslegen",
+        "subtitle": "Melden Sie sich an, um Ihre Umzüge zu verfolgen, Buchungsdetails zu sehen und Ihre Umzugstermine zu verwalten.",
+        "title": "Hier erscheinen Ihre Umzüge"
+      },
+      "subtitle": "Alle Ihre Umzüge verfolgen",
+      "tab": {
+        "all": {
+          "label": "Alle Umzüge"
+        },
+        "cancelled": {
+          "label": "Storniert"
+        },
+        "completed": {
+          "label": "Abgeschlossen"
+        },
+        "inProgress": {
+          "label": "Läuft"
+        },
+        "pending": {
+          "label": "Ausstehend"
+        },
+        "scheduled": {
+          "label": "Geplant"
+        }
+      },
+      "title": "Ihre Umzüge"
+    },
+    "welcomeBack": {
+      "label": "Willkommen zurück, {{name}}!"
+    }
+  },
+  "instant": {
+    "cardInApp": {
+      "helper": "Dieser Umzug wird per Karte bezahlt. Öffnen Sie die PickLT App, um die Zahlung abzuschließen — dort wird Ihre hinterlegte Karte belastet, bar ist nichts fällig."
+    },
+    "chat": {
+      "comingSoon": "Die Chat-Funktion kommt bald!"
+    },
+    "inventory": {
+      "next": {
+        "cta": "Fotos hinzufügen"
+      },
+      "subtitle": "Wählen Sie die Gegenstände aus, die umziehen sollen. So finden wir den passenden Umzugsprofi für Sie.",
+      "title": "Was ziehen Sie um?"
+    },
+    "loadFailed": {
+      "subtitle": "Die Umzugsdetails konnten nicht vom Server geladen werden."
+    },
+    "loading": {
+      "label": "Umzugsdetails werden geladen…"
+    },
+    "missingLocations": {
+      "subtitle": "Bitte wählen Sie Abhol- und Zieladresse, um fortzufahren.",
+      "title": "Fehlende Ortsangaben"
+    },
+    "photos": {
+      "helper": "Laden Sie Fotos der Gegenstände hoch, die umziehen sollen. So kommt der Umzugsprofi mit der richtigen Ausrüstung und hat ein klares Bild vom Auftrag.",
+      "next": {
+        "cta": "Umzugsprofis finden"
+      },
+      "subtitle": "Helfen Sie Ihrem Umzugsprofi bei der Vorbereitung",
+      "title": "Fotos hinzufügen"
+    },
+    "review": {
+      "comment": {
+        "placeholder": "Kommentar hinzufügen (optional)"
+      },
+      "prompt": "Wie war Ihre Erfahrung mit {{name}}?",
+      "promptUnnamed": "Wie war Ihre Erfahrung mit Ihrem Umzugsprofi?",
+      "star": {
+        "a11y_one": "{{count}} Stern geben",
+        "a11y_other": "{{count}} Sterne geben"
+      },
+      "submit": {
+        "cta": "Bewertung absenden"
+      },
+      "thanks": {
+        "subtitle": "Ihre Bewertung wurde übermittelt.",
+        "title": "Vielen Dank!"
+      }
+    }
+  },
+  "login": {
+    "asClient": {
+      "cta": "Als Kunde anmelden"
+    },
+    "asMover": {
+      "cta": "Als Umzugsprofi anmelden"
+    },
+    "clientBadge": {
+      "label": "👤 Kundenkonto"
+    },
+    "moverBadge": {
+      "label": "🚚 Umzugsprofi-Konto"
+    },
+    "phoneRequired": {
+      "helper": "Nach der Anmeldung ist eine Verifizierung Ihrer Telefonnummer erforderlich"
+    },
+    "phoneVerify": {
+      "subtitle": "Wir müssen Ihre Telefonnummer verifizieren, um die Anmeldung abzuschließen."
+    },
+    "resumeMove": {
+      "helper": "Melden Sie sich an, um mit Ihrem Umzug fortzufahren. Ihr Fortschritt wurde gespeichert."
+    },
+    "switchToClient": {
+      "label": "Sie sind Kunde?"
+    },
+    "switchToMover": {
+      "label": "Sie sind Umzugsprofi?"
+    },
+    "verifyAndSignIn": {
+      "cta": "Verifizieren & anmelden"
+    }
+  },
+  "moveChoice": {
+    "instant": {
+      "cta": "Loslegen",
+      "eta": "Umzugsprofi kommt in 15–30 Min.",
+      "subtitle": "Sie müssen sofort umziehen? Wir finden umgehend einen Umzugsprofi in Ihrer Nähe.",
+      "tracking": "Verfolgung in Echtzeit"
+    },
+    "scheduled": {
+      "cta": "Umzug planen",
+      "date": "Wunschtermin wählen",
+      "subtitle": "Planen Sie voraus und legen Sie Datum und Uhrzeit für Ihren Umzug fest.",
+      "title": "Für später buchen",
+      "window": "Zeitfenster für die Ankunft wählen"
+    },
+    "subtitle": "Wählen Sie die Option, die am besten zu Ihnen passt",
+    "summary": {
+      "title": "Ihre Umzugsdetails"
+    },
+    "title": "Wie möchten Sie umziehen?"
+  },
+  "moveDetails": {
+    "header": {
+      "subtitle": "{{moveType}}-Umzug · {{date}}"
+    },
+    "mover": {
+      "title": "Ihr Umzugsprofi"
+    },
+    "notFound": {
+      "subtitle": "Dieser Umzug wurde möglicherweise entfernt oder der Link ist ungültig."
+    },
+    "reschedule": {
+      "dateTime": {
+        "label": "Neuer Termin"
+      }
+    }
+  },
+  "mover": {
+    "acceptMove": {
+      "cta": "Umzug annehmen"
+    },
+    "accepted": {
+      "helper": "Sie haben diesen Umzug angenommen. Tippen Sie auf „Route starten“, sobald Sie bereit sind, damit der Kunde weiß, dass Sie unterwegs sind."
+    },
+    "activeBadge": {
+      "label": "Aktiver Umzugsprofi"
+    },
+    "activeMove": {
+      "advance": {
+        "cta": "Markieren als: {{phase}}"
+      },
+      "cancelledByClient": {
+        "title": "Umzug vom Kunden storniert"
+      },
+      "empty": {
+        "subtitle": "Nehmen Sie eine Umzugsanfrage an, um sie hier zu verfolgen.",
+        "title": "Kein aktiver Umzug"
+      },
+      "etaToPickup": {
+        "label": "~{{minutes}} Min. bis zur Abholung"
+      },
+      "proximity": {
+        "helper": "Sie müssen sich im Umkreis von 100 m der Abholadresse befinden, um die Ankunft zu melden ({{distance}} m entfernt)"
+      }
+    },
+    "additionalServicesCount_one": "+{{count}} Leistung",
+    "additionalServicesCount_other": "+{{count}} Leistungen",
+    "availableMoves": {
+      "empty": {
+        "subtitle": "Derzeit keine geplanten Umzüge im Umkreis von 30 km. Wir prüfen automatisch alle 30 Sekunden.",
+        "title": "Keine Umzüge verfügbar"
+      },
+      "error": {
+        "title": "Umzüge konnten nicht geladen werden"
+      },
+      "loading": {
+        "label": "Verfügbare Umzüge in Ihrer Nähe werden gesucht…"
+      }
+    },
+    "backToDashboard": {
+      "cta": "Zurück zum Dashboard"
+    },
+    "browseAvailable": {
+      "cta": "Verfügbare Umzüge durchsuchen"
+    },
+    "clientContact": {
+      "title": "Kontakt zum Kunden"
+    },
+    "crew": {
+      "addFirst": {
+        "cta": "Erstes Mitglied hinzufügen"
+      },
+      "addMember": {
+        "cta": "Mitglied hinzufügen"
+      },
+      "addModal": {
+        "title": "Neues Teammitglied hinzufügen"
+      },
+      "editModal": {
+        "title": "Teammitglied bearbeiten"
+      },
+      "empty": {
+        "subtitle": "Fügen Sie Ihr erstes Teammitglied hinzu, um Ihr Team zu verwalten.",
+        "title": "Noch keine Teammitglieder"
+      },
+      "role": {
+        "label": "Rolle"
+      },
+      "subtitle": "Verwalten Sie Ihre Teammitglieder",
+      "title": "Mein Team"
+    },
+    "crewSize": {
+      "label": "{{crew}} Umzugsprofis"
+    },
+    "earnings": {
+      "average": {
+        "label": "Durchschnitt pro Umzug"
+      },
+      "breakdown": {
+        "title": "Aufschlüsselung"
+      },
+      "empty": "In diesem Zeitraum noch kein Verdienst",
+      "error": {
+        "title": "Verdienst konnte nicht geladen werden"
+      },
+      "label": "Verdienst",
+      "loading": "Verdienst wird geladen…",
+      "movesCompleted": {
+        "label": "Abgeschlossene Umzüge"
+      },
+      "payout": {
+        "helper": "Auszahlungen werden wöchentlich verarbeitet"
+      },
+      "payoutAvailable": {
+        "label": "Zur Auszahlung verfügbar"
+      },
+      "period": {
+        "month": {
+          "caption": "diesen Monat",
+          "label": "Dieser Monat"
+        },
+        "today": {
+          "caption": "heute",
+          "label": "Heute"
+        },
+        "week": {
+          "caption": "diese Woche",
+          "label": "Diese Woche"
+        },
+        "year": {
+          "caption": "dieses Jahr",
+          "label": "Dieses Jahr"
+        }
+      },
+      "refresh": {
+        "a11y": "Aktualisieren"
+      },
+      "requestPayout": {
+        "cta": "Auszahlung anfordern"
+      },
+      "subtitle": "Behalten Sie Einnahmen und Leistung im Blick",
+      "title": "Verdienst",
+      "total": {
+        "label": "Gesamtverdienst"
+      }
+    },
+    "experienceYears_one": "{{count}} Jahr",
+    "experienceYears_other": "{{count}} Jahre",
+    "field": {
+      "businessStreet": {
+        "label": "Geschäftsadresse, Straße (optional)",
+        "placeholder": "Straße und Hausnummer"
+      },
+      "city": {
+        "helper": "Die Stadt, in der Sie überwiegend als Umzugsprofi tätig sind"
+      },
+      "experience": {
+        "label": "Jahre Berufserfahrung *",
+        "placeholder": "z. B. 5"
+      },
+      "languages": {
+        "label": "Gesprochene Sprachen *"
+      },
+      "licenseNumber": {
+        "label": "Führerscheinnummer *",
+        "placeholder": "Geben Sie Ihre Führerscheinnummer ein"
+      },
+      "licensePhoto": {
+        "a11y": "Vorschau des Führerscheins",
+        "cta": "Laden Sie ein Foto Ihres Führerscheins hoch",
+        "helper": "Ein scharfes Foto beschleunigt die Verifizierung",
+        "label": "Foto des Führerscheins"
+      },
+      "phone": {
+        "placeholder": "+49 123 456 7890"
+      },
+      "postcode": {
+        "label": "Postleitzahl (optional)",
+        "placeholder": "z. B. 10115"
+      },
+      "selfie": {
+        "a11y": "Vorschau des Selfies",
+        "cta": "Machen Sie ein scharfes Selfie oder laden Sie eines hoch",
+        "helper": "Für die Identitätsprüfung ist ein scharfes Selfie erforderlich",
+        "label": "Selfie *",
+        "retake": {
+          "cta": "Selfie erneut aufnehmen"
+        }
+      },
+      "ssn": {
+        "helper": "Verschlüsselt und ausschließlich zur steuerlichen Überprüfung verwendet",
+        "label": "Sozialversicherungsnummer *",
+        "placeholder": "Geben Sie Ihre Sozialversicherungsnummer ein"
+      },
+      "taxId": {
+        "helper": "Erforderlich für die Rechnungsstellung und die steuerliche Meldung",
+        "label": "Steuerliche Identifikationsnummer *",
+        "placeholder": "z. B. DE123456789"
+      },
+      "vatId": {
+        "helper": "Leer lassen, wenn Sie Kleinunternehmer ohne VAT ID sind",
+        "label": "VAT ID (USt-IdNr., optional)",
+        "placeholder": "z. B. DE123456789"
+      }
+    },
+    "goToActive": {
+      "cta": "Zum aktiven Umzug"
+    },
+    "homeTypeMoveType": {
+      "label": "{{homeType}} · {{moveType}}"
+    },
+    "jobDetails": {
+      "notFound": {
+        "subtitle": "Dieser Umzug wurde möglicherweise entfernt oder der Link ist ungültig."
+      },
+      "subheading": {
+        "label": "{{moveType}}-Umzug · {{date}}"
+      }
+    },
+    "moveTypeBadge": {
+      "label": "{{type}}-Umzug"
+    },
+    "notStartable": {
+      "body": "<0>Umzug noch nicht startbar.</0> Sie können diese Route am <1>{{when}}</1> starten (Route starten wird 5 Minuten vorher freigeschaltet)."
+    },
+    "notify": {
+      "newRequest": {
+        "body": "Sie haben eine neue Umzugsanfrage. Öffnen Sie die App, um Details zu sehen und anzunehmen.",
+        "title": "Neue Umzugsanfrage! 📋"
+      }
+    },
+    "onboarding": {
+      "done": {
+        "redirect": "Sie werden zu Ihrem Dashboard weitergeleitet…",
+        "subtitle": "Ihr Umzugsprofi-Profil wird geprüft. Wir benachrichtigen Sie, sobald es verifiziert ist.",
+        "title": "Profil übermittelt!"
+      },
+      "review": {
+        "experience": {
+          "title": "Erfahrung",
+          "value_one": "{{count}} Jahr",
+          "value_other": "{{count}} Jahre"
+        },
+        "languages": {
+          "value": "Sprachen: {{languages}}"
+        },
+        "license": {
+          "value": "Führerschein: {{number}}"
+        },
+        "licenseOk": "✓ Führerscheinfoto hochgeladen",
+        "location": {
+          "value": "{{city}}, {{country}}"
+        },
+        "personal": {
+          "value": "{{name}} · {{phone}}"
+        },
+        "selfieOk": "✓ Selfie hochgeladen",
+        "ssn": {
+          "value": "Sozialversicherungsnummer: ••••{{last4}}"
+        },
+        "subtitle": "Bitte prüfen Sie Ihre Angaben, bevor Sie sie absenden.",
+        "taxId": {
+          "value": "Steuernummer: {{taxId}}"
+        },
+        "title": "Profil prüfen",
+        "vehicle": {
+          "capacity": {
+            "value": "{{vehicleType}} · Kennz.: {{registration}} · {{capacity}}"
+          },
+          "value": "{{vehicleType}} · Kennz.: {{registration}}"
+        },
+        "vehicleName": {
+          "value": "{{brand}} {{model}} ({{year}})"
+        },
+        "verification": {
+          "title": "Verifizierung & Einsatzort"
+        }
+      },
+      "step": {
+        "experience": {
+          "label": "Erfahrung"
+        },
+        "personal": {
+          "label": "Persönliche Daten"
+        },
+        "review": {
+          "label": "Prüfen & absenden"
+        },
+        "vehicle": {
+          "label": "Fahrzeugdaten"
+        },
+        "verification": {
+          "label": "Verifizierung"
+        }
+      },
+      "submit": {
+        "cta": "Profil absenden"
+      },
+      "subtitle": "Tragen Sie Ihre Daten ein, um Umzüge annehmen zu können",
+      "title": "Vervollständigen Sie Ihr Umzugsprofi-Profil"
+    },
+    "request": {
+      "categoryAndType": {
+        "instant": {
+          "light": {
+            "subtitle": "Sofort · Kleiner Umzug"
+          },
+          "premium": {
+            "subtitle": "Sofort · Premium-Umzug"
+          },
+          "regular": {
+            "subtitle": "Sofort · Normaler Umzug"
+          }
+        },
+        "scheduled": {
+          "light": {
+            "subtitle": "Geplant · Kleiner Umzug"
+          },
+          "premium": {
+            "subtitle": "Geplant · Premium-Umzug"
+          },
+          "regular": {
+            "subtitle": "Geplant · Normaler Umzug"
+          }
+        }
+      },
+      "earnings": {
+        "label": "Ihr Verdienst"
+      },
+      "respondWithin": {
+        "label": "Antworten Sie innerhalb von <1>{{seconds}} s</1>"
+      },
+      "services": {
+        "label": "Leistungen: {{list}}"
+      },
+      "title": "Neue Umzugsanfrage!",
+      "viewDetails": {
+        "cta": "Alle Details anzeigen"
+      }
+    },
+    "roleLabel": "Umzugsprofi",
+    "scheduledMoves": {
+      "empty": {
+        "subtitle": "Angenommene geplante Umzüge erscheinen hier bis zu ihrem Umzugstermin.",
+        "title": "Keine geplanten Umzüge"
+      },
+      "subtitle": "Umzüge, die Ihnen zugewiesen sind und auf ihren geplanten Termin warten"
+    },
+    "section": {
+      "experience": {
+        "title": "Erfahrung & Stundensatz"
+      },
+      "verification": {
+        "helper": "Diese Angaben sind für die Identitätsprüfung erforderlich und werden sicher aufbewahrt.",
+        "title": "Verifizierung & Einsatzgebiet"
+      }
+    },
+    "settings": {
+      "payouts": {
+        "helper": "Auszahlungskonten verwalten",
+        "label": "Zahlungsmethoden"
+      },
+      "subtitle": "Verwalten Sie Ihr Konto und Ihre Einstellungen",
+      "version": {
+        "label": "pickLT Mover App v{{version}}"
+      }
+    },
+    "startRoute": {
+      "cta": "Route starten — ich bin unterwegs"
+    },
+    "tapForDetails": {
+      "helper": "Tippen, um Details zu sehen"
+    },
+    "tax": {
+      "empty": {
+        "subtitle": "Schließen Sie diesen Monat Umzüge ab, dann erscheint Ihre erste Abrechnung am 1.",
+        "title": "Noch keine Abrechnungen"
+      },
+      "helper1": "Ihre monatliche Abrechnung wird am 1. jedes Monats für den Vormonat erstellt.",
+      "helper2": "Bewahren Sie sie für Ihre Steuerberatung oder das Finanzamt auf.",
+      "openPdf": {
+        "cta": "PDF öffnen"
+      },
+      "preparing": {
+        "label": "Wird vorbereitet…"
+      },
+      "row": {
+        "summary_one": "{{count}} Umzug · brutto {{gross}} · netto {{net}}",
+        "summary_other": "{{count}} Umzüge · brutto {{gross}} · netto {{net}}"
+      },
+      "title": "Steuer- und Verdienstunterlagen"
+    },
+    "verification": {
+      "pending": {
+        "body": "Ihr Umzugsprofi-Profil wird geprüft. Sobald es verifiziert ist, können Sie Umzüge annehmen und alle Funktionen nutzen.",
+        "title": "Verifizierung ausstehend"
+      },
+      "rejected": {
+        "body": "Ihr Umzugsprofi-Profil wurde abgelehnt. Bitte wenden Sie sich an den Support oder aktualisieren Sie Ihr Profil in den Einstellungen.",
+        "title": "Profil abgelehnt"
+      },
+      "suspended": {
+        "body": "Ihr Konto wurde gesperrt. Bitte wenden Sie sich für weitere Informationen an den Support.",
+        "title": "Konto gesperrt"
+      }
+    },
+    "viewDetails": {
+      "cta": "Details anzeigen"
+    },
+    "withdraw": {
+      "cta": "Vom Umzug zurücktreten"
+    },
+    "withdrawConfirm": {
+      "body": "Sind Sie sicher? Der Umzug wird für andere Umzugsprofis freigegeben.",
+      "cta": "Ja, zurücktreten"
+    }
+  },
+  "moverDashboard": {
+    "findMoves": {
+      "cta": "Umzüge finden"
+    },
+    "manageCrew": {
+      "cta": "Team verwalten"
+    },
+    "quickActions": {
+      "title": "Schnellzugriff"
+    },
+    "recentMoves": {
+      "moveType": {
+        "label": "{{type}}-Umzug"
+      },
+      "title": "Letzte Umzüge"
+    },
+    "stat": {
+      "activeMoves": {
+        "label": "Aktive Umzüge"
+      },
+      "availableMoves": {
+        "label": "Verfügbare Umzüge"
+      },
+      "completedThisMonth": {
+        "label": "Diesen Monat abgeschlossen"
+      },
+      "crewMembers": {
+        "label": "Teammitglieder"
+      },
+      "earningsThisMonth": {
+        "label": "Verdienst diesen Monat"
+      },
+      "scheduledMoves": {
+        "label": "Geplante Umzüge"
+      }
+    },
+    "welcome": {
+      "subtitle": "Das steht heute an",
+      "title": "Willkommen zurück, {{name}}!"
+    }
+  },
+  "moverNav": {
+    "active": {
+      "label": "Aktiv"
+    },
+    "activeMove": {
+      "label": "Aktiver Umzug"
+    },
+    "availableMoves": {
+      "label": "Verfügbare Umzüge"
+    },
+    "crew": {
+      "label": "Team"
+    },
+    "dashboard": {
+      "label": "Dashboard"
+    },
+    "earnings": {
+      "label": "Verdienst"
+    },
+    "home": {
+      "label": "Start"
+    },
+    "moves": {
+      "label": "Umzüge"
+    },
+    "myCrew": {
+      "label": "Mein Team"
+    },
+    "scheduledMoves": {
+      "label": "Geplante Umzüge"
+    },
+    "taxDocuments": {
+      "label": "Steuerunterlagen"
+    }
+  },
+  "myMoves": {
+    "book": {
+      "cta": "Umzug buchen"
+    },
+    "empty": {
+      "filtered": {
+        "title": "Keine Umzüge: {{status}}"
+      },
+      "subtitle": "Buchen Sie Ihren ersten Umzug, dann erscheint er hier.",
+      "title": "Noch keine Umzüge"
+    },
+    "subtitle": "Verfolgen und verwalten Sie all Ihre Umzüge an einem Ort.",
+    "title": "Meine Umzüge"
+  },
+  "nav": {
+    "account": {
+      "a11y": "Zu Ihrem Konto",
+      "label": "Konto"
+    },
+    "backToMyMoves": {
+      "cta": "Zurück zu meinen Umzügen"
+    },
+    "becomeMover": {
+      "label": "Umzugsprofi werden"
+    },
+    "dashboard": {
+      "cta": "Dashboard",
+      "label": "Dashboard"
+    },
+    "earnings": {
+      "label": "Verdienst"
+    },
+    "home": {
+      "label": "Start"
+    },
+    "moverDashboard": {
+      "label": "Umzugsprofi-Dashboard"
+    },
+    "moves": {
+      "label": "Umzüge"
+    },
+    "myAccount": {
+      "label": "Mein Konto"
+    },
+    "myCrew": {
+      "label": "Mein Team"
+    },
+    "myMoves": {
+      "cta": "Meine Umzüge",
+      "label": "Meine Umzüge"
+    },
+    "navigateTo": {
+      "a11y": "Zu {{name}} navigieren"
+    },
+    "scheduled": {
+      "label": "Geplant"
+    },
+    "signInAsClient": {
+      "helper": "Als Kunde anmelden oder registrieren",
+      "label": "Kunde"
+    },
+    "signInAsMover": {
+      "helper": "Als Umzugsprofi anmelden oder registrieren",
+      "label": "Umzugsprofi"
+    }
+  },
+  "notFound": {
+    "cta": "Zurück zur Startseite",
+    "image": {
+      "a11y": "Seite nicht gefunden"
+    },
+    "title": "Die gesuchte Seite existiert nicht."
+  },
+  "notify": {
+    "empty": "Sie haben keine Benachrichtigungen."
+  },
+  "payDone": {
+    "booked": {
+      "title": "Buchung bestätigt!"
+    },
+    "confirmed": {
+      "title": "Ihr Umzug ist bestätigt!"
+    },
+    "confirmedPaid": {
+      "title": "Umzug bestätigt und bezahlt!"
+    },
+    "congrats": {
+      "title": "Herzlichen Glückwunsch 🎉"
+    },
+    "instant": {
+      "subtitle": "Ihr Sofort-Umzug"
+    },
+    "scheduled": {
+      "subtitle": "Ihre Umzugsbuchung"
+    },
+    "viewDetails": {
+      "cta": "Umzugsdetails anzeigen"
+    }
+  },
+  "preview": {
+    "complete": {
+      "cta": "Umzug abschließen"
+    },
+    "creating": {
+      "cta": "Ihr Umzug wird angelegt…"
+    },
+    "editPhotos": {
+      "cta": "Fotos bearbeiten"
+    },
+    "moveTypeBadge": {
+      "label": "{{moveType}}-Umzug"
+    }
+  },
+  "scheduledMoves": {
+    "book": {
+      "cta": "Geplanten Umzug buchen"
+    },
+    "empty": {
+      "filtered": {
+        "title": "Keine geplanten Umzüge: {{status}}"
+      },
+      "subtitle": "Buchen Sie einen geplanten Umzug, dann erscheint er hier.",
+      "title": "Noch keine geplanten Umzüge"
+    },
+    "subtitle": "Alle Ihre bevorstehenden und vergangenen geplanten Umzüge.",
+    "title": "Geplante Umzüge"
+  },
+  "search": {
+    "dropoff": {
+      "placeholder": "Wohin ziehen Sie?"
+    },
+    "from": {
+      "label": "Von"
+    },
+    "location": {
+      "a11y": "Nach einem Ort suchen",
+      "placeholder": "Wo ziehen Sie um?"
+    },
+    "mobile": {
+      "collapsed": {
+        "label": "Umzug planen"
+      },
+      "title": "Planen Sie Ihren Umzug",
+      "where": {
+        "placeholder": "Wohin?"
+      }
+    },
+    "pickup": {
+      "placeholder": "Woher ziehen Sie aus?"
+    },
+    "to": {
+      "label": "Nach"
+    }
+  },
+  "selectMover": {
+    "available": {
+      "title_one": "Verfügbare Umzugsprofis ({{count}})",
+      "title_other": "Verfügbare Umzugsprofis ({{count}})"
+    },
+    "capacity": {
+      "label": "{{volume}} m³ Ladevolumen"
+    },
+    "confirm": {
+      "cta": "Bestätigen · {{amount}}"
+    },
+    "creating": {
+      "cta": "Umzug wird angelegt…"
+    },
+    "empty": {
+      "subtitle": "Derzeit sind keine verifizierten Umzugsprofis in Ihrer Nähe online. Bitte versuchen Sie es in ein paar Minuten erneut.",
+      "title": "Keine Umzugsprofis verfügbar"
+    },
+    "error": {
+      "title": "Umzugsprofis konnten nicht gefunden werden"
+    },
+    "eta": {
+      "label_one": "~{{count}} Min. entfernt",
+      "label_other": "~{{count}} Min. entfernt"
+    },
+    "experienceYears_one": "{{count}} J. Erfahrung",
+    "experienceYears_other": "{{count}} J. Erfahrung",
+    "languages": {
+      "label": "Sprachen: {{languages}}"
+    },
+    "pricing": {
+      "disclaimer": "Der Endpreis kann je nach tatsächlichen Gegebenheiten abweichen.",
+      "helper_one": "Die Preise enthalten Grundgebühr, Entfernung ({{distance}}), Teamgröße, Ladevolumen des Fahrzeugs und das Handling für {{count}} Gegenstand.",
+      "helper_other": "Die Preise enthalten Grundgebühr, Entfernung ({{distance}}), Teamgröße, Ladevolumen des Fahrzeugs und das Handling für {{count}} Gegenstände.",
+      "title": "So entsteht der Preis:"
+    },
+    "searching": {
+      "subtitle": "Wir suchen verifizierte Umzugsprofis in der Nähe Ihrer Abholadresse",
+      "title": "Verfügbare Umzugsprofis werden gesucht…"
+    },
+    "selectFirst": {
+      "cta": "Umzugsprofi auswählen"
+    },
+    "title": "Umzugsprofi auswählen"
+  },
+  "seo": {
+    "about": {
+      "description": "PickLT ist eine Plattform für Umzugsdienstleistungen für Wohnungen, Büros und Umzugsgut in ganz Europa.",
+      "title": "Über uns"
+    },
+    "accountBilling": {
+      "description": "Verwalten Sie Ihre Zahlungen und Auszahlungen",
+      "title": "Konto – Zahlungen & Auszahlungen"
+    },
+    "accountPassword": {
+      "description": "Verwalten Sie Ihr Passwort",
+      "title": "Konto – Passwort"
+    },
+    "contact": {
+      "description": "Nehmen Sie Kontakt mit dem PickLT Team auf.",
+      "title": "Kontakt"
+    },
+    "default": {
+      "description": "PickLT – Ihre Plattform für zuverlässige Umzugsdienstleistungen",
+      "keywords": "PickLT, Umzug, Umzugsunternehmen, Umzugsprofi, Möbeltransport, Umzugsservice",
+      "title": "PickLT – klüger umziehen mit PickLT"
+    },
+    "forgotPassword": {
+      "description": "Setzen Sie Ihr Passwort zurück",
+      "title": "Passwort vergessen"
+    },
+    "home": {
+      "description": "Buchen Sie geprüfte Umzugsprofis für Wohnungen, Büros und Umzugsgut in ganz Europa.",
+      "title": "Startseite"
+    },
+    "titleTemplate": "%s – PickLT"
+  },
+  "sidebar": {
+    "blurb": "Entdecken Sie die herausragendsten Artikel zu allen Themen des Lebens. Schreiben Sie Ihre Geschichten und teilen Sie sie",
+    "getStarted": {
+      "cta": "Loslegen"
+    },
+    "search": {
+      "a11y": "Nach Artikeln suchen",
+      "placeholder": "Tippen und Enter drücken"
+    }
+  },
+  "signup": {
+    "clientSubtitle": "Erstellen Sie ein Konto, um Ihre Umzüge zu buchen",
+    "moverSubtitle": "Werden Sie Teil unseres Netzwerks professioneller Umzugsprofis",
+    "moverTitle": "Als Umzugsprofi mitmachen",
+    "phoneRequired": {
+      "helper": "Nach der Registrierung ist eine Verifizierung Ihrer Telefonnummer erforderlich"
+    },
+    "phoneVerify": {
+      "subtitle": "Wir müssen Ihre Telefonnummer verifizieren, um Ihre Registrierung abzuschließen."
+    },
+    "resumeMove": {
+      "helper": "Erstellen Sie ein Konto, um mit Ihrem Umzug fortzufahren. Ihr Fortschritt wurde gespeichert."
+    },
+    "verifyAndCreate": {
+      "cta": "Verifizieren & Konto erstellen"
+    }
+  },
+  "wizard": {
+    "finish": {
+      "cta": "Umzug anlegen"
+    },
+    "nextStep": {
+      "cta": "Weiter zu Schritt {{step}}"
+    },
+    "step1": {
+      "route": {
+        "title": "Ihre Umzugsroute"
+      },
+      "title": "SCHRITT 1 — UMZUGSDETAILS"
+    },
+    "step2": {
+      "title": "Abholadresse"
+    },
+    "step3": {
+      "title": "Zieladresse"
+    },
+    "step4": {
+      "subtitle": "Wählen Sie die Gegenstände aus, die umziehen sollen. So schätzen wir die passende Fahrzeuggröße und Teamgröße ein."
+    },
+    "step5": {
+      "dateInStep1": {
+        "helper": "Ihren Umzugstermin legen Sie in Schritt {{step}} fest"
+      },
+      "subtitle": "Wählen Sie, wann die Umzugsprofis eintreffen sollen."
+    },
+    "step6": {
+      "services": {
+        "helper": "Das sind Standardleistungen deutscher Umzugsunternehmen."
+      },
+      "subtitle": "Wählen Sie zusätzliche Leistungen und laden Sie Fotos der Gegenstände hoch.",
+      "title": "Zusätzliche Leistungen & Fotos"
+    },
+    "stepOf": {
+      "label": "Schritt {{current}} von {{total}}"
+    },
+    "stepTotal": {
+      "label": "/{{total}}"
+    }
+  }
+}

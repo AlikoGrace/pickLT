@@ -96,6 +96,16 @@ const LanguageDropdown: FC<Props> = ({
   const select = (next: Locale) => {
     if (next === locale) return
     document.cookie = `${LOCALE_COOKIE}=${next}; path=/; max-age=${LOCALE_COOKIE_MAX_AGE}; samesite=lax`
+    // D8: mirror the choice onto the user document so server-generated push
+    // notifications and the tax PDF come out in this language too. Fire and
+    // forget, and never awaited — the cookie above is what the user is about to
+    // see, and it must not wait on (or be undone by) a round trip. Signed-out
+    // visitors get a 204 from the route; nothing here needs to know.
+    void fetch('/api/user/locale', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ locale: next }),
+    }).catch(() => {})
     startTransition(() => router.refresh())
   }
 

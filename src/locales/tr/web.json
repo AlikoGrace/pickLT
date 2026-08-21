@@ -1,1 +1,1052 @@
-{}
+{
+  "about": {
+    "hero": {
+      "subtitle": "PickLT bir taşımacılık hizmetleri platformudur. Taşınmanızı anlatırsınız, nakliyecileri karşılaştırırsınız ve istediğinizi seçersiniz — Avrupa genelinde daireler, ofisler ve tekil eşyalar için.",
+      "title": "👋 Hakkımızda."
+    }
+  },
+  "account": {
+    "clientType": {
+      "label": "Müşteri hesabı"
+    },
+    "moverType": {
+      "label": "Nakliyeci hesabı"
+    },
+    "myMoves": {
+      "helper": "Tüm taşınmalarınızı görüntüleyin ve takip edin"
+    },
+    "signedOut": {
+      "subtitle": "Profilinizi yönetmek, taşınmalarınızı görmek ve daha fazlası için giriş yapın.",
+      "title": "Hesabınızı görmek için giriş yapın"
+    },
+    "version": {
+      "label": "pickLT v{{version}}"
+    }
+  },
+  "authGate": {
+    "redirecting": {
+      "label": "Giriş sayfasına yönlendiriliyorsunuz…"
+    }
+  },
+  "billing": {
+    "addPayout": {
+      "cta": "Hakediş yöntemi ekle"
+    },
+    "payoutMethods": {
+      "body": "PickLT üzerinden ödeme almak için bir hakediş yöntemi ekleyin. Hakedişler, aşağıda belirlediğiniz yönteme gönderilir.",
+      "title": "Hakediş yöntemleri"
+    },
+    "title": "Ödemeler ve hakedişler"
+  },
+  "checkout": {
+    "confirmAndPay": {
+      "cta": "Onaylayın ve {{amount}} ödeyin"
+    },
+    "confirmMove": {
+      "cta": "Taşınmayı onayla · {{amount}}"
+    },
+    "editHint": {
+      "helper": "Taşınma ayrıntılarınızı düzenlemek için herhangi bir bölüme tıklayın."
+    },
+    "pay": {
+      "title": "Onay ve ödeme"
+    },
+    "title": "Taşınmanızı onaylayın",
+    "yourMove": {
+      "title": "Taşınmanız"
+    }
+  },
+  "contact": {
+    "address": {
+      "label": "🗺 ADRES",
+      "value": "Photo booth tattooed prism, portland taiyaki hoodie neutra typewriter"
+    },
+    "email": {
+      "label": "💌 E-POSTA"
+    },
+    "fullName": {
+      "placeholder": "AD SOYAD"
+    },
+    "message": {
+      "label": "Mesaj"
+    },
+    "phone": {
+      "label": "☎ TELEFON"
+    },
+    "socials": {
+      "label": "🌏 SOSYAL MEDYA"
+    },
+    "submit": {
+      "cta": "Mesaj gönder"
+    },
+    "title": "İletişim"
+  },
+  "footer": {
+    "company": {
+      "about": "Hakkımızda",
+      "careers": "Kariyer",
+      "locations": "Lokasyonlar",
+      "title": "Şirket"
+    },
+    "copyright": "© {{year}} PickLT. Tüm hakları saklıdır.",
+    "legal": {
+      "title": "Yasal"
+    },
+    "solutions": {
+      "commercial": "Kurumsal taşımacılık",
+      "localMoving": "Şehir içi taşımacılık",
+      "longDistance": "Şehirler arası taşımacılık",
+      "packing": "Paketleme hizmetleri",
+      "storage": "Depolama çözümleri",
+      "title": "Çözümler"
+    },
+    "support": {
+      "contact": "Bize ulaşın",
+      "faq": "SSS",
+      "quote": "Teklif alın",
+      "title": "Destek"
+    },
+    "tagline": "Avrupa genelinde daireler, ofisler ve eşyalar için nakliyeci ayırtın."
+  },
+  "home": {
+    "hero": {
+      "imageAlt": "Yeni bir eve kutu taşıyan nakliyeciler",
+      "subtitle": "Hayatın büyük anları için güvenilir nakliyeciler.",
+      "title": "Her seferinde stressiz bir taşınma."
+    },
+    "moverBanner": {
+      "subtitle": "Taşınma kabul etmeye başlamak için giriş yapın",
+      "title": "Nakliyeci misiniz?"
+    },
+    "moves": {
+      "empty": "Henüz taşınma yok. İlk taşınmanızı ayırtarak başlayın!",
+      "emptyFiltered": "„{{status}}” durumunda taşınma bulunamadı.",
+      "emptyScheduled": "Planlı taşınma bulunamadı.",
+      "signedOut": {
+        "cta": "Başlamak için giriş yapın",
+        "subtitle": "Taşınmalarınızı takip etmek, rezervasyon ayrıntılarını görmek ve taşınma programınızı yönetmek için giriş yapın.",
+        "title": "Taşınmalarınız burada görünecek"
+      },
+      "subtitle": "Tüm taşınmalarınızı takip edin",
+      "tab": {
+        "all": {
+          "label": "Tüm taşınmalar"
+        },
+        "cancelled": {
+          "label": "İptal edildi"
+        },
+        "completed": {
+          "label": "Tamamlandı"
+        },
+        "inProgress": {
+          "label": "Devam ediyor"
+        },
+        "pending": {
+          "label": "Beklemede"
+        },
+        "scheduled": {
+          "label": "Planlı"
+        }
+      },
+      "title": "Taşınmalarınız"
+    },
+    "welcomeBack": {
+      "label": "Tekrar hoş geldiniz, {{name}}!"
+    }
+  },
+  "instant": {
+    "cardInApp": {
+      "helper": "Bu taşınmanın ödemesi kartla yapılır. Ödemeyi tamamlamak için PickLT uygulamasını açın — kayıtlı kartınızdan orada tahsilat yapılır, nakit ödeme gerekmez."
+    },
+    "chat": {
+      "comingSoon": "Sohbet özelliği çok yakında!"
+    },
+    "inventory": {
+      "next": {
+        "cta": "Fotoğraf ekle"
+      },
+      "subtitle": "Taşımak istediğiniz eşyaları seçin. Bu, size doğru nakliyeciyi bulmamıza yardımcı olur.",
+      "title": "Neleri taşıyorsunuz?"
+    },
+    "loadFailed": {
+      "subtitle": "Taşınma ayrıntıları sunucudan yüklenemedi."
+    },
+    "loading": {
+      "label": "Taşınma ayrıntıları yükleniyor…"
+    },
+    "missingLocations": {
+      "subtitle": "Devam etmek için lütfen alış ve teslim konumlarınızı seçin.",
+      "title": "Konum ayrıntıları eksik"
+    },
+    "photos": {
+      "helper": "Taşımak istediğiniz eşyaların fotoğraflarını yükleyin. Bu, nakliyecinin doğru ekipmanla hazır gelmesini sağlar ve işin kapsamını net görmesine yardımcı olur.",
+      "next": {
+        "cta": "Nakliyeci bul"
+      },
+      "subtitle": "Nakliyecinizin hazırlanmasına yardımcı olun",
+      "title": "Fotoğraf ekleyin"
+    },
+    "review": {
+      "comment": {
+        "placeholder": "Yorum ekleyin (isteğe bağlı)"
+      },
+      "prompt": "{{name}} ile deneyiminiz nasıldı?",
+      "promptUnnamed": "Nakliyecinizle deneyiminiz nasıldı?",
+      "star": {
+        "a11y_one": "{{count}} yıldız ver",
+        "a11y_other": "{{count}} yıldız ver"
+      },
+      "submit": {
+        "cta": "Değerlendirmeyi gönder"
+      },
+      "thanks": {
+        "subtitle": "Değerlendirmeniz gönderildi.",
+        "title": "Teşekkürler!"
+      }
+    }
+  },
+  "login": {
+    "asClient": {
+      "cta": "Müşteri olarak giriş yap"
+    },
+    "asMover": {
+      "cta": "Nakliyeci olarak giriş yap"
+    },
+    "clientBadge": {
+      "label": "👤 Müşteri hesabı"
+    },
+    "moverBadge": {
+      "label": "🚚 Nakliyeci hesabı"
+    },
+    "phoneRequired": {
+      "helper": "Girişten sonra telefon doğrulaması gerekecek"
+    },
+    "phoneVerify": {
+      "subtitle": "Girişi tamamlamak için telefon numaranızı doğrulamamız gerekiyor."
+    },
+    "resumeMove": {
+      "helper": "Taşınmanıza devam etmek için giriş yapın. İlerlemeniz kaydedildi."
+    },
+    "switchToClient": {
+      "label": "Müşteri misiniz?"
+    },
+    "switchToMover": {
+      "label": "Nakliyeci misiniz?"
+    },
+    "verifyAndSignIn": {
+      "cta": "Doğrula ve giriş yap"
+    }
+  },
+  "moveChoice": {
+    "instant": {
+      "cta": "Başla",
+      "eta": "Nakliyeci 15-30 dakika içinde gelir",
+      "subtitle": "Hemen taşınmanız mı gerekiyor? Size en yakın nakliyeciyi anında buluruz.",
+      "tracking": "Gerçek zamanlı takip"
+    },
+    "scheduled": {
+      "cta": "Taşınmayı planla",
+      "date": "Tercih ettiğiniz tarihi seçin",
+      "subtitle": "Önceden plan yapın ve taşınmanızı belirli bir tarih ve saate ayarlayın.",
+      "title": "Sonrası için ayırtın",
+      "window": "Varış zaman aralığını seçin"
+    },
+    "subtitle": "İhtiyacınıza en uygun seçeneği belirleyin",
+    "summary": {
+      "title": "Taşınma ayrıntılarınız"
+    },
+    "title": "Nasıl taşınmak istersiniz?"
+  },
+  "moveDetails": {
+    "header": {
+      "subtitle": "{{moveType}} taşıma · {{date}}"
+    },
+    "mover": {
+      "title": "Nakliyeciniz"
+    },
+    "notFound": {
+      "subtitle": "Bu taşınma kaldırılmış olabilir veya bağlantı geçersiz."
+    },
+    "reschedule": {
+      "dateTime": {
+        "label": "Yeni tarih ve saat"
+      }
+    }
+  },
+  "mover": {
+    "acceptMove": {
+      "cta": "Taşınmayı kabul et"
+    },
+    "accepted": {
+      "helper": "Bu taşınmayı kabul ettiniz. Hazır olduğunuzda, yola çıktığınızı müşteriye bildirmek için „Rotayı başlat” düğmesine dokunun."
+    },
+    "activeBadge": {
+      "label": "Aktif nakliyeci"
+    },
+    "activeMove": {
+      "advance": {
+        "cta": "Durumu güncelle: {{phase}}"
+      },
+      "cancelledByClient": {
+        "title": "Taşınma müşteri tarafından iptal edildi"
+      },
+      "empty": {
+        "subtitle": "Burada takip etmeye başlamak için bir taşınma talebini kabul edin.",
+        "title": "Aktif taşınma yok"
+      },
+      "etaToPickup": {
+        "label": "Alışa ~{{minutes}} dk"
+      },
+      "proximity": {
+        "helper": "Varış olarak işaretlemek için alış noktasının 100 m yakınında olmalısınız ({{distance}} m uzakta)"
+      }
+    },
+    "additionalServicesCount_one": "+{{count}} hizmet",
+    "additionalServicesCount_other": "+{{count}} hizmet",
+    "availableMoves": {
+      "empty": {
+        "subtitle": "Şu anda 30 km içinde planlı taşınma yok. Her 30 saniyede bir otomatik olarak kontrol ediyoruz.",
+        "title": "Uygun taşınma yok"
+      },
+      "error": {
+        "title": "Taşınmalar yüklenemedi"
+      },
+      "loading": {
+        "label": "Yakınınızdaki uygun taşınmalar bulunuyor…"
+      }
+    },
+    "backToDashboard": {
+      "cta": "Panoya dön"
+    },
+    "browseAvailable": {
+      "cta": "Uygun taşınmalara göz at"
+    },
+    "clientContact": {
+      "title": "Müşteri iletişim bilgileri"
+    },
+    "crew": {
+      "addFirst": {
+        "cta": "İlk üyeyi ekle"
+      },
+      "addMember": {
+        "cta": "Üye ekle"
+      },
+      "addModal": {
+        "title": "Yeni ekip üyesi ekle"
+      },
+      "editModal": {
+        "title": "Ekip üyesini düzenle"
+      },
+      "empty": {
+        "subtitle": "Ekibinizi yönetmeye başlamak için ilk ekip üyenizi ekleyin.",
+        "title": "Henüz ekip üyesi yok"
+      },
+      "role": {
+        "label": "Rol"
+      },
+      "subtitle": "Ekip üyelerinizi yönetin",
+      "title": "Ekibim"
+    },
+    "crewSize": {
+      "label": "{{crew}} nakliyeci"
+    },
+    "earnings": {
+      "average": {
+        "label": "Taşınma başına ortalama"
+      },
+      "breakdown": {
+        "title": "Dağılım"
+      },
+      "empty": "Bu dönem için henüz kazanç yok",
+      "error": {
+        "title": "Kazançlar yüklenemedi"
+      },
+      "label": "Kazançlar",
+      "loading": "Kazançlar yükleniyor…",
+      "movesCompleted": {
+        "label": "Tamamlanan taşınmalar"
+      },
+      "payout": {
+        "helper": "Hakedişler haftalık olarak işlenir"
+      },
+      "payoutAvailable": {
+        "label": "Hakedişe uygun tutar"
+      },
+      "period": {
+        "month": {
+          "caption": "bu ay",
+          "label": "Bu ay"
+        },
+        "today": {
+          "caption": "bugün",
+          "label": "Bugün"
+        },
+        "week": {
+          "caption": "bu hafta",
+          "label": "Bu hafta"
+        },
+        "year": {
+          "caption": "bu yıl",
+          "label": "Bu yıl"
+        }
+      },
+      "refresh": {
+        "a11y": "Yenile"
+      },
+      "requestPayout": {
+        "cta": "Hakediş talep et"
+      },
+      "subtitle": "Gelirinizi ve performansınızı takip edin",
+      "title": "Kazançlar",
+      "total": {
+        "label": "Toplam kazanç"
+      }
+    },
+    "experienceYears_one": "{{count}} yıl",
+    "experienceYears_other": "{{count}} yıl",
+    "field": {
+      "businessStreet": {
+        "label": "İş yeri açık adresi (isteğe bağlı)",
+        "placeholder": "Sokak ve numara"
+      },
+      "city": {
+        "helper": "Nakliyeci olarak ağırlıklı çalıştığınız şehir"
+      },
+      "experience": {
+        "label": "Deneyim yılı *",
+        "placeholder": "örn. 5"
+      },
+      "languages": {
+        "label": "Konuşulan diller *"
+      },
+      "licenseNumber": {
+        "label": "Ehliyet numarası *",
+        "placeholder": "Ehliyet numaranızı girin"
+      },
+      "licensePhoto": {
+        "a11y": "Ehliyet önizlemesi",
+        "cta": "Ehliyetinizin bir fotoğrafını yükleyin",
+        "helper": "Net bir fotoğraf doğrulamayı hızlandırır",
+        "label": "Ehliyet fotoğrafı"
+      },
+      "phone": {
+        "placeholder": "+49 123 456 7890"
+      },
+      "postcode": {
+        "label": "Posta kodu (isteğe bağlı)",
+        "placeholder": "örn. 10115"
+      },
+      "selfie": {
+        "a11y": "Selfie önizlemesi",
+        "cta": "Net bir selfie çekin veya yükleyin",
+        "helper": "Kimlik doğrulaması için net bir selfie gereklidir",
+        "label": "Selfie fotoğrafı *",
+        "retake": {
+          "cta": "Selfie'yi yeniden çek"
+        }
+      },
+      "ssn": {
+        "helper": "Şifrelenir ve yalnızca vergi doğrulaması için kullanılır",
+        "label": "Sosyal güvenlik numarası *",
+        "placeholder": "Sosyal güvenlik numaranızı girin"
+      },
+      "taxId": {
+        "helper": "Fatura oluşturma ve vergi bildirimi için gereklidir",
+        "label": "Vergi kimlik numarası *",
+        "placeholder": "örn. DE123456789"
+      },
+      "vatId": {
+        "helper": "Kleinunternehmer iseniz ve VAT ID numaranız yoksa boş bırakın",
+        "label": "VAT ID (USt-IdNr., isteğe bağlı)",
+        "placeholder": "örn. DE123456789"
+      }
+    },
+    "goToActive": {
+      "cta": "Aktif taşınmaya git"
+    },
+    "homeTypeMoveType": {
+      "label": "{{homeType}} · {{moveType}}"
+    },
+    "jobDetails": {
+      "notFound": {
+        "subtitle": "Bu taşınma kaldırılmış olabilir veya bağlantı geçersiz."
+      },
+      "subheading": {
+        "label": "{{moveType}} taşıma · {{date}}"
+      }
+    },
+    "moveTypeBadge": {
+      "label": "{{type}} taşıma"
+    },
+    "notStartable": {
+      "body": "<0>Taşınma henüz başlatılamaz.</0> Bu rotayı <1>{{when}}</1> tarihinde başlatabilirsiniz (Rotayı başlat, 5 dakika önce açılır)."
+    },
+    "notify": {
+      "newRequest": {
+        "body": "Yeni bir taşınma talebiniz var. Ayrıntıları görmek ve kabul etmek için uygulamayı açın.",
+        "title": "Yeni taşınma talebi! 📋"
+      }
+    },
+    "onboarding": {
+      "done": {
+        "redirect": "Panonuza yönlendiriliyorsunuz…",
+        "subtitle": "Nakliyeci profiliniz inceleniyor. Doğrulandığında sizi bilgilendireceğiz.",
+        "title": "Profil gönderildi!"
+      },
+      "review": {
+        "experience": {
+          "title": "Deneyim",
+          "value_one": "{{count}} yıl",
+          "value_other": "{{count}} yıl"
+        },
+        "languages": {
+          "value": "Diller: {{languages}}"
+        },
+        "license": {
+          "value": "Ehliyet: {{number}}"
+        },
+        "licenseOk": "✓ Ehliyet fotoğrafı yüklendi",
+        "location": {
+          "value": "{{city}}, {{country}}"
+        },
+        "personal": {
+          "value": "{{name}} · {{phone}}"
+        },
+        "selfieOk": "✓ Selfie yüklendi",
+        "ssn": {
+          "value": "Sosyal güvenlik no: ••••{{last4}}"
+        },
+        "subtitle": "Göndermeden önce lütfen bilgilerinizi gözden geçirin.",
+        "taxId": {
+          "value": "Vergi numarası: {{taxId}}"
+        },
+        "title": "Profilinizi gözden geçirin",
+        "vehicle": {
+          "capacity": {
+            "value": "{{vehicleType}} · Ruhsat: {{registration}} · {{capacity}}"
+          },
+          "value": "{{vehicleType}} · Ruhsat: {{registration}}"
+        },
+        "vehicleName": {
+          "value": "{{brand}} {{model}} ({{year}})"
+        },
+        "verification": {
+          "title": "Doğrulama ve konum"
+        }
+      },
+      "step": {
+        "experience": {
+          "label": "Deneyim"
+        },
+        "personal": {
+          "label": "Kişisel bilgiler"
+        },
+        "review": {
+          "label": "Gözden geçir ve gönder"
+        },
+        "vehicle": {
+          "label": "Araç ayrıntıları"
+        },
+        "verification": {
+          "label": "Doğrulama"
+        }
+      },
+      "submit": {
+        "cta": "Profili gönder"
+      },
+      "subtitle": "Taşınma kabul etmeye başlamak için bilgilerinizi doldurun",
+      "title": "Nakliyeci profilinizi tamamlayın"
+    },
+    "request": {
+      "categoryAndType": {
+        "instant": {
+          "light": {
+            "subtitle": "Anında · Hafif taşıma"
+          },
+          "premium": {
+            "subtitle": "Anında · Premium taşıma"
+          },
+          "regular": {
+            "subtitle": "Anında · Standart taşıma"
+          }
+        },
+        "scheduled": {
+          "light": {
+            "subtitle": "Planlı · Hafif taşıma"
+          },
+          "premium": {
+            "subtitle": "Planlı · Premium taşıma"
+          },
+          "regular": {
+            "subtitle": "Planlı · Standart taşıma"
+          }
+        }
+      },
+      "earnings": {
+        "label": "Kazancınız"
+      },
+      "respondWithin": {
+        "label": "<1>{{seconds}} sn</1> içinde yanıtlayın"
+      },
+      "services": {
+        "label": "Hizmetler: {{list}}"
+      },
+      "title": "Yeni taşınma talebi!",
+      "viewDetails": {
+        "cta": "Tüm ayrıntıları gör"
+      }
+    },
+    "roleLabel": "Nakliyeci",
+    "scheduledMoves": {
+      "empty": {
+        "subtitle": "Planlı taşınmaları kabul ettiğinizde, taşınma tarihine kadar burada görünürler.",
+        "title": "Planlı taşınma yok"
+      },
+      "subtitle": "Size atanmış, planlanan tarihini bekleyen taşınmalar"
+    },
+    "section": {
+      "experience": {
+        "title": "Deneyim ve ücret"
+      },
+      "verification": {
+        "helper": "Bu bilgiler kimlik doğrulaması için gereklidir ve güvenli şekilde saklanır.",
+        "title": "Doğrulama ve çalışma konumu"
+      }
+    },
+    "settings": {
+      "payouts": {
+        "helper": "Hakediş hesaplarını yönetin",
+        "label": "Ödeme yöntemleri"
+      },
+      "subtitle": "Hesabınızı ve tercihlerinizi yönetin",
+      "version": {
+        "label": "pickLT Nakliyeci Uygulaması v{{version}}"
+      }
+    },
+    "startRoute": {
+      "cta": "Rotayı başlat — Yola çıkıyorum"
+    },
+    "tapForDetails": {
+      "helper": "Ayrıntılar için dokunun"
+    },
+    "tax": {
+      "empty": {
+        "subtitle": "Bu ay taşınmaları tamamlayın, ilk belgeniz ayın 1'inde görünsün.",
+        "title": "Henüz belge yok"
+      },
+      "helper1": "Aylık belgeniz, bir önceki ayı kapsayacak şekilde her ayın 1'inde oluşturulur.",
+      "helper2": "Muhasebeciniz veya vergi dairesi için saklayın.",
+      "openPdf": {
+        "cta": "PDF'yi aç"
+      },
+      "preparing": {
+        "label": "Hazırlanıyor…"
+      },
+      "row": {
+        "summary_one": "{{count}} taşınma · brüt {{gross}} · net {{net}}",
+        "summary_other": "{{count}} taşınma · brüt {{gross}} · net {{net}}"
+      },
+      "title": "Vergi ve kazanç belgeleri"
+    },
+    "verification": {
+      "pending": {
+        "body": "Nakliyeci profiliniz inceleniyor. Doğrulandığında taşınma kabul edebilir ve tüm özelliklere erişebilirsiniz.",
+        "title": "Doğrulama bekleniyor"
+      },
+      "rejected": {
+        "body": "Nakliyeci profiliniz reddedildi. Lütfen destek ekibiyle iletişime geçin veya profilinizi Ayarlar bölümünden güncelleyin.",
+        "title": "Profil reddedildi"
+      },
+      "suspended": {
+        "body": "Hesabınız askıya alındı. Daha fazla bilgi için lütfen destek ekibiyle iletişime geçin.",
+        "title": "Hesap askıya alındı"
+      }
+    },
+    "viewDetails": {
+      "cta": "Ayrıntıları gör"
+    },
+    "withdraw": {
+      "cta": "Taşınmadan çekil"
+    },
+    "withdrawConfirm": {
+      "body": "Emin misiniz? Taşınma, diğer nakliyeciler için uygun hale gelecek.",
+      "cta": "Evet, çekil"
+    }
+  },
+  "moverDashboard": {
+    "findMoves": {
+      "cta": "Taşınma bul"
+    },
+    "manageCrew": {
+      "cta": "Ekibi yönet"
+    },
+    "quickActions": {
+      "title": "Hızlı işlemler"
+    },
+    "recentMoves": {
+      "moveType": {
+        "label": "{{type}} taşıma"
+      },
+      "title": "Son taşınmalar"
+    },
+    "stat": {
+      "activeMoves": {
+        "label": "Aktif taşınmalar"
+      },
+      "availableMoves": {
+        "label": "Uygun taşınmalar"
+      },
+      "completedThisMonth": {
+        "label": "Bu ay tamamlanan"
+      },
+      "crewMembers": {
+        "label": "Ekip üyeleri"
+      },
+      "earningsThisMonth": {
+        "label": "Bu ayki kazanç"
+      },
+      "scheduledMoves": {
+        "label": "Planlı taşınmalar"
+      }
+    },
+    "welcome": {
+      "subtitle": "Bugün olup bitenler",
+      "title": "Tekrar hoş geldiniz, {{name}}!"
+    }
+  },
+  "moverNav": {
+    "active": {
+      "label": "Aktif"
+    },
+    "activeMove": {
+      "label": "Aktif taşınma"
+    },
+    "availableMoves": {
+      "label": "Uygun taşınmalar"
+    },
+    "crew": {
+      "label": "Ekip"
+    },
+    "dashboard": {
+      "label": "Pano"
+    },
+    "earnings": {
+      "label": "Kazançlar"
+    },
+    "home": {
+      "label": "Ana sayfa"
+    },
+    "moves": {
+      "label": "Taşınmalar"
+    },
+    "myCrew": {
+      "label": "Ekibim"
+    },
+    "scheduledMoves": {
+      "label": "Planlı taşınmalar"
+    },
+    "taxDocuments": {
+      "label": "Vergi belgeleri"
+    }
+  },
+  "myMoves": {
+    "book": {
+      "cta": "Taşınma ayırt"
+    },
+    "empty": {
+      "filtered": {
+        "title": "„{{status}}” durumunda taşınma yok"
+      },
+      "subtitle": "İlk taşınmanızı ayırtın, burada görünsün.",
+      "title": "Henüz taşınma yok"
+    },
+    "subtitle": "Tüm taşınmalarınızı tek bir yerden takip edin ve yönetin.",
+    "title": "Taşınmalarım"
+  },
+  "nav": {
+    "account": {
+      "a11y": "Hesabınıza gidin",
+      "label": "Hesap"
+    },
+    "backToMyMoves": {
+      "cta": "Taşınmalarıma dön"
+    },
+    "becomeMover": {
+      "label": "Nakliyeci olun"
+    },
+    "dashboard": {
+      "cta": "Pano",
+      "label": "Pano"
+    },
+    "earnings": {
+      "label": "Kazançlar"
+    },
+    "home": {
+      "label": "Ana sayfa"
+    },
+    "moverDashboard": {
+      "label": "Nakliyeci panosu"
+    },
+    "moves": {
+      "label": "Taşınmalar"
+    },
+    "myAccount": {
+      "label": "Hesabım"
+    },
+    "myCrew": {
+      "label": "Ekibim"
+    },
+    "myMoves": {
+      "cta": "Taşınmalarım",
+      "label": "Taşınmalarım"
+    },
+    "navigateTo": {
+      "a11y": "{{name}} sayfasına git"
+    },
+    "scheduled": {
+      "label": "Planlı"
+    },
+    "signInAsClient": {
+      "helper": "Müşteri olarak giriş yapın veya kaydolun",
+      "label": "Müşteri"
+    },
+    "signInAsMover": {
+      "helper": "Nakliyeci olarak giriş yapın veya kaydolun",
+      "label": "Nakliyeci"
+    }
+  },
+  "notFound": {
+    "cta": "Ana sayfaya dön",
+    "image": {
+      "a11y": "Sayfa bulunamadı"
+    },
+    "title": "Aradığınız sayfa mevcut değil."
+  },
+  "notify": {
+    "empty": "Bildiriminiz yok."
+  },
+  "payDone": {
+    "booked": {
+      "title": "Rezervasyon onaylandı!"
+    },
+    "confirmed": {
+      "title": "Taşınmanız onaylandı!"
+    },
+    "confirmedPaid": {
+      "title": "Taşınma onaylandı ve ödendi!"
+    },
+    "congrats": {
+      "title": "Tebrikler 🎉"
+    },
+    "instant": {
+      "subtitle": "Anında taşınmanız"
+    },
+    "scheduled": {
+      "subtitle": "Taşınma rezervasyonunuz"
+    },
+    "viewDetails": {
+      "cta": "Taşınma ayrıntılarını gör"
+    }
+  },
+  "preview": {
+    "complete": {
+      "cta": "Taşınmayı tamamla"
+    },
+    "creating": {
+      "cta": "Taşınmanız oluşturuluyor…"
+    },
+    "editPhotos": {
+      "cta": "Fotoğrafları düzenle"
+    },
+    "moveTypeBadge": {
+      "label": "{{moveType}} taşıma"
+    }
+  },
+  "scheduledMoves": {
+    "book": {
+      "cta": "Planlı taşınma ayırt"
+    },
+    "empty": {
+      "filtered": {
+        "title": "„{{status}}” durumunda planlı taşınma yok"
+      },
+      "subtitle": "Planlı bir taşınma ayırtın, burada görünsün.",
+      "title": "Henüz planlı taşınma yok"
+    },
+    "subtitle": "Yaklaşan ve geçmiş tüm planlı taşınmalarınız.",
+    "title": "Planlı taşınmalar"
+  },
+  "search": {
+    "dropoff": {
+      "placeholder": "Nereye taşınıyorsunuz?"
+    },
+    "from": {
+      "label": "Nereden"
+    },
+    "location": {
+      "a11y": "Konum ara",
+      "placeholder": "Nereye taşınıyorsunuz?"
+    },
+    "mobile": {
+      "collapsed": {
+        "label": "Taşınmanızı planlayın"
+      },
+      "title": "Taşınmanızı planlayın",
+      "where": {
+        "placeholder": "Nereye?"
+      }
+    },
+    "pickup": {
+      "placeholder": "Nereden taşınıyorsunuz?"
+    },
+    "to": {
+      "label": "Nereye"
+    }
+  },
+  "selectMover": {
+    "available": {
+      "title_one": "Uygun nakliyeciler ({{count}})",
+      "title_other": "Uygun nakliyeciler ({{count}})"
+    },
+    "capacity": {
+      "label": "{{volume}} m³ kapasite"
+    },
+    "confirm": {
+      "cta": "Onayla · {{amount}}"
+    },
+    "creating": {
+      "cta": "Taşınma oluşturuluyor…"
+    },
+    "empty": {
+      "subtitle": "Konumunuzun yakınında şu anda çevrimiçi doğrulanmış nakliyeci yok. Lütfen birkaç dakika sonra tekrar deneyin.",
+      "title": "Uygun nakliyeci yok"
+    },
+    "error": {
+      "title": "Nakliyeciler bulunamadı"
+    },
+    "eta": {
+      "label_one": "~{{count}} dk uzakta",
+      "label_other": "~{{count}} dk uzakta"
+    },
+    "experienceYears_one": "{{count}} yıl deneyim",
+    "experienceYears_other": "{{count}} yıl deneyim",
+    "languages": {
+      "label": "Diller: {{languages}}"
+    },
+    "pricing": {
+      "disclaimer": "Nihai fiyat, gerçek koşullara göre değişebilir.",
+      "helper_one": "Fiyatlara temel ücret, mesafe ({{distance}}), ekip büyüklüğü, araç kapasitesi ve {{count}} eşyanın taşınması dahildir.",
+      "helper_other": "Fiyatlara temel ücret, mesafe ({{distance}}), ekip büyüklüğü, araç kapasitesi ve {{count}} eşyanın taşınması dahildir.",
+      "title": "Fiyatlandırma nasıl işler:"
+    },
+    "searching": {
+      "subtitle": "Alış konumunuzun yakınındaki doğrulanmış nakliyecileri arıyoruz",
+      "title": "Uygun nakliyeciler bulunuyor…"
+    },
+    "selectFirst": {
+      "cta": "Bir nakliyeci seçin"
+    },
+    "title": "Nakliyeci seçin"
+  },
+  "seo": {
+    "about": {
+      "description": "PickLT, Avrupa genelinde daireler, ofisler ve eşyalar için bir taşımacılık hizmetleri platformudur.",
+      "title": "Hakkımızda"
+    },
+    "accountBilling": {
+      "description": "Ödemelerinizi ve hakedişlerinizi yönetin",
+      "title": "Hesap - Ödemeler ve hakedişler"
+    },
+    "accountPassword": {
+      "description": "Parolanızı yönetin",
+      "title": "Hesap - parola"
+    },
+    "contact": {
+      "description": "PickLT ekibiyle iletişime geçin.",
+      "title": "Bize ulaşın"
+    },
+    "default": {
+      "description": "PickLT - Güvenilir taşımacılık hizmeti platformunuz",
+      "keywords": "PickLT, taşınma, nakliye, nakliyeci, evden eve nakliyat, Umzug",
+      "title": "PickLT - PickLT ile daha akıllı taşının"
+    },
+    "forgotPassword": {
+      "description": "Parolanızı sıfırlayın",
+      "title": "Parolamı unuttum"
+    },
+    "home": {
+      "description": "Avrupa genelinde daireler, ofisler ve eşyalar için doğrulanmış nakliyeci ayırtın.",
+      "title": "Ana sayfa"
+    },
+    "titleTemplate": "%s - PickLT"
+  },
+  "sidebar": {
+    "blurb": "Hayatın her konusunda öne çıkan makaleleri keşfedin. Kendi hikâyelerinizi yazın ve paylaşın",
+    "getStarted": {
+      "cta": "Başla"
+    },
+    "search": {
+      "a11y": "Makale ara",
+      "placeholder": "Yazıp enter tuşuna basın"
+    }
+  },
+  "signup": {
+    "clientSubtitle": "Taşınmalarınızı ayırtmak için bir hesap oluşturun",
+    "moverSubtitle": "Profesyonel nakliyeci ağımıza katılın",
+    "moverTitle": "Nakliyeci olarak katılın",
+    "phoneRequired": {
+      "helper": "Kayıttan sonra telefon doğrulaması gerekecek"
+    },
+    "phoneVerify": {
+      "subtitle": "Kaydınızı tamamlamak için telefon numaranızı doğrulamamız gerekiyor."
+    },
+    "resumeMove": {
+      "helper": "Taşınmanıza devam etmek için bir hesap oluşturun. İlerlemeniz kaydedildi."
+    },
+    "verifyAndCreate": {
+      "cta": "Doğrula ve hesap oluştur"
+    }
+  },
+  "wizard": {
+    "finish": {
+      "cta": "Taşınma oluştur"
+    },
+    "nextStep": {
+      "cta": "Sonraki adım {{step}}"
+    },
+    "step1": {
+      "route": {
+        "title": "Taşınma rotanız"
+      },
+      "title": "ADIM 1 — Taşınma ayrıntıları"
+    },
+    "step2": {
+      "title": "Alış adresi"
+    },
+    "step3": {
+      "title": "Teslim adresi"
+    },
+    "step4": {
+      "subtitle": "Taşımak istediğiniz eşyaları seçin. Bu, doğru araç boyutunu ve ekibi tahmin etmemize yardımcı olur."
+    },
+    "step5": {
+      "dateInStep1": {
+        "helper": "Taşınma tarihinizi {{step}} numaralı adımda belirleyebilirsiniz"
+      },
+      "subtitle": "Nakliyecilerin ne zaman geleceğini seçin."
+    },
+    "step6": {
+      "services": {
+        "helper": "Bunlar Alman nakliyecilerinin standart hizmetleridir."
+      },
+      "subtitle": "Ek hizmetleri seçin ve taşınacak eşyaların fotoğraflarını yükleyin.",
+      "title": "Ek hizmetler ve fotoğraflar"
+    },
+    "stepOf": {
+      "label": "Adım {{current}}/{{total}}"
+    },
+    "stepTotal": {
+      "label": "/{{total}}"
+    }
+  }
+}

@@ -191,6 +191,7 @@
         "placeholder": "Add a comment (optional)"
       },
       "prompt": "How was your experience with {{name}}?",
+      "promptUnnamed": "How was your experience with your mover?",
       "star": {
         "a11y_one": "Rate {{count}} star",
         "a11y_other": "Rate {{count}} stars"
@@ -558,7 +559,28 @@
     },
     "request": {
       "categoryAndType": {
-        "subtitle": "{{category}} · {{type}}"
+        "instant": {
+          "light": {
+            "subtitle": "Instant · Light Move"
+          },
+          "premium": {
+            "subtitle": "Instant · Premium Move"
+          },
+          "regular": {
+            "subtitle": "Instant · Regular Move"
+          }
+        },
+        "scheduled": {
+          "light": {
+            "subtitle": "Scheduled · Light Move"
+          },
+          "premium": {
+            "subtitle": "Scheduled · Premium Move"
+          },
+          "regular": {
+            "subtitle": "Scheduled · Regular Move"
+          }
+        }
       },
       "earnings": {
         "label": "Your earnings"

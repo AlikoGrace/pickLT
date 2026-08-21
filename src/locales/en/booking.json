@@ -140,7 +140,18 @@
     },
     "title": "Move classification",
     "upgrade": {
-      "cta": "Upgrade to {{tier}}",
+      "fallback": {
+        "cta": "Upgrade move type"
+      },
+      "light": {
+        "cta": "Upgrade to Light Move"
+      },
+      "premium": {
+        "cta": "Upgrade to Premium Move"
+      },
+      "regular": {
+        "cta": "Upgrade to Regular Move"
+      },
       "subtitle": "Based on your selected items, we recommend upgrading from <0>{{from}}</0> to <1>{{to}}</1>.",
       "title": "Move type upgrade recommended"
     },
@@ -702,10 +713,7 @@
       "title": "Type of Move"
     },
     "selectHelper": "Select the type of move",
-    "selectPlaceholder": "Select type",
-    "suffixed": {
-      "label": "{{type}} Move"
-    }
+    "selectPlaceholder": "Select type"
   },
   "packing": {
     "label": "Packing Service"

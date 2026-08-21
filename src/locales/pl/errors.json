@@ -1,4 +1,90 @@
 {
+  "api": {
+    "admin": {
+      "awaitingApproval": "Twoje konto administratora czeka na zatwierdzenie przez innego administratora.",
+      "noProfile": "Nie znaleziono profilu administratora dla tego konta.",
+      "notAuthorized": "To konto nie ma uprawnień do konsoli administracyjnej.",
+      "suspended": "Twój dostęp administratora został zawieszony. Skontaktuj się z innym administratorem."
+    },
+    "admins": {
+      "alreadyAdmin": "Ten użytkownik jest już aktywnym administratorem.",
+      "invalidStatus": "Status musi mieć jedną z wartości: {{list}}",
+      "lastAdmin": "To ostatni aktywny administrator — nadaj uprawnienia komuś innemu, zanim go usuniesz.",
+      "notAnAdmin": "To konto nie jest kontem administratora.",
+      "notFound": "Nie znaleziono administratora.",
+      "selfDemote": "Nie możesz odebrać uprawnień administratora samemu sobie.",
+      "selfStatus": "Nie możesz zmienić własnego statusu administratora.",
+      "userIdRequired": "Identyfikator użytkownika jest wymagany.",
+      "userNotFound": "Nie znaleziono użytkownika."
+    },
+    "auth": {
+      "missingUserId": "Nie udało się dokończyć logowania. Spróbuj ponownie.",
+      "noSession": "Brak aktywnej sesji. Zaloguj się ponownie.",
+      "sessionInitFailed": "Nie udało się rozpocząć sesji. Spróbuj ponownie."
+    },
+    "dac7": {
+      "exportBlocked_few": "{{count}} sprzedawcy nie mają numeru podatkowego (TIN). Uzupełnij ich KYC przed eksportem albo ponów żądanie z force=1, aby otrzymać wewnętrzną kopię do przeglądu.",
+      "exportBlocked_many": "{{count}} sprzedawców nie ma numeru podatkowego (TIN). Uzupełnij ich KYC przed eksportem albo ponów żądanie z force=1, aby otrzymać wewnętrzną kopię do przeglądu.",
+      "exportBlocked_one": "{{count}} sprzedawca nie ma numeru podatkowego (TIN). Uzupełnij jego KYC przed eksportem albo ponów żądanie z force=1, aby otrzymać wewnętrzną kopię do przeglądu.",
+      "exportBlocked_other": "{{count}} sprzedawcy nie ma numeru podatkowego (TIN). Uzupełnij ich KYC przed eksportem albo ponów żądanie z force=1, aby otrzymać wewnętrzną kopię do przeglądu.",
+      "invalidYear": "Nieprawidłowy rok"
+    },
+    "dispute": {
+      "invalidStatus": "Rozstrzygnięcie musi mieć jedną z wartości: {{list}}",
+      "moveIdRequired": "Identyfikator przeprowadzki jest wymagany."
+    },
+    "forbidden": "Nie masz uprawnień do wykonania tej operacji.",
+    "functionFailed": {
+      "error": "Funkcja {{functionId}} zakończyła się błędem ({{status}})"
+    },
+    "internal": "Coś poszło nie tak. Spróbuj ponownie.",
+    "inventory": {
+      "categoryRequired": "Kategoria jest wymagana.",
+      "invalidMoveType": "moveTypeMinimum musi mieć jedną z wartości: {{list}}",
+      "nameRequired": "Nazwa jest wymagana.",
+      "notANonNegativeNumber": "{{field}} musi być liczbą nieujemną."
+    },
+    "invite": {
+      "accountClash": "Konto z tym adresem e-mail już istnieje. Poproś administratora, aby zamiast tego nadał mu uprawnienia.",
+      "alreadyAccepted": "To zaproszenie zostało już przyjęte. Zamiast tego zawieś konto administratora.",
+      "emailExists": "Ten adres e-mail ma już konto w PickLT. Zamiast zapraszać, nadaj mu uprawnienia na stronie Użytkownicy.",
+      "emailIsAdmin": "Ten adres e-mail należy już do administratora.",
+      "expired": "To zaproszenie wygasło. Poproś administratora o nowy link.",
+      "idRequired": "Identyfikator zaproszenia jest wymagany.",
+      "invalidEmail": "Podaj prawidłowy adres e-mail.",
+      "invalidLink": "Ten link z zaproszeniem jest nieprawidłowy.",
+      "loadFailed": "Nie udało się wczytać tego zaproszenia.",
+      "nameRequired": "Podaj imię i nazwisko osoby zapraszanej.",
+      "notFound": "Nie znaleziono zaproszenia.",
+      "passwordTooShort_few": "Hasło musi mieć co najmniej {{count}} znaki.",
+      "passwordTooShort_many": "Hasło musi mieć co najmniej {{count}} znaków.",
+      "passwordTooShort_one": "Hasło musi mieć co najmniej {{count}} znak.",
+      "passwordTooShort_other": "Hasło musi mieć co najmniej {{count}} znaku.",
+      "revoked": "To zaproszenie zostało cofnięte.",
+      "signupFailed": "Nie udało się dokończyć rejestracji.",
+      "used": "To zaproszenie zostało już wykorzystane."
+    },
+    "mover": {
+      "invalidStatus": "Nowy status musi mieć jedną z wartości: {{list}}",
+      "noLicensePhoto": "Brak zapisanego zdjęcia prawa jazdy.",
+      "notFound": "Nie znaleziono przewoźnika.",
+      "reasonRequired": "Przy odrzuceniu lub zawieszeniu przewoźnika wymagane jest podanie powodu.",
+      "verifyFailed": "Weryfikacja nie powiodła się (status {{status}}). Spróbuj ponownie."
+    },
+    "pricing": {
+      "keyRequired": "klucz jest wymagany",
+      "negative": "{{label}} nie może być ujemna.",
+      "notANumber": "{{label}} musi być liczbą.",
+      "ratioTooLarge": "{{label}} wygląda na zbyt dużą — to współczynnik, a nie kwota w euro.",
+      "unknownKey": "Nieznany klucz cennika: {{key}}"
+    },
+    "unauthorized": "Twoja sesja wygasła. Zaloguj się ponownie.",
+    "user": {
+      "blockedFlagRequired": "Wymagana jest wartość zablokowany/odblokowany.",
+      "notFound": "Nie znaleziono użytkownika.",
+      "selfBlock": "Nie możesz zablokować własnego konta."
+    }
+  },
   "appwrite": {
     "generalArgumentInvalid": "Jedno z pól jest nieprawidłowe. Sprawdź wprowadzone dane.",
     "generalRateLimitExceeded": "Zbyt wiele prób. Odczekaj chwilę i spróbuj ponownie.",
@@ -15,9 +101,15 @@
     "userUnauthorized": "Brak uprawnień. Zaloguj się ponownie."
   },
   "auth": {
+    "forbidden": "Brak dostępu",
+    "initSessionFailed": "Nie udało się zainicjować sesji",
+    "noActiveSession": "Brak aktywnej sesji",
     "noSession": {
       "error": "Brak zalogowanego użytkownika"
-    }
+    },
+    "setPhoneFailed": "Nie udało się zapisać numeru telefonu",
+    "syncFailed": "Nie udało się zsynchronizować użytkownika",
+    "unauthorized": "Brak uprawnień"
   },
   "call": {
     "noPhoneNumber": "Brak zapisanego numeru telefonu tego przewoźnika."
@@ -39,13 +131,37 @@
       "userNotFound": "Nie udało się wczytać Twojego konta. Zaloguj się ponownie."
     }
   },
+  "crew": {
+    "fieldsRequired": "Imię i nazwisko oraz telefon są wymagane",
+    "memberNotFound": "Nie znaleziono członka ekipy",
+    "notOwner": {
+      "error": "To nie jest członek Twojej ekipy"
+    }
+  },
   "generic": {
     "fallback": "Coś poszło nie tak. Spróbuj ponownie.",
+    "internal": "Wewnętrzny błąd serwera",
     "retry": {
       "body": "Spróbuj ponownie.",
       "error": "Coś poszło nie tak. Spróbuj ponownie."
     },
-    "title": "Coś poszło nie tak"
+    "saveFailed": "Nie udało się zapisać",
+    "title": "Coś poszło nie tak",
+    "unknown": "Nieznany błąd"
+  },
+  "geo": {
+    "denied": {
+      "error": "Odmówiono dostępu do lokalizacji. Włącz go w ustawieniach przeglądarki."
+    },
+    "unavailable": {
+      "error": "Nie udało się ustalić Twojej lokalizacji. Spróbuj ponownie."
+    },
+    "unsupported": {
+      "error": "Twoja przeglądarka nie obsługuje geolokalizacji"
+    }
+  },
+  "geocode": {
+    "searchFailed": "Nie udało się pobrać lokalizacji"
   },
   "google": {
     "cancelled": {
@@ -72,6 +188,11 @@
       }
     }
   },
+  "location": {
+    "unavailable": {
+      "error": "Nie udało się ustalić Twojej lokalizacji."
+    }
+  },
   "mapbox": {
     "unreachable": {
       "error": "Nie można połączyć się z Mapbox, sprawdź połączenie"
@@ -82,11 +203,135 @@
     "sendFailed": "Nie udało się wysłać wiadomości. Spróbuj ponownie.",
     "tooLong": "Wiadomość jest za długa. Limit to {{max}} znaków."
   },
+  "move": {
+    "alreadyAssigned": "Przeprowadzka jest już przydzielona",
+    "alreadyAssigned2": "Do tej przeprowadzki przydzielono już przewoźnika",
+    "cancelFailed": "Nie udało się anulować tej przeprowadzki. Spróbuj ponownie.",
+    "cancelRetry": "Nie udało się anulować. Spróbuj ponownie.",
+    "createFailed": "Nie udało się utworzyć przeprowadzki",
+    "dateInPast": "Data przeprowadzki musi być datą przyszłą",
+    "invalidTransition": "Nieprawidłowa zmiana statusu z „{{from}}” na „{{to}}”",
+    "loadFailed": "Nie udało się wczytać danych przeprowadzki",
+    "notAcceptableInStatus": "Przeprowadzki nie można przyjąć, gdy ma status {{status}}",
+    "notAssigned": "Brak przydziału do tej przeprowadzki",
+    "notAssigned2": "Nie jesteś przydzielony do tej przeprowadzki",
+    "notAuthorized": "Brak uprawnień do tej przeprowadzki",
+    "notAvailable": "Tej przeprowadzki nie można przyjąć",
+    "notCancellable": "Tej przeprowadzki nie można już anulować ({{stage}}). Twoje rzeczy mogą być już w transporcie — skontaktuj się bezpośrednio ze swoim przewoźnikiem.",
+    "notCancellableUnknownStage": "Tej przeprowadzki nie można już anulować. Twoje rzeczy mogą być już w transporcie — skontaktuj się bezpośrednio ze swoim przewoźnikiem.",
+    "notFound": "Nie znaleziono przeprowadzki",
+    "notReschedulable": "Nie można zmienić terminu przeprowadzki o statusie „{{status}}”",
+    "rescheduleFailed": "Nie udało się zmienić terminu",
+    "rescheduleRetry": "Nie udało się zmienić terminu. Spróbuj ponownie.",
+    "scheduledOnly": "W ten sposób można przyjąć tylko zaplanowane przeprowadzki",
+    "statusUpdateFailed": "Nie udało się zaktualizować statusu",
+    "tooEarly": "Tej przeprowadzki nie można rozpocząć przed zaplanowaną datą.",
+    "withdrawTooLate": "Nie można się wycofać po rozpoczęciu przeprowadzki"
+  },
+  "mover": {
+    "acceptFailed": {
+      "error": "Nie udało się przyjąć przeprowadzki"
+    },
+    "acceptRetry": "Nie udało się przyjąć przeprowadzki. Spróbuj ponownie.",
+    "clientCannotConvert": "Twoje konto jest zarejestrowane jako konto klienta. Kont klientów nie można przekształcić w konta przewoźnika. Załóż nowe konto, aby zarejestrować się jako przewoźnik.",
+    "earningsFetchFailed": "Nie udało się pobrać zarobków",
+    "earningsLoadFailed": "Nie udało się wczytać zarobków",
+    "licenseUploadFailed": "Nie udało się przesłać zdjęcia prawa jazdy",
+    "noLocation": "Brak dostępnej lokalizacji. Włącz usługi lokalizacyjne lub zaktualizuj swoją lokalizację.",
+    "notVerified": "Twój profil przewoźnika nie został jeszcze zweryfikowany",
+    "notVerifiedPendingApproval": "Twój profil przewoźnika nie został jeszcze zweryfikowany. Poczekaj na zatwierdzenie przez administratora.",
+    "profileNotFound": "Nie znaleziono profilu przewoźnika",
+    "profileSubmitFailed": "Nie udało się wysłać profilu",
+    "selfieRequired": "Do weryfikacji tożsamości wymagane jest selfie",
+    "selfieUploadFailed": "Nie udało się przesłać selfie",
+    "startRouteFailed": "Nie udało się rozpocząć trasy",
+    "startRouteRetry": "Nie udało się rozpocząć trasy. Spróbuj ponownie.",
+    "withdrawFailed": "Nie udało się wycofać z przeprowadzki",
+    "withdrawRetry": "Nie udało się wycofać. Spróbuj ponownie."
+  },
+  "movers": {
+    "fetchFailed": "Nie udało się pobrać przewoźników",
+    "findFailed": "Nie udało się znaleźć przewoźników"
+  },
+  "moves": {
+    "fetchFailed": "Nie udało się pobrać przeprowadzek",
+    "loadFailed": "Nie udało się wczytać przeprowadzek",
+    "scheduledLoadFailed": "Nie udało się wczytać zaplanowanych przeprowadzek"
+  },
+  "network": {
+    "generic": {
+      "error": "Błąd sieci. Spróbuj ponownie."
+    },
+    "unreachable": "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie."
+  },
   "payment": {
     "cardDeclined": "Twoja karta została odrzucona. Spróbuj innej metody płatności.",
     "charge": {
       "failed": "Nie udało się dokończyć płatności. Spróbuj ponownie.",
       "initFailed": "Nie udało się rozpocząć płatności. Spróbuj ponownie."
+    },
+    "confirmFailed": "Nie udało się potwierdzić płatności",
+    "notAwaiting": "Przeprowadzka nie oczekuje na płatność (obecny status: {{status}})"
+  },
+  "profile": {
+    "changeEmailFailed": "Nie udało się zmienić adresu e-mail",
+    "changePhoneFailed": "Nie udało się zmienić numeru telefonu",
+    "emailChangeFailed": "Nie udało się zmienić adresu e-mail",
+    "emailTaken": "Ten adres e-mail jest już używany przez inne konto",
+    "nameUpdateFailed": "Nie udało się zaktualizować imienia i nazwiska",
+    "phoneChangeFailed": "Nie udało się zmienić numeru telefonu",
+    "phoneNumberChangeFailed": "Nie udało się zmienić numeru telefonu",
+    "phoneTaken": "Ten numer telefonu jest już używany przez inne konto"
+  },
+  "request": {
+    "moveMismatch": "Zgłoszenie nie dotyczy tej przeprowadzki",
+    "notOwned": "Zgłoszenie nie należy do tego przewoźnika",
+    "notPending": "Zgłoszenie nie jest już aktualne"
+  },
+  "review": {
+    "moveNotCompleted": "Przeprowadzka nie została zakończona",
+    "noMover": "Do tej przeprowadzki nie przydzielono przewoźnika",
+    "ratingRange": "Ocena musi mieścić się w zakresie od 1 do 5",
+    "submitFailed": "Nie udało się wysłać opinii"
+  },
+  "tax": {
+    "listFailed": "Nie udało się wczytać informacji podatkowych",
+    "pdfLoadFailed": "Nie udało się wczytać pliku PDF",
+    "pdfNotReady": "Plik PDF informacji podatkowej nie jest jeszcze gotowy"
+  },
+  "taxDocs": {
+    "downloadFailed": {
+      "error": "Nie udało się pobrać informacji podatkowej. Spróbuj ponownie."
+    },
+    "pdfNotReady": {
+      "error": "Plik PDF informacji podatkowej nie jest jeszcze gotowy"
     }
+  },
+  "update": {
+    "failed": {
+      "title": "Nie udało się zaktualizować"
+    }
+  },
+  "upload": {
+    "failed": "Przesyłanie nie powiodło się",
+    "noFile": "Nie wskazano pliku",
+    "notAnImage": "Wybierz plik graficzny",
+    "notAnImage2": "Plik musi być obrazem",
+    "photoFailed": "Nie udało się przesłać zdjęcia",
+    "photosFailed": "Nie udało się przesłać zdjęć",
+    "tooLarge": "Obraz musi być mniejszy niż {{limit}}",
+    "tooLarge2": "Plik musi być mniejszy niż 10 MB"
+  },
+  "validation": {
+    "emailFormat": "Nieprawidłowy format adresu e-mail",
+    "emailRequired": "Adres e-mail jest wymagany",
+    "noFields": "Brak prawidłowych pól do aktualizacji",
+    "phoneFormat": "Nieprawidłowy numer telefonu. Użyj formatu międzynarodowego (np. +491234567890)",
+    "phoneRequired2": "Numer telefonu jest wymagany"
+  },
+  "vehicle": {
+    "fieldsRequired": "Wypełnij wszystkie wymagane pola dotyczące pojazdu",
+    "saveFailed": "Nie udało się zapisać danych pojazdu",
+    "updateFailed": "Nie udało się zaktualizować danych pojazdu"
   }
 }

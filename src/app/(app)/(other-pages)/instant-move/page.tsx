@@ -991,9 +991,15 @@ const InstantMovePage = () => {
                 </div>
                 <p className="text-lg font-bold text-neutral-900 dark:text-white">{t('track:phase.completed.title')}</p>
                 <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
-                  {t('web:instant.review.prompt', {
-                    name: mover?.name || t('common:person.theMover'),
-                  })}
+                  {/* Two whole sentences rather than one with "the mover"
+                      interpolated. A bare noun fragment cannot carry the
+                      genitive/dative/instrumental a Polish host sentence
+                      governs, and `{{name}}` here is a real person's name —
+                      data, not a translated word — so it stays a placeholder in
+                      the branch that has one. */}
+                  {mover?.name
+                    ? t('web:instant.review.prompt', { name: mover.name })
+                    : t('web:instant.review.promptUnnamed')}
                 </p>
               </div>
               {/* Star rating */}

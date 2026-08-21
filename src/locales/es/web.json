@@ -1,1 +1,1052 @@
-{}
+{
+  "about": {
+    "hero": {
+      "subtitle": "PickLT es una plataforma de servicios de mudanza. Describes tu mudanza, comparas transportistas y reservas el que quieras, para pisos, oficinas y objetos sueltos por toda Europa.",
+      "title": "👋 Quiénes somos."
+    }
+  },
+  "account": {
+    "clientType": {
+      "label": "Cuenta de cliente"
+    },
+    "moverType": {
+      "label": "Cuenta de transportista"
+    },
+    "myMoves": {
+      "helper": "Consulta y sigue todas tus mudanzas"
+    },
+    "signedOut": {
+      "subtitle": "Inicia sesión para gestionar tu perfil, ver tus mudanzas y mucho más.",
+      "title": "Inicia sesión para ver tu cuenta"
+    },
+    "version": {
+      "label": "pickLT v{{version}}"
+    }
+  },
+  "authGate": {
+    "redirecting": {
+      "label": "Redirigiendo al inicio de sesión…"
+    }
+  },
+  "billing": {
+    "addPayout": {
+      "cta": "Añadir método de abono"
+    },
+    "payoutMethods": {
+      "body": "Añade un método de abono para recibir los pagos de PickLT. Los abonos se envían al método que configures abajo.",
+      "title": "Métodos de abono"
+    },
+    "title": "Pagos y abonos"
+  },
+  "checkout": {
+    "confirmAndPay": {
+      "cta": "Confirmar y pagar {{amount}}"
+    },
+    "confirmMove": {
+      "cta": "Confirmar la mudanza · {{amount}}"
+    },
+    "editHint": {
+      "helper": "Haz clic en cualquier sección para editar los detalles de tu mudanza."
+    },
+    "pay": {
+      "title": "Confirmación y pago"
+    },
+    "title": "Confirma tu mudanza",
+    "yourMove": {
+      "title": "Tu mudanza"
+    }
+  },
+  "contact": {
+    "address": {
+      "label": "🗺 DIRECCIÓN",
+      "value": "Photo booth tattooed prism, portland taiyaki hoodie neutra typewriter"
+    },
+    "email": {
+      "label": "💌 CORREO"
+    },
+    "fullName": {
+      "placeholder": "Tu nombre completo"
+    },
+    "message": {
+      "label": "Mensaje"
+    },
+    "phone": {
+      "label": "☎ TELÉFONO"
+    },
+    "socials": {
+      "label": "🌏 REDES SOCIALES"
+    },
+    "submit": {
+      "cta": "Enviar mensaje"
+    },
+    "title": "Contacto"
+  },
+  "footer": {
+    "company": {
+      "about": "Quiénes somos",
+      "careers": "Empleo",
+      "locations": "Dónde operamos",
+      "title": "Empresa"
+    },
+    "copyright": "© {{year}} PickLT. Todos los derechos reservados.",
+    "legal": {
+      "title": "Aviso legal"
+    },
+    "solutions": {
+      "commercial": "Mudanzas para empresas",
+      "localMoving": "Mudanzas locales",
+      "longDistance": "Mudanzas de larga distancia",
+      "packing": "Servicios de embalaje",
+      "storage": "Soluciones de almacenamiento",
+      "title": "Soluciones"
+    },
+    "support": {
+      "contact": "Contacto",
+      "faq": "Preguntas frecuentes",
+      "quote": "Pedir presupuesto",
+      "title": "Soporte"
+    },
+    "tagline": "Reserva transportistas para pisos, oficinas y objetos por toda Europa."
+  },
+  "home": {
+    "hero": {
+      "imageAlt": "Transportistas llevando cajas a una casa nueva",
+      "subtitle": "Transportistas de confianza para los grandes momentos.",
+      "title": "Una mudanza sin estrés, siempre."
+    },
+    "moverBanner": {
+      "subtitle": "Inicia sesión para empezar a aceptar mudanzas",
+      "title": "¿Eres transportista?"
+    },
+    "moves": {
+      "empty": "Aún no hay mudanzas. ¡Empieza reservando la primera!",
+      "emptyFiltered": "No se han encontrado mudanzas en {{status}}.",
+      "emptyScheduled": "No se han encontrado mudanzas programadas.",
+      "signedOut": {
+        "cta": "Inicia sesión para empezar",
+        "subtitle": "Inicia sesión para seguir tus mudanzas, ver los detalles de la reserva y gestionar tu calendario de mudanzas.",
+        "title": "Aquí aparecerán tus mudanzas"
+      },
+      "subtitle": "Sigue todas tus mudanzas",
+      "tab": {
+        "all": {
+          "label": "Todas las mudanzas"
+        },
+        "cancelled": {
+          "label": "Canceladas"
+        },
+        "completed": {
+          "label": "Completadas"
+        },
+        "inProgress": {
+          "label": "En curso"
+        },
+        "pending": {
+          "label": "Pendientes"
+        },
+        "scheduled": {
+          "label": "Programadas"
+        }
+      },
+      "title": "Tus mudanzas"
+    },
+    "welcomeBack": {
+      "label": "¡Hola de nuevo, {{name}}!"
+    }
+  },
+  "instant": {
+    "cardInApp": {
+      "helper": "Esta mudanza se paga con tarjeta. Abre la app de PickLT para completar el pago: se cobrará en tu tarjeta guardada y no hay que pagar nada en efectivo."
+    },
+    "chat": {
+      "comingSoon": "¡El chat estará disponible muy pronto!"
+    },
+    "inventory": {
+      "next": {
+        "cta": "Añadir fotos"
+      },
+      "subtitle": "Selecciona los objetos que necesitas mudar. Así podemos encontrarte el transportista adecuado.",
+      "title": "¿Qué vas a mudar?"
+    },
+    "loadFailed": {
+      "subtitle": "No se pudieron cargar los detalles de la mudanza desde el servidor."
+    },
+    "loading": {
+      "label": "Cargando los detalles de la mudanza…"
+    },
+    "missingLocations": {
+      "subtitle": "Selecciona los puntos de recogida y de entrega para continuar.",
+      "title": "Faltan datos de las direcciones"
+    },
+    "photos": {
+      "helper": "Sube fotos de los objetos que quieres mudar. Así el transportista viene preparado con el equipo adecuado y se hace una idea clara del trabajo.",
+      "next": {
+        "cta": "Buscar transportistas"
+      },
+      "subtitle": "Ayuda a tu transportista a prepararse",
+      "title": "Añadir fotos"
+    },
+    "review": {
+      "comment": {
+        "placeholder": "Añade un comentario (opcional)"
+      },
+      "prompt": "¿Qué tal ha ido tu experiencia con {{name}}?",
+      "promptUnnamed": "¿Qué tal ha ido tu experiencia con tu transportista?",
+      "star": {
+        "a11y_one": "Valorar con {{count}} estrella",
+        "a11y_other": "Valorar con {{count}} estrellas"
+      },
+      "submit": {
+        "cta": "Enviar la reseña"
+      },
+      "thanks": {
+        "subtitle": "Tu reseña se ha enviado.",
+        "title": "¡Gracias!"
+      }
+    }
+  },
+  "login": {
+    "asClient": {
+      "cta": "Iniciar sesión como cliente"
+    },
+    "asMover": {
+      "cta": "Iniciar sesión como transportista"
+    },
+    "clientBadge": {
+      "label": "👤 Cuenta de cliente"
+    },
+    "moverBadge": {
+      "label": "🚚 Cuenta de transportista"
+    },
+    "phoneRequired": {
+      "helper": "Tendrás que verificar tu teléfono después de iniciar sesión"
+    },
+    "phoneVerify": {
+      "subtitle": "Necesitamos verificar tu número de teléfono para completar el inicio de sesión."
+    },
+    "resumeMove": {
+      "helper": "Inicia sesión para continuar con tu mudanza. Hemos guardado tu progreso."
+    },
+    "switchToClient": {
+      "label": "¿Eres cliente?"
+    },
+    "switchToMover": {
+      "label": "¿Eres transportista?"
+    },
+    "verifyAndSignIn": {
+      "cta": "Verificar e iniciar sesión"
+    }
+  },
+  "moveChoice": {
+    "instant": {
+      "cta": "Empezar",
+      "eta": "El transportista llega en 15-30 min",
+      "subtitle": "¿Necesitas mudarte ahora mismo? Te buscamos un transportista cerca de ti al instante.",
+      "tracking": "Seguimiento en tiempo real"
+    },
+    "scheduled": {
+      "cta": "Programar la mudanza",
+      "date": "Elige la fecha que prefieras",
+      "subtitle": "Organízate con antelación y programa tu mudanza para una fecha y una hora concretas.",
+      "title": "Reservar para más adelante",
+      "window": "Selecciona la franja de llegada"
+    },
+    "subtitle": "Elige la opción que mejor se adapte a lo que necesitas",
+    "summary": {
+      "title": "Los detalles de tu mudanza"
+    },
+    "title": "¿Cómo quieres hacer tu mudanza?"
+  },
+  "moveDetails": {
+    "header": {
+      "subtitle": "Mudanza {{moveType}} · {{date}}"
+    },
+    "mover": {
+      "title": "Tu transportista"
+    },
+    "notFound": {
+      "subtitle": "Puede que esta mudanza se haya eliminado o que el enlace no sea válido."
+    },
+    "reschedule": {
+      "dateTime": {
+        "label": "Nueva fecha y hora"
+      }
+    }
+  },
+  "mover": {
+    "acceptMove": {
+      "cta": "Aceptar la mudanza"
+    },
+    "accepted": {
+      "helper": "Has aceptado esta mudanza. Cuando estés listo, pulsa «Iniciar la ruta» para avisar al cliente de que vas de camino."
+    },
+    "activeBadge": {
+      "label": "Transportista activo"
+    },
+    "activeMove": {
+      "advance": {
+        "cta": "Marcar como: {{phase}}"
+      },
+      "cancelledByClient": {
+        "title": "Mudanza cancelada por el cliente"
+      },
+      "empty": {
+        "subtitle": "Acepta una solicitud de mudanza para hacer el seguimiento aquí.",
+        "title": "Ninguna mudanza activa"
+      },
+      "etaToPickup": {
+        "label": "~{{minutes}} min hasta la recogida"
+      },
+      "proximity": {
+        "helper": "Tienes que estar a menos de 100 m del punto de recogida para marcar la llegada (estás a {{distance}} m)"
+      }
+    },
+    "additionalServicesCount_one": "+{{count}} servicio",
+    "additionalServicesCount_other": "+{{count}} servicios",
+    "availableMoves": {
+      "empty": {
+        "subtitle": "Ahora mismo no hay mudanzas programadas a menos de 30 km. Lo comprobamos automáticamente cada 30 segundos.",
+        "title": "No hay mudanzas disponibles"
+      },
+      "error": {
+        "title": "No se pudieron cargar las mudanzas"
+      },
+      "loading": {
+        "label": "Buscando mudanzas disponibles cerca de ti…"
+      }
+    },
+    "backToDashboard": {
+      "cta": "Volver al panel"
+    },
+    "browseAvailable": {
+      "cta": "Ver las mudanzas disponibles"
+    },
+    "clientContact": {
+      "title": "Contacto del cliente"
+    },
+    "crew": {
+      "addFirst": {
+        "cta": "Añadir el primer miembro"
+      },
+      "addMember": {
+        "cta": "Añadir miembro"
+      },
+      "addModal": {
+        "title": "Añadir un nuevo miembro del equipo"
+      },
+      "editModal": {
+        "title": "Editar miembro del equipo"
+      },
+      "empty": {
+        "subtitle": "Añade tu primer miembro del equipo para empezar a gestionarlo.",
+        "title": "Aún no hay miembros en el equipo"
+      },
+      "role": {
+        "label": "Rol"
+      },
+      "subtitle": "Gestiona los miembros de tu equipo",
+      "title": "Mi equipo"
+    },
+    "crewSize": {
+      "label": "{{crew}} transportistas"
+    },
+    "earnings": {
+      "average": {
+        "label": "Media por mudanza"
+      },
+      "breakdown": {
+        "title": "Desglose"
+      },
+      "empty": "Todavía no hay ganancias en este periodo",
+      "error": {
+        "title": "No se pudieron cargar las ganancias"
+      },
+      "label": "Ganancias",
+      "loading": "Cargando las ganancias…",
+      "movesCompleted": {
+        "label": "Mudanzas completadas"
+      },
+      "payout": {
+        "helper": "Los abonos se procesan cada semana"
+      },
+      "payoutAvailable": {
+        "label": "Disponible para abono"
+      },
+      "period": {
+        "month": {
+          "caption": "este mes",
+          "label": "Este mes"
+        },
+        "today": {
+          "caption": "hoy",
+          "label": "Hoy"
+        },
+        "week": {
+          "caption": "esta semana",
+          "label": "Esta semana"
+        },
+        "year": {
+          "caption": "este año",
+          "label": "Este año"
+        }
+      },
+      "refresh": {
+        "a11y": "Actualizar"
+      },
+      "requestPayout": {
+        "cta": "Solicitar abono"
+      },
+      "subtitle": "Sigue tus ingresos y tu rendimiento",
+      "title": "Ganancias",
+      "total": {
+        "label": "Ganancias totales"
+      }
+    },
+    "experienceYears_one": "{{count}} año",
+    "experienceYears_other": "{{count}} años",
+    "field": {
+      "businessStreet": {
+        "label": "Dirección de la empresa (opcional)",
+        "placeholder": "Calle y número"
+      },
+      "city": {
+        "helper": "La ciudad en la que trabajas principalmente como transportista"
+      },
+      "experience": {
+        "label": "Años de experiencia *",
+        "placeholder": "p. ej., 5"
+      },
+      "languages": {
+        "label": "Idiomas que hablas *"
+      },
+      "licenseNumber": {
+        "label": "Número del permiso de conducir *",
+        "placeholder": "Introduce el número de tu permiso de conducir"
+      },
+      "licensePhoto": {
+        "a11y": "Vista previa del permiso",
+        "cta": "Sube una foto de tu permiso de conducir",
+        "helper": "Una foto nítida acelera la verificación",
+        "label": "Foto del permiso de conducir"
+      },
+      "phone": {
+        "placeholder": "+49 123 456 7890"
+      },
+      "postcode": {
+        "label": "Código postal (opcional)",
+        "placeholder": "p. ej., 10115"
+      },
+      "selfie": {
+        "a11y": "Vista previa del selfie",
+        "cta": "Hazte o sube un selfie nítido",
+        "helper": "Se necesita un selfie nítido para verificar tu identidad",
+        "label": "Foto tipo selfie *",
+        "retake": {
+          "cta": "Repetir el selfie"
+        }
+      },
+      "ssn": {
+        "helper": "Se cifra y solo se usa para la verificación fiscal",
+        "label": "Número de la seguridad social *",
+        "placeholder": "Introduce tu número de la seguridad social"
+      },
+      "taxId": {
+        "helper": "Necesario para emitir facturas y para la declaración fiscal",
+        "label": "Número de identificación fiscal *",
+        "placeholder": "p. ej., DE123456789"
+      },
+      "vatId": {
+        "helper": "Déjalo vacío si eres Kleinunternehmer y no tienes VAT ID",
+        "label": "VAT ID (USt-IdNr., opcional)",
+        "placeholder": "p. ej., DE123456789"
+      }
+    },
+    "goToActive": {
+      "cta": "Ir a la mudanza activa"
+    },
+    "homeTypeMoveType": {
+      "label": "{{homeType}} · {{moveType}}"
+    },
+    "jobDetails": {
+      "notFound": {
+        "subtitle": "Puede que esta mudanza se haya eliminado o que el enlace no sea válido."
+      },
+      "subheading": {
+        "label": "Mudanza {{moveType}} · {{date}}"
+      }
+    },
+    "moveTypeBadge": {
+      "label": "Mudanza {{type}}"
+    },
+    "notStartable": {
+      "body": "<0>Todavía no puedes iniciar la mudanza.</0> Podrás iniciar esta ruta el <1>{{when}}</1> («Iniciar la ruta» se activa 5 minutos antes)."
+    },
+    "notify": {
+      "newRequest": {
+        "body": "Tienes una nueva solicitud de mudanza. Abre la app para ver los detalles y aceptarla.",
+        "title": "¡Nueva solicitud de mudanza! 📋"
+      }
+    },
+    "onboarding": {
+      "done": {
+        "redirect": "Te estamos redirigiendo a tu panel…",
+        "subtitle": "Tu perfil de transportista está en revisión. Te avisaremos en cuanto esté verificado.",
+        "title": "¡Perfil enviado!"
+      },
+      "review": {
+        "experience": {
+          "title": "Experiencia",
+          "value_one": "{{count}} año",
+          "value_other": "{{count}} años"
+        },
+        "languages": {
+          "value": "Idiomas: {{languages}}"
+        },
+        "license": {
+          "value": "Permiso: {{number}}"
+        },
+        "licenseOk": "✓ Foto del permiso subida",
+        "location": {
+          "value": "{{city}}, {{country}}"
+        },
+        "personal": {
+          "value": "{{name}} · {{phone}}"
+        },
+        "selfieOk": "✓ Selfie subido",
+        "ssn": {
+          "value": "N.º SS: ••••{{last4}}"
+        },
+        "subtitle": "Revisa tus datos antes de enviarlos.",
+        "taxId": {
+          "value": "N.º fiscal: {{taxId}}"
+        },
+        "title": "Revisa tu perfil",
+        "vehicle": {
+          "capacity": {
+            "value": "{{vehicleType}} · Matr.: {{registration}} · {{capacity}}"
+          },
+          "value": "{{vehicleType}} · Matr.: {{registration}}"
+        },
+        "vehicleName": {
+          "value": "{{brand}} {{model}} ({{year}})"
+        },
+        "verification": {
+          "title": "Verificación y ubicación"
+        }
+      },
+      "step": {
+        "experience": {
+          "label": "Experiencia"
+        },
+        "personal": {
+          "label": "Datos personales"
+        },
+        "review": {
+          "label": "Revisar y enviar"
+        },
+        "vehicle": {
+          "label": "Datos del vehículo"
+        },
+        "verification": {
+          "label": "Verificación"
+        }
+      },
+      "submit": {
+        "cta": "Enviar el perfil"
+      },
+      "subtitle": "Rellena tus datos para empezar a aceptar mudanzas",
+      "title": "Completa tu perfil de transportista"
+    },
+    "request": {
+      "categoryAndType": {
+        "instant": {
+          "light": {
+            "subtitle": "Inmediata · Mudanza ligera"
+          },
+          "premium": {
+            "subtitle": "Inmediata · Mudanza premium"
+          },
+          "regular": {
+            "subtitle": "Inmediata · Mudanza estándar"
+          }
+        },
+        "scheduled": {
+          "light": {
+            "subtitle": "Programada · Mudanza ligera"
+          },
+          "premium": {
+            "subtitle": "Programada · Mudanza premium"
+          },
+          "regular": {
+            "subtitle": "Programada · Mudanza estándar"
+          }
+        }
+      },
+      "earnings": {
+        "label": "Tus ganancias"
+      },
+      "respondWithin": {
+        "label": "Responde en <1>{{seconds}}s</1>"
+      },
+      "services": {
+        "label": "Servicios: {{list}}"
+      },
+      "title": "¡Nueva solicitud de mudanza!",
+      "viewDetails": {
+        "cta": "Ver todos los detalles"
+      }
+    },
+    "roleLabel": "Transportista",
+    "scheduledMoves": {
+      "empty": {
+        "subtitle": "Cuando aceptes mudanzas programadas, aparecerán aquí hasta la fecha de la mudanza.",
+        "title": "No hay mudanzas programadas"
+      },
+      "subtitle": "Mudanzas que se te han asignado y que esperan a su fecha programada"
+    },
+    "section": {
+      "experience": {
+        "title": "Experiencia y tarifa"
+      },
+      "verification": {
+        "helper": "Estos datos son necesarios para verificar tu identidad y se guardarán de forma segura.",
+        "title": "Verificación y zona de trabajo"
+      }
+    },
+    "settings": {
+      "payouts": {
+        "helper": "Gestiona las cuentas de abono",
+        "label": "Métodos de pago"
+      },
+      "subtitle": "Gestiona tu cuenta y tus preferencias",
+      "version": {
+        "label": "pickLT Mover App v{{version}}"
+      }
+    },
+    "startRoute": {
+      "cta": "Iniciar la ruta — voy de camino"
+    },
+    "tapForDetails": {
+      "helper": "Pulsa para ver los detalles"
+    },
+    "tax": {
+      "empty": {
+        "subtitle": "Completa mudanzas este mes y tu primer resumen aparecerá el día 1.",
+        "title": "Aún no hay resúmenes"
+      },
+      "helper1": "Tu resumen mensual se genera el día 1 de cada mes y cubre el mes anterior.",
+      "helper2": "Guárdalos para tu asesoría fiscal o para la Administración tributaria.",
+      "openPdf": {
+        "cta": "Abrir el PDF"
+      },
+      "preparing": {
+        "label": "Preparando…"
+      },
+      "row": {
+        "summary_one": "{{count}} mudanza · bruto {{gross}} · neto {{net}}",
+        "summary_other": "{{count}} mudanzas · bruto {{gross}} · neto {{net}}"
+      },
+      "title": "Documentos fiscales y de ganancias"
+    },
+    "verification": {
+      "pending": {
+        "body": "Tu perfil de transportista está en revisión. Podrás aceptar mudanzas y usar todas las funciones en cuanto se verifique.",
+        "title": "Verificación pendiente"
+      },
+      "rejected": {
+        "body": "Tu perfil de transportista se ha rechazado. Ponte en contacto con soporte o actualiza tu perfil en Ajustes.",
+        "title": "Perfil rechazado"
+      },
+      "suspended": {
+        "body": "Tu cuenta se ha suspendido. Ponte en contacto con soporte para más información.",
+        "title": "Cuenta suspendida"
+      }
+    },
+    "viewDetails": {
+      "cta": "Ver detalles"
+    },
+    "withdraw": {
+      "cta": "Retirarme de la mudanza"
+    },
+    "withdrawConfirm": {
+      "body": "¿Seguro? La mudanza volverá a estar disponible para otros transportistas.",
+      "cta": "Sí, retirarme"
+    }
+  },
+  "moverDashboard": {
+    "findMoves": {
+      "cta": "Buscar mudanzas"
+    },
+    "manageCrew": {
+      "cta": "Gestionar el equipo"
+    },
+    "quickActions": {
+      "title": "Acciones rápidas"
+    },
+    "recentMoves": {
+      "moveType": {
+        "label": "Mudanza {{type}}"
+      },
+      "title": "Mudanzas recientes"
+    },
+    "stat": {
+      "activeMoves": {
+        "label": "Mudanzas activas"
+      },
+      "availableMoves": {
+        "label": "Mudanzas disponibles"
+      },
+      "completedThisMonth": {
+        "label": "Completadas este mes"
+      },
+      "crewMembers": {
+        "label": "Miembros del equipo"
+      },
+      "earningsThisMonth": {
+        "label": "Ganancias de este mes"
+      },
+      "scheduledMoves": {
+        "label": "Mudanzas programadas"
+      }
+    },
+    "welcome": {
+      "subtitle": "Esto es lo que hay para hoy",
+      "title": "¡Hola de nuevo, {{name}}!"
+    }
+  },
+  "moverNav": {
+    "active": {
+      "label": "Activa"
+    },
+    "activeMove": {
+      "label": "Mudanza activa"
+    },
+    "availableMoves": {
+      "label": "Mudanzas disponibles"
+    },
+    "crew": {
+      "label": "Equipo"
+    },
+    "dashboard": {
+      "label": "Panel"
+    },
+    "earnings": {
+      "label": "Ganancias"
+    },
+    "home": {
+      "label": "Inicio"
+    },
+    "moves": {
+      "label": "Mudanzas"
+    },
+    "myCrew": {
+      "label": "Mi equipo"
+    },
+    "scheduledMoves": {
+      "label": "Mudanzas programadas"
+    },
+    "taxDocuments": {
+      "label": "Documentos fiscales"
+    }
+  },
+  "myMoves": {
+    "book": {
+      "cta": "Reservar una mudanza"
+    },
+    "empty": {
+      "filtered": {
+        "title": "No hay mudanzas {{status}}"
+      },
+      "subtitle": "Reserva tu primera mudanza y aparecerá aquí.",
+      "title": "Aún no hay mudanzas"
+    },
+    "subtitle": "Sigue y gestiona todas tus mudanzas desde un mismo sitio.",
+    "title": "Mis mudanzas"
+  },
+  "nav": {
+    "account": {
+      "a11y": "Ir a tu cuenta",
+      "label": "Cuenta"
+    },
+    "backToMyMoves": {
+      "cta": "Volver a Mis mudanzas"
+    },
+    "becomeMover": {
+      "label": "Hazte transportista"
+    },
+    "dashboard": {
+      "cta": "Panel",
+      "label": "Panel"
+    },
+    "earnings": {
+      "label": "Ganancias"
+    },
+    "home": {
+      "label": "Inicio"
+    },
+    "moverDashboard": {
+      "label": "Panel del transportista"
+    },
+    "moves": {
+      "label": "Mudanzas"
+    },
+    "myAccount": {
+      "label": "Mi cuenta"
+    },
+    "myCrew": {
+      "label": "Mi equipo"
+    },
+    "myMoves": {
+      "cta": "Mis mudanzas",
+      "label": "Mis mudanzas"
+    },
+    "navigateTo": {
+      "a11y": "Ir a {{name}}"
+    },
+    "scheduled": {
+      "label": "Programadas"
+    },
+    "signInAsClient": {
+      "helper": "Inicia sesión o regístrate como cliente",
+      "label": "Cliente"
+    },
+    "signInAsMover": {
+      "helper": "Inicia sesión o regístrate como transportista",
+      "label": "Transportista"
+    }
+  },
+  "notFound": {
+    "cta": "Volver a la página de inicio",
+    "image": {
+      "a11y": "Página no encontrada"
+    },
+    "title": "La página que buscabas no existe."
+  },
+  "notify": {
+    "empty": "No tienes notificaciones."
+  },
+  "payDone": {
+    "booked": {
+      "title": "¡Reserva confirmada!"
+    },
+    "confirmed": {
+      "title": "¡Tu mudanza está confirmada!"
+    },
+    "confirmedPaid": {
+      "title": "¡Mudanza confirmada y pagada!"
+    },
+    "congrats": {
+      "title": "Enhorabuena 🎉"
+    },
+    "instant": {
+      "subtitle": "Tu mudanza inmediata"
+    },
+    "scheduled": {
+      "subtitle": "Tu reserva de mudanza"
+    },
+    "viewDetails": {
+      "cta": "Ver los detalles de la mudanza"
+    }
+  },
+  "preview": {
+    "complete": {
+      "cta": "Completar la mudanza"
+    },
+    "creating": {
+      "cta": "Creando tu mudanza…"
+    },
+    "editPhotos": {
+      "cta": "Editar las fotos"
+    },
+    "moveTypeBadge": {
+      "label": "Mudanza {{moveType}}"
+    }
+  },
+  "scheduledMoves": {
+    "book": {
+      "cta": "Reservar una mudanza programada"
+    },
+    "empty": {
+      "filtered": {
+        "title": "No hay mudanzas programadas {{status}}"
+      },
+      "subtitle": "Reserva una mudanza programada y aparecerá aquí.",
+      "title": "Aún no hay mudanzas programadas"
+    },
+    "subtitle": "Todas tus mudanzas programadas, próximas y pasadas.",
+    "title": "Mudanzas programadas"
+  },
+  "search": {
+    "dropoff": {
+      "placeholder": "¿Adónde te mudas?"
+    },
+    "from": {
+      "label": "Desde"
+    },
+    "location": {
+      "a11y": "Buscar una ubicación",
+      "placeholder": "¿Adónde te mudas?"
+    },
+    "mobile": {
+      "collapsed": {
+        "label": "Planifica tu mudanza"
+      },
+      "title": "Planifica tu mudanza",
+      "where": {
+        "placeholder": "¿Adónde?"
+      }
+    },
+    "pickup": {
+      "placeholder": "¿Desde dónde te mudas?"
+    },
+    "to": {
+      "label": "Hasta"
+    }
+  },
+  "selectMover": {
+    "available": {
+      "title_one": "Transportistas disponibles ({{count}})",
+      "title_other": "Transportistas disponibles ({{count}})"
+    },
+    "capacity": {
+      "label": "{{volume}} m³ de capacidad"
+    },
+    "confirm": {
+      "cta": "Confirmar · {{amount}}"
+    },
+    "creating": {
+      "cta": "Creando la mudanza…"
+    },
+    "empty": {
+      "subtitle": "Ahora mismo no hay transportistas verificados conectados cerca de tu ubicación. Inténtalo de nuevo dentro de unos minutos.",
+      "title": "No hay transportistas disponibles"
+    },
+    "error": {
+      "title": "No se pudieron encontrar transportistas"
+    },
+    "eta": {
+      "label_one": "a ~{{count}} min",
+      "label_other": "a ~{{count}} min"
+    },
+    "experienceYears_one": "{{count}} año exp.",
+    "experienceYears_other": "{{count}} años exp.",
+    "languages": {
+      "label": "Idiomas: {{languages}}"
+    },
+    "pricing": {
+      "disclaimer": "El precio final puede variar según las condiciones reales.",
+      "helper_one": "Los precios incluyen la tarifa base, la distancia ({{distance}}), el tamaño del equipo, la capacidad del vehículo y la manipulación de {{count}} objeto.",
+      "helper_other": "Los precios incluyen la tarifa base, la distancia ({{distance}}), el tamaño del equipo, la capacidad del vehículo y la manipulación de {{count}} objetos.",
+      "title": "Cómo se calcula el precio:"
+    },
+    "searching": {
+      "subtitle": "Estamos buscando transportistas verificados cerca de tu punto de recogida",
+      "title": "Buscando transportistas disponibles…"
+    },
+    "selectFirst": {
+      "cta": "Selecciona un transportista"
+    },
+    "title": "Elegir transportista"
+  },
+  "seo": {
+    "about": {
+      "description": "PickLT es una plataforma de servicios de mudanza para pisos, oficinas y objetos por toda Europa.",
+      "title": "Quiénes somos"
+    },
+    "accountBilling": {
+      "description": "Gestiona tus pagos y abonos",
+      "title": "Cuenta - Pagos y abonos"
+    },
+    "accountPassword": {
+      "description": "Gestiona tu contraseña",
+      "title": "Cuenta - contraseña"
+    },
+    "contact": {
+      "description": "Ponte en contacto con el equipo de PickLT.",
+      "title": "Contacto"
+    },
+    "default": {
+      "description": "PickLT: tu plataforma de servicios de mudanza de confianza",
+      "keywords": "PickLT, mudanzas, transportistas, traslados, Umzug",
+      "title": "PickLT - Múdate mejor con PickLT"
+    },
+    "forgotPassword": {
+      "description": "Restablece tu contraseña",
+      "title": "He olvidado mi contraseña"
+    },
+    "home": {
+      "description": "Reserva transportistas verificados para pisos, oficinas y objetos por toda Europa.",
+      "title": "Inicio"
+    },
+    "titleTemplate": "%s - PickLT"
+  },
+  "sidebar": {
+    "blurb": "Descubre los artículos más destacados sobre todos los temas de la vida. Escribe tus historias y compártelas",
+    "getStarted": {
+      "cta": "Empezar"
+    },
+    "search": {
+      "a11y": "Buscar artículos",
+      "placeholder": "Escribe y pulsa intro"
+    }
+  },
+  "signup": {
+    "clientSubtitle": "Crea una cuenta para reservar tus mudanzas",
+    "moverSubtitle": "Únete a nuestra red de transportistas profesionales",
+    "moverTitle": "Únete como transportista",
+    "phoneRequired": {
+      "helper": "Tendrás que verificar tu teléfono después de registrarte"
+    },
+    "phoneVerify": {
+      "subtitle": "Necesitamos verificar tu número de teléfono para completar tu registro."
+    },
+    "resumeMove": {
+      "helper": "Crea una cuenta para continuar con tu mudanza. Hemos guardado tu progreso."
+    },
+    "verifyAndCreate": {
+      "cta": "Verificar y crear la cuenta"
+    }
+  },
+  "wizard": {
+    "finish": {
+      "cta": "Crear la mudanza"
+    },
+    "nextStep": {
+      "cta": "Siguiente paso {{step}}"
+    },
+    "step1": {
+      "route": {
+        "title": "La ruta de tu mudanza"
+      },
+      "title": "PASO 1 — Detalles de la mudanza"
+    },
+    "step2": {
+      "title": "Dirección de recogida"
+    },
+    "step3": {
+      "title": "Dirección de entrega"
+    },
+    "step4": {
+      "subtitle": "Selecciona los objetos que necesitas mudar. Así podemos calcular el tamaño de vehículo y el equipo adecuados."
+    },
+    "step5": {
+      "dateInStep1": {
+        "helper": "Puedes fijar la fecha de tu mudanza en el paso {{step}}"
+      },
+      "subtitle": "Elige cuándo deben llegar los transportistas."
+    },
+    "step6": {
+      "services": {
+        "helper": "Estos son los servicios habituales de las empresas de mudanzas alemanas."
+      },
+      "subtitle": "Selecciona servicios adicionales y sube fotos de los objetos que vas a mudar.",
+      "title": "Servicios adicionales y fotos"
+    },
+    "stepOf": {
+      "label": "Paso {{current}} de {{total}}"
+    },
+    "stepTotal": {
+      "label": "/{{total}}"
+    }
+  }
+}

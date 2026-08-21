@@ -176,9 +176,16 @@ describe.each(NAMESPACES)('%s.json', (ns) => {
       families.get(b)!.add(category)
     }
 
+    // Ordinal families (`…_ordinal_two`) select on the ordinal rule set, not the
+    // cardinal one this table pins. English ordinals genuinely use one/two/few/other
+    // (1st, 2nd, 3rd, 4th) while English cardinals use one/other, and German ordinals
+    // use `other` alone — so judging one by the other's table both demands forms that
+    // can never render and rejects forms that must. Cardinals stay pinned by hand
+    // (conventions §4); ordinals only need their `other` fallback to exist.
     const incomplete: { key: string; missing: string[] }[] = []
     for (const [b, categories] of families) {
-      const missing = REQUIRED_PLURAL_CATEGORIES[locale].filter((c) => !categories.has(c))
+      const required = b.endsWith('_ordinal') ? ['other'] : REQUIRED_PLURAL_CATEGORIES[locale]
+      const missing = required.filter((c) => !categories.has(c))
       if (missing.length) incomplete.push({ key: b, missing })
     }
     expect(incomplete).toEqual([])

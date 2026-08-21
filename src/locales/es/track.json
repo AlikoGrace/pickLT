@@ -1,4 +1,9 @@
 {
+  "action": {
+    "trackLive": {
+      "cta": "Seguir la mudanza en directo"
+    }
+  },
   "address": {
     "dropoff": {
       "title": "Dirección de entrega"
@@ -6,9 +11,16 @@
     "floor": {
       "label": "Planta {{floor}}"
     },
+    "floorWithElevator": {
+      "label": "Planta {{floor}} · Ascensor"
+    },
     "pickup": {
       "title": "Dirección de recogida"
     }
+  },
+  "banner": {
+    "accepted": "¡Un transportista ha aceptado tu mudanza! Saldrá en breve.",
+    "awaitingAccept": "Esperando a que un transportista acepte tu mudanza…"
   },
   "eta": {
     "assigned": {
@@ -16,6 +28,13 @@
     },
     "distance": {
       "footnote": "A {{distance}} km"
+    },
+    "distanceAway": {
+      "label": "A {{distance}} km"
+    },
+    "minutes": {
+      "label_one": "{{count}} min",
+      "label_other": "{{count}} min"
     },
     "moverArriving": {
       "label": "Transportista en camino"
@@ -26,10 +45,132 @@
       "label": "Transportista asignado"
     }
   },
+  "hint": {
+    "arrivedDestination": "¡Ha llegado! La descarga empezará enseguida.",
+    "inTransit": "De camino a tu destino…",
+    "loading": "Tus cosas se están cargando…",
+    "loadingSoon": "Tu transportista empezará a cargar en breve",
+    "unloading": "Tus cosas se están descargando…"
+  },
+  "live": {
+    "helper": "Tu transportista está en marcha: sigue el progreso en tiempo real"
+  },
+  "map": {
+    "dropoffPin": {
+      "label": "E"
+    },
+    "pickupPin": {
+      "label": "R"
+    }
+  },
   "mover": {
+    "cancelled": {
+      "searching": "El transportista ha cancelado. Buscando otro transportista…"
+    },
     "moveCount": {
       "label_one": "{{count}} mudanza",
       "label_other": "{{count}} mudanzas"
+    },
+    "noPhone": {
+      "error": "El número de teléfono del transportista no está disponible"
+    }
+  },
+  "moverPhase": {
+    "atDropoff": {
+      "subtitle": "Has llegado al destino",
+      "title": "En la entrega"
+    },
+    "atPickup": {
+      "subtitle": "Has llegado. Empieza a cargar los objetos.",
+      "title": "En la recogida"
+    },
+    "awaitingPayment": {
+      "subtitle": "Esperando la confirmación del pago",
+      "title": "Pago por confirmar"
+    },
+    "completed": {
+      "subtitle": "¡Mudanza completada correctamente!",
+      "title": "Completada"
+    },
+    "enRoute": {
+      "subtitle": "Dirígete al punto de recogida",
+      "title": "De camino a la recogida"
+    },
+    "inTransit": {
+      "subtitle": "De camino al punto de entrega",
+      "title": "En tránsito"
+    },
+    "loading": {
+      "subtitle": "Cargando los objetos en tu vehículo",
+      "title": "Cargando"
+    },
+    "unloading": {
+      "subtitle": "Descargando los objetos en el destino",
+      "title": "Descargando"
+    }
+  },
+  "notify": {
+    "accepted": {
+      "body": "Un transportista ha aceptado tu mudanza programada. Saldrá en breve.",
+      "shortBody": "¡Un transportista ha aceptado tu solicitud de mudanza!",
+      "shortTitle": "Transportista confirmado",
+      "title": "¡Un transportista ha aceptado tu mudanza! ✅"
+    },
+    "arrived": {
+      "body": "Tu transportista ha llegado al punto de recogida. Ve a su encuentro.",
+      "shortBody": "Tu transportista ha llegado al punto de recogida.",
+      "shortTitle": "Transportista ha llegado",
+      "title": "¡Tu transportista ha llegado! 🚛"
+    },
+    "arrivedDestination": {
+      "body": "Tu transportista ha llegado al punto de entrega.",
+      "shortBody": "Tu transportista ha llegado al destino.",
+      "shortTitle": "Ha llegado",
+      "title": "¡Ha llegado al destino! 🏠"
+    },
+    "cancelled": {
+      "shortBody": "El transportista ha cancelado esta mudanza.",
+      "shortTitle": "Mudanza cancelada"
+    },
+    "completed": {
+      "body": "Tu mudanza se ha completado correctamente.",
+      "shortBody": "¡Tu mudanza se ha completado! Deja una reseña.",
+      "shortTitle": "Mudanza completada",
+      "title": "¡Mudanza completada! ✅"
+    },
+    "enRoute": {
+      "body": "Tu transportista se dirige al punto de recogida.",
+      "shortBody": "Tu transportista va de camino a tu punto de recogida.",
+      "shortTitle": "Transportista en camino",
+      "title": "¡El transportista está en camino! 🚚"
+    },
+    "inTransit": {
+      "body": "Tus cosas se están transportando al destino.",
+      "shortBody": "Tus cosas van de camino al destino.",
+      "shortTitle": "En tránsito",
+      "title": "¡En marcha! 🛣️"
+    },
+    "loading": {
+      "body": "Tu transportista ha empezado a cargar tus cosas.",
+      "shortBody": "Tus cosas se están cargando.",
+      "shortTitle": "Carga iniciada",
+      "title": "Carga iniciada 📦"
+    },
+    "paymentDue": {
+      "body": "Tu mudanza está terminando: completa el pago.",
+      "shortBody": "Tu mudanza ha terminado: confirma el pago.",
+      "shortTitle": "Pago por confirmar",
+      "title": "Pago por confirmar 💶"
+    },
+    "unloading": {
+      "body": "Tus cosas se están descargando en el destino.",
+      "shortBody": "Tus cosas se están descargando.",
+      "shortTitle": "Descargando",
+      "title": "Descargando tus cosas 📦"
+    },
+    "withdrawn": {
+      "body": "El transportista se ha retirado de tu mudanza. Ya está disponible para otros transportistas.",
+      "title": "Transportista retirado"
     }
   },
   "order": {
@@ -66,9 +207,17 @@
     }
   },
   "phase": {
+    "arrived": {
+      "subtitle": "Reúnete con él en el punto de recogida",
+      "title": "¡Tu transportista ha llegado!"
+    },
     "arrivedDestination": {
       "subtitle": "Tu transportista ha llegado a la dirección de entrega",
       "title": "¡Ha llegado al destino!"
+    },
+    "awaitingAccept": {
+      "subtitle": "Hemos enviado tu solicitud. El transportista responderá en breve.",
+      "title": "Esperando la aceptación del transportista"
     },
     "awaitingPayment": {
       "subtitle": "Paga al transportista y confirma abajo",
@@ -85,9 +234,11 @@
       "subtitle": "Cancelada por el transportista"
     },
     "completed": {
-      "label": "Mudanza completada"
+      "label": "Mudanza completada",
+      "title": "¡Mudanza completada!"
     },
     "inTransit": {
+      "body": "Tus cosas se están transportando",
       "subtitle": "Tus cosas están en transporte",
       "title": "De camino al destino"
     },
@@ -98,6 +249,9 @@
     "moverArrived": {
       "subtitle": "Reúnete con él en la dirección de recogida",
       "title": "¡Tu transportista ha llegado!"
+    },
+    "moverEnRoute": {
+      "title": "El transportista está en camino"
     },
     "paid": {
       "subtitle": "Esperando a que el transportista cierre la mudanza",

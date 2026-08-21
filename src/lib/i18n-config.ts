@@ -25,7 +25,7 @@ export const LOCALE_HEADER = 'x-picklt-locale'
 export const LOCALE_COOKIE_MAX_AGE = 365 * 24 * 60 * 60 // 1 year, in seconds
 
 /**
- * Namespaces. The first nine are shared byte-for-byte with the other PickLT
+ * Namespaces. The first eleven are shared byte-for-byte with the other PickLT
  * repos via the `sync-locales` script (D6); `web` is copy specific to the pickLT web client.
  */
 export const NAMESPACES = [
@@ -38,6 +38,8 @@ export const NAMESPACES = [
   'errors',
   'legal',
   'inventory',
+  'notifications',
+  'tax',
   'web',
 ] as const
 

@@ -1,5 +1,47 @@
 {
+  "action": {
+    "cancel": {
+      "cta": "Anuluj przeprowadzkę"
+    },
+    "reschedule": {
+      "cta": "Zmień termin przeprowadzki"
+    }
+  },
+  "available": {
+    "withinRadiusCount_few": "{{count}} przeprowadzki w promieniu 30 km",
+    "withinRadiusCount_many": "{{count}} przeprowadzek w promieniu 30 km",
+    "withinRadiusCount_one": "{{count}} przeprowadzka w promieniu 30 km",
+    "withinRadiusCount_other": "{{count}} przeprowadzki w promieniu 30 km"
+  },
+  "booking": {
+    "code": {
+      "label": "Kod rezerwacji"
+    },
+    "title": "Szczegóły rezerwacji"
+  },
+  "cancelConfirm": {
+    "cancelling": {
+      "cta": "Anulowanie…"
+    },
+    "confirm": {
+      "cta": "Tak, anuluj"
+    },
+    "keep": {
+      "cta": "Zachowaj przeprowadzkę"
+    },
+    "subtitle": "Twój przewoźnik jest już w drodze. Na pewno chcesz anulować? Tej operacji nie można cofnąć.",
+    "title": "Anulować tę przeprowadzkę?",
+    "window": "Na pewno chcesz anulować tę przeprowadzkę? Tej operacji nie można cofnąć."
+  },
   "card": {
+    "category": {
+      "instant": {
+        "label": "Natychmiastowa"
+      },
+      "scheduled": {
+        "label": "Zaplanowana"
+      }
+    },
     "route": {
       "dropoffFallback": {
         "label": "Dostawa"
@@ -11,6 +53,69 @@
     "title": {
       "generic": {
         "label": "Przeprowadzka"
+      }
+    },
+    "typeAndCategory": {
+      "light": {
+        "instant": {
+          "subtitle": "Mała przeprowadzka · Natychmiastowa"
+        },
+        "scheduled": {
+          "subtitle": "Mała przeprowadzka · Zaplanowana"
+        }
+      },
+      "premium": {
+        "instant": {
+          "subtitle": "Przeprowadzka premium · Natychmiastowa"
+        },
+        "scheduled": {
+          "subtitle": "Przeprowadzka premium · Zaplanowana"
+        }
+      },
+      "regular": {
+        "instant": {
+          "subtitle": "Standardowa przeprowadzka · Natychmiastowa"
+        },
+        "scheduled": {
+          "subtitle": "Standardowa przeprowadzka · Zaplanowana"
+        }
+      }
+    },
+    "typeAndDate": {
+      "light": {
+        "subtitle": "Mała przeprowadzka · {{date}}"
+      },
+      "premium": {
+        "subtitle": "Przeprowadzka premium · {{date}}"
+      },
+      "regular": {
+        "subtitle": "Standardowa przeprowadzka · {{date}}"
+      }
+    },
+    "typeCategoryDate": {
+      "light": {
+        "instant": {
+          "subtitle": "Mała przeprowadzka · Natychmiastowa · {{date}}"
+        },
+        "scheduled": {
+          "subtitle": "Mała przeprowadzka · Zaplanowana · {{date}}"
+        }
+      },
+      "premium": {
+        "instant": {
+          "subtitle": "Przeprowadzka premium · Natychmiastowa · {{date}}"
+        },
+        "scheduled": {
+          "subtitle": "Przeprowadzka premium · Zaplanowana · {{date}}"
+        }
+      },
+      "regular": {
+        "instant": {
+          "subtitle": "Standardowa przeprowadzka · Natychmiastowa · {{date}}"
+        },
+        "scheduled": {
+          "subtitle": "Standardowa przeprowadzka · Zaplanowana · {{date}}"
+        }
       }
     }
   },
@@ -31,6 +136,9 @@
       "label": "Oczekujące"
     }
   },
+  "createdAt": {
+    "label": "Utworzono"
+  },
   "detail": {
     "additionalServices": {
       "title": "Usługi dodatkowe"
@@ -40,6 +148,12 @@
     },
     "arrivalWindow": {
       "label": "Okno przyjazdu"
+    },
+    "category": {
+      "label": "Kategoria"
+    },
+    "client": {
+      "title": "Klient"
     },
     "distance": {
       "label": "Odległość"
@@ -62,6 +176,15 @@
     "itemLine": {
       "label": "{{qty}} x {{label}}"
     },
+    "itemLineReversed": {
+      "label": "{{label}} × {{qty}}"
+    },
+    "itemQuantity": {
+      "label": "{{label}} × {{qty}}"
+    },
+    "items": {
+      "label": "Przedmioty"
+    },
     "moveDate": {
       "label": "Data przeprowadzki"
     },
@@ -70,6 +193,9 @@
     },
     "moveItems": {
       "title": "Przedmioty do przewozu"
+    },
+    "moveStatus": {
+      "label": "Status przeprowadzki"
     },
     "packingService": {
       "label": "Usługa pakowania"
@@ -95,8 +221,42 @@
     "type": {
       "label": "Typ"
     },
+    "typeAndCategory": {
+      "light": {
+        "instant": {
+          "value": "Mała · Natychmiastowa"
+        },
+        "scheduled": {
+          "value": "Mała · Zaplanowana"
+        }
+      },
+      "premium": {
+        "instant": {
+          "value": "Premium · Natychmiastowa"
+        },
+        "scheduled": {
+          "value": "Premium · Zaplanowana"
+        }
+      },
+      "regular": {
+        "instant": {
+          "value": "Standardowa · Natychmiastowa"
+        },
+        "scheduled": {
+          "value": "Standardowa · Zaplanowana"
+        }
+      }
+    },
     "unit": {
       "label": "Lokal"
+    }
+  },
+  "filter": {
+    "count": {
+      "badge": "({{value}})"
+    },
+    "empty": {
+      "helper": "Spróbuj wybrać inny filtr."
     }
   },
   "itemCount_few": "{{count}} przedmioty",
@@ -117,6 +277,35 @@
       "label": "Zaplanowana"
     }
   },
+  "moveCount_few": "{{count}} przeprowadzki",
+  "moveCount_many": "{{count}} przeprowadzek",
+  "moveCount_one": "{{count}} przeprowadzka",
+  "moveCount_other": "{{count}} przeprowadzki",
+  "mover": {
+    "experience": {
+      "label": "Doświadczenie"
+    },
+    "languages": {
+      "label": "Języki"
+    },
+    "verified": {
+      "badge": "Zweryfikowany przewoźnik"
+    }
+  },
+  "moverCount_few": "{{count}} przewoźnicy",
+  "moverCount_many": "{{count}} przewoźników",
+  "moverCount_one": "{{count}} przewoźnik",
+  "moverCount_other": "{{count}} przewoźnika",
+  "notify": {
+    "cancelledByClient": {
+      "body": "Klient anulował tę przeprowadzkę.",
+      "title": "Przeprowadzka anulowana przez klienta ❌"
+    },
+    "moverWithdrawn": {
+      "body": "Przydzielony przewoźnik wycofał się z tej przeprowadzki.",
+      "title": "Przewoźnik się wycofał"
+    }
+  },
   "payment": {
     "method": {
       "label": "Metoda płatności"
@@ -131,8 +320,17 @@
     "arrivedDestination": {
       "label": "Na miejscu"
     },
+    "assigned": {
+      "label": "Przydzielona"
+    },
     "awaitingPayment": {
-      "label": "Oczekuje na płatność"
+      "label": "Płatność do rozliczenia"
+    },
+    "booked": {
+      "label": "Zarezerwowana"
+    },
+    "cancelled": {
+      "label": "Anulowana"
     },
     "cancelledByClient": {
       "label": "Anulowana"
@@ -143,14 +341,26 @@
     "completed": {
       "label": "Zakończona"
     },
+    "confirmedPayLater": {
+      "label": "Potwierdzona – płatność później"
+    },
     "disputed": {
       "label": "Sporna"
+    },
+    "draft": {
+      "label": "Wersja robocza"
+    },
+    "inProgress": {
+      "label": "W trakcie"
     },
     "inTransit": {
       "label": "W transporcie"
     },
     "loading": {
       "label": "Załadunek"
+    },
+    "moverAccepted": {
+      "label": "Przewoźnik potwierdził"
     },
     "moverArrived": {
       "label": "Przeprowadzkowiec na miejscu"
@@ -167,8 +377,17 @@
     "pending": {
       "label": "Oczekuje"
     },
+    "pendingPayment": {
+      "label": "Oczekuje na płatność"
+    },
+    "unknown": {
+      "label": "Nieznany"
+    },
     "unloading": {
       "label": "Rozładunek"
     }
+  },
+  "summary": {
+    "title": "Podsumowanie"
   }
 }

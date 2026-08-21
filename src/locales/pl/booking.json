@@ -1,5 +1,303 @@
 {
+  "accessNotes": {
+    "helper": "Wszelkie informacje, które ułatwią naszej ekipie dostęp do miejsca",
+    "label": "Uwagi dotyczące dostępu (opcjonalnie)",
+    "placeholder": "np. wąski korytarz, strome schody, remont przy wejściu",
+    "shortLabel": "Uwagi dotyczące dostępu"
+  },
+  "address": {
+    "accessNotes": {
+      "label": "Uwagi dotyczące dostępu: {{notes}}"
+    },
+    "aptUnit": {
+      "label": "Mieszkanie/lokal: {{unit}}"
+    },
+    "elevatorAvailable": {
+      "label": "Winda dostępna"
+    },
+    "floor": {
+      "label": "Piętro: {{floor}}"
+    },
+    "label": "Lokalizacja",
+    "noResults": {
+      "empty": "Nie znaleziono lokalizacji"
+    },
+    "parking": {
+      "label": "Parking: {{value}}"
+    },
+    "suggestions": {
+      "label": "Sugerowane lokalizacje"
+    },
+    "typeToSearch": {
+      "empty": "Zacznij pisać, aby wyszukać lokalizację"
+    },
+    "useCurrent": {
+      "cta": "Użyj mojej bieżącej lokalizacji"
+    },
+    "withUnit": {
+      "label": "{{address}}, lokal {{unit}}"
+    }
+  },
+  "apartmentUnit": {
+    "dropoff": {
+      "placeholder": "np. 2. piętro, mieszkanie 5"
+    },
+    "helper": "Piętro, numer mieszkania lub nazwa lokalu",
+    "label": "Mieszkanie / lokal (opcjonalnie)",
+    "pickup": {
+      "placeholder": "np. 3. piętro, mieszkanie 12"
+    }
+  },
+  "arrivalTime": {
+    "fieldLabel": "Godzina przyjazdu",
+    "helper": "Wybierz, o której mają przyjechać przewoźnicy.",
+    "label": "Preferowana godzina przyjazdu",
+    "placeholder": "Wybierz godzinę"
+  },
+  "arrivalWindow": {
+    "afternoon": {
+      "label": "Popołudnie (12:00–17:00)"
+    },
+    "evening": {
+      "label": "Wieczór (17:00–21:00)"
+    },
+    "label": "Przedział czasowy przyjazdu",
+    "morning": {
+      "label": "Rano (8:00–12:00)"
+    },
+    "optionalLabel": "Przedział czasowy przyjazdu (opcjonalnie)"
+  },
+  "business": {
+    "company": {
+      "label": "Nazwa firmy",
+      "placeholder": "np. Mustermann GmbH",
+      "shortLabel": "Firma"
+    },
+    "companyName": {
+      "label": "Firma"
+    },
+    "isBusiness": {
+      "label": "To przeprowadzka firmowa (potrzebuję faktury VAT)"
+    },
+    "title": "Dane firmy",
+    "type": {
+      "business": {
+        "label": "Przeprowadzka firmowa"
+      },
+      "personal": {
+        "label": "Przeprowadzka prywatna"
+      }
+    },
+    "vatId": {
+      "helper": "Do faktur dla firm z UE",
+      "label": "VAT ID (USt-IdNr.)",
+      "placeholder": "np. DE123456789",
+      "shortLabel": "VAT ID"
+    }
+  },
+  "card": {
+    "cvc": {
+      "label": "CVC"
+    },
+    "expiry": {
+      "label": "Data ważności"
+    },
+    "holder": {
+      "label": "Posiadacz karty",
+      "placeholder": "JAN KOWALSKI"
+    },
+    "number": {
+      "label": "Numer karty"
+    }
+  },
+  "category": {
+    "instant": {
+      "label": "Przeprowadzka natychmiastowa"
+    }
+  },
+  "classification": {
+    "itemMinimum": {
+      "premium": "„{{item}}” wymaga co najmniej przeprowadzki premium",
+      "regular": "„{{item}}” wymaga co najmniej przeprowadzki standardowej"
+    },
+    "keepCurrent": {
+      "cta": "Zachowaj obecny"
+    },
+    "nearLimit": {
+      "light": "Zbliżasz się do limitu małej przeprowadzki",
+      "regular": "Zbliżasz się do limitu standardowej przeprowadzki"
+    },
+    "notice": {
+      "title": "Informacja o klasyfikacji przeprowadzki"
+    },
+    "pointCount_few": "{{count}} punkty",
+    "pointCount_many": "{{count}} punktów",
+    "pointCount_one": "{{count}} punkt",
+    "pointCount_other": "{{count}} punktu",
+    "points": {
+      "label": "Punkty"
+    },
+    "summary": {
+      "label": "{{items}} · ~{{weight}} kg · {{points}}"
+    },
+    "title": "Klasyfikacja przeprowadzki",
+    "upgrade": {
+      "fallback": {
+        "cta": "Zmień rodzaj przeprowadzki"
+      },
+      "light": {
+        "cta": "Zmień na małą przeprowadzkę"
+      },
+      "premium": {
+        "cta": "Zmień na przeprowadzkę premium"
+      },
+      "regular": {
+        "cta": "Zmień na standardową przeprowadzkę"
+      },
+      "subtitle": "Na podstawie wybranych rzeczy zalecamy zmianę z <0>{{from}}</0> na <1>{{to}}</1>.",
+      "title": "Zalecana zmiana rodzaju przeprowadzki"
+    },
+    "weight": {
+      "label": "Szac. waga"
+    }
+  },
+  "contact": {
+    "email": {
+      "helper": "Do potwierdzenia rezerwacji i powiadomień",
+      "invalid": {
+        "error": "Podaj prawidłowy adres e-mail"
+      },
+      "label": "E-mail",
+      "placeholder": "np. jan@przyklad.pl",
+      "required": {
+        "error": "Podaj swój adres e-mail"
+      }
+    },
+    "emailPhone": {
+      "label": "{{email}} · {{phone}}"
+    },
+    "name": {
+      "helper": "Twoje imię i nazwisko",
+      "label": "Imię i nazwisko",
+      "placeholder": "np. Jan Kowalski",
+      "required": {
+        "error": "Podaj swoje imię i nazwisko"
+      },
+      "shortLabel": "Osoba kontaktowa"
+    },
+    "notes": {
+      "helper": "Wszelkie specjalne instrukcje lub prośby",
+      "label": "Uwagi dla przewoźników (opcjonalnie)",
+      "placeholder": "np. Proszę zadzwonić 30 minut przed przyjazdem, w sypialni są rzeczy delikatne…",
+      "shortLabel": "Uwagi dla przewoźników"
+    },
+    "phone": {
+      "helper": "Możemy zadzwonić, aby potwierdzić szczegóły",
+      "label": "Telefon",
+      "placeholder": "np. +49 170 1234567",
+      "required": {
+        "error": "Podaj swój numer telefonu"
+      }
+    },
+    "subtitle": "Wykorzystamy te dane, aby potwierdzić rezerwację i skoordynować przeprowadzkę.",
+    "title": "Dane kontaktowe"
+  },
+  "crew": {
+    "label": "Ekipa",
+    "size": {
+      "label": "Liczebność ekipy"
+    },
+    "tbd": {
+      "label": "Ekipa do ustalenia"
+    }
+  },
+  "crewRole": {
+    "driver": {
+      "label": "Kierowca"
+    },
+    "helper": {
+      "label": "Pomocnik"
+    }
+  },
+  "details": {
+    "title": "Szczegóły przeprowadzki"
+  },
+  "disposal": {
+    "helper": "Wypisz meble lub rzeczy, które mamy zutylizować.",
+    "items": {
+      "label": "Rzeczy do utylizacji"
+    },
+    "placeholder": "np. stara kanapa, zniszczony regał, materac…",
+    "title": "Rzeczy do utylizacji"
+  },
+  "dropoff": {
+    "edit": {
+      "a11y": "Edytuj miejsce dostawy"
+    },
+    "fallback": {
+      "label": "Miejsce dostawy"
+    },
+    "label": "Miejsce dostawy",
+    "location": {
+      "label": "Miejsce dostawy"
+    },
+    "required": {
+      "error": "Wybierz miejsce dostawy"
+    },
+    "short": {
+      "label": "Dostawa"
+    },
+    "tapToSelect": {
+      "placeholder": "Dotknij, aby wybrać dostawę"
+    },
+    "tapToSelectLong": {
+      "placeholder": "Dotknij, aby wybrać miejsce dostawy"
+    }
+  },
+  "dropoffAddress": {
+    "label": "Adres dostawy"
+  },
+  "dropoffParking": {
+    "directlyInFront": {
+      "label": "Parking bezpośrednio przed wejściem"
+    },
+    "limited": {
+      "label": "Ograniczone miejsca parkingowe"
+    },
+    "loadingZone": {
+      "label": "Wymagana strefa załadunku (Haltverbot)"
+    },
+    "streetOnly": {
+      "label": "Brak parkingu / tylko ulica"
+    },
+    "underground": {
+      "label": "Wjazd do garażu podziemnego"
+    }
+  },
+  "duration": {
+    "estimated": {
+      "label": "Szac. czas trwania"
+    }
+  },
+  "elevator": {
+    "dropoff": {
+      "helper": "Czy pod adresem dostawy jest winda?"
+    },
+    "label": "Winda dostępna",
+    "question": {
+      "label": "Czy jest winda?"
+    }
+  },
   "field": {
+    "accessNotes": {
+      "value": "Uwagi dotyczące dostępu: {{notes}}"
+    },
+    "additionalServices": {
+      "label": "Usługi dodatkowe"
+    },
+    "apartmentUnit": {
+      "value": "Mieszkanie/lokal: {{unit}}"
+    },
     "arrivalTime": {
       "hour": {
         "label": "Godz."
@@ -14,11 +312,23 @@
         "title": "Preferowana godzina przyjazdu"
       }
     },
+    "arrivalWindow": {
+      "label": "Przedział czasowy przyjazdu",
+      "value": {
+        "label": "Przyjazd: {{window}}"
+      }
+    },
     "contact": {
       "label": "Kontakt"
     },
+    "crew": {
+      "label": "Ekipa"
+    },
     "crewSize": {
       "label": "Liczebność ekipy"
+    },
+    "disposalItems": {
+      "label": "Rzeczy do utylizacji"
     },
     "distance": {
       "label": "Odległość"
@@ -26,11 +336,32 @@
     "dropoff": {
       "label": "Miejsce docelowe"
     },
+    "dropoffLocation": {
+      "label": "Miejsce dostawy"
+    },
     "elevator": {
       "label": "Czy jest winda?"
     },
+    "elevatorAvailable": {
+      "label": "Winda dostępna"
+    },
+    "estimatedDuration": {
+      "label": "Szac. czas trwania"
+    },
+    "flexibility": {
+      "label": "Elastyczność"
+    },
+    "floor": {
+      "value": "Piętro: {{floor}}"
+    },
+    "homeType": {
+      "label": "Rodzaj lokalu"
+    },
     "inventory": {
       "label": "Spis rzeczy"
+    },
+    "items": {
+      "label": "Przedmioty"
     },
     "moveDate": {
       "label": "Data przeprowadzki",
@@ -39,6 +370,9 @@
         "title": "Wybierz datę przeprowadzki"
       }
     },
+    "moveDateTime": {
+      "label": "Data i godzina przeprowadzki"
+    },
     "moveType": {
       "label": "Rodzaj przeprowadzki",
       "placeholder": "Wybierz rodzaj przeprowadzki",
@@ -46,8 +380,29 @@
         "title": "Wybierz rodzaj przeprowadzki"
       }
     },
+    "name": {
+      "label": "Imię i nazwisko"
+    },
+    "notesForMovers": {
+      "label": "Uwagi dla przewoźników"
+    },
+    "packingMaterials": {
+      "label": "Materiały do pakowania"
+    },
+    "packingNotes": {
+      "label": "Uwagi do pakowania"
+    },
+    "packingService": {
+      "label": "Usługa pakowania"
+    },
+    "parking": {
+      "value": "Parking: {{parking}}"
+    },
     "pickup": {
       "label": "Odbiór"
+    },
+    "pickupLocation": {
+      "label": "Miejsce odbioru"
     },
     "preferredTime": {
       "label": "Preferowana pora",
@@ -65,9 +420,25 @@
     },
     "vehicle": {
       "label": "Pojazd"
+    },
+    "weight": {
+      "label": "Waga",
+      "value": "{{weight}} kg"
+    }
+  },
+  "flexibility": {
+    "flexible1hr": {
+      "label": "Mogę poczekać do 1 godziny"
+    },
+    "label": "Elastyczność",
+    "notFlexible": {
+      "label": "Bez elastyczności"
     }
   },
   "floorLevel": {
+    "dropoff": {
+      "helper": "Na którym piętrze znajduje się adres dostawy?"
+    },
     "floor1": {
       "option": "1. piętro"
     },
@@ -84,28 +455,147 @@
       "option": "5. piętro lub wyżej"
     },
     "ground": {
+      "label": "Parter",
       "option": "Parter"
     },
+    "label": "Piętro",
     "numbered": {
+      "label_ordinal_other": "{{count}}. piętro",
       "option": "{{n}}. piętro"
+    },
+    "pickup": {
+      "helper": "Na którym piętrze znajduje się adres odbioru?"
+    },
+    "placeholder": "Wybierz piętro",
+    "required": {
+      "error": "Wybierz piętro"
+    }
+  },
+  "haltverbot": {
+    "arrange": {
+      "helper": "Zajmiemy się wnioskiem w Twoim urzędzie miasta",
+      "label": "Czy mamy załatwić dla Ciebie zezwolenie Haltverbot?"
+    },
+    "arrangeDropoff": {
+      "helper": "Zajmiemy się wnioskiem w miejscowym urzędzie",
+      "label": "Czy mamy załatwić zezwolenie Haltverbot pod adresem dostawy?"
+    },
+    "arrangeNo": {
+      "label": "Nie, zajmę się tym samodzielnie"
+    },
+    "arrangeYes": {
+      "label": "Tak, załatwcie to za mnie"
+    },
+    "customerArranges": {
+      "label": "Klient załatwia we własnym zakresie"
+    },
+    "helper": "Strefa Haltverbot rezerwuje miejsce postojowe dla samochodu przeprowadzkowego",
+    "label": "Wymagana strefa załadunku? (niemieckie zezwolenie Haltverbot)",
+    "requested": {
+      "label": "Zamówiono Haltverbot (strefa zakazu postoju)"
+    },
+    "weArrange": {
+      "label": "My załatwiamy"
     }
   },
   "homeType": {
     "apartment": {
+      "label": "Mieszkanie",
       "option": "Mieszkanie"
     },
+    "helper": "Wybierz rodzaj lokalu lub przestrzeni do przeprowadzki",
     "house": {
+      "label": "Dom",
       "option": "Dom"
     },
+    "label": "Rodzaj lokalu",
     "office": {
+      "label": "Biuro",
       "option": "Biuro"
     },
     "other": {
       "option": "Inne"
     },
+    "placeholder": "Wybierz rodzaj",
+    "required": {
+      "error": "Wybierz rodzaj lokalu"
+    },
     "storage": {
+      "label": "Magazyn",
       "option": "Magazyn"
     }
+  },
+  "inventory": {
+    "addCustom": {
+      "cta": "Dodaj własny przedmiot"
+    },
+    "addItem": {
+      "cta": "Dodaj przedmiot"
+    },
+    "custom": {
+      "name": {
+        "label": "Nazwa przedmiotu *",
+        "placeholder": "np. zegar stojący"
+      },
+      "qty": {
+        "label_few": "Liczba: {{count}}",
+        "label_many": "Liczba: {{count}}",
+        "label_one": "Liczba: {{count}}",
+        "label_other": "Liczba: {{count}}"
+      },
+      "size": {
+        "label": "• Rozmiar: {{size}}"
+      },
+      "sizeField": {
+        "label": "Przybliżony rozmiar",
+        "placeholder": "np. 100x50x200 cm"
+      },
+      "weight": {
+        "label": "• Waga: {{weight}}"
+      },
+      "weightField": {
+        "label": "Przybliżona waga",
+        "placeholder": "np. 50 kg"
+      }
+    },
+    "customItems": {
+      "empty": "Nie dodano jeszcze własnych przedmiotów. Użyj przycisku powyżej, aby dodać rzeczy spoza listy.",
+      "title": "Własne przedmioty"
+    },
+    "customModal": {
+      "title": "Dodaj własny przedmiot"
+    },
+    "emptyCatalog": {
+      "subtitle": "Nasza lista rzeczy do przewozu jest właśnie przygotowywana. Spróbuj ponownie za chwilę.",
+      "title": "Brak dostępnych przedmiotów"
+    },
+    "heavyItems": {
+      "label": "Ciężkie przedmioty wymagające specjalnego traktowania"
+    },
+    "items": {
+      "label": "Przedmioty"
+    },
+    "itemsCount": {
+      "label": "Przedmioty"
+    },
+    "itemsToMove": {
+      "title": "Rzeczy do przewiezienia"
+    },
+    "loadFailed": {
+      "title": "Nie udało się wczytać listy przedmiotów"
+    },
+    "required": {
+      "error": "Dodaj co najmniej jeden przedmiot do spisu rzeczy, zanim przejdziesz dalej."
+    },
+    "selectedCount_few": "Wybrano {{count}} przedmioty",
+    "selectedCount_many": "Wybrano {{count}} przedmiotów",
+    "selectedCount_one": "Wybrano {{count}} przedmiot",
+    "selectedCount_other": "Wybrano {{count}} przedmiotu",
+    "specialItems": {
+      "helper": "Te przedmioty wymagają specjalnego traktowania i mogą wpłynąć na cenę.",
+      "title": "Przedmioty specjalne"
+    },
+    "title": "Spis rzeczy"
   },
   "location": {
     "gpsFailed": {
@@ -120,6 +610,9 @@
     "noResults": {
       "empty": "Nie znaleziono lokalizacji"
     },
+    "noResultsLong": {
+      "empty": "Nie znaleziono lokalizacji. Spróbuj innego wyszukiwania."
+    },
     "permissionDenied": {
       "error": "Odmówiono dostępu do lokalizacji. Włącz go w Ustawieniach."
     },
@@ -129,15 +622,24 @@
     "searchIdle": {
       "empty": "Zacznij pisać, aby wyszukać adres."
     },
+    "section": {
+      "title": "Lokalizacje"
+    },
     "selectPlaceholder": {
       "placeholder": "Wybierz lokalizację: {{field}}"
     },
     "sheet": {
       "title": "Lokalizacja: {{field}}"
     },
+    "suggestions": {
+      "label": "Sugerowane lokalizacje"
+    },
     "useCurrent": {
       "cta": "Użyj bieżącej lokalizacji"
     }
+  },
+  "locations": {
+    "title": "Lokalizacje"
   },
   "map": {
     "dropoff": {
@@ -166,6 +668,9 @@
     "search": {
       "placeholder": "Szukaj lokalizacji…"
     },
+    "selected": {
+      "label": "Wybrana lokalizacja"
+    },
     "tapHint": {
       "helper": "Dotknij mapy, aby wybrać lokalizację"
     },
@@ -173,25 +678,51 @@
       "cta": "Użyj mojej bieżącej lokalizacji"
     }
   },
+  "moveDate": {
+    "helper": "Kiedy chcesz się przeprowadzić?",
+    "label": "Data przeprowadzki",
+    "placeholder": "Wybierz datę przeprowadzki",
+    "required": {
+      "error": "Wybierz datę przeprowadzki"
+    }
+  },
   "moveType": {
+    "a11y": "Wybierz rodzaj przeprowadzki",
+    "label": "Rodzaj przeprowadzki",
     "light": {
       "body": "Małe przeprowadzki realizujemy małym busem.",
+      "helper": "Mały ładunek — kilka rzeczy",
+      "label": "Mała przeprowadzka",
       "short": "Mała",
       "subtitle": "Idealna przy niewielkim ładunku — kartony, pojedyncze meble lub kawalerka.",
       "title": "Mała przeprowadzka"
     },
+    "placeholder": "Wybierz rodzaj przeprowadzki",
     "premium": {
       "body": "Przeprowadzki premium realizujemy większymi pojazdami i ekipą liczącą 2 osoby lub więcej.",
+      "helper": "Przeprowadzka z pełną obsługą",
+      "label": "Przeprowadzka premium",
       "short": "Premium",
       "subtitle": "Pełna obsługa dużych domów — pakowanie, załadunek, transport i rozładunek.",
       "title": "Przeprowadzka premium"
     },
     "regular": {
       "body": "Standardowe przeprowadzki realizujemy średnim pojazdem i 2-osobową ekipą.",
+      "helper": "Standardowa przeprowadzka domowa",
+      "label": "Standardowa przeprowadzka",
       "short": "Standardowa",
       "subtitle": "Dobra dla mieszkań 2–3-pokojowych ze zwykłymi meblami i sprzętem AGD.",
       "title": "Standardowa przeprowadzka"
-    }
+    },
+    "section": {
+      "title": "Rodzaj przeprowadzki"
+    },
+    "selectHelper": "Wybierz rodzaj przeprowadzki",
+    "selectPlaceholder": "Wybierz rodzaj",
+    "suffixed": {}
+  },
+  "packing": {
+    "label": "Usługa pakowania"
   },
   "packingLevel": {
     "full": {
@@ -211,8 +742,21 @@
       "option": "Pakowanie i rozpakowanie"
     }
   },
+  "packingMaterials": {
+    "label": "Materiały do pakowania",
+    "selectedCount": {
+      "label_few": "Wybrano: {{count}}",
+      "label_many": "Wybrano: {{count}}",
+      "label_one": "Wybrano: {{count}}",
+      "label_other": "Wybrano: {{count}}"
+    }
+  },
+  "packingNotes": {
+    "label": "Uwagi do pakowania"
+  },
   "parking": {
     "atBuilding": {
+      "label": "Parking bezpośrednio przy budynku",
       "option": "Parking bezpośrednio przy budynku"
     },
     "directlyInFront": {
@@ -221,6 +765,8 @@
     "driveway": {
       "option": "Podjazd"
     },
+    "helper": "Dostępność miejsc parkingowych przy budynku dla samochodu przeprowadzkowego",
+    "label": "Sytuacja parkingowa",
     "limited": {
       "option": "Ograniczone miejsca parkingowe"
     },
@@ -231,10 +777,18 @@
       "option": "Parking"
     },
     "nearby": {
+      "label": "Parking w pobliżu (0–20 m)",
       "option": "Parking w pobliżu (0–20 m)"
+    },
+    "noParking": {
+      "label": "Brak parkingu / długie noszenie"
     },
     "none": {
       "option": "Brak miejsca do parkowania"
+    },
+    "placeholder": "Wybierz sytuację parkingową",
+    "required": {
+      "error": "Wybierz sytuację parkingową"
     },
     "street": {
       "option": "Parkowanie na ulicy"
@@ -244,21 +798,192 @@
     }
   },
   "payment": {
+    "amount": {
+      "label": "Kwota do zapłaty"
+    },
+    "amountCard": {
+      "label": "Kwota do zapłaty kartą"
+    },
+    "awaitingClient": {
+      "label": "Czekamy na potwierdzenie płatności przez klienta…"
+    },
+    "awaitingMover": {
+      "label": "Płatność potwierdzona! Czekamy na potwierdzenie odbioru zapłaty przez przewoźnika…"
+    },
+    "bankTransfer": {
+      "label": "Przelew bankowy"
+    },
+    "card": {
+      "helper": "Karta zostanie obciążona po zakończeniu przeprowadzki. Teraz nie pobieramy żadnej opłaty.",
+      "label": "Karta"
+    },
+    "cash": {
+      "body": "Wybierając płatność gotówką, zapłacisz przewoźnikowi bezpośrednio po zakończeniu przeprowadzki. Przygotuj odliczoną kwotę.",
+      "footnote": "Zapłacisz przewoźnikowi bezpośrednio po zakończeniu przeprowadzki.",
+      "helper": "Zapłać przewoźnikowi gotówką na miejscu. Bez obciążania karty.",
+      "label": "Gotówka",
+      "noUpfront": {
+        "label": "Bez płatności z góry"
+      },
+      "payAfter": {
+        "label": "Płatność po zakończeniu przeprowadzki"
+      },
+      "receipt": {
+        "label": "Paragon wystawia przewoźnik"
+      },
+      "title": "Zapłać przewoźnikowi bezpośrednio"
+    },
+    "cashHandshake": {
+      "helper": "Zapłać przewoźnikowi bezpośrednio (gotówką lub przelewem), a następnie dotknij „Zapłaciłem” poniżej."
+    },
+    "cashLong": {
+      "label": "Gotówka (płatność bezpośrednio przewoźnikowi)"
+    },
+    "cashReminder": {
+      "helper": "Przygotuj {{amount}} do zapłaty przewoźnikowi po zakończeniu przeprowadzki."
+    },
+    "cashSelected": {
+      "title": "Wybrano płatność gotówką"
+    },
+    "clientConfirmed": {
+      "label": "Klient potwierdził",
+      "success": "Płatność klienta potwierdzona. Czekamy na potwierdzenie przewoźnika."
+    },
+    "confirmation": {
+      "title": "Potwierdzenie płatności"
+    },
+    "confirming": {
+      "cta": "Potwierdzanie…"
+    },
+    "creditCard": {
+      "label": "Karta kredytowa"
+    },
+    "dualConfirm": {
+      "helper": "Przewoźnik również musi potwierdzić otrzymanie zapłaty, zanim przeprowadzka zostanie oznaczona jako zakończona."
+    },
+    "iHavePaid": {
+      "cta": "Zapłaciłem"
+    },
     "method": {
+      "card": {
+        "label": "Karta"
+      },
       "cash": {
         "label": "Gotówka"
+      },
+      "helper": "Jak chcesz zapłacić za przeprowadzkę?",
+      "label": "Preferowana metoda płatności"
+    },
+    "moverConfirm": {
+      "cta": "Potwierdź otrzymanie zapłaty",
+      "helper": "Potwierdź, gdy klient Ci zapłaci"
+    },
+    "moverConfirmed": {
+      "success": "Płatność potwierdzona przez przewoźnika. Czekamy na potwierdzenie klienta."
+    },
+    "paidOn": {
+      "label": "Zapłacono"
+    },
+    "payCard": {
+      "cta": "Zapłać kartą"
+    },
+    "payCash": {
+      "cta": "Zapłać gotówką"
+    },
+    "payWith": {
+      "title": "Zapłać za pomocą"
+    },
+    "reminder": {
+      "body": "Przygotuj <0>{{amount}}</0> do zapłaty bezpośrednio przewoźnikowi {{when}}.",
+      "title": "Przypomnienie o płatności",
+      "whenInstant": {
+        "label": "po zakończeniu przeprowadzki"
+      },
+      "whenScheduled": {
+        "label": "w dniu przeprowadzki"
       }
     },
     "section": {
       "title": "Płatność"
+    },
+    "title": "Płatność",
+    "yourConfirmation": {
+      "label": "Twoje potwierdzenie"
+    }
+  },
+  "paypal": {
+    "email": {
+      "label": "E-mail PayPal",
+      "placeholder": "twoj@email.com"
+    },
+    "redirect": {
+      "helper": "Przekierujemy Cię do PayPal, aby bezpiecznie dokończyć płatność."
     }
   },
   "photos": {
+    "addMore": {
+      "cta": "Dodaj więcej zdjęć"
+    },
+    "additional": {
+      "helper": "Prześlij więcej zdjęć mebli, pomieszczeń lub konkretnych rzeczy",
+      "label": "Dodatkowe zdjęcia"
+    },
+    "additionalCount_few": "{{count}} dodatkowe zdjęcia",
+    "additionalCount_many": "{{count}} dodatkowych zdjęć",
+    "additionalCount_one": "{{count}} dodatkowe zdjęcie",
+    "additionalCount_other": "{{count}} dodatkowego zdjęcia",
+    "all": {
+      "title": "Wszystkie zdjęcia"
+    },
     "chooseGallery": {
       "cta": "Wybierz z galerii"
     },
+    "countSummary": {
+      "label": "{{main}} • {{additional}}"
+    },
+    "cover": {
+      "a11y": "Zdjęcie główne",
+      "helper": "Prześlij zdjęcie główne pokazujące Twoje rzeczy lub przestrzeń",
+      "label": "Zdjęcie główne"
+    },
     "formatHint": {
       "subtitle": "PNG, JPG do 3 MB"
+    },
+    "gallery": {
+      "a11y": "Zdjęcia przeprowadzki",
+      "helper": "Prześlij dodatkowe zdjęcia mebli, pomieszczeń lub rzeczy",
+      "item": {
+        "a11y": "Zdjęcie z galerii {{index}}"
+      },
+      "label": "Zdjęcia z galerii"
+    },
+    "item": {
+      "a11y": "Zdjęcie przeprowadzki"
+    },
+    "itemIndexed": {
+      "a11y": "Zdjęcie przeprowadzki {{index}}"
+    },
+    "itemNumbered": {
+      "a11y": "Zdjęcie przeprowadzki {{n}}"
+    },
+    "main": {
+      "cta": "Dotknij, aby przesłać zdjęcie główne",
+      "helper": "Prześlij zdjęcie główne pokazujące Twoje rzeczy lub przestrzeń",
+      "label": "Zdjęcie główne"
+    },
+    "mainCount_few": "{{count}} zdjęcia główne",
+    "mainCount_many": "{{count}} zdjęć głównych",
+    "mainCount_one": "{{count}} zdjęcie główne",
+    "mainCount_other": "{{count}} zdjęcia głównego",
+    "photoCount_few": "{{count}} zdjęcia",
+    "photoCount_many": "{{count}} zdjęć",
+    "photoCount_one": "{{count}} zdjęcie",
+    "photoCount_other": "{{count}} zdjęcia",
+    "preview": {
+      "a11y": "Podgląd przeprowadzki"
+    },
+    "required": {
+      "error": "Dodaj co najmniej jedno zdjęcie swoich rzeczy, zanim przejdziesz dalej."
     },
     "sourceSheet": {
       "title": "Dodaj zdjęcie"
@@ -267,12 +992,89 @@
       "cta": "Zrób zdjęcie"
     }
   },
+  "pickup": {
+    "edit": {
+      "a11y": "Edytuj miejsce odbioru"
+    },
+    "fallback": {
+      "label": "Miejsce odbioru"
+    },
+    "label": "Miejsce odbioru",
+    "location": {
+      "label": "Miejsce odbioru"
+    },
+    "required": {
+      "error": "Wybierz miejsce odbioru"
+    },
+    "short": {
+      "label": "Odbiór"
+    },
+    "tapToSelect": {
+      "placeholder": "Dotknij, aby wybrać odbiór"
+    },
+    "tapToSelectLong": {
+      "placeholder": "Dotknij, aby wybrać miejsce odbioru"
+    }
+  },
+  "pickupAddress": {
+    "label": "Adres odbioru"
+  },
+  "price": {
+    "estimated": {
+      "label": "Cena szacunkowa"
+    },
+    "final": {
+      "label": "Cena końcowa"
+    }
+  },
   "pricing": {
+    "additionalServicesCount": {
+      "label_few": "Usługi dodatkowe ({{count}})",
+      "label_many": "Usługi dodatkowe ({{count}})",
+      "label_one": "Usługi dodatkowe ({{count}})",
+      "label_other": "Usługi dodatkowe ({{count}})"
+    },
+    "baseFare": {
+      "label": "Opłata podstawowa"
+    },
     "baseRate": {
       "label": "Stawka podstawowa ({{moveType}})"
     },
+    "baseRateWithDistance": {
+      "label": "Stawka podstawowa ({{moveType}}, {{distance}})"
+    },
+    "crew": {
+      "label": "Ekipa ({{crew}})"
+    },
+    "estimatedTotal": {
+      "label": "Szacowana suma"
+    },
+    "finalAfterReview": {
+      "helper": "Cena końcowa potwierdzana po weryfikacji"
+    },
+    "floorSurcharge": {
+      "label": "Dopłata za piętro"
+    },
+    "itemsCount": {
+      "label_few": "Przedmioty ({{count}})",
+      "label_many": "Przedmioty ({{count}})",
+      "label_one": "Przedmioty ({{count}})",
+      "label_other": "Przedmioty ({{count}})"
+    },
+    "moverFare": {
+      "label": "Wynagrodzenie przewoźnika"
+    },
+    "packingService": {
+      "label": "Usługa pakowania"
+    },
     "storage": {
       "label": "Przechowywanie"
+    },
+    "storageWeeks": {
+      "label_few": "Przechowywanie ({{count}} tygodnie)",
+      "label_many": "Przechowywanie ({{count}} tygodni)",
+      "label_one": "Przechowywanie ({{count}} tydzień)",
+      "label_other": "Przechowywanie ({{count}} tygodnia)"
     },
     "subtotal": {
       "label": "Suma częściowa"
@@ -284,7 +1086,56 @@
       "label": "VAT ({{rate}})"
     }
   },
+  "route": {
+    "driveTime": {
+      "label": "~{{duration}} jazdy"
+    },
+    "from": {
+      "label": "Skąd"
+    },
+    "title": "Szczegóły trasy",
+    "to": {
+      "label": "Dokąd"
+    }
+  },
+  "service": {
+    "applianceConnect": {
+      "helper": "Ponownie podłączamy sprzęt pod nowym adresem",
+      "label": "Podłączenie sprzętu AGD"
+    },
+    "applianceDisconnect": {
+      "helper": "Odłączamy pralkę, zmywarkę, suszarkę",
+      "label": "Odłączenie sprzętu AGD"
+    },
+    "assembly": {
+      "helper": "Montujemy meble w nowym miejscu",
+      "label": "Montaż mebli"
+    },
+    "cleaning": {
+      "helper": "Profesjonalne sprzątanie Twojego dotychczasowego mieszkania",
+      "label": "Sprzątanie po wyprowadzce"
+    },
+    "disassembly": {
+      "helper": "Demontujemy łóżka, szafy i stoły przed załadunkiem",
+      "label": "Demontaż mebli"
+    },
+    "disposal": {
+      "helper": "Utylizujemy niepotrzebne meble i rzeczy",
+      "label": "Utylizacja (Entsorgung)"
+    },
+    "storage": {
+      "helper": "Bezpiecznie przechowujemy rzeczy między przeprowadzkami",
+      "label": "Przechowywanie tymczasowe"
+    },
+    "tvMount": {
+      "helper": "Montujemy lub zdejmujemy telewizory z uchwytów ściennych",
+      "label": "Montaż / demontaż uchwytu TV"
+    }
+  },
   "services": {
+    "additional": {
+      "label": "Usługi dodatkowe"
+    },
     "applianceConnect": {
       "helper": "Ponownie podłączamy sprzęt w nowym miejscu",
       "label": "Podłączenie sprzętu AGD",
@@ -295,10 +1146,15 @@
       "label": "Odłączenie sprzętu AGD",
       "option": "Odłączenie sprzętu AGD"
     },
+    "detailsSubtitle": "Wybrane przez Ciebie usługi i preferencje",
+    "detailsTitle": "Szczegóły usług",
     "disposal": {
       "helper": "Wywozimy niepotrzebne rzeczy do miejskiego punktu zbiórki odpadów",
       "label": "Utylizacja",
       "option": "Utylizacja"
+    },
+    "disposalItems": {
+      "label": "Rzeczy do utylizacji: {{items}}"
     },
     "furnitureAssembly": {
       "helper": "Montujemy meble w nowym miejscu",
@@ -315,15 +1171,55 @@
       "label": "Sprzątanie po wyprowadzce",
       "option": "Sprzątanie po wyprowadzce"
     },
+    "section": {
+      "title": "Usługi"
+    },
+    "subtitle": "Wybrane przez Ciebie usługi dodatkowe",
     "temporaryStorage": {
       "helper": "Przechowujemy rzeczy między datą odbioru a dostawy",
       "label": "Przechowywanie tymczasowe",
       "option": "Przechowywanie tymczasowe"
     },
+    "temporaryStorageWeeks": {
+      "label_few": "Przechowywanie tymczasowe: {{count}} tygodnie",
+      "label_many": "Przechowywanie tymczasowe: {{count}} tygodni",
+      "label_one": "Przechowywanie tymczasowe: {{count}} tydzień",
+      "label_other": "Przechowywanie tymczasowe: {{count}} tygodnia"
+    },
+    "title": "Usługi dodatkowe",
     "tvMountRemove": {
       "helper": "Zdejmujemy telewizory z uchwytów ściennych przy odbiorze",
       "label": "Demontaż uchwytu TV",
       "option": "Demontaż uchwytu TV"
+    }
+  },
+  "storage": {
+    "helper": "Standardowe magazyny mają kontrolowany klimat i są ubezpieczone.",
+    "title": "Szczegóły przechowywania",
+    "weeks": {
+      "label": "Ile tygodni przechowywania?"
+    }
+  },
+  "storageWeekCount_few": "{{count}} tygodnie",
+  "storageWeekCount_many": "{{count}} tygodni",
+  "storageWeekCount_one": "{{count}} tydzień",
+  "storageWeekCount_other": "{{count}} tygodnia",
+  "storageWeeks_few": "{{count}} tygodnie",
+  "storageWeeks_many": "{{count}} tygodni",
+  "storageWeeks_one": "{{count}} tydzień",
+  "storageWeeks_other": "{{count}} tygodnia",
+  "streetAddress": {
+    "dropoff": {
+      "helper": "Podaj pełny adres dostawy",
+      "placeholder": "np. Berliner Straße 12"
+    },
+    "label": "Ulica i numer",
+    "pickup": {
+      "helper": "Podaj pełny adres odbioru",
+      "placeholder": "np. Hauptstraße 45"
+    },
+    "required": {
+      "error": "Podaj adres"
     }
   },
   "timeSlot": {
@@ -337,15 +1233,89 @@
       "label": "Rano"
     }
   },
+  "timing": {
+    "now": {
+      "label": "Teraz"
+    },
+    "title": "Termin przeprowadzki"
+  },
+  "timingPrefs": {
+    "earliest": {
+      "label": "Wolę jak najwcześniejszy przyjazd"
+    },
+    "helper": "Wybierz dodatkowe preferencje dotyczące terminu.",
+    "noEvening": {
+      "label": "Unikaj dostawy wieczorem"
+    },
+    "noLunchGap": {
+      "label": "Unikaj przerwy na przerwę obiadową"
+    },
+    "title": "Preferencje opcjonalne"
+  },
   "vehicle": {
+    "addDetails": {
+      "helper": "Dodaj dane swojego pojazdu"
+    },
+    "brand": {
+      "label": "Marka pojazdu *",
+      "placeholder": "np. Mercedes-Benz"
+    },
+    "brandShort": {
+      "label": "Marka *"
+    },
+    "capacity": {
+      "label": "Ładowność (m³)",
+      "placeholder": "np. 15",
+      "value": "{{capacity}} m³"
+    },
+    "edit": {
+      "title": "Edytuj dane pojazdu"
+    },
     "largeTruck": {
+      "capacity": "25+ m³",
+      "helper": "25+ m³ — przeprowadzki domów, duże ładunki",
       "label": "Duża ciężarówka"
     },
     "mediumTruck": {
+      "capacity": "10–25 m³",
+      "helper": "10–25 m³ — przeprowadzki mieszkań",
       "label": "Średnia ciężarówka"
     },
+    "model": {
+      "label": "Model pojazdu *",
+      "placeholder": "np. Sprinter"
+    },
+    "modelShort": {
+      "label": "Model *"
+    },
+    "multiple": {
+      "label": "Kilka"
+    },
+    "registration": {
+      "label": "Numer rejestracyjny *",
+      "placeholder": "np. B-AB 1234"
+    },
+    "registrationShort": {
+      "label": "Rejestracja *"
+    },
     "smallVan": {
+      "capacity": "Do 10 m³",
+      "helper": "Do 10 m³ — małe przeprowadzki, pojedyncze rzeczy",
       "label": "Mały bus"
+    },
+    "title": "Dane pojazdu",
+    "type": {
+      "label": "Rodzaj pojazdu"
+    },
+    "updated": {
+      "success": "Dane pojazdu zaktualizowane"
+    },
+    "year": {
+      "label": "Rok *",
+      "placeholder": "np. 2022"
+    },
+    "yearShort": {
+      "label": "Rok"
     }
   }
 }

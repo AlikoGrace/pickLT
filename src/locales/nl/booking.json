@@ -1,5 +1,301 @@
 {
+  "accessNotes": {
+    "helper": "Alle details die ons team helpen om op de locatie te komen",
+    "label": "Toegangsnotities (optioneel)",
+    "placeholder": "bijv. smalle gang, steile trap, werkzaamheden bij de ingang",
+    "shortLabel": "Toegangsnotities"
+  },
+  "address": {
+    "accessNotes": {
+      "label": "Toegangsnotities: {{notes}}"
+    },
+    "aptUnit": {
+      "label": "Appartement/unit: {{unit}}"
+    },
+    "elevatorAvailable": {
+      "label": "Lift aanwezig"
+    },
+    "floor": {
+      "label": "Verdieping: {{floor}}"
+    },
+    "label": "Locatie",
+    "noResults": {
+      "empty": "Geen locaties gevonden"
+    },
+    "parking": {
+      "label": "Parkeren: {{value}}"
+    },
+    "suggestions": {
+      "label": "Voorgestelde locaties"
+    },
+    "typeToSearch": {
+      "empty": "Typ om naar locaties te zoeken"
+    },
+    "useCurrent": {
+      "cta": "Mijn huidige locatie gebruiken"
+    },
+    "withUnit": {
+      "label": "{{address}}, unit {{unit}}"
+    }
+  },
+  "apartmentUnit": {
+    "dropoff": {
+      "placeholder": "bijv. 2e verdieping, app. 5"
+    },
+    "helper": "Verdieping, appartementnummer of naam van de unit",
+    "label": "Appartement / unit (optioneel)",
+    "pickup": {
+      "placeholder": "bijv. 3e verdieping, app. 12"
+    }
+  },
+  "arrivalTime": {
+    "fieldLabel": "Aankomsttijd",
+    "helper": "Kies wanneer je wilt dat de verhuizers aankomen.",
+    "label": "Gewenste aankomsttijd",
+    "placeholder": "Kies een tijd"
+  },
+  "arrivalWindow": {
+    "afternoon": {
+      "label": "Middag (12:00–17:00)"
+    },
+    "evening": {
+      "label": "Avond (17:00–21:00)"
+    },
+    "label": "Aankomsttijdvak",
+    "morning": {
+      "label": "Ochtend (08:00–12:00)"
+    },
+    "optionalLabel": "Aankomsttijdvak (optioneel)"
+  },
+  "business": {
+    "company": {
+      "label": "Bedrijfsnaam",
+      "placeholder": "bijv. Mustermann GmbH",
+      "shortLabel": "Bedrijf"
+    },
+    "companyName": {
+      "label": "Bedrijf"
+    },
+    "isBusiness": {
+      "label": "Dit is een zakelijke verhuizing (ik heb een factuur met btw nodig)"
+    },
+    "title": "Bedrijfsgegevens",
+    "type": {
+      "business": {
+        "label": "Zakelijke verhuizing"
+      },
+      "personal": {
+        "label": "Particuliere verhuizing"
+      }
+    },
+    "vatId": {
+      "helper": "Voor zakelijke facturen binnen de EU",
+      "label": "VAT ID (USt-IdNr.)",
+      "placeholder": "bijv. DE123456789",
+      "shortLabel": "VAT ID"
+    }
+  },
+  "card": {
+    "cvc": {
+      "label": "CVC"
+    },
+    "expiry": {
+      "label": "Vervaldatum"
+    },
+    "holder": {
+      "label": "Kaarthouder",
+      "placeholder": "JOHN DOE"
+    },
+    "number": {
+      "label": "Kaartnummer"
+    }
+  },
+  "category": {
+    "instant": {
+      "label": "Directe verhuizing"
+    }
+  },
+  "classification": {
+    "itemMinimum": {
+      "premium": "“{{item}}” vereist minstens een Premium verhuizing",
+      "regular": "“{{item}}” vereist minstens een Gewone verhuizing"
+    },
+    "keepCurrent": {
+      "cta": "Huidige behouden"
+    },
+    "nearLimit": {
+      "light": "Je nadert de grens van een Kleine verhuizing",
+      "regular": "Je nadert de grens van een Gewone verhuizing"
+    },
+    "notice": {
+      "title": "Melding over de indeling van je verhuizing"
+    },
+    "pointCount_one": "{{count}} punt",
+    "pointCount_other": "{{count}} punten",
+    "points": {
+      "label": "Punten"
+    },
+    "summary": {
+      "label": "{{items}} · ~{{weight}} kg · {{points}}"
+    },
+    "title": "Indeling van de verhuizing",
+    "upgrade": {
+      "fallback": {
+        "cta": "Verhuistype upgraden"
+      },
+      "light": {
+        "cta": "Upgraden naar Kleine verhuizing"
+      },
+      "premium": {
+        "cta": "Upgraden naar Premium verhuizing"
+      },
+      "regular": {
+        "cta": "Upgraden naar Gewone verhuizing"
+      },
+      "subtitle": "Op basis van je gekozen spullen raden we aan om te upgraden van <0>{{from}}</0> naar <1>{{to}}</1>.",
+      "title": "Upgrade van het verhuistype aanbevolen"
+    },
+    "weight": {
+      "label": "Geschat gewicht"
+    }
+  },
+  "contact": {
+    "email": {
+      "helper": "Voor de bevestiging van je boeking en updates",
+      "invalid": {
+        "error": "Voer een geldig e-mailadres in"
+      },
+      "label": "E-mail",
+      "placeholder": "bijv. max@voorbeeld.nl",
+      "required": {
+        "error": "Voer je e-mailadres in"
+      }
+    },
+    "emailPhone": {
+      "label": "{{email}} · {{phone}}"
+    },
+    "name": {
+      "helper": "Je voor- en achternaam",
+      "label": "Naam",
+      "placeholder": "bijv. Max Mustermann",
+      "required": {
+        "error": "Voer je volledige naam in"
+      },
+      "shortLabel": "Naam contactpersoon"
+    },
+    "notes": {
+      "helper": "Bijzondere instructies of wensen",
+      "label": "Notities voor de verhuizers (optioneel)",
+      "placeholder": "bijv. Bel 30 minuten voor aankomst, breekbare spullen in de slaapkamer…",
+      "shortLabel": "Notities voor de verhuizers"
+    },
+    "phone": {
+      "helper": "We bellen je mogelijk om details te bevestigen",
+      "label": "Telefoon",
+      "placeholder": "bijv. +49 170 1234567",
+      "required": {
+        "error": "Voer je telefoonnummer in"
+      }
+    },
+    "subtitle": "We gebruiken deze gegevens om je boeking te bevestigen en de verhuizing af te stemmen.",
+    "title": "Contactgegevens"
+  },
+  "crew": {
+    "label": "Team",
+    "size": {
+      "label": "Teamgrootte"
+    },
+    "tbd": {
+      "label": "Team nog te bepalen"
+    }
+  },
+  "crewRole": {
+    "driver": {
+      "label": "Chauffeur"
+    },
+    "helper": {
+      "label": "Helper"
+    }
+  },
+  "details": {
+    "title": "Details van de verhuizing"
+  },
+  "disposal": {
+    "helper": "Noem de meubels of spullen die we voor je moeten afvoeren.",
+    "items": {
+      "label": "Af te voeren spullen"
+    },
+    "placeholder": "bijv. oude bank, kapotte boekenkast, matras...",
+    "title": "Spullen om af te voeren"
+  },
+  "dropoff": {
+    "edit": {
+      "a11y": "Afleverlocatie bewerken"
+    },
+    "fallback": {
+      "label": "Afleverlocatie"
+    },
+    "label": "Afleverlocatie",
+    "location": {
+      "label": "Afleverlocatie"
+    },
+    "required": {
+      "error": "Kies een afleverlocatie"
+    },
+    "short": {
+      "label": "Afleveren"
+    },
+    "tapToSelect": {
+      "placeholder": "Tik om afleveren te kiezen"
+    },
+    "tapToSelectLong": {
+      "placeholder": "Tik om de afleverlocatie te kiezen"
+    }
+  },
+  "dropoffAddress": {
+    "label": "Afleveradres"
+  },
+  "dropoffParking": {
+    "directlyInFront": {
+      "label": "Parkeren direct ervoor"
+    },
+    "limited": {
+      "label": "Beperkte parkeergelegenheid"
+    },
+    "loadingZone": {
+      "label": "Laad- en loszone nodig (Haltverbot)"
+    },
+    "streetOnly": {
+      "label": "Geen parkeerplaats / alleen op straat"
+    },
+    "underground": {
+      "label": "Toegang tot parkeergarage"
+    }
+  },
+  "duration": {
+    "estimated": {
+      "label": "Geschatte duur"
+    }
+  },
+  "elevator": {
+    "dropoff": {
+      "helper": "Is er een lift op de afleverlocatie?"
+    },
+    "label": "Lift aanwezig",
+    "question": {
+      "label": "Is er een lift?"
+    }
+  },
   "field": {
+    "accessNotes": {
+      "value": "Toegangsnotities: {{notes}}"
+    },
+    "additionalServices": {
+      "label": "Extra diensten"
+    },
+    "apartmentUnit": {
+      "value": "Appartement/unit: {{unit}}"
+    },
     "arrivalTime": {
       "hour": {
         "label": "Uur"
@@ -14,11 +310,23 @@
         "title": "Gewenste aankomsttijd"
       }
     },
+    "arrivalWindow": {
+      "label": "Aankomsttijdvak",
+      "value": {
+        "label": "Aankomst {{window}}"
+      }
+    },
     "contact": {
       "label": "Contact"
     },
+    "crew": {
+      "label": "Team"
+    },
     "crewSize": {
       "label": "Teamgrootte"
+    },
+    "disposalItems": {
+      "label": "Af te voeren spullen"
     },
     "distance": {
       "label": "Afstand"
@@ -26,11 +334,32 @@
     "dropoff": {
       "label": "Bestemming"
     },
+    "dropoffLocation": {
+      "label": "Afleverlocatie"
+    },
     "elevator": {
       "label": "Is er een lift?"
     },
+    "elevatorAvailable": {
+      "label": "Lift aanwezig"
+    },
+    "estimatedDuration": {
+      "label": "Geschatte duur"
+    },
+    "flexibility": {
+      "label": "Flexibiliteit"
+    },
+    "floor": {
+      "value": "Verdieping: {{floor}}"
+    },
+    "homeType": {
+      "label": "Type woning"
+    },
     "inventory": {
       "label": "Inventaris"
+    },
+    "items": {
+      "label": "Spullen"
     },
     "moveDate": {
       "label": "Verhuisdatum",
@@ -39,6 +368,9 @@
         "title": "Verhuisdatum kiezen"
       }
     },
+    "moveDateTime": {
+      "label": "Datum en tijd van de verhuizing"
+    },
     "moveType": {
       "label": "Soort verhuizing",
       "placeholder": "Soort verhuizing kiezen",
@@ -46,8 +378,29 @@
         "title": "Soort verhuizing kiezen"
       }
     },
+    "name": {
+      "label": "Naam"
+    },
+    "notesForMovers": {
+      "label": "Notities voor de verhuizers"
+    },
+    "packingMaterials": {
+      "label": "Verpakkingsmateriaal"
+    },
+    "packingNotes": {
+      "label": "Notities over het inpakken"
+    },
+    "packingService": {
+      "label": "Inpakservice"
+    },
+    "parking": {
+      "value": "Parkeren: {{parking}}"
+    },
     "pickup": {
       "label": "Ophalen"
+    },
+    "pickupLocation": {
+      "label": "Ophaallocatie"
     },
     "preferredTime": {
       "label": "Voorkeurstijd",
@@ -65,9 +418,25 @@
     },
     "vehicle": {
       "label": "Voertuig"
+    },
+    "weight": {
+      "label": "Gewicht",
+      "value": "{{weight}} kg"
+    }
+  },
+  "flexibility": {
+    "flexible1hr": {
+      "label": "Ik ben flexibel tot 1 uur"
+    },
+    "label": "Flexibiliteit",
+    "notFlexible": {
+      "label": "Niet flexibel"
     }
   },
   "floorLevel": {
+    "dropoff": {
+      "helper": "Op welke verdieping ligt het afleveradres?"
+    },
     "floor1": {
       "option": "1e verdieping"
     },
@@ -84,28 +453,143 @@
       "option": "5e verdieping of hoger"
     },
     "ground": {
+      "label": "Begane grond",
       "option": "Begane grond"
     },
+    "label": "Verdieping",
     "numbered": {
+      "label_ordinal_other": "{{count}}e verdieping",
       "option": "{{n}}e verdieping"
+    },
+    "pickup": {
+      "helper": "Op welke verdieping ligt het ophaaladres?"
+    },
+    "placeholder": "Kies een verdieping",
+    "required": {
+      "error": "Kies een verdieping"
+    }
+  },
+  "haltverbot": {
+    "arrange": {
+      "helper": "Wij regelen de vergunningsaanvraag bij je gemeente",
+      "label": "Wil je dat wij de Haltverbot-vergunning voor je regelen?"
+    },
+    "arrangeDropoff": {
+      "helper": "Wij regelen de vergunningsaanvraag bij de gemeente",
+      "label": "Zullen wij de Haltverbot-vergunning voor de afleverlocatie regelen?"
+    },
+    "arrangeNo": {
+      "label": "Nee, ik regel het zelf"
+    },
+    "arrangeYes": {
+      "label": "Ja, regel het voor mij"
+    },
+    "customerArranges": {
+      "label": "Klant regelt het"
+    },
+    "helper": "Een Haltverbot-zone reserveert parkeerruimte voor de verhuiswagen",
+    "label": "Laad- en loszone nodig? (Duitse Haltverbot-vergunning)",
+    "requested": {
+      "label": "Haltverbot (parkeerverbodzone) aangevraagd"
+    },
+    "weArrange": {
+      "label": "Wij regelen het"
     }
   },
   "homeType": {
     "apartment": {
+      "label": "Appartement",
       "option": "Appartement"
     },
+    "helper": "Kies het type woning of ruimte dat je verhuist",
     "house": {
+      "label": "Huis",
       "option": "Huis"
     },
+    "label": "Type woning",
     "office": {
+      "label": "Kantoor",
       "option": "Kantoor"
     },
     "other": {
       "option": "Anders"
     },
+    "placeholder": "Kies een type",
+    "required": {
+      "error": "Kies een type woning"
+    },
     "storage": {
+      "label": "Opslagruimte",
       "option": "Opslag"
     }
+  },
+  "inventory": {
+    "addCustom": {
+      "cta": "Eigen item toevoegen"
+    },
+    "addItem": {
+      "cta": "Item toevoegen"
+    },
+    "custom": {
+      "name": {
+        "label": "Naam van het item *",
+        "placeholder": "bijv. staande klok"
+      },
+      "qty": {
+        "label_one": "Aantal: {{count}}",
+        "label_other": "Aantal: {{count}}"
+      },
+      "size": {
+        "label": "• Afmeting: {{size}}"
+      },
+      "sizeField": {
+        "label": "Geschatte afmeting",
+        "placeholder": "bijv. 100x50x200 cm"
+      },
+      "weight": {
+        "label": "• Gewicht: {{weight}}"
+      },
+      "weightField": {
+        "label": "Geschat gewicht",
+        "placeholder": "bijv. 50 kg"
+      }
+    },
+    "customItems": {
+      "empty": "Je hebt nog geen eigen items toegevoegd. Tik op de knop hierboven om spullen toe te voegen die er niet bij staan.",
+      "title": "Eigen items"
+    },
+    "customModal": {
+      "title": "Eigen item toevoegen"
+    },
+    "emptyCatalog": {
+      "subtitle": "Onze lijst met verhuisbare spullen wordt klaargezet. Probeer het zo meteen opnieuw.",
+      "title": "Nog geen spullen beschikbaar"
+    },
+    "heavyItems": {
+      "label": "Zware spullen die speciale behandeling vereisen"
+    },
+    "items": {
+      "label": "Spullen"
+    },
+    "itemsCount": {
+      "label": "Spullen"
+    },
+    "itemsToMove": {
+      "title": "Te verhuizen spullen"
+    },
+    "loadFailed": {
+      "title": "De lijst met spullen kon niet worden geladen"
+    },
+    "required": {
+      "error": "Voeg minstens één item toe aan je inboedel voordat je verdergaat."
+    },
+    "selectedCount_one": "{{count}} item geselecteerd",
+    "selectedCount_other": "{{count}} items geselecteerd",
+    "specialItems": {
+      "helper": "Deze spullen vereisen speciale behandeling en kunnen de prijs beïnvloeden.",
+      "title": "Bijzondere spullen"
+    },
+    "title": "Inboedel"
   },
   "location": {
     "gpsFailed": {
@@ -118,6 +602,9 @@
     "noResults": {
       "empty": "Geen locaties gevonden"
     },
+    "noResultsLong": {
+      "empty": "Geen locaties gevonden. Probeer een andere zoekopdracht."
+    },
     "permissionDenied": {
       "error": "Locatietoegang geweigerd. Schakel dit in bij Instellingen."
     },
@@ -127,15 +614,24 @@
     "searchIdle": {
       "empty": "Begin met typen om een adres te zoeken."
     },
+    "section": {
+      "title": "Locaties"
+    },
     "selectPlaceholder": {
       "placeholder": "Locatie {{field}} kiezen"
     },
     "sheet": {
       "title": "Locatie {{field}}"
     },
+    "suggestions": {
+      "label": "Voorgestelde locaties"
+    },
     "useCurrent": {
       "cta": "Huidige locatie gebruiken"
     }
+  },
+  "locations": {
+    "title": "Locaties"
   },
   "map": {
     "dropoff": {
@@ -164,6 +660,9 @@
     "search": {
       "placeholder": "Zoek een locatie…"
     },
+    "selected": {
+      "label": "Gekozen locatie"
+    },
     "tapHint": {
       "helper": "Tik op de kaart om een locatie te kiezen"
     },
@@ -171,25 +670,50 @@
       "cta": "Mijn huidige locatie gebruiken"
     }
   },
+  "moveDate": {
+    "helper": "Wanneer wil je verhuizen?",
+    "label": "Verhuisdatum",
+    "placeholder": "Kies je verhuisdatum",
+    "required": {
+      "error": "Kies een verhuisdatum"
+    }
+  },
   "moveType": {
+    "a11y": "Verhuistype kiezen",
+    "label": "Type verhuizing",
     "light": {
       "body": "Kleine verhuizingen gaan met een kleine bestelbus.",
+      "helper": "Kleine lading — weinig spullen",
+      "label": "Kleine verhuizing",
       "short": "Klein",
       "subtitle": "Perfect voor kleine ladingen — dozen, losse meubelstukken of een studio.",
       "title": "Kleine verhuizing"
     },
+    "placeholder": "Kies een verhuistype",
     "premium": {
       "body": "Premium verhuizingen gaan met grotere voertuigen en een team van 2 of meer personen.",
+      "helper": "Verhuizing met volledige service",
+      "label": "Premium verhuizing",
       "short": "Premium",
       "subtitle": "Volledige service voor grote woningen — inpakken, laden, vervoer en uitladen.",
       "title": "Premium verhuizing"
     },
     "regular": {
       "body": "Gewone verhuizingen gaan met een middelgroot voertuig en een team van 2 personen.",
+      "helper": "Gewone woningverhuizing",
+      "label": "Gewone verhuizing",
       "short": "Gewoon",
       "subtitle": "Ideaal voor appartementen met 1 of 2 slaapkamers met gewone meubels en apparatuur.",
       "title": "Gewone verhuizing"
-    }
+    },
+    "section": {
+      "title": "Type verhuizing"
+    },
+    "selectHelper": "Kies het type verhuizing",
+    "selectPlaceholder": "Kies een type"
+  },
+  "packing": {
+    "label": "Inpakservice"
   },
   "packingLevel": {
     "full": {
@@ -209,8 +733,19 @@
       "option": "In- en uitpakken"
     }
   },
+  "packingMaterials": {
+    "label": "Verpakkingsmateriaal",
+    "selectedCount": {
+      "label_one": "{{count}} geselecteerd",
+      "label_other": "{{count}} geselecteerd"
+    }
+  },
+  "packingNotes": {
+    "label": "Notities over het inpakken"
+  },
   "parking": {
     "atBuilding": {
+      "label": "Parkeren direct bij het gebouw",
       "option": "Parkeren direct bij het gebouw"
     },
     "directlyInFront": {
@@ -219,6 +754,8 @@
     "driveway": {
       "option": "Oprit"
     },
+    "helper": "Beschikbaarheid van parkeerruimte bij het gebouw voor de verhuiswagen",
+    "label": "Parkeersituatie",
     "limited": {
       "option": "Beperkte parkeergelegenheid"
     },
@@ -229,10 +766,18 @@
       "option": "Parkeerterrein"
     },
     "nearby": {
+      "label": "Parkeren dichtbij (0–20 m)",
       "option": "Parkeren in de buurt (0–20 m)"
+    },
+    "noParking": {
+      "label": "Geen parkeerplaats / lange loopafstand"
     },
     "none": {
       "option": "Geen parkeergelegenheid"
+    },
+    "placeholder": "Kies de parkeersituatie",
+    "required": {
+      "error": "Kies een parkeersituatie"
     },
     "street": {
       "option": "Parkeren op straat"
@@ -242,21 +787,186 @@
     }
   },
   "payment": {
+    "amount": {
+      "label": "Te betalen bedrag"
+    },
+    "amountCard": {
+      "label": "Met kaart te betalen bedrag"
+    },
+    "awaitingClient": {
+      "label": "Wachten tot de klant de betaling bevestigt…"
+    },
+    "awaitingMover": {
+      "label": "Betaling bevestigd! Wachten tot de verhuizer de ontvangst bevestigt…"
+    },
+    "bankTransfer": {
+      "label": "Bankoverschrijving"
+    },
+    "card": {
+      "helper": "Je kaart wordt belast zodra de verhuizing is afgerond. Er wordt nu niets afgeschreven.",
+      "label": "Kaart"
+    },
+    "cash": {
+      "body": "Als je voor contant kiest, betaal je de verhuizer rechtstreeks nadat je verhuizing is afgerond. Zorg dat je het exacte bedrag klaar hebt liggen.",
+      "footnote": "Je betaalt je verhuizer rechtstreeks nadat de verhuizing is afgerond.",
+      "helper": "Betaal de verhuizer bij aankomst contant. Geen afschrijving van je kaart.",
+      "label": "Contant",
+      "noUpfront": {
+        "label": "Geen aanbetaling nodig"
+      },
+      "payAfter": {
+        "label": "Betaal nadat de verhuizing is afgerond"
+      },
+      "receipt": {
+        "label": "Je krijgt een bon van de verhuizer"
+      },
+      "title": "Betaal je verhuizer rechtstreeks"
+    },
+    "cashHandshake": {
+      "helper": "Betaal de verhuizer rechtstreeks (contant of per overschrijving) en tik daarna hieronder op “Ik heb betaald”."
+    },
+    "cashLong": {
+      "label": "Contant (rechtstreeks aan de verhuizer)"
+    },
+    "cashReminder": {
+      "helper": "Zorg dat je {{amount}} klaar hebt om je verhuizer te betalen nadat de verhuizing is afgerond."
+    },
+    "cashSelected": {
+      "title": "Contant betalen gekozen"
+    },
+    "clientConfirmed": {
+      "label": "Klant heeft bevestigd",
+      "success": "Betaling door de klant bevestigd. Wachten op bevestiging van de verhuizer."
+    },
+    "confirmation": {
+      "title": "Bevestiging van de betaling"
+    },
+    "confirming": {
+      "cta": "Bevestigen…"
+    },
+    "creditCard": {
+      "label": "Creditcard"
+    },
+    "dualConfirm": {
+      "helper": "Ook de verhuizer moet de ontvangst bevestigen voordat de verhuizing als afgerond geldt."
+    },
+    "iHavePaid": {
+      "cta": "Ik heb betaald"
+    },
     "method": {
+      "card": {
+        "label": "Kaart"
+      },
       "cash": {
         "label": "Contant"
+      },
+      "helper": "Hoe wil je de verhuizing betalen?",
+      "label": "Gewenste betaalmethode"
+    },
+    "moverConfirm": {
+      "cta": "Ontvangst van betaling bevestigen",
+      "helper": "Bevestig zodra de klant je heeft betaald"
+    },
+    "moverConfirmed": {
+      "success": "Betaling door de verhuizer bevestigd. Wachten op bevestiging van de klant."
+    },
+    "paidOn": {
+      "label": "Betaald op"
+    },
+    "payCard": {
+      "cta": "Met kaart betalen"
+    },
+    "payCash": {
+      "cta": "Contant betalen"
+    },
+    "payWith": {
+      "title": "Betalen met"
+    },
+    "reminder": {
+      "body": "Zorg dat je <0>{{amount}}</0> klaar hebt om je verhuizer rechtstreeks te betalen {{when}}.",
+      "title": "Betalingsherinnering",
+      "whenInstant": {
+        "label": "nadat de verhuizing is afgerond"
+      },
+      "whenScheduled": {
+        "label": "op de verhuisdag"
       }
     },
     "section": {
       "title": "Betaling"
+    },
+    "title": "Betaling",
+    "yourConfirmation": {
+      "label": "Jouw bevestiging"
+    }
+  },
+  "paypal": {
+    "email": {
+      "label": "PayPal-e-mailadres",
+      "placeholder": "jouw@e-mail.nl"
+    },
+    "redirect": {
+      "helper": "Je wordt doorgestuurd naar PayPal om je betaling veilig af te ronden."
     }
   },
   "photos": {
+    "addMore": {
+      "cta": "Meer foto's toevoegen"
+    },
+    "additional": {
+      "helper": "Upload meer foto's van meubels, kamers of specifieke spullen",
+      "label": "Extra foto's"
+    },
+    "additionalCount_one": "{{count}} extra foto",
+    "additionalCount_other": "{{count}} extra foto's",
+    "all": {
+      "title": "Alle foto's"
+    },
     "chooseGallery": {
       "cta": "Kies uit galerij"
     },
+    "countSummary": {
+      "label": "{{main}} • {{additional}}"
+    },
+    "cover": {
+      "a11y": "Omslagfoto",
+      "helper": "Upload een hoofdfoto van je spullen of ruimte",
+      "label": "Omslagfoto"
+    },
     "formatHint": {
       "subtitle": "PNG, JPG tot 3 MB"
+    },
+    "gallery": {
+      "a11y": "Foto's van de verhuizing",
+      "helper": "Upload extra foto's van meubels, kamers of spullen",
+      "item": {
+        "a11y": "Galerijfoto {{index}}"
+      },
+      "label": "Galerijfoto's"
+    },
+    "item": {
+      "a11y": "Foto van de verhuizing"
+    },
+    "itemIndexed": {
+      "a11y": "Foto {{index}} van de verhuizing"
+    },
+    "itemNumbered": {
+      "a11y": "Foto {{n}} van de verhuizing"
+    },
+    "main": {
+      "cta": "Tik om de hoofdfoto te uploaden",
+      "helper": "Upload een hoofdfoto van je spullen of de ruimte",
+      "label": "Hoofdfoto"
+    },
+    "mainCount_one": "{{count}} hoofdfoto",
+    "mainCount_other": "{{count}} hoofdfoto's",
+    "photoCount_one": "{{count}} foto",
+    "photoCount_other": "{{count}} foto's",
+    "preview": {
+      "a11y": "Voorbeeld van de verhuizing"
+    },
+    "required": {
+      "error": "Voeg minstens één foto van je spullen toe voordat je verdergaat."
     },
     "sourceSheet": {
       "title": "Foto toevoegen"
@@ -265,12 +975,83 @@
       "cta": "Foto maken"
     }
   },
+  "pickup": {
+    "edit": {
+      "a11y": "Ophaallocatie bewerken"
+    },
+    "fallback": {
+      "label": "Ophaallocatie"
+    },
+    "label": "Ophaallocatie",
+    "location": {
+      "label": "Ophaallocatie"
+    },
+    "required": {
+      "error": "Kies een ophaallocatie"
+    },
+    "short": {
+      "label": "Ophalen"
+    },
+    "tapToSelect": {
+      "placeholder": "Tik om ophalen te kiezen"
+    },
+    "tapToSelectLong": {
+      "placeholder": "Tik om de ophaallocatie te kiezen"
+    }
+  },
+  "pickupAddress": {
+    "label": "Ophaaladres"
+  },
+  "price": {
+    "estimated": {
+      "label": "Geschatte prijs"
+    },
+    "final": {
+      "label": "Definitieve prijs"
+    }
+  },
   "pricing": {
+    "additionalServicesCount": {
+      "label_one": "Extra diensten ({{count}})",
+      "label_other": "Extra diensten ({{count}})"
+    },
+    "baseFare": {
+      "label": "Basistarief"
+    },
     "baseRate": {
       "label": "Basistarief ({{moveType}})"
     },
+    "baseRateWithDistance": {
+      "label": "Basistarief ({{moveType}}, {{distance}})"
+    },
+    "crew": {
+      "label": "Team ({{crew}})"
+    },
+    "estimatedTotal": {
+      "label": "Geschat totaal"
+    },
+    "finalAfterReview": {
+      "helper": "De definitieve prijs wordt na controle bevestigd"
+    },
+    "floorSurcharge": {
+      "label": "Verdiepingstoeslag"
+    },
+    "itemsCount": {
+      "label_one": "Spullen ({{count}})",
+      "label_other": "Spullen ({{count}})"
+    },
+    "moverFare": {
+      "label": "Tarief verhuizer"
+    },
+    "packingService": {
+      "label": "Inpakservice"
+    },
     "storage": {
       "label": "Opslag"
+    },
+    "storageWeeks": {
+      "label_one": "Opslag ({{count}} week)",
+      "label_other": "Opslag ({{count}} weken)"
     },
     "subtotal": {
       "label": "Subtotaal"
@@ -282,7 +1063,56 @@
       "label": "Btw ({{rate}})"
     }
   },
+  "route": {
+    "driveTime": {
+      "label": "~{{duration}} rijden"
+    },
+    "from": {
+      "label": "Van"
+    },
+    "title": "Routegegevens",
+    "to": {
+      "label": "Naar"
+    }
+  },
+  "service": {
+    "applianceConnect": {
+      "helper": "Apparaten opnieuw aansluiten op het nieuwe adres",
+      "label": "Apparaten aansluiten"
+    },
+    "applianceDisconnect": {
+      "helper": "Wasmachine, vaatwasser en droger afkoppelen",
+      "label": "Apparaten afkoppelen"
+    },
+    "assembly": {
+      "helper": "Wij zetten je meubels op de nieuwe locatie weer in elkaar",
+      "label": "Meubels monteren"
+    },
+    "cleaning": {
+      "helper": "Professionele schoonmaak van je oude woning",
+      "label": "Eindschoonmaak"
+    },
+    "disassembly": {
+      "helper": "Wij demonteren bedden, kasten en tafels voor het laden",
+      "label": "Meubels demonteren"
+    },
+    "disposal": {
+      "helper": "Ongewenste meubels en spullen afvoeren",
+      "label": "Afvoeren (Entsorgung)"
+    },
+    "storage": {
+      "helper": "Sla spullen veilig op tussen twee verhuizingen",
+      "label": "Tijdelijke opslag"
+    },
+    "tvMount": {
+      "helper": "Tv's aan de wand ophangen of afhalen",
+      "label": "Tv ophangen / afhalen"
+    }
+  },
   "services": {
+    "additional": {
+      "label": "Extra diensten"
+    },
     "applianceConnect": {
       "helper": "Apparaten opnieuw aansluiten op de nieuwe locatie",
       "label": "Apparaten aansluiten",
@@ -293,10 +1123,15 @@
       "label": "Apparaten loskoppelen",
       "option": "Apparaten loskoppelen"
     },
+    "detailsSubtitle": "Je gekozen diensten en voorkeuren",
+    "detailsTitle": "Details van de diensten",
     "disposal": {
       "helper": "Ongewenste spullen naar de gemeentelijke milieustraat brengen",
       "label": "Afvoeren",
       "option": "Afvoeren"
+    },
+    "disposalItems": {
+      "label": "Af te voeren spullen: {{items}}"
     },
     "furnitureAssembly": {
       "helper": "We monteren meubels op de nieuwe locatie",
@@ -313,15 +1148,49 @@
       "label": "Eindschoonmaak",
       "option": "Eindschoonmaak"
     },
+    "section": {
+      "title": "Diensten"
+    },
+    "subtitle": "Extra diensten die je hebt gekozen",
     "temporaryStorage": {
       "helper": "Spullen opslaan tussen de ophaal- en afleverdatum",
       "label": "Tijdelijke opslag",
       "option": "Tijdelijke opslag"
     },
+    "temporaryStorageWeeks": {
+      "label_one": "Tijdelijke opslag: {{count}} week",
+      "label_other": "Tijdelijke opslag: {{count}} weken"
+    },
+    "title": "Extra diensten",
     "tvMountRemove": {
       "helper": "Wandtelevisies losmaken bij het ophaaladres",
       "label": "Tv-beugel verwijderen",
       "option": "Tv-beugel verwijderen"
+    }
+  },
+  "storage": {
+    "helper": "Standaard opslagruimtes zijn geklimatiseerd en verzekerd.",
+    "title": "Details van de opslag",
+    "weeks": {
+      "label": "Hoeveel weken opslag?"
+    }
+  },
+  "storageWeekCount_one": "{{count}} week",
+  "storageWeekCount_other": "{{count}} weken",
+  "storageWeeks_one": "{{count}} week",
+  "storageWeeks_other": "{{count}} weken",
+  "streetAddress": {
+    "dropoff": {
+      "helper": "Voer het volledige afleveradres in",
+      "placeholder": "bijv. Berliner Straße 12"
+    },
+    "label": "Straat en huisnummer",
+    "pickup": {
+      "helper": "Voer het volledige ophaaladres in",
+      "placeholder": "bijv. Hauptstraße 45"
+    },
+    "required": {
+      "error": "Voer een straat en huisnummer in"
     }
   },
   "timeSlot": {
@@ -335,15 +1204,89 @@
       "label": "Ochtend"
     }
   },
+  "timing": {
+    "now": {
+      "label": "Nu"
+    },
+    "title": "Tijdstip van de verhuizing"
+  },
+  "timingPrefs": {
+    "earliest": {
+      "label": "Liefst zo vroeg mogelijk aankomen"
+    },
+    "helper": "Kies eventuele extra voorkeuren voor het tijdstip.",
+    "noEvening": {
+      "label": "Geen bezorging in de avond"
+    },
+    "noLunchGap": {
+      "label": "Geen onderbreking voor de lunch"
+    },
+    "title": "Optionele voorkeuren"
+  },
   "vehicle": {
+    "addDetails": {
+      "helper": "Voeg de gegevens van je voertuig toe"
+    },
+    "brand": {
+      "label": "Merk voertuig *",
+      "placeholder": "bijv. Mercedes-Benz"
+    },
+    "brandShort": {
+      "label": "Merk *"
+    },
+    "capacity": {
+      "label": "Laadvermogen (m³)",
+      "placeholder": "bijv. 15",
+      "value": "{{capacity}} m³"
+    },
+    "edit": {
+      "title": "Voertuiggegevens bewerken"
+    },
     "largeTruck": {
+      "capacity": "25+ m³",
+      "helper": "25+ m³ — woningverhuizingen, grote ladingen",
       "label": "Grote vrachtwagen"
     },
     "mediumTruck": {
+      "capacity": "10–25 m³",
+      "helper": "10–25 m³ — appartementverhuizingen",
       "label": "Middelgrote vrachtwagen"
     },
+    "model": {
+      "label": "Model voertuig *",
+      "placeholder": "bijv. Sprinter"
+    },
+    "modelShort": {
+      "label": "Model *"
+    },
+    "multiple": {
+      "label": "Meerdere"
+    },
+    "registration": {
+      "label": "Kenteken *",
+      "placeholder": "bijv. B-AB 1234"
+    },
+    "registrationShort": {
+      "label": "Kenteken *"
+    },
     "smallVan": {
+      "capacity": "Tot 10 m³",
+      "helper": "Tot 10 m³ — kleine verhuizingen, losse spullen",
       "label": "Kleine bestelbus"
+    },
+    "title": "Voertuiggegevens",
+    "type": {
+      "label": "Type voertuig"
+    },
+    "updated": {
+      "success": "Voertuiggegevens bijgewerkt"
+    },
+    "year": {
+      "label": "Bouwjaar *",
+      "placeholder": "bijv. 2022"
+    },
+    "yearShort": {
+      "label": "Bouwjaar"
     }
   }
 }

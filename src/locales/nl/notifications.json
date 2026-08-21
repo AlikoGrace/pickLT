@@ -1,0 +1,147 @@
+{
+  "cancel": {
+    "byClient": {
+      "body": "De klant heeft de verhuizing geannuleerd.",
+      "bodyWithHandle": "De klant heeft verhuizing {{handle}} geannuleerd.",
+      "title": "Verhuizing geannuleerd"
+    },
+    "reassigning": {
+      "body": "Je verhuizer moest je verhuizing teruggeven. We bieden de verhuizing aan andere verhuizers in de buurt aan.",
+      "bodyWithHandle": "Je verhuizer moest verhuizing {{handle}} teruggeven. We bieden de verhuizing aan andere verhuizers in de buurt aan.",
+      "title": "We zoeken een andere verhuizer"
+    }
+  },
+  "message": {
+    "new": {
+      "title": "Nieuw bericht"
+    }
+  },
+  "payment": {
+    "clientCharged": {
+      "body": "Je betaling van {{amount}} is verwerkt. Je verhuisboeking is bevestigd!",
+      "title": "Betaling bevestigd"
+    },
+    "clientConfirmed": {
+      "body": "De klant heeft deze verhuizing als betaald gemarkeerd. Bevestig het van jouw kant om af te ronden.",
+      "title": "Klant heeft betaling bevestigd"
+    },
+    "confirmYours": {
+      "body": "Je verhuizer heeft de betaling bevestigd. Bevestig het van jouw kant om de verhuizing af te ronden.",
+      "title": "Bevestig je betaling"
+    },
+    "moverPaid": {
+      "body": "Je hebt {{amount}} uitbetaald gekregen.",
+      "bodyWithHandle": "Je hebt {{amount}} uitbetaald gekregen voor verhuizing {{handle}}.",
+      "title": "Uitbetaling ontvangen"
+    }
+  },
+  "reminder": {
+    "starting": {
+      "client": {
+        "body": "Verhuizing {{handle}} begint zo. Je verhuizer maakt zich klaar.",
+        "title": "Je verhuizing begint {{lead}}"
+      },
+      "mover": {
+        "body": "Verhuizing {{handle}} begint {{lead}} — je kunt de route nu starten.",
+        "title": "Tijd om je verhuizing te starten"
+      }
+    },
+    "upcoming": {
+      "client": {
+        "body": "Je verhuizing {{handle}} begint {{lead}}.",
+        "bodyWithWindow": "Je verhuizing {{handle}} begint {{lead}}, in het tijdvak {{window}}.",
+        "title": "Verhuisherinnering"
+      },
+      "mover": {
+        "body": "Geplande verhuizing {{handle}} begint {{lead}}.",
+        "bodyWithWindow": "Geplande verhuizing {{handle}} begint {{lead}}, in het tijdvak {{window}}.",
+        "title": "Verhuisherinnering"
+      }
+    }
+  },
+  "request": {
+    "new": {
+      "body": "Er is een nieuwe verhuisaanvraag bij jou in de buurt. Tik om te bekijken en te accepteren.",
+      "bodyRoute": "{{from}} → {{to}}. Tik om te bekijken en te accepteren.",
+      "title": "Nieuwe verhuisaanvraag"
+    }
+  },
+  "review": {
+    "received": {
+      "bodyWithComment_one": "Je hebt een review van {{count}} ster ontvangen: “{{comment}}”",
+      "bodyWithComment_other": "Je hebt een review van {{count}} sterren ontvangen: “{{comment}}”",
+      "body_one": "Je hebt een review van {{count}} ster ontvangen.",
+      "body_other": "Je hebt een review van {{count}} sterren ontvangen.",
+      "title": "Nieuwe review"
+    }
+  },
+  "status": {
+    "arrivedDestination": {
+      "body": "Je verhuizer is aangekomen op de bestemming.",
+      "title": "Aangekomen"
+    },
+    "awaitingPayment": {
+      "body": "Je verhuizing is klaar — bevestig de betaling.",
+      "title": "Betaling openstaand"
+    },
+    "cancelledByMover": {
+      "body": "De verhuizer heeft deze verhuizing geannuleerd.",
+      "title": "Verhuizing geannuleerd"
+    },
+    "completed": {
+      "body": "Je verhuizing is afgerond! Laat een review achter.",
+      "title": "Verhuizing afgerond"
+    },
+    "inTransit": {
+      "body": "Je spullen zijn onderweg naar de bestemming.",
+      "title": "Onderweg"
+    },
+    "loading": {
+      "body": "Je spullen worden geladen.",
+      "title": "Laden gestart"
+    },
+    "moverAccepted": {
+      "body": "Een verhuizer heeft je verhuisaanvraag geaccepteerd!",
+      "title": "Verhuizer bevestigd"
+    },
+    "moverAcceptedScheduled": {
+      "body": "Een verhuizer heeft je geplande verhuizing geaccepteerd!",
+      "title": "Verhuizer bevestigd"
+    },
+    "moverArrived": {
+      "body": "Je verhuizer is aangekomen op de ophaallocatie.",
+      "title": "Verhuizer gearriveerd"
+    },
+    "moverEnRoute": {
+      "body": "Je verhuizer is onderweg naar je ophaallocatie.",
+      "title": "Verhuizer onderweg"
+    },
+    "moverWithdrew": {
+      "body": "Je verhuizer heeft zich teruggetrokken. We zoeken een andere verhuizer voor je.",
+      "title": "Verhuizer teruggetrokken"
+    },
+    "unloading": {
+      "body": "Je spullen worden uitgeladen.",
+      "title": "Lossen"
+    }
+  },
+  "verification": {
+    "contactSupport": "Neem contact op met de klantenservice voor meer informatie.",
+    "rejected": {
+      "body": "Je aanvraag voor een verhuizersprofiel is afgewezen. {{reason}}",
+      "title": "Profiel afgewezen"
+    },
+    "submitted": {
+      "body": "Je verhuizersprofiel wordt beoordeeld. We laten het je weten zodra het geverifieerd is.",
+      "title": "Profiel ingediend"
+    },
+    "suspended": {
+      "body": "Je verhuizersaccount is opgeschort. {{reason}}",
+      "title": "Account opgeschort"
+    },
+    "verified": {
+      "body": "Gefeliciteerd! Je verhuizersprofiel is geverifieerd. Je kunt nu verhuizingen accepteren.",
+      "title": "Profiel geverifieerd"
+    }
+  }
+}

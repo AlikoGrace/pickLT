@@ -1,1 +1,1052 @@
-{}
+{
+  "about": {
+    "hero": {
+      "subtitle": "PickLT est une plateforme de services de déménagement. Vous décrivez votre déménagement, comparez les déménageurs et réservez celui de votre choix — pour des appartements, des bureaux et des objets isolés partout en Europe.",
+      "title": "👋 À propos."
+    }
+  },
+  "account": {
+    "clientType": {
+      "label": "Compte client"
+    },
+    "moverType": {
+      "label": "Compte déménageur"
+    },
+    "myMoves": {
+      "helper": "Consultez et suivez tous vos déménagements"
+    },
+    "signedOut": {
+      "subtitle": "Connectez-vous pour gérer votre profil, consulter vos déménagements et plus encore.",
+      "title": "Connectez-vous pour accéder à votre compte"
+    },
+    "version": {
+      "label": "pickLT v{{version}}"
+    }
+  },
+  "authGate": {
+    "redirecting": {
+      "label": "Redirection vers la connexion…"
+    }
+  },
+  "billing": {
+    "addPayout": {
+      "cta": "Ajouter un mode de versement"
+    },
+    "payoutMethods": {
+      "body": "Ajoutez un mode de versement pour recevoir les paiements de PickLT. Les versements sont envoyés vers le mode configuré ci-dessous.",
+      "title": "Modes de versement"
+    },
+    "title": "Paiements et versements"
+  },
+  "checkout": {
+    "confirmAndPay": {
+      "cta": "Confirmer et payer {{amount}}"
+    },
+    "confirmMove": {
+      "cta": "Confirmer le déménagement · {{amount}}"
+    },
+    "editHint": {
+      "helper": "Cliquez sur une section pour modifier les détails de votre déménagement."
+    },
+    "pay": {
+      "title": "Confirmation et paiement"
+    },
+    "title": "Confirmez votre déménagement",
+    "yourMove": {
+      "title": "Votre déménagement"
+    }
+  },
+  "contact": {
+    "address": {
+      "label": "🗺 ADRESSE",
+      "value": "Photo booth tattooed prism, portland taiyaki hoodie neutra typewriter"
+    },
+    "email": {
+      "label": "💌 E-MAIL"
+    },
+    "fullName": {
+      "placeholder": "Jean Dupont"
+    },
+    "message": {
+      "label": "Message"
+    },
+    "phone": {
+      "label": "☎ TÉLÉPHONE"
+    },
+    "socials": {
+      "label": "🌏 RÉSEAUX SOCIAUX"
+    },
+    "submit": {
+      "cta": "Envoyer le message"
+    },
+    "title": "Contact"
+  },
+  "footer": {
+    "company": {
+      "about": "À propos",
+      "careers": "Carrières",
+      "locations": "Implantations",
+      "title": "Entreprise"
+    },
+    "copyright": "© {{year}} PickLT. Tous droits réservés.",
+    "legal": {
+      "title": "Mentions légales"
+    },
+    "solutions": {
+      "commercial": "Déménagement d'entreprise",
+      "localMoving": "Déménagement local",
+      "longDistance": "Déménagement longue distance",
+      "packing": "Services d'emballage",
+      "storage": "Solutions de garde-meuble",
+      "title": "Solutions"
+    },
+    "support": {
+      "contact": "Nous contacter",
+      "faq": "FAQ",
+      "quote": "Obtenir un devis",
+      "title": "Assistance"
+    },
+    "tagline": "Réservez des déménageurs pour vos appartements, vos bureaux et vos affaires partout en Europe."
+  },
+  "home": {
+    "hero": {
+      "imageAlt": "Des déménageurs portant des cartons dans un nouveau logement",
+      "subtitle": "Des déménageurs de confiance pour les grands moments de la vie.",
+      "title": "Un déménagement sans stress, à chaque fois."
+    },
+    "moverBanner": {
+      "subtitle": "Connectez-vous pour commencer à accepter des déménagements",
+      "title": "Vous êtes déménageur ?"
+    },
+    "moves": {
+      "empty": "Aucun déménagement pour l'instant. Commencez par réserver votre premier déménagement !",
+      "emptyFiltered": "Aucun déménagement dans la catégorie {{status}}.",
+      "emptyScheduled": "Aucun déménagement planifié.",
+      "signedOut": {
+        "cta": "Connectez-vous pour commencer",
+        "subtitle": "Connectez-vous pour suivre vos déménagements, consulter les détails de vos réservations et gérer votre planning.",
+        "title": "Vos déménagements apparaîtront ici"
+      },
+      "subtitle": "Suivez tous vos déménagements",
+      "tab": {
+        "all": {
+          "label": "Tous les déménagements"
+        },
+        "cancelled": {
+          "label": "Annulés"
+        },
+        "completed": {
+          "label": "Terminés"
+        },
+        "inProgress": {
+          "label": "En cours"
+        },
+        "pending": {
+          "label": "En attente"
+        },
+        "scheduled": {
+          "label": "Planifiés"
+        }
+      },
+      "title": "Vos déménagements"
+    },
+    "welcomeBack": {
+      "label": "Bon retour, {{name}} !"
+    }
+  },
+  "instant": {
+    "cardInApp": {
+      "helper": "Ce déménagement est payé par carte. Ouvrez l'application PickLT pour finaliser le paiement — votre carte enregistrée y est débitée, rien n'est à régler en espèces."
+    },
+    "chat": {
+      "comingSoon": "Fonction de messagerie bientôt disponible !"
+    },
+    "inventory": {
+      "next": {
+        "cta": "Ajouter des photos"
+      },
+      "subtitle": "Sélectionnez les objets à déménager. Cela nous aide à trouver le déménageur qu'il vous faut.",
+      "title": "Que déménagez-vous ?"
+    },
+    "loadFailed": {
+      "subtitle": "Impossible de charger les détails du déménagement depuis le serveur."
+    },
+    "loading": {
+      "label": "Chargement des détails du déménagement…"
+    },
+    "missingLocations": {
+      "subtitle": "Veuillez sélectionner vos lieux d'enlèvement et de livraison pour continuer.",
+      "title": "Informations de lieu manquantes"
+    },
+    "photos": {
+      "helper": "Importez des photos des objets à déménager. Cela permet au déménageur d'arriver avec le bon équipement et de se faire une idée précise de la mission.",
+      "next": {
+        "cta": "Trouver des déménageurs"
+      },
+      "subtitle": "Aidez votre déménageur à se préparer",
+      "title": "Ajouter des photos"
+    },
+    "review": {
+      "comment": {
+        "placeholder": "Ajouter un commentaire (facultatif)"
+      },
+      "prompt": "Comment s'est passée votre expérience avec {{name}} ?",
+      "promptUnnamed": "Comment s'est passée votre expérience avec votre déménageur ?",
+      "star": {
+        "a11y_one": "Attribuer {{count}} étoile",
+        "a11y_other": "Attribuer {{count}} étoiles"
+      },
+      "submit": {
+        "cta": "Envoyer l'avis"
+      },
+      "thanks": {
+        "subtitle": "Votre avis a bien été envoyé.",
+        "title": "Merci !"
+      }
+    }
+  },
+  "login": {
+    "asClient": {
+      "cta": "Se connecter en tant que client"
+    },
+    "asMover": {
+      "cta": "Se connecter en tant que déménageur"
+    },
+    "clientBadge": {
+      "label": "👤 Compte client"
+    },
+    "moverBadge": {
+      "label": "🚚 Compte déménageur"
+    },
+    "phoneRequired": {
+      "helper": "La vérification du téléphone sera requise après la connexion"
+    },
+    "phoneVerify": {
+      "subtitle": "Nous devons vérifier votre numéro de téléphone pour finaliser la connexion."
+    },
+    "resumeMove": {
+      "helper": "Connectez-vous pour poursuivre votre déménagement. Votre progression a été enregistrée."
+    },
+    "switchToClient": {
+      "label": "Vous êtes client ?"
+    },
+    "switchToMover": {
+      "label": "Vous êtes déménageur ?"
+    },
+    "verifyAndSignIn": {
+      "cta": "Vérifier et se connecter"
+    }
+  },
+  "moveChoice": {
+    "instant": {
+      "cta": "Commencer",
+      "eta": "Le déménageur arrive dans 15-30 min",
+      "subtitle": "Besoin de déménager tout de suite ? Nous trouvons immédiatement un déménageur près de chez vous.",
+      "tracking": "Suivi en temps réel"
+    },
+    "scheduled": {
+      "cta": "Planifier le déménagement",
+      "date": "Choisissez la date qui vous convient",
+      "subtitle": "Anticipez et planifiez votre déménagement à une date et une heure précises.",
+      "title": "Réserver pour plus tard",
+      "window": "Sélectionnez un créneau d'arrivée"
+    },
+    "subtitle": "Choisissez l'option qui correspond le mieux à vos besoins",
+    "summary": {
+      "title": "Détails de votre déménagement"
+    },
+    "title": "Comment souhaitez-vous déménager ?"
+  },
+  "moveDetails": {
+    "header": {
+      "subtitle": "Déménagement {{moveType}} · {{date}}"
+    },
+    "mover": {
+      "title": "Votre déménageur"
+    },
+    "notFound": {
+      "subtitle": "Ce déménagement a peut-être été supprimé ou le lien est invalide."
+    },
+    "reschedule": {
+      "dateTime": {
+        "label": "Nouvelle date et heure"
+      }
+    }
+  },
+  "mover": {
+    "acceptMove": {
+      "cta": "Accepter le déménagement"
+    },
+    "accepted": {
+      "helper": "Vous avez accepté ce déménagement. Quand vous souhaitez partir, appuyez sur « Démarrer l'itinéraire » pour prévenir le client que vous êtes en route."
+    },
+    "activeBadge": {
+      "label": "Déménageur actif"
+    },
+    "activeMove": {
+      "advance": {
+        "cta": "Marquer comme : {{phase}}"
+      },
+      "cancelledByClient": {
+        "title": "Déménagement annulé par le client"
+      },
+      "empty": {
+        "subtitle": "Acceptez une demande de déménagement pour la suivre ici.",
+        "title": "Aucun déménagement en cours"
+      },
+      "etaToPickup": {
+        "label": "~{{minutes}} min jusqu'à l'enlèvement"
+      },
+      "proximity": {
+        "helper": "Vous devez être à moins de 100 m du lieu d'enlèvement pour signaler votre arrivée (à {{distance}} m)"
+      }
+    },
+    "additionalServicesCount_one": "+{{count}} service",
+    "additionalServicesCount_other": "+{{count}} services",
+    "availableMoves": {
+      "empty": {
+        "subtitle": "Aucun déménagement planifié dans un rayon de 30 km pour le moment. Nous vérifions automatiquement toutes les 30 secondes.",
+        "title": "Aucun déménagement disponible"
+      },
+      "error": {
+        "title": "Impossible de charger les déménagements"
+      },
+      "loading": {
+        "label": "Recherche de déménagements disponibles près de chez vous…"
+      }
+    },
+    "backToDashboard": {
+      "cta": "Retour au tableau de bord"
+    },
+    "browseAvailable": {
+      "cta": "Parcourir les déménagements disponibles"
+    },
+    "clientContact": {
+      "title": "Coordonnées du client"
+    },
+    "crew": {
+      "addFirst": {
+        "cta": "Ajouter un premier membre"
+      },
+      "addMember": {
+        "cta": "Ajouter un membre"
+      },
+      "addModal": {
+        "title": "Ajouter un membre d'équipe"
+      },
+      "editModal": {
+        "title": "Modifier le membre d'équipe"
+      },
+      "empty": {
+        "subtitle": "Ajoutez votre premier membre d'équipe pour commencer à gérer votre équipe.",
+        "title": "Aucun membre d'équipe"
+      },
+      "role": {
+        "label": "Rôle"
+      },
+      "subtitle": "Gérez les membres de votre équipe",
+      "title": "Mon équipe"
+    },
+    "crewSize": {
+      "label": "{{crew}} déménageurs"
+    },
+    "earnings": {
+      "average": {
+        "label": "Moyenne par déménagement"
+      },
+      "breakdown": {
+        "title": "Détail"
+      },
+      "empty": "Aucun revenu pour cette période",
+      "error": {
+        "title": "Impossible de charger les revenus"
+      },
+      "label": "Revenus",
+      "loading": "Chargement des revenus…",
+      "movesCompleted": {
+        "label": "Déménagements terminés"
+      },
+      "payout": {
+        "helper": "Les versements sont traités chaque semaine"
+      },
+      "payoutAvailable": {
+        "label": "Disponible pour versement"
+      },
+      "period": {
+        "month": {
+          "caption": "ce mois-ci",
+          "label": "Ce mois-ci"
+        },
+        "today": {
+          "caption": "aujourd'hui",
+          "label": "Aujourd'hui"
+        },
+        "week": {
+          "caption": "cette semaine",
+          "label": "Cette semaine"
+        },
+        "year": {
+          "caption": "cette année",
+          "label": "Cette année"
+        }
+      },
+      "refresh": {
+        "a11y": "Actualiser"
+      },
+      "requestPayout": {
+        "cta": "Demander un versement"
+      },
+      "subtitle": "Suivez vos revenus et vos performances",
+      "title": "Revenus",
+      "total": {
+        "label": "Revenus totaux"
+      }
+    },
+    "experienceYears_one": "{{count}} an",
+    "experienceYears_other": "{{count}} ans",
+    "field": {
+      "businessStreet": {
+        "label": "Adresse professionnelle (facultatif)",
+        "placeholder": "Rue et numéro"
+      },
+      "city": {
+        "helper": "La ville où vous exercez principalement comme déménageur"
+      },
+      "experience": {
+        "label": "Années d'expérience *",
+        "placeholder": "ex. 5"
+      },
+      "languages": {
+        "label": "Langues parlées *"
+      },
+      "licenseNumber": {
+        "label": "Numéro de permis de conduire *",
+        "placeholder": "Saisissez votre numéro de permis de conduire"
+      },
+      "licensePhoto": {
+        "a11y": "Aperçu du permis",
+        "cta": "Importez une photo de votre permis de conduire",
+        "helper": "Une photo nette accélère la vérification",
+        "label": "Photo du permis de conduire"
+      },
+      "phone": {
+        "placeholder": "+49 123 456 7890"
+      },
+      "postcode": {
+        "label": "Code postal (facultatif)",
+        "placeholder": "ex. 10115"
+      },
+      "selfie": {
+        "a11y": "Aperçu du selfie",
+        "cta": "Prenez ou importez un selfie net",
+        "helper": "Un selfie net est obligatoire pour la vérification d'identité",
+        "label": "Photo selfie *",
+        "retake": {
+          "cta": "Reprendre le selfie"
+        }
+      },
+      "ssn": {
+        "helper": "Chiffré et utilisé uniquement pour la vérification fiscale",
+        "label": "Numéro de sécurité sociale *",
+        "placeholder": "Saisissez votre numéro de sécurité sociale"
+      },
+      "taxId": {
+        "helper": "Nécessaire pour l'émission des factures et les déclarations fiscales",
+        "label": "Numéro d'identification fiscale *",
+        "placeholder": "ex. DE123456789"
+      },
+      "vatId": {
+        "helper": "Laissez vide si vous êtes Kleinunternehmer sans VAT ID",
+        "label": "VAT ID (USt-IdNr., facultatif)",
+        "placeholder": "ex. DE123456789"
+      }
+    },
+    "goToActive": {
+      "cta": "Aller au déménagement en cours"
+    },
+    "homeTypeMoveType": {
+      "label": "{{homeType}} · {{moveType}}"
+    },
+    "jobDetails": {
+      "notFound": {
+        "subtitle": "Ce déménagement a peut-être été supprimé ou le lien est invalide."
+      },
+      "subheading": {
+        "label": "Déménagement {{moveType}} · {{date}}"
+      }
+    },
+    "moveTypeBadge": {
+      "label": "Déménagement {{type}}"
+    },
+    "notStartable": {
+      "body": "<0>Ce déménagement ne peut pas encore démarrer.</0> Vous pourrez lancer cet itinéraire le <1>{{when}}</1> (le démarrage de l'itinéraire se débloque 5 minutes avant)."
+    },
+    "notify": {
+      "newRequest": {
+        "body": "Vous avez une nouvelle demande de déménagement. Ouvrez l'application pour voir les détails et accepter.",
+        "title": "Nouvelle demande de déménagement ! 📋"
+      }
+    },
+    "onboarding": {
+      "done": {
+        "redirect": "Vous êtes redirigé vers votre tableau de bord…",
+        "subtitle": "Votre profil de déménageur est en cours d'examen. Nous vous préviendrons dès qu'il sera vérifié.",
+        "title": "Profil envoyé !"
+      },
+      "review": {
+        "experience": {
+          "title": "Expérience",
+          "value_one": "{{count}} an",
+          "value_other": "{{count}} ans"
+        },
+        "languages": {
+          "value": "Langues : {{languages}}"
+        },
+        "license": {
+          "value": "Permis : {{number}}"
+        },
+        "licenseOk": "✓ Photo du permis importée",
+        "location": {
+          "value": "{{city}}, {{country}}"
+        },
+        "personal": {
+          "value": "{{name}} · {{phone}}"
+        },
+        "selfieOk": "✓ Selfie importé",
+        "ssn": {
+          "value": "Sécurité sociale : ••••{{last4}}"
+        },
+        "subtitle": "Veuillez vérifier vos informations avant de les envoyer.",
+        "taxId": {
+          "value": "Numéro fiscal : {{taxId}}"
+        },
+        "title": "Vérifiez votre profil",
+        "vehicle": {
+          "capacity": {
+            "value": "{{vehicleType}} · Imm. : {{registration}} · {{capacity}}"
+          },
+          "value": "{{vehicleType}} · Imm. : {{registration}}"
+        },
+        "vehicleName": {
+          "value": "{{brand}} {{model}} ({{year}})"
+        },
+        "verification": {
+          "title": "Vérification et localisation"
+        }
+      },
+      "step": {
+        "experience": {
+          "label": "Expérience"
+        },
+        "personal": {
+          "label": "Informations personnelles"
+        },
+        "review": {
+          "label": "Vérifier et envoyer"
+        },
+        "vehicle": {
+          "label": "Détails du véhicule"
+        },
+        "verification": {
+          "label": "Vérification"
+        }
+      },
+      "submit": {
+        "cta": "Envoyer le profil"
+      },
+      "subtitle": "Renseignez vos informations pour commencer à accepter des déménagements",
+      "title": "Complétez votre profil de déménageur"
+    },
+    "request": {
+      "categoryAndType": {
+        "instant": {
+          "light": {
+            "subtitle": "Immédiat · Déménagement léger"
+          },
+          "premium": {
+            "subtitle": "Immédiat · Déménagement premium"
+          },
+          "regular": {
+            "subtitle": "Immédiat · Déménagement standard"
+          }
+        },
+        "scheduled": {
+          "light": {
+            "subtitle": "Planifié · Déménagement léger"
+          },
+          "premium": {
+            "subtitle": "Planifié · Déménagement premium"
+          },
+          "regular": {
+            "subtitle": "Planifié · Déménagement standard"
+          }
+        }
+      },
+      "earnings": {
+        "label": "Vos revenus"
+      },
+      "respondWithin": {
+        "label": "Répondez sous <1>{{seconds}} s</1>"
+      },
+      "services": {
+        "label": "Services : {{list}}"
+      },
+      "title": "Nouvelle demande de déménagement !",
+      "viewDetails": {
+        "cta": "Voir tous les détails"
+      }
+    },
+    "roleLabel": "Déménageur",
+    "scheduledMoves": {
+      "empty": {
+        "subtitle": "Lorsque vous acceptez des déménagements planifiés, ils apparaissent ici jusqu'à leur date.",
+        "title": "Aucun déménagement planifié"
+      },
+      "subtitle": "Les déménagements qui vous sont assignés et qui attendent leur date planifiée"
+    },
+    "section": {
+      "experience": {
+        "title": "Expérience et tarif"
+      },
+      "verification": {
+        "helper": "Ces informations sont nécessaires à la vérification d'identité et seront conservées de manière sécurisée.",
+        "title": "Vérification et lieu de travail"
+      }
+    },
+    "settings": {
+      "payouts": {
+        "helper": "Gérez vos comptes de versement",
+        "label": "Moyens de paiement"
+      },
+      "subtitle": "Gérez votre compte et vos préférences",
+      "version": {
+        "label": "pickLT Mover App v{{version}}"
+      }
+    },
+    "startRoute": {
+      "cta": "Démarrer l'itinéraire — je suis en route"
+    },
+    "tapForDetails": {
+      "helper": "Appuyez pour voir les détails"
+    },
+    "tax": {
+      "empty": {
+        "subtitle": "Terminez des déménagements ce mois-ci et votre premier relevé apparaîtra le 1er.",
+        "title": "Aucun relevé pour l'instant"
+      },
+      "helper1": "Votre relevé mensuel est généré le 1er de chaque mois et couvre le mois précédent.",
+      "helper2": "Conservez-les pour votre comptable ou votre administration fiscale.",
+      "openPdf": {
+        "cta": "Ouvrir le PDF"
+      },
+      "preparing": {
+        "label": "Préparation…"
+      },
+      "row": {
+        "summary_one": "{{count}} déménagement · brut {{gross}} · net {{net}}",
+        "summary_other": "{{count}} déménagements · brut {{gross}} · net {{net}}"
+      },
+      "title": "Documents fiscaux et de revenus"
+    },
+    "verification": {
+      "pending": {
+        "body": "Votre profil de déménageur est en cours d'examen. Vous pourrez accepter des déménagements et accéder à toutes les fonctionnalités une fois qu'il sera vérifié.",
+        "title": "Vérification en attente"
+      },
+      "rejected": {
+        "body": "Votre profil de déménageur a été refusé. Veuillez contacter l'assistance ou mettre à jour votre profil dans les Paramètres.",
+        "title": "Profil refusé"
+      },
+      "suspended": {
+        "body": "Votre compte a été suspendu. Veuillez contacter l'assistance pour plus d'informations.",
+        "title": "Compte suspendu"
+      }
+    },
+    "viewDetails": {
+      "cta": "Voir les détails"
+    },
+    "withdraw": {
+      "cta": "Se retirer du déménagement"
+    },
+    "withdrawConfirm": {
+      "body": "Confirmez-vous ? Le déménagement redeviendra disponible pour les autres déménageurs.",
+      "cta": "Oui, me retirer"
+    }
+  },
+  "moverDashboard": {
+    "findMoves": {
+      "cta": "Trouver des déménagements"
+    },
+    "manageCrew": {
+      "cta": "Gérer l'équipe"
+    },
+    "quickActions": {
+      "title": "Actions rapides"
+    },
+    "recentMoves": {
+      "moveType": {
+        "label": "Déménagement {{type}}"
+      },
+      "title": "Déménagements récents"
+    },
+    "stat": {
+      "activeMoves": {
+        "label": "Déménagements en cours"
+      },
+      "availableMoves": {
+        "label": "Déménagements disponibles"
+      },
+      "completedThisMonth": {
+        "label": "Terminés ce mois-ci"
+      },
+      "crewMembers": {
+        "label": "Membres d'équipe"
+      },
+      "earningsThisMonth": {
+        "label": "Revenus ce mois-ci"
+      },
+      "scheduledMoves": {
+        "label": "Déménagements planifiés"
+      }
+    },
+    "welcome": {
+      "subtitle": "Voici ce qui se passe aujourd'hui",
+      "title": "Bon retour, {{name}} !"
+    }
+  },
+  "moverNav": {
+    "active": {
+      "label": "En cours"
+    },
+    "activeMove": {
+      "label": "Déménagement en cours"
+    },
+    "availableMoves": {
+      "label": "Déménagements disponibles"
+    },
+    "crew": {
+      "label": "Équipe"
+    },
+    "dashboard": {
+      "label": "Tableau de bord"
+    },
+    "earnings": {
+      "label": "Revenus"
+    },
+    "home": {
+      "label": "Accueil"
+    },
+    "moves": {
+      "label": "Déménagements"
+    },
+    "myCrew": {
+      "label": "Mon équipe"
+    },
+    "scheduledMoves": {
+      "label": "Déménagements planifiés"
+    },
+    "taxDocuments": {
+      "label": "Documents fiscaux"
+    }
+  },
+  "myMoves": {
+    "book": {
+      "cta": "Réserver un déménagement"
+    },
+    "empty": {
+      "filtered": {
+        "title": "Aucun déménagement {{status}}"
+      },
+      "subtitle": "Réservez votre premier déménagement et il apparaîtra ici.",
+      "title": "Aucun déménagement pour l'instant"
+    },
+    "subtitle": "Suivez et gérez tous vos déménagements au même endroit.",
+    "title": "Mes déménagements"
+  },
+  "nav": {
+    "account": {
+      "a11y": "Accéder à votre compte",
+      "label": "Compte"
+    },
+    "backToMyMoves": {
+      "cta": "Retour à Mes déménagements"
+    },
+    "becomeMover": {
+      "label": "Devenir déménageur"
+    },
+    "dashboard": {
+      "cta": "Tableau de bord",
+      "label": "Tableau de bord"
+    },
+    "earnings": {
+      "label": "Revenus"
+    },
+    "home": {
+      "label": "Accueil"
+    },
+    "moverDashboard": {
+      "label": "Tableau de bord déménageur"
+    },
+    "moves": {
+      "label": "Déménagements"
+    },
+    "myAccount": {
+      "label": "Mon compte"
+    },
+    "myCrew": {
+      "label": "Mon équipe"
+    },
+    "myMoves": {
+      "cta": "Mes déménagements",
+      "label": "Mes déménagements"
+    },
+    "navigateTo": {
+      "a11y": "Aller à {{name}}"
+    },
+    "scheduled": {
+      "label": "Planifiés"
+    },
+    "signInAsClient": {
+      "helper": "Connectez-vous ou inscrivez-vous en tant que client",
+      "label": "Client"
+    },
+    "signInAsMover": {
+      "helper": "Connectez-vous ou inscrivez-vous en tant que déménageur",
+      "label": "Déménageur"
+    }
+  },
+  "notFound": {
+    "cta": "Retour à l'accueil",
+    "image": {
+      "a11y": "Page introuvable"
+    },
+    "title": "La page que vous cherchez n'existe pas."
+  },
+  "notify": {
+    "empty": "Vous n'avez aucune notification."
+  },
+  "payDone": {
+    "booked": {
+      "title": "Réservation confirmée !"
+    },
+    "confirmed": {
+      "title": "Votre déménagement est confirmé !"
+    },
+    "confirmedPaid": {
+      "title": "Déménagement confirmé et payé !"
+    },
+    "congrats": {
+      "title": "Félicitations 🎉"
+    },
+    "instant": {
+      "subtitle": "Votre déménagement immédiat"
+    },
+    "scheduled": {
+      "subtitle": "Votre réservation de déménagement"
+    },
+    "viewDetails": {
+      "cta": "Voir les détails du déménagement"
+    }
+  },
+  "preview": {
+    "complete": {
+      "cta": "Finaliser le déménagement"
+    },
+    "creating": {
+      "cta": "Création de votre déménagement…"
+    },
+    "editPhotos": {
+      "cta": "Modifier les photos"
+    },
+    "moveTypeBadge": {
+      "label": "Déménagement {{moveType}}"
+    }
+  },
+  "scheduledMoves": {
+    "book": {
+      "cta": "Réserver un déménagement planifié"
+    },
+    "empty": {
+      "filtered": {
+        "title": "Aucun déménagement planifié {{status}}"
+      },
+      "subtitle": "Réservez un déménagement planifié et il apparaîtra ici.",
+      "title": "Aucun déménagement planifié pour l'instant"
+    },
+    "subtitle": "Tous vos déménagements planifiés, à venir et passés.",
+    "title": "Déménagements planifiés"
+  },
+  "search": {
+    "dropoff": {
+      "placeholder": "Vers où déménagez-vous ?"
+    },
+    "from": {
+      "label": "Départ"
+    },
+    "location": {
+      "a11y": "Rechercher un lieu",
+      "placeholder": "Où déménagez-vous ?"
+    },
+    "mobile": {
+      "collapsed": {
+        "label": "Planifiez votre déménagement"
+      },
+      "title": "Planifiez votre déménagement",
+      "where": {
+        "placeholder": "Vers où ?"
+      }
+    },
+    "pickup": {
+      "placeholder": "D'où déménagez-vous ?"
+    },
+    "to": {
+      "label": "Arrivée"
+    }
+  },
+  "selectMover": {
+    "available": {
+      "title_one": "Déménageurs disponibles ({{count}})",
+      "title_other": "Déménageurs disponibles ({{count}})"
+    },
+    "capacity": {
+      "label": "{{volume}} m³ de capacité"
+    },
+    "confirm": {
+      "cta": "Confirmer · {{amount}}"
+    },
+    "creating": {
+      "cta": "Création du déménagement…"
+    },
+    "empty": {
+      "subtitle": "Aucun déménageur vérifié n'est actuellement en ligne près de chez vous. Veuillez réessayer dans quelques minutes.",
+      "title": "Aucun déménageur disponible"
+    },
+    "error": {
+      "title": "Impossible de trouver des déménageurs"
+    },
+    "eta": {
+      "label_one": "à ~{{count}} min",
+      "label_other": "à ~{{count}} min"
+    },
+    "experienceYears_one": "{{count}} an d'exp.",
+    "experienceYears_other": "{{count}} ans d'exp.",
+    "languages": {
+      "label": "Langues : {{languages}}"
+    },
+    "pricing": {
+      "disclaimer": "Le prix final peut varier selon les conditions réelles.",
+      "helper_one": "Les prix comprennent le forfait de base, la distance ({{distance}}), la taille de l'équipe, la capacité du véhicule et la manutention de {{count}} objet.",
+      "helper_other": "Les prix comprennent le forfait de base, la distance ({{distance}}), la taille de l'équipe, la capacité du véhicule et la manutention de {{count}} objets.",
+      "title": "Comment le prix est calculé :"
+    },
+    "searching": {
+      "subtitle": "Nous recherchons des déménageurs vérifiés près de votre lieu d'enlèvement",
+      "title": "Recherche de déménageurs disponibles…"
+    },
+    "selectFirst": {
+      "cta": "Sélectionnez un déménageur"
+    },
+    "title": "Choisir un déménageur"
+  },
+  "seo": {
+    "about": {
+      "description": "PickLT est une plateforme de services de déménagement pour appartements, bureaux et objets partout en Europe.",
+      "title": "À propos"
+    },
+    "accountBilling": {
+      "description": "Gérez vos paiements et vos versements",
+      "title": "Compte - Paiements et versements"
+    },
+    "accountPassword": {
+      "description": "Gérez votre mot de passe",
+      "title": "Compte - mot de passe"
+    },
+    "contact": {
+      "description": "Contactez l'équipe PickLT.",
+      "title": "Nous contacter"
+    },
+    "default": {
+      "description": "PickLT - Votre plateforme de services de déménagement de confiance",
+      "keywords": "PickLT, déménagement, déménageurs, relocation, Umzug",
+      "title": "PickLT - Déménagez plus intelligemment avec PickLT"
+    },
+    "forgotPassword": {
+      "description": "Réinitialisez votre mot de passe",
+      "title": "Mot de passe oublié"
+    },
+    "home": {
+      "description": "Réservez des déménageurs vérifiés pour vos appartements, vos bureaux et vos affaires partout en Europe.",
+      "title": "Accueil"
+    },
+    "titleTemplate": "%s - PickLT"
+  },
+  "sidebar": {
+    "blurb": "Découvrez les articles les plus remarquables sur tous les sujets de la vie. Écrivez vos histoires et partagez-les",
+    "getStarted": {
+      "cta": "Commencer"
+    },
+    "search": {
+      "a11y": "Rechercher des articles",
+      "placeholder": "Tapez puis appuyez sur Entrée"
+    }
+  },
+  "signup": {
+    "clientSubtitle": "Créez un compte pour réserver vos déménagements",
+    "moverSubtitle": "Rejoignez notre réseau de déménageurs professionnels",
+    "moverTitle": "Rejoignez-nous comme déménageur",
+    "phoneRequired": {
+      "helper": "La vérification du téléphone sera requise après l'inscription"
+    },
+    "phoneVerify": {
+      "subtitle": "Nous devons vérifier votre numéro de téléphone pour finaliser votre inscription."
+    },
+    "resumeMove": {
+      "helper": "Créez un compte pour poursuivre votre déménagement. Votre progression a été enregistrée."
+    },
+    "verifyAndCreate": {
+      "cta": "Vérifier et créer le compte"
+    }
+  },
+  "wizard": {
+    "finish": {
+      "cta": "Créer le déménagement"
+    },
+    "nextStep": {
+      "cta": "Étape suivante {{step}}"
+    },
+    "step1": {
+      "route": {
+        "title": "Votre itinéraire de déménagement"
+      },
+      "title": "ÉTAPE 1 — Détails du déménagement"
+    },
+    "step2": {
+      "title": "Adresse d'enlèvement"
+    },
+    "step3": {
+      "title": "Adresse de livraison"
+    },
+    "step4": {
+      "subtitle": "Sélectionnez les objets à déménager. Cela nous aide à estimer la taille du camion et de l'équipe."
+    },
+    "step5": {
+      "dateInStep1": {
+        "helper": "Vous pouvez définir votre date de déménagement à l'étape {{step}}"
+      },
+      "subtitle": "Choisissez l'heure d'arrivée des déménageurs."
+    },
+    "step6": {
+      "services": {
+        "helper": "Il s'agit des prestations standard des déménageurs allemands."
+      },
+      "subtitle": "Sélectionnez des services supplémentaires et importez des photos des objets à déménager.",
+      "title": "Services supplémentaires et photos"
+    },
+    "stepOf": {
+      "label": "Étape {{current}} sur {{total}}"
+    },
+    "stepTotal": {
+      "label": "/{{total}}"
+    }
+  }
+}

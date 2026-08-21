@@ -1,0 +1,40 @@
+{
+  "doc": {
+    "draftBanner": "DRAFT — pending tax-advisor review",
+    "driverHeading": "Driver",
+    "footerDisclaimer": "Automatically generated for the driver’s information. Drivers remain responsible for declaring their own revenue and income.",
+    "operatorHeading": "Platform operator",
+    "operatorPending": "[operator details pending]",
+    "operatorRegistration": "Registration number: {{value}}",
+    "operatorVatId": "VAT ID: {{value}}",
+    "period": "Period: {{period}}",
+    "statementNo": "Statement no.: {{number}}",
+    "taxNumber": "Tax number: {{value}}",
+    "title": "Monthly driver activity statement",
+    "vatId": "VAT ID: {{value}}"
+  },
+  "lines": {
+    "cashAlreadyHeld": "Of which already received in cash",
+    "commission": "Commission / service fee",
+    "deductionsHeading": "Platform deductions",
+    "grossCash": "Collected in cash",
+    "grossDigital": "Collected digitally (in-app/card)",
+    "grossHeading": "Gross earnings",
+    "grossLocal": "Gross in local currency ({{currency}})",
+    "grossTotal": "Total gross earnings",
+    "instantMoves": "Of which instant moves",
+    "net": "Net amount",
+    "netPayable": "Net payable to driver",
+    "resultHeading": "Result",
+    "scheduledMoves": "Of which scheduled moves",
+    "summary": "Summary of settled moves",
+    "totalMoves": "Total moves completed",
+    "withholdingHeading": "Taxes withheld at source",
+    "withholdingIncome": "Income tax withheld",
+    "withholdingVat": "VAT withheld"
+  },
+  "statementReady": {
+    "body": "Statement {{number}} for {{period}} is available in your tax documents.",
+    "title": "Your monthly statement is ready"
+  }
+}

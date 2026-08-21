@@ -1,4 +1,86 @@
 {
+  "api": {
+    "admin": {
+      "awaitingApproval": "Il tuo account amministratore è in attesa di approvazione da parte di un amministratore esistente.",
+      "noProfile": "Nessun profilo amministratore trovato per questo account.",
+      "notAuthorized": "Questo account non è autorizzato ad accedere alla console di amministrazione.",
+      "suspended": "Il tuo accesso da amministratore è stato sospeso. Contatta un altro amministratore."
+    },
+    "admins": {
+      "alreadyAdmin": "Quell’utente è già un amministratore attivo.",
+      "invalidStatus": "Lo stato deve essere uno tra: {{list}}",
+      "lastAdmin": "Questo è l’ultimo amministratore attivo: promuovine un altro prima di rimuoverlo.",
+      "notAnAdmin": "Quell’account non è un amministratore.",
+      "notFound": "Amministratore non trovato.",
+      "selfDemote": "Non puoi rimuovere il tuo accesso da amministratore.",
+      "selfStatus": "Non puoi modificare il tuo stato di amministratore.",
+      "userIdRequired": "È richiesto un ID utente.",
+      "userNotFound": "Utente non trovato."
+    },
+    "auth": {
+      "missingUserId": "Impossibile completare l’accesso. Riprova.",
+      "noSession": "Nessuna sessione attiva. Accedi di nuovo.",
+      "sessionInitFailed": "Impossibile avviare la sessione. Riprova."
+    },
+    "dac7": {
+      "exportBlocked_one": "{{count}} venditore senza codice fiscale (TIN). Completa il suo KYC prima di esportare, oppure ripeti la richiesta con force=1 per ottenere una copia a uso interno.",
+      "exportBlocked_other": "{{count}} venditori senza codice fiscale (TIN). Completa il loro KYC prima di esportare, oppure ripeti la richiesta con force=1 per ottenere una copia a uso interno.",
+      "invalidYear": "Anno non valido"
+    },
+    "dispute": {
+      "invalidStatus": "L’esito deve essere uno tra: {{list}}",
+      "moveIdRequired": "È richiesto un ID trasloco."
+    },
+    "forbidden": "Non hai i permessi necessari per questa operazione.",
+    "functionFailed": {
+      "error": "La funzione {{functionId}} non è riuscita ({{status}})"
+    },
+    "internal": "Si è verificato un problema. Riprova.",
+    "inventory": {
+      "categoryRequired": "La categoria è obbligatoria.",
+      "invalidMoveType": "moveTypeMinimum deve essere uno tra: {{list}}",
+      "nameRequired": "Il nome è obbligatorio.",
+      "notANonNegativeNumber": "{{field}} deve essere un numero non negativo."
+    },
+    "invite": {
+      "accountClash": "Esiste già un account per questa e-mail. Chiedi a un amministratore di promuoverlo.",
+      "alreadyAccepted": "Quell’invito è già stato accettato. Sospendi invece l’account amministratore.",
+      "emailExists": "Questa e-mail ha già un account PickLT. Promuovilo dalla pagina Utenti invece di inviare un invito.",
+      "emailIsAdmin": "Questa e-mail appartiene già a un amministratore.",
+      "expired": "Questo invito è scaduto. Chiedi a un amministratore un nuovo link.",
+      "idRequired": "È richiesto un ID invito.",
+      "invalidEmail": "Inserisci un indirizzo e-mail valido.",
+      "invalidLink": "Questo link di invito non è valido.",
+      "loadFailed": "Impossibile caricare questo invito.",
+      "nameRequired": "Inserisci il nome completo della persona invitata.",
+      "notFound": "Invito non trovato.",
+      "passwordTooShort_one": "La password deve contenere almeno {{count}} carattere.",
+      "passwordTooShort_other": "La password deve contenere almeno {{count}} caratteri.",
+      "revoked": "Questo invito è stato revocato.",
+      "signupFailed": "Impossibile completare la registrazione.",
+      "used": "Questo invito è già stato utilizzato."
+    },
+    "mover": {
+      "invalidStatus": "Il nuovo stato deve essere uno tra: {{list}}",
+      "noLicensePhoto": "Nessuna foto della patente registrata.",
+      "notFound": "Traslocatore non trovato.",
+      "reasonRequired": "È necessario indicare un motivo per rifiutare o sospendere un traslocatore.",
+      "verifyFailed": "Verifica non riuscita (stato {{status}}). Riprova."
+    },
+    "pricing": {
+      "keyRequired": "key è obbligatorio",
+      "negative": "{{label}} non può essere negativo.",
+      "notANumber": "{{label}} deve essere un numero.",
+      "ratioTooLarge": "{{label}} sembra troppo grande: è un rapporto, non un importo in euro.",
+      "unknownKey": "Chiave di prezzo sconosciuta: {{key}}"
+    },
+    "unauthorized": "La tua sessione è scaduta. Accedi di nuovo.",
+    "user": {
+      "blockedFlagRequired": "È richiesto un valore bloccato/sbloccato.",
+      "notFound": "Utente non trovato.",
+      "selfBlock": "Non puoi bloccare il tuo account."
+    }
+  },
   "appwrite": {
     "generalArgumentInvalid": "Uno dei campi non è valido. Controlla i dati inseriti.",
     "generalRateLimitExceeded": "Troppi tentativi. Attendi un momento e riprova.",
@@ -15,9 +97,15 @@
     "userUnauthorized": "Non hai l’autorizzazione. Accedi di nuovo."
   },
   "auth": {
+    "forbidden": "Accesso negato",
+    "initSessionFailed": "Impossibile inizializzare la sessione",
+    "noActiveSession": "Nessuna sessione attiva",
     "noSession": {
       "error": "Nessun utente autenticato"
-    }
+    },
+    "setPhoneFailed": "Impossibile impostare il numero di telefono",
+    "syncFailed": "Impossibile sincronizzare l’utente",
+    "unauthorized": "Non autorizzato"
   },
   "call": {
     "noPhoneNumber": "Nessun numero di telefono registrato per questo trasportatore."
@@ -39,13 +127,37 @@
       "userNotFound": "Non è stato possibile caricare il tuo account. Accedi di nuovo."
     }
   },
+  "crew": {
+    "fieldsRequired": "Nome e telefono sono obbligatori",
+    "memberNotFound": "Membro della squadra non trovato",
+    "notOwner": {
+      "error": "Non è un membro della tua squadra"
+    }
+  },
   "generic": {
     "fallback": "Si è verificato un problema. Riprova.",
+    "internal": "Errore interno del server",
     "retry": {
       "body": "Riprova.",
       "error": "Si è verificato un problema. Riprova."
     },
-    "title": "Si è verificato un problema"
+    "saveFailed": "Salvataggio non riuscito",
+    "title": "Si è verificato un problema",
+    "unknown": "Errore sconosciuto"
+  },
+  "geo": {
+    "denied": {
+      "error": "Accesso alla posizione negato. Attivalo nelle impostazioni del browser."
+    },
+    "unavailable": {
+      "error": "Impossibile rilevare la tua posizione. Riprova."
+    },
+    "unsupported": {
+      "error": "La geolocalizzazione non è supportata dal tuo browser"
+    }
+  },
+  "geocode": {
+    "searchFailed": "Impossibile recuperare le località"
   },
   "google": {
     "cancelled": {
@@ -72,6 +184,11 @@
       }
     }
   },
+  "location": {
+    "unavailable": {
+      "error": "Impossibile determinare la tua posizione."
+    }
+  },
   "mapbox": {
     "unreachable": {
       "error": "Impossibile raggiungere Mapbox, controlla la connessione"
@@ -82,11 +199,135 @@
     "sendFailed": "Impossibile inviare il messaggio. Riprova.",
     "tooLong": "Il messaggio è troppo lungo. Il limite è di {{max}} caratteri."
   },
+  "move": {
+    "alreadyAssigned": "Il trasloco è già stato assegnato",
+    "alreadyAssigned2": "Questo trasloco ha già un traslocatore assegnato",
+    "cancelFailed": "Impossibile annullare questo trasloco. Riprova.",
+    "cancelRetry": "Annullamento non riuscito. Riprova.",
+    "createFailed": "Impossibile creare il trasloco",
+    "dateInPast": "La data del trasloco deve essere futura",
+    "invalidTransition": "Passaggio non valido da «{{from}}» a «{{to}}»",
+    "loadFailed": "Impossibile caricare i dati del trasloco",
+    "notAcceptableInStatus": "Il trasloco non può essere accettato mentre è {{status}}",
+    "notAssigned": "Non sei assegnato a questo trasloco",
+    "notAssigned2": "Non sei assegnato a questo trasloco",
+    "notAuthorized": "Non autorizzato per questo trasloco",
+    "notAvailable": "Questo trasloco non è disponibile per l’accettazione",
+    "notCancellable": "Questo trasloco non può più essere annullato ({{stage}}). Le tue cose potrebbero essere già in viaggio: contatta direttamente il tuo traslocatore.",
+    "notCancellableUnknownStage": "Questo trasloco non può più essere annullato. Le tue cose potrebbero essere già in viaggio: contatta direttamente il tuo traslocatore.",
+    "notFound": "Trasloco non trovato",
+    "notReschedulable": "Impossibile riprogrammare un trasloco con stato «{{status}}»",
+    "rescheduleFailed": "Riprogrammazione non riuscita",
+    "rescheduleRetry": "Riprogrammazione non riuscita. Riprova.",
+    "scheduledOnly": "Solo i traslochi programmati possono essere accettati in questo modo",
+    "statusUpdateFailed": "Impossibile aggiornare lo stato",
+    "tooEarly": "Questo trasloco non può essere avviato prima della data programmata.",
+    "withdrawTooLate": "Non puoi ritirarti dopo l’inizio del trasloco"
+  },
+  "mover": {
+    "acceptFailed": {
+      "error": "Impossibile accettare il trasloco"
+    },
+    "acceptRetry": "Impossibile accettare il trasloco. Riprova.",
+    "clientCannotConvert": "Il tuo account è registrato come cliente. Gli account cliente non possono essere convertiti in account traslocatore. Crea un nuovo account per registrarti come traslocatore.",
+    "earningsFetchFailed": "Impossibile recuperare i guadagni",
+    "earningsLoadFailed": "Impossibile caricare i guadagni",
+    "licenseUploadFailed": "Impossibile caricare la foto della patente",
+    "noLocation": "Nessuna posizione disponibile. Attiva i servizi di localizzazione oppure aggiorna la tua posizione.",
+    "notVerified": "Il tuo profilo da traslocatore non è ancora stato verificato",
+    "notVerifiedPendingApproval": "Il tuo profilo da traslocatore non è ancora stato verificato. Attendi l’approvazione dell’amministratore.",
+    "profileNotFound": "Profilo traslocatore non trovato",
+    "profileSubmitFailed": "Impossibile inviare il profilo",
+    "selfieRequired": "Il selfie è obbligatorio per la verifica dell’identità",
+    "selfieUploadFailed": "Impossibile caricare il selfie",
+    "startRouteFailed": "Impossibile avviare il percorso",
+    "startRouteRetry": "Impossibile avviare il percorso. Riprova.",
+    "withdrawFailed": "Impossibile ritirarsi dal trasloco",
+    "withdrawRetry": "Ritiro non riuscito. Riprova."
+  },
+  "movers": {
+    "fetchFailed": "Impossibile recuperare i traslocatori",
+    "findFailed": "Impossibile trovare traslocatori"
+  },
+  "moves": {
+    "fetchFailed": "Impossibile recuperare i traslochi",
+    "loadFailed": "Impossibile caricare i traslochi",
+    "scheduledLoadFailed": "Impossibile caricare i traslochi programmati"
+  },
+  "network": {
+    "generic": {
+      "error": "Errore di rete. Riprova."
+    },
+    "unreachable": "Impossibile raggiungere il server. Controlla la connessione e riprova."
+  },
   "payment": {
     "cardDeclined": "La tua carta è stata rifiutata. Prova un altro metodo di pagamento.",
     "charge": {
       "failed": "Impossibile completare il pagamento. Riprova.",
       "initFailed": "Impossibile avviare il pagamento. Riprova."
+    },
+    "confirmFailed": "Impossibile confermare il pagamento",
+    "notAwaiting": "Il trasloco non è in attesa di pagamento (attuale: {{status}})"
+  },
+  "profile": {
+    "changeEmailFailed": "Impossibile cambiare l’e-mail",
+    "changePhoneFailed": "Impossibile cambiare il telefono",
+    "emailChangeFailed": "Impossibile cambiare l’e-mail",
+    "emailTaken": "Questa e-mail è già utilizzata da un altro account",
+    "nameUpdateFailed": "Impossibile aggiornare il nome",
+    "phoneChangeFailed": "Impossibile cambiare il telefono",
+    "phoneNumberChangeFailed": "Impossibile cambiare il numero di telefono",
+    "phoneTaken": "Questo numero di telefono è già utilizzato da un altro account"
+  },
+  "request": {
+    "moveMismatch": "La richiesta non corrisponde a questo trasloco",
+    "notOwned": "La richiesta non appartiene a questo traslocatore",
+    "notPending": "La richiesta non è più in attesa"
+  },
+  "review": {
+    "moveNotCompleted": "Il trasloco non è completato",
+    "noMover": "Nessun traslocatore assegnato a questo trasloco",
+    "ratingRange": "La valutazione deve essere compresa tra 1 e 5",
+    "submitFailed": "Impossibile inviare la recensione"
+  },
+  "tax": {
+    "listFailed": "Impossibile caricare le certificazioni",
+    "pdfLoadFailed": "Impossibile caricare il PDF",
+    "pdfNotReady": "Il PDF della certificazione non è ancora pronto"
+  },
+  "taxDocs": {
+    "downloadFailed": {
+      "error": "Impossibile scaricare la certificazione. Riprova."
+    },
+    "pdfNotReady": {
+      "error": "Il PDF della certificazione non è ancora pronto"
     }
+  },
+  "update": {
+    "failed": {
+      "title": "Impossibile aggiornare"
+    }
+  },
+  "upload": {
+    "failed": "Caricamento non riuscito",
+    "noFile": "Nessun file fornito",
+    "notAnImage": "Seleziona un file immagine",
+    "notAnImage2": "Il file deve essere un’immagine",
+    "photoFailed": "Impossibile caricare la foto",
+    "photosFailed": "Impossibile caricare le foto",
+    "tooLarge": "L’immagine deve essere inferiore a {{limit}}",
+    "tooLarge2": "La dimensione del file deve essere inferiore a 10 MB"
+  },
+  "validation": {
+    "emailFormat": "Formato e-mail non valido",
+    "emailRequired": "L’e-mail è obbligatoria",
+    "noFields": "Nessun campo valido da aggiornare",
+    "phoneFormat": "Numero di telefono non valido. Usa il formato internazionale (es. +491234567890)",
+    "phoneRequired2": "Il numero di telefono è obbligatorio"
+  },
+  "vehicle": {
+    "fieldsRequired": "Compila tutti i campi obbligatori del veicolo",
+    "saveFailed": "Impossibile salvare i dati del veicolo",
+    "updateFailed": "Impossibile aggiornare i dati del veicolo"
   }
 }

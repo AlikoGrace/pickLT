@@ -1,0 +1,147 @@
+{
+  "cancel": {
+    "byClient": {
+      "body": "The client cancelled the move.",
+      "bodyWithHandle": "The client cancelled move {{handle}}.",
+      "title": "Move cancelled"
+    },
+    "reassigning": {
+      "body": "Your mover had to drop your move. We’re offering it to other movers nearby.",
+      "bodyWithHandle": "Your mover had to drop move {{handle}}. We’re offering it to other movers nearby.",
+      "title": "Finding you another mover"
+    }
+  },
+  "message": {
+    "new": {
+      "title": "New message"
+    }
+  },
+  "payment": {
+    "clientCharged": {
+      "body": "Your payment of {{amount}} has been processed. Your move booking is confirmed!",
+      "title": "Payment confirmed"
+    },
+    "clientConfirmed": {
+      "body": "The client marked this move as paid. Confirm on your end to close it out.",
+      "title": "Client confirmed payment"
+    },
+    "confirmYours": {
+      "body": "Your mover confirmed payment. Confirm on your end to complete the move.",
+      "title": "Confirm your payment"
+    },
+    "moverPaid": {
+      "body": "You’ve been paid {{amount}}.",
+      "bodyWithHandle": "You’ve been paid {{amount}} for move {{handle}}.",
+      "title": "Payment received"
+    }
+  },
+  "reminder": {
+    "starting": {
+      "client": {
+        "body": "Move {{handle}} is about to begin. Your mover is getting ready.",
+        "title": "Your move starts {{lead}}"
+      },
+      "mover": {
+        "body": "Move {{handle}} starts {{lead}} — Start Route is now available.",
+        "title": "Time to start your move"
+      }
+    },
+    "upcoming": {
+      "client": {
+        "body": "Your move {{handle}} starts {{lead}}.",
+        "bodyWithWindow": "Your move {{handle}} starts {{lead}} at {{window}}.",
+        "title": "Move reminder"
+      },
+      "mover": {
+        "body": "Scheduled move {{handle}} starts {{lead}}.",
+        "bodyWithWindow": "Scheduled move {{handle}} starts {{lead}} at {{window}}.",
+        "title": "Move reminder"
+      }
+    }
+  },
+  "request": {
+    "new": {
+      "body": "You have a new move request nearby. Tap to view and accept.",
+      "bodyRoute": "{{from}} → {{to}}. Tap to view and accept.",
+      "title": "New move request"
+    }
+  },
+  "review": {
+    "received": {
+      "bodyWithComment_one": "You received a {{count}}-star review: “{{comment}}”",
+      "bodyWithComment_other": "You received a {{count}}-star review: “{{comment}}”",
+      "body_one": "You received a {{count}}-star review.",
+      "body_other": "You received a {{count}}-star review.",
+      "title": "New review"
+    }
+  },
+  "status": {
+    "arrivedDestination": {
+      "body": "Your mover has arrived at the destination.",
+      "title": "Arrived"
+    },
+    "awaitingPayment": {
+      "body": "Your move is done — please confirm payment.",
+      "title": "Payment due"
+    },
+    "cancelledByMover": {
+      "body": "The mover has cancelled this move.",
+      "title": "Move cancelled"
+    },
+    "completed": {
+      "body": "Your move has been completed! Please leave a review.",
+      "title": "Move completed"
+    },
+    "inTransit": {
+      "body": "Your items are on the way to the destination.",
+      "title": "In transit"
+    },
+    "loading": {
+      "body": "Your items are being loaded.",
+      "title": "Loading started"
+    },
+    "moverAccepted": {
+      "body": "A mover has accepted your move request!",
+      "title": "Mover accepted"
+    },
+    "moverAcceptedScheduled": {
+      "body": "A mover has accepted your scheduled move!",
+      "title": "Mover accepted"
+    },
+    "moverArrived": {
+      "body": "Your mover has arrived at the pickup location.",
+      "title": "Mover arrived"
+    },
+    "moverEnRoute": {
+      "body": "Your mover is on the way to your pickup location.",
+      "title": "Mover en route"
+    },
+    "moverWithdrew": {
+      "body": "Your mover withdrew. We are finding you another mover.",
+      "title": "Mover withdrew"
+    },
+    "unloading": {
+      "body": "Your items are being unloaded.",
+      "title": "Unloading"
+    }
+  },
+  "verification": {
+    "contactSupport": "Please contact support for details.",
+    "rejected": {
+      "body": "Your mover profile application has been rejected. {{reason}}",
+      "title": "Profile rejected"
+    },
+    "submitted": {
+      "body": "Your mover profile is under review. We will notify you once it is verified.",
+      "title": "Profile submitted"
+    },
+    "suspended": {
+      "body": "Your mover account has been suspended. {{reason}}",
+      "title": "Account suspended"
+    },
+    "verified": {
+      "body": "Congratulations! Your mover profile has been verified. You can now accept moves.",
+      "title": "Profile verified"
+    }
+  }
+}

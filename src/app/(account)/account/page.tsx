@@ -618,7 +618,7 @@ export default function AccountPage() {
                       type="text"
                       value={phoneOtp}
                       onChange={(e) => setPhoneOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                      placeholder={t('auth:otp.input.placeholder', { digits: OTP_DIGITS })}
+                      placeholder={t('auth:otp.input.placeholder', { count: OTP_DIGITS })}
                       maxLength={OTP_DIGITS}
                       className="w-full px-4 py-3 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-transparent text-center text-lg tracking-widest focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none"
                     />

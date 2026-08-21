@@ -1,4 +1,11 @@
 {
+  "accept": {
+    "privacy": "Przyjmuję do wiadomości <0>politykę prywatności</0> (RODO)",
+    "required": {
+      "error": "Zaakceptuj regulamin i politykę prywatności, aby kontynuować"
+    },
+    "terms": "Potwierdzam poprawność danych i akceptuję <0>regulamin</0>"
+  },
   "governingLanguage": {
     "notice": "Ten dokument jest tłumaczeniem. Ma charakter wyłącznie informacyjny; w razie rozbieżności rozstrzygająca jest wersja angielska."
   },
@@ -26,6 +33,9 @@
       }
     }
   },
+  "insuranceClaims": {
+    "title": "Ubezpieczenie i roszczenia"
+  },
   "privacy": {
     "effectiveDate": {
       "label": "Data wejścia w życie: {{date}}",
@@ -49,5 +59,11 @@
         "title": "4. Środki bezpieczeństwa"
       }
     }
+  },
+  "privacyPolicy": {
+    "title": "Polityka prywatności"
+  },
+  "termsOfService": {
+    "title": "Regulamin świadczenia usług"
   }
 }

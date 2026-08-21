@@ -1,11 +1,15 @@
 {
   "action": {
+    "add": {
+      "cta": "Toevoegen"
+    },
     "back": {
       "a11y": "Terug",
       "cta": "Terug"
     },
     "backToHome": {
-      "a11y": "Terug naar start"
+      "a11y": "Terug naar start",
+      "cta": "Terug naar start"
     },
     "call": {
       "cta": "Bellen"
@@ -13,20 +17,53 @@
     "cancel": {
       "cta": "Annuleren"
     },
+    "changePhoto": {
+      "cta": "Foto wijzigen"
+    },
+    "clearAll": {
+      "cta": "Alles wissen"
+    },
     "confirm": {
       "cta": "Bevestigen"
     },
     "continue": {
       "cta": "Doorgaan"
     },
+    "decline": {
+      "cta": "Afwijzen"
+    },
+    "decrement": {
+      "a11y": "Verlagen"
+    },
+    "delete": {
+      "cta": "Verwijderen"
+    },
     "discard": {
       "cta": "Verwerpen"
+    },
+    "dismiss": {
+      "cta": "Sluiten"
     },
     "done": {
       "cta": "Klaar"
     },
+    "edit": {
+      "cta": "Bewerken"
+    },
     "goBack": {
       "cta": "Terug"
+    },
+    "goHome": {
+      "cta": "Naar start"
+    },
+    "increment": {
+      "a11y": "Verhogen"
+    },
+    "keepCurrent": {
+      "label": "Huidige behouden"
+    },
+    "logout": {
+      "cta": "Uitloggen"
     },
     "message": {
       "cta": "Bericht"
@@ -34,8 +71,17 @@
     "next": {
       "cta": "Volgende"
     },
+    "notNow": {
+      "cta": "Niet nu"
+    },
     "ok": {
       "cta": "OK"
+    },
+    "refresh": {
+      "a11y": "Vernieuwen"
+    },
+    "remove": {
+      "cta": "Verwijderen"
     },
     "replace": {
       "cta": "Vervangen"
@@ -43,17 +89,41 @@
     "retry": {
       "cta": "Opnieuw proberen"
     },
+    "save": {
+      "cta": "Opslaan"
+    },
+    "saveChanges": {
+      "cta": "Wijzigingen opslaan"
+    },
+    "saving": {
+      "cta": "Opslaan…"
+    },
     "search": {
       "cta": "Zoeken"
     },
     "seeAll": {
       "cta": "Alles bekijken"
     },
+    "showMore": {
+      "cta": "Laat meer zien"
+    },
+    "signOut": {
+      "cta": "Uitloggen"
+    },
     "skip": {
       "cta": "Overslaan"
     },
     "submitting": {
       "cta": "Verzenden…"
+    },
+    "tapToUpload": {
+      "cta": "Tik om te uploaden"
+    },
+    "tryAgain": {
+      "cta": "Opnieuw proberen"
+    },
+    "viewAll": {
+      "cta": "Alles bekijken"
     }
   },
   "answer": {
@@ -71,6 +141,46 @@
       "body": "Log eerst in."
     }
   },
+  "badge": {
+    "overflow": {
+      "label": "9+"
+    }
+  },
+  "call": {
+    "dialerFailed": {
+      "title": "Kan de telefoon-app niet openen"
+    },
+    "inApp": {
+      "title": "Bellen in de app"
+    },
+    "moveComplete": {
+      "subtitle": "De verhuizing is afgerond"
+    },
+    "noPhone": {
+      "subtitle": "Geen telefoonnummer bekend"
+    },
+    "title": "Bellen",
+    "viaPhone": {
+      "title": "Bellen via de telefoon"
+    }
+  },
+  "chat": {
+    "closed": {
+      "helper": "Deze verhuizing is afgerond. De chat is gesloten."
+    },
+    "composer": {
+      "placeholder": "Typ een bericht..."
+    },
+    "loadFailed": {
+      "error": "Berichten konden niet worden geladen"
+    },
+    "online": {
+      "label": "Online"
+    },
+    "sendFailed": {
+      "title": "Versturen mislukt"
+    }
+  },
   "confirm": {
     "irreversible": {
       "body": "Dit kan niet ongedaan worden gemaakt."
@@ -81,18 +191,163 @@
       "label": "Vandaag"
     }
   },
+  "error": {
+    "checkConnection": "Controleer je verbinding en probeer het opnieuw."
+  },
+  "field": {
+    "city": {
+      "label": "Plaats *",
+      "placeholder": "bijv. Berlijn"
+    },
+    "country": {
+      "label": "Land *",
+      "placeholder": "Kies je land"
+    },
+    "email": {
+      "label": "E-mail",
+      "shortLabel": "E-mail"
+    },
+    "fullName": {
+      "label": "Volledige naam",
+      "placeholder": "Je volledige naam",
+      "required": {
+        "label": "Volledige naam *"
+      }
+    },
+    "name": {
+      "label": "Naam",
+      "placeholder": "Voer een naam in"
+    },
+    "notes": {
+      "label": "Notities (optioneel)",
+      "placeholder": "Eventuele extra notities..."
+    },
+    "phone": {
+      "label": "Telefoonnummer",
+      "placeholder": "Voer een telefoonnummer in",
+      "required": {
+        "label": "Telefoonnummer *"
+      },
+      "shortLabel": "Telefoon"
+    },
+    "quantity": {
+      "label": "Aantal"
+    },
+    "status": {
+      "label": "Status"
+    }
+  },
+  "label": {
+    "total": "Totaal"
+  },
+  "language": {
+    "arabic": {
+      "option": "Arabisch"
+    },
+    "choose": "Kies een taal",
+    "english": {
+      "option": "Engels"
+    },
+    "french": {
+      "option": "Frans"
+    },
+    "german": {
+      "option": "Duits"
+    },
+    "italian": {
+      "option": "Italiaans"
+    },
+    "label": "Taal",
+    "polish": {
+      "option": "Pools"
+    },
+    "romanian": {
+      "option": "Roemeens"
+    },
+    "russian": {
+      "option": "Russisch"
+    },
+    "spanish": {
+      "option": "Spaans"
+    },
+    "turkish": {
+      "option": "Turks"
+    }
+  },
+  "list": {
+    "separator": ", "
+  },
+  "map": {
+    "myLocation": {
+      "label": "Mijn locatie"
+    }
+  },
   "mover": {
+    "nameFallback": {
+      "label": "Naam verhuizer"
+    },
     "unnamed": {
       "label": "Verhuizer"
     }
   },
+  "nav": {
+    "darkTheme": {
+      "label": "Donker thema"
+    },
+    "help": {
+      "label": "Help"
+    },
+    "menu": {
+      "label": "Menu"
+    },
+    "notifications": {
+      "label": "Meldingen"
+    },
+    "openMenu": {
+      "a11y": "Menu openen"
+    },
+    "settings": {
+      "label": "Instellingen"
+    }
+  },
+  "notifications": {
+    "empty": "Je hebt nog geen meldingen.",
+    "header": {
+      "title": "Meldingen"
+    },
+    "markAll": {
+      "cta": "Alles gelezen"
+    },
+    "markAllError": {
+      "body": "Sommige meldingen zijn mogelijk nog ongelezen.",
+      "title": "Kon niet alles als gelezen markeren"
+    }
+  },
   "payment": {
     "brand": {
+      "amex": {
+        "label": "American Express"
+      },
+      "diners": {
+        "label": "Diners Club"
+      },
+      "discover": {
+        "label": "Discover"
+      },
       "fallback": {
         "label": "Kaart"
       },
+      "jcb": {
+        "label": "JCB"
+      },
+      "mastercard": {
+        "label": "Mastercard"
+      },
       "unionpay": {
         "label": "UnionPay"
+      },
+      "visa": {
+        "label": "Visa"
       }
     },
     "brandTag": {
@@ -144,6 +399,35 @@
       }
     }
   },
+  "person": {
+    "fallbackMover": {
+      "label": "Naam verhuizer"
+    },
+    "fallbackName": {
+      "label": "daar"
+    },
+    "fallbackUser": "Gebruiker",
+    "unnamed": {
+      "label": "Je naam"
+    }
+  },
+  "photoViewer": {
+    "close": {
+      "a11y": "Fotoweergave sluiten"
+    },
+    "counter": {
+      "label": "{{page}} / {{total}}"
+    }
+  },
+  "place": {
+    "dropoff": "Afleveren",
+    "pickup": "Ophalen"
+  },
+  "separator": {
+    "or": {
+      "label": "of"
+    }
+  },
   "starRating": {
     "rate": {
       "a11y_one": "{{count}} ster geven",
@@ -151,29 +435,154 @@
     }
   },
   "state": {
+    "accepting": {
+      "label": "Accepteren…"
+    },
+    "adding": {
+      "label": "Toevoegen…"
+    },
+    "checking": {
+      "cta": "Controleren…"
+    },
+    "confirmed": {
+      "label": "Bevestigd"
+    },
+    "declining": {
+      "label": "Afwijzen…"
+    },
     "loading": {
       "label": "Laden…"
     },
+    "loadingEllipsis": {
+      "label": "Laden…"
+    },
+    "locating": {
+      "label": "Je locatie bepalen..."
+    },
     "processing": {
       "cta": "Verwerken…"
+    },
+    "redirecting": {
+      "label": "Doorsturen..."
+    },
+    "saving": {
+      "label": "Opslaan…"
+    },
+    "searching": {
+      "label": "Zoeken…"
+    },
+    "selected": {
+      "label": "Geselecteerd"
+    },
+    "starting": {
+      "label": "Starten..."
+    },
+    "submitting": {
+      "label": "Versturen…"
+    },
+    "updating": {
+      "label": "Bijwerken…"
+    },
+    "waiting": {
+      "label": "Wachten"
+    },
+    "withdrawing": {
+      "label": "Terugtrekken..."
     }
   },
   "status": {
+    "active": {
+      "label": "Actief"
+    },
     "comingSoon": {
       "label": "Binnenkort beschikbaar"
+    },
+    "inactive": {
+      "label": "Inactief"
+    }
+  },
+  "timeAgo": {
+    "days": {
+      "label_one": "{{count}} d geleden",
+      "label_other": "{{count}} d geleden"
+    },
+    "hours": {
+      "label_one": "{{count}} u geleden",
+      "label_other": "{{count}} u geleden"
+    },
+    "justNow": {
+      "label": "Zojuist"
+    },
+    "minutes": {
+      "label_one": "{{count}} min geleden",
+      "label_other": "{{count}} min geleden"
+    },
+    "seconds": {
+      "label_one": "{{count}} s geleden",
+      "label_other": "{{count}} s geleden"
     }
   },
   "unit": {
+    "approxMinutes": {
+      "label": "~{{minutes}} min"
+    },
+    "meters": {
+      "label": "{{value}} m"
+    },
     "minutes": {
       "label": "min"
     }
   },
+  "upload": {
+    "constraints": {
+      "helper": "PNG, JPG, GIF tot 10 MB"
+    },
+    "constraintsNoGif": {
+      "helper": "PNG, JPG tot 10 MB"
+    },
+    "dragDrop": {
+      "label": "of sleep hierheen"
+    },
+    "file": {
+      "cta": "Een bestand uploaden"
+    },
+    "files": {
+      "cta": "Bestanden uploaden"
+    },
+    "multiple": {
+      "helper": "Je kunt meerdere bestanden selecteren"
+    }
+  },
   "value": {
+    "noEmail": {
+      "empty": "Geen e-mailadres"
+    },
+    "noPhone": {
+      "empty": "Geen telefoonnummer"
+    },
     "noneSelected": {
       "empty": "Niets geselecteerd"
     },
+    "notAvailable": {
+      "label": "n.v.t."
+    },
+    "notProvided": {
+      "empty": "Niet opgegeven"
+    },
+    "notSelected": {
+      "empty": "Niet geselecteerd"
+    },
+    "notSet": {
+      "empty": "Niet ingesteld"
+    },
     "notSpecified": {
       "empty": "Niet opgegeven"
+    },
+    "required": {
+      "label": "Verplicht"
+    },
+    "standard": {
+      "label": "Standaard"
     }
   },
   "vehicleType": {
@@ -185,6 +594,14 @@
     },
     "smallVan": {
       "label": "Kleine bestelwagen"
+    }
+  },
+  "view": {
+    "list": {
+      "label": "Lijst"
+    },
+    "map": {
+      "label": "Kaart"
     }
   }
 }

@@ -22,6 +22,7 @@ import {
   CheckCircleIcon,
 } from '@heroicons/react/24/outline'
 import { formatDateWith, formatMoney } from '@/lib/format'
+import { moveSubtitle, moveTypeAndCategoryValue, requestCategoryAndType } from '@/lib/move-subtitle'
 import { Trans, useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
 
@@ -71,12 +72,6 @@ interface IncomingRequest {
 // the catalog; never humanise the slug (catalog conventions §5).
 const snakeToCamel = (value: string) => value.replace(/_([a-z])/g, (_, c: string) => c.toUpperCase())
 
-const moveTypeLabel = (t: TFunction, value: string | null | undefined): string => {
-  // i18n-keys: booking:moveType.light.short, booking:moveType.regular.short, booking:moveType.premium.short
-  if (!value) return t('common:value.notSpecified.empty')
-  return t(`booking:moveType.${value}.short`)
-}
-
 const homeTypeLabel = (t: TFunction, value: string | null | undefined): string => {
   // i18n-keys: booking:homeType.apartment.option, booking:homeType.house.option, booking:homeType.office.option, booking:homeType.storage.option, booking:homeType.other.option
   if (!value) return t('common:value.notSpecified.empty')
@@ -105,12 +100,15 @@ const SERVICE_KEY: Record<string, string> = {
   disposal_entsorgung: 'disposal',
 }
 
+// A standalone row label ("Category: Instant"), not a fragment of a phrase —
+// so this one stays a lookup. It is the assembled *sentences* that had to go.
+// i18n-keys: moves:moveCategory.instant.label, moves:moveCategory.scheduled.label
+const categoryLabel = (t: TFunction, moveCategory: string | null | undefined): string =>
+  moveCategory === 'instant' ? t('moves:moveCategory.instant.label') : t('moves:moveCategory.scheduled.label')
+
 const serviceLabel = (t: TFunction, value: string): string =>
   // i18n-keys: booking:services.furnitureDisassembly.option, booking:services.furnitureAssembly.option, booking:services.tvMountRemove.option, booking:services.applianceDisconnect.option, booking:services.applianceConnect.option, booking:services.disposal.option, booking:services.moveoutCleaning.option, booking:services.temporaryStorage.option
   t(`booking:services.${SERVICE_KEY[value] ?? snakeToCamel(value)}.option`)
-
-const categoryLabel = (t: TFunction, moveCategory: string | null | undefined): string =>
-  moveCategory === 'instant' ? t('moves:moveCategory.instant.label') : t('moves:moveCategory.scheduled.label')
 
 const formatDate = (dateStr: string | null) => {
   if (!dateStr) return ''
@@ -525,10 +523,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                 <div>
                   <span className="font-bold text-lg block leading-tight">{t('web:mover.request.title')}</span>
                   <span className="text-xs opacity-80">
-                    {t('web:mover.request.categoryAndType.subtitle', {
-                      category: categoryLabel(t, move?.moveCategory),
-                      type: moveTypeLabel(t, move?.moveType),
-                    })}
+                    {requestCategoryAndType(t, move?.moveCategory, move?.moveType)}
                   </span>
                 </div>
               </div>
@@ -755,16 +750,10 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                     {pickupDisplay.split(',')[0]} &rarr; {dropoffDisplay.split(',')[0]}
                   </h1>
                   <p className="text-neutral-500 dark:text-neutral-400 mt-1">
-                    {move.moveDate
-                      ? t('moves:card.typeCategoryDate.subtitle', {
-                          type: moveTypeLabel(t, move.moveType),
-                          category: categoryLabel(t, move.moveCategory),
-                          date: formatDate(move.moveDate),
-                        })
-                      : t('moves:card.typeAndCategory.subtitle', {
-                          type: moveTypeLabel(t, move.moveType),
-                          category: categoryLabel(t, move.moveCategory),
-                        })}
+                    {/* One whole phrase per (type, category) pair — see
+                        `lib/move-subtitle.ts`. `formatDate` already returns ''
+                        for a null date, so the date branch is inside. */}
+                    {moveSubtitle(t, move.moveType, move.moveCategory, formatDate(move.moveDate))}
                   </p>
                 </div>
                 {move.estimatedPrice != null && move.estimatedPrice > 0 && (
@@ -843,10 +832,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                     <InfoRow
                       icon={TruckIcon}
                       label={t('booking:field.moveType.label')}
-                      value={t('moves:detail.typeAndCategory.value', {
-                        type: moveTypeLabel(t, move.moveType),
-                        category: categoryLabel(t, move.moveCategory),
-                      })}
+                      value={moveTypeAndCategoryValue(t, move.moveType, move.moveCategory)}
                     />
                     {move.moveDate && <InfoRow icon={CalendarIcon} label={t('booking:field.moveDate.label')} value={formatDate(move.moveDate)} />}
                     {move.homeType && <InfoRow icon={HomeIcon} label={t('booking:field.homeType.label')} value={homeTypeLabel(t, move.homeType)} />}

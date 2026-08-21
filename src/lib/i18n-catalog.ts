@@ -16,6 +16,8 @@ import de_moves from '../locales/de/moves.json'
 import de_errors from '../locales/de/errors.json'
 import de_legal from '../locales/de/legal.json'
 import de_inventory from '../locales/de/inventory.json'
+import de_notifications from '../locales/de/notifications.json'
+import de_tax from '../locales/de/tax.json'
 import de_web from '../locales/de/web.json'
 import en_common from '../locales/en/common.json'
 import en_auth from '../locales/en/auth.json'
@@ -26,6 +28,8 @@ import en_moves from '../locales/en/moves.json'
 import en_errors from '../locales/en/errors.json'
 import en_legal from '../locales/en/legal.json'
 import en_inventory from '../locales/en/inventory.json'
+import en_notifications from '../locales/en/notifications.json'
+import en_tax from '../locales/en/tax.json'
 import en_web from '../locales/en/web.json'
 import fr_common from '../locales/fr/common.json'
 import fr_auth from '../locales/fr/auth.json'
@@ -36,6 +40,8 @@ import fr_moves from '../locales/fr/moves.json'
 import fr_errors from '../locales/fr/errors.json'
 import fr_legal from '../locales/fr/legal.json'
 import fr_inventory from '../locales/fr/inventory.json'
+import fr_notifications from '../locales/fr/notifications.json'
+import fr_tax from '../locales/fr/tax.json'
 import fr_web from '../locales/fr/web.json'
 import es_common from '../locales/es/common.json'
 import es_auth from '../locales/es/auth.json'
@@ -46,6 +52,8 @@ import es_moves from '../locales/es/moves.json'
 import es_errors from '../locales/es/errors.json'
 import es_legal from '../locales/es/legal.json'
 import es_inventory from '../locales/es/inventory.json'
+import es_notifications from '../locales/es/notifications.json'
+import es_tax from '../locales/es/tax.json'
 import es_web from '../locales/es/web.json'
 import it_common from '../locales/it/common.json'
 import it_auth from '../locales/it/auth.json'
@@ -56,6 +64,8 @@ import it_moves from '../locales/it/moves.json'
 import it_errors from '../locales/it/errors.json'
 import it_legal from '../locales/it/legal.json'
 import it_inventory from '../locales/it/inventory.json'
+import it_notifications from '../locales/it/notifications.json'
+import it_tax from '../locales/it/tax.json'
 import it_web from '../locales/it/web.json'
 import pl_common from '../locales/pl/common.json'
 import pl_auth from '../locales/pl/auth.json'
@@ -66,6 +76,8 @@ import pl_moves from '../locales/pl/moves.json'
 import pl_errors from '../locales/pl/errors.json'
 import pl_legal from '../locales/pl/legal.json'
 import pl_inventory from '../locales/pl/inventory.json'
+import pl_notifications from '../locales/pl/notifications.json'
+import pl_tax from '../locales/pl/tax.json'
 import pl_web from '../locales/pl/web.json'
 import nl_common from '../locales/nl/common.json'
 import nl_auth from '../locales/nl/auth.json'
@@ -76,6 +88,8 @@ import nl_moves from '../locales/nl/moves.json'
 import nl_errors from '../locales/nl/errors.json'
 import nl_legal from '../locales/nl/legal.json'
 import nl_inventory from '../locales/nl/inventory.json'
+import nl_notifications from '../locales/nl/notifications.json'
+import nl_tax from '../locales/nl/tax.json'
 import nl_web from '../locales/nl/web.json'
 import tr_common from '../locales/tr/common.json'
 import tr_auth from '../locales/tr/auth.json'
@@ -86,6 +100,8 @@ import tr_moves from '../locales/tr/moves.json'
 import tr_errors from '../locales/tr/errors.json'
 import tr_legal from '../locales/tr/legal.json'
 import tr_inventory from '../locales/tr/inventory.json'
+import tr_notifications from '../locales/tr/notifications.json'
+import tr_tax from '../locales/tr/tax.json'
 import tr_web from '../locales/tr/web.json'
 
 import { DEFAULT_LOCALE, LOCALES, type Locale } from './i18n-config'
@@ -102,6 +118,8 @@ const CATALOG: Record<Locale, ResourceLanguage> = {
     errors: de_errors,
     legal: de_legal,
     inventory: de_inventory,
+    notifications: de_notifications,
+    tax: de_tax,
     web: de_web,
   },
   en: {
@@ -114,6 +132,8 @@ const CATALOG: Record<Locale, ResourceLanguage> = {
     errors: en_errors,
     legal: en_legal,
     inventory: en_inventory,
+    notifications: en_notifications,
+    tax: en_tax,
     web: en_web,
   },
   fr: {
@@ -126,6 +146,8 @@ const CATALOG: Record<Locale, ResourceLanguage> = {
     errors: fr_errors,
     legal: fr_legal,
     inventory: fr_inventory,
+    notifications: fr_notifications,
+    tax: fr_tax,
     web: fr_web,
   },
   es: {
@@ -138,6 +160,8 @@ const CATALOG: Record<Locale, ResourceLanguage> = {
     errors: es_errors,
     legal: es_legal,
     inventory: es_inventory,
+    notifications: es_notifications,
+    tax: es_tax,
     web: es_web,
   },
   it: {
@@ -150,6 +174,8 @@ const CATALOG: Record<Locale, ResourceLanguage> = {
     errors: it_errors,
     legal: it_legal,
     inventory: it_inventory,
+    notifications: it_notifications,
+    tax: it_tax,
     web: it_web,
   },
   pl: {
@@ -162,6 +188,8 @@ const CATALOG: Record<Locale, ResourceLanguage> = {
     errors: pl_errors,
     legal: pl_legal,
     inventory: pl_inventory,
+    notifications: pl_notifications,
+    tax: pl_tax,
     web: pl_web,
   },
   nl: {
@@ -174,6 +202,8 @@ const CATALOG: Record<Locale, ResourceLanguage> = {
     errors: nl_errors,
     legal: nl_legal,
     inventory: nl_inventory,
+    notifications: nl_notifications,
+    tax: nl_tax,
     web: nl_web,
   },
   tr: {
@@ -186,6 +216,8 @@ const CATALOG: Record<Locale, ResourceLanguage> = {
     errors: tr_errors,
     legal: tr_legal,
     inventory: tr_inventory,
+    notifications: tr_notifications,
+    tax: tr_tax,
     web: tr_web,
   },
 }

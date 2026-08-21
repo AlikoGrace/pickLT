@@ -55,7 +55,7 @@ export default async ({ req, res, log, error }) => {
   ].filter((k) => !process.env[k]);
   if (missingEnv.length) {
     error(`[submitmoverprofile] missing env: ${missingEnv.join(', ')}`);
-    return res.json({ error: 'misconfigured' }, 500);
+    return res.json({ error: 'misconfigured', fnCode: 'generic.misconfigured' }, 500);
   }
 
   const client = new Client()
@@ -65,14 +65,14 @@ export default async ({ req, res, log, error }) => {
   const databases = new Databases(client);
 
   if (req.method !== 'POST') {
-    return res.json({ error: 'Method not allowed' }, 405);
+    return res.json({ error: 'Method not allowed', fnCode: 'generic.methodNotAllowed' }, 405);
   }
 
   try {
     const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
     // Identity comes from the authenticated session, never the body.
     const userId = req.headers['x-appwrite-user-id'] ?? null;
-    if (!userId) return res.json({ error: 'Unauthenticated' }, 401);
+    if (!userId) return res.json({ error: 'Unauthenticated', fnCode: 'api.unauthorized' }, 401);
 
     const {
       fullName,
@@ -107,7 +107,11 @@ export default async ({ req, res, log, error }) => {
       const list = cfg.documents[0]?.value ? JSON.parse(cfg.documents[0].value) : [];
       if (isSanctionedCountry(primaryCountry, list)) {
         return res.json(
-          { error: `PickLT does not operate in ${primaryCountry}. Mover onboarding is not available there.` },
+          {
+            error: `PickLT does not operate in ${primaryCountry}. Mover onboarding is not available there.`,
+            fnCode: 'country.notSupported',
+            fnParams: { country: primaryCountry },
+          },
           403,
         );
       }
@@ -220,7 +224,11 @@ export default async ({ req, res, log, error }) => {
           type: 'system',
           title: 'Profile Submitted',
           body: 'Your mover profile is under review. We will notify you once it is verified.',
-          data: JSON.stringify({ moverProfileId: profile.$id }),
+          data: JSON.stringify({
+            moverProfileId: profile.$id,
+            i18nKey: 'verification.submitted',
+            i18nParams: {},
+          }),
           isRead: false,
         }, [
           // Addressee only. `update` is needed for markAsRead / markAllAsRead,
@@ -236,6 +244,6 @@ export default async ({ req, res, log, error }) => {
     return res.json({ success: true, profile });
   } catch (err) {
     error(`Submit mover profile failed: ${err.message}`);
-    return res.json({ error: err.message }, 500);
+    return res.json({ error: 'Something went wrong. Please try again.', fnCode: 'generic.unexpected' }, 500);
   }
 };

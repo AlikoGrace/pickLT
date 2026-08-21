@@ -84,7 +84,7 @@ export default async ({ req, res, log, error }) => {
   ].filter((k) => !process.env[k]);
   if (missingEnv.length) {
     error(`[createmove] missing env: ${missingEnv.join(', ')}`);
-    return res.json({ error: 'misconfigured' }, 500);
+    return res.json({ error: 'misconfigured', fnCode: 'generic.misconfigured' }, 500);
   }
 
   const client = new Client()
@@ -94,7 +94,7 @@ export default async ({ req, res, log, error }) => {
   const databases = new Databases(client);
 
   if (req.method !== 'POST') {
-    return res.json({ error: 'Method not allowed' }, 405);
+    return res.json({ error: 'Method not allowed', fnCode: 'generic.methodNotAllowed' }, 405);
   }
 
   let body = {};
@@ -103,7 +103,7 @@ export default async ({ req, res, log, error }) => {
     const { clientId, moveCategory, moveType, moveDate, ...moveData } = body;
 
     if (!clientId) {
-      return res.json({ error: 'clientId is required' }, 400);
+      return res.json({ error: 'clientId is required', fnCode: 'generic.badRequest' }, 400);
     }
 
     // Fetch inventory catalog for server-side classification
@@ -248,6 +248,6 @@ export default async ({ req, res, log, error }) => {
     } catch {
       /* diagnostics only — never mask the original error */
     }
-    return res.json({ error: err.message }, 500);
+    return res.json({ error: 'Something went wrong. Please try again.', fnCode: 'generic.unexpected' }, 500);
   }
 };

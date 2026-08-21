@@ -20,6 +20,7 @@ import React, { Suspense, useEffect, useState } from 'react'
 import PayWith, { PaymentMethod } from './PayWith'
 import YourMove from './YourMove'
 import { formatDateWith, formatMoney, formatPercent } from '@/lib/format'
+import { moveSubtitle } from '@/lib/move-subtitle'
 import { useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
 
@@ -373,10 +374,13 @@ const CheckoutContent = () => {
           <div className="flex flex-col gap-y-3 py-5 text-start sm:ps-5">
             <div>
               <span className="line-clamp-1 text-sm text-neutral-500 dark:text-neutral-400">
+                {/* `moveSubtitle` owns the whole phrase, date separator
+                    included. The old shape fed a title-cased English slug into
+                    "{{type}} Move", which no locale can inflect and which was
+                    never translated at all — see `lib/move-subtitle.ts`. */}
                 {isInstantMove
                   ? t('booking:category.instant.label')
-                  : t('booking:moveType.suffixed.label', { type: formatLabel(moveType, t) })}
-                {!isInstantMove && moveDate && ` · ${formatDate(moveDate, t)}`}
+                  : moveSubtitle(t, moveType, null, moveDate ? formatDate(moveDate, t) : null)}
               </span>
               <span className="mt-1 block text-base font-medium line-clamp-2">
                 {pickupStreetAddress || pickupLocation || t('booking:field.pickup.label')} → {dropoffStreetAddress || dropoffLocation || t('booking:field.dropoff.label')}

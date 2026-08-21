@@ -1,0 +1,40 @@
+{
+  "doc": {
+    "draftBanner": "TASLAK — mali müşavir incelemesi bekleniyor",
+    "driverHeading": "Şoför",
+    "footerDisclaimer": "Şoförün bilgilendirilmesi amacıyla otomatik olarak oluşturulmuştur. Şoförler kendi hasılat ve gelirlerini beyan etmekten kendileri sorumludur.",
+    "operatorHeading": "Platform işletmecisi",
+    "operatorPending": "[işletmeci bilgileri bekleniyor]",
+    "operatorRegistration": "Sicil numarası: {{value}}",
+    "operatorVatId": "VAT ID (KDV numarası): {{value}}",
+    "period": "Dönem: {{period}}",
+    "statementNo": "Belge no: {{number}}",
+    "taxNumber": "Vergi numarası: {{value}}",
+    "title": "Aylık şoför faaliyet belgesi",
+    "vatId": "VAT ID (KDV numarası): {{value}}"
+  },
+  "lines": {
+    "cashAlreadyHeld": "Bunun nakit olarak tahsil edilmiş kısmı",
+    "commission": "Komisyon / hizmet bedeli",
+    "deductionsHeading": "Platform kesintileri",
+    "grossCash": "Nakit tahsil edilen",
+    "grossDigital": "Dijital tahsil edilen (uygulama içi/kart)",
+    "grossHeading": "Brüt kazanç",
+    "grossLocal": "Yerel para biriminde brüt ({{currency}})",
+    "grossTotal": "Toplam brüt kazanç",
+    "instantMoves": "Bunlardan anında taşınmalar",
+    "net": "Net tutar",
+    "netPayable": "Şoföre ödenecek net hakediş",
+    "resultHeading": "Sonuç",
+    "scheduledMoves": "Bunlardan planlı taşınmalar",
+    "summary": "Hesabı kapatılan taşınmaların özeti",
+    "totalMoves": "Tamamlanan toplam taşınma",
+    "withholdingHeading": "Kaynakta kesilen vergiler",
+    "withholdingIncome": "Kesilen gelir vergisi",
+    "withholdingVat": "Kesilen KDV"
+  },
+  "statementReady": {
+    "body": "{{period}} dönemine ait {{number}} numaralı belge, vergi belgeleriniz arasında hazır.",
+    "title": "Aylık belgeniz hazır"
+  }
+}

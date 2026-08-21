@@ -1,4 +1,11 @@
 {
+  "accept": {
+    "privacy": "Dichiaro di aver letto l’<0>informativa sulla privacy</0> (GDPR)",
+    "required": {
+      "error": "Per continuare, accetta i termini e l’informativa sulla privacy"
+    },
+    "terms": "Confermo i dati e accetto i <0>termini e condizioni</0>"
+  },
   "governingLanguage": {
     "notice": "Questo documento è una traduzione. È fornita a solo scopo informativo; in caso di discrepanze prevale la versione inglese."
   },
@@ -26,6 +33,9 @@
       }
     }
   },
+  "insuranceClaims": {
+    "title": "Assicurazione e reclami"
+  },
   "privacy": {
     "effectiveDate": {
       "label": "Data di entrata in vigore: {{date}}",
@@ -49,5 +59,11 @@
         "title": "4. Misure di sicurezza"
       }
     }
+  },
+  "privacyPolicy": {
+    "title": "Informativa sulla privacy"
+  },
+  "termsOfService": {
+    "title": "Termini di servizio"
   }
 }

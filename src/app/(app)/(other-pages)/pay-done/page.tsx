@@ -22,6 +22,7 @@ import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import React, { Suspense, useEffect, useState } from 'react'
 import { formatDateWith, formatMoney } from '@/lib/format'
+import { moveSubtitle } from '@/lib/move-subtitle'
 import { Trans, useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
 
@@ -190,10 +191,11 @@ const PayDoneContent = () => {
             <div className="flex flex-col gap-y-3 pt-5 sm:px-5 sm:pb-5">
               <div>
                 <span className="line-clamp-1 text-sm text-neutral-500 dark:text-neutral-400">
+                  {/* One whole phrase per move type, date separator included
+                      — see `lib/move-subtitle.ts`. */}
                   {isInstantMove
                     ? t('booking:category.instant.label')
-                    : t('booking:moveType.suffixed.label', { type: formatLabel(move?.moveType, t) })}
-                  {!isInstantMove && ` · ${formatDate(move?.moveDate || null, t)}`}
+                    : moveSubtitle(t, move?.moveType, null, formatDate(move?.moveDate || null, t))}
                 </span>
                 <span className="mt-1 block text-base font-medium sm:text-lg">
                   {pickupDisplay.split(',')[0]} → {dropoffDisplay.split(',')[0]}

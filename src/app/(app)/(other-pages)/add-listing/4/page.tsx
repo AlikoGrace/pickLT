@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { categoryLabel, categoryTranslator } from '@/lib/inventory-i18n'
+import { upgradeCta } from '@/lib/move-subtitle'
 
 // Inventory item definitions with internal metadata for move estimation
 type InventoryItemDef = {
@@ -542,11 +543,10 @@ const Page = () => {
                 onClick={handleAcceptUpgrade}
                 className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-full font-medium hover:bg-primary-700 transition-colors"
               >
-                {t('booking:classification.upgrade.cta', {
-                  tier: classification.upgradeTo
-                    ? t(`booking:moveType.${classification.upgradeTo}.label`)
-                    : '',
-                })}
+                {/* One whole CTA per tier — a translated tier noun cannot be
+                    slotted into "Upgrade to {{tier}}" and come out declined
+                    correctly in Polish. See `lib/move-subtitle.ts`. */}
+                {upgradeCta(t, classification.upgradeTo)}
               </button>
             </div>
           </DialogPanel>

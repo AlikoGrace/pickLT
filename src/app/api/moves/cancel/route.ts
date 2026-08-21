@@ -59,10 +59,23 @@ export async function POST(request: NextRequest) {
     // Verify the move is in a cancellable state
     if (!CANCELLABLE_STATUSES.includes(move.status)) {
       // Never leak a raw enum token like "mover_en_route" into the message.
-      const friendly =
-        moveStatusLabel(t, move.status) || t('moves:status.currentStage.label')
+      //
+      // Two whole sentences rather than one sentence with an "its current
+      // stage" fragment slotted into it (`5.glossary.md` §7). A translated
+      // fragment cannot carry the case German and Polish demand of the noun
+      // after "while it is", nor the suffix Turkish demands, so the fallback
+      // has to be a sentence that never had a slot in the first place. The
+      // named-stage sentence keeps its `{{stage}}` placeholder — that one is
+      // filled with a status label the catalog owns, and it is the whole
+      // grammatical object of the clause, not a piece of one.
+      const stage = moveStatusLabel(t, move.status)
+      const knownStage = stage !== '' && stage !== move.status
       return NextResponse.json(
-        { error: t('errors:move.notCancellable', { stage: friendly }) },
+        {
+          error: knownStage
+            ? t('errors:move.notCancellable', { stage })
+            : t('errors:move.notCancellableUnknownStage'),
+        },
         { status: 400 }
       )
     }

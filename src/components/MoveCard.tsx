@@ -11,6 +11,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { FC } from 'react'
 import { formatDayMonth, formatMoney } from '@/lib/format'
+import { moveSubtitle } from '@/lib/move-subtitle'
 import { useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
 
@@ -26,12 +27,6 @@ const VEHICLE_KEY: Record<string, string> = {
   small_van: 'smallVan',
   medium_truck: 'mediumTruck',
   large_truck: 'largeTruck',
-}
-
-const moveTypeLabel = (t: TFunction, value: string | null | undefined): string => {
-  // i18n-keys: booking:moveType.light.short, booking:moveType.regular.short, booking:moveType.premium.short
-  if (!value) return t('common:value.notSpecified.empty')
-  return t(`booking:moveType.${value}.short`)
 }
 
 const vehicleLabel = (t: TFunction, value: string | null | undefined): string => {
@@ -139,10 +134,9 @@ const MoveCard: FC<MoveCardProps> = ({ size = 'default', className = '', data })
       <div className={clsx(size === 'default' ? 'mt-3 gap-y-3' : 'mt-2 gap-y-2', 'flex flex-col')}>
         <div className="flex flex-col gap-y-2">
           <span className="text-sm text-neutral-500 dark:text-neutral-400">
-            {t('moves:card.typeAndDate.subtitle', {
-              type: moveTypeLabel(t, moveType),
-              date: formatDate(t, moveDate),
-            })}
+            {/* One whole phrase per move type — see `lib/move-subtitle.ts` for
+                why the type cannot be interpolated into a frame. */}
+            {moveSubtitle(t, moveType, null, moveDate ? formatDate(t, moveDate) : null)}
           </span>
           <div className="flex items-center gap-x-2">
             <h2 className={`text-base font-semibold text-neutral-900 capitalize dark:text-white`}>

@@ -37,17 +37,35 @@ const VALID_TRANSITIONS = {
   disputed: ['completed'],
 };
 
+// i18n wire contract (plan 11 §S1/S2). A notification row carries a KEY, not a
+// finished sentence: `sendpush` resolves it in the recipient's locale before it
+// reaches FCM, and the in-app list re-resolves it at read time so notification
+// history follows a language switch. `title`/`body` keep an English rendering as
+// the wire-compatible fallback — an old client, a missing key, a missing user
+// document or an absent locale all land on it, and a push is never lost to a
+// translation problem.
+//
+//   data.i18nKey       base key in the `notifications` namespace;
+//                      title = `<key>.title`, body = `<key>.body`
+//   data.i18nTitleKey  optional full key, when the title is not `<key>.title`
+//   data.i18nBodyKey   optional full key; `null` means "never translate the
+//                      body" (it is user-authored text) — use the stored one
+//   data.i18nParams    interpolation params, pre-formatted per conventions §3.4
+//
+// `key` here is the base; the English pair beside it is the fallback and is the
+// same copy that seeds `en/notifications.json`. Adding a status to
+// VALID_TRANSITIONS without adding a row here is caught by the key-coverage test.
 const NOTIFICATION_MESSAGES = {
-  mover_accepted: { title: 'Mover Accepted', body: 'A mover has accepted your move request!' },
-  mover_en_route: { title: 'Mover En Route', body: 'Your mover is on the way to your pickup location.' },
-  mover_arrived: { title: 'Mover Arrived', body: 'Your mover has arrived at the pickup location.' },
-  loading: { title: 'Loading Started', body: 'Your items are being loaded.' },
-  in_transit: { title: 'In Transit', body: 'Your items are on the way to the destination.' },
-  arrived_destination: { title: 'Arrived', body: 'Your mover has arrived at the destination.' },
-  unloading: { title: 'Unloading', body: 'Your items are being unloaded.' },
-  awaiting_payment: { title: 'Payment Due', body: 'Your move is done — please confirm payment.' },
-  completed: { title: 'Move Completed', body: 'Your move has been completed! Please leave a review.' },
-  cancelled_by_mover: { title: 'Move Cancelled', body: 'The mover has cancelled this move.' },
+  mover_accepted: { key: 'status.moverAccepted', title: 'Mover Accepted', body: 'A mover has accepted your move request!' },
+  mover_en_route: { key: 'status.moverEnRoute', title: 'Mover En Route', body: 'Your mover is on the way to your pickup location.' },
+  mover_arrived: { key: 'status.moverArrived', title: 'Mover Arrived', body: 'Your mover has arrived at the pickup location.' },
+  loading: { key: 'status.loading', title: 'Loading Started', body: 'Your items are being loaded.' },
+  in_transit: { key: 'status.inTransit', title: 'In Transit', body: 'Your items are on the way to the destination.' },
+  arrived_destination: { key: 'status.arrivedDestination', title: 'Arrived', body: 'Your mover has arrived at the destination.' },
+  unloading: { key: 'status.unloading', title: 'Unloading', body: 'Your items are being unloaded.' },
+  awaiting_payment: { key: 'status.awaitingPayment', title: 'Payment Due', body: 'Your move is done — please confirm payment.' },
+  completed: { key: 'status.completed', title: 'Move Completed', body: 'Your move has been completed! Please leave a review.' },
+  cancelled_by_mover: { key: 'status.cancelledByMover', title: 'Move Cancelled', body: 'The mover has cancelled this move.' },
 };
 
 function relId(v) {
@@ -167,7 +185,7 @@ export default async ({ req, res, log, error }) => {
   ].filter((k) => !process.env[k]);
   if (missingEnv.length) {
     error(`[updatemovestatus] missing env: ${missingEnv.join(', ')}`);
-    return res.json({ error: 'misconfigured' }, 500);
+    return res.json({ error: 'misconfigured', fnCode: 'generic.misconfigured' }, 500);
   }
 
   const client = new Client()
@@ -177,7 +195,7 @@ export default async ({ req, res, log, error }) => {
   const databases = new Databases(client);
 
   if (req.method !== 'POST') {
-    return res.json({ error: 'Method not allowed' }, 405);
+    return res.json({ error: 'Method not allowed', fnCode: 'generic.methodNotAllowed' }, 405);
   }
 
   try {
@@ -185,9 +203,9 @@ export default async ({ req, res, log, error }) => {
     const { moveId, newStatus, note } = body;
     const authId = req.headers['x-appwrite-user-id'] ?? null;
 
-    if (!authId) return res.json({ error: 'Unauthenticated' }, 401);
+    if (!authId) return res.json({ error: 'Unauthenticated', fnCode: 'api.unauthorized' }, 401);
     if (!moveId || !newStatus) {
-      return res.json({ error: 'moveId and newStatus are required' }, 400);
+      return res.json({ error: 'moveId and newStatus are required', fnCode: 'generic.badRequest' }, 400);
     }
 
     // Resolve the caller's verified mover profile.
@@ -195,16 +213,16 @@ export default async ({ req, res, log, error }) => {
       Query.equal('userId', authId),
       Query.limit(1),
     ]);
-    if (profiles.documents.length === 0) return res.json({ error: 'Not a mover' }, 403);
+    if (profiles.documents.length === 0) return res.json({ error: 'Not a mover', fnCode: 'mover.notAMover' }, 403);
     const profile = profiles.documents[0];
     if (profile.verificationStatus !== 'verified') {
-      return res.json({ error: 'Mover is not verified' }, 403);
+      return res.json({ error: 'Mover is not verified', fnCode: 'mover.notVerified' }, 403);
     }
 
     // Get current move + ownership check.
     const move = await databases.getDocument(DATABASE_ID, MOVES_COLLECTION, moveId);
     if (relId(move.moverProfileId) !== profile.$id) {
-      return res.json({ error: 'You are not assigned to this move' }, 403);
+      return res.json({ error: 'You are not assigned to this move', fnCode: 'move.notAssigned' }, 403);
     }
     const currentStatus = move.status || 'draft';
 
@@ -214,6 +232,8 @@ export default async ({ req, res, log, error }) => {
       return res.json(
         {
           error: `Invalid transition: ${currentStatus} → ${newStatus}. Allowed: ${allowedNext.join(', ')}`,
+          fnCode: 'move.invalidTransition',
+          fnParams: { from: currentStatus, to: newStatus },
         },
         400,
       );
@@ -269,7 +289,13 @@ export default async ({ req, res, log, error }) => {
           userId: clientId,
           title: notif.title,
           body: notif.body,
-          data: JSON.stringify({ moveId, handle: move.handle, status: newStatus }),
+          data: JSON.stringify({
+            moveId,
+            handle: move.handle,
+            status: newStatus,
+            i18nKey: notif.key,
+            i18nParams: { handle: move.handle ?? '' },
+          }),
           isRead: false,
         };
         const preferredType = STATUS_PUSH_TYPE[newStatus] ?? 'system';
@@ -308,6 +334,6 @@ export default async ({ req, res, log, error }) => {
     return res.json({ success: true, previousStatus: currentStatus, newStatus });
   } catch (err) {
     error(`Update move status failed: ${err.message}`);
-    return res.json({ error: err.message }, 500);
+    return res.json({ error: 'Something went wrong. Please try again.', fnCode: 'generic.unexpected' }, 500);
   }
 };
