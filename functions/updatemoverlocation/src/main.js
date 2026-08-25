@@ -9,6 +9,25 @@ const MOVES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVES;
 const relId = (v) => (!v ? null : typeof v === 'string' ? v : v.$id ?? null);
 
 /**
+ * Statuses in which a client is tracking this mover, in progression order.
+ * Mirrors the mover app's ACTIVE_STATUSES (hooks/use-active-move.ts). The
+ * row's `moveId` tag goes to the most advanced live move; every live move's
+ * client gets read access.
+ */
+const TRACKED_STATUSES = [
+  'mover_accepted',
+  'mover_en_route',
+  'mover_arrived',
+  'loading',
+  'in_transit',
+  'arrived_destination',
+  'unloading',
+  'awaiting_payment',
+  'paid',
+];
+const isFiniteNumber = (v) => typeof v === 'number' && Number.isFinite(v);
+
+/**
  * updatemoverlocation
  *
  * Upserts ONE mover_locations row per mover instead of appending a row per ping.
@@ -22,6 +41,10 @@ const relId = (v) => (!v ? null : typeof v === 'string' ? v : v.$id ?? null);
  *
  * One row per mover also bounds table growth and turns the client's realtime
  * feed into `*.update` events on a stable document id.
+ *
+ * The row's `moveId` tag and its reader list are derived server-side from the
+ * moves this mover is assigned to (see below), so a ping is correct from any
+ * screen, foreground or background.
  */
 export default async ({ req, res, log, error }) => {
   // Keep-warm ping (scheduled trigger): short-circuit before any work. Position
@@ -62,8 +85,11 @@ export default async ({ req, res, log, error }) => {
     const authId = req.headers['x-appwrite-user-id'] ?? null;
 
     if (!authId) return res.json({ error: 'Unauthenticated', fnCode: 'api.unauthorized' }, 401);
-    if (latitude == null || longitude == null) {
+    if (!isFiniteNumber(latitude) || !isFiniteNumber(longitude)) {
       return res.json({ error: 'latitude and longitude are required', fnCode: 'generic.badRequest' }, 400);
+    }
+    if (Math.abs(latitude) > 90 || Math.abs(longitude) > 180) {
+      return res.json({ error: 'latitude/longitude out of range', fnCode: 'generic.badRequest' }, 400);
     }
 
     // Resolve the caller's own profile — never trust a body-supplied id.
@@ -74,9 +100,41 @@ export default async ({ req, res, log, error }) => {
     if (profiles.documents.length === 0) return res.json({ error: 'Not a mover', fnCode: 'mover.notAMover' }, 403);
     const moverProfileId = profiles.documents[0].$id;
 
+    // Which move does this ping belong to, and who may read it? Decided here,
+    // from the moves this mover is actually assigned to — never from the
+    // client. The mover app streams from every screen, foreground and
+    // background (field test 2026-08-25), so it cannot know which of its
+    // screens "owns" the row; and a body-supplied moveId used to let any
+    // mover grant themselves a stranger's client as a reader and repaint that
+    // client's truck marker.
+    //
+    // ONE row per mover, upserted in place, and Appwrite REPLACES the
+    // permission array on every write — so the full set is recomputed each
+    // ping. authId is the mover's auth account id; mover_profiles.$id is not.
+    let liveMoves = [];
+    try {
+      const r = await databases.listDocuments(DATABASE_ID, MOVES_COLLECTION, [
+        Query.equal('moverProfileId', moverProfileId),
+        Query.equal('status', TRACKED_STATUSES),
+        Query.limit(10),
+      ]);
+      liveMoves = r.documents;
+    } catch (lookupErr) {
+      // Never fail a position ping over the lookup — the mover keeps their
+      // own read and the profile mirror below still feeds discovery.
+      error(`updatemoverlocation: live-move lookup failed: ${lookupErr.message}`);
+    }
+
+    // Tag: the caller's stated move if it is one of theirs (screen intent),
+    // else the most advanced live move, else none.
+    const rank = (m) => TRACKED_STATUSES.indexOf(m.status);
+    const stated = moveId ? liveMoves.find((m) => m.$id === moveId) : null;
+    const tagged =
+      stated ?? [...liveMoves].sort((a, b) => rank(b) - rank(a))[0] ?? null;
+
     const payload = {
       moverProfileId,
-      moveId: moveId || null,
+      moveId: tagged ? tagged.$id : null,
       latitude,
       longitude,
       heading: heading ?? null,
@@ -84,30 +142,12 @@ export default async ({ req, res, log, error }) => {
       timestamp: new Date().toISOString(),
     };
 
-    // Live GPS. The mover always reads their own row; the client of the move
-    // this ping is attached to reads it only while that move is live. There is
-    // ONE row per mover which is upserted in place, so the permission set has
-    // to be re-emitted on every write — Appwrite REPLACES the array, and a row
-    // first written while the mover was idle would otherwise stay
-    // mover-only-readable for the whole of their next job. Dropping moveId
-    // (idle heartbeat) likewise revokes the previous client's read.
-    //
-    // authId is the mover's Appwrite auth account id — mover_profiles.$id is
-    // not, so it must never be used here.
-    const locationPermissions = [Permission.read(Role.user(authId))];
-    if (moveId && MOVES_COLLECTION) {
-      try {
-        const move = await databases.getDocument(DATABASE_ID, MOVES_COLLECTION, moveId);
-        const clientAuthId = relId(move.clientId);
-        if (clientAuthId && clientAuthId !== authId) {
-          locationPermissions.push(Permission.read(Role.user(clientAuthId)));
-        }
-      } catch (lookupErr) {
-        // Never fail a position ping over the lookup — the mover keeps their
-        // own read and the client falls back to mover_profiles coordinates.
-        error(`updatemoverlocation: move lookup failed for ${moveId}: ${lookupErr.message}`);
-      }
+    const readers = new Set([authId]);
+    for (const m of liveMoves) {
+      const clientAuthId = relId(m.clientId);
+      if (clientAuthId) readers.add(clientAuthId);
     }
+    const locationPermissions = [...readers].map((id) => Permission.read(Role.user(id)));
 
     // Upsert this mover's single location row.
     const existing = await databases.listDocuments(DATABASE_ID, MOVER_LOCATIONS_COLLECTION, [
