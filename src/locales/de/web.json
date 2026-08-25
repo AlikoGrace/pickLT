@@ -38,6 +38,18 @@
     },
     "title": "Zahlungen & Auszahlungen"
   },
+  "camera": {
+    "capture": {
+      "cta": "Aufnehmen"
+    },
+    "preview": {
+      "a11y": "Live-Kameravorschau"
+    },
+    "title": "Foto aufnehmen",
+    "unavailable": {
+      "error": "Kein Zugriff auf die Kamera. Erlauben Sie den Kamerazugriff in Ihrem Browser oder laden Sie stattdessen ein Foto hoch."
+    }
+  },
   "checkout": {
     "confirmAndPay": {
       "cta": "Bestätigen und {{amount}} bezahlen"
@@ -435,7 +447,6 @@
       },
       "licensePhoto": {
         "a11y": "Vorschau des Führerscheins",
-        "cta": "Laden Sie ein Foto Ihres Führerscheins hoch",
         "helper": "Ein scharfes Foto beschleunigt die Verifizierung",
         "label": "Foto des Führerscheins"
       },
@@ -448,7 +459,6 @@
       },
       "selfie": {
         "a11y": "Vorschau des Selfies",
-        "cta": "Machen Sie ein scharfes Selfie oder laden Sie eines hoch",
         "helper": "Für die Identitätsprüfung ist ein scharfes Selfie erforderlich",
         "label": "Selfie",
         "retake": {
@@ -694,6 +704,14 @@
         "summary_other": "{{count}} Umzüge · brutto {{gross}} · netto {{net}}"
       },
       "title": "Steuer- und Verdienstunterlagen"
+    },
+    "upload": {
+      "fromDevice": {
+        "cta": "Vom Gerät hochladen"
+      },
+      "takePhoto": {
+        "cta": "Foto aufnehmen"
+      }
     },
     "verification": {
       "pending": {

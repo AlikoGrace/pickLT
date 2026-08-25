@@ -38,6 +38,18 @@
     },
     "title": "Pagamenti e accrediti"
   },
+  "camera": {
+    "capture": {
+      "cta": "Scatta"
+    },
+    "preview": {
+      "a11y": "Anteprima della fotocamera in tempo reale"
+    },
+    "title": "Scatta una foto",
+    "unavailable": {
+      "error": "Impossibile accedere alla fotocamera. Consenti l'accesso alla fotocamera nel browser oppure carica una foto."
+    }
+  },
   "checkout": {
     "confirmAndPay": {
       "cta": "Conferma e paga {{amount}}"
@@ -435,7 +447,6 @@
       },
       "licensePhoto": {
         "a11y": "Anteprima della patente",
-        "cta": "Carica una foto della tua patente",
         "helper": "Una foto nitida velocizza la verifica",
         "label": "Foto della patente"
       },
@@ -448,7 +459,6 @@
       },
       "selfie": {
         "a11y": "Anteprima del selfie",
-        "cta": "Scatta o carica un selfie nitido",
         "helper": "Per la verifica dell’identità serve un selfie nitido",
         "label": "Foto selfie",
         "retake": {
@@ -694,6 +704,14 @@
         "summary_other": "{{count}} traslochi · lordo {{gross}} · netto {{net}}"
       },
       "title": "Documenti fiscali e guadagni"
+    },
+    "upload": {
+      "fromDevice": {
+        "cta": "Carica dal dispositivo"
+      },
+      "takePhoto": {
+        "cta": "Scatta una foto"
+      }
     },
     "verification": {
       "pending": {

@@ -38,6 +38,18 @@
     },
     "title": "Betalingen en uitbetalingen"
   },
+  "camera": {
+    "capture": {
+      "cta": "Vastleggen"
+    },
+    "preview": {
+      "a11y": "Live cameravoorbeeld"
+    },
+    "title": "Foto maken",
+    "unavailable": {
+      "error": "Geen toegang tot de camera. Sta cameratoegang toe in je browser of upload in plaats daarvan een foto."
+    }
+  },
   "checkout": {
     "confirmAndPay": {
       "cta": "Bevestigen en {{amount}} betalen"
@@ -435,7 +447,6 @@
       },
       "licensePhoto": {
         "a11y": "Voorbeeld rijbewijs",
-        "cta": "Upload een foto van je rijbewijs",
         "helper": "Een scherpe foto versnelt de verificatie",
         "label": "Foto van je rijbewijs"
       },
@@ -448,7 +459,6 @@
       },
       "selfie": {
         "a11y": "Voorbeeld selfie",
-        "cta": "Maak of upload een duidelijke selfie",
         "helper": "Een duidelijke selfie is nodig voor identiteitsverificatie",
         "label": "Selfie",
         "retake": {
@@ -694,6 +704,14 @@
         "summary_other": "{{count}} verhuizingen · bruto {{gross}} · netto {{net}}"
       },
       "title": "Belasting- en verdienstendocumenten"
+    },
+    "upload": {
+      "fromDevice": {
+        "cta": "Uploaden vanaf apparaat"
+      },
+      "takePhoto": {
+        "cta": "Foto maken"
+      }
     },
     "verification": {
       "pending": {

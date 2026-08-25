@@ -38,6 +38,18 @@
     },
     "title": "Pagos y abonos"
   },
+  "camera": {
+    "capture": {
+      "cta": "Capturar"
+    },
+    "preview": {
+      "a11y": "Vista previa de la cámara en directo"
+    },
+    "title": "Hacer una foto",
+    "unavailable": {
+      "error": "No se pudo acceder a la cámara. Permite el acceso a la cámara en tu navegador o sube una foto."
+    }
+  },
   "checkout": {
     "confirmAndPay": {
       "cta": "Confirmar y pagar {{amount}}"
@@ -435,7 +447,6 @@
       },
       "licensePhoto": {
         "a11y": "Vista previa del permiso",
-        "cta": "Sube una foto de tu permiso de conducir",
         "helper": "Una foto nítida acelera la verificación",
         "label": "Foto del permiso de conducir"
       },
@@ -448,7 +459,6 @@
       },
       "selfie": {
         "a11y": "Vista previa del selfie",
-        "cta": "Hazte o sube un selfie nítido",
         "helper": "Se necesita un selfie nítido para verificar tu identidad",
         "label": "Foto tipo selfie",
         "retake": {
@@ -694,6 +704,14 @@
         "summary_other": "{{count}} mudanzas · bruto {{gross}} · neto {{net}}"
       },
       "title": "Documentos fiscales y de ganancias"
+    },
+    "upload": {
+      "fromDevice": {
+        "cta": "Subir desde el dispositivo"
+      },
+      "takePhoto": {
+        "cta": "Hacer una foto"
+      }
     },
     "verification": {
       "pending": {

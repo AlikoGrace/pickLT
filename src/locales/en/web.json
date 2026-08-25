@@ -38,6 +38,18 @@
     },
     "title": "Payments & payouts"
   },
+  "camera": {
+    "capture": {
+      "cta": "Capture photo"
+    },
+    "preview": {
+      "a11y": "Live camera preview"
+    },
+    "title": "Take a photo",
+    "unavailable": {
+      "error": "Could not access the camera. Allow camera access in your browser, or upload a photo instead."
+    }
+  },
   "checkout": {
     "confirmAndPay": {
       "cta": "Confirm and pay {{amount}}"
@@ -435,7 +447,6 @@
       },
       "licensePhoto": {
         "a11y": "License preview",
-        "cta": "Upload a photo of your driver's license",
         "helper": "A clear photo helps speed up verification",
         "label": "Driver's License Photo"
       },
@@ -448,7 +459,6 @@
       },
       "selfie": {
         "a11y": "Selfie preview",
-        "cta": "Take or upload a clear selfie",
         "helper": "A clear selfie is required for identity verification",
         "label": "Selfie Photo",
         "retake": {
@@ -694,6 +704,14 @@
         "summary_other": "{{count}} moves · gross {{gross}} · net {{net}}"
       },
       "title": "Tax & Earnings Documents"
+    },
+    "upload": {
+      "fromDevice": {
+        "cta": "Upload from device"
+      },
+      "takePhoto": {
+        "cta": "Take photo"
+      }
     },
     "verification": {
       "pending": {

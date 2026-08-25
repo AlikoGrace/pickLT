@@ -4,6 +4,7 @@ import { useAuth } from '@/context/auth'
 import { formatVolumeM3, languageName, regionName } from '@/lib/format'
 import { vehicleCapacityLabel } from '@/lib/vehicle-capacity'
 import { compressImage } from '@/utils/compressImage'
+import CameraCaptureModal from '@/components/CameraCaptureModal'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -17,6 +18,7 @@ import {
   ShieldCheckIcon,
   MapPinIcon,
   CameraIcon,
+  ArrowUpTrayIcon,
 } from '@heroicons/react/24/outline'
 
 /**
@@ -142,6 +144,9 @@ export default function CompleteProfilePage() {
   const [success, setSuccess] = useState(false)
   const licensePhotoRef = useRef<HTMLInputElement>(null)
   const selfiePhotoRef = useRef<HTMLInputElement>(null)
+  // Which field the live-camera modal is capturing for. The selfie opens the
+  // front camera, the license the back one.
+  const [cameraFor, setCameraFor] = useState<'license' | 'selfie' | null>(null)
 
   // Form state
   const [form, setForm] = useState({
@@ -190,6 +195,16 @@ export default function CompleteProfilePage() {
 
   const updateForm = (updates: Partial<typeof form>) => {
     setForm((prev) => ({ ...prev, ...updates }))
+  }
+
+  const handleCameraCapture = (file: File) => {
+    const preview = URL.createObjectURL(file)
+    if (cameraFor === 'license') {
+      updateForm({ driversLicensePhoto: file, driversLicensePhotoPreview: preview })
+    } else if (cameraFor === 'selfie') {
+      updateForm({ selfiePhoto: file, selfiePhotoPreview: preview })
+    }
+    setCameraFor(null)
   }
 
   const stepIdx = STEPS.findIndex((s) => s.key === currentStep)
@@ -499,23 +514,42 @@ export default function CompleteProfilePage() {
                     alt={t('web:mover.field.licensePhoto.a11y')}
                     className="h-40 w-full rounded-xl object-cover border border-neutral-200 dark:border-neutral-700"
                   />
+                  <div className="absolute bottom-2 right-2 flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setCameraFor('license')}
+                      className="rounded-full bg-white/90 dark:bg-neutral-800/90 px-3 py-1.5 text-xs font-medium shadow transition hover:bg-white"
+                    >
+                      {t('web:mover.upload.takePhoto.cta')}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => licensePhotoRef.current?.click()}
+                      className="rounded-full bg-white/90 dark:bg-neutral-800/90 px-3 py-1.5 text-xs font-medium shadow transition hover:bg-white"
+                    >
+                      {t('web:mover.upload.fromDevice.cta')}
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <button
+                    type="button"
+                    onClick={() => setCameraFor('license')}
+                    className="flex items-center justify-center gap-2 rounded-xl border-2 border-dashed border-neutral-300 py-8 text-sm text-neutral-500 transition hover:border-primary-400 hover:text-primary-600 dark:border-neutral-600 dark:hover:border-primary-500"
+                  >
+                    <CameraIcon className="h-5 w-5" />
+                    {t('web:mover.upload.takePhoto.cta')}
+                  </button>
                   <button
                     type="button"
                     onClick={() => licensePhotoRef.current?.click()}
-                    className="absolute bottom-2 right-2 rounded-full bg-white/90 dark:bg-neutral-800/90 px-3 py-1.5 text-xs font-medium shadow transition hover:bg-white"
+                    className="flex items-center justify-center gap-2 rounded-xl border-2 border-dashed border-neutral-300 py-8 text-sm text-neutral-500 transition hover:border-primary-400 hover:text-primary-600 dark:border-neutral-600 dark:hover:border-primary-500"
                   >
-                    {t('common:action.changePhoto.cta')}
+                    <ArrowUpTrayIcon className="h-5 w-5" />
+                    {t('web:mover.upload.fromDevice.cta')}
                   </button>
                 </div>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => licensePhotoRef.current?.click()}
-                  className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-neutral-300 py-8 text-sm text-neutral-500 transition hover:border-primary-400 hover:text-primary-600 dark:border-neutral-600 dark:hover:border-primary-500"
-                >
-                  <CameraIcon className="h-5 w-5" />
-                  {t('web:mover.field.licensePhoto.cta')}
-                </button>
               )}
               <p className="mt-1 text-xs text-neutral-400">
                 {t('web:mover.field.licensePhoto.helper')}
@@ -612,7 +646,6 @@ export default function CompleteProfilePage() {
                 ref={selfiePhotoRef}
                 type="file"
                 accept="image/*"
-                capture="user"
                 className="hidden"
                 onChange={(e) => {
                   const file = e.target.files?.[0]
@@ -631,23 +664,42 @@ export default function CompleteProfilePage() {
                     alt={t('web:mover.field.selfie.a11y')}
                     className="h-48 w-48 rounded-full object-cover border-4 border-primary-500 mx-auto"
                   />
+                  <div className="absolute bottom-0 left-1/2 flex -translate-x-1/2 translate-y-1/2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setCameraFor('selfie')}
+                      className="whitespace-nowrap rounded-full bg-white/90 dark:bg-neutral-800/90 px-3 py-1.5 text-xs font-medium shadow transition hover:bg-white"
+                    >
+                      {t('web:mover.field.selfie.retake.cta')}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => selfiePhotoRef.current?.click()}
+                      className="whitespace-nowrap rounded-full bg-white/90 dark:bg-neutral-800/90 px-3 py-1.5 text-xs font-medium shadow transition hover:bg-white"
+                    >
+                      {t('web:mover.upload.fromDevice.cta')}
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <button
+                    type="button"
+                    onClick={() => setCameraFor('selfie')}
+                    className="flex items-center justify-center gap-2 rounded-xl border-2 border-dashed border-neutral-300 py-8 text-sm text-neutral-500 transition hover:border-primary-400 hover:text-primary-600 dark:border-neutral-600 dark:hover:border-primary-500"
+                  >
+                    <CameraIcon className="h-5 w-5" />
+                    {t('web:mover.upload.takePhoto.cta')}
+                  </button>
                   <button
                     type="button"
                     onClick={() => selfiePhotoRef.current?.click()}
-                    className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 rounded-full bg-white/90 dark:bg-neutral-800/90 px-3 py-1.5 text-xs font-medium shadow transition hover:bg-white"
+                    className="flex items-center justify-center gap-2 rounded-xl border-2 border-dashed border-neutral-300 py-8 text-sm text-neutral-500 transition hover:border-primary-400 hover:text-primary-600 dark:border-neutral-600 dark:hover:border-primary-500"
                   >
-                    {t('web:mover.field.selfie.retake.cta')}
+                    <ArrowUpTrayIcon className="h-5 w-5" />
+                    {t('web:mover.upload.fromDevice.cta')}
                   </button>
                 </div>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => selfiePhotoRef.current?.click()}
-                  className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-neutral-300 py-8 text-sm text-neutral-500 transition hover:border-primary-400 hover:text-primary-600 dark:border-neutral-600 dark:hover:border-primary-500"
-                >
-                  <CameraIcon className="h-5 w-5" />
-                  {t('web:mover.field.selfie.cta')}
-                </button>
               )}
               <p className="mt-1 text-xs text-neutral-400">
                 {t('web:mover.field.selfie.helper')}
@@ -1037,6 +1089,13 @@ export default function CompleteProfilePage() {
           )}
         </div>
       </div>
+
+      <CameraCaptureModal
+        open={cameraFor !== null}
+        facingMode={cameraFor === 'selfie' ? 'user' : 'environment'}
+        onCapture={handleCameraCapture}
+        onClose={() => setCameraFor(null)}
+      />
     </div>
   )
 }

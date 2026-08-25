@@ -38,6 +38,18 @@
     },
     "title": "Paiements et versements"
   },
+  "camera": {
+    "capture": {
+      "cta": "Capturer"
+    },
+    "preview": {
+      "a11y": "Aperçu de la caméra en direct"
+    },
+    "title": "Prendre une photo",
+    "unavailable": {
+      "error": "Impossible d'accéder à la caméra. Autorisez l'accès à la caméra dans votre navigateur ou importez plutôt une photo."
+    }
+  },
   "checkout": {
     "confirmAndPay": {
       "cta": "Confirmer et payer {{amount}}"
@@ -435,7 +447,6 @@
       },
       "licensePhoto": {
         "a11y": "Aperçu du permis",
-        "cta": "Importez une photo de votre permis de conduire",
         "helper": "Une photo nette accélère la vérification",
         "label": "Photo du permis de conduire"
       },
@@ -448,7 +459,6 @@
       },
       "selfie": {
         "a11y": "Aperçu du selfie",
-        "cta": "Prenez ou importez un selfie net",
         "helper": "Un selfie net est obligatoire pour la vérification d'identité",
         "label": "Photo selfie",
         "retake": {
@@ -694,6 +704,14 @@
         "summary_other": "{{count}} déménagements · brut {{gross}} · net {{net}}"
       },
       "title": "Documents fiscaux et de revenus"
+    },
+    "upload": {
+      "fromDevice": {
+        "cta": "Importer depuis l'appareil"
+      },
+      "takePhoto": {
+        "cta": "Prendre une photo"
+      }
     },
     "verification": {
       "pending": {

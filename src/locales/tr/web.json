@@ -38,6 +38,18 @@
     },
     "title": "Ödemeler ve hakedişler"
   },
+  "camera": {
+    "capture": {
+      "cta": "Çek"
+    },
+    "preview": {
+      "a11y": "Canlı kamera önizlemesi"
+    },
+    "title": "Fotoğraf çek",
+    "unavailable": {
+      "error": "Kameraya erişilemedi. Tarayıcınızda kamera erişimine izin verin veya bunun yerine bir fotoğraf yükleyin."
+    }
+  },
   "checkout": {
     "confirmAndPay": {
       "cta": "Onaylayın ve {{amount}} ödeyin"
@@ -435,7 +447,6 @@
       },
       "licensePhoto": {
         "a11y": "Ehliyet önizlemesi",
-        "cta": "Ehliyetinizin bir fotoğrafını yükleyin",
         "helper": "Net bir fotoğraf doğrulamayı hızlandırır",
         "label": "Ehliyet fotoğrafı"
       },
@@ -448,7 +459,6 @@
       },
       "selfie": {
         "a11y": "Selfie önizlemesi",
-        "cta": "Net bir selfie çekin veya yükleyin",
         "helper": "Kimlik doğrulaması için net bir selfie gereklidir",
         "label": "Selfie fotoğrafı",
         "retake": {
@@ -694,6 +704,14 @@
         "summary_other": "{{count}} taşınma · brüt {{gross}} · net {{net}}"
       },
       "title": "Vergi ve kazanç belgeleri"
+    },
+    "upload": {
+      "fromDevice": {
+        "cta": "Cihazdan yükle"
+      },
+      "takePhoto": {
+        "cta": "Fotoğraf çek"
+      }
     },
     "verification": {
       "pending": {

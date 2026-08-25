@@ -38,6 +38,18 @@
     },
     "title": "Płatności i wypłaty"
   },
+  "camera": {
+    "capture": {
+      "cta": "Zrób zdjęcie"
+    },
+    "preview": {
+      "a11y": "Podgląd kamery na żywo"
+    },
+    "title": "Zrób zdjęcie",
+    "unavailable": {
+      "error": "Nie udało się uzyskać dostępu do aparatu. Zezwól na dostęp do aparatu w przeglądarce albo wgraj zdjęcie."
+    }
+  },
   "checkout": {
     "confirmAndPay": {
       "cta": "Potwierdź i zapłać {{amount}}"
@@ -441,7 +453,6 @@
       },
       "licensePhoto": {
         "a11y": "Podgląd prawa jazdy",
-        "cta": "Wgraj zdjęcie swojego prawa jazdy",
         "helper": "Wyraźne zdjęcie przyspiesza weryfikację",
         "label": "Zdjęcie prawa jazdy"
       },
@@ -454,7 +465,6 @@
       },
       "selfie": {
         "a11y": "Podgląd selfie",
-        "cta": "Zrób lub wgraj wyraźne selfie",
         "helper": "Wyraźne selfie jest wymagane do weryfikacji tożsamości",
         "label": "Zdjęcie selfie",
         "retake": {
@@ -704,6 +714,14 @@
         "summary_other": "{{count}} przeprowadzki · brutto {{gross}} · netto {{net}}"
       },
       "title": "Dokumenty podatkowe i zarobkowe"
+    },
+    "upload": {
+      "fromDevice": {
+        "cta": "Wgraj z urządzenia"
+      },
+      "takePhoto": {
+        "cta": "Zrób zdjęcie"
+      }
     },
     "verification": {
       "pending": {
