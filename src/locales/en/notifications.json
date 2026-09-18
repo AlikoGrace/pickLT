@@ -125,6 +125,20 @@
       "title": "Unloading"
     }
   },
+  "vehicle": {
+    "confirmationRequired": {
+      "body": "Before your next move, confirm whether you are still using the same vehicle.",
+      "title": "Confirm your vehicle"
+    },
+    "rejected": {
+      "body": "Your vehicle submission was not approved: {{reason}}. Correct the details and resubmit.",
+      "title": "Vehicle not approved"
+    },
+    "verified": {
+      "body": "Your vehicle {{plate}} has been verified. You can receive moves again.",
+      "title": "Vehicle verified"
+    }
+  },
   "verification": {
     "contactSupport": "Please contact support for details.",
     "rejected": {

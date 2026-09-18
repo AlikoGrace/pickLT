@@ -27,6 +27,20 @@ const DEFAULTS = {
   'instant.storagePerWeek': 25,
   'instant.minimumPrice': 49,
 
+  // ── Per-mover surcharges + capacity bands ─────────────────────────────
+  // Not consumed by this function's formulas (those live in the apps'
+  // lib/move-pricing.ts + lib/move-volume.ts), but listed so `loadOverrides`
+  // keeps the admin's rows for them instead of dropping them as unknown keys
+  // (vehicles master plan D15). Mirror of lib/pricing-config.ts.
+  'mover.crewSurchargePerHead': 10,
+  'mover.itemSurcharge': 1.5,
+  'mover.vehicle.small_van': 0,
+  'mover.vehicle.medium_truck': 10,
+  'mover.vehicle.large_truck': 25,
+  'capacityM3.small_van': 10,
+  'capacityM3.medium_truck': 25,
+  'capacityM3.large_truck': 45,
+
   // ── Unified quote engine ────────────────────────────────────────────────
   // DORMANT: `pricing.model.enabled` is 0, so everything below is inert and
   // this function prices exactly as it always has. Setting it to 1 in
@@ -318,12 +332,12 @@ export default async ({ req, res, log, error }) => {
         try {
           owner = await databases.getDocument(DATABASE_ID, MOVES_COLLECTION, moveId);
         } catch {
-          return res.json({ error: 'Move not found', fnCode: 'move.notFound' }, 404);
+          return res.json({ error: 'Move not found', code: 'move_not_found', fnCode: 'move.notFound' }, 404);
         }
         const clientId =
           typeof owner.clientId === 'string' ? owner.clientId : owner.clientId?.$id ?? null;
         if (clientId !== callerId) {
-          return res.json({ error: 'Move not found', fnCode: 'move.notFound' }, 404);
+          return res.json({ error: 'Move not found', code: 'move_not_found', fnCode: 'move.notFound' }, 404);
         }
         await databases.updateDocument(DATABASE_ID, MOVES_COLLECTION, moveId, {
           estimatedPrice: quote.estimatedPrice,
@@ -404,14 +418,14 @@ export default async ({ req, res, log, error }) => {
       try {
         move = await databases.getDocument(DATABASE_ID, MOVES_COLLECTION, moveId);
       } catch {
-        return res.json({ error: 'Move not found', fnCode: 'move.notFound' }, 404);
+        return res.json({ error: 'Move not found', code: 'move_not_found', fnCode: 'move.notFound' }, 404);
       }
 
       // Relationship attributes arrive as either a bare id or a hydrated doc.
       const clientId =
         typeof move.clientId === 'string' ? move.clientId : move.clientId?.$id ?? null;
       if (clientId !== callerId) {
-        return res.json({ error: 'Move not found', fnCode: 'move.notFound' }, 404);
+        return res.json({ error: 'Move not found', code: 'move_not_found', fnCode: 'move.notFound' }, 404);
       }
 
       await databases.updateDocument(DATABASE_ID, MOVES_COLLECTION, moveId, {

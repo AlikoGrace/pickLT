@@ -20,6 +20,8 @@ import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAuth } from '@/context/auth'
+import VehicleStatusBanner from '@/components/mover/VehicleStatusBanner'
+import { useVehicleReadiness } from '@/hooks/useVehicleReadiness'
 import { client } from '@/lib/appwrite'
 import {
   formatRequestedAt,
@@ -238,6 +240,7 @@ export default function MoverMoveDetailsPage() {
   const params = useParams()
   const router = useRouter()
   const { user } = useAuth()
+  const vehicle = useVehicleReadiness()
   const handle = params.handle as string
 
   const [move, setMove] = useState<MoveData | null>(null)
@@ -766,11 +769,16 @@ export default function MoverMoveDetailsPage() {
             {isScheduled && (
               <div className="mt-6 space-y-3">
                 {/* Accept Move */}
+                {/* Not service-ready: the accept gate would refuse (403), so say
+                    why and where to fix it instead of offering the click. */}
+                {canAccept && vehicle.restricted && (
+                  <VehicleStatusBanner state={vehicle.state} className="rounded-xl border" />
+                )}
                 {canAccept && (
                   <button
                     onClick={handleAccept}
-                    disabled={isAccepting}
-                    className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-semibold py-3 px-4 rounded-xl transition-colors"
+                    disabled={isAccepting || vehicle.restricted}
+                    className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-xl transition-colors"
                   >
                     <CheckCircleIcon className="w-5 h-5" />
                     {isAccepting ? t('common:state.accepting.label') : t('web:mover.acceptMove.cta')}

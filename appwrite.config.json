@@ -151,7 +151,15 @@
             "entrypoint": "src/main.js",
             "commands": "npm install --legacy-peer-deps",
             "ignore": "node_modules,.npm",
-            "path": "functions/broadcastmoverequest"
+            "path": "functions/broadcastmoverequest",
+            "variables": {
+                "APPWRITE_DATABASE_ID": "",
+                "APPWRITE_COLLECTION_MOVER_PROFILES": "",
+                "APPWRITE_COLLECTION_MOVES": "",
+                "APPWRITE_COLLECTION_MOVE_REQUESTS": "",
+                "APPWRITE_COLLECTION_INVENTORY_CATALOG": "",
+                "PLATFORM_TZ": ""
+            }
         },
         {
             "$id": "6995a60b0039c1cd33b0",
@@ -193,7 +201,15 @@
             "entrypoint": "src/main.js",
             "commands": "npm install --legacy-peer-deps",
             "ignore": "node_modules,.npm",
-            "path": "functions/updatemovestatus"
+            "path": "functions/updatemovestatus",
+            "variables": {
+                "APPWRITE_DATABASE_ID": "",
+                "APPWRITE_COLLECTION_MOVER_PROFILES": "",
+                "APPWRITE_COLLECTION_MOVES": "",
+                "APPWRITE_COLLECTION_MOVE_STATUS_HISTORY": "",
+                "APPWRITE_COLLECTION_NOTIFICATIONS": "",
+                "APPWRITE_COLLECTION_VEHICLE_EVENTS": ""
+            }
         },
         {
             "$id": "6995a67e002eb3fa6e09",
@@ -678,6 +694,100 @@
                     "size": 512,
                     "default": null,
                     "encrypt": false
+                },
+                {
+                    "key": "vatId",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "size": 32,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "businessStreet",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "size": 128,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "businessPostcode",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "size": 16,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "locationUpdatedAt",
+                    "type": "datetime",
+                    "required": false,
+                    "array": false,
+                    "default": null,
+                    "format": ""
+                },
+                {
+                    "key": "vehicleOwnership",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "default": "owned",
+                    "format": "enum",
+                    "elements": [
+                        "owned",
+                        "rented"
+                    ]
+                },
+                {
+                    "key": "currentVehicleId",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "size": 36,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "vehicleStatus",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "default": "none",
+                    "format": "enum",
+                    "elements": [
+                        "none",
+                        "pending_review",
+                        "verified",
+                        "rejected"
+                    ]
+                },
+                {
+                    "key": "vehicleConfirmedAt",
+                    "type": "datetime",
+                    "required": false,
+                    "array": false,
+                    "default": null,
+                    "format": ""
+                },
+                {
+                    "key": "vehicleConfirmedServiceDate",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "size": 10,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "vehicleReconfirmRequired",
+                    "type": "boolean",
+                    "required": false,
+                    "array": false,
+                    "default": false
                 }
             ],
             "indexes": []
@@ -1327,6 +1437,15 @@
                     "required": false,
                     "array": false,
                     "default": null
+                },
+                {
+                    "key": "vehicleId",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "size": 36,
+                    "default": null,
+                    "encrypt": false
                 }
             ],
             "indexes": []
@@ -1743,12 +1862,24 @@
                     "elements": [
                         "move_request",
                         "move_accepted",
+                        "mover_en_route",
                         "mover_arrived",
                         "move_completed",
                         "payment",
                         "review",
                         "system",
-                        "verification"
+                        "move_cancelled",
+                        "verification",
+                        "loading",
+                        "in_transit",
+                        "arrived_destination",
+                        "unloading",
+                        "move_reminder",
+                        "move_starting",
+                        "tax_statement",
+                        "vehicle_verified",
+                        "vehicle_rejected",
+                        "vehicle_confirmation_required"
                     ]
                 },
                 {
@@ -1885,6 +2016,440 @@
                 }
             ],
             "indexes": []
+        },
+        {
+            "$id": "vehicles",
+            "$permissions": [],
+            "databaseId": "6990885c000627570048",
+            "name": "vehicles",
+            "enabled": true,
+            "rowSecurity": true,
+            "columns": [
+                {
+                    "key": "moverProfileId",
+                    "type": "text",
+                    "required": true,
+                    "array": false,
+                    "size": 36,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "ownerUserId",
+                    "type": "text",
+                    "required": true,
+                    "array": false,
+                    "size": 36,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "ownership",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "default": null,
+                    "format": "enum",
+                    "elements": [
+                        "owned",
+                        "rented"
+                    ]
+                },
+                {
+                    "key": "registrationNumber",
+                    "type": "text",
+                    "required": true,
+                    "array": false,
+                    "size": 32,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "registrationNormalized",
+                    "type": "text",
+                    "required": true,
+                    "array": false,
+                    "size": 32,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "brand",
+                    "type": "text",
+                    "required": true,
+                    "array": false,
+                    "size": 64,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "model",
+                    "type": "text",
+                    "required": true,
+                    "array": false,
+                    "size": 64,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "year",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "size": 8,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "vehicleType",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "default": null,
+                    "format": "enum",
+                    "elements": [
+                        "small_van",
+                        "medium_truck",
+                        "large_truck"
+                    ]
+                },
+                {
+                    "key": "capacityM3",
+                    "type": "double",
+                    "required": false,
+                    "array": false,
+                    "default": null,
+                    "min": -1.7976931348623157e+308,
+                    "max": 1.7976931348623157e+308
+                },
+                {
+                    "key": "frontPlatePhoto",
+                    "type": "text",
+                    "required": true,
+                    "array": false,
+                    "size": 512,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "rearPlatePhoto",
+                    "type": "text",
+                    "required": true,
+                    "array": false,
+                    "size": 512,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "fullVehiclePhoto",
+                    "type": "text",
+                    "required": true,
+                    "array": false,
+                    "size": 512,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "status",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "default": null,
+                    "format": "enum",
+                    "elements": [
+                        "pending_review",
+                        "verified",
+                        "rejected",
+                        "retired"
+                    ]
+                },
+                {
+                    "key": "rejectionReason",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "size": 512,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "checks",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "size": 2048,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "isCurrent",
+                    "type": "boolean",
+                    "required": false,
+                    "array": false,
+                    "default": false
+                },
+                {
+                    "key": "replacesVehicleId",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "size": 36,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "submittedAt",
+                    "type": "datetime",
+                    "required": true,
+                    "array": false,
+                    "default": null,
+                    "format": ""
+                },
+                {
+                    "key": "verifiedAt",
+                    "type": "datetime",
+                    "required": false,
+                    "array": false,
+                    "default": null,
+                    "format": ""
+                },
+                {
+                    "key": "reviewedBy",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "size": 36,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "retiredAt",
+                    "type": "datetime",
+                    "required": false,
+                    "array": false,
+                    "default": null,
+                    "format": ""
+                }
+            ],
+            "indexes": [
+                {
+                    "key": "by_mover",
+                    "type": "key",
+                    "status": "available",
+                    "columns": [
+                        "moverProfileId"
+                    ],
+                    "orders": [
+                        "ASC"
+                    ]
+                },
+                {
+                    "key": "by_plate",
+                    "type": "key",
+                    "status": "available",
+                    "columns": [
+                        "registrationNormalized"
+                    ],
+                    "orders": [
+                        "ASC"
+                    ]
+                },
+                {
+                    "key": "by_status",
+                    "type": "key",
+                    "status": "available",
+                    "columns": [
+                        "status"
+                    ],
+                    "orders": [
+                        "ASC"
+                    ]
+                },
+                {
+                    "key": "by_mover_current",
+                    "type": "key",
+                    "status": "available",
+                    "columns": [
+                        "moverProfileId",
+                        "isCurrent"
+                    ],
+                    "orders": [
+                        "ASC",
+                        "ASC"
+                    ]
+                }
+            ]
+        },
+        {
+            "$id": "vehicle_events",
+            "$permissions": [],
+            "databaseId": "6990885c000627570048",
+            "name": "vehicle_events",
+            "enabled": true,
+            "rowSecurity": true,
+            "columns": [
+                {
+                    "key": "moverProfileId",
+                    "type": "text",
+                    "required": true,
+                    "array": false,
+                    "size": 36,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "ownerUserId",
+                    "type": "text",
+                    "required": true,
+                    "array": false,
+                    "size": 36,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "vehicleId",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "size": 36,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "moveId",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "size": 36,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "action",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "default": null,
+                    "format": "enum",
+                    "elements": [
+                        "submitted",
+                        "resubmitted",
+                        "confirmed_same",
+                        "change_requested",
+                        "verified",
+                        "rejected",
+                        "retired",
+                        "reconfirm_required"
+                    ]
+                },
+                {
+                    "key": "previousStatus",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "size": 24,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "newStatus",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "size": 24,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "source",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "default": null,
+                    "format": "enum",
+                    "elements": [
+                        "registration",
+                        "settings",
+                        "login",
+                        "post_move",
+                        "admin",
+                        "system",
+                        "backfill"
+                    ]
+                },
+                {
+                    "key": "serviceDate",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "size": 10,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "actorId",
+                    "type": "text",
+                    "required": true,
+                    "array": false,
+                    "size": 36,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "actorRole",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "default": null,
+                    "format": "enum",
+                    "elements": [
+                        "mover",
+                        "admin",
+                        "system"
+                    ]
+                },
+                {
+                    "key": "note",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "size": 512,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "at",
+                    "type": "datetime",
+                    "required": true,
+                    "array": false,
+                    "default": null,
+                    "format": ""
+                }
+            ],
+            "indexes": [
+                {
+                    "key": "by_mover",
+                    "type": "key",
+                    "status": "available",
+                    "columns": [
+                        "moverProfileId"
+                    ],
+                    "orders": [
+                        "ASC"
+                    ]
+                },
+                {
+                    "key": "by_vehicle",
+                    "type": "key",
+                    "status": "available",
+                    "columns": [
+                        "vehicleId"
+                    ],
+                    "orders": [
+                        "ASC"
+                    ]
+                }
+            ]
         }
     ],
     "buckets": [

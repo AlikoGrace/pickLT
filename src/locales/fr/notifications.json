@@ -125,6 +125,20 @@
       "title": "Déchargement"
     }
   },
+  "vehicle": {
+    "confirmationRequired": {
+      "body": "Avant votre prochain déménagement, confirmez si vous utilisez toujours le même véhicule.",
+      "title": "Confirmez votre véhicule"
+    },
+    "rejected": {
+      "body": "Votre demande de véhicule n'a pas été approuvée : {{reason}}. Corrigez les informations et soumettez-les à nouveau.",
+      "title": "Véhicule non approuvé"
+    },
+    "verified": {
+      "body": "Votre véhicule {{plate}} a été vérifié. Vous pouvez à nouveau recevoir des déménagements.",
+      "title": "Véhicule vérifié"
+    }
+  },
   "verification": {
     "contactSupport": "Veuillez contacter le support pour plus de détails.",
     "rejected": {

@@ -1283,8 +1283,19 @@
         "value": "{{capacity}}'e kadar"
       }
     },
+    "declaration": {
+      "body": "Göndererek bu bilgilerin doğru ve güncel olduğunu ve yürürlükteki araç, ehliyet ve sigorta gerekliliklerine uymaktan sizin sorumlu olduğunuzu onaylarsınız.",
+      "confirmBody": "Onaylayarak bugün kayıtlı aracı kullandığınızı ve kayıtlı bilgilerin doğru ve güncel olduğunu beyan edersiniz."
+    },
     "edit": {
       "title": "Araç bilgilerini düzenle"
+    },
+    "evidence": {
+      "title": "Araç belgeleri"
+    },
+    "fullPhoto": {
+      "helper": "Kırpılmış bir bölüm değil, aracın tamamını gösterin.",
+      "label": "Aracın tamamının fotoğrafı"
     },
     "largeTruck": {
       "helper": "{{capacity}} — ev taşımaları, büyük yükler",
@@ -1304,7 +1315,28 @@
     "multiple": {
       "label": "Birden fazla"
     },
+    "ownership": {
+      "label": "Aracı kim sağlıyor?",
+      "owned": {
+        "helper": "Taşınmalarda kullanacağınız aracın sahibisiniz."
+      },
+      "rented": {
+        "helper": "Aracı kiralıyorsunuz. Kaydı şimdi tamamlayıp aracı daha sonra ekleyebilirsiniz. Taşınma alabilmeniz için aracın doğrulanmış olması gerekir."
+      },
+      "switchNeedsApproval": {
+        "body": "Kiralık araçtan kendi aracınıza geçiş onay gerektirir. Bu araç doğrulanana kadar kiralık araç sürücüsü olarak kalırsınız ve günlük araç onayına devam edersiniz."
+      }
+    },
+    "plateFront": {
+      "helper": "Plaka numarası okunabilir olmalıdır.",
+      "label": "Ön plaka fotoğrafı"
+    },
+    "plateRear": {
+      "helper": "Plaka numarası okunabilir olmalıdır.",
+      "label": "Arka plaka fotoğrafı"
+    },
     "registration": {
+      "helper": "Her iki plakadaki numarayla eşleşmelidir.",
       "label": "Araç plakası *",
       "placeholder": "örn. B-AB 1234"
     },
@@ -1314,6 +1346,9 @@
     "smallVan": {
       "helper": "{{capacity}} — küçük taşımalar, tek parça eşyalar",
       "label": "Küçük panelvan"
+    },
+    "submitForVerification": {
+      "cta": "Doğrulama için gönder"
     },
     "title": "Araç bilgileri",
     "type": {

@@ -1,5 +1,6 @@
 import { createAdminClient } from '@/lib/appwrite-server'
-import { APPWRITE } from '@/lib/constants'
+import { APPWRITE, PLATFORM_TZ } from '@/lib/constants'
+import { vehicleServiceReady } from '@/lib/vehicle-service'
 import { getSessionUserId } from '@/lib/auth-session'
 import { Query } from 'node-appwrite'
 import { NextResponse } from 'next/server'
@@ -45,6 +46,29 @@ export async function requireVerifiedMover(): Promise<
   }
 
   return { userId, moverProfile }
+}
+
+/**
+ * `requireVerifiedMover` plus the vehicle readiness term (master D3/D4): a
+ * verified current vehicle, and for rental drivers today's SAME confirmation
+ * with no post-move re-confirmation outstanding. Used by the routes that hand
+ * out *new* work (accept-move, accept-scheduled-move); a mover mid-move keeps
+ * the routes that finish it. The response carries `fnCode` so the driver app
+ * can map it to `errors:mover.vehicleNotReady` in its own locale.
+ */
+export async function requireServiceReadyMover(): Promise<
+  VerifiedMoverResult | NextResponse
+> {
+  const result = await requireVerifiedMover()
+  if (isErrorResponse(result)) return result
+  if (!vehicleServiceReady(result.moverProfile as Record<string, unknown>, Date.now(), PLATFORM_TZ)) {
+    const { t } = await getTranslations()
+    return NextResponse.json(
+      { error: t('errors:mover.vehicleNotReady'), fnCode: 'mover.vehicleNotReady' },
+      { status: 403 }
+    )
+  }
+  return result
 }
 
 /** Type guard to check if the result is an error response */

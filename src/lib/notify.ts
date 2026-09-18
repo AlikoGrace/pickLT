@@ -25,6 +25,12 @@ export type NotifyType =
   | 'move_reminder'
   | 'move_starting'
   | 'tax_statement'
+  // Vehicle verification (master §4.5). Written by the admin verify route and
+  // the completion hooks; `writeNotification` falls back to `system` until the
+  // enum is widened, exactly like the in-progress step types below.
+  | 'vehicle_verified'
+  | 'vehicle_rejected'
+  | 'vehicle_confirmation_required'
   | 'system'
 
 /**

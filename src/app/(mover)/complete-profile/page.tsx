@@ -5,6 +5,15 @@ import { formatVolumeM3, languageName, regionName } from '@/lib/format'
 import { vehicleCapacityLabel } from '@/lib/vehicle-capacity'
 import { compressImage } from '@/utils/compressImage'
 import CameraCaptureModal from '@/components/CameraCaptureModal'
+import VehiclePhotoField from '@/components/mover/VehiclePhotoField'
+import {
+  canGoNext as stepCanGoNext,
+  stepsForOwnership,
+  type CompleteProfileStep,
+} from '@/lib/complete-profile-validation'
+import { submitVehicle, uploadVehiclePhoto } from '@/lib/vehicle-client'
+import type { VehicleOwnership } from '@/lib/vehicle-service'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -16,7 +25,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   ShieldCheckIcon,
-  MapPinIcon,
+  KeyIcon,
   CameraIcon,
   ArrowUpTrayIcon,
 } from '@heroicons/react/24/outline'
@@ -87,17 +96,21 @@ function countryLabel(value: string, locale: string): string {
   return option ? regionName(option.code, locale) : value
 }
 
-type Step = 'personal' | 'verification' | 'vehicle' | 'experience' | 'review'
+type Step = CompleteProfileStep
 
-/** Order + icon only. The label is resolved during render so a language switch
- *  is picked up (a module-scope label array would freeze the boot language). */
-const STEPS: { key: Step; icon: typeof TruckIcon }[] = [
-  { key: 'personal', icon: IdentificationIcon },
-  { key: 'verification', icon: ShieldCheckIcon },
-  { key: 'vehicle', icon: TruckIcon },
-  { key: 'experience', icon: ClipboardDocumentCheckIcon },
-  { key: 'review', icon: CheckCircleIcon },
-]
+/** Icon per step. Order comes from `stepsForOwnership` (a rental driver skips
+ *  the vehicle step — master D10). The label is resolved during render so a
+ *  language switch is picked up. */
+const STEP_ICONS: Record<Step, typeof TruckIcon> = {
+  personal: IdentificationIcon,
+  verification: ShieldCheckIcon,
+  ownership: KeyIcon,
+  vehicle: TruckIcon,
+  experience: ClipboardDocumentCheckIcon,
+  review: CheckCircleIcon,
+}
+
+type PhotoKind = 'license' | 'selfie' | 'front' | 'rear' | 'full'
 
 /**
  * The required marker lives here rather than in the catalog (catalog
@@ -142,11 +155,14 @@ export default function CompleteProfilePage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
+  // D10: the profile is saved even when the follow-up vehicle call fails; the
+  // dashboard then prompts for the vehicle. This carries that message.
+  const [vehicleWarning, setVehicleWarning] = useState('')
   const licensePhotoRef = useRef<HTMLInputElement>(null)
   const selfiePhotoRef = useRef<HTMLInputElement>(null)
   // Which field the live-camera modal is capturing for. The selfie opens the
-  // front camera, the license the back one.
-  const [cameraFor, setCameraFor] = useState<'license' | 'selfie' | null>(null)
+  // front camera; the licence and the three vehicle photos the back one.
+  const [cameraFor, setCameraFor] = useState<PhotoKind | null>(null)
 
   // Form state
   const [form, setForm] = useState({
@@ -164,6 +180,13 @@ export default function CompleteProfilePage() {
     businessPostcode: '',
     primaryCity: '',
     primaryCountry: '',
+    vehicleOwnership: '' as VehicleOwnership | '',
+    frontPlatePhoto: null as File | null,
+    frontPlatePreview: '',
+    rearPlatePhoto: null as File | null,
+    rearPlatePreview: '',
+    fullVehiclePhoto: null as File | null,
+    fullVehiclePreview: '',
     vehicleBrand: '',
     vehicleModel: '',
     vehicleYear: '',
@@ -190,51 +213,72 @@ export default function CompleteProfilePage() {
     return () => {
       if (form.driversLicensePhotoPreview) URL.revokeObjectURL(form.driversLicensePhotoPreview)
       if (form.selfiePhotoPreview) URL.revokeObjectURL(form.selfiePhotoPreview)
+      if (form.frontPlatePreview) URL.revokeObjectURL(form.frontPlatePreview)
+      if (form.rearPlatePreview) URL.revokeObjectURL(form.rearPlatePreview)
+      if (form.fullVehiclePreview) URL.revokeObjectURL(form.fullVehiclePreview)
     }
-  }, [form.driversLicensePhotoPreview, form.selfiePhotoPreview])
+  }, [
+    form.driversLicensePhotoPreview,
+    form.selfiePhotoPreview,
+    form.frontPlatePreview,
+    form.rearPlatePreview,
+    form.fullVehiclePreview,
+  ])
 
   const updateForm = (updates: Partial<typeof form>) => {
     setForm((prev) => ({ ...prev, ...updates }))
   }
 
-  const handleCameraCapture = (file: File) => {
+  /** One setter for every photo field, whichever path (camera / file) produced the file. */
+  const setPhoto = (kind: PhotoKind, file: File) => {
     const preview = URL.createObjectURL(file)
-    if (cameraFor === 'license') {
-      updateForm({ driversLicensePhoto: file, driversLicensePhotoPreview: preview })
-    } else if (cameraFor === 'selfie') {
-      updateForm({ selfiePhoto: file, selfiePhotoPreview: preview })
+    switch (kind) {
+      case 'license':
+        return updateForm({ driversLicensePhoto: file, driversLicensePhotoPreview: preview })
+      case 'selfie':
+        return updateForm({ selfiePhoto: file, selfiePhotoPreview: preview })
+      case 'front':
+        return updateForm({ frontPlatePhoto: file, frontPlatePreview: preview })
+      case 'rear':
+        return updateForm({ rearPlatePhoto: file, rearPlatePreview: preview })
+      case 'full':
+        return updateForm({ fullVehiclePhoto: file, fullVehiclePreview: preview })
     }
+  }
+
+  const handleCameraCapture = (file: File) => {
+    if (cameraFor) setPhoto(cameraFor, file)
     setCameraFor(null)
   }
 
+  const STEPS = stepsForOwnership(form.vehicleOwnership).map((key) => ({ key, icon: STEP_ICONS[key] }))
   const stepIdx = STEPS.findIndex((s) => s.key === currentStep)
 
-  const canGoNext = () => {
-    switch (currentStep) {
-      case 'personal':
-        return form.fullName.trim() && form.phone.trim() && form.driversLicense.trim()
-      case 'verification':
-        return (
-          form.primaryCity.trim() &&
-          form.primaryCountry.trim() &&
-          form.socialSecurityNumber.trim() &&
-          form.taxNumber.trim() &&
-          form.selfiePhoto !== null
-        )
-      case 'vehicle':
-        return (
-          form.vehicleBrand.trim() &&
-          form.vehicleModel.trim() &&
-          form.vehicleYear.trim() &&
-          form.vehicleRegistration.trim() &&
-          form.vehicleType
-        )
-      case 'experience':
-        return form.yearsExperience && form.languages.length > 0
-      default:
-        return true
-    }
-  }
+  // The rule lives in `lib/complete-profile-validation.ts` (unit-tested); the
+  // page only maps `File | null` to presence booleans.
+  const canGoNext = () =>
+    stepCanGoNext(currentStep, {
+      fullName: form.fullName,
+      phone: form.phone,
+      driversLicense: form.driversLicense,
+      primaryCity: form.primaryCity,
+      primaryCountry: form.primaryCountry,
+      socialSecurityNumber: form.socialSecurityNumber,
+      taxNumber: form.taxNumber,
+      hasSelfiePhoto: form.selfiePhoto !== null,
+      vehicleOwnership: form.vehicleOwnership,
+      vehicleBrand: form.vehicleBrand,
+      vehicleModel: form.vehicleModel,
+      vehicleYear: form.vehicleYear,
+      vehicleCapacity: form.vehicleCapacity,
+      vehicleRegistration: form.vehicleRegistration,
+      vehicleType: form.vehicleType,
+      hasFrontPlatePhoto: form.frontPlatePhoto !== null,
+      hasRearPlatePhoto: form.rearPlatePhoto !== null,
+      hasFullVehiclePhoto: form.fullVehiclePhoto !== null,
+      yearsExperience: form.yearsExperience,
+      languages: form.languages,
+    })
 
   const goNext = () => {
     if (stepIdx < STEPS.length - 1) {
@@ -315,12 +359,9 @@ export default function CompleteProfilePage() {
           businessPostcode: form.businessPostcode,
           primaryCity: form.primaryCity,
           primaryCountry: form.primaryCountry,
-          vehicleBrand: form.vehicleBrand,
-          vehicleModel: form.vehicleModel,
-          vehicleYear: form.vehicleYear,
-          vehicleCapacity: form.vehicleCapacity,
-          vehicleRegistration: form.vehicleRegistration,
-          vehicleType: form.vehicleType,
+          // Master D10: the profile carries the ownership declaration only;
+          // the vehicle is submitted as its own record right after.
+          vehicleOwnership: form.vehicleOwnership || 'owned',
           languages: form.languages,
           yearsExperience: Number(form.yearsExperience),
         }),
@@ -331,13 +372,48 @@ export default function CompleteProfilePage() {
         throw new Error(data.error || t('errors:mover.profileSubmitFailed'))
       }
 
+      // Second call: the owned driver's vehicle (same evidence standard as a
+      // rental driver adding one later — D5). A failure here does not undo the
+      // profile: `vehicleStatus` stays `none` and the dashboard prompts.
+      let vehicleFailed = false
+      if (form.vehicleOwnership === 'owned' && form.frontPlatePhoto && form.rearPlatePhoto && form.fullVehiclePhoto) {
+        try {
+          const [frontPlatePhoto, rearPlatePhoto, fullVehiclePhoto] = await Promise.all([
+            uploadVehiclePhoto(form.frontPlatePhoto),
+            uploadVehiclePhoto(form.rearPlatePhoto),
+            uploadVehiclePhoto(form.fullVehiclePhoto),
+          ])
+          await submitVehicle({
+            ownership: 'owned',
+            registrationNumber: form.vehicleRegistration.trim(),
+            brand: form.vehicleBrand.trim(),
+            model: form.vehicleModel.trim(),
+            year: form.vehicleYear.trim() || undefined,
+            vehicleType: form.vehicleType,
+            capacityM3: form.vehicleCapacity.trim() || null,
+            frontPlatePhoto,
+            rearPlatePhoto,
+            fullVehiclePhoto,
+            source: 'registration',
+          })
+        } catch (vehicleErr) {
+          vehicleFailed = true
+          setVehicleWarning(
+            t('web:mover.onboarding.vehicleSubmitFailed', {
+              error: vehicleErr instanceof Error ? vehicleErr.message : '',
+            }),
+          )
+        }
+      }
+
       // Refresh auth context to pick up the new mover profile
       updateUser({ userType: 'mover' })
       await refreshProfile()
 
       setSuccess(true)
-      // Redirect to dashboard after brief delay
-      setTimeout(() => router.push('/dashboard'), 2000)
+      // Redirect to dashboard after brief delay — unless the vehicle call
+      // failed: that warning has to be read and acted on, not flashed for 2 s.
+      if (!vehicleFailed) setTimeout(() => router.push('/dashboard'), 2000)
     } catch (err) {
       setError(err instanceof Error ? err.message : t('errors:generic.title'))
     } finally {
@@ -356,9 +432,22 @@ export default function CompleteProfilePage() {
             {t('web:mover.onboarding.done.title')}
           </h2>
           <p className="mt-2 text-neutral-500 dark:text-neutral-400">
-            {t('web:mover.onboarding.done.subtitle')}{' '}
-            {t('web:mover.onboarding.done.redirect')}
+            {t('web:mover.onboarding.done.subtitle')}
+            {!vehicleWarning && <> {t('web:mover.onboarding.done.redirect')}</>}
           </p>
+          {vehicleWarning && (
+            <>
+              <p role="alert" className="mt-4 rounded-xl bg-amber-50 p-3 text-sm text-amber-800 dark:bg-amber-900/20 dark:text-amber-200">
+                {vehicleWarning}
+              </p>
+              <Link
+                href="/vehicle/setup?mode=add"
+                className="mt-4 inline-flex items-center justify-center rounded-full bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-700"
+              >
+                {t('web:mover.vehicle.action.add.cta')}
+              </Link>
+            </>
+          )}
         </div>
       </div>
     )
@@ -382,7 +471,7 @@ export default function CompleteProfilePage() {
           {STEPS.map((step, idx) => {
             const isActive = idx === stepIdx
             const isCompleted = idx < stepIdx
-            // i18n-keys: web:mover.onboarding.step.personal.label, web:mover.onboarding.step.verification.label, web:mover.onboarding.step.vehicle.label, web:mover.onboarding.step.experience.label, web:mover.onboarding.step.review.label
+            // i18n-keys: web:mover.onboarding.step.personal.label, web:mover.onboarding.step.verification.label, web:mover.onboarding.step.ownership.label, web:mover.onboarding.step.vehicle.label, web:mover.onboarding.step.experience.label, web:mover.onboarding.step.review.label
             const stepLabel = t(`web:mover.onboarding.step.${step.key}.label`)
             return (
               <div key={step.key} className="flex flex-1 items-center">
@@ -744,7 +833,55 @@ export default function CompleteProfilePage() {
           </div>
         )}
 
-        {/* Step 3: Vehicle Details */}
+        {/* Step 3: Ownership — decides whether the vehicle step follows (D10) */}
+        {currentStep === 'ownership' && (
+          <div className="space-y-5">
+            <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+              {t('web:mover.onboarding.ownership.title')}
+            </h2>
+            <RequiredLabel className="mb-2" markerHiddenFromAT={false}>
+              {t('booking:vehicle.ownership.label')}
+            </RequiredLabel>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {(['owned', 'rented'] as const).map((value) => (
+                <label
+                  key={value}
+                  className={`flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition-colors ${
+                    form.vehicleOwnership === value
+                      ? 'border-primary-500 bg-primary-50 dark:border-primary-400 dark:bg-primary-900/20'
+                      : 'border-neutral-200 hover:border-neutral-300 dark:border-neutral-700 dark:hover:border-neutral-600'
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="vehicleOwnership"
+                    value={value}
+                    checked={form.vehicleOwnership === value}
+                    onChange={() => updateForm({ vehicleOwnership: value })}
+                    className="sr-only"
+                  />
+                  {value === 'owned' ? (
+                    <KeyIcon className="mt-0.5 h-6 w-6 flex-shrink-0 text-neutral-500" />
+                  ) : (
+                    <TruckIcon className="mt-0.5 h-6 w-6 flex-shrink-0 text-neutral-500" />
+                  )}
+                  <div>
+                    {/* i18n-keys: common:vehicleOwnership.owned.label, common:vehicleOwnership.rented.label */}
+                    <p className="font-medium text-neutral-900 dark:text-neutral-100">
+                      {t(`common:vehicleOwnership.${value}.label`)}
+                    </p>
+                    {/* i18n-keys: booking:vehicle.ownership.owned.helper, booking:vehicle.ownership.rented.helper */}
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                      {t(`booking:vehicle.ownership.${value}.helper`)}
+                    </p>
+                  </div>
+                </label>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Step 4: Vehicle Details (owned drivers only) */}
 
         {currentStep === 'vehicle' && (
           <div className="space-y-5">
@@ -817,8 +954,9 @@ export default function CompleteProfilePage() {
                 value={form.vehicleRegistration}
                 onChange={(e) => updateForm({ vehicleRegistration: e.target.value })}
                 placeholder={t('booking:vehicle.registration.placeholder')}
-                className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
+                className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 font-mono uppercase outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
               />
+              <p className="mt-1 text-xs text-neutral-400">{t('booking:vehicle.registration.helper')}</p>
             </div>
             <div>
               <label className="mb-2 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
@@ -865,10 +1003,41 @@ export default function CompleteProfilePage() {
                 })}
               </div>
             </div>
+
+            {/* Evidence — front plate, rear plate, full vehicle (master §7, D5) */}
+            <div className="space-y-4 rounded-xl border border-neutral-200 p-4 dark:border-neutral-700">
+              <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
+                {t('booking:vehicle.evidence.title')}
+              </h3>
+              <VehiclePhotoField
+                label={<RequiredLabel markerHiddenFromAT={false}>{t('booking:vehicle.plateFront.label')}</RequiredLabel>}
+                helper={t('booking:vehicle.plateFront.helper')}
+                alt={t('web:mover.vehicle.photo.front.a11y')}
+                preview={form.frontPlatePreview || null}
+                onTakePhoto={() => setCameraFor('front')}
+                onFile={(f) => setPhoto('front', f)}
+              />
+              <VehiclePhotoField
+                label={<RequiredLabel markerHiddenFromAT={false}>{t('booking:vehicle.plateRear.label')}</RequiredLabel>}
+                helper={t('booking:vehicle.plateRear.helper')}
+                alt={t('web:mover.vehicle.photo.rear.a11y')}
+                preview={form.rearPlatePreview || null}
+                onTakePhoto={() => setCameraFor('rear')}
+                onFile={(f) => setPhoto('rear', f)}
+              />
+              <VehiclePhotoField
+                label={<RequiredLabel markerHiddenFromAT={false}>{t('booking:vehicle.fullPhoto.label')}</RequiredLabel>}
+                helper={t('booking:vehicle.fullPhoto.helper')}
+                alt={t('web:mover.vehicle.photo.full.a11y')}
+                preview={form.fullVehiclePreview || null}
+                onTakePhoto={() => setCameraFor('full')}
+                onFile={(f) => setPhoto('full', f)}
+              />
+            </div>
           </div>
         )}
 
-        {/* Step 4: Experience */}
+        {/* Step 5: Experience */}
         {currentStep === 'experience' && (
           <div className="space-y-5">
             <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
@@ -930,7 +1099,7 @@ export default function CompleteProfilePage() {
           </div>
         )}
 
-        {/* Step 5: Review */}
+        {/* Step 6: Review */}
         {currentStep === 'review' && (
           <div className="space-y-5">
             <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
@@ -990,7 +1159,17 @@ export default function CompleteProfilePage() {
                 <p className="text-xs font-medium uppercase text-neutral-400">
                   {t('booking:field.vehicle.label')}
                 </p>
+                {/* i18n-keys: common:vehicleOwnership.owned.label, common:vehicleOwnership.rented.label */}
                 <p className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">
+                  {t('web:mover.onboarding.review.ownership.value', {
+                    ownership: t(`common:vehicleOwnership.${form.vehicleOwnership === 'rented' ? 'rented' : 'owned'}.label`),
+                  })}
+                </p>
+                {form.vehicleOwnership === 'rented' ? (
+                  <p className="text-sm text-neutral-500">{t('web:mover.onboarding.review.vehicleLater')}</p>
+                ) : (
+                <>
+                <p className="text-sm text-neutral-900 dark:text-neutral-100">
                   {t('web:mover.onboarding.review.vehicleName.value', {
                     brand: form.vehicleBrand,
                     model: form.vehicleModel,
@@ -1014,6 +1193,13 @@ export default function CompleteProfilePage() {
                         })
                   })()}
                 </p>
+                {form.frontPlatePreview && form.rearPlatePreview && form.fullVehiclePreview && (
+                  <p className="text-sm text-green-600 dark:text-green-400">
+                    {t('web:mover.onboarding.review.platesOk')}
+                  </p>
+                )}
+                </>
+                )}
               </div>
               <hr className="border-neutral-200 dark:border-neutral-600" />
               <div>

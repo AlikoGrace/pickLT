@@ -1283,8 +1283,19 @@
         "value": "Fino a {{capacity}}"
       }
     },
+    "declaration": {
+      "body": "Inviando, conferma che queste informazioni sono veritiere e aggiornate e che Lei è responsabile del rispetto dei requisiti applicabili in materia di veicolo, patente e assicurazione.",
+      "confirmBody": "Confermando, dichiara di utilizzare oggi il veicolo registrato e che le informazioni registrate sono veritiere e aggiornate."
+    },
     "edit": {
       "title": "Modifica i dati del veicolo"
+    },
+    "evidence": {
+      "title": "Documentazione del veicolo"
+    },
+    "fullPhoto": {
+      "helper": "Mostri il veicolo completo, non una parte ritagliata.",
+      "label": "Foto dell'intero veicolo"
     },
     "largeTruck": {
       "helper": "{{capacity}} — traslochi di case, carichi grandi",
@@ -1304,7 +1315,28 @@
     "multiple": {
       "label": "Più veicoli"
     },
+    "ownership": {
+      "label": "Chi fornisce il veicolo?",
+      "owned": {
+        "helper": "Lei è proprietario del veicolo che utilizzerà per i traslochi."
+      },
+      "rented": {
+        "helper": "Lei noleggia il veicolo. Può completare la registrazione ora e aggiungere il veicolo in seguito. Deve essere verificato prima di poter ricevere traslochi."
+      },
+      "switchNeedsApproval": {
+        "body": "Il passaggio da un veicolo a noleggio a un veicolo proprio richiede approvazione. Lei resta un autista con veicolo a noleggio, con la conferma giornaliera del veicolo, finché questo veicolo non sarà verificato."
+      }
+    },
+    "plateFront": {
+      "helper": "Il numero di targa deve essere leggibile.",
+      "label": "Foto della targa anteriore"
+    },
+    "plateRear": {
+      "helper": "Il numero di targa deve essere leggibile.",
+      "label": "Foto della targa posteriore"
+    },
     "registration": {
+      "helper": "Deve corrispondere al numero su entrambe le targhe.",
       "label": "Targa del veicolo *",
       "placeholder": "es. B-AB 1234"
     },
@@ -1314,6 +1346,9 @@
     "smallVan": {
       "helper": "{{capacity}} — piccoli traslochi, singoli oggetti",
       "label": "Furgone piccolo"
+    },
+    "submitForVerification": {
+      "cta": "Invia per la verifica"
     },
     "title": "Dati del veicolo",
     "type": {

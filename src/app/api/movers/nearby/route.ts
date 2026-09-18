@@ -1,14 +1,20 @@
 import { getTranslations } from '@/lib/i18n-server'
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient, withRetry } from '@/lib/appwrite-server'
-import { APPWRITE } from '@/lib/constants'
+import { APPWRITE, PLATFORM_TZ } from '@/lib/constants'
 import { Query } from 'node-appwrite'
 import { getSessionUserId } from '@/lib/auth-session'
+import { isLocationFresh } from '@/lib/mover-gates'
+import { vehicleServiceReady } from '@/lib/vehicle-service'
 
 /** Appwrite rows are schemaless at the SDK boundary. */
 type AnyDoc = Record<string, any>
 
 const MAX_RADIUS_KM = 50
+
+// Freshness (`isLocationFresh`, 3 min) is the same window as `listnearbymovers`
+// / `broadcastmoverequest` — this route used to skip the term and list stale
+// drivers the functions had already dropped. Shared with create-instant.
 
 // ~1.1 km — enough to place a pin and estimate arrival, not enough to track an
 // individual driver. The displayed distance is computed from the exact
@@ -94,7 +100,12 @@ export async function GET(req: NextRequest) {
     console.log(
       `[nearby] Found ${movers.total} online mover(s), client coords: ${lat},${lng}, radius: ${radiusKm}km`
     )
+    const nowMs = Date.now()
     const nearbyMovers = movers.documents
+      // Freshness + vehicle readiness (master D3/D4): a verified current
+      // vehicle, and for rental drivers today's SAME confirmation. Every mover
+      // that reaches the client therefore carries a verified vehicle.
+      .filter((mover) => isLocationFresh(mover, nowMs) && vehicleServiceReady(mover as AnyDoc, nowMs, PLATFORM_TZ))
       .filter((mover) => {
         if (!mover.currentLatitude || !mover.currentLongitude) return false
         const dist = haversineKm(lat, lng, mover.currentLatitude, mover.currentLongitude)

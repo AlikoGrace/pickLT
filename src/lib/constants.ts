@@ -18,6 +18,10 @@ export const APPWRITE = {
     INVENTORY_CATALOG: process.env.APPWRITE_COLLECTION_INVENTORY_CATALOG!,
     // T8 tax statements — custom ids are stable across environments.
     TAX_STATEMENTS: process.env.APPWRITE_COLLECTION_TAX_STATEMENTS || 'tax_statements',
+    // Vehicle entity + append-only audit trail (`.agent/plans/vehicles/0.master.md` §4).
+    // Slug ids, stable across environments like the tax statements.
+    VEHICLES: process.env.APPWRITE_COLLECTION_VEHICLES || 'vehicles',
+    VEHICLE_EVENTS: process.env.APPWRITE_COLLECTION_VEHICLE_EVENTS || 'vehicle_events',
   },
 
   // Cloud Functions
@@ -48,3 +52,10 @@ export const APPWRITE = {
 
 // ─── Appwrite Endpoint ──────────────────────────────────
 export const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!
+
+/**
+ * The zone a rental driver's "service day" is computed in (master §5, D6).
+ * Same env name as the gating cloud functions so one operator setting drives
+ * every gate; the default matches `DEFAULT_PLATFORM_TZ` in `vehicle-service.ts`.
+ */
+export const PLATFORM_TZ = process.env.PLATFORM_TZ || 'Europe/Berlin'

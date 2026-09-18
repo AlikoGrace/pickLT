@@ -589,7 +589,12 @@
         },
         "verification": {
           "title": "Verifica e posizione"
-        }
+        },
+        "ownership": {
+          "value": "Veicolo: {{ownership}}"
+        },
+        "vehicleLater": "Il veicolo verrà aggiunto dopo la registrazione e dovrà essere verificato prima che Lei riceva traslochi.",
+        "platesOk": "Foto delle targhe e del veicolo allegate"
       },
       "step": {
         "experience": {
@@ -606,13 +611,20 @@
         },
         "verification": {
           "label": "Verifica"
+        },
+        "ownership": {
+          "label": "Proprietà"
         }
       },
       "submit": {
         "cta": "Invia il profilo"
       },
       "subtitle": "Inserisci i tuoi dati per iniziare ad accettare traslochi",
-      "title": "Completa il tuo profilo di traslocatore"
+      "title": "Completa il tuo profilo di traslocatore",
+      "ownership": {
+        "title": "Proprietà del veicolo"
+      },
+      "vehicleSubmitFailed": "Il Suo profilo è stato salvato, ma non è stato possibile inviare il veicolo ({{error}}). Lo aggiunga dalla dashboard."
     },
     "request": {
       "categoryAndType": {
@@ -736,6 +748,151 @@
     "withdrawConfirm": {
       "body": "Sei sicuro? Il trasloco tornerà disponibile per gli altri traslocatori.",
       "cta": "Sì, ritirati"
+    },
+    "vehicle": {
+      "title": "Veicolo",
+      "subtitle": "Il Suo veicolo attuale, il relativo stato di verifica e la cronologia.",
+      "loadFailed": {
+        "error": "Impossibile caricare i dati del veicolo."
+      },
+      "uploadFailed": {
+        "error": "Impossibile caricare la foto del veicolo."
+      },
+      "submitFailed": {
+        "error": "Impossibile inviare il veicolo."
+      },
+      "confirmFailed": {
+        "error": "Impossibile salvare la conferma."
+      },
+      "submitted": {
+        "success": "Veicolo inviato per la verifica"
+      },
+      "submittedAt": {
+        "label": "Inviato"
+      },
+      "verifiedAt": {
+        "label": "Verificato"
+      },
+      "confirmedFor": {
+        "label": "Confermato per il {{date}}"
+      },
+      "rejectionReason": {
+        "label": "Motivo"
+      },
+      "history": {
+        "title": "Cronologia",
+        "empty": "Ancora nessuna voce."
+      },
+      "none": {
+        "title": "Nessun veicolo registrato",
+        "body": "Aggiunga il Suo veicolo e lo invii per la verifica. Riceverà traslochi non appena sarà approvato."
+      },
+      "photo": {
+        "front": {
+          "a11y": "Targa anteriore"
+        },
+        "rear": {
+          "a11y": "Targa posteriore"
+        },
+        "full": {
+          "a11y": "Veicolo intero"
+        },
+        "none": {
+          "label": "Nessuna foto registrata"
+        }
+      },
+      "setup": {
+        "add": {
+          "title": "Aggiungi veicolo"
+        },
+        "change": {
+          "title": "Cambia veicolo"
+        },
+        "resubmit": {
+          "title": "Invia di nuovo il veicolo"
+        },
+        "subtitle": "Ogni veicolo viene verificato separatamente dal Suo profilo di autista. Indichi il numero di targa e fornisca tre foto.",
+        "changeNote": "L'invio di un nuovo veicolo ritira quello attuale. Non riceverà traslochi finché il nuovo veicolo non sarà verificato.",
+        "resubmitNote": "Corregga i dati riportati di seguito e li invii di nuovo. Motivo del rifiuto: {{reason}}",
+        "keepPhoto": {
+          "label": "La foto attuale verrà mantenuta"
+        }
+      },
+      "action": {
+        "add": {
+          "cta": "Aggiungi veicolo"
+        },
+        "change": {
+          "cta": "Cambia veicolo"
+        },
+        "resubmit": {
+          "cta": "Correggi e invia di nuovo"
+        },
+        "confirmToday": {
+          "cta": "Conferma per oggi"
+        },
+        "view": {
+          "cta": "Vedi veicolo"
+        }
+      },
+      "state": {
+        "ownVerified": {
+          "title": "Veicolo verificato",
+          "body": "Il Suo veicolo è stato verificato. Può ricevere e accettare traslochi."
+        },
+        "ownPendingVehicle": {
+          "title": "Aggiunga il Suo veicolo",
+          "body": "Nessun veicolo è ancora registrato. Aggiunga il Suo veicolo e lo invii per la verifica per ricevere traslochi."
+        },
+        "ownVehicleReview": {
+          "title": "Veicolo in revisione",
+          "body": "Il Suo veicolo è in fase di verifica. Riceverà traslochi non appena sarà approvato."
+        },
+        "rentalPendingVehicle": {
+          "title": "Aggiunga il Suo veicolo a noleggio",
+          "body": "La Sua registrazione è completa. Aggiunga il veicolo che noleggia e lo invii per la verifica per iniziare a ricevere traslochi."
+        },
+        "rentalVehicleReview": {
+          "title": "Veicolo a noleggio in revisione",
+          "body": "Il Suo veicolo a noleggio è in fase di verifica. Riceverà traslochi non appena sarà approvato."
+        },
+        "rentalChangePending": {
+          "title": "Cambio veicolo in revisione",
+          "body": "Il Suo nuovo veicolo è in fase di verifica. Fino ad allora non riceverà traslochi."
+        },
+        "rentalDailyConfirmationRequired": {
+          "title": "Confermi il Suo veicolo",
+          "body": "Confermi se oggi utilizza lo stesso veicolo prima di ricevere traslochi."
+        },
+        "rentalVerifiedToday": {
+          "title": "Veicolo confermato per oggi",
+          "body": "Il Suo veicolo a noleggio è verificato e confermato per oggi. Può ricevere e accettare traslochi."
+        },
+        "vehicleRejected": {
+          "title": "Veicolo non approvato",
+          "body": "Il Suo veicolo non è stato approvato. Corregga i dati e li invii di nuovo."
+        }
+      },
+      "confirm": {
+        "title": "Quale veicolo utilizza oggi?",
+        "body": "Confermi il Suo veicolo prima di andare online. È richiesto a ogni accesso in un giorno di servizio.",
+        "bodyPostMove": "Il Suo ultimo trasloco è completato. Confermi se continuerà con lo stesso veicolo.",
+        "same": {
+          "cta": "Stesso veicolo"
+        },
+        "change": {
+          "cta": "Cambia veicolo"
+        },
+        "confirming": {
+          "label": "Conferma…"
+        }
+      },
+      "settings": {
+        "helper": "Le modifiche al veicolo vengono verificate separatamente e non influiscono sulla Sua verifica come autista.",
+        "status": {
+          "label": "{{vehicle}} · {{status}}"
+        }
+      }
     }
   },
   "moverDashboard": {
@@ -817,6 +974,9 @@
     },
     "taxDocuments": {
       "label": "Documenti fiscali"
+    },
+    "vehicle": {
+      "label": "Veicolo"
     }
   },
   "myMoves": {
@@ -1136,6 +1296,11 @@
     },
     "stepTotal": {
       "label": "/{{total}}"
+    }
+  },
+  "moverCard": {
+    "vehicleVerified": {
+      "badge": "Veicolo verificato"
     }
   }
 }

@@ -582,6 +582,57 @@
       "label": "Standaard"
     }
   },
+  "vehicleEvent": {
+    "changeRequested": {
+      "label": "Voertuigwissel aangevraagd"
+    },
+    "confirmedSame": {
+      "label": "Zelfde voertuig bevestigd"
+    },
+    "reconfirmRequired": {
+      "label": "Bevestiging vereist na een verhuizing"
+    },
+    "rejected": {
+      "label": "Voertuig afgewezen"
+    },
+    "resubmitted": {
+      "label": "Voertuig opnieuw ingediend"
+    },
+    "retired": {
+      "label": "Voertuig afgemeld"
+    },
+    "submitted": {
+      "label": "Voertuig ingediend"
+    },
+    "verified": {
+      "label": "Voertuig geverifieerd"
+    }
+  },
+  "vehicleOwnership": {
+    "owned": {
+      "label": "Eigen voertuig"
+    },
+    "rented": {
+      "label": "Huurvoertuig"
+    }
+  },
+  "vehicleStatus": {
+    "none": {
+      "label": "Geen voertuig"
+    },
+    "pendingReview": {
+      "label": "Verificatie in behandeling"
+    },
+    "rejected": {
+      "label": "Afgewezen"
+    },
+    "retired": {
+      "label": "Vorig voertuig"
+    },
+    "verified": {
+      "label": "Geverifieerd"
+    }
+  },
   "vehicleType": {
     "largeTruck": {
       "label": "Grote vrachtwagen"

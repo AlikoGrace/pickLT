@@ -5,6 +5,9 @@ const MOVES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVES;
 const MOVER_PROFILES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVER_PROFILES;
 const MOVE_STATUS_HISTORY_COLLECTION = process.env.APPWRITE_COLLECTION_MOVE_STATUS_HISTORY;
 const NOTIFICATIONS_COLLECTION = process.env.APPWRITE_COLLECTION_NOTIFICATIONS;
+// Append-only vehicle audit trail (vehicles master plan §4.2). Optional:
+// defaults to the slug id the schema script creates.
+const VEHICLE_EVENTS_COLLECTION = process.env.APPWRITE_COLLECTION_VEHICLE_EVENTS || 'vehicle_events';
 
 // Valid status transitions.
 //
@@ -71,6 +74,83 @@ const NOTIFICATION_MESSAGES = {
 function relId(v) {
   if (!v) return null;
   return typeof v === 'string' ? v : (v.$id ?? null);
+}
+
+/**
+ * Post-move re-confirmation hook (vehicles master plan D12).
+ *
+ * A rental driver must answer SAME / CHANGE again after every completed move
+ * before they can take the next one. The requirement is a SERVER-set flag on
+ * the profile — not navigation state in the app — so it survives an app
+ * restart and is honoured by every gate through `vehicleServiceReady`. Beside
+ * the flag: an append-only `vehicle_events` row and a
+ * `vehicle_confirmation_required` notification (falls back to `system` until
+ * the notifications.type enum is widened, same convention as the status
+ * notifications). Owned drivers are untouched.
+ *
+ * FAIL-OPEN: the move is already completed by the time this runs; nothing here
+ * may fail the completion, so every error is logged and swallowed.
+ */
+async function requireVehicleReconfirmation(databases, profile, move, actorId, tag, log, error) {
+  if (!profile || profile.vehicleOwnership !== 'rented') return;
+  const moveId = move.$id;
+  const moverAuthId = relId(profile.userId);
+  const nowIso = new Date().toISOString();
+  try {
+    await databases.updateDocument(DATABASE_ID, MOVER_PROFILES_COLLECTION, profile.$id, {
+      vehicleReconfirmRequired: true,
+    });
+  } catch (e) {
+    error(`[${tag}] vehicleReconfirmRequired not set for ${profile.$id}: ${e.message}`);
+    return;
+  }
+  if (moverAuthId) {
+    try {
+      await databases.createDocument(DATABASE_ID, VEHICLE_EVENTS_COLLECTION, ID.unique(), {
+        moverProfileId: profile.$id,
+        ownerUserId: moverAuthId,
+        vehicleId: profile.currentVehicleId ?? null,
+        moveId,
+        action: 'reconfirm_required',
+        previousStatus: profile.vehicleStatus ?? null,
+        newStatus: profile.vehicleStatus ?? null,
+        source: 'system',
+        serviceDate: null,
+        actorId,
+        actorRole: 'system',
+        note: null,
+        at: nowIso,
+      }, [Permission.read(Role.user(moverAuthId))]);
+    } catch (e) {
+      error(`[${tag}] vehicle_events reconfirm_required failed: ${e.message}`);
+    }
+  }
+  if (moverAuthId && NOTIFICATIONS_COLLECTION) {
+    const row = {
+      userId: moverAuthId,
+      title: 'Confirm your vehicle',
+      body: 'Before your next move, confirm whether you are still using the same vehicle.',
+      data: JSON.stringify({ i18nKey: 'vehicle.confirmationRequired', handle: move.handle ?? null, moveId }),
+      isRead: false,
+    };
+    const notifPermissions = [
+      Permission.read(Role.user(moverAuthId)),
+      Permission.update(Role.user(moverAuthId)),
+      Permission.delete(Role.user(moverAuthId)),
+    ];
+    try {
+      await databases.createDocument(DATABASE_ID, NOTIFICATIONS_COLLECTION, ID.unique(), {
+        ...row,
+        type: 'vehicle_confirmation_required',
+      }, notifPermissions);
+    } catch (e) {
+      error(`[${tag}] notification type 'vehicle_confirmation_required' rejected (enum not widened yet): ${e.message} — retrying as system`);
+      await databases
+        .createDocument(DATABASE_ID, NOTIFICATIONS_COLLECTION, ID.unique(), { ...row, type: 'system' }, notifPermissions)
+        .catch((e2) => error(`[${tag}] vehicle notification fallback failed: ${e2.message}`));
+    }
+  }
+  log(`[${tag}] vehicle re-confirmation required for ${profile.$id} after move ${moveId}`);
 }
 
 // "The mover is physically on this job", as opposed to merely holding it.
@@ -257,6 +337,12 @@ export default async ({ req, res, log, error }) => {
     // ...and restate the flag on the mover's OTHER waiting jobs, which this
     // transition may have just freed (or just blocked). Fail-open by contract.
     await syncQueuedBehind(databases, profile.$id, { moveId, newStatus }, log, error);
+
+    // Rental drivers must re-confirm SAME/CHANGE after every completed move
+    // (vehicles master plan D12). Fail-open by contract.
+    if (newStatus === 'completed') {
+      await requireVehicleReconfirmation(databases, profile, move, authId, 'updatemovestatus', log, error);
+    }
 
     // Status history (changedBy is the authenticated caller, not body-supplied).
     await databases.createDocument(DATABASE_ID, MOVE_STATUS_HISTORY_COLLECTION, ID.unique(), {

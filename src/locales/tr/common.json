@@ -582,6 +582,57 @@
       "label": "Standart"
     }
   },
+  "vehicleEvent": {
+    "changeRequested": {
+      "label": "Araç değişikliği talep edildi"
+    },
+    "confirmedSame": {
+      "label": "Aynı araç onaylandı"
+    },
+    "reconfirmRequired": {
+      "label": "Taşınma sonrasında onay gerekiyor"
+    },
+    "rejected": {
+      "label": "Araç reddedildi"
+    },
+    "resubmitted": {
+      "label": "Araç yeniden gönderildi"
+    },
+    "retired": {
+      "label": "Araç kullanımdan kaldırıldı"
+    },
+    "submitted": {
+      "label": "Araç gönderildi"
+    },
+    "verified": {
+      "label": "Araç doğrulandı"
+    }
+  },
+  "vehicleOwnership": {
+    "owned": {
+      "label": "Kendi aracı"
+    },
+    "rented": {
+      "label": "Kiralık araç"
+    }
+  },
+  "vehicleStatus": {
+    "none": {
+      "label": "Araç yok"
+    },
+    "pendingReview": {
+      "label": "Doğrulama bekleniyor"
+    },
+    "rejected": {
+      "label": "Reddedildi"
+    },
+    "retired": {
+      "label": "Önceki araç"
+    },
+    "verified": {
+      "label": "Doğrulandı"
+    }
+  },
   "vehicleType": {
     "largeTruck": {
       "label": "Büyük kamyon"

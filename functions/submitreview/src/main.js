@@ -108,7 +108,7 @@ export default async ({ req, res, log, error }) => {
     ]);
 
     if (moveResult.status === 'rejected') {
-      return res.json({ error: 'Move not found', fnCode: 'move.notFound' }, 404);
+      return res.json({ error: 'Move not found', code: 'move_not_found', fnCode: 'move.notFound' }, 404);
     }
     const move = moveResult.value;
 
@@ -132,8 +132,12 @@ export default async ({ req, res, log, error }) => {
       return res.json({ error: 'This move has no assigned mover to review', fnCode: 'review.noMover' }, 400);
     }
 
+    // `code` is what the client branches on. `error` stays English prose and is
+    // only ever a log line or a last-resort fallback — the app matches the code
+    // first and the sentence second, so translating the sentence later cannot
+    // break the duplicate-review path. Never repurpose an existing code string.
     if (existingResult.value.documents.length > 0) {
-      return res.json({ error: 'You have already reviewed this move', fnCode: 'review.alreadyReviewed' }, 400);
+      return res.json({ error: 'You have already reviewed this move', code: 'review_already_submitted', fnCode: 'review.alreadyReviewed' }, 400);
     }
 
     // Read the mover's existing reviews and their profile together. The profile

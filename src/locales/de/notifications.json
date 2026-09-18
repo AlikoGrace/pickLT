@@ -125,6 +125,20 @@
       "title": "Wird entladen"
     }
   },
+  "vehicle": {
+    "confirmationRequired": {
+      "body": "Bestätigen Sie vor Ihrem nächsten Umzug, ob Sie weiterhin dasselbe Fahrzeug nutzen.",
+      "title": "Bestätigen Sie Ihr Fahrzeug"
+    },
+    "rejected": {
+      "body": "Ihre Fahrzeugeinreichung wurde nicht genehmigt: {{reason}}. Korrigieren Sie die Angaben und reichen Sie sie erneut ein.",
+      "title": "Fahrzeug nicht genehmigt"
+    },
+    "verified": {
+      "body": "Ihr Fahrzeug {{plate}} wurde verifiziert. Sie können wieder Umzüge erhalten.",
+      "title": "Fahrzeug verifiziert"
+    }
+  },
   "verification": {
     "contactSupport": "Bitte wenden Sie sich für Details an den Support.",
     "rejected": {

@@ -87,15 +87,23 @@ export default async ({ req, res, log, error }) => {
       businessPostcode,
       primaryCity,
       primaryCountry,
-      vehicleBrand,
-      vehicleModel,
-      vehicleYear,
-      vehicleCapacity,
-      vehicleRegistration,
-      vehicleType,
+      vehicleOwnership,
       languages,
       yearsExperience,
     } = body;
+
+    // Vehicle ownership (vehicles master plan §6.4 / D10). The vehicle itself
+    // is no longer part of the profile: it is submitted separately through
+    // `submitvehicle` as its own `vehicles` row with its own review status.
+    // A caller that sends no ownership is a legacy owned-vehicle driver — on
+    // CREATE only. On a re-submit an omitted value must leave the stored one
+    // alone: defaulting there would silently turn a rented driver into an owned
+    // one and drop them out of the daily SAME/CHANGE confirmation.
+    const ownershipGiven = vehicleOwnership !== undefined && vehicleOwnership !== null;
+    const ownership = ownershipGiven ? String(vehicleOwnership) : 'owned';
+    if (ownership !== 'owned' && ownership !== 'rented') {
+      return res.json({ error: 'vehicleOwnership must be owned|rented', fnCode: 'generic.badRequest' }, 400);
+    }
 
     // T9 sanctions gate — server-authoritative; both onboarding UIs surface
     // this message verbatim.
@@ -138,7 +146,13 @@ export default async ({ req, res, log, error }) => {
     const photoUrl = selfiePhoto || existingUser?.profilePhoto || null;
 
     // Profile fields written on both create and re-submit. A re-submit returns
-    // the mover to pending_verification (vehicle/KYC changes need re-review).
+    // the mover to pending_verification (KYC changes need re-review).
+    //
+    // The legacy vehicleBrand/Model/Year/Capacity/Registration/Type columns
+    // are deliberately NOT written here any more: they are the snapshot of
+    // the current VERIFIED vehicle and only the admin verify route writes
+    // them (vehicles master plan D2), so pricing and capacity gating key on
+    // verified data by construction.
     const profileFields = {
       userId,
       displayName,
@@ -152,12 +166,6 @@ export default async ({ req, res, log, error }) => {
       businessPostcode: businessPostcode || null,
       primaryCity: primaryCity || null,
       primaryCountry: primaryCountry || null,
-      vehicleBrand: vehicleBrand || null,
-      vehicleModel: vehicleModel || null,
-      vehicleYear: vehicleYear || null,
-      vehicleCapacity: vehicleCapacity || null,
-      vehicleRegistration: vehicleRegistration || null,
-      vehicleType: vehicleType || null,
       languages: languages || [],
       yearsExperience: yearsExperience || 0,
       verificationStatus: 'pending_verification',
@@ -175,7 +183,11 @@ export default async ({ req, res, log, error }) => {
         DATABASE_ID,
         MOVER_PROFILES_COLLECTION,
         existing.documents[0].$id,
-        profileFields,
+        // Rented → owned is an admin decision (vehicles master D16): it goes
+        // through a vehicle submission and its review, never a profile re-submit.
+        ownershipGiven && !(existing.documents[0].vehicleOwnership === 'rented' && ownership === 'owned')
+          ? { ...profileFields, vehicleOwnership: ownership }
+          : profileFields,
       );
     } else {
       profile = await databases.createDocument(
@@ -184,6 +196,10 @@ export default async ({ req, res, log, error }) => {
         ID.unique(),
         {
           ...profileFields,
+          vehicleOwnership: ownership,
+          // No vehicle yet: the dashboard reads `none` as "add your vehicle"
+          // (D10). Never reset on re-submit — the vehicle has its own status.
+          vehicleStatus: 'none',
           rating: 0,
           totalMoves: 0,
           isOnline: false,

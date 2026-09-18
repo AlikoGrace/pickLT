@@ -1310,8 +1310,19 @@
         "value": "Do {{capacity}}"
       }
     },
+    "declaration": {
+      "body": "Przesyłając zgłoszenie, potwierdzają Państwo, że podane informacje są prawdziwe i aktualne oraz że odpowiadają Państwo za spełnienie obowiązujących wymogów dotyczących pojazdu, uprawnień i ubezpieczenia.",
+      "confirmBody": "Potwierdzając, oświadczają Państwo, że korzystają dziś z zarejestrowanego pojazdu oraz że zapisane informacje są prawdziwe i aktualne."
+    },
     "edit": {
       "title": "Edytuj dane pojazdu"
+    },
+    "evidence": {
+      "title": "Dokumentacja pojazdu"
+    },
+    "fullPhoto": {
+      "helper": "Proszę pokazać cały pojazd, a nie przycięty fragment.",
+      "label": "Zdjęcie całego pojazdu"
     },
     "largeTruck": {
       "helper": "{{capacity}} — przeprowadzki domów, duże ładunki",
@@ -1331,7 +1342,28 @@
     "multiple": {
       "label": "Kilka"
     },
+    "ownership": {
+      "label": "Kto zapewnia pojazd?",
+      "owned": {
+        "helper": "Jest Pan/Pani właścicielem pojazdu używanego do przeprowadzek."
+      },
+      "rented": {
+        "helper": "Wynajmuje Pan/Pani pojazd. Rejestrację można ukończyć teraz, a pojazd dodać później. Musi on zostać zweryfikowany, zanim zacznie Pan/Pani otrzymywać przeprowadzki."
+      },
+      "switchNeedsApproval": {
+        "body": "Zmiana z pojazdu wynajętego na własny wymaga zatwierdzenia. Do czasu weryfikacji tego pojazdu pozostają Państwo kierowcą pojazdu wynajętego i nadal codziennie potwierdzają pojazd."
+      }
+    },
+    "plateFront": {
+      "helper": "Numer rejestracyjny musi być czytelny.",
+      "label": "Zdjęcie przedniej tablicy rejestracyjnej"
+    },
+    "plateRear": {
+      "helper": "Numer rejestracyjny musi być czytelny.",
+      "label": "Zdjęcie tylnej tablicy rejestracyjnej"
+    },
     "registration": {
+      "helper": "Musi być zgodny z numerem na obu tablicach.",
       "label": "Numer rejestracyjny *",
       "placeholder": "np. B-AB 1234"
     },
@@ -1341,6 +1373,9 @@
     "smallVan": {
       "helper": "{{capacity}} — małe przeprowadzki, pojedyncze rzeczy",
       "label": "Mały bus"
+    },
+    "submitForVerification": {
+      "cta": "Wyślij do weryfikacji"
     },
     "title": "Dane pojazdu",
     "type": {

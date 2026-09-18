@@ -589,7 +589,12 @@
         },
         "verification": {
           "title": "Verificación y ubicación"
-        }
+        },
+        "ownership": {
+          "value": "Vehículo: {{ownership}}"
+        },
+        "vehicleLater": "El vehículo se añadirá después del registro y deberá verificarse antes de que reciba mudanzas.",
+        "platesOk": "Fotos de las placas y del vehículo adjuntas"
       },
       "step": {
         "experience": {
@@ -606,13 +611,20 @@
         },
         "verification": {
           "label": "Verificación"
+        },
+        "ownership": {
+          "label": "Propiedad"
         }
       },
       "submit": {
         "cta": "Enviar el perfil"
       },
       "subtitle": "Rellena tus datos para empezar a aceptar mudanzas",
-      "title": "Completa tu perfil de transportista"
+      "title": "Completa tu perfil de transportista",
+      "ownership": {
+        "title": "Propiedad del vehículo"
+      },
+      "vehicleSubmitFailed": "Su perfil se ha guardado, pero no se pudo enviar el vehículo ({{error}}). Añádalo desde el panel."
     },
     "request": {
       "categoryAndType": {
@@ -736,6 +748,151 @@
     "withdrawConfirm": {
       "body": "¿Seguro? La mudanza volverá a estar disponible para otros transportistas.",
       "cta": "Sí, retirarme"
+    },
+    "vehicle": {
+      "title": "Vehículo",
+      "subtitle": "Su vehículo actual, su estado de verificación y su historial.",
+      "loadFailed": {
+        "error": "No se pudieron cargar los datos del vehículo."
+      },
+      "uploadFailed": {
+        "error": "No se pudo subir la foto del vehículo."
+      },
+      "submitFailed": {
+        "error": "No se pudo enviar el vehículo."
+      },
+      "confirmFailed": {
+        "error": "No se pudo guardar la confirmación."
+      },
+      "submitted": {
+        "success": "Vehículo enviado para verificación"
+      },
+      "submittedAt": {
+        "label": "Enviado"
+      },
+      "verifiedAt": {
+        "label": "Verificado"
+      },
+      "confirmedFor": {
+        "label": "Confirmado para el {{date}}"
+      },
+      "rejectionReason": {
+        "label": "Motivo"
+      },
+      "history": {
+        "title": "Historial",
+        "empty": "Aún no hay entradas."
+      },
+      "none": {
+        "title": "Ningún vehículo registrado",
+        "body": "Añada su vehículo y envíelo para verificación. Recibirá mudanzas en cuanto se apruebe."
+      },
+      "photo": {
+        "front": {
+          "a11y": "Placa delantera"
+        },
+        "rear": {
+          "a11y": "Placa trasera"
+        },
+        "full": {
+          "a11y": "Vehículo completo"
+        },
+        "none": {
+          "label": "Sin foto registrada"
+        }
+      },
+      "setup": {
+        "add": {
+          "title": "Añadir vehículo"
+        },
+        "change": {
+          "title": "Cambiar de vehículo"
+        },
+        "resubmit": {
+          "title": "Reenviar vehículo"
+        },
+        "subtitle": "Cada vehículo se verifica por separado de su perfil de conductor. Indique el número de matrícula y aporte tres fotos.",
+        "changeNote": "Al enviar un vehículo nuevo se retira el actual. No recibirá mudanzas hasta que el nuevo vehículo esté verificado.",
+        "resubmitNote": "Corrija los datos siguientes y envíelos de nuevo. Motivo del rechazo: {{reason}}",
+        "keepPhoto": {
+          "label": "Se conservará la foto actual"
+        }
+      },
+      "action": {
+        "add": {
+          "cta": "Añadir vehículo"
+        },
+        "change": {
+          "cta": "Cambiar de vehículo"
+        },
+        "resubmit": {
+          "cta": "Corregir y reenviar"
+        },
+        "confirmToday": {
+          "cta": "Confirmar para hoy"
+        },
+        "view": {
+          "cta": "Ver vehículo"
+        }
+      },
+      "state": {
+        "ownVerified": {
+          "title": "Vehículo verificado",
+          "body": "Su vehículo ha sido verificado. Puede recibir y aceptar mudanzas."
+        },
+        "ownPendingVehicle": {
+          "title": "Añada su vehículo",
+          "body": "Aún no hay ningún vehículo registrado. Añada su vehículo y envíelo para verificación para recibir mudanzas."
+        },
+        "ownVehicleReview": {
+          "title": "Vehículo en revisión",
+          "body": "Su vehículo se está verificando. Recibirá mudanzas en cuanto se apruebe."
+        },
+        "rentalPendingVehicle": {
+          "title": "Añada su vehículo de alquiler",
+          "body": "Su registro está completo. Añada el vehículo que alquila y envíelo para verificación para empezar a recibir mudanzas."
+        },
+        "rentalVehicleReview": {
+          "title": "Vehículo de alquiler en revisión",
+          "body": "Su vehículo de alquiler se está verificando. Recibirá mudanzas en cuanto se apruebe."
+        },
+        "rentalChangePending": {
+          "title": "Cambio de vehículo en revisión",
+          "body": "Su nuevo vehículo se está verificando. Hasta entonces no recibirá mudanzas."
+        },
+        "rentalDailyConfirmationRequired": {
+          "title": "Confirme su vehículo",
+          "body": "Confirme si hoy utiliza el mismo vehículo antes de recibir mudanzas."
+        },
+        "rentalVerifiedToday": {
+          "title": "Vehículo confirmado para hoy",
+          "body": "Su vehículo de alquiler está verificado y confirmado para hoy. Puede recibir y aceptar mudanzas."
+        },
+        "vehicleRejected": {
+          "title": "Vehículo no aprobado",
+          "body": "Su vehículo no ha sido aprobado. Corrija los datos y envíelos de nuevo."
+        }
+      },
+      "confirm": {
+        "title": "¿Qué vehículo utiliza hoy?",
+        "body": "Confirme su vehículo antes de conectarse. Es obligatorio en cada inicio de sesión en un día de servicio.",
+        "bodyPostMove": "Su última mudanza ha finalizado. Confirme si continuará con el mismo vehículo.",
+        "same": {
+          "cta": "Mismo vehículo"
+        },
+        "change": {
+          "cta": "Cambiar de vehículo"
+        },
+        "confirming": {
+          "label": "Confirmando…"
+        }
+      },
+      "settings": {
+        "helper": "Los cambios de vehículo se verifican por separado y no afectan a su verificación como conductor.",
+        "status": {
+          "label": "{{vehicle}} · {{status}}"
+        }
+      }
     }
   },
   "moverDashboard": {
@@ -817,6 +974,9 @@
     },
     "taxDocuments": {
       "label": "Documentos fiscales"
+    },
+    "vehicle": {
+      "label": "Vehículo"
     }
   },
   "myMoves": {
@@ -1136,6 +1296,11 @@
     },
     "stepTotal": {
       "label": "/{{total}}"
+    }
+  },
+  "moverCard": {
+    "vehicleVerified": {
+      "badge": "Vehículo verificado"
     }
   }
 }

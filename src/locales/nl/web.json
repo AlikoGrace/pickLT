@@ -589,7 +589,12 @@
         },
         "verification": {
           "title": "Verificatie en locatie"
-        }
+        },
+        "ownership": {
+          "value": "Voertuig: {{ownership}}"
+        },
+        "vehicleLater": "Het voertuig wordt na de registratie toegevoegd en moet worden geverifieerd voordat u verhuizingen ontvangt.",
+        "platesOk": "Foto's van kentekenplaten en voertuig toegevoegd"
       },
       "step": {
         "experience": {
@@ -606,13 +611,20 @@
         },
         "verification": {
           "label": "Verificatie"
+        },
+        "ownership": {
+          "label": "Eigendom"
         }
       },
       "submit": {
         "cta": "Profiel indienen"
       },
       "subtitle": "Vul je gegevens in om verhuizingen te kunnen aannemen",
-      "title": "Maak je verhuizersprofiel compleet"
+      "title": "Maak je verhuizersprofiel compleet",
+      "ownership": {
+        "title": "Voertuigeigendom"
+      },
+      "vehicleSubmitFailed": "Uw profiel is opgeslagen, maar het voertuig kon niet worden ingediend ({{error}}). Voeg het toe via het dashboard."
     },
     "request": {
       "categoryAndType": {
@@ -736,6 +748,151 @@
     "withdrawConfirm": {
       "body": "Weet je het zeker? De verhuizing komt beschikbaar voor andere verhuizers.",
       "cta": "Ja, terugtrekken"
+    },
+    "vehicle": {
+      "title": "Voertuig",
+      "subtitle": "Uw huidige voertuig, de verificatiestatus en de geschiedenis.",
+      "loadFailed": {
+        "error": "De voertuiggegevens konden niet worden geladen."
+      },
+      "uploadFailed": {
+        "error": "De voertuigfoto kon niet worden geüpload."
+      },
+      "submitFailed": {
+        "error": "Het voertuig kon niet worden ingediend."
+      },
+      "confirmFailed": {
+        "error": "De bevestiging kon niet worden opgeslagen."
+      },
+      "submitted": {
+        "success": "Voertuig ter verificatie ingediend"
+      },
+      "submittedAt": {
+        "label": "Ingediend"
+      },
+      "verifiedAt": {
+        "label": "Geverifieerd"
+      },
+      "confirmedFor": {
+        "label": "Bevestigd voor {{date}}"
+      },
+      "rejectionReason": {
+        "label": "Reden"
+      },
+      "history": {
+        "title": "Geschiedenis",
+        "empty": "Nog geen vermeldingen."
+      },
+      "none": {
+        "title": "Geen voertuig geregistreerd",
+        "body": "Voeg uw voertuig toe en dien het ter verificatie in. U ontvangt verhuizingen zodra het is goedgekeurd."
+      },
+      "photo": {
+        "front": {
+          "a11y": "Voorste kentekenplaat"
+        },
+        "rear": {
+          "a11y": "Achterste kentekenplaat"
+        },
+        "full": {
+          "a11y": "Volledig voertuig"
+        },
+        "none": {
+          "label": "Geen foto geregistreerd"
+        }
+      },
+      "setup": {
+        "add": {
+          "title": "Voertuig toevoegen"
+        },
+        "change": {
+          "title": "Voertuig wijzigen"
+        },
+        "resubmit": {
+          "title": "Voertuig opnieuw indienen"
+        },
+        "subtitle": "Elk voertuig wordt los van uw chauffeursprofiel geverifieerd. Geef het kenteken op en voeg drie foto's toe.",
+        "changeNote": "Als u een nieuw voertuig indient, vervalt uw huidige voertuig. U ontvangt geen verhuizingen totdat het nieuwe voertuig is geverifieerd.",
+        "resubmitNote": "Corrigeer de onderstaande gegevens en dien ze opnieuw in. Reden van de afwijzing: {{reason}}",
+        "keepPhoto": {
+          "label": "Huidige foto blijft behouden"
+        }
+      },
+      "action": {
+        "add": {
+          "cta": "Voertuig toevoegen"
+        },
+        "change": {
+          "cta": "Voertuig wijzigen"
+        },
+        "resubmit": {
+          "cta": "Corrigeren en opnieuw indienen"
+        },
+        "confirmToday": {
+          "cta": "Voor vandaag bevestigen"
+        },
+        "view": {
+          "cta": "Voertuig bekijken"
+        }
+      },
+      "state": {
+        "ownVerified": {
+          "title": "Voertuig geverifieerd",
+          "body": "Uw voertuig is geverifieerd. U kunt verhuizingen ontvangen en accepteren."
+        },
+        "ownPendingVehicle": {
+          "title": "Voeg uw voertuig toe",
+          "body": "Er is nog geen voertuig geregistreerd. Voeg uw voertuig toe en dien het ter verificatie in om verhuizingen te ontvangen."
+        },
+        "ownVehicleReview": {
+          "title": "Voertuig in beoordeling",
+          "body": "Uw voertuig wordt geverifieerd. U ontvangt verhuizingen zodra het is goedgekeurd."
+        },
+        "rentalPendingVehicle": {
+          "title": "Voeg uw huurvoertuig toe",
+          "body": "Uw registratie is afgerond. Voeg het voertuig toe dat u huurt en dien het ter verificatie in om verhuizingen te ontvangen."
+        },
+        "rentalVehicleReview": {
+          "title": "Huurvoertuig in beoordeling",
+          "body": "Uw huurvoertuig wordt geverifieerd. U ontvangt verhuizingen zodra het is goedgekeurd."
+        },
+        "rentalChangePending": {
+          "title": "Voertuigwissel in beoordeling",
+          "body": "Uw nieuwe voertuig wordt geverifieerd. Tot die tijd ontvangt u geen verhuizingen."
+        },
+        "rentalDailyConfirmationRequired": {
+          "title": "Bevestig uw voertuig",
+          "body": "Bevestig of u vandaag hetzelfde voertuig gebruikt voordat u verhuizingen ontvangt."
+        },
+        "rentalVerifiedToday": {
+          "title": "Voertuig bevestigd voor vandaag",
+          "body": "Uw huurvoertuig is geverifieerd en voor vandaag bevestigd. U kunt verhuizingen ontvangen en accepteren."
+        },
+        "vehicleRejected": {
+          "title": "Voertuig niet goedgekeurd",
+          "body": "Uw voertuig is niet goedgekeurd. Corrigeer de gegevens en dien ze opnieuw in."
+        }
+      },
+      "confirm": {
+        "title": "Welk voertuig gebruikt u vandaag?",
+        "body": "Bevestig uw voertuig voordat u online gaat. Dit is vereist bij elke aanmelding op een werkdag.",
+        "bodyPostMove": "Uw laatste verhuizing is afgerond. Bevestig of u met hetzelfde voertuig verdergaat.",
+        "same": {
+          "cta": "Zelfde voertuig"
+        },
+        "change": {
+          "cta": "Voertuig wijzigen"
+        },
+        "confirming": {
+          "label": "Bevestigen…"
+        }
+      },
+      "settings": {
+        "helper": "Voertuigwijzigingen worden afzonderlijk geverifieerd en hebben geen invloed op uw chauffeursverificatie.",
+        "status": {
+          "label": "{{vehicle}} · {{status}}"
+        }
+      }
     }
   },
   "moverDashboard": {
@@ -817,6 +974,9 @@
     },
     "taxDocuments": {
       "label": "Belastingdocumenten"
+    },
+    "vehicle": {
+      "label": "Voertuig"
     }
   },
   "myMoves": {
@@ -1136,6 +1296,11 @@
     },
     "stepTotal": {
       "label": "/{{total}}"
+    }
+  },
+  "moverCard": {
+    "vehicleVerified": {
+      "badge": "Geverifieerd voertuig"
     }
   }
 }

@@ -1286,8 +1286,19 @@
         "value": "Up to {{capacity}}"
       }
     },
+    "declaration": {
+      "body": "By submitting, you confirm that this information is truthful and current, and that you are responsible for complying with the applicable vehicle, licensing and insurance requirements.",
+      "confirmBody": "By confirming, you declare that you are using the registered vehicle today and that the information on file is truthful and current."
+    },
     "edit": {
       "title": "Edit Vehicle Information"
+    },
+    "evidence": {
+      "title": "Vehicle evidence"
+    },
+    "fullPhoto": {
+      "helper": "Show the complete vehicle, not a cropped section.",
+      "label": "Photo of the whole vehicle"
     },
     "largeTruck": {
       "helper": "{{capacity}} — house moves, large loads",
@@ -1307,7 +1318,28 @@
     "multiple": {
       "label": "Multiple"
     },
+    "ownership": {
+      "label": "Who provides the vehicle?",
+      "owned": {
+        "helper": "You own the vehicle you will use for moves."
+      },
+      "rented": {
+        "helper": "You rent the vehicle. You can finish registration now and add the vehicle afterwards. It must be verified before you receive moves."
+      },
+      "switchNeedsApproval": {
+        "body": "Switching from a rented vehicle to your own needs approval. You remain a rental driver, with the daily vehicle confirmation, until this vehicle has been verified."
+      }
+    },
+    "plateFront": {
+      "helper": "The registration number must be readable.",
+      "label": "Front number plate photo"
+    },
+    "plateRear": {
+      "helper": "The registration number must be readable.",
+      "label": "Rear number plate photo"
+    },
     "registration": {
+      "helper": "Must match the number on both plates.",
       "label": "Vehicle Registration *",
       "placeholder": "e.g. B-AB 1234"
     },
@@ -1317,6 +1349,9 @@
     "smallVan": {
       "helper": "{{capacity}} — small moves, single items",
       "label": "Small Van"
+    },
+    "submitForVerification": {
+      "cta": "Submit for verification"
     },
     "title": "Vehicle Information",
     "type": {

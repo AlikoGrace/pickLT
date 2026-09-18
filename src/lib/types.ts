@@ -25,6 +25,9 @@ export interface UserDoc extends AppwriteDoc {
 // ─── Mover Profiles ────────────────────────────────────
 export type VehicleType = 'small_van' | 'medium_truck' | 'large_truck'
 export type VerificationStatus = 'pending_verification' | 'verified' | 'suspended' | 'rejected'
+export type VehicleOwnership = 'owned' | 'rented'
+/** `mover_profiles.vehicleStatus` — the current vehicle's status, mirrored by the server. */
+export type ProfileVehicleStatus = 'none' | 'pending_review' | 'verified' | 'rejected'
 
 export interface MoverProfileDoc extends AppwriteDoc {
   userId: UserDoc | string
@@ -47,7 +50,16 @@ export interface MoverProfileDoc extends AppwriteDoc {
   isOnline: boolean | null
   currentLatitude: number | null
   currentLongitude: number | null
+  locationUpdatedAt?: string | null
   languages: string[]
+  // Vehicle entity pointer + rental confirmation (master §4.3). Optional:
+  // rows written before the schema change carry none of them.
+  vehicleOwnership?: VehicleOwnership | null
+  currentVehicleId?: string | null
+  vehicleStatus?: ProfileVehicleStatus | null
+  vehicleConfirmedAt?: string | null
+  vehicleConfirmedServiceDate?: string | null
+  vehicleReconfirmRequired?: boolean | null
   // Relationships
   crew_members: CrewMemberDoc[]
   moves: MoveDoc[]
@@ -145,6 +157,8 @@ export interface MoveDoc extends AppwriteDoc {
   // Crew & Vehicle
   crewSize: string | null
   vehicleType: string | null
+  /** Snapshot of the mover's current vehicle at assignment (master D13). */
+  vehicleId?: string | null
 
   // Services
   additionalServices: string[]
@@ -245,6 +259,9 @@ export type NotificationType =
   | 'move_completed'
   | 'payment'
   | 'review'
+  | 'vehicle_verified'
+  | 'vehicle_rejected'
+  | 'vehicle_confirmation_required'
   | 'system'
 
 export interface NotificationDoc extends AppwriteDoc {
@@ -254,6 +271,60 @@ export interface NotificationDoc extends AppwriteDoc {
   body: string | null
   data: string | null
   isRead: boolean
+}
+
+// ─── Vehicles (master §4.1 / §4.2) ─────────────────────
+export type VehicleStatus = 'pending_review' | 'verified' | 'rejected' | 'retired'
+
+export interface VehicleDoc extends AppwriteDoc {
+  moverProfileId: string
+  ownerUserId: string
+  ownership: VehicleOwnership
+  registrationNumber: string
+  registrationNormalized: string
+  brand: string
+  model: string
+  year: string | null
+  vehicleType: VehicleType
+  capacityM3: number | null
+  frontPlatePhoto: string
+  rearPlatePhoto: string
+  fullVehiclePhoto: string
+  status: VehicleStatus
+  rejectionReason: string | null
+  checks: string | null
+  isCurrent: boolean
+  replacesVehicleId: string | null
+  submittedAt: string
+  verifiedAt: string | null
+  reviewedBy: string | null
+  retiredAt: string | null
+}
+
+export type VehicleEventAction =
+  | 'submitted'
+  | 'resubmitted'
+  | 'confirmed_same'
+  | 'change_requested'
+  | 'verified'
+  | 'rejected'
+  | 'retired'
+  | 'reconfirm_required'
+
+export interface VehicleEventDoc extends AppwriteDoc {
+  moverProfileId: string
+  ownerUserId: string
+  vehicleId: string | null
+  moveId: string | null
+  action: VehicleEventAction
+  previousStatus: string | null
+  newStatus: string | null
+  source: 'registration' | 'settings' | 'login' | 'post_move' | 'admin' | 'system' | 'backfill'
+  serviceDate: string | null
+  actorId: string
+  actorRole: 'mover' | 'admin' | 'system'
+  note: string | null
+  at: string
 }
 
 // ─── Inventory Catalog ─────────────────────────────────

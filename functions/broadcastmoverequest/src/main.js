@@ -8,6 +8,53 @@ const INVENTORY_CATALOG_COLLECTION = process.env.APPWRITE_COLLECTION_INVENTORY_C
 
 const MAX_MOVERS = 10;
 const REQUEST_TIMEOUT_SECONDS = 60;
+// Service day for the vehicle-readiness gate (master plan §5). Optional:
+// defaults to the platform's home zone.
+const PLATFORM_TZ = process.env.PLATFORM_TZ || 'Europe/Berlin';
+
+// --- vehicle-service (mirror) ---
+/**
+ * Mirror of pickltmobile/lib/vehicle-service.ts (master plan §5). Do not edit
+ * here; edit the TS module and re-copy. The client parity test compares them.
+ */
+function serviceDate(nowMs, tz) {
+  var zone = tz || 'Europe/Berlin';
+  var parts;
+  try {
+    parts = new Intl.DateTimeFormat('en-CA', {
+      timeZone: zone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).formatToParts(new Date(nowMs));
+  } catch (e) {
+    return new Date(nowMs).toISOString().slice(0, 10);
+  }
+  var get = function (type) {
+    for (var i = 0; i < parts.length; i++) if (parts[i].type === type) return parts[i].value;
+    return '';
+  };
+  var y = get('year');
+  var m = get('month');
+  var d = get('day');
+  if (y.length !== 4 || m.length !== 2 || d.length !== 2) {
+    return new Date(nowMs).toISOString().slice(0, 10);
+  }
+  return y + '-' + m + '-' + d;
+}
+
+function vehicleServiceReady(profile, nowMs, tz) {
+  if (!profile) return false;
+  if (profile.verificationStatus !== 'verified') return false;
+  if (profile.vehicleStatus !== 'verified') return false;
+  if (!profile.currentVehicleId) return false;
+  if (profile.vehicleOwnership === 'rented') {
+    if (profile.vehicleReconfirmRequired === true) return false;
+    if (profile.vehicleConfirmedServiceDate !== serviceDate(nowMs, tz)) return false;
+  }
+  return true;
+}
+// --- end vehicle-service ---
 
 // ─── Load volume + vehicle capacity ─────────────────────────────────────────
 //
@@ -236,8 +283,18 @@ export default async ({ req, res, log, error }) => {
       log(`staleness gate: ${located.length - fresh.length}/${located.length} online movers dropped (no ping in 3 min)`);
     }
 
+    // Vehicle-readiness gate (master plan §5, D4): a verified driver whose
+    // current vehicle is not verified — or, for a rental driver, not confirmed
+    // for today's service day — is not offered new moves. Same predicate as
+    // listnearbymovers / createpriorityrequest / setmoveronline / acceptmove.
+    const ready = fresh.filter(m => vehicleServiceReady(m, Date.now(), PLATFORM_TZ));
+    const vehicleGated = fresh.length - ready.length;
+    if (vehicleGated > 0) {
+      log(`vehicle gate: ${vehicleGated}/${fresh.length} fresh movers dropped (vehicle not service-ready)`);
+    }
+
     // Calculate distances and sort by proximity
-    const inRange = fresh
+    const inRange = ready
       .map(m => ({
         ...m,
         distanceKm: haversineKm(
@@ -315,7 +372,7 @@ export default async ({ req, res, log, error }) => {
 
     if (nearbyMovers.length === 0) {
       log(`No nearby movers found for move ${moveId}`);
-      return res.json({ success: true, requestsSent: 0, message: 'No nearby movers available' });
+      return res.json({ success: true, requestsSent: 0, vehicleGated, message: 'No nearby movers available' });
     }
 
     const now = new Date();
@@ -361,6 +418,7 @@ export default async ({ req, res, log, error }) => {
       requestsSent: requests.length,
       loadVolumeM3: loadM3,
       capacityGated,
+      vehicleGated,
       moversNotified: nearbyMovers.map(m => ({ id: m.$id, distanceKm: Math.round(m.distanceKm * 10) / 10 })),
     });
   } catch (err) {
@@ -404,6 +462,9 @@ function scheduledStartMs(move) {
   const tz = process.env.PLATFORM_TZ || 'Europe/Berlin';
   const wallAsUtc = Date.UTC(base.getUTCFullYear(), base.getUTCMonth(), base.getUTCDate(), 0, h * 60 + mins);
   const offset = (t) => {
+    // NOT a display locale — 'en-US' is a fixed parsing anchor for
+    // `formatToParts`; the tag never reaches a screen and localising it would
+    // break DST handling.
     const dtf = new Intl.DateTimeFormat('en-US', {
       timeZone: tz, hour12: false, year: 'numeric', month: '2-digit', day: '2-digit',
       hour: '2-digit', minute: '2-digit', second: '2-digit',

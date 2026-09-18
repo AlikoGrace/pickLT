@@ -72,7 +72,9 @@
       "verifyFailed": "Weryfikacja nie powiodła się (status {{status}}). Spróbuj ponownie."
     },
     "pricing": {
+      "capacityOutOfRange": "{{label}} musi mieścić się w zakresie od 1 do 120 m³.",
       "commissionTooLarge": "{{label}} to ułamek, nie procent — wpisz 0.15, aby uzyskać 15%.",
+      "flagNotBoolean": "{{label}} to przełącznik – proszę wpisać 0 lub 1.",
       "keyRequired": "klucz jest wymagany",
       "negative": "{{label}} nie może być ujemna.",
       "notANumber": "{{label}} musi być liczbą.",
@@ -84,6 +86,15 @@
       "blockedFlagRequired": "Wymagana jest wartość zablokowany/odblokowany.",
       "notFound": "Nie znaleziono użytkownika.",
       "selfBlock": "Nie możesz zablokować własnego konta."
+    },
+    "vehicle": {
+      "invalidDecision": "Decyzja musi mieć wartość „verified” lub „rejected”.",
+      "invalidPhotoKind": "Rodzaj zdjęcia musi mieć wartość front, rear lub full.",
+      "noPhoto": "Brak zdjęcia „{{kind}}” dla tego pojazdu.",
+      "notFound": "Nie znaleziono pojazdu.",
+      "notPending": "Ten pojazd nie oczekuje na weryfikację.",
+      "reasonRequired": "Odrzucenie pojazdu wymaga podania powodu.",
+      "verifyFailed": "Weryfikacja pojazdu nie powiodła się (status {{status}}). Proszę spróbować ponownie."
     }
   },
   "appwrite": {
@@ -245,6 +256,7 @@
     "selfieUploadFailed": "Nie udało się przesłać selfie",
     "startRouteFailed": "Nie udało się rozpocząć trasy",
     "startRouteRetry": "Nie udało się rozpocząć trasy. Spróbuj ponownie.",
+    "vehicleNotReady": "Proszę potwierdzić lub zweryfikować pojazd przed przejściem w tryb online lub przyjęciem przeprowadzki.",
     "withdrawFailed": "Nie udało się wycofać z przeprowadzki",
     "withdrawRetry": "Nie udało się wycofać. Spróbuj ponownie."
   },
@@ -325,8 +337,18 @@
     "phoneRequired2": "Numer telefonu jest wymagany"
   },
   "vehicle": {
+    "capacityOutOfRange": "Pojemność musi mieścić się w zakresie od 1 do 120 m³.",
     "fieldsRequired": "Wypełnij wszystkie wymagane pola dotyczące pojazdu",
+    "notFound": "Nie znaleziono pojazdu.",
+    "notPending": "Ten pojazd nie oczekuje na weryfikację.",
+    "notRental": "Codzienne potwierdzenie dotyczy wyłącznie pojazdów wynajętych.",
+    "notVerified": "Pana/Pani obecny pojazd nie został jeszcze zweryfikowany.",
+    "photosRequired": "Proszę dodać zdjęcia przedniej tablicy, tylnej tablicy i całego pojazdu.",
+    "plateInUse": "Ten numer rejestracyjny jest już zarejestrowany na innego kierowcę.",
+    "plateInvalid": "Proszę wpisać prawidłowy numer rejestracyjny.",
     "saveFailed": "Nie udało się zapisać danych pojazdu",
-    "updateFailed": "Nie udało się zaktualizować danych pojazdu"
+    "typeInvalid": "Proszę wybrać typ pojazdu.",
+    "updateFailed": "Nie udało się zaktualizować danych pojazdu",
+    "yearInvalid": "Proszę wpisać czterocyfrowy rok."
   }
 }

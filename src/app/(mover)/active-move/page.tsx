@@ -53,7 +53,7 @@ const PHASE_ORDER: MovePhase[] = ['en_route', 'arrived_pickup', 'loading', 'in_t
 export default function ActiveMovePage() {
   const { t } = useTranslation()
   const PHASE_LABELS = buildPhaseLabels(t)
-  const { user } = useAuth()
+  const { user, refreshProfile } = useAuth()
   const router = useRouter()
 
   const [move, setMove] = useState<Record<string, unknown> | null>(null)
@@ -356,6 +356,16 @@ export default function ActiveMovePage() {
     const interval = setInterval(poll, 5_000)
     return () => { cancelled = true; clearInterval(interval) }
   }, [phase, move?.$id, move?.estimatedPrice])
+
+  // Completion is where the server sets a rental driver's post-move
+  // re-confirmation flag (D12) — whichever of the three paths above saw it
+  // (status sync, payment poll, own confirm). Re-read the profile so the
+  // SAME/CHANGE prompt is waiting when the driver leaves this screen.
+  const refreshProfileRef = useRef(refreshProfile)
+  refreshProfileRef.current = refreshProfile
+  useEffect(() => {
+    if (phase === 'completed') void refreshProfileRef.current({ background: true })
+  }, [phase])
 
   const handleConfirmPayment = async () => {
     if (!move?.$id) return

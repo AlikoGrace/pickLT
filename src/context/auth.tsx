@@ -44,6 +44,13 @@ export type User = {
     verificationStatus?: string
     isOnline?: boolean
     languages?: string[]
+    // Vehicle entity pointer + rental confirmation (master §4.3). Read by
+    // `vehicleServiceReady` / `vehicleServiceState` for the dashboard gates.
+    vehicleOwnership?: 'owned' | 'rented'
+    vehicleStatus?: 'none' | 'pending_review' | 'verified' | 'rejected'
+    currentVehicleId?: string | null
+    vehicleConfirmedServiceDate?: string | null
+    vehicleReconfirmRequired?: boolean
   }
 }
 
@@ -68,7 +75,8 @@ type AuthActions = {
   logout: () => void
   updateUser: (updates: Partial<User>) => void
   setUserType: (type: UserType) => void
-  refreshProfile: () => Promise<void>
+  /** `background`: a failed refresh keeps the current user instead of clearing it. */
+  refreshProfile: (opts?: { background?: boolean }) => Promise<void>
   addCrewMember: (member: CrewMember) => void
   updateCrewMember: (id: string, updates: Partial<CrewMember>) => void
   removeCrewMember: (id: string) => void
@@ -113,7 +121,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [crewMembers, setCrewMembers] = useState<CrewMember[]>([])
 
   // Check the current Appwrite session and sync profile
-  const loadSession = useCallback(async () => {
+  const loadSession = useCallback(async (opts?: { background?: boolean }) => {
     try {
       const appwriteUser = await account.get()
 
@@ -193,6 +201,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             verificationStatus: moverProfile.verificationStatus ?? undefined,
             isOnline: moverProfile.isOnline ?? undefined,
             languages: moverProfile.languages ?? undefined,
+            // Defaults match the backfill (D14): a legacy row is an owned
+            // driver with no vehicle entity yet.
+            vehicleOwnership: moverProfile.vehicleOwnership === 'rented' ? 'rented' : 'owned',
+            vehicleStatus: moverProfile.vehicleStatus ?? 'none',
+            currentVehicleId: moverProfile.currentVehicleId ?? null,
+            vehicleConfirmedServiceDate: moverProfile.vehicleConfirmedServiceDate ?? null,
+            vehicleReconfirmRequired: moverProfile.vehicleReconfirmRequired === true,
           },
         }),
       }
@@ -214,8 +229,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         )
       }
     } catch {
-      // No active session or sync failed
-      setUser(null)
+      // No active session or sync failed. A background refresh (the mover
+      // dashboard's visibility/interval poll) keeps the user it already has:
+      // a network blip must not sign a driver out in the middle of a move.
+      if (!opts?.background) setUser(null)
     } finally {
       setIsLoading(false)
     }
@@ -312,8 +329,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser((prev) => (prev ? { ...prev, ...updates } : null))
   }
 
-  const refreshProfile = async () => {
-    await loadSession()
+  const refreshProfile = async (opts?: { background?: boolean }) => {
+    await loadSession(opts)
   }
 
   const addCrewMember = (member: CrewMember) => {

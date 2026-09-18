@@ -68,7 +68,9 @@
       "verifyFailed": "La verificación ha fallado (estado {{status}}). Inténtalo de nuevo."
     },
     "pricing": {
+      "capacityOutOfRange": "{{label}} debe estar entre 1 y 120 m³.",
       "commissionTooLarge": "{{label}} es una fracción, no un porcentaje: introduce 0.15 para el 15 %.",
+      "flagNotBoolean": "{{label}} es un interruptor: introduzca 0 o 1.",
       "keyRequired": "key es obligatorio",
       "negative": "{{label}} no puede ser negativo.",
       "notANumber": "{{label}} debe ser un número.",
@@ -80,6 +82,15 @@
       "blockedFlagRequired": "Se requiere un valor de bloqueado/desbloqueado.",
       "notFound": "Usuario no encontrado.",
       "selfBlock": "No puedes bloquear tu propia cuenta."
+    },
+    "vehicle": {
+      "invalidDecision": "La decisión debe ser «verified» o «rejected».",
+      "invalidPhotoKind": "El tipo de foto debe ser front, rear o full.",
+      "noPhoto": "No hay ninguna foto «{{kind}}» registrada para este vehículo.",
+      "notFound": "Vehículo no encontrado.",
+      "notPending": "Este vehículo no está pendiente de revisión.",
+      "reasonRequired": "Se requiere un motivo para rechazar un vehículo.",
+      "verifyFailed": "La verificación del vehículo falló (estado {{status}}). Inténtelo de nuevo."
     }
   },
   "appwrite": {
@@ -241,6 +252,7 @@
     "selfieUploadFailed": "No se ha podido subir el selfi",
     "startRouteFailed": "No se ha podido iniciar la ruta",
     "startRouteRetry": "No se ha podido iniciar la ruta. Inténtalo de nuevo.",
+    "vehicleNotReady": "Confirme o verifique su vehículo antes de conectarse o aceptar mudanzas.",
     "withdrawFailed": "No se ha podido retirar de la mudanza",
     "withdrawRetry": "No se ha podido retirar. Inténtalo de nuevo."
   },
@@ -321,8 +333,18 @@
     "phoneRequired2": "El número de teléfono es obligatorio"
   },
   "vehicle": {
+    "capacityOutOfRange": "La capacidad debe estar entre 1 y 120 m³.",
     "fieldsRequired": "Rellena todos los campos obligatorios del vehículo",
+    "notFound": "Vehículo no encontrado.",
+    "notPending": "Este vehículo no está pendiente de revisión.",
+    "notRental": "La confirmación diaria solo se aplica a vehículos alquilados.",
+    "notVerified": "Su vehículo actual aún no ha sido verificado.",
+    "photosRequired": "Añada las fotos de la matrícula delantera, la matrícula trasera y el vehículo completo.",
+    "plateInUse": "Este número de matrícula ya está registrado a nombre de otro conductor.",
+    "plateInvalid": "Introduzca un número de matrícula válido.",
     "saveFailed": "No se ha podido guardar la información del vehículo",
-    "updateFailed": "No se ha podido actualizar la información del vehículo"
+    "typeInvalid": "Elija un tipo de vehículo.",
+    "updateFailed": "No se ha podido actualizar la información del vehículo",
+    "yearInvalid": "Introduzca un año de cuatro dígitos."
   }
 }

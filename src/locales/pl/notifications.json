@@ -129,6 +129,20 @@
       "title": "Rozładunek"
     }
   },
+  "vehicle": {
+    "confirmationRequired": {
+      "body": "Przed następną przeprowadzką proszę potwierdzić, czy nadal korzysta Pan/Pani z tego samego pojazdu.",
+      "title": "Proszę potwierdzić pojazd"
+    },
+    "rejected": {
+      "body": "Zgłoszenie pojazdu nie zostało zatwierdzone: {{reason}}. Proszę poprawić dane i wysłać je ponownie.",
+      "title": "Pojazd niezatwierdzony"
+    },
+    "verified": {
+      "body": "Pana/Pani pojazd {{plate}} został zweryfikowany. Może Pan/Pani ponownie otrzymywać przeprowadzki.",
+      "title": "Pojazd zweryfikowany"
+    }
+  },
   "verification": {
     "contactSupport": "Skontaktuj się z pomocą techniczną, aby poznać szczegóły.",
     "rejected": {
