@@ -1323,6 +1323,9 @@
       },
       "rented": {
         "helper": "Sie mieten das Fahrzeug. Sie können die Registrierung jetzt abschließen und das Fahrzeug anschließend hinzufügen. Es muss verifiziert sein, bevor Sie Umzüge erhalten."
+      },
+      "switchNeedsApproval": {
+        "body": "Der Wechsel von einem Mietfahrzeug zu einem eigenen Fahrzeug muss freigegeben werden. Bis dieses Fahrzeug verifiziert ist, bleiben Sie Mietfahrzeug-Fahrer und bestätigen Ihr Fahrzeug weiterhin täglich."
       }
     },
     "plateFront": {

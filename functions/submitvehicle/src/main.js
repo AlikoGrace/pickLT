@@ -123,6 +123,18 @@ export function validateVehicleInput(input) {
 
 /** Optional numeric field: null when absent/blank, else the number. */
 /**
+ * What `mover_profiles.vehicleOwnership` becomes when a vehicle is SUBMITTED
+ * (master D16). Rented → owned takes the driver out of the daily and post-move
+ * SAME/CHANGE regime, so it is never the driver's own call: the profile stays
+ * `rented` and the admin's approval of the owned vehicle is what switches it.
+ * Every other combination takes effect at once — owned → rented only tightens.
+ */
+export function profileOwnershipOnSubmit(current, requested) {
+  if (current === 'rented' && requested === 'owned') return 'rented';
+  return requested;
+}
+
+/**
  * Reviewer hint, never a rejection: European plate formats vary too much to
  * reject on shape, but a plate with no letter, no digit, or an odd length is
  * worth a second look next to the photos.
@@ -452,7 +464,7 @@ export default async ({ req, res, log, error }) => {
     //    (driver KYC is a separate decision) and the legacy vehicle* snapshot
     //    (only the approval path writes that, so pricing keys on verified data).
     const updatedProfile = await databases.updateDocument(DATABASE_ID, MOVER_PROFILES_COLLECTION, profile.$id, {
-      vehicleOwnership: ownership,
+      vehicleOwnership: profileOwnershipOnSubmit(profile.vehicleOwnership, ownership),
       currentVehicleId: vehicle.$id,
       vehicleStatus: 'pending_review',
       vehicleReconfirmRequired: false,

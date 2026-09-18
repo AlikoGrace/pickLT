@@ -1322,6 +1322,9 @@
       },
       "rented": {
         "helper": "Lei noleggia il veicolo. Può completare la registrazione ora e aggiungere il veicolo in seguito. Deve essere verificato prima di poter ricevere traslochi."
+      },
+      "switchNeedsApproval": {
+        "body": "Il passaggio da un veicolo a noleggio a un veicolo proprio richiede approvazione. Lei resta un autista con veicolo a noleggio, con la conferma giornaliera del veicolo, finché questo veicolo non sarà verificato."
       }
     },
     "plateFront": {

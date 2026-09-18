@@ -127,3 +127,22 @@ describe('resolveOwnershipWrite (submit-profile)', () => {
     expect(resolveOwnershipWrite(1, false)).toEqual({ ok: false })
   })
 })
+
+describe('rented → owned needs admin approval (master D16)', () => {
+  it('a vehicle submission never switches a rented profile to owned', async () => {
+    const { profileOwnershipOnSubmit } = await import('../mover-gates')
+    expect(profileOwnershipOnSubmit('rented', 'owned')).toBe('rented')
+    expect(profileOwnershipOnSubmit('owned', 'rented')).toBe('rented')
+    expect(profileOwnershipOnSubmit('owned', 'owned')).toBe('owned')
+    expect(profileOwnershipOnSubmit(undefined, 'owned')).toBe('owned')
+  })
+
+  it('a profile re-submit cannot switch rented → owned, but can still tighten owned → rented', async () => {
+    const { resolveOwnershipWrite } = await import('../mover-gates')
+    expect(resolveOwnershipWrite('owned', false, 'rented')).toEqual({ ok: true, write: undefined })
+    expect(resolveOwnershipWrite('rented', false, 'owned')).toEqual({ ok: true, write: 'rented' })
+    expect(resolveOwnershipWrite('owned', false, 'owned')).toEqual({ ok: true, write: 'owned' })
+    // Create has no stored value to protect.
+    expect(resolveOwnershipWrite('owned', true, undefined)).toEqual({ ok: true, write: 'owned' })
+  })
+})

@@ -1322,6 +1322,9 @@
       },
       "rented": {
         "helper": "U huurt het voertuig. U kunt de registratie nu afronden en het voertuig daarna toevoegen. Het moet geverifieerd zijn voordat u verhuizingen ontvangt."
+      },
+      "switchNeedsApproval": {
+        "body": "De overstap van een huurvoertuig naar een eigen voertuig moet worden goedgekeurd. U blijft chauffeur met een huurvoertuig, met de dagelijkse voertuigbevestiging, totdat dit voertuig is geverifieerd."
       }
     },
     "plateFront": {

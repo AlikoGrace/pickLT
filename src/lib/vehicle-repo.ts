@@ -3,6 +3,7 @@ import { ID, Query } from 'node-appwrite'
 
 import { APPWRITE, PLATFORM_TZ } from './constants'
 import { vehiclePermissions } from './doc-permissions'
+import { profileOwnershipOnSubmit } from './mover-gates'
 import { relId, writeNotification } from './notify'
 import {
   normalizePlate,
@@ -455,7 +456,7 @@ export async function submitVehicle(
   }
 
   const updatedProfile = await db.updateDocument(DB(), PROFILES(), profile.$id, {
-    vehicleOwnership: ownership,
+    vehicleOwnership: profileOwnershipOnSubmit(profile.vehicleOwnership, ownership),
     currentVehicleId: vehicle.$id,
     vehicleStatus: 'pending_review',
     vehicleReconfirmRequired: false,

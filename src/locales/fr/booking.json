@@ -1324,6 +1324,9 @@
       },
       "rented": {
         "helper": "Vous louez le véhicule. Vous pouvez terminer l'inscription maintenant et ajouter le véhicule ensuite. Il doit être vérifié avant que vous receviez des déménagements."
+      },
+      "switchNeedsApproval": {
+        "body": "Le passage d'un véhicule de location à votre propre véhicule doit être approuvé. Vous restez chauffeur avec véhicule de location, avec la confirmation quotidienne du véhicule, jusqu'à ce que ce véhicule soit vérifié."
       }
     },
     "plateFront": {

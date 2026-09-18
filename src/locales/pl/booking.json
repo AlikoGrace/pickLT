@@ -1349,6 +1349,9 @@
       },
       "rented": {
         "helper": "Wynajmuje Pan/Pani pojazd. Rejestrację można ukończyć teraz, a pojazd dodać później. Musi on zostać zweryfikowany, zanim zacznie Pan/Pani otrzymywać przeprowadzki."
+      },
+      "switchNeedsApproval": {
+        "body": "Zmiana z pojazdu wynajętego na własny wymaga zatwierdzenia. Do czasu weryfikacji tego pojazdu pozostają Państwo kierowcą pojazdu wynajętego i nadal codziennie potwierdzają pojazd."
       }
     },
     "plateFront": {

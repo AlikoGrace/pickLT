@@ -183,7 +183,11 @@ export default async ({ req, res, log, error }) => {
         DATABASE_ID,
         MOVER_PROFILES_COLLECTION,
         existing.documents[0].$id,
-        ownershipGiven ? { ...profileFields, vehicleOwnership: ownership } : profileFields,
+        // Rented → owned is an admin decision (vehicles master D16): it goes
+        // through a vehicle submission and its review, never a profile re-submit.
+        ownershipGiven && !(existing.documents[0].vehicleOwnership === 'rented' && ownership === 'owned')
+          ? { ...profileFields, vehicleOwnership: ownership }
+          : profileFields,
       );
     } else {
       profile = await databases.createDocument(

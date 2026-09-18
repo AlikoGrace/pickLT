@@ -82,10 +82,24 @@ export function mayMarkOnline(profile: AnyDoc | null | undefined, nowMs: number,
 export function resolveOwnershipWrite(
   raw: unknown,
   isCreate: boolean,
+  current?: unknown,
 ): { ok: true; write: VehicleOwnership | undefined } | { ok: false } {
   if (raw === undefined || raw === null) {
     return { ok: true, write: isCreate ? 'owned' : undefined }
   }
+  // Rented → owned is an admin decision (master D16), never a profile re-submit.
+  if (raw === 'owned' && !isCreate && current === 'rented') return { ok: true, write: undefined }
   if (raw === 'owned' || raw === 'rented') return { ok: true, write: raw }
   return { ok: false }
+}
+
+/**
+ * What `mover_profiles.vehicleOwnership` becomes when a vehicle is SUBMITTED
+ * (master D16) — mirrors `profileOwnershipOnSubmit` in `functions/submitvehicle`.
+ * Rented → owned leaves the daily SAME/CHANGE regime, so the profile stays
+ * `rented` until an admin approves the owned vehicle.
+ */
+export function profileOwnershipOnSubmit(current: unknown, requested: VehicleOwnership): VehicleOwnership {
+  if (current === 'rented' && requested === 'owned') return 'rented'
+  return requested
 }

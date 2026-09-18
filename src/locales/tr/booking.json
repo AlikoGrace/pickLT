@@ -1322,6 +1322,9 @@
       },
       "rented": {
         "helper": "Aracı kiralıyorsunuz. Kaydı şimdi tamamlayıp aracı daha sonra ekleyebilirsiniz. Taşınma alabilmeniz için aracın doğrulanmış olması gerekir."
+      },
+      "switchNeedsApproval": {
+        "body": "Kiralık araçtan kendi aracınıza geçiş onay gerektirir. Bu araç doğrulanana kadar kiralık araç sürücüsü olarak kalırsınız ve günlük araç onayına devam edersiniz."
       }
     },
     "plateFront": {

@@ -1322,6 +1322,9 @@
       },
       "rented": {
         "helper": "Usted alquila el vehículo. Puede completar el registro ahora y añadir el vehículo después. Debe estar verificado antes de recibir mudanzas."
+      },
+      "switchNeedsApproval": {
+        "body": "El cambio de un vehículo de alquiler a uno propio requiere aprobación. Seguirá siendo conductor con vehículo de alquiler, con la confirmación diaria del vehículo, hasta que este vehículo esté verificado."
       }
     },
     "plateFront": {

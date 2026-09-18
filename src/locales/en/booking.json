@@ -1325,6 +1325,9 @@
       },
       "rented": {
         "helper": "You rent the vehicle. You can finish registration now and add the vehicle afterwards. It must be verified before you receive moves."
+      },
+      "switchNeedsApproval": {
+        "body": "Switching from a rented vehicle to your own needs approval. You remain a rental driver, with the daily vehicle confirmation, until this vehicle has been verified."
       }
     },
     "plateFront": {

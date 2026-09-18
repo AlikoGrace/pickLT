@@ -125,7 +125,11 @@ export async function POST(req: NextRequest) {
 
     // An update that omits the ownership leaves it alone: defaulting to
     // 'owned' here silently flipped rented drivers. The default is for create.
-    const ownership = resolveOwnershipWrite(vehicleOwnership, existing.total === 0)
+    const ownership = resolveOwnershipWrite(
+      vehicleOwnership,
+      existing.total === 0,
+      existing.documents[0]?.vehicleOwnership,
+    )
     if (ownership.ok && ownership.write) profilePayload.vehicleOwnership = ownership.write
 
     let profile

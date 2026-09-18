@@ -201,6 +201,12 @@ export default function VehicleForm({ mode, source, initialOwnership, prefill, o
             </label>
           ))}
         </div>
+        {/* Rented → owned is the admin's call (master D16): say so before they submit. */}
+        {initialOwnership === 'rented' && ownership === 'owned' && (
+          <p className="mt-2 rounded-xl bg-amber-50 p-3 text-xs text-amber-800 dark:bg-amber-900/20 dark:text-amber-200">
+            {t('booking:vehicle.ownership.switchNeedsApproval.body')}
+          </p>
+        )}
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
