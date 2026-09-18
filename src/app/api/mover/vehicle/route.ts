@@ -10,6 +10,7 @@ import {
   vehicleErrorMessage,
   VehicleRepoError,
   webAuditNote,
+  withoutPhotoPlaceholders,
 } from '@/lib/vehicle-repo'
 
 /**
@@ -85,7 +86,7 @@ export async function GET() {
       getCurrentVehicle(databases, profile.$id),
       getVehicleHistory(databases, profile.$id),
     ])
-    return NextResponse.json({ profile: profileVehicleFields(profile), vehicle, history })
+    return NextResponse.json({ profile: profileVehicleFields(profile), vehicle: withoutPhotoPlaceholders(vehicle), history })
   } catch (err) {
     console.error('GET /api/mover/vehicle error:', err)
     return NextResponse.json({ error: t('errors:generic.internal') }, { status: 500 })

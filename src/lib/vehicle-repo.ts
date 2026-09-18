@@ -201,6 +201,22 @@ export function webAuditNote(bodyNote: unknown, userAgent: string | null): strin
   return ua ? `web; ${ua}`.slice(0, 512) : 'web'
 }
 
+/**
+ * Backfilled vehicles (D14) predate plate photos: their three required photo
+ * columns hold the literal `backfill:missing`, not a URL. Blank anything that
+ * is not an http(s) URL before a row reaches a screen, so it renders as "no
+ * photo" rather than a broken image.
+ */
+export function withoutPhotoPlaceholders<T extends Record<string, unknown>>(vehicle: T | null): T | null {
+  if (!vehicle) return vehicle
+  const out: Record<string, unknown> = { ...vehicle }
+  for (const key of ['frontPlatePhoto', 'rearPlatePhoto', 'fullVehiclePhoto']) {
+    const v = out[key]
+    if (typeof v !== 'string' || !/^https?:\/\//i.test(v)) out[key] = null
+  }
+  return out as T
+}
+
 /** Reviewer hint, never a rejection — mirrors `plateFormatHint` in `functions/submitvehicle`. */
 export function plateFormatHint(normalized: string): 'ok' | 'unusual' {
   if (normalized.length < 4 || normalized.length > 10) return 'unusual'

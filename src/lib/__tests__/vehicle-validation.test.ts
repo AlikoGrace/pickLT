@@ -396,3 +396,17 @@ describe('reviewer checks and audit note (sub-plan 9)', () => {
     expect(repo.webAuditNote(null, 'x'.repeat(900))!.length).toBe(512)
   })
 })
+
+describe('withoutPhotoPlaceholders (backfilled rows, D14)', () => {
+  it('blanks the backfill sentinel and keeps real URLs', () => {
+    const out = repo.withoutPhotoPlaceholders({
+      $id: 'veh_1',
+      frontPlatePhoto: 'backfill:missing',
+      rearPlatePhoto: 'https://cloud.appwrite.io/v1/storage/buckets/b/files/f/view?project=p',
+      fullVehiclePhoto: '',
+    })
+    expect(out).toMatchObject({ frontPlatePhoto: null, fullVehiclePhoto: null })
+    expect(out?.rearPlatePhoto).toMatch(/^https:/)
+    expect(repo.withoutPhotoPlaceholders(null)).toBeNull()
+  })
+})
