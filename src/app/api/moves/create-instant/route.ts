@@ -1,11 +1,12 @@
 import { getTranslations } from '@/lib/i18n-server'
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/appwrite-server'
-import { APPWRITE } from '@/lib/constants'
+import { APPWRITE, PLATFORM_TZ } from '@/lib/constants'
 import { getSessionUserId } from '@/lib/auth-session'
 import { asText, asTextArray } from '@/lib/move-normalizers'
 import { movePermissions, moveRequestPermissions } from '@/lib/doc-permissions'
-import { moverUserIdFromProfile } from '@/lib/notify'
+import { directAssignmentBlock } from '@/lib/mover-gates'
+import { relId } from '@/lib/notify'
 import { ID, Query } from 'node-appwrite'
 
 /**
@@ -59,13 +60,38 @@ export async function POST(req: NextRequest) {
 
     const { databases } = createAdminClient()
 
+    // This route pins the move to a mover directly, so it is an assignment
+    // gate (master D4) — the web counterpart of `createpriorityrequest`, same
+    // checks and `fnCode`s: KYC, online, location freshness, vehicle
+    // readiness. The client's list is a snapshot; a rental driver's service
+    // day can roll over between the fetch and the tap.
+    let mover: Record<string, unknown> | null = null
+    try {
+      mover = await databases.getDocument(
+        APPWRITE.DATABASE_ID,
+        APPWRITE.COLLECTIONS.MOVER_PROFILES,
+        moverProfileId
+      )
+    } catch {
+      // Unknown profile id — same answer as an unverified one.
+    }
+    const blocked = directAssignmentBlock(mover, Date.now(), PLATFORM_TZ)
+    if (!mover || blocked) {
+      // The reader is the client, so the sentence is the client-facing one;
+      // `fnCode` carries the function contract's reason.
+      return NextResponse.json(
+        { error: t('errors:instant.moverUnavailable.error'), fnCode: blocked ?? 'mover.notVerified' },
+        { status: 400 }
+      )
+    }
+
     // Generate a human-readable handle
     const handle = `IM-${Date.now().toString(36).toUpperCase()}`
 
     // An instant move names its mover up front, so the row can carry the
     // mover's read grant immediately. `moverProfileId` is a mover_profiles $id,
     // NOT an auth id — resolve it through `mover_profiles.userId` first.
-    const moverUserId = await moverUserIdFromProfile(moverProfileId)
+    const moverUserId = relId(mover.userId)
 
     // ── Create the move document ────────────────────────────
     const moveId = ID.unique()
@@ -78,6 +104,9 @@ export async function POST(req: NextRequest) {
         clientId: userId,
         moverProfileId: moverProfileId,
         status: 'mover_assigned',
+        // Snapshot of the vehicle doing the job (master D13) — this path
+        // assigns the mover without an accept route in between.
+        vehicleId: mover.currentVehicleId ?? null,
         moveCategory: 'instant',
         moveType: moveType || 'regular',
         systemMoveType: moveType || 'regular',

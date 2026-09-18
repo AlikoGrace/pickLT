@@ -796,6 +796,9 @@
         },
         "full": {
           "a11y": "Aracın tamamı"
+        },
+        "none": {
+          "label": "Kayıtlı fotoğraf yok"
         }
       },
       "setup": {

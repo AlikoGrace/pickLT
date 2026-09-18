@@ -4,6 +4,7 @@ import { createAdminClient, withRetry } from '@/lib/appwrite-server'
 import { APPWRITE, PLATFORM_TZ } from '@/lib/constants'
 import { Query } from 'node-appwrite'
 import { getSessionUserId } from '@/lib/auth-session'
+import { isLocationFresh } from '@/lib/mover-gates'
 import { vehicleServiceReady } from '@/lib/vehicle-service'
 
 /** Appwrite rows are schemaless at the SDK boundary. */
@@ -11,15 +12,9 @@ type AnyDoc = Record<string, any>
 
 const MAX_RADIUS_KM = 50
 
-// A fix older than this is a driver who closed the app without going offline.
-// Same window as `listnearbymovers` / `broadcastmoverequest` — this route used
-// to skip the term and list stale drivers the functions had already dropped.
-const LOCATION_FRESHNESS_MS = 3 * 60 * 1000
-
-function isLocationFresh(mover: AnyDoc, nowMs: number): boolean {
-  const at = typeof mover.locationUpdatedAt === 'string' ? Date.parse(mover.locationUpdatedAt) : NaN
-  return Number.isFinite(at) && nowMs - at <= LOCATION_FRESHNESS_MS
-}
+// Freshness (`isLocationFresh`, 3 min) is the same window as `listnearbymovers`
+// / `broadcastmoverequest` — this route used to skip the term and list stale
+// drivers the functions had already dropped. Shared with create-instant.
 
 // ~1.1 km — enough to place a pin and estimate arrival, not enough to track an
 // individual driver. The displayed distance is computed from the exact

@@ -21,16 +21,44 @@ import {
 } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useState, useRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { formatFileSizeMb } from '@/lib/format'
 import { AVATAR_UPLOAD_MAX_MB } from '@/lib/service-limits'
+import { fetchVehicleOverview } from '@/lib/vehicle-client'
 import { vehicleStatusLabel } from '@/lib/vehicle-labels'
 
 type ModalType = 'editName' | 'changeEmail' | 'changePhone' | null
 
 const SettingsPage = () => {
   const { user, updateUser, logout, refreshProfile } = useAuth()
+
+  // The vehicle row's label names the *current* vehicle. The profile's
+  // `vehicleBrand/Model` are the snapshot of the last verified one (master D2),
+  // so during a pending change they would pair the old vehicle with the new
+  // status. Falls back to the snapshot until (or unless) the row loads.
+  const [currentVehicleName, setCurrentVehicleName] = useState<string | null>(null)
+  const currentVehicleId = user?.moverDetails?.currentVehicleId ?? null
+  const profileVehicleStatus = user?.moverDetails?.vehicleStatus
+  useEffect(() => {
+    if (!currentVehicleId) {
+      setCurrentVehicleName(null)
+      return
+    }
+    let cancelled = false
+    fetchVehicleOverview()
+      .then((d) => {
+        if (!cancelled) setCurrentVehicleName([d.vehicle?.brand, d.vehicle?.model].filter(Boolean).join(' ') || null)
+      })
+      .catch(() => {
+        /* keep the snapshot label */
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [currentVehicleId, profileVehicleStatus])
+  const snapshotVehicleName = `${user?.moverDetails?.vehicleBrand ?? ''} ${user?.moverDetails?.vehicleModel ?? ''}`.trim()
+  const vehicleName = currentVehicleName || snapshotVehicleName
   const { t } = useTranslation()
   const router = useRouter()
   const [activeModal, setActiveModal] = useState<ModalType>(null)
@@ -271,10 +299,10 @@ const SettingsPage = () => {
           id: 'vehicle',
           icon: TruckIcon,
           label: t('booking:vehicle.title'),
-          description: user?.moverDetails?.vehicleBrand
+          description: vehicleName
             ? t('web:mover.vehicle.settings.status.label', {
-                vehicle: `${user.moverDetails.vehicleBrand} ${user.moverDetails.vehicleModel ?? ''}`.trim(),
-                status: vehicleStatusLabel(t, user.moverDetails.vehicleStatus),
+                vehicle: vehicleName,
+                status: vehicleStatusLabel(t, user?.moverDetails?.vehicleStatus),
               })
             : vehicleStatusLabel(t, user?.moverDetails?.vehicleStatus),
           action: () => router.push('/vehicle'),

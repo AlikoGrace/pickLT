@@ -43,7 +43,7 @@ interface Mover {
   rating?: number
   totalMoves?: number
   vehicleType?: string
-  vehicleMake?: string
+  vehicleBrand?: string
   vehicleModel?: string
   vehiclePlateNumber?: string
   crewSize?: number
@@ -245,7 +245,7 @@ const SelectMoverPage = () => {
         rating: mover.rating || 0,
         totalMoves: mover.totalMoves || 0,
         vehicleType,
-        vehicleName: [mover.vehicleMake, mover.vehicleModel].filter(Boolean).join(' ') || vehicleLabel(t, vehicleType),
+        vehicleName: [mover.vehicleBrand, mover.vehicleModel].filter(Boolean).join(' ') || vehicleLabel(t, vehicleType),
         vehiclePlate: mover.vehiclePlateNumber || '',
         crewSize,
         capacityM3: moverCapacityM3({ vehicleType, vehicleCapacity: mover.vehicleCapacity }, pricingRates),
@@ -266,6 +266,7 @@ const SelectMoverPage = () => {
   }
 
   const [isConfirming, setIsConfirming] = useState(false)
+  const [confirmError, setConfirmError] = useState<string | null>(null)
   // T7 parity: both methods settle at completion — cash in person, card via
   // the mobile app's Stripe flow. Nothing is charged at booking.
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card'>('cash')
@@ -277,6 +278,7 @@ const SelectMoverPage = () => {
     if (!mover) return
 
     setIsConfirming(true)
+    setConfirmError(null)
 
     // Store selected mover in sessionStorage
     sessionStorage.setItem('selectedMover', JSON.stringify({
@@ -354,6 +356,19 @@ const SelectMoverPage = () => {
         // Store moveId so the instant-move page can subscribe to updates
         sessionStorage.setItem('activeMoveId', data.moveId)
         sessionStorage.setItem('activeMoveRequestId', data.moveRequestId)
+      } else if (res.status === 400) {
+        // The assignment gate refused this mover (went offline, vehicle no
+        // longer service-ready — the list is a snapshot). Stay here so the
+        // client can pick someone else instead of tracking a move that was
+        // never created.
+        const data = await res.json().catch(() => ({}))
+        if (typeof data.fnCode === 'string' && data.fnCode.startsWith('mover.')) {
+          setApiMovers((prev) => prev.filter((m) => m.$id !== selectedMover))
+          setSelectedMover(null)
+          setConfirmError(data.error || t('errors:instant.moverUnavailable.error'))
+          setIsConfirming(false)
+          return
+        }
       }
     } catch (err) {
       console.error('Failed to create move:', err)
@@ -676,6 +691,11 @@ const SelectMoverPage = () => {
 
       {/* Fixed Bottom Button */}
       <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-800 p-4">
+        {confirmError && (
+          <p role="alert" className="container max-w-3xl mx-auto mb-3 text-sm text-red-600 dark:text-red-400">
+            {confirmError}
+          </p>
+        )}
         <div className="container max-w-3xl mx-auto flex gap-3">
           <ButtonSecondary
             href="/instant-move/photos"

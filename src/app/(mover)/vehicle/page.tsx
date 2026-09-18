@@ -4,6 +4,7 @@ import {
   ArrowPathIcon,
   CheckCircleIcon,
   ClockIcon,
+  PhotoIcon,
   PlusIcon,
   TruckIcon,
   XCircleIcon,
@@ -192,7 +193,15 @@ export default function VehiclePage() {
                   <figure key={kind}>
                     {/* Owner-read files: the session cookie on the Appwrite domain
                         authorises the driver's own <img>; nobody else resolves them. */}
-                    <img src={url} alt={alt} className="h-24 w-full rounded-lg border border-neutral-200 object-cover dark:border-neutral-700" />
+                    {url ? (
+                      <img src={url} alt={alt} className="h-24 w-full rounded-lg border border-neutral-200 object-cover dark:border-neutral-700" />
+                    ) : (
+                      // Backfilled vehicles (D14) carry no photos — a neutral tile, not a broken image.
+                      <div className="flex h-24 w-full flex-col items-center justify-center gap-1 rounded-lg border border-dashed border-neutral-300 bg-neutral-50 px-1 text-center text-xs text-neutral-400 dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-500">
+                        <PhotoIcon className="h-5 w-5" aria-hidden="true" />
+                        {t('web:mover.vehicle.photo.none.label')}
+                      </div>
+                    )}
                     <figcaption className="mt-1 truncate text-xs text-neutral-500 dark:text-neutral-400">{alt}</figcaption>
                   </figure>
                 ))}

@@ -11,7 +11,7 @@ process.env.PLATFORM_TZ = 'Europe/Berlin'
 const { normalizePlate, validateVehicleInput } = await import('../vehicle-service')
 const { uploadedPhotoPermissions, vehiclePermissions } = await import('../doc-permissions')
 const repo = await import('../vehicle-repo')
-const { confirmVehicleSame, markReconfirmRequired, submitVehicle, VehicleRepoError } = repo
+const { confirmVehicleSame, markReconfirmRequired, markReconfirmRequiredForMover, submitVehicle, VehicleRepoError } = repo
 
 type AnyDoc = Record<string, any>
 
@@ -368,6 +368,74 @@ describe('markReconfirmRequired (D12)', () => {
       data: { handle: 'MV-1', moveId: 'm1' },
       i18n: { key: 'vehicle.confirmationRequired' },
     })
+  })
+
+  it('rented: a failed event write after the flag landed still reports the flag and still notifies', async () => {
+    const db = fakeDb({
+      mover_profiles: [profile({ vehicleOwnership: 'rented', vehicleStatus: 'verified', currentVehicleId: 'v1' })],
+    })
+    db.createDocument = async () => {
+      throw new Error('vehicle_events unavailable')
+    }
+    const set = await markReconfirmRequired(db, db.store.mover_profiles[0], { moveId: 'm1', handle: 'MV-1', nowMs: NOW, notify })
+    expect(set).toBe(true)
+    expect(db.store.mover_profiles[0].vehicleReconfirmRequired).toBe(true)
+    expect(db.store.vehicle_events ?? []).toHaveLength(0)
+    expect(notify).toHaveBeenCalledTimes(1)
+  })
+
+  it('rented: a failed notification does not throw or undo the flag and the event', async () => {
+    const db = fakeDb({
+      mover_profiles: [profile({ vehicleOwnership: 'rented', vehicleStatus: 'verified', currentVehicleId: 'v1' })],
+    })
+    notify.mockRejectedValueOnce(new Error('notifications unavailable'))
+    const set = await markReconfirmRequired(db, db.store.mover_profiles[0], { moveId: 'm1', handle: 'MV-1', nowMs: NOW, notify })
+    expect(set).toBe(true)
+    expect(db.store.mover_profiles[0].vehicleReconfirmRequired).toBe(true)
+    expect(db.store.vehicle_events).toHaveLength(1)
+  })
+
+  it('rented: a failed flag write is the only failure that reports false — no event, no notification', async () => {
+    const db = fakeDb({
+      mover_profiles: [profile({ vehicleOwnership: 'rented', vehicleStatus: 'verified', currentVehicleId: 'v1' })],
+    })
+    db.updateDocument = async () => {
+      throw new Error('mover_profiles unavailable')
+    }
+    const set = await markReconfirmRequired(db, db.store.mover_profiles[0], { moveId: 'm1', handle: 'MV-1', nowMs: NOW, notify })
+    expect(set).toBe(false)
+    expect(db.store.vehicle_events ?? []).toHaveLength(0)
+    expect(notify).not.toHaveBeenCalled()
+  })
+})
+
+// The client-confirms-second completion path holds only `moves.moverProfileId`.
+describe('markReconfirmRequiredForMover (D12, client confirm-payment path)', () => {
+  const notify = vi.fn(async (_params: { userId: string }) => {})
+  beforeEach(() => notify.mockClear())
+
+  it('rented: loads the profile by id and sets the flag, event and notification', async () => {
+    const db = fakeDb({
+      mover_profiles: [profile({ vehicleOwnership: 'rented', vehicleStatus: 'verified', currentVehicleId: 'v1' })],
+    })
+    const set = await markReconfirmRequiredForMover(db, db.store.mover_profiles[0].$id, { moveId: 'm1', handle: 'MV-1', nowMs: NOW, notify })
+    expect(set).toBe(true)
+    expect(db.store.mover_profiles[0].vehicleReconfirmRequired).toBe(true)
+    expect(db.store.vehicle_events[0]).toMatchObject({ action: 'reconfirm_required', moveId: 'm1' })
+    expect(notify).toHaveBeenCalledTimes(1)
+  })
+
+  it('owned: no-op', async () => {
+    const db = fakeDb({ mover_profiles: [profile({ vehicleStatus: 'verified', currentVehicleId: 'v1' })] })
+    expect(await markReconfirmRequiredForMover(db, db.store.mover_profiles[0].$id, { moveId: 'm1', nowMs: NOW, notify })).toBe(false)
+    expect(notify).not.toHaveBeenCalled()
+  })
+
+  it('never throws: no assigned mover, or a profile that cannot be read', async () => {
+    const db = fakeDb({ mover_profiles: [] })
+    expect(await markReconfirmRequiredForMover(db, null, { moveId: 'm1', nowMs: NOW, notify })).toBe(false)
+    expect(await markReconfirmRequiredForMover(db, 'missing', { moveId: 'm1', nowMs: NOW, notify })).toBe(false)
+    expect(notify).not.toHaveBeenCalled()
   })
 })
 

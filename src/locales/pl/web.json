@@ -806,6 +806,9 @@
         },
         "full": {
           "a11y": "Cały pojazd"
+        },
+        "none": {
+          "label": "Brak zarejestrowanego zdjęcia"
         }
       },
       "setup": {

@@ -521,8 +521,8 @@ type NotifyFn = typeof writeNotification
  * sets the server flag the dashboard prompt reads, appends the audit event and
  * writes the `vehicle_confirmation_required` notification (`sendpush` fans it
  * out; `writeNotification` falls back to `system` until the enum is widened).
- * Best-effort by design: a failure here must not fail the completion.
- * Returns whether the flag was set.
+ * Best-effort by design: a failure here must not fail the completion, and
+ * never throws. Returns whether the flag was set.
  */
 export async function markReconfirmRequired(
   db: VehicleDb,
@@ -537,8 +537,17 @@ export async function markReconfirmRequired(
   if (!ownerUserId) return false
   const notify = params.notify ?? writeNotification
 
+  // The flag write is the point of no return: it is what gates the next
+  // accept. Once it lands, the audit event and the notification are each
+  // best-effort and independent, and the function reports the flag as set.
   try {
     await db.updateDocument(DB(), PROFILES(), profile.$id, { vehicleReconfirmRequired: true })
+  } catch (err) {
+    console.warn('[vehicle-repo] markReconfirmRequired failed (non-fatal):', err)
+    return false
+  }
+
+  try {
     await appendVehicleEvent(db, {
       moverProfileId: profile.$id,
       ownerUserId,
@@ -554,17 +563,41 @@ export async function markReconfirmRequired(
       at: now,
     })
   } catch (err) {
-    console.warn('[vehicle-repo] markReconfirmRequired failed (non-fatal):', err)
-    return false
+    console.warn('[vehicle-repo] markReconfirmRequired: event write failed (flag is set):', err)
   }
 
-  await notify({
-    userId: ownerUserId,
-    type: 'vehicle_confirmation_required',
-    title: 'Confirm your vehicle',
-    body: 'Before your next move, confirm whether you are still using the same vehicle.',
-    data: { handle: params.handle ?? null, moveId: params.moveId },
-    i18n: { key: 'vehicle.confirmationRequired' },
-  })
+  try {
+    await notify({
+      userId: ownerUserId,
+      type: 'vehicle_confirmation_required',
+      title: 'Confirm your vehicle',
+      body: 'Before your next move, confirm whether you are still using the same vehicle.',
+      data: { handle: params.handle ?? null, moveId: params.moveId },
+      i18n: { key: 'vehicle.confirmationRequired' },
+    })
+  } catch (err) {
+    console.warn('[vehicle-repo] markReconfirmRequired: notification failed (flag is set):', err)
+  }
   return true
+}
+
+/**
+ * D12 for the completion path that holds only the move: when the *client*
+ * confirms payment second, the route knows `moves.moverProfileId`, not the
+ * profile row. Loads it and defers to `markReconfirmRequired`. Never throws.
+ */
+export async function markReconfirmRequiredForMover(
+  db: VehicleDb,
+  moverProfileId: string | null | undefined,
+  params: Parameters<typeof markReconfirmRequired>[2],
+): Promise<boolean> {
+  if (!moverProfileId) return false
+  let profile: AnyDoc
+  try {
+    profile = await db.getDocument(DB(), PROFILES(), moverProfileId)
+  } catch (err) {
+    console.warn('[vehicle-repo] markReconfirmRequiredForMover: profile lookup failed (non-fatal):', err)
+    return false
+  }
+  return markReconfirmRequired(db, profile, params)
 }

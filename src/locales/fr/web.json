@@ -796,6 +796,9 @@
         },
         "full": {
           "a11y": "Véhicule entier"
+        },
+        "none": {
+          "label": "Aucune photo enregistrée"
         }
       },
       "setup": {

@@ -13,6 +13,7 @@ import {
 } from '@/lib/complete-profile-validation'
 import { submitVehicle, uploadVehiclePhoto } from '@/lib/vehicle-client'
 import type { VehicleOwnership } from '@/lib/vehicle-service'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -374,6 +375,7 @@ export default function CompleteProfilePage() {
       // Second call: the owned driver's vehicle (same evidence standard as a
       // rental driver adding one later — D5). A failure here does not undo the
       // profile: `vehicleStatus` stays `none` and the dashboard prompts.
+      let vehicleFailed = false
       if (form.vehicleOwnership === 'owned' && form.frontPlatePhoto && form.rearPlatePhoto && form.fullVehiclePhoto) {
         try {
           const [frontPlatePhoto, rearPlatePhoto, fullVehiclePhoto] = await Promise.all([
@@ -395,6 +397,7 @@ export default function CompleteProfilePage() {
             source: 'registration',
           })
         } catch (vehicleErr) {
+          vehicleFailed = true
           setVehicleWarning(
             t('web:mover.onboarding.vehicleSubmitFailed', {
               error: vehicleErr instanceof Error ? vehicleErr.message : '',
@@ -408,8 +411,9 @@ export default function CompleteProfilePage() {
       await refreshProfile()
 
       setSuccess(true)
-      // Redirect to dashboard after brief delay
-      setTimeout(() => router.push('/dashboard'), 2000)
+      // Redirect to dashboard after brief delay — unless the vehicle call
+      // failed: that warning has to be read and acted on, not flashed for 2 s.
+      if (!vehicleFailed) setTimeout(() => router.push('/dashboard'), 2000)
     } catch (err) {
       setError(err instanceof Error ? err.message : t('errors:generic.title'))
     } finally {
@@ -428,13 +432,21 @@ export default function CompleteProfilePage() {
             {t('web:mover.onboarding.done.title')}
           </h2>
           <p className="mt-2 text-neutral-500 dark:text-neutral-400">
-            {t('web:mover.onboarding.done.subtitle')}{' '}
-            {t('web:mover.onboarding.done.redirect')}
+            {t('web:mover.onboarding.done.subtitle')}
+            {!vehicleWarning && <> {t('web:mover.onboarding.done.redirect')}</>}
           </p>
           {vehicleWarning && (
-            <p className="mt-4 rounded-xl bg-amber-50 p-3 text-sm text-amber-800 dark:bg-amber-900/20 dark:text-amber-200">
-              {vehicleWarning}
-            </p>
+            <>
+              <p role="alert" className="mt-4 rounded-xl bg-amber-50 p-3 text-sm text-amber-800 dark:bg-amber-900/20 dark:text-amber-200">
+                {vehicleWarning}
+              </p>
+              <Link
+                href="/vehicle/setup?mode=add"
+                className="mt-4 inline-flex items-center justify-center rounded-full bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-700"
+              >
+                {t('web:mover.vehicle.action.add.cta')}
+              </Link>
+            </>
           )}
         </div>
       </div>

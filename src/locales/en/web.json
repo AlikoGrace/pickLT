@@ -796,6 +796,9 @@
         },
         "full": {
           "a11y": "Whole vehicle"
+        },
+        "none": {
+          "label": "No photo on file"
         }
       },
       "setup": {

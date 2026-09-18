@@ -6,6 +6,7 @@ import { getSessionUserId } from '@/lib/auth-session'
 import { sanctionedCountryRejection } from '@/lib/sanctions'
 import { writeNotification } from '@/lib/notify'
 import { moverProfilePermissions } from '@/lib/doc-permissions'
+import { resolveOwnershipWrite } from '@/lib/mover-gates'
 import { ID, Query } from 'node-appwrite'
 
 /**
@@ -47,8 +48,13 @@ export async function POST(req: NextRequest) {
     // Master D10: the profile carries only the ownership declaration. The
     // vehicle itself is its own row, submitted through `POST /api/mover/vehicle`
     // as the second call of registration. Legacy callers that send no
-    // ownership are owned drivers (D14).
-    const ownership: 'owned' | 'rented' = vehicleOwnership === 'rented' ? 'rented' : 'owned'
+    // ownership are owned drivers (D14) — on create only; see below.
+    if (!resolveOwnershipWrite(vehicleOwnership, true).ok) {
+      return NextResponse.json(
+        { error: 'vehicleOwnership must be owned|rented', fnCode: 'generic.badRequest' },
+        { status: 400 }
+      )
+    }
 
     const { databases, users } = createAdminClient()
 
@@ -113,10 +119,14 @@ export async function POST(req: NextRequest) {
       // The six legacy `vehicle*` columns are no longer written here: they are
       // the server-side snapshot of the *verified* vehicle (master D2), written
       // only by the admin verify route and the backfill.
-      vehicleOwnership: ownership,
       languages: languages || [],
       yearsExperience: yearsExperience ? Number(yearsExperience) : 0,
     }
+
+    // An update that omits the ownership leaves it alone: defaulting to
+    // 'owned' here silently flipped rented drivers. The default is for create.
+    const ownership = resolveOwnershipWrite(vehicleOwnership, existing.total === 0)
+    if (ownership.ok && ownership.write) profilePayload.vehicleOwnership = ownership.write
 
     let profile
     if (existing.total > 0) {

@@ -1,9 +1,10 @@
 import { getTranslations } from '@/lib/i18n-server'
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient, withRetry } from '@/lib/appwrite-server'
-import { APPWRITE } from '@/lib/constants'
+import { APPWRITE, PLATFORM_TZ } from '@/lib/constants'
 import { getSessionUserId } from '@/lib/auth-session'
 import { moverLocationPermissions } from '@/lib/doc-permissions'
+import { mayMarkOnline } from '@/lib/mover-gates'
 import { relId } from '@/lib/notify'
 import { ID, Query } from 'node-appwrite'
 
@@ -85,7 +86,11 @@ export async function POST(req: NextRequest) {
       )
     )
 
-    // Update current position on the mover profile and mark as online
+    // Update current position on the mover profile. The heartbeat marks the
+    // driver online only when `setmoveronline` would have allowed it (KYC +
+    // service-ready vehicle, master D4); otherwise `isOnline` is left as it
+    // is — never forced off, the driver may be finishing a move.
+    const markOnline = mayMarkOnline(profiles.documents[0], Date.now(), PLATFORM_TZ)
     await withRetry(() =>
       databases.updateDocument(
         APPWRITE.DATABASE_ID,
@@ -98,7 +103,7 @@ export async function POST(req: NextRequest) {
           // function port wrote it; this route did not, which left web-only
           // drivers permanently stale for `listnearbymovers`.
           locationUpdatedAt: new Date().toISOString(),
-          isOnline: true,
+          ...(markOnline ? { isOnline: true } : {}),
         }
       )
     )

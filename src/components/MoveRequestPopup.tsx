@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState, useCallback, ReactNode } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/context/auth'
+import VehicleStatusBanner from '@/components/mover/VehicleStatusBanner'
+import { useVehicleReadiness } from '@/hooks/useVehicleReadiness'
 import { client, databases } from '@/lib/appwrite'
 import { Query } from 'appwrite'
 import type { RealtimeResponseEvent, Models } from 'appwrite'
@@ -268,6 +270,7 @@ function createAlarmSound(): { play: () => void; stop: () => void } {
 export default function MoveRequestPopup({ children }: { children: ReactNode }) {
   const { t } = useTranslation()
   const { user } = useAuth()
+  const vehicle = useVehicleReadiness()
 
   const moverProfileId = user?.moverDetails?.profileId
   const isVerifiedMover = user?.moverDetails?.verificationStatus === 'verified'
@@ -682,6 +685,11 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                 {t('web:mover.request.viewDetails.cta')}
               </button>
             )}
+            {/* Not service-ready: the accept gate would refuse (403), so say why
+                and where to fix it. Declining stays available. */}
+            {vehicle.restricted && (
+              <VehicleStatusBanner state={vehicle.state} className="mb-3 rounded-xl border" />
+            )}
             <div className="flex gap-3">
             <button
               onClick={handleDecline}
@@ -692,8 +700,8 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
             </button>
             <button
               onClick={handleAccept}
-              disabled={isAccepting}
-              className="flex-[2] py-3 px-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold text-sm transition-colors disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg shadow-green-600/30"
+              disabled={isAccepting || vehicle.restricted}
+              className="flex-[2] py-3 px-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-green-600/30"
             >
               {isAccepting ? (
                 t('common:state.accepting.label')
@@ -936,6 +944,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
 
           {/* Sticky bottom action bar */}
           <div className="sticky bottom-0 border-t border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
+            {vehicle.restricted && <VehicleStatusBanner state={vehicle.state} />}
             <div className="max-w-6xl mx-auto px-4 lg:px-8 py-3 flex gap-3">
               <button
                 onClick={() => { setShowDetails(false); handleDecline() }}
@@ -946,8 +955,8 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
               </button>
               <button
                 onClick={() => { setShowDetails(false); handleAccept() }}
-                disabled={isAccepting}
-                className="flex-[2] py-3 px-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold text-sm transition-colors disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg shadow-green-600/30"
+                disabled={isAccepting || vehicle.restricted}
+                className="flex-[2] py-3 px-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-green-600/30"
               >
                 <CheckIcon className="w-5 h-5" />
                 {t('web:mover.acceptMove.cta')}

@@ -796,6 +796,9 @@
         },
         "full": {
           "a11y": "Volledig voertuig"
+        },
+        "none": {
+          "label": "Geen foto geregistreerd"
         }
       },
       "setup": {

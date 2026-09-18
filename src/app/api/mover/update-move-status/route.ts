@@ -1,10 +1,10 @@
 import { getTranslations } from '@/lib/i18n-server'
 import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
-import { APPWRITE } from '@/lib/constants'
+import { APPWRITE, PLATFORM_TZ } from '@/lib/constants'
+import { startGate } from '@/lib/mover-gates'
 import { relId, writeNotification, statusNotification } from '@/lib/notify'
 import { paymentPermissions } from '@/lib/doc-permissions'
-import { markReconfirmRequired } from '@/lib/vehicle-repo'
 import { Query, ID } from 'node-appwrite'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -87,6 +87,17 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Leaving `mover_assigned` starts a job that was pinned to this mover
+    // without an accept route, so it takes the accept gate here (master D4).
+    // Every later transition is a move already under way and stays ungated.
+    const start = startGate(move, moverProfile, Date.now(), PLATFORM_TZ)
+    if (start.blocked) {
+      return NextResponse.json(
+        { error: t('errors:mover.vehicleNotReady'), fnCode: 'mover.vehicleNotReady' },
+        { status: 403 }
+      )
+    }
+
     // Prevent starting a route before the scheduled move date
     if (move.status === 'mover_accepted' && status === 'mover_en_route' && move.moveDate) {
       const today = new Date()
@@ -103,6 +114,8 @@ export async function POST(request: NextRequest) {
 
     // Update the move status
     const updateData: Record<string, unknown> = { status }
+    // Vehicle snapshot (master D13) when the accept route never wrote one.
+    if (start.vehicleId) updateData.vehicleId = start.vehicleId
 
     // If transitioning to awaiting_payment, create a payment record
     if (status === 'awaiting_payment') {
@@ -142,11 +155,7 @@ export async function POST(request: NextRequest) {
       updateData
     )
 
-    // Master D12: true completion asks a rental driver to re-confirm the
-    // vehicle before the next move. Best-effort; the completion stands.
-    if (status === 'completed') {
-      await markReconfirmRequired(databases, moverProfile, { moveId, handle: move.handle ?? null })
-    }
+    // No D12 hook here: `completed` is not reachable through this route. It is hooked in both confirm-payment routes.
 
     // Notify the client of the status change (pushable statuses fan out an OS
     // push via sendpush; granular in-progress steps stay silent).

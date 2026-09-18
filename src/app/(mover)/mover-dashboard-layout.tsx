@@ -34,7 +34,7 @@ import clsx from 'clsx'
 import type { TFunction } from 'i18next'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 interface NavItem {
@@ -159,6 +159,9 @@ interface Props {
   children: ReactNode
 }
 
+const PROFILE_REFRESH_INTERVAL_MS = 60_000
+const PROFILE_REFRESH_MIN_GAP_MS = 10_000
+
 // Full-screen map pages — hide mobile header to maximise visible map area
 const MAP_PAGES = ['/available-moves', '/active-move']
 
@@ -184,6 +187,30 @@ const MoverDashboardLayout = ({ children }: Props) => {
     const id = setInterval(() => setNowMs(Date.now()), 60_000)
     return () => clearInterval(id)
   }, [])
+  // The vehicle columns reach the UI only through the auth profile, and the
+  // writers are elsewhere: an admin approves or rejects, a completion sets the
+  // post-move flag (D12). Re-read the profile when the tab comes back and once
+  // a minute while it is visible, never more than once per 10 s.
+  const refreshProfileRef = useRef(refreshProfile)
+  refreshProfileRef.current = refreshProfile
+  const hasMoverProfile = !!user?.moverDetails?.profileId
+  useEffect(() => {
+    if (!hasMoverProfile) return
+    let lastAt = Date.now()
+    const refresh = () => {
+      if (document.visibilityState !== 'visible') return
+      const now = Date.now()
+      if (now - lastAt < PROFILE_REFRESH_MIN_GAP_MS) return
+      lastAt = now
+      void refreshProfileRef.current({ background: true })
+    }
+    document.addEventListener('visibilitychange', refresh)
+    const id = setInterval(refresh, PROFILE_REFRESH_INTERVAL_MS)
+    return () => {
+      document.removeEventListener('visibilitychange', refresh)
+      clearInterval(id)
+    }
+  }, [hasMoverProfile])
   const moverDetails = user?.moverDetails
   // The current `vehicles` row is only needed to tell a first rental review
   // from a CHANGE review, and for the rejection reason / plate in the prompts.
@@ -495,7 +522,7 @@ const MoverDashboardLayout = ({ children }: Props) => {
         postMove={moverDetails?.vehicleReconfirmRequired === true}
         vehicleLabel={currentVehicle ? [currentVehicle.brand, currentVehicle.model].filter(Boolean).join(' ') : null}
         plate={currentVehicle?.registrationNumber ?? null}
-        onConfirmed={refreshProfile}
+        onConfirmed={() => refreshProfile()}
       />
 
       {/* Mobile Bottom Navigation */}
