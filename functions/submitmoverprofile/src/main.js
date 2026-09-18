@@ -95,9 +95,12 @@ export default async ({ req, res, log, error }) => {
     // Vehicle ownership (vehicles master plan §6.4 / D10). The vehicle itself
     // is no longer part of the profile: it is submitted separately through
     // `submitvehicle` as its own `vehicles` row with its own review status.
-    // Legacy callers that send no ownership are owned-vehicle drivers.
-    const ownership =
-      vehicleOwnership === undefined || vehicleOwnership === null ? 'owned' : String(vehicleOwnership);
+    // A caller that sends no ownership is a legacy owned-vehicle driver — on
+    // CREATE only. On a re-submit an omitted value must leave the stored one
+    // alone: defaulting there would silently turn a rented driver into an owned
+    // one and drop them out of the daily SAME/CHANGE confirmation.
+    const ownershipGiven = vehicleOwnership !== undefined && vehicleOwnership !== null;
+    const ownership = ownershipGiven ? String(vehicleOwnership) : 'owned';
     if (ownership !== 'owned' && ownership !== 'rented') {
       return res.json({ error: 'vehicleOwnership must be owned|rented', fnCode: 'generic.badRequest' }, 400);
     }
@@ -163,7 +166,6 @@ export default async ({ req, res, log, error }) => {
       businessPostcode: businessPostcode || null,
       primaryCity: primaryCity || null,
       primaryCountry: primaryCountry || null,
-      vehicleOwnership: ownership,
       languages: languages || [],
       yearsExperience: yearsExperience || 0,
       verificationStatus: 'pending_verification',
@@ -181,7 +183,7 @@ export default async ({ req, res, log, error }) => {
         DATABASE_ID,
         MOVER_PROFILES_COLLECTION,
         existing.documents[0].$id,
-        profileFields,
+        ownershipGiven ? { ...profileFields, vehicleOwnership: ownership } : profileFields,
       );
     } else {
       profile = await databases.createDocument(
@@ -190,6 +192,7 @@ export default async ({ req, res, log, error }) => {
         ID.unique(),
         {
           ...profileFields,
+          vehicleOwnership: ownership,
           // No vehicle yet: the dashboard reads `none` as "add your vehicle"
           // (D10). Never reset on re-submit — the vehicle has its own status.
           vehicleStatus: 'none',
