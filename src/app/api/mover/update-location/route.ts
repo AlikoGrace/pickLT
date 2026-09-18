@@ -94,6 +94,10 @@ export async function POST(req: NextRequest) {
         {
           currentLatitude: latitude,
           currentLongitude: longitude,
+          // The freshness term every visibility gate reads (3 min). The
+          // function port wrote it; this route did not, which left web-only
+          // drivers permanently stale for `listnearbymovers`.
+          locationUpdatedAt: new Date().toISOString(),
           isOnline: true,
         }
       )

@@ -589,7 +589,12 @@
         },
         "verification": {
           "title": "Doğrulama ve konum"
-        }
+        },
+        "ownership": {
+          "value": "Araç: {{ownership}}"
+        },
+        "vehicleLater": "Araç kayıttan sonra eklenecek ve taşıma alabilmeniz için doğrulanması gerekecektir.",
+        "platesOk": "Plaka ve araç fotoğrafları eklendi"
       },
       "step": {
         "experience": {
@@ -606,13 +611,20 @@
         },
         "verification": {
           "label": "Doğrulama"
+        },
+        "ownership": {
+          "label": "Mülkiyet"
         }
       },
       "submit": {
         "cta": "Profili gönder"
       },
       "subtitle": "Taşınma kabul etmeye başlamak için bilgilerinizi doldurun",
-      "title": "Nakliyeci profilinizi tamamlayın"
+      "title": "Nakliyeci profilinizi tamamlayın",
+      "ownership": {
+        "title": "Araç mülkiyeti"
+      },
+      "vehicleSubmitFailed": "Profiliniz kaydedildi, ancak araç gönderilemedi ({{error}}). Lütfen aracı panelden ekleyin."
     },
     "request": {
       "categoryAndType": {
@@ -736,6 +748,148 @@
     "withdrawConfirm": {
       "body": "Emin misiniz? Taşınma, diğer nakliyeciler için uygun hale gelecek.",
       "cta": "Evet, çekil"
+    },
+    "vehicle": {
+      "title": "Araç",
+      "subtitle": "Mevcut aracınız, doğrulama durumu ve geçmişi.",
+      "loadFailed": {
+        "error": "Araç bilgileri yüklenemedi."
+      },
+      "uploadFailed": {
+        "error": "Araç fotoğrafı yüklenemedi."
+      },
+      "submitFailed": {
+        "error": "Araç gönderilemedi."
+      },
+      "confirmFailed": {
+        "error": "Onay kaydedilemedi."
+      },
+      "submitted": {
+        "success": "Araç doğrulama için gönderildi"
+      },
+      "submittedAt": {
+        "label": "Gönderildi"
+      },
+      "verifiedAt": {
+        "label": "Doğrulandı"
+      },
+      "confirmedFor": {
+        "label": "{{date}} için onaylandı"
+      },
+      "rejectionReason": {
+        "label": "Neden"
+      },
+      "history": {
+        "title": "Geçmiş",
+        "empty": "Henüz kayıt yok."
+      },
+      "none": {
+        "title": "Kayıtlı araç yok",
+        "body": "Aracınızı ekleyin ve doğrulama için gönderin. Onaylanır onaylanmaz taşıma almaya başlarsınız."
+      },
+      "photo": {
+        "front": {
+          "a11y": "Ön plaka"
+        },
+        "rear": {
+          "a11y": "Arka plaka"
+        },
+        "full": {
+          "a11y": "Aracın tamamı"
+        }
+      },
+      "setup": {
+        "add": {
+          "title": "Araç ekle"
+        },
+        "change": {
+          "title": "Araç değiştir"
+        },
+        "resubmit": {
+          "title": "Aracı yeniden gönder"
+        },
+        "subtitle": "Her araç, sürücü profilinizden ayrı olarak doğrulanır. Lütfen plaka numarasını girin ve üç fotoğraf ekleyin.",
+        "changeNote": "Yeni bir araç göndermek mevcut aracınızı kullanım dışı bırakır. Yeni araç doğrulanana kadar taşıma almazsınız.",
+        "resubmitNote": "Lütfen aşağıdaki bilgileri düzeltip yeniden gönderin. Ret nedeni: {{reason}}",
+        "keepPhoto": {
+          "label": "Mevcut fotoğraf korunacak"
+        }
+      },
+      "action": {
+        "add": {
+          "cta": "Araç ekle"
+        },
+        "change": {
+          "cta": "Araç değiştir"
+        },
+        "resubmit": {
+          "cta": "Düzelt ve yeniden gönder"
+        },
+        "confirmToday": {
+          "cta": "Bugün için onayla"
+        },
+        "view": {
+          "cta": "Aracı görüntüle"
+        }
+      },
+      "state": {
+        "ownVerified": {
+          "title": "Araç doğrulandı",
+          "body": "Aracınız doğrulandı. Taşıma alabilir ve kabul edebilirsiniz."
+        },
+        "ownPendingVehicle": {
+          "title": "Aracınızı ekleyin",
+          "body": "Henüz kayıtlı bir araç yok. Taşıma alabilmek için aracınızı ekleyin ve doğrulama için gönderin."
+        },
+        "ownVehicleReview": {
+          "title": "Araç inceleniyor",
+          "body": "Aracınız doğrulanıyor. Onaylanır onaylanmaz taşıma almaya başlarsınız."
+        },
+        "rentalPendingVehicle": {
+          "title": "Kiralık aracınızı ekleyin",
+          "body": "Kaydınız tamamlandı. Taşıma almaya başlamak için kiraladığınız aracı ekleyin ve doğrulama için gönderin."
+        },
+        "rentalVehicleReview": {
+          "title": "Kiralık araç inceleniyor",
+          "body": "Kiralık aracınız doğrulanıyor. Onaylanır onaylanmaz taşıma almaya başlarsınız."
+        },
+        "rentalChangePending": {
+          "title": "Araç değişikliği inceleniyor",
+          "body": "Yeni aracınız doğrulanıyor. O zamana kadar taşıma almazsınız."
+        },
+        "rentalDailyConfirmationRequired": {
+          "title": "Aracınızı onaylayın",
+          "body": "Taşıma almadan önce lütfen bugün aynı aracı kullanıp kullanmadığınızı onaylayın."
+        },
+        "rentalVerifiedToday": {
+          "title": "Araç bugün için onaylandı",
+          "body": "Kiralık aracınız doğrulandı ve bugün için onaylandı. Taşıma alabilir ve kabul edebilirsiniz."
+        },
+        "vehicleRejected": {
+          "title": "Araç onaylanmadı",
+          "body": "Aracınız onaylanmadı. Lütfen bilgileri düzeltip yeniden gönderin."
+        }
+      },
+      "confirm": {
+        "title": "Bugün hangi aracı kullanıyorsunuz?",
+        "body": "Çevrimiçi olmadan önce lütfen aracınızı onaylayın. Bu, bir hizmet günündeki her girişte gereklidir.",
+        "bodyPostMove": "Son taşımanız tamamlandı. Lütfen aynı araçla devam edip etmeyeceğinizi onaylayın.",
+        "same": {
+          "cta": "Aynı araç"
+        },
+        "change": {
+          "cta": "Araç değiştir"
+        },
+        "confirming": {
+          "label": "Onaylanıyor…"
+        }
+      },
+      "settings": {
+        "helper": "Araç değişiklikleri ayrı olarak doğrulanır ve sürücü doğrulamanızı etkilemez.",
+        "status": {
+          "label": "{{vehicle}} · {{status}}"
+        }
+      }
     }
   },
   "moverDashboard": {
@@ -817,6 +971,9 @@
     },
     "taxDocuments": {
       "label": "Vergi belgeleri"
+    },
+    "vehicle": {
+      "label": "Araç"
     }
   },
   "myMoves": {
@@ -1136,6 +1293,11 @@
     },
     "stepTotal": {
       "label": "/{{total}}"
+    }
+  },
+  "moverCard": {
+    "vehicleVerified": {
+      "badge": "Doğrulanmış araç"
     }
   }
 }

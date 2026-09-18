@@ -127,6 +127,30 @@ export function notificationPermissions(addresseeAuthId: string): string[] {
 }
 
 /**
+ * `vehicles` / `vehicle_events` — the driver reads their own vehicle and its
+ * audit trail directly from a session (mobile). Every write is a server path,
+ * so there is no `update`/`delete` grant. `ownerAuthId` is the profile's
+ * `userId` (an auth account id), never `mover_profiles.$id`.
+ */
+export function vehiclePermissions(ownerAuthId: string): string[] {
+  return [Permission.read(Role.user(ownerAuthId))]
+}
+
+/**
+ * Storage permissions for `/api/user/upload-photo`, keyed on the `purpose`
+ * field the caller sends. A selfie is an avatar rendered by bare `<img>` tags
+ * across four apps with no Appwrite identity, so it keeps whatever the bucket
+ * allows (`undefined`). Everything else — the licence scan and the three
+ * vehicle photos (`purpose='vehicle'`, master D11) — is evidence displayed only
+ * through the admin console's authorised proxy, so it gets an explicit
+ * owner-only grant and must never become world-readable. Pulled out of the
+ * route so the branch is pinned by a test rather than by a comment.
+ */
+export function uploadedPhotoPermissions(purpose: string, ownerAuthId: string): string[] | undefined {
+  return purpose === 'selfie' ? undefined : [Permission.read(Role.user(ownerAuthId))]
+}
+
+/**
  * `move_status_history` — deliberately empty. Nothing in any client reads this
  * collection; it is a pure server-side audit trail. Passed explicitly so the
  * intent is visible at the call site rather than looking like an omission.

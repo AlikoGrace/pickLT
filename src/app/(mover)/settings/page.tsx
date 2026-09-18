@@ -25,19 +25,9 @@ import { useState, useRef } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { formatFileSizeMb } from '@/lib/format'
 import { AVATAR_UPLOAD_MAX_MB } from '@/lib/service-limits'
-import { vehicleCapacityLabel } from '@/lib/vehicle-capacity'
+import { vehicleStatusLabel } from '@/lib/vehicle-labels'
 
-type ModalType = 'editName' | 'changeEmail' | 'changePhone' | 'editVehicle' | null
-
-/**
- * Stored slug -> catalog segment. The slug is what Appwrite persists; the label is
- * looked up. Never derive the slug back out of a label.
- */
-const VEHICLE_TYPE_SLUGS = [
-  { value: 'small_van', key: 'smallVan' },
-  { value: 'medium_truck', key: 'mediumTruck' },
-  { value: 'large_truck', key: 'largeTruck' },
-] as const
+type ModalType = 'editName' | 'changeEmail' | 'changePhone' | null
 
 const SettingsPage = () => {
   const { user, updateUser, logout, refreshProfile } = useAuth()
@@ -60,16 +50,6 @@ const SettingsPage = () => {
   const [newPhone, setNewPhone] = useState('')
   const [phoneOtp, setPhoneOtp] = useState('')
   const [phoneStep, setPhoneStep] = useState<'input' | 'verify'>('input')
-
-  // Vehicle edit state
-  const [vehicleForm, setVehicleForm] = useState({
-    vehicleBrand: user?.moverDetails?.vehicleBrand || '',
-    vehicleModel: user?.moverDetails?.vehicleModel || '',
-    vehicleYear: user?.moverDetails?.vehicleYear || '',
-    vehicleCapacity: user?.moverDetails?.vehicleCapacity || '',
-    vehicleRegistration: user?.moverDetails?.vehicleRegistration || '',
-    vehicleType: user?.moverDetails?.vehicleType || '',
-  })
 
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -242,48 +222,6 @@ const SettingsPage = () => {
     setPhoneOtp('')
   }
 
-  const handleSaveVehicle = async () => {
-    if (!vehicleForm.vehicleBrand.trim() || !vehicleForm.vehicleModel.trim() || !vehicleForm.vehicleRegistration.trim() || !vehicleForm.vehicleType) {
-      setError(t('errors:vehicle.fieldsRequired'))
-      return
-    }
-    setIsSaving(true)
-    setError('')
-    try {
-      const res = await fetch('/api/mover/submit-profile', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          fullName: user?.fullName,
-          phone: user?.phone,
-          driversLicense: user?.moverDetails?.driversLicense || '',
-          primaryCity: user?.moverDetails?.primaryCity || '',
-          primaryCountry: user?.moverDetails?.primaryCountry || '',
-          vehicleBrand: vehicleForm.vehicleBrand,
-          vehicleModel: vehicleForm.vehicleModel,
-          vehicleYear: vehicleForm.vehicleYear,
-          vehicleCapacity: vehicleForm.vehicleCapacity,
-          vehicleRegistration: vehicleForm.vehicleRegistration,
-          vehicleType: vehicleForm.vehicleType,
-          languages: user?.moverDetails?.languages || [],
-          yearsExperience: user?.moverDetails?.yearsExperience || 0,
-        }),
-      })
-      if (!res.ok) {
-        const data = await res.json()
-        throw new Error(data.error || t('errors:vehicle.updateFailed'))
-      }
-      await refreshProfile()
-      setActiveModal(null)
-      setSuccess(t('booking:vehicle.updated.success'))
-      setTimeout(() => setSuccess(''), 3000)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : t('errors:vehicle.saveFailed'))
-    } finally {
-      setIsSaving(false)
-    }
-  }
-
   const settingsSections = [
     {
       id: 'account',
@@ -326,24 +264,20 @@ const SettingsPage = () => {
           },
         },
         {
+          // The vehicle is its own verified record now (master D1). Editing it
+          // used to re-submit the whole profile and silently drop the driver
+          // back to `pending_verification`; the vehicle page submits a vehicle
+          // for its own review and leaves driver KYC alone.
           id: 'vehicle',
           icon: TruckIcon,
           label: t('booking:vehicle.title'),
           description: user?.moverDetails?.vehicleBrand
-            ? `${user.moverDetails.vehicleBrand} ${user.moverDetails.vehicleModel}`
-            : t('booking:vehicle.addDetails.helper'),
-          action: () => {
-            setVehicleForm({
-              vehicleBrand: user?.moverDetails?.vehicleBrand || '',
-              vehicleModel: user?.moverDetails?.vehicleModel || '',
-              vehicleYear: user?.moverDetails?.vehicleYear || '',
-              vehicleCapacity: user?.moverDetails?.vehicleCapacity || '',
-              vehicleRegistration: user?.moverDetails?.vehicleRegistration || '',
-              vehicleType: user?.moverDetails?.vehicleType || '',
-            })
-            setError('')
-            setActiveModal('editVehicle')
-          },
+            ? t('web:mover.vehicle.settings.status.label', {
+                vehicle: `${user.moverDetails.vehicleBrand} ${user.moverDetails.vehicleModel ?? ''}`.trim(),
+                status: vehicleStatusLabel(t, user.moverDetails.vehicleStatus),
+              })
+            : vehicleStatusLabel(t, user?.moverDetails?.vehicleStatus),
+          action: () => router.push('/vehicle'),
         },
         {
           id: 'payouts',
@@ -499,6 +433,10 @@ const SettingsPage = () => {
           </div>
         ))}
       </div>
+
+      <p className="mt-3 px-1 text-xs text-neutral-400 dark:text-neutral-500">
+        {t('web:mover.vehicle.settings.helper')}
+      </p>
 
       {/* Logout Button */}
       <button
@@ -740,133 +678,6 @@ const SettingsPage = () => {
               </>
             )}
 
-            {/* ── Edit Vehicle ── */}
-            {activeModal === 'editVehicle' && (
-              <>
-                <h3 className="text-xl font-bold text-neutral-900 dark:text-neutral-100 mb-4">
-                  {t('booking:vehicle.edit.title')}
-                </h3>
-                <div className="space-y-4 max-h-[60vh] overflow-y-auto">
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                        {t('booking:vehicle.brandShort.label')}
-                      </label>
-                      <input
-                        type="text"
-                        value={vehicleForm.vehicleBrand}
-                        onChange={(e) => setVehicleForm(prev => ({ ...prev, vehicleBrand: e.target.value }))}
-                        placeholder={t('booking:vehicle.brand.placeholder')}
-                        className="w-full px-4 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-transparent focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                        {t('booking:vehicle.modelShort.label')}
-                      </label>
-                      <input
-                        type="text"
-                        value={vehicleForm.vehicleModel}
-                        onChange={(e) => setVehicleForm(prev => ({ ...prev, vehicleModel: e.target.value }))}
-                        placeholder={t('booking:vehicle.model.placeholder')}
-                        className="w-full px-4 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-transparent focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none"
-                      />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                        {t('booking:vehicle.yearShort.label')}
-                      </label>
-                      <input
-                        type="text"
-                        value={vehicleForm.vehicleYear}
-                        onChange={(e) => setVehicleForm(prev => ({ ...prev, vehicleYear: e.target.value }))}
-                        placeholder={t('booking:vehicle.year.placeholder')}
-                        maxLength={4}
-                        className="w-full px-4 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-transparent focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                        {t('booking:vehicle.capacity.label')}
-                      </label>
-                      <input
-                        type="text"
-                        value={vehicleForm.vehicleCapacity}
-                        onChange={(e) => setVehicleForm(prev => ({ ...prev, vehicleCapacity: e.target.value }))}
-                        placeholder={t('booking:vehicle.capacity.placeholder')}
-                        className="w-full px-4 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-transparent focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                      {t('booking:vehicle.registrationShort.label')}
-                    </label>
-                    <input
-                      type="text"
-                      value={vehicleForm.vehicleRegistration}
-                      onChange={(e) => setVehicleForm(prev => ({ ...prev, vehicleRegistration: e.target.value }))}
-                      placeholder={t('booking:vehicle.registration.placeholder')}
-                      className="w-full px-4 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-transparent focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                      {t('booking:vehicle.type.label')}
-                    </label>
-                    <div className="space-y-2">
-                      {/* i18n-keys: booking:vehicle.smallVan.label, booking:vehicle.mediumTruck.label, booking:vehicle.largeTruck.label */}
-                      {VEHICLE_TYPE_SLUGS.map((v) => (
-                        <label
-                          key={v.value}
-                          className={`flex cursor-pointer items-center rounded-xl border p-3 transition-colors ${
-                            vehicleForm.vehicleType === v.value
-                              ? 'border-primary-500 bg-primary-50 dark:border-primary-400 dark:bg-primary-900/20'
-                              : 'border-neutral-200 hover:border-neutral-300 dark:border-neutral-700'
-                          }`}
-                        >
-                          <input
-                            type="radio"
-                            name="vehicleTypeEdit"
-                            value={v.value}
-                            checked={vehicleForm.vehicleType === v.value}
-                            onChange={() => setVehicleForm(prev => ({ ...prev, vehicleType: v.value }))}
-                            className="sr-only"
-                          />
-                          <TruckIcon className="mr-3 h-5 w-5 flex-shrink-0 text-neutral-500" />
-                          <div>
-                            <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
-                              {t(`booking:vehicle.${v.key}.label`)}
-                            </p>
-                            <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                              {vehicleCapacityLabel(t, v.key)}
-                            </p>
-                          </div>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                  {error && <p className="text-sm text-red-500">{error}</p>}
-                  <div className="flex gap-3 pt-2">
-                    <button
-                      onClick={closeModal}
-                      className="flex-1 px-4 py-2 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-full font-medium hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
-                    >
-                      {t('common:action.cancel.cta')}
-                    </button>
-                    <button
-                      onClick={handleSaveVehicle}
-                      disabled={isSaving}
-                      className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-full font-medium hover:bg-primary-700 transition-colors disabled:opacity-50"
-                    >
-                      {isSaving ? t('common:state.saving.label') : t('common:action.saveChanges.cta')}
-                    </button>
-                  </div>
-                </div>
-              </>
-            )}
           </div>
         </div>
       )}

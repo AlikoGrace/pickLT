@@ -589,7 +589,12 @@
         },
         "verification": {
           "title": "Verification & Location"
-        }
+        },
+        "ownership": {
+          "value": "Vehicle: {{ownership}}"
+        },
+        "vehicleLater": "The vehicle will be added after registration and must be verified before you receive moves.",
+        "platesOk": "Number plate and vehicle photos attached"
       },
       "step": {
         "experience": {
@@ -606,13 +611,20 @@
         },
         "verification": {
           "label": "Verification"
+        },
+        "ownership": {
+          "label": "Ownership"
         }
       },
       "submit": {
         "cta": "Submit Profile"
       },
       "subtitle": "Fill in your details to start accepting moves",
-      "title": "Complete Your Mover Profile"
+      "title": "Complete Your Mover Profile",
+      "ownership": {
+        "title": "Vehicle ownership"
+      },
+      "vehicleSubmitFailed": "Your profile has been saved, but the vehicle could not be submitted ({{error}}). Please add it from the dashboard."
     },
     "request": {
       "categoryAndType": {
@@ -736,6 +748,148 @@
     "withdrawConfirm": {
       "body": "Are you sure? The move will become available for other movers.",
       "cta": "Yes, Withdraw"
+    },
+    "vehicle": {
+      "title": "Vehicle",
+      "subtitle": "Your current vehicle, its verification status and history.",
+      "loadFailed": {
+        "error": "The vehicle details could not be loaded."
+      },
+      "uploadFailed": {
+        "error": "The vehicle photo could not be uploaded."
+      },
+      "submitFailed": {
+        "error": "The vehicle could not be submitted."
+      },
+      "confirmFailed": {
+        "error": "The confirmation could not be saved."
+      },
+      "submitted": {
+        "success": "Vehicle submitted for verification"
+      },
+      "submittedAt": {
+        "label": "Submitted"
+      },
+      "verifiedAt": {
+        "label": "Verified"
+      },
+      "confirmedFor": {
+        "label": "Confirmed for {{date}}"
+      },
+      "rejectionReason": {
+        "label": "Reason"
+      },
+      "history": {
+        "title": "History",
+        "empty": "No entries yet."
+      },
+      "none": {
+        "title": "No vehicle on file",
+        "body": "Add your vehicle and submit it for verification. You will receive moves once it has been approved."
+      },
+      "photo": {
+        "front": {
+          "a11y": "Front number plate"
+        },
+        "rear": {
+          "a11y": "Rear number plate"
+        },
+        "full": {
+          "a11y": "Whole vehicle"
+        }
+      },
+      "setup": {
+        "add": {
+          "title": "Add vehicle"
+        },
+        "change": {
+          "title": "Change vehicle"
+        },
+        "resubmit": {
+          "title": "Resubmit vehicle"
+        },
+        "subtitle": "Each vehicle is verified separately from your driver profile. Please provide the registration number and three photos.",
+        "changeNote": "Submitting a new vehicle retires your current one. You will not receive moves until the new vehicle has been verified.",
+        "resubmitNote": "Please correct the details below and submit again. Reason for the rejection: {{reason}}",
+        "keepPhoto": {
+          "label": "Current photo will be kept"
+        }
+      },
+      "action": {
+        "add": {
+          "cta": "Add vehicle"
+        },
+        "change": {
+          "cta": "Change vehicle"
+        },
+        "resubmit": {
+          "cta": "Correct and resubmit"
+        },
+        "confirmToday": {
+          "cta": "Confirm for today"
+        },
+        "view": {
+          "cta": "View vehicle"
+        }
+      },
+      "state": {
+        "ownVerified": {
+          "title": "Vehicle verified",
+          "body": "Your vehicle has been verified. You can receive and accept moves."
+        },
+        "ownPendingVehicle": {
+          "title": "Add your vehicle",
+          "body": "No vehicle is on file yet. Add your vehicle and submit it for verification to receive moves."
+        },
+        "ownVehicleReview": {
+          "title": "Vehicle under review",
+          "body": "Your vehicle is being verified. You will receive moves as soon as it has been approved."
+        },
+        "rentalPendingVehicle": {
+          "title": "Add your rental vehicle",
+          "body": "Your registration is complete. Add the vehicle you are renting and submit it for verification to start receiving moves."
+        },
+        "rentalVehicleReview": {
+          "title": "Rental vehicle under review",
+          "body": "Your rental vehicle is being verified. You will receive moves as soon as it has been approved."
+        },
+        "rentalChangePending": {
+          "title": "Vehicle change under review",
+          "body": "Your new vehicle is being verified. Until then you will not receive moves."
+        },
+        "rentalDailyConfirmationRequired": {
+          "title": "Confirm your vehicle",
+          "body": "Please confirm whether you are using the same vehicle today before you receive moves."
+        },
+        "rentalVerifiedToday": {
+          "title": "Vehicle confirmed for today",
+          "body": "Your rental vehicle is verified and confirmed for today. You can receive and accept moves."
+        },
+        "vehicleRejected": {
+          "title": "Vehicle not approved",
+          "body": "Your vehicle submission was not approved. Please correct the details and resubmit."
+        }
+      },
+      "confirm": {
+        "title": "Which vehicle are you using today?",
+        "body": "Please confirm your vehicle before you go online. This is required at every login on a service day.",
+        "bodyPostMove": "Your last move is complete. Please confirm whether you will continue with the same vehicle.",
+        "same": {
+          "cta": "Same vehicle"
+        },
+        "change": {
+          "cta": "Change vehicle"
+        },
+        "confirming": {
+          "label": "Confirming…"
+        }
+      },
+      "settings": {
+        "helper": "Vehicle changes are verified separately and do not affect your driver verification.",
+        "status": {
+          "label": "{{vehicle}} · {{status}}"
+        }
+      }
     }
   },
   "moverDashboard": {
@@ -817,6 +971,9 @@
     },
     "taxDocuments": {
       "label": "Tax Documents"
+    },
+    "vehicle": {
+      "label": "Vehicle"
     }
   },
   "myMoves": {
@@ -1136,6 +1293,11 @@
     },
     "stepTotal": {
       "label": "/{{total}}"
+    }
+  },
+  "moverCard": {
+    "vehicleVerified": {
+      "badge": "Verified vehicle"
     }
   }
 }

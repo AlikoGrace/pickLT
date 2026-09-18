@@ -1,0 +1,3 @@
+# submitvehicle
+
+Mover-callable function (identity from `x-appwrite-user-id`) that registers or re-submits a driver's vehicle as its own `vehicles` row, retires the previous current vehicle, appends the audit rows to `vehicle_events`, and moves the profile to `vehicleStatus='pending_review'` without touching driver KYC (`verificationStatus`) or the legacy `vehicle*` snapshot columns. Contract: `pickltmobile/.agent/plans/vehicles/0.master.md` §6.1. Owner repo: pickltmover; the copies in pickltmobile and pickLT are byte-identical reference mirrors (`pickltmobile/scripts/check-function-mirrors.sh`).

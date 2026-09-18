@@ -162,6 +162,10 @@ export async function GET(
         yearsExperience: moverProfile.yearsExperience || 0,
         languages: moverProfile.languages || [],
         isVerified: moverProfile.verificationStatus === 'verified',
+        // Vehicle verification is separate from driver KYC (master D1). The
+        // legacy snapshot columns above are written only for a verified
+        // vehicle, but the flag is what the badge reads.
+        vehicleVerified: moverProfile.vehicleStatus === 'verified',
       } : null,
     })
   } catch (err) {

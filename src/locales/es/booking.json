@@ -1283,8 +1283,19 @@
         "value": "Hasta {{capacity}}"
       }
     },
+    "declaration": {
+      "body": "Al enviar, confirma que esta información es veraz y está actualizada, y que usted es responsable de cumplir los requisitos aplicables en materia de vehículo, permisos y seguro.",
+      "confirmBody": "Al confirmar, declara que hoy utiliza el vehículo registrado y que la información registrada es veraz y está actualizada."
+    },
     "edit": {
       "title": "Editar la información del vehículo"
+    },
+    "evidence": {
+      "title": "Pruebas del vehículo"
+    },
+    "fullPhoto": {
+      "helper": "Muestre el vehículo completo, no una parte recortada.",
+      "label": "Foto del vehículo completo"
     },
     "largeTruck": {
       "helper": "{{capacity}}: mudanzas de casas, cargas grandes",
@@ -1304,7 +1315,25 @@
     "multiple": {
       "label": "Varios"
     },
+    "ownership": {
+      "label": "¿Quién aporta el vehículo?",
+      "owned": {
+        "helper": "Usted es propietario del vehículo que utilizará para las mudanzas."
+      },
+      "rented": {
+        "helper": "Usted alquila el vehículo. Puede completar el registro ahora y añadir el vehículo después. Debe estar verificado antes de recibir mudanzas."
+      }
+    },
+    "plateFront": {
+      "helper": "El número de matrícula debe ser legible.",
+      "label": "Foto de la matrícula delantera"
+    },
+    "plateRear": {
+      "helper": "El número de matrícula debe ser legible.",
+      "label": "Foto de la matrícula trasera"
+    },
     "registration": {
+      "helper": "Debe coincidir con el número de ambas matrículas.",
       "label": "Matrícula del vehículo *",
       "placeholder": "p. ej., B-AB 1234"
     },
@@ -1314,6 +1343,9 @@
     "smallVan": {
       "helper": "{{capacity}}: mudanzas pequeñas, objetos sueltos",
       "label": "Furgoneta pequeña"
+    },
+    "submitForVerification": {
+      "cta": "Enviar para verificación"
     },
     "title": "Información del vehículo",
     "type": {

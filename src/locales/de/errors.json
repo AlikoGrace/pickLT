@@ -68,7 +68,9 @@
       "verifyFailed": "Verifizierung fehlgeschlagen (Status {{status}}). Bitte versuchen Sie es erneut."
     },
     "pricing": {
+      "capacityOutOfRange": "{{label}} muss zwischen 1 und 120 m³ liegen.",
       "commissionTooLarge": "{{label}} ist ein Anteil, kein Prozentwert – geben Sie 0.15 für 15 % ein.",
+      "flagNotBoolean": "{{label}} ist ein Schalter – geben Sie 0 oder 1 ein.",
       "keyRequired": "key ist erforderlich",
       "negative": "{{label}} darf nicht negativ sein.",
       "notANumber": "{{label}} muss eine Zahl sein.",
@@ -80,6 +82,15 @@
       "blockedFlagRequired": "Ein Wert für gesperrt/entsperrt ist erforderlich.",
       "notFound": "Nutzer nicht gefunden.",
       "selfBlock": "Sie können Ihr eigenes Konto nicht sperren."
+    },
+    "vehicle": {
+      "invalidDecision": "Die Entscheidung muss „verified“ oder „rejected“ lauten.",
+      "invalidPhotoKind": "Die Fotoart muss front, rear oder full sein.",
+      "noPhoto": "Für dieses Fahrzeug liegt kein Foto „{{kind}}“ vor.",
+      "notFound": "Fahrzeug nicht gefunden.",
+      "notPending": "Dieses Fahrzeug wartet nicht auf eine Prüfung.",
+      "reasonRequired": "Beim Ablehnen eines Fahrzeugs ist eine Begründung erforderlich.",
+      "verifyFailed": "Fahrzeugprüfung fehlgeschlagen (Status {{status}}). Bitte versuchen Sie es erneut."
     }
   },
   "appwrite": {
@@ -241,6 +252,7 @@
     "selfieUploadFailed": "Das Selfie konnte nicht hochgeladen werden",
     "startRouteFailed": "Route konnte nicht gestartet werden",
     "startRouteRetry": "Route konnte nicht gestartet werden. Bitte versuchen Sie es erneut.",
+    "vehicleNotReady": "Bestätigen oder verifizieren Sie Ihr Fahrzeug, bevor Sie online gehen oder Umzüge annehmen.",
     "withdrawFailed": "Rücktritt vom Umzug fehlgeschlagen",
     "withdrawRetry": "Rücktritt fehlgeschlagen. Bitte versuchen Sie es erneut."
   },
@@ -321,8 +333,18 @@
     "phoneRequired2": "Telefonnummer ist erforderlich"
   },
   "vehicle": {
+    "capacityOutOfRange": "Das Ladevolumen muss zwischen 1 und 120 m³ liegen.",
     "fieldsRequired": "Bitte füllen Sie alle Pflichtfelder zum Fahrzeug aus",
+    "notFound": "Fahrzeug nicht gefunden.",
+    "notPending": "Dieses Fahrzeug wartet nicht auf eine Prüfung.",
+    "notRental": "Die tägliche Bestätigung gilt nur für Mietfahrzeuge.",
+    "notVerified": "Ihr aktuelles Fahrzeug wurde noch nicht verifiziert.",
+    "photosRequired": "Fügen Sie Fotos des vorderen Kennzeichens, des hinteren Kennzeichens und des gesamten Fahrzeugs hinzu.",
+    "plateInUse": "Dieses Kennzeichen ist bereits bei einem anderen Fahrer registriert.",
+    "plateInvalid": "Geben Sie ein gültiges Kennzeichen ein.",
     "saveFailed": "Fahrzeugdaten konnten nicht gespeichert werden",
-    "updateFailed": "Fahrzeugdaten konnten nicht aktualisiert werden"
+    "typeInvalid": "Wählen Sie einen Fahrzeugtyp.",
+    "updateFailed": "Fahrzeugdaten konnten nicht aktualisiert werden",
+    "yearInvalid": "Geben Sie ein vierstelliges Jahr ein."
   }
 }

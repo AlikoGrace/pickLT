@@ -125,6 +125,20 @@
       "title": "Descargando"
     }
   },
+  "vehicle": {
+    "confirmationRequired": {
+      "body": "Antes de su próxima mudanza, confirme si sigue utilizando el mismo vehículo.",
+      "title": "Confirme su vehículo"
+    },
+    "rejected": {
+      "body": "Su solicitud de vehículo no fue aprobada: {{reason}}. Corrija los datos y vuelva a enviarla.",
+      "title": "Vehículo no aprobado"
+    },
+    "verified": {
+      "body": "Su vehículo {{plate}} ha sido verificado. Ya puede volver a recibir mudanzas.",
+      "title": "Vehículo verificado"
+    }
+  },
   "verification": {
     "contactSupport": "Ponte en contacto con soporte para más detalles.",
     "rejected": {

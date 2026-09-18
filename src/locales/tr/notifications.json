@@ -125,6 +125,20 @@
       "title": "Boşaltılıyor"
     }
   },
+  "vehicle": {
+    "confirmationRequired": {
+      "body": "Bir sonraki taşınmanızdan önce hâlâ aynı aracı kullanıp kullanmadığınızı onaylayın.",
+      "title": "Aracınızı onaylayın"
+    },
+    "rejected": {
+      "body": "Araç başvurunuz onaylanmadı: {{reason}}. Bilgileri düzeltip yeniden gönderin.",
+      "title": "Araç onaylanmadı"
+    },
+    "verified": {
+      "body": "{{plate}} plakalı aracınız doğrulandı. Yeniden taşınma alabilirsiniz.",
+      "title": "Araç doğrulandı"
+    }
+  },
   "verification": {
     "contactSupport": "Ayrıntılar için lütfen destek ekibiyle iletişime geçin.",
     "rejected": {

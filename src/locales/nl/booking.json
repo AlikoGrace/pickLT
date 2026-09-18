@@ -1283,8 +1283,19 @@
         "value": "Tot {{capacity}}"
       }
     },
+    "declaration": {
+      "body": "Door in te dienen bevestigt u dat deze gegevens waarheidsgetrouw en actueel zijn, en dat u verantwoordelijk bent voor het naleven van de geldende eisen voor voertuig, rijbevoegdheid en verzekering.",
+      "confirmBody": "Door te bevestigen verklaart u dat u vandaag het geregistreerde voertuig gebruikt en dat de vastgelegde gegevens waarheidsgetrouw en actueel zijn."
+    },
     "edit": {
       "title": "Voertuiggegevens bewerken"
+    },
+    "evidence": {
+      "title": "Voertuigbewijs"
+    },
+    "fullPhoto": {
+      "helper": "Toon het volledige voertuig, geen bijgesneden deel.",
+      "label": "Foto van het hele voertuig"
     },
     "largeTruck": {
       "helper": "{{capacity}} — woningverhuizingen, grote ladingen",
@@ -1304,7 +1315,25 @@
     "multiple": {
       "label": "Meerdere"
     },
+    "ownership": {
+      "label": "Wie levert het voertuig?",
+      "owned": {
+        "helper": "U bent eigenaar van het voertuig dat u voor verhuizingen gebruikt."
+      },
+      "rented": {
+        "helper": "U huurt het voertuig. U kunt de registratie nu afronden en het voertuig daarna toevoegen. Het moet geverifieerd zijn voordat u verhuizingen ontvangt."
+      }
+    },
+    "plateFront": {
+      "helper": "Het kenteken moet leesbaar zijn.",
+      "label": "Foto van de voorste kentekenplaat"
+    },
+    "plateRear": {
+      "helper": "Het kenteken moet leesbaar zijn.",
+      "label": "Foto van de achterste kentekenplaat"
+    },
     "registration": {
+      "helper": "Moet overeenkomen met het nummer op beide kentekenplaten.",
       "label": "Kenteken *",
       "placeholder": "bijv. B-AB 1234"
     },
@@ -1314,6 +1343,9 @@
     "smallVan": {
       "helper": "{{capacity}} — kleine verhuizingen, losse spullen",
       "label": "Kleine bestelbus"
+    },
+    "submitForVerification": {
+      "cta": "Indienen ter verificatie"
     },
     "title": "Voertuiggegevens",
     "type": {

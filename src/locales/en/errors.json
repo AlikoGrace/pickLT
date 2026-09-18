@@ -68,7 +68,9 @@
       "verifyFailed": "Verification failed (status {{status}}). Please try again."
     },
     "pricing": {
+      "capacityOutOfRange": "{{label}} must be between 1 and 120 m³.",
       "commissionTooLarge": "{{label}} is a fraction, not a percentage — enter 0.15 for 15%.",
+      "flagNotBoolean": "{{label}} is a switch — enter 0 or 1.",
       "keyRequired": "key is required",
       "negative": "{{label}} cannot be negative.",
       "notANumber": "{{label}} must be a number.",
@@ -80,6 +82,15 @@
       "blockedFlagRequired": "A blocked/unblocked value is required.",
       "notFound": "User not found.",
       "selfBlock": "You cannot block your own account."
+    },
+    "vehicle": {
+      "invalidDecision": "Decision must be \"verified\" or \"rejected\".",
+      "invalidPhotoKind": "Photo kind must be front, rear or full.",
+      "noPhoto": "No {{kind}} photo on file for this vehicle.",
+      "notFound": "Vehicle not found.",
+      "notPending": "This vehicle is not awaiting review.",
+      "reasonRequired": "A reason is required when rejecting a vehicle.",
+      "verifyFailed": "Vehicle verification failed (status {{status}}). Please try again."
     }
   },
   "appwrite": {
@@ -241,6 +252,7 @@
     "selfieUploadFailed": "Failed to upload selfie photo",
     "startRouteFailed": "Failed to start route",
     "startRouteRetry": "Failed to start route. Please try again.",
+    "vehicleNotReady": "Confirm or verify your vehicle before going online or accepting moves.",
     "withdrawFailed": "Failed to withdraw from move",
     "withdrawRetry": "Failed to withdraw. Please try again."
   },
@@ -321,8 +333,18 @@
     "phoneRequired2": "Phone number is required"
   },
   "vehicle": {
+    "capacityOutOfRange": "Capacity must be between 1 and 120 m³.",
     "fieldsRequired": "Please fill in all required vehicle fields",
+    "notFound": "Vehicle not found.",
+    "notPending": "This vehicle is not awaiting review.",
+    "notRental": "Daily confirmation applies to rented vehicles only.",
+    "notVerified": "Your current vehicle has not been verified yet.",
+    "photosRequired": "Add the front plate, rear plate and full vehicle photos.",
+    "plateInUse": "This registration number is already registered to another driver.",
+    "plateInvalid": "Enter a valid registration number.",
     "saveFailed": "Failed to save vehicle info",
-    "updateFailed": "Failed to update vehicle info"
+    "typeInvalid": "Choose a vehicle type.",
+    "updateFailed": "Failed to update vehicle info",
+    "yearInvalid": "Enter a four-digit year."
   }
 }

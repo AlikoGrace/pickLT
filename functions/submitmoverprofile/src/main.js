@@ -87,15 +87,20 @@ export default async ({ req, res, log, error }) => {
       businessPostcode,
       primaryCity,
       primaryCountry,
-      vehicleBrand,
-      vehicleModel,
-      vehicleYear,
-      vehicleCapacity,
-      vehicleRegistration,
-      vehicleType,
+      vehicleOwnership,
       languages,
       yearsExperience,
     } = body;
+
+    // Vehicle ownership (vehicles master plan §6.4 / D10). The vehicle itself
+    // is no longer part of the profile: it is submitted separately through
+    // `submitvehicle` as its own `vehicles` row with its own review status.
+    // Legacy callers that send no ownership are owned-vehicle drivers.
+    const ownership =
+      vehicleOwnership === undefined || vehicleOwnership === null ? 'owned' : String(vehicleOwnership);
+    if (ownership !== 'owned' && ownership !== 'rented') {
+      return res.json({ error: 'vehicleOwnership must be owned|rented', fnCode: 'generic.badRequest' }, 400);
+    }
 
     // T9 sanctions gate — server-authoritative; both onboarding UIs surface
     // this message verbatim.
@@ -138,7 +143,13 @@ export default async ({ req, res, log, error }) => {
     const photoUrl = selfiePhoto || existingUser?.profilePhoto || null;
 
     // Profile fields written on both create and re-submit. A re-submit returns
-    // the mover to pending_verification (vehicle/KYC changes need re-review).
+    // the mover to pending_verification (KYC changes need re-review).
+    //
+    // The legacy vehicleBrand/Model/Year/Capacity/Registration/Type columns
+    // are deliberately NOT written here any more: they are the snapshot of
+    // the current VERIFIED vehicle and only the admin verify route writes
+    // them (vehicles master plan D2), so pricing and capacity gating key on
+    // verified data by construction.
     const profileFields = {
       userId,
       displayName,
@@ -152,12 +163,7 @@ export default async ({ req, res, log, error }) => {
       businessPostcode: businessPostcode || null,
       primaryCity: primaryCity || null,
       primaryCountry: primaryCountry || null,
-      vehicleBrand: vehicleBrand || null,
-      vehicleModel: vehicleModel || null,
-      vehicleYear: vehicleYear || null,
-      vehicleCapacity: vehicleCapacity || null,
-      vehicleRegistration: vehicleRegistration || null,
-      vehicleType: vehicleType || null,
+      vehicleOwnership: ownership,
       languages: languages || [],
       yearsExperience: yearsExperience || 0,
       verificationStatus: 'pending_verification',
@@ -184,6 +190,9 @@ export default async ({ req, res, log, error }) => {
         ID.unique(),
         {
           ...profileFields,
+          // No vehicle yet: the dashboard reads `none` as "add your vehicle"
+          // (D10). Never reset on re-submit — the vehicle has its own status.
+          vehicleStatus: 'none',
           rating: 0,
           totalMoves: 0,
           isOnline: false,

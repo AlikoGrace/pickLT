@@ -589,7 +589,12 @@
         },
         "verification": {
           "title": "Verifizierung & Einsatzort"
-        }
+        },
+        "ownership": {
+          "value": "Fahrzeug: {{ownership}}"
+        },
+        "vehicleLater": "Das Fahrzeug wird nach der Registrierung hinzugefügt und muss verifiziert werden, bevor Sie Umzüge erhalten.",
+        "platesOk": "Kennzeichen- und Fahrzeugfotos angehängt"
       },
       "step": {
         "experience": {
@@ -606,13 +611,20 @@
         },
         "verification": {
           "label": "Verifizierung"
+        },
+        "ownership": {
+          "label": "Besitz"
         }
       },
       "submit": {
         "cta": "Profil absenden"
       },
       "subtitle": "Tragen Sie Ihre Daten ein, um Umzüge annehmen zu können",
-      "title": "Vervollständigen Sie Ihr Umzugsprofi-Profil"
+      "title": "Vervollständigen Sie Ihr Umzugsprofi-Profil",
+      "ownership": {
+        "title": "Fahrzeugbesitz"
+      },
+      "vehicleSubmitFailed": "Ihr Profil wurde gespeichert, aber das Fahrzeug konnte nicht eingereicht werden ({{error}}). Bitte fügen Sie es über das Dashboard hinzu."
     },
     "request": {
       "categoryAndType": {
@@ -736,6 +748,148 @@
     "withdrawConfirm": {
       "body": "Sind Sie sicher? Der Umzug wird für andere Umzugsprofis freigegeben.",
       "cta": "Ja, zurücktreten"
+    },
+    "vehicle": {
+      "title": "Fahrzeug",
+      "subtitle": "Ihr aktuelles Fahrzeug, sein Verifizierungsstatus und der Verlauf.",
+      "loadFailed": {
+        "error": "Die Fahrzeugdaten konnten nicht geladen werden."
+      },
+      "uploadFailed": {
+        "error": "Das Fahrzeugfoto konnte nicht hochgeladen werden."
+      },
+      "submitFailed": {
+        "error": "Das Fahrzeug konnte nicht eingereicht werden."
+      },
+      "confirmFailed": {
+        "error": "Die Bestätigung konnte nicht gespeichert werden."
+      },
+      "submitted": {
+        "success": "Fahrzeug zur Verifizierung eingereicht"
+      },
+      "submittedAt": {
+        "label": "Eingereicht"
+      },
+      "verifiedAt": {
+        "label": "Verifiziert"
+      },
+      "confirmedFor": {
+        "label": "Bestätigt für {{date}}"
+      },
+      "rejectionReason": {
+        "label": "Grund"
+      },
+      "history": {
+        "title": "Verlauf",
+        "empty": "Noch keine Einträge."
+      },
+      "none": {
+        "title": "Kein Fahrzeug hinterlegt",
+        "body": "Fügen Sie Ihr Fahrzeug hinzu und reichen Sie es zur Verifizierung ein. Sie erhalten Umzüge, sobald es freigegeben ist."
+      },
+      "photo": {
+        "front": {
+          "a11y": "Vorderes Nummernschild"
+        },
+        "rear": {
+          "a11y": "Hinteres Nummernschild"
+        },
+        "full": {
+          "a11y": "Gesamtes Fahrzeug"
+        }
+      },
+      "setup": {
+        "add": {
+          "title": "Fahrzeug hinzufügen"
+        },
+        "change": {
+          "title": "Fahrzeug wechseln"
+        },
+        "resubmit": {
+          "title": "Fahrzeug erneut einreichen"
+        },
+        "subtitle": "Jedes Fahrzeug wird getrennt von Ihrem Fahrerprofil verifiziert. Bitte geben Sie das Kennzeichen an und fügen Sie drei Fotos hinzu.",
+        "changeNote": "Wenn Sie ein neues Fahrzeug einreichen, wird Ihr aktuelles stillgelegt. Sie erhalten keine Umzüge, bis das neue Fahrzeug verifiziert ist.",
+        "resubmitNote": "Bitte korrigieren Sie die folgenden Angaben und reichen Sie sie erneut ein. Grund der Ablehnung: {{reason}}",
+        "keepPhoto": {
+          "label": "Aktuelles Foto wird beibehalten"
+        }
+      },
+      "action": {
+        "add": {
+          "cta": "Fahrzeug hinzufügen"
+        },
+        "change": {
+          "cta": "Fahrzeug wechseln"
+        },
+        "resubmit": {
+          "cta": "Korrigieren und erneut einreichen"
+        },
+        "confirmToday": {
+          "cta": "Für heute bestätigen"
+        },
+        "view": {
+          "cta": "Fahrzeug ansehen"
+        }
+      },
+      "state": {
+        "ownVerified": {
+          "title": "Fahrzeug verifiziert",
+          "body": "Ihr Fahrzeug wurde verifiziert. Sie können Umzüge erhalten und annehmen."
+        },
+        "ownPendingVehicle": {
+          "title": "Fahrzeug hinzufügen",
+          "body": "Es ist noch kein Fahrzeug hinterlegt. Fügen Sie Ihr Fahrzeug hinzu und reichen Sie es zur Verifizierung ein, um Umzüge zu erhalten."
+        },
+        "ownVehicleReview": {
+          "title": "Fahrzeug wird geprüft",
+          "body": "Ihr Fahrzeug wird verifiziert. Sie erhalten Umzüge, sobald es freigegeben ist."
+        },
+        "rentalPendingVehicle": {
+          "title": "Mietfahrzeug hinzufügen",
+          "body": "Ihre Registrierung ist abgeschlossen. Fügen Sie das Fahrzeug hinzu, das Sie mieten, und reichen Sie es zur Verifizierung ein, um Umzüge zu erhalten."
+        },
+        "rentalVehicleReview": {
+          "title": "Mietfahrzeug wird geprüft",
+          "body": "Ihr Mietfahrzeug wird verifiziert. Sie erhalten Umzüge, sobald es freigegeben ist."
+        },
+        "rentalChangePending": {
+          "title": "Fahrzeugwechsel wird geprüft",
+          "body": "Ihr neues Fahrzeug wird verifiziert. Bis dahin erhalten Sie keine Umzüge."
+        },
+        "rentalDailyConfirmationRequired": {
+          "title": "Bestätigen Sie Ihr Fahrzeug",
+          "body": "Bitte bestätigen Sie, ob Sie heute dasselbe Fahrzeug nutzen, bevor Sie Umzüge erhalten."
+        },
+        "rentalVerifiedToday": {
+          "title": "Fahrzeug für heute bestätigt",
+          "body": "Ihr Mietfahrzeug ist verifiziert und für heute bestätigt. Sie können Umzüge erhalten und annehmen."
+        },
+        "vehicleRejected": {
+          "title": "Fahrzeug nicht freigegeben",
+          "body": "Ihr Fahrzeug wurde nicht freigegeben. Bitte korrigieren Sie die Angaben und reichen Sie sie erneut ein."
+        }
+      },
+      "confirm": {
+        "title": "Welches Fahrzeug nutzen Sie heute?",
+        "body": "Bitte bestätigen Sie Ihr Fahrzeug, bevor Sie online gehen. Dies ist bei jeder Anmeldung an einem Einsatztag erforderlich.",
+        "bodyPostMove": "Ihr letzter Umzug ist abgeschlossen. Bitte bestätigen Sie, ob Sie mit demselben Fahrzeug weiterfahren.",
+        "same": {
+          "cta": "Gleiches Fahrzeug"
+        },
+        "change": {
+          "cta": "Fahrzeug wechseln"
+        },
+        "confirming": {
+          "label": "Wird bestätigt…"
+        }
+      },
+      "settings": {
+        "helper": "Fahrzeugänderungen werden separat verifiziert und haben keinen Einfluss auf Ihre Fahrerverifizierung.",
+        "status": {
+          "label": "{{vehicle}} · {{status}}"
+        }
+      }
     }
   },
   "moverDashboard": {
@@ -817,6 +971,9 @@
     },
     "taxDocuments": {
       "label": "Steuerunterlagen"
+    },
+    "vehicle": {
+      "label": "Fahrzeug"
     }
   },
   "myMoves": {
@@ -1136,6 +1293,11 @@
     },
     "stepTotal": {
       "label": "/{{total}}"
+    }
+  },
+  "moverCard": {
+    "vehicleVerified": {
+      "badge": "Verifiziertes Fahrzeug"
     }
   }
 }

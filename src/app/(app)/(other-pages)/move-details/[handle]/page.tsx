@@ -65,6 +65,8 @@ interface MoverInfo {
   yearsExperience: number
   languages: string[]
   isVerified: boolean
+  /** The mover's current vehicle passed its own review (master D1); separate from driver KYC. */
+  vehicleVerified?: boolean
 }
 
 const formatDate = (dateStr: string | null, t: TFunction) => {
@@ -965,6 +967,12 @@ export default function MoveDetailsPage() {
                     {moverInfo.vehiclePlate && (
                       <span className="ml-2 text-xs bg-neutral-100 dark:bg-neutral-700 px-2 py-0.5 rounded font-mono">
                         {moverInfo.vehiclePlate}
+                      </span>
+                    )}
+                    {moverInfo.vehicleVerified && (
+                      <span className="ml-2 inline-flex items-center gap-1 rounded-full bg-green-50 px-2 py-0.5 text-xs font-medium text-green-700 dark:bg-green-900/30 dark:text-green-300">
+                        <ShieldCheckIcon className="h-3.5 w-3.5" />
+                        {t('web:moverCard.vehicleVerified.badge')}
                       </span>
                     )}
                   </>

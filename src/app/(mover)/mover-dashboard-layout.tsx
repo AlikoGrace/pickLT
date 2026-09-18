@@ -6,6 +6,11 @@ import { useLocationBroadcast } from '@/hooks/useLocationBroadcast'
 import Logo from '@/shared/Logo'
 import SwitchDarkMode from '@/shared/SwitchDarkMode'
 import LanguageDropdown from '@/components/Header/LanguageDropdown'
+import VehicleConfirmModal from '@/components/mover/VehicleConfirmModal'
+import VehicleStatusBanner from '@/components/mover/VehicleStatusBanner'
+import type { VehicleDoc } from '@/lib/types'
+import { fetchVehicleOverview } from '@/lib/vehicle-client'
+import { vehicleServiceReady, vehicleServiceState } from '@/lib/vehicle-service'
 import {
   Bars3Icon,
   CalendarDaysIcon,
@@ -29,11 +34,22 @@ import clsx from 'clsx'
 import type { TFunction } from 'i18next'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { ReactNode, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+interface NavItem {
+  key: string
+  name: string
+  href: string
+  icon: typeof HomeIcon
+  /** Locked until driver KYC is verified. */
+  requiresVerification: boolean
+  /** Locked until `vehicleServiceReady` — new work only (master D4). */
+  requiresServiceReady?: boolean
+}
+
 // Built per render from `t` — a module-scope array would freeze at the boot language.
-const getMoverNavItems = (t: TFunction) => [
+const getMoverNavItems = (t: TFunction): NavItem[] => [
   {
     key: 'dashboard',
     name: t('web:moverNav.dashboard.label'),
@@ -54,6 +70,7 @@ const getMoverNavItems = (t: TFunction) => [
     href: '/available-moves',
     icon: MapIcon,
     requiresVerification: true,
+    requiresServiceReady: true,
   },
   {
     key: 'scheduledMoves',
@@ -84,6 +101,13 @@ const getMoverNavItems = (t: TFunction) => [
     requiresVerification: true,
   },
   {
+    key: 'vehicle',
+    name: t('web:moverNav.vehicle.label'),
+    href: '/vehicle',
+    icon: TruckIcon,
+    requiresVerification: false,
+  },
+  {
     key: 'settings',
     name: t('common:nav.settings.label'),
     href: '/settings',
@@ -92,7 +116,7 @@ const getMoverNavItems = (t: TFunction) => [
   },
 ]
 
-const getMobileNavItems = (t: TFunction) => [
+const getMobileNavItems = (t: TFunction): NavItem[] => [
   {
     key: 'home',
     name: t('web:moverNav.home.label'),
@@ -113,6 +137,7 @@ const getMobileNavItems = (t: TFunction) => [
     href: '/available-moves',
     icon: MapIcon,
     requiresVerification: true,
+    requiresServiceReady: true,
   },
   {
     key: 'crew',
@@ -140,7 +165,7 @@ const MAP_PAGES = ['/available-moves', '/active-move']
 const MoverDashboardLayout = ({ children }: Props) => {
   const pathname = usePathname()
   const router = useRouter()
-  const { user, logout, isLoading } = useAuth()
+  const { user, logout, isLoading, refreshProfile } = useAuth()
   const { t } = useTranslation()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
@@ -150,6 +175,41 @@ const MoverDashboardLayout = ({ children }: Props) => {
   // Verification state
   const verificationStatus = user?.moverDetails?.verificationStatus
   const isVerified = verificationStatus === 'verified'
+
+  // ── Vehicle service state (master §5) ──────────────────────────────
+  // The clock ticks once a minute so a rental driver's confirmation lapses at
+  // midnight (platform zone) without a reload.
+  const [nowMs, setNowMs] = useState(() => Date.now())
+  useEffect(() => {
+    const id = setInterval(() => setNowMs(Date.now()), 60_000)
+    return () => clearInterval(id)
+  }, [])
+  const moverDetails = user?.moverDetails
+  // The current `vehicles` row is only needed to tell a first rental review
+  // from a CHANGE review, and for the rejection reason / plate in the prompts.
+  const [currentVehicle, setCurrentVehicle] = useState<VehicleDoc | null>(null)
+  const profileId = moverDetails?.profileId
+  const currentVehicleId = moverDetails?.currentVehicleId ?? null
+  const vehicleStatus = moverDetails?.vehicleStatus ?? 'none'
+  useEffect(() => {
+    if (!profileId || !currentVehicleId) {
+      setCurrentVehicle(null)
+      return
+    }
+    let cancelled = false
+    fetchVehicleOverview()
+      .then((d) => {
+        if (!cancelled) setCurrentVehicle(d.vehicle)
+      })
+      .catch(() => {
+        /* the banner degrades to the profile-only state */
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [profileId, currentVehicleId, vehicleStatus])
+  const vehicleState = vehicleServiceState(moverDetails, currentVehicle, nowMs)
+  const isServiceReady = vehicleServiceReady(moverDetails, nowMs)
 
   // Hide the mobile header and its offset on full-screen map pages
   const isMapPage = MAP_PAGES.some((p) => pathname === p || pathname.startsWith(p + '/'))
@@ -208,6 +268,28 @@ const MoverDashboardLayout = ({ children }: Props) => {
     return null
   }
 
+  // New work needs a service-ready vehicle too (master D4). A mover mid-move
+  // keeps `/active-move`; the browse page is what hands out new moves.
+  const isOnVehiclePages = pathname === '/vehicle' || pathname.startsWith('/vehicle/')
+  const serviceReadyPaths = ['/available-moves']
+  const isOnServiceReadyPage = serviceReadyPaths.some((p) => pathname === p || pathname.startsWith(p + '/'))
+  if (hasCompletedProfile && isVerified && !isServiceReady && isOnServiceReadyPage) {
+    router.replace('/dashboard')
+    return null
+  }
+
+  // The rental driver's daily / post-move SAME-CHANGE prompt. From server
+  // state, so it survives a reload; hidden on the vehicle pages (where the
+  // driver may be mid-CHANGE) and on the active-move screen (a move in
+  // progress must be finished first — the prompt shows when it ends).
+  const showConfirmModal =
+    hasCompletedProfile &&
+    isVerified &&
+    vehicleState === 'RENTAL_DAILY_CONFIRMATION_REQUIRED' &&
+    !isOnCompleteProfilePage &&
+    !isOnVehiclePages &&
+    !pathname.startsWith('/active-move')
+
     // Compute initials from user's full name
   const initials = user?.fullName
     ? user.fullName
@@ -257,7 +339,9 @@ const MoverDashboardLayout = ({ children }: Props) => {
           <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
             {moverNavItems.map((item) => {
               const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
-              const isLocked = item.requiresVerification && !isVerified && hasCompletedProfile
+              const isLocked =
+                hasCompletedProfile &&
+                ((item.requiresVerification && !isVerified) || (item.requiresServiceReady && !isServiceReady))
 
               if (isLocked) {
                 return (
@@ -399,14 +483,28 @@ const MoverDashboardLayout = ({ children }: Props) => {
             </div>
           </div>
         )}
+        {/* Vehicle state banner — every non-ready state names the restoring action */}
+        {hasCompletedProfile && !isOnCompleteProfilePage && !isOnVehiclePages && !showConfirmModal && (
+          <VehicleStatusBanner state={vehicleState} rejectionReason={currentVehicle?.rejectionReason ?? null} />
+        )}
         <div className="min-h-screen">{children}</div>
       </main>
+
+      <VehicleConfirmModal
+        open={showConfirmModal}
+        postMove={moverDetails?.vehicleReconfirmRequired === true}
+        vehicleLabel={currentVehicle ? [currentVehicle.brand, currentVehicle.model].filter(Boolean).join(' ') : null}
+        plate={currentVehicle?.registrationNumber ?? null}
+        onConfirmed={refreshProfile}
+      />
 
       {/* Mobile Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 z-30 flex items-center justify-around border-t border-neutral-200 bg-white py-2 dark:border-neutral-700 dark:bg-neutral-800 lg:hidden">
         {mobileNavItems.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
-          const isLocked = item.requiresVerification && !isVerified && hasCompletedProfile
+          const isLocked =
+            hasCompletedProfile &&
+            ((item.requiresVerification && !isVerified) || (item.requiresServiceReady && !isServiceReady))
 
           if (isLocked) {
             return (

@@ -68,7 +68,9 @@
       "verifyFailed": "Doğrulama başarısız oldu (durum {{status}}). Lütfen tekrar deneyin."
     },
     "pricing": {
+      "capacityOutOfRange": "{{label}} 1 ile 120 m³ arasında olmalıdır.",
       "commissionTooLarge": "{{label}} yüzde değil, bir kesirdir — %15 için 0.15 girin.",
+      "flagNotBoolean": "{{label}} bir anahtardır: 0 veya 1 girin.",
       "keyRequired": "key alanı gereklidir",
       "negative": "{{label}} negatif olamaz.",
       "notANumber": "{{label}} bir sayı olmalıdır.",
@@ -80,6 +82,15 @@
       "blockedFlagRequired": "Engellendi/engel kaldırıldı değeri gereklidir.",
       "notFound": "Kullanıcı bulunamadı.",
       "selfBlock": "Kendi hesabınızı engelleyemezsiniz."
+    },
+    "vehicle": {
+      "invalidDecision": "Karar \"verified\" veya \"rejected\" olmalıdır.",
+      "invalidPhotoKind": "Fotoğraf türü front, rear veya full olmalıdır.",
+      "noPhoto": "Bu araç için kayıtlı \"{{kind}}\" fotoğrafı yok.",
+      "notFound": "Araç bulunamadı.",
+      "notPending": "Bu araç inceleme beklemiyor.",
+      "reasonRequired": "Bir aracı reddetmek için gerekçe gereklidir.",
+      "verifyFailed": "Araç doğrulaması başarısız oldu (durum {{status}}). Lütfen tekrar deneyin."
     }
   },
   "appwrite": {
@@ -241,6 +252,7 @@
     "selfieUploadFailed": "Özçekim fotoğrafı yüklenemedi",
     "startRouteFailed": "Rota başlatılamadı",
     "startRouteRetry": "Rota başlatılamadı. Lütfen tekrar deneyin.",
+    "vehicleNotReady": "Çevrimiçi olmadan veya taşınma kabul etmeden önce aracınızı onaylayın veya doğrulatın.",
     "withdrawFailed": "Taşınmadan geri çekilme işlemi başarısız oldu",
     "withdrawRetry": "Geri çekilme işlemi başarısız oldu. Lütfen tekrar deneyin."
   },
@@ -321,8 +333,18 @@
     "phoneRequired2": "Telefon numarası gereklidir"
   },
   "vehicle": {
+    "capacityOutOfRange": "Kapasite 1 ile 120 m³ arasında olmalıdır.",
     "fieldsRequired": "Lütfen zorunlu araç alanlarının tümünü doldurun",
+    "notFound": "Araç bulunamadı.",
+    "notPending": "Bu araç inceleme beklemiyor.",
+    "notRental": "Günlük onay yalnızca kiralık araçlar için geçerlidir.",
+    "notVerified": "Mevcut aracınız henüz doğrulanmadı.",
+    "photosRequired": "Ön plaka, arka plaka ve aracın tamamının fotoğraflarını ekleyin.",
+    "plateInUse": "Bu plaka numarası başka bir sürücü adına zaten kayıtlı.",
+    "plateInvalid": "Geçerli bir plaka numarası girin.",
     "saveFailed": "Araç bilgileri kaydedilemedi",
-    "updateFailed": "Araç bilgileri güncellenemedi"
+    "typeInvalid": "Bir araç türü seçin.",
+    "updateFailed": "Araç bilgileri güncellenemedi",
+    "yearInvalid": "Dört haneli bir yıl girin."
   }
 }

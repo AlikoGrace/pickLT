@@ -592,6 +592,57 @@
       "label": "Standard"
     }
   },
+  "vehicleEvent": {
+    "changeRequested": {
+      "label": "Zgłoszono zmianę pojazdu"
+    },
+    "confirmedSame": {
+      "label": "Potwierdzono ten sam pojazd"
+    },
+    "reconfirmRequired": {
+      "label": "Wymagane potwierdzenie po przeprowadzce"
+    },
+    "rejected": {
+      "label": "Pojazd odrzucony"
+    },
+    "resubmitted": {
+      "label": "Pojazd zgłoszony ponownie"
+    },
+    "retired": {
+      "label": "Pojazd wycofany"
+    },
+    "submitted": {
+      "label": "Pojazd zgłoszony"
+    },
+    "verified": {
+      "label": "Pojazd zweryfikowany"
+    }
+  },
+  "vehicleOwnership": {
+    "owned": {
+      "label": "Pojazd własny"
+    },
+    "rented": {
+      "label": "Pojazd wynajęty"
+    }
+  },
+  "vehicleStatus": {
+    "none": {
+      "label": "Brak pojazdu"
+    },
+    "pendingReview": {
+      "label": "Oczekuje na weryfikację"
+    },
+    "rejected": {
+      "label": "Odrzucony"
+    },
+    "retired": {
+      "label": "Poprzedni pojazd"
+    },
+    "verified": {
+      "label": "Zweryfikowany"
+    }
+  },
   "vehicleType": {
     "largeTruck": {
       "label": "Duża ciężarówka"

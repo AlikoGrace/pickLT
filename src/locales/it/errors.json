@@ -68,7 +68,9 @@
       "verifyFailed": "Verifica non riuscita (stato {{status}}). Riprova."
     },
     "pricing": {
+      "capacityOutOfRange": "{{label}} deve essere compreso tra 1 e 120 m³.",
       "commissionTooLarge": "{{label}} è una frazione, non una percentuale: inserisci 0.15 per il 15%.",
+      "flagNotBoolean": "{{label}} è un interruttore: inserisca 0 o 1.",
       "keyRequired": "key è obbligatorio",
       "negative": "{{label}} non può essere negativo.",
       "notANumber": "{{label}} deve essere un numero.",
@@ -80,6 +82,15 @@
       "blockedFlagRequired": "È richiesto un valore bloccato/sbloccato.",
       "notFound": "Utente non trovato.",
       "selfBlock": "Non puoi bloccare il tuo account."
+    },
+    "vehicle": {
+      "invalidDecision": "La decisione deve essere «verified» o «rejected».",
+      "invalidPhotoKind": "Il tipo di foto deve essere front, rear o full.",
+      "noPhoto": "Nessuna foto «{{kind}}» registrata per questo veicolo.",
+      "notFound": "Veicolo non trovato.",
+      "notPending": "Questo veicolo non è in attesa di verifica.",
+      "reasonRequired": "Per rifiutare un veicolo è richiesta una motivazione.",
+      "verifyFailed": "Verifica del veicolo non riuscita (stato {{status}}). Riprovi."
     }
   },
   "appwrite": {
@@ -241,6 +252,7 @@
     "selfieUploadFailed": "Impossibile caricare il selfie",
     "startRouteFailed": "Impossibile avviare il percorso",
     "startRouteRetry": "Impossibile avviare il percorso. Riprova.",
+    "vehicleNotReady": "Confermi o faccia verificare il Suo veicolo prima di andare online o accettare traslochi.",
     "withdrawFailed": "Impossibile ritirarsi dal trasloco",
     "withdrawRetry": "Ritiro non riuscito. Riprova."
   },
@@ -321,8 +333,18 @@
     "phoneRequired2": "Il numero di telefono è obbligatorio"
   },
   "vehicle": {
+    "capacityOutOfRange": "La capacità deve essere compresa tra 1 e 120 m³.",
     "fieldsRequired": "Compila tutti i campi obbligatori del veicolo",
+    "notFound": "Veicolo non trovato.",
+    "notPending": "Questo veicolo non è in attesa di verifica.",
+    "notRental": "La conferma giornaliera si applica solo ai veicoli a noleggio.",
+    "notVerified": "Il Suo veicolo attuale non è ancora stato verificato.",
+    "photosRequired": "Aggiunga le foto della targa anteriore, della targa posteriore e dell'intero veicolo.",
+    "plateInUse": "Questo numero di targa è già registrato a nome di un altro autista.",
+    "plateInvalid": "Inserisca un numero di targa valido.",
     "saveFailed": "Impossibile salvare i dati del veicolo",
-    "updateFailed": "Impossibile aggiornare i dati del veicolo"
+    "typeInvalid": "Scelga un tipo di veicolo.",
+    "updateFailed": "Impossibile aggiornare i dati del veicolo",
+    "yearInvalid": "Inserisca un anno di quattro cifre."
   }
 }

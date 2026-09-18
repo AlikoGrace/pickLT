@@ -39,15 +39,16 @@ export async function POST(req: NextRequest) {
       businessPostcode,
       primaryCity,
       primaryCountry,
-      vehicleBrand,
-      vehicleModel,
-      vehicleYear,
-      vehicleCapacity,
-      vehicleRegistration,
-      vehicleType,
+      vehicleOwnership,
       languages,
       yearsExperience,
     } = body
+
+    // Master D10: the profile carries only the ownership declaration. The
+    // vehicle itself is its own row, submitted through `POST /api/mover/vehicle`
+    // as the second call of registration. Legacy callers that send no
+    // ownership are owned drivers (D14).
+    const ownership: 'owned' | 'rented' = vehicleOwnership === 'rented' ? 'rented' : 'owned'
 
     const { databases, users } = createAdminClient()
 
@@ -109,12 +110,10 @@ export async function POST(req: NextRequest) {
       businessPostcode: businessPostcode || null,
       primaryCity: primaryCity || null,
       primaryCountry: primaryCountry || null,
-      vehicleBrand: vehicleBrand || null,
-      vehicleModel: vehicleModel || null,
-      vehicleYear: vehicleYear || null,
-      vehicleCapacity: vehicleCapacity || null,
-      vehicleRegistration: vehicleRegistration || null,
-      vehicleType: vehicleType || null,
+      // The six legacy `vehicle*` columns are no longer written here: they are
+      // the server-side snapshot of the *verified* vehicle (master D2), written
+      // only by the admin verify route and the backfill.
+      vehicleOwnership: ownership,
       languages: languages || [],
       yearsExperience: yearsExperience ? Number(yearsExperience) : 0,
     }
@@ -143,6 +142,8 @@ export async function POST(req: NextRequest) {
           rating: 0,
           totalMoves: 0,
           verificationStatus: 'pending_verification',
+          // "Add your vehicle" until `POST /api/mover/vehicle` lands (D10).
+          vehicleStatus: 'none',
           isOnline: false,
           currentLatitude: null,
           currentLongitude: null,

@@ -44,6 +44,13 @@ export type User = {
     verificationStatus?: string
     isOnline?: boolean
     languages?: string[]
+    // Vehicle entity pointer + rental confirmation (master §4.3). Read by
+    // `vehicleServiceReady` / `vehicleServiceState` for the dashboard gates.
+    vehicleOwnership?: 'owned' | 'rented'
+    vehicleStatus?: 'none' | 'pending_review' | 'verified' | 'rejected'
+    currentVehicleId?: string | null
+    vehicleConfirmedServiceDate?: string | null
+    vehicleReconfirmRequired?: boolean
   }
 }
 
@@ -193,6 +200,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             verificationStatus: moverProfile.verificationStatus ?? undefined,
             isOnline: moverProfile.isOnline ?? undefined,
             languages: moverProfile.languages ?? undefined,
+            // Defaults match the backfill (D14): a legacy row is an owned
+            // driver with no vehicle entity yet.
+            vehicleOwnership: moverProfile.vehicleOwnership === 'rented' ? 'rented' : 'owned',
+            vehicleStatus: moverProfile.vehicleStatus ?? 'none',
+            currentVehicleId: moverProfile.currentVehicleId ?? null,
+            vehicleConfirmedServiceDate: moverProfile.vehicleConfirmedServiceDate ?? null,
+            vehicleReconfirmRequired: moverProfile.vehicleReconfirmRequired === true,
           },
         }),
       }

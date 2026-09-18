@@ -4,6 +4,7 @@ import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
 import { relId, writeNotification } from '@/lib/notify'
 import { paymentPermissions } from '@/lib/doc-permissions'
+import { markReconfirmRequired } from '@/lib/vehicle-repo'
 import { Query, ID } from 'node-appwrite'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -151,6 +152,10 @@ export async function POST(request: NextRequest) {
       } catch {
         // Non-critical
       }
+
+      // Master D12: the move is truly complete here, so a rental driver must
+      // re-confirm SAME/CHANGE before the next one. Best-effort.
+      await markReconfirmRequired(databases, moverProfile, { moveId, handle: move.handle ?? null })
 
       // Notify the client their move is complete.
       const clientId = relId(move.clientId)

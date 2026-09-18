@@ -578,6 +578,13 @@ const SelectMoverPage = () => {
                     <span className="text-xs bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 px-2 py-0.5 rounded-full">
                       {vehicleLabel(t, mover.vehicleType)}
                     </span>
+                    {/* Every mover `/api/movers/nearby` returns passed the vehicle
+                        readiness gate, so the vehicle is verified by construction
+                        (master D3). The plate itself stays redacted. */}
+                    <span className="inline-flex items-center gap-1 rounded-full bg-green-50 px-2 py-0.5 text-xs font-medium text-green-700 dark:bg-green-900/30 dark:text-green-300">
+                      <HugeiconsIcon icon={CheckmarkCircle02Icon} size={12} strokeWidth={2} />
+                      {t('web:moverCard.vehicleVerified.badge')}
+                    </span>
                   </div>
 
                   {/* Capacity & Crew */}

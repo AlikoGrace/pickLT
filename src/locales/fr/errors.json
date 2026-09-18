@@ -68,7 +68,9 @@
       "verifyFailed": "Échec de la vérification (statut {{status}}). Veuillez réessayer."
     },
     "pricing": {
+      "capacityOutOfRange": "{{label}} doit être compris entre 1 et 120 m³.",
       "commissionTooLarge": "{{label}} est une fraction, pas un pourcentage : saisissez 0.15 pour 15 %.",
+      "flagNotBoolean": "{{label}} est un commutateur : saisissez 0 ou 1.",
       "keyRequired": "La clé est obligatoire",
       "negative": "{{label}} ne peut pas être négatif.",
       "notANumber": "{{label}} doit être un nombre.",
@@ -80,6 +82,15 @@
       "blockedFlagRequired": "Une valeur bloqué/débloqué est requise.",
       "notFound": "Utilisateur introuvable.",
       "selfBlock": "Vous ne pouvez pas bloquer votre propre compte."
+    },
+    "vehicle": {
+      "invalidDecision": "La décision doit être « verified » ou « rejected ».",
+      "invalidPhotoKind": "Le type de photo doit être front, rear ou full.",
+      "noPhoto": "Aucune photo « {{kind}} » enregistrée pour ce véhicule.",
+      "notFound": "Véhicule introuvable.",
+      "notPending": "Ce véhicule n'est pas en attente de vérification.",
+      "reasonRequired": "Un motif est requis pour refuser un véhicule.",
+      "verifyFailed": "La vérification du véhicule a échoué (statut {{status}}). Veuillez réessayer."
     }
   },
   "appwrite": {
@@ -241,6 +252,7 @@
     "selfieUploadFailed": "Échec de l’envoi du selfie",
     "startRouteFailed": "Échec du démarrage de l’itinéraire",
     "startRouteRetry": "Échec du démarrage de l’itinéraire. Veuillez réessayer.",
+    "vehicleNotReady": "Confirmez ou faites vérifier votre véhicule avant de passer en ligne ou d'accepter des déménagements.",
     "withdrawFailed": "Échec du retrait du déménagement",
     "withdrawRetry": "Échec du retrait. Veuillez réessayer."
   },
@@ -321,8 +333,18 @@
     "phoneRequired2": "Le numéro de téléphone est obligatoire"
   },
   "vehicle": {
+    "capacityOutOfRange": "La capacité doit être comprise entre 1 et 120 m³.",
     "fieldsRequired": "Veuillez renseigner tous les champs obligatoires du véhicule",
+    "notFound": "Véhicule introuvable.",
+    "notPending": "Ce véhicule n'est pas en attente de vérification.",
+    "notRental": "La confirmation quotidienne ne s'applique qu'aux véhicules de location.",
+    "notVerified": "Votre véhicule actuel n'a pas encore été vérifié.",
+    "photosRequired": "Ajoutez les photos de la plaque avant, de la plaque arrière et du véhicule entier.",
+    "plateInUse": "Ce numéro d'immatriculation est déjà enregistré pour un autre chauffeur.",
+    "plateInvalid": "Saisissez un numéro d'immatriculation valide.",
     "saveFailed": "Échec de l’enregistrement des informations du véhicule",
-    "updateFailed": "Échec de la mise à jour des informations du véhicule"
+    "typeInvalid": "Choisissez un type de véhicule.",
+    "updateFailed": "Échec de la mise à jour des informations du véhicule",
+    "yearInvalid": "Saisissez une année à quatre chiffres."
   }
 }

@@ -125,6 +125,20 @@
       "title": "Lossen"
     }
   },
+  "vehicle": {
+    "confirmationRequired": {
+      "body": "Bevestig vóór uw volgende verhuizing of u nog hetzelfde voertuig gebruikt.",
+      "title": "Bevestig uw voertuig"
+    },
+    "rejected": {
+      "body": "Uw voertuigaanvraag is niet goedgekeurd: {{reason}}. Corrigeer de gegevens en dien ze opnieuw in.",
+      "title": "Voertuig niet goedgekeurd"
+    },
+    "verified": {
+      "body": "Uw voertuig {{plate}} is geverifieerd. U kunt weer verhuizingen ontvangen.",
+      "title": "Voertuig geverifieerd"
+    }
+  },
   "verification": {
     "contactSupport": "Neem contact op met de klantenservice voor meer informatie.",
     "rejected": {

@@ -582,6 +582,57 @@
       "label": "Estándar"
     }
   },
+  "vehicleEvent": {
+    "changeRequested": {
+      "label": "Cambio de vehículo solicitado"
+    },
+    "confirmedSame": {
+      "label": "Mismo vehículo confirmado"
+    },
+    "reconfirmRequired": {
+      "label": "Confirmación requerida tras una mudanza"
+    },
+    "rejected": {
+      "label": "Vehículo rechazado"
+    },
+    "resubmitted": {
+      "label": "Vehículo enviado de nuevo"
+    },
+    "retired": {
+      "label": "Vehículo retirado"
+    },
+    "submitted": {
+      "label": "Vehículo enviado"
+    },
+    "verified": {
+      "label": "Vehículo verificado"
+    }
+  },
+  "vehicleOwnership": {
+    "owned": {
+      "label": "Vehículo propio"
+    },
+    "rented": {
+      "label": "Vehículo alquilado"
+    }
+  },
+  "vehicleStatus": {
+    "none": {
+      "label": "Sin vehículo"
+    },
+    "pendingReview": {
+      "label": "Verificación pendiente"
+    },
+    "rejected": {
+      "label": "Rechazado"
+    },
+    "retired": {
+      "label": "Vehículo anterior"
+    },
+    "verified": {
+      "label": "Verificado"
+    }
+  },
   "vehicleType": {
     "largeTruck": {
       "label": "Camión grande"

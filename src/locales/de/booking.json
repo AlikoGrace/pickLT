@@ -1284,8 +1284,19 @@
         "value": "Bis {{capacity}}"
       }
     },
+    "declaration": {
+      "body": "Mit dem Einreichen bestätigen Sie, dass diese Angaben wahrheitsgemäß und aktuell sind und dass Sie für die Einhaltung der geltenden Fahrzeug-, Zulassungs- und Versicherungsvorschriften verantwortlich sind.",
+      "confirmBody": "Mit der Bestätigung erklären Sie, dass Sie heute das registrierte Fahrzeug nutzen und dass die hinterlegten Angaben wahrheitsgemäß und aktuell sind."
+    },
     "edit": {
       "title": "Fahrzeugdaten bearbeiten"
+    },
+    "evidence": {
+      "title": "Fahrzeugnachweise"
+    },
+    "fullPhoto": {
+      "helper": "Zeigen Sie das vollständige Fahrzeug, keinen Ausschnitt.",
+      "label": "Foto des gesamten Fahrzeugs"
     },
     "largeTruck": {
       "helper": "{{capacity}} — Hausumzüge, große Mengen",
@@ -1305,7 +1316,25 @@
     "multiple": {
       "label": "Mehrere"
     },
+    "ownership": {
+      "label": "Wer stellt das Fahrzeug?",
+      "owned": {
+        "helper": "Sie besitzen das Fahrzeug, das Sie für Umzüge nutzen."
+      },
+      "rented": {
+        "helper": "Sie mieten das Fahrzeug. Sie können die Registrierung jetzt abschließen und das Fahrzeug anschließend hinzufügen. Es muss verifiziert sein, bevor Sie Umzüge erhalten."
+      }
+    },
+    "plateFront": {
+      "helper": "Das Kennzeichen muss lesbar sein.",
+      "label": "Foto des vorderen Kennzeichens"
+    },
+    "plateRear": {
+      "helper": "Das Kennzeichen muss lesbar sein.",
+      "label": "Foto des hinteren Kennzeichens"
+    },
     "registration": {
+      "helper": "Muss mit der Nummer auf beiden Kennzeichen übereinstimmen.",
       "label": "Kfz-Kennzeichen *",
       "placeholder": "z. B. B-AB 1234"
     },
@@ -1315,6 +1344,9 @@
     "smallVan": {
       "helper": "{{capacity}} — kleine Umzüge, Einzelstücke",
       "label": "Kleiner Transporter"
+    },
+    "submitForVerification": {
+      "cta": "Zur Prüfung einreichen"
     },
     "title": "Fahrzeugdaten",
     "type": {

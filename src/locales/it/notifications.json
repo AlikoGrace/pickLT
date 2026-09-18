@@ -125,6 +125,20 @@
       "title": "Scarico in corso"
     }
   },
+  "vehicle": {
+    "confirmationRequired": {
+      "body": "Prima del Suo prossimo trasloco, confermi se utilizza ancora lo stesso veicolo.",
+      "title": "Confermi il Suo veicolo"
+    },
+    "rejected": {
+      "body": "La Sua richiesta per il veicolo non è stata approvata: {{reason}}. Corregga i dati e la invii di nuovo.",
+      "title": "Veicolo non approvato"
+    },
+    "verified": {
+      "body": "Il Suo veicolo {{plate}} è stato verificato. Può ricevere di nuovo traslochi.",
+      "title": "Veicolo verificato"
+    }
+  },
   "verification": {
     "contactSupport": "Contatta l’assistenza per maggiori dettagli.",
     "rejected": {

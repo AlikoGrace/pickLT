@@ -582,6 +582,57 @@
       "label": "Standard"
     }
   },
+  "vehicleEvent": {
+    "changeRequested": {
+      "label": "Vehicle change requested"
+    },
+    "confirmedSame": {
+      "label": "Same vehicle confirmed"
+    },
+    "reconfirmRequired": {
+      "label": "Confirmation required after a move"
+    },
+    "rejected": {
+      "label": "Vehicle rejected"
+    },
+    "resubmitted": {
+      "label": "Vehicle resubmitted"
+    },
+    "retired": {
+      "label": "Vehicle retired"
+    },
+    "submitted": {
+      "label": "Vehicle submitted"
+    },
+    "verified": {
+      "label": "Vehicle verified"
+    }
+  },
+  "vehicleOwnership": {
+    "owned": {
+      "label": "Own vehicle"
+    },
+    "rented": {
+      "label": "Rented vehicle"
+    }
+  },
+  "vehicleStatus": {
+    "none": {
+      "label": "No vehicle"
+    },
+    "pendingReview": {
+      "label": "Pending verification"
+    },
+    "rejected": {
+      "label": "Rejected"
+    },
+    "retired": {
+      "label": "Previous vehicle"
+    },
+    "verified": {
+      "label": "Verified"
+    }
+  },
   "vehicleType": {
     "largeTruck": {
       "label": "Large truck"

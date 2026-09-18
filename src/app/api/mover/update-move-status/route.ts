@@ -4,6 +4,7 @@ import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
 import { relId, writeNotification, statusNotification } from '@/lib/notify'
 import { paymentPermissions } from '@/lib/doc-permissions'
+import { markReconfirmRequired } from '@/lib/vehicle-repo'
 import { Query, ID } from 'node-appwrite'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -140,6 +141,12 @@ export async function POST(request: NextRequest) {
       moveId,
       updateData
     )
+
+    // Master D12: true completion asks a rental driver to re-confirm the
+    // vehicle before the next move. Best-effort; the completion stands.
+    if (status === 'completed') {
+      await markReconfirmRequired(databases, moverProfile, { moveId, handle: move.handle ?? null })
+    }
 
     // Notify the client of the status change (pushable statuses fan out an OS
     // push via sendpush; granular in-progress steps stay silent).

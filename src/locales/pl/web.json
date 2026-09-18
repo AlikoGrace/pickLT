@@ -597,7 +597,12 @@
         },
         "verification": {
           "title": "Weryfikacja i lokalizacja"
-        }
+        },
+        "ownership": {
+          "value": "Pojazd: {{ownership}}"
+        },
+        "vehicleLater": "Pojazd zostanie dodany po rejestracji i musi zostać zweryfikowany, zanim będą Państwo otrzymywać przeprowadzki.",
+        "platesOk": "Dołączono zdjęcia tablic i pojazdu"
       },
       "step": {
         "experience": {
@@ -614,13 +619,20 @@
         },
         "verification": {
           "label": "Weryfikacja"
+        },
+        "ownership": {
+          "label": "Własność"
         }
       },
       "submit": {
         "cta": "Wyślij profil"
       },
       "subtitle": "Uzupełnij dane, aby zacząć przyjmować przeprowadzki",
-      "title": "Uzupełnij profil przewoźnika"
+      "title": "Uzupełnij profil przewoźnika",
+      "ownership": {
+        "title": "Własność pojazdu"
+      },
+      "vehicleSubmitFailed": "Profil został zapisany, ale nie udało się przesłać pojazdu ({{error}}). Proszę dodać go z poziomu panelu."
     },
     "request": {
       "categoryAndType": {
@@ -746,6 +758,148 @@
     "withdrawConfirm": {
       "body": "Na pewno? Przeprowadzka stanie się dostępna dla innych przewoźników.",
       "cta": "Tak, wycofaj mnie"
+    },
+    "vehicle": {
+      "title": "Pojazd",
+      "subtitle": "Państwa obecny pojazd, status jego weryfikacji i historia.",
+      "loadFailed": {
+        "error": "Nie udało się wczytać danych pojazdu."
+      },
+      "uploadFailed": {
+        "error": "Nie udało się przesłać zdjęcia pojazdu."
+      },
+      "submitFailed": {
+        "error": "Nie udało się przesłać pojazdu."
+      },
+      "confirmFailed": {
+        "error": "Nie udało się zapisać potwierdzenia."
+      },
+      "submitted": {
+        "success": "Pojazd przesłany do weryfikacji"
+      },
+      "submittedAt": {
+        "label": "Wysłano"
+      },
+      "verifiedAt": {
+        "label": "Zweryfikowano"
+      },
+      "confirmedFor": {
+        "label": "Potwierdzono na {{date}}"
+      },
+      "rejectionReason": {
+        "label": "Powód"
+      },
+      "history": {
+        "title": "Historia",
+        "empty": "Brak wpisów."
+      },
+      "none": {
+        "title": "Brak zarejestrowanego pojazdu",
+        "body": "Proszę dodać pojazd i przesłać go do weryfikacji. Przeprowadzki będą dostępne, gdy tylko zostanie zatwierdzony."
+      },
+      "photo": {
+        "front": {
+          "a11y": "Przednia tablica rejestracyjna"
+        },
+        "rear": {
+          "a11y": "Tylna tablica rejestracyjna"
+        },
+        "full": {
+          "a11y": "Cały pojazd"
+        }
+      },
+      "setup": {
+        "add": {
+          "title": "Dodaj pojazd"
+        },
+        "change": {
+          "title": "Zmień pojazd"
+        },
+        "resubmit": {
+          "title": "Wyślij pojazd ponownie"
+        },
+        "subtitle": "Każdy pojazd jest weryfikowany niezależnie od profilu kierowcy. Proszę podać numer rejestracyjny i dodać trzy zdjęcia.",
+        "changeNote": "Przesłanie nowego pojazdu wycofuje obecny. Do czasu weryfikacji nowego pojazdu nie będą Państwo otrzymywać przeprowadzek.",
+        "resubmitNote": "Proszę poprawić poniższe dane i przesłać je ponownie. Powód odrzucenia: {{reason}}",
+        "keepPhoto": {
+          "label": "Obecne zdjęcie zostanie zachowane"
+        }
+      },
+      "action": {
+        "add": {
+          "cta": "Dodaj pojazd"
+        },
+        "change": {
+          "cta": "Zmień pojazd"
+        },
+        "resubmit": {
+          "cta": "Popraw i wyślij ponownie"
+        },
+        "confirmToday": {
+          "cta": "Potwierdź na dziś"
+        },
+        "view": {
+          "cta": "Zobacz pojazd"
+        }
+      },
+      "state": {
+        "ownVerified": {
+          "title": "Pojazd zweryfikowany",
+          "body": "Pojazd został zweryfikowany. Mogą Państwo otrzymywać i przyjmować przeprowadzki."
+        },
+        "ownPendingVehicle": {
+          "title": "Proszę dodać pojazd",
+          "body": "Nie zarejestrowano jeszcze żadnego pojazdu. Proszę dodać pojazd i przesłać go do weryfikacji, aby otrzymywać przeprowadzki."
+        },
+        "ownVehicleReview": {
+          "title": "Pojazd w trakcie weryfikacji",
+          "body": "Pojazd jest weryfikowany. Przeprowadzki będą dostępne, gdy tylko zostanie zatwierdzony."
+        },
+        "rentalPendingVehicle": {
+          "title": "Proszę dodać wynajęty pojazd",
+          "body": "Rejestracja została zakończona. Proszę dodać wynajmowany pojazd i przesłać go do weryfikacji, aby zacząć otrzymywać przeprowadzki."
+        },
+        "rentalVehicleReview": {
+          "title": "Wynajęty pojazd w trakcie weryfikacji",
+          "body": "Wynajęty pojazd jest weryfikowany. Przeprowadzki będą dostępne, gdy tylko zostanie zatwierdzony."
+        },
+        "rentalChangePending": {
+          "title": "Zmiana pojazdu w trakcie weryfikacji",
+          "body": "Nowy pojazd jest weryfikowany. Do tego czasu nie będą Państwo otrzymywać przeprowadzek."
+        },
+        "rentalDailyConfirmationRequired": {
+          "title": "Proszę potwierdzić pojazd",
+          "body": "Przed otrzymaniem przeprowadzek proszę potwierdzić, czy korzystają Państwo dziś z tego samego pojazdu."
+        },
+        "rentalVerifiedToday": {
+          "title": "Pojazd potwierdzony na dziś",
+          "body": "Wynajęty pojazd jest zweryfikowany i potwierdzony na dziś. Mogą Państwo otrzymywać i przyjmować przeprowadzki."
+        },
+        "vehicleRejected": {
+          "title": "Pojazd nie został zatwierdzony",
+          "body": "Pojazd nie został zatwierdzony. Proszę poprawić dane i przesłać je ponownie."
+        }
+      },
+      "confirm": {
+        "title": "Z jakiego pojazdu korzystają Państwo dzisiaj?",
+        "body": "Przed przejściem w tryb online proszę potwierdzić pojazd. Jest to wymagane przy każdym logowaniu w dniu pracy.",
+        "bodyPostMove": "Ostatnia przeprowadzka została zakończona. Proszę potwierdzić, czy będą Państwo nadal korzystać z tego samego pojazdu.",
+        "same": {
+          "cta": "Ten sam pojazd"
+        },
+        "change": {
+          "cta": "Zmień pojazd"
+        },
+        "confirming": {
+          "label": "Potwierdzanie…"
+        }
+      },
+      "settings": {
+        "helper": "Zmiany pojazdu są weryfikowane osobno i nie wpływają na weryfikację kierowcy.",
+        "status": {
+          "label": "{{vehicle}} · {{status}}"
+        }
+      }
     }
   },
   "moverDashboard": {
@@ -827,6 +981,9 @@
     },
     "taxDocuments": {
       "label": "Dokumenty podatkowe"
+    },
+    "vehicle": {
+      "label": "Pojazd"
     }
   },
   "myMoves": {
@@ -1154,6 +1311,11 @@
     },
     "stepTotal": {
       "label": "/{{total}}"
+    }
+  },
+  "moverCard": {
+    "vehicleVerified": {
+      "badge": "Zweryfikowany pojazd"
     }
   }
 }

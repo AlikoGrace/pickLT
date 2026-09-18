@@ -1285,8 +1285,19 @@
         "value": "Jusqu'à {{capacity}}"
       }
     },
+    "declaration": {
+      "body": "En transmettant ces informations, vous confirmez qu'elles sont exactes et à jour, et que vous êtes responsable du respect des exigences applicables en matière de véhicule, de permis et d'assurance.",
+      "confirmBody": "En confirmant, vous déclarez utiliser aujourd'hui le véhicule enregistré et que les informations enregistrées sont exactes et à jour."
+    },
     "edit": {
       "title": "Modifier les informations du véhicule"
+    },
+    "evidence": {
+      "title": "Justificatifs du véhicule"
+    },
+    "fullPhoto": {
+      "helper": "Montrez le véhicule complet, pas une partie recadrée.",
+      "label": "Photo du véhicule entier"
     },
     "largeTruck": {
       "helper": "{{capacity}} — déménagements de maison, gros volumes",
@@ -1306,7 +1317,25 @@
     "multiple": {
       "label": "Plusieurs"
     },
+    "ownership": {
+      "label": "Qui fournit le véhicule ?",
+      "owned": {
+        "helper": "Vous êtes propriétaire du véhicule que vous utiliserez pour les déménagements."
+      },
+      "rented": {
+        "helper": "Vous louez le véhicule. Vous pouvez terminer l'inscription maintenant et ajouter le véhicule ensuite. Il doit être vérifié avant que vous receviez des déménagements."
+      }
+    },
+    "plateFront": {
+      "helper": "Le numéro d'immatriculation doit être lisible.",
+      "label": "Photo de la plaque avant"
+    },
+    "plateRear": {
+      "helper": "Le numéro d'immatriculation doit être lisible.",
+      "label": "Photo de la plaque arrière"
+    },
     "registration": {
+      "helper": "Doit correspondre au numéro figurant sur les deux plaques.",
       "label": "Immatriculation du véhicule *",
       "placeholder": "ex. AB-123-CD"
     },
@@ -1316,6 +1345,9 @@
     "smallVan": {
       "helper": "{{capacity}} — petits déménagements, objets isolés",
       "label": "Petite camionnette"
+    },
+    "submitForVerification": {
+      "cta": "Soumettre pour vérification"
     },
     "title": "Informations sur le véhicule",
     "type": {

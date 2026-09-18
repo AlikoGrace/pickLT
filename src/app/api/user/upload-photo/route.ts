@@ -3,10 +3,11 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE, APPWRITE_ENDPOINT } from '@/lib/constants'
 import { getSessionUserId } from '@/lib/auth-session'
-import { ID, Permission, Role } from 'node-appwrite'
+import { ID } from 'node-appwrite'
 import { InputFile } from 'node-appwrite/file'
 import sharp from 'sharp'
 
+import { uploadedPhotoPermissions } from '@/lib/doc-permissions'
 import { formatFileSizeMb } from '@/lib/format'
 import { UPLOAD_MAX_MB } from '@/lib/service-limits'
 
@@ -70,20 +71,18 @@ export async function POST(req: NextRequest) {
 
     // Upload to Appwrite Storage.
     //
-    // `purpose` decides the permissions, because this one route uploads two very
-    // different things into the same bucket. A selfie is an avatar rendered by
-    // bare <img>/<Image> tags across four apps, which present no Appwrite
-    // identity — it keeps whatever the bucket allows (unchanged behaviour).
-    // Anything else here is a KYC document (the driver's-licence scan), and it
-    // gets an explicit owner-only grant: it is displayed solely through the
-    // admin console's authorised proxy, so it must never become world-readable.
-    const isSelfie = purpose === 'selfie'
+    // `purpose` decides the permissions, because this one route uploads very
+    // different things into the same bucket: a world-viewable avatar
+    // (`selfie`), the KYC licence scan (`license`) and the three vehicle
+    // evidence photos (`vehicle`, master D11). Everything but the selfie is
+    // owner-read-only and reaches the admin only through its authorised proxy.
+    // The branch lives in `uploadedPhotoPermissions` so a test pins it.
     const fileId = ID.unique()
     await storage.createFile(
       APPWRITE.BUCKETS.PROFILE_PHOTOS,
       fileId,
       InputFile.fromBuffer(uint8, fileName),
-      isSelfie ? undefined : [Permission.read(Role.user(userId))]
+      uploadedPhotoPermissions(purpose, userId)
     )
 
     // Build the public preview URL

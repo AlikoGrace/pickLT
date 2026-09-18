@@ -68,7 +68,9 @@
       "verifyFailed": "Verificatie mislukt (status {{status}}). Probeer het opnieuw."
     },
     "pricing": {
+      "capacityOutOfRange": "{{label}} moet tussen 1 en 120 m³ liggen.",
       "commissionTooLarge": "{{label}} is een breuk, geen percentage — voer 0.15 in voor 15%.",
+      "flagNotBoolean": "{{label}} is een schakelaar: voer 0 of 1 in.",
       "keyRequired": "key is verplicht",
       "negative": "{{label}} kan niet negatief zijn.",
       "notANumber": "{{label}} moet een getal zijn.",
@@ -80,6 +82,15 @@
       "blockedFlagRequired": "Een waarde voor geblokkeerd/gedeblokkeerd is verplicht.",
       "notFound": "Gebruiker niet gevonden.",
       "selfBlock": "Je kunt je eigen account niet blokkeren."
+    },
+    "vehicle": {
+      "invalidDecision": "De beslissing moet \"verified\" of \"rejected\" zijn.",
+      "invalidPhotoKind": "Het fototype moet front, rear of full zijn.",
+      "noPhoto": "Geen \"{{kind}}\"-foto vastgelegd voor dit voertuig.",
+      "notFound": "Voertuig niet gevonden.",
+      "notPending": "Dit voertuig wacht niet op beoordeling.",
+      "reasonRequired": "Bij het afwijzen van een voertuig is een reden vereist.",
+      "verifyFailed": "Voertuigverificatie mislukt (status {{status}}). Probeer het opnieuw."
     }
   },
   "appwrite": {
@@ -241,6 +252,7 @@
     "selfieUploadFailed": "Selfie kon niet worden geüpload",
     "startRouteFailed": "Route kon niet worden gestart",
     "startRouteRetry": "Route kon niet worden gestart. Probeer het opnieuw.",
+    "vehicleNotReady": "Bevestig of verifieer uw voertuig voordat u online gaat of verhuizingen accepteert.",
     "withdrawFailed": "Terugtrekken uit de verhuizing mislukt",
     "withdrawRetry": "Terugtrekken mislukt. Probeer het opnieuw."
   },
@@ -321,8 +333,18 @@
     "phoneRequired2": "Telefoonnummer is verplicht"
   },
   "vehicle": {
+    "capacityOutOfRange": "De capaciteit moet tussen 1 en 120 m³ liggen.",
     "fieldsRequired": "Vul alle verplichte voertuigvelden in",
+    "notFound": "Voertuig niet gevonden.",
+    "notPending": "Dit voertuig wacht niet op beoordeling.",
+    "notRental": "De dagelijkse bevestiging geldt alleen voor huurvoertuigen.",
+    "notVerified": "Uw huidige voertuig is nog niet geverifieerd.",
+    "photosRequired": "Voeg foto's toe van de voorste kentekenplaat, de achterste kentekenplaat en het hele voertuig.",
+    "plateInUse": "Dit kenteken is al geregistreerd bij een andere chauffeur.",
+    "plateInvalid": "Voer een geldig kenteken in.",
     "saveFailed": "Voertuiggegevens konden niet worden opgeslagen",
-    "updateFailed": "Voertuiggegevens konden niet worden bijgewerkt"
+    "typeInvalid": "Kies een voertuigtype.",
+    "updateFailed": "Voertuiggegevens konden niet worden bijgewerkt",
+    "yearInvalid": "Voer een jaartal van vier cijfers in."
   }
 }
