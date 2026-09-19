@@ -612,6 +612,9 @@
     "noResults": {
       "empty": "Nie znaleziono lokalizacji"
     },
+    "noResultsInCountry": {
+      "empty": "Nie znaleziono niczego w Państwa kraju. Proszę spróbować nazwy ulicy lub dzielnicy albo wyszukać we wszystkich krajach."
+    },
     "noResultsLong": {
       "empty": "Nie znaleziono lokalizacji. Spróbuj innego wyszukiwania."
     },
@@ -620,6 +623,9 @@
     },
     "search": {
       "placeholder": "Szukaj miejsca, obiektu lub adresu"
+    },
+    "searchAllCountries": {
+      "cta": "Szukaj we wszystkich krajach"
     },
     "searchIdle": {
       "empty": "Zacznij pisać, aby wyszukać adres."

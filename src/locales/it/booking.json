@@ -604,6 +604,9 @@
     "noResults": {
       "empty": "Nessun luogo trovato"
     },
+    "noResultsInCountry": {
+      "empty": "Nessun risultato nel Suo paese. Provi con il nome di una via o di un quartiere, oppure cerchi in tutti i paesi."
+    },
     "noResultsLong": {
       "empty": "Nessun luogo trovato. Prova con un’altra ricerca."
     },
@@ -612,6 +615,9 @@
     },
     "search": {
       "placeholder": "Cerca un luogo, un punto di riferimento o un indirizzo"
+    },
+    "searchAllCountries": {
+      "cta": "Cerca in tutti i paesi"
     },
     "searchIdle": {
       "empty": "Inizia a digitare per cercare un indirizzo."

@@ -604,6 +604,9 @@
     "noResults": {
       "empty": "Keine Orte gefunden"
     },
+    "noResultsInCountry": {
+      "empty": "In Ihrem Land wurde nichts gefunden. Versuchen Sie es mit einem Straßen- oder Ortsteilnamen oder suchen Sie in allen Ländern."
+    },
     "noResultsLong": {
       "empty": "Keine Orte gefunden. Versuchen Sie eine andere Suche."
     },
@@ -612,6 +615,9 @@
     },
     "search": {
       "placeholder": "Ort, Sehenswürdigkeit oder Adresse suchen"
+    },
+    "searchAllCountries": {
+      "cta": "In allen Ländern suchen"
     },
     "searchIdle": {
       "empty": "Tippen Sie, um nach einer Adresse zu suchen."

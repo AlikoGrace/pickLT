@@ -604,6 +604,9 @@
     "noResults": {
       "empty": "Geen locaties gevonden"
     },
+    "noResultsInCountry": {
+      "empty": "Niets gevonden in uw land. Probeer een straat- of wijknaam, of zoek in alle landen."
+    },
     "noResultsLong": {
       "empty": "Geen locaties gevonden. Probeer een andere zoekopdracht."
     },
@@ -612,6 +615,9 @@
     },
     "search": {
       "placeholder": "Zoek een plaats, herkenningspunt of adres"
+    },
+    "searchAllCountries": {
+      "cta": "In alle landen zoeken"
     },
     "searchIdle": {
       "empty": "Begin met typen om een adres te zoeken."

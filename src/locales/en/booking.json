@@ -607,6 +607,9 @@
     "noResults": {
       "empty": "No locations found"
     },
+    "noResultsInCountry": {
+      "empty": "Nothing found in your country. Try a street or district name, or search all countries."
+    },
     "noResultsLong": {
       "empty": "No locations found. Try a different search."
     },
@@ -615,6 +618,9 @@
     },
     "search": {
       "placeholder": "Search a place, landmark or address"
+    },
+    "searchAllCountries": {
+      "cta": "Search all countries"
     },
     "searchIdle": {
       "empty": "Start typing to search for an address."

@@ -604,6 +604,9 @@
     "noResults": {
       "empty": "Konum bulunamadı"
     },
+    "noResultsInCountry": {
+      "empty": "Ülkenizde sonuç bulunamadı. Bir sokak veya semt adı deneyin ya da tüm ülkelerde arayın."
+    },
     "noResultsLong": {
       "empty": "Konum bulunamadı. Farklı bir arama deneyin."
     },
@@ -612,6 +615,9 @@
     },
     "search": {
       "placeholder": "Bir yer, simge yapı veya adres arayın"
+    },
+    "searchAllCountries": {
+      "cta": "Tüm ülkelerde ara"
     },
     "searchIdle": {
       "empty": "Adres aramak için yazmaya başlayın."
