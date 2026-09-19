@@ -331,6 +331,7 @@
     "emailRequired": "Email is required",
     "noFields": "No valid fields to update",
     "phoneFormat": "Invalid phone number. Use international format (e.g. +491234567890)",
+    "phoneInUse": "This phone number is already used by another account. Use a different number, or sign in to the account that has it.",
     "phoneRequired2": "Phone number is required"
   },
   "vehicle": {

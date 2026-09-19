@@ -331,6 +331,7 @@
     "emailRequired": "L’e-mail è obbligatoria",
     "noFields": "Nessun campo valido da aggiornare",
     "phoneFormat": "Numero di telefono non valido. Usa il formato internazionale (es. +491234567890)",
+    "phoneInUse": "Questo numero di telefono è già utilizzato da un altro account. Utilizzi un altro numero o acceda all'account a cui è associato.",
     "phoneRequired2": "Il numero di telefono è obbligatorio"
   },
   "vehicle": {

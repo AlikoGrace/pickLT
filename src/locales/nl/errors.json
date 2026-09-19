@@ -331,6 +331,7 @@
     "emailRequired": "E-mailadres is verplicht",
     "noFields": "Geen geldige velden om bij te werken",
     "phoneFormat": "Ongeldig telefoonnummer. Gebruik de internationale notatie (bijv. +491234567890)",
+    "phoneInUse": "Dit telefoonnummer wordt al door een ander account gebruikt. Gebruik een ander nummer of meld u aan bij het account waaraan het is gekoppeld.",
     "phoneRequired2": "Telefoonnummer is verplicht"
   },
   "vehicle": {

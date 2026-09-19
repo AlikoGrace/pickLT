@@ -331,6 +331,7 @@
     "emailRequired": "E-Mail-Adresse ist erforderlich",
     "noFields": "Keine gültigen Felder zum Aktualisieren",
     "phoneFormat": "Ungültige Telefonnummer. Verwenden Sie das internationale Format (z. B. +491234567890)",
+    "phoneInUse": "Diese Telefonnummer wird bereits von einem anderen Konto verwendet. Verwenden Sie eine andere Nummer oder melden Sie sich mit dem Konto an, dem sie gehört.",
     "phoneRequired2": "Telefonnummer ist erforderlich"
   },
   "vehicle": {

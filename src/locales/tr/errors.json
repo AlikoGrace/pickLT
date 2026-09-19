@@ -331,6 +331,7 @@
     "emailRequired": "E-posta adresi gereklidir",
     "noFields": "Güncellenecek geçerli alan yok",
     "phoneFormat": "Geçersiz telefon numarası. Uluslararası biçimi kullanın (örn. +491234567890)",
+    "phoneInUse": "Bu telefon numarası başka bir hesap tarafından kullanılıyor. Farklı bir numara kullanın veya numaranın bağlı olduğu hesaba giriş yapın.",
     "phoneRequired2": "Telefon numarası gereklidir"
   },
   "vehicle": {

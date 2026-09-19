@@ -335,6 +335,7 @@
     "emailRequired": "Adres e-mail jest wymagany",
     "noFields": "Brak prawidłowych pól do aktualizacji",
     "phoneFormat": "Nieprawidłowy numer telefonu. Użyj formatu międzynarodowego (np. +491234567890)",
+    "phoneInUse": "Ten numer telefonu jest już używany przez inne konto. Proszę użyć innego numeru lub zalogować się na konto, do którego jest przypisany.",
     "phoneRequired2": "Numer telefonu jest wymagany"
   },
   "vehicle": {
