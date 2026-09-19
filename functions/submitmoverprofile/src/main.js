@@ -26,12 +26,84 @@ const COUNTRY_CODES = {
   'north korea': 'KP', kp: 'KP', cuba: 'CU', cu: 'CU',
 };
 
+// Every English country name the apps' country picker can submit (ICU
+// `Intl.DisplayNames('en', { type: 'region' })`, ISO-3166-1 alpha-2 + Kosovo),
+// normalised by `normCountry`. GENERATED together with `pickltmover/lib/countries.ts`
+// — the picker stores the English name, and without this table any country
+// outside the hand-written aliases above resolved to null and skipped the
+// sanctions gate. The tax functions keep their own narrower map on purpose:
+// widening country resolution there changes which tax rules apply.
+const ISO_NAME_CODES = {
+  "afghanistan": 'AF', "aland islands": 'AX', "albania": 'AL', "algeria": 'DZ', "american samoa": 'AS',
+  "andorra": 'AD', "angola": 'AO', "anguilla": 'AI', "antarctica": 'AQ', "antigua and barbuda": 'AG',
+  "argentina": 'AR', "armenia": 'AM', "aruba": 'AW', "australia": 'AU', "austria": 'AT', "azerbaijan": 'AZ',
+  "bahamas": 'BS', "bahrain": 'BH', "bangladesh": 'BD', "barbados": 'BB', "belarus": 'BY', "belgium": 'BE',
+  "belize": 'BZ', "benin": 'BJ', "bermuda": 'BM', "bhutan": 'BT', "bolivia": 'BO',
+  "bosnia and herzegovina": 'BA', "botswana": 'BW', "bouvet island": 'BV', "brazil": 'BR',
+  "british indian ocean territory": 'IO', "british virgin islands": 'VG', "brunei": 'BN', "bulgaria": 'BG',
+  "burkina faso": 'BF', "burundi": 'BI', "cambodia": 'KH', "cameroon": 'CM', "canada": 'CA',
+  "cape verde": 'CV', "caribbean netherlands": 'BQ', "cayman islands": 'KY',
+  "central african republic": 'CF', "chad": 'TD', "chile": 'CL', "china": 'CN', "christmas island": 'CX',
+  "cocos (keeling) islands": 'CC', "colombia": 'CO', "comoros": 'KM', "congo - brazzaville": 'CG',
+  "congo - kinshasa": 'CD', "cook islands": 'CK', "costa rica": 'CR', "cote d'ivoire": 'CI', "croatia": 'HR',
+  "cuba": 'CU', "curacao": 'CW', "cyprus": 'CY', "czechia": 'CZ', "denmark": 'DK', "djibouti": 'DJ',
+  "dominica": 'DM', "dominican republic": 'DO', "ecuador": 'EC', "egypt": 'EG', "el salvador": 'SV',
+  "equatorial guinea": 'GQ', "eritrea": 'ER', "estonia": 'EE', "eswatini": 'SZ', "ethiopia": 'ET',
+  "falkland islands": 'FK', "faroe islands": 'FO', "fiji": 'FJ', "finland": 'FI', "france": 'FR',
+  "french guiana": 'GF', "french polynesia": 'PF', "french southern territories": 'TF', "gabon": 'GA',
+  "gambia": 'GM', "georgia": 'GE', "germany": 'DE', "ghana": 'GH', "gibraltar": 'GI', "greece": 'GR',
+  "greenland": 'GL', "grenada": 'GD', "guadeloupe": 'GP', "guam": 'GU', "guatemala": 'GT', "guernsey": 'GG',
+  "guinea": 'GN', "guinea-bissau": 'GW', "guyana": 'GY', "haiti": 'HT', "heard and mcdonald islands": 'HM',
+  "honduras": 'HN', "hong kong sar china": 'HK', "hungary": 'HU', "iceland": 'IS', "india": 'IN',
+  "indonesia": 'ID', "iran": 'IR', "iraq": 'IQ', "ireland": 'IE', "isle of man": 'IM', "israel": 'IL',
+  "italy": 'IT', "jamaica": 'JM', "japan": 'JP', "jersey": 'JE', "jordan": 'JO', "kazakhstan": 'KZ',
+  "kenya": 'KE', "kiribati": 'KI', "kosovo": 'XK', "kuwait": 'KW', "kyrgyzstan": 'KG', "laos": 'LA',
+  "latvia": 'LV', "lebanon": 'LB', "lesotho": 'LS', "liberia": 'LR', "libya": 'LY', "liechtenstein": 'LI',
+  "lithuania": 'LT', "luxembourg": 'LU', "macao sar china": 'MO', "madagascar": 'MG', "malawi": 'MW',
+  "malaysia": 'MY', "maldives": 'MV', "mali": 'ML', "malta": 'MT', "marshall islands": 'MH',
+  "martinique": 'MQ', "mauritania": 'MR', "mauritius": 'MU', "mayotte": 'YT', "mexico": 'MX',
+  "micronesia": 'FM', "moldova": 'MD', "monaco": 'MC', "mongolia": 'MN', "montenegro": 'ME',
+  "montserrat": 'MS', "morocco": 'MA', "mozambique": 'MZ', "myanmar (burma)": 'MM', "namibia": 'NA',
+  "nauru": 'NR', "nepal": 'NP', "netherlands": 'NL', "new caledonia": 'NC', "new zealand": 'NZ',
+  "nicaragua": 'NI', "niger": 'NE', "nigeria": 'NG', "niue": 'NU', "norfolk island": 'NF',
+  "north korea": 'KP', "north macedonia": 'MK', "northern mariana islands": 'MP', "norway": 'NO',
+  "oman": 'OM', "pakistan": 'PK', "palau": 'PW', "palestinian territories": 'PS', "panama": 'PA',
+  "papua new guinea": 'PG', "paraguay": 'PY', "peru": 'PE', "philippines": 'PH', "pitcairn islands": 'PN',
+  "poland": 'PL', "portugal": 'PT', "puerto rico": 'PR', "qatar": 'QA', "reunion": 'RE', "romania": 'RO',
+  "russia": 'RU', "rwanda": 'RW', "samoa": 'WS', "san marino": 'SM', "sao tome and principe": 'ST',
+  "saudi arabia": 'SA', "senegal": 'SN', "serbia": 'RS', "seychelles": 'SC', "sierra leone": 'SL',
+  "singapore": 'SG', "sint maarten": 'SX', "slovakia": 'SK', "slovenia": 'SI', "solomon islands": 'SB',
+  "somalia": 'SO', "south africa": 'ZA', "south georgia and south sandwich islands": 'GS',
+  "south korea": 'KR', "south sudan": 'SS', "spain": 'ES', "sri lanka": 'LK', "st. barthelemy": 'BL',
+  "st. helena": 'SH', "st. kitts and nevis": 'KN', "st. lucia": 'LC', "st. martin": 'MF',
+  "st. pierre and miquelon": 'PM', "st. vincent and grenadines": 'VC', "sudan": 'SD', "suriname": 'SR',
+  "svalbard and jan mayen": 'SJ', "sweden": 'SE', "switzerland": 'CH', "syria": 'SY', "taiwan": 'TW',
+  "tajikistan": 'TJ', "tanzania": 'TZ', "thailand": 'TH', "timor-leste": 'TL', "togo": 'TG', "tokelau": 'TK',
+  "tonga": 'TO', "trinidad and tobago": 'TT', "tunisia": 'TN', "turkiye": 'TR', "turkmenistan": 'TM',
+  "turks and caicos islands": 'TC', "tuvalu": 'TV', "u.s. outlying islands": 'UM',
+  "u.s. virgin islands": 'VI', "uganda": 'UG', "ukraine": 'UA', "united arab emirates": 'AE',
+  "united kingdom": 'GB', "united states": 'US', "uruguay": 'UY', "uzbekistan": 'UZ', "vanuatu": 'VU',
+  "vatican city": 'VA', "venezuela": 'VE', "vietnam": 'VN', "wallis and futuna": 'WF',
+  "western sahara": 'EH', "yemen": 'YE', "zambia": 'ZM', "zimbabwe": 'ZW',
+};
+
+/** Lower-case, accent-free, straight apostrophes, `&` → `and` — the key form of both tables. */
+function normCountry(raw) {
+  return raw
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/\u2019/g, "'")
+    .replace(/&/g, 'and')
+    .trim();
+}
+
 export function countryToIso2(raw) {
   if (!raw || typeof raw !== 'string') return null;
   const key = raw.trim().toLowerCase();
   if (COUNTRY_CODES[key]) return COUNTRY_CODES[key];
   if (/^[a-z]{2}$/.test(key)) return key.toUpperCase();
-  return null;
+  return ISO_NAME_CODES[normCountry(raw)] ?? null;
 }
 
 /**
