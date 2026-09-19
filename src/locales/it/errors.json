@@ -239,6 +239,7 @@
       "error": "Impossibile accettare il trasloco"
     },
     "acceptRetry": "Impossibile accettare il trasloco. Riprova.",
+    "adminAccount": "Gli account amministratore non possono registrarsi come traslocatori. Utilizzi un account separato.",
     "clientCannotConvert": "Il tuo account è registrato come cliente. Gli account cliente non possono essere convertiti in account traslocatore. Crea un nuovo account per registrarti come traslocatore.",
     "earningsFetchFailed": "Impossibile recuperare i guadagni",
     "earningsLoadFailed": "Impossibile caricare i guadagni",

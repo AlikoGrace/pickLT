@@ -141,6 +141,16 @@ export default async ({ req, res, log, error }) => {
     } catch (e) {
       error(`could not read user ${userId} for denormalisation: ${e.message}`);
     }
+    // An admin account must never become a mover. `users.userType` is single-
+    // valued and is the admin console's ONLY role check, so the `userType:
+    // 'mover'` write below used to demote the admin — on 2026-09-19 it locked
+    // the last admin out of the console. Refuse before anything is written.
+    if (existingUser?.userType === 'admin') {
+      return res.json(
+        { error: 'Admin accounts cannot register as movers. Use a separate account.', fnCode: 'mover.adminAccount' },
+        403,
+      );
+    }
     const displayName =
       (typeof fullName === 'string' && fullName.trim()) || existingUser?.fullName || null;
     const photoUrl = selfiePhoto || existingUser?.profilePhoto || null;
@@ -227,7 +237,9 @@ export default async ({ req, res, log, error }) => {
 
     // User-doc updates: flip to mover, set name/phone, use the selfie as the
     // profile photo (matches the web onboarding behavior).
-    const userUpdates = { userType: 'mover' };
+    // Only claim the role when the user row was actually read above: a failed
+    // read must not turn into a blind role overwrite.
+    const userUpdates = existingUser ? { userType: 'mover' } : {};
     if (fullName) userUpdates.fullName = fullName;
     if (phone) userUpdates.phone = phone.startsWith('+') ? phone : `+${phone}`;
     if (selfiePhoto) userUpdates.profilePhoto = selfiePhoto;

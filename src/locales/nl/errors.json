@@ -239,6 +239,7 @@
       "error": "Verhuizing accepteren mislukt"
     },
     "acceptRetry": "Verhuizing accepteren mislukt. Probeer het opnieuw.",
+    "adminAccount": "Beheerdersaccounts kunnen zich niet als verhuizer registreren. Gebruik een apart account.",
     "clientCannotConvert": "Je account is geregistreerd als klant. Klantaccounts kunnen niet worden omgezet naar verhuizersaccounts. Maak een nieuw account aan om je als verhuizer te registreren.",
     "earningsFetchFailed": "Verdiensten konden niet worden opgehaald",
     "earningsLoadFailed": "Verdiensten konden niet worden geladen",

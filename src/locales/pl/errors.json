@@ -243,6 +243,7 @@
       "error": "Nie udało się przyjąć przeprowadzki"
     },
     "acceptRetry": "Nie udało się przyjąć przeprowadzki. Spróbuj ponownie.",
+    "adminAccount": "Konta administratorów nie mogą rejestrować się jako przewoźnicy. Proszę użyć osobnego konta.",
     "clientCannotConvert": "Twoje konto jest zarejestrowane jako konto klienta. Kont klientów nie można przekształcić w konta przewoźnika. Załóż nowe konto, aby zarejestrować się jako przewoźnik.",
     "earningsFetchFailed": "Nie udało się pobrać zarobków",
     "earningsLoadFailed": "Nie udało się wczytać zarobków",

@@ -239,6 +239,7 @@
       "error": "Umzug konnte nicht angenommen werden"
     },
     "acceptRetry": "Umzug konnte nicht angenommen werden. Bitte versuchen Sie es erneut.",
+    "adminAccount": "Admin-Konten können sich nicht als Umzugsfahrer registrieren. Bitte verwenden Sie ein separates Konto.",
     "clientCannotConvert": "Ihr Konto ist als Kundenkonto registriert. Kundenkonten können nicht in Umzugsprofi-Konten umgewandelt werden. Bitte erstellen Sie ein neues Konto, um sich als Umzugsprofi zu registrieren.",
     "earningsFetchFailed": "Verdienst konnte nicht abgerufen werden",
     "earningsLoadFailed": "Verdienst konnte nicht geladen werden",

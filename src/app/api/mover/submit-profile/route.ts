@@ -76,6 +76,16 @@ export async function POST(req: NextRequest) {
       // User doc doesn't exist yet; sync-user should have created it
     }
 
+    // An admin account must never become a mover: `userType` is single-valued
+    // and is the admin console's only role check, so the write below would
+    // demote the admin (it locked the last one out on 2026-09-19).
+    if (userDoc?.userType === 'admin') {
+      return NextResponse.json(
+        { error: t('errors:mover.adminAccount'), fnCode: 'mover.adminAccount' },
+        { status: 403 }
+      )
+    }
+
     if (userDoc?.userType === 'client') {
       return NextResponse.json(
         { error: t('errors:mover.clientCannotConvert') },

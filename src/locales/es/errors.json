@@ -239,6 +239,7 @@
       "error": "No se ha podido aceptar la mudanza"
     },
     "acceptRetry": "No se ha podido aceptar la mudanza. Inténtalo de nuevo.",
+    "adminAccount": "Las cuentas de administrador no pueden registrarse como transportistas. Utilice una cuenta distinta.",
     "clientCannotConvert": "Tu cuenta está registrada como cliente. Las cuentas de cliente no se pueden convertir en cuentas de transportista. Crea una cuenta nueva para registrarte como transportista.",
     "earningsFetchFailed": "No se han podido obtener las ganancias",
     "earningsLoadFailed": "No se han podido cargar las ganancias",

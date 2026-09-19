@@ -239,6 +239,7 @@
       "error": "Failed to accept move"
     },
     "acceptRetry": "Failed to accept move. Please try again.",
+    "adminAccount": "Admin accounts cannot register as movers. Please use a separate account.",
     "clientCannotConvert": "Your account is registered as a client. Client accounts cannot be converted to mover accounts. Please create a new account to register as a mover.",
     "earningsFetchFailed": "Failed to fetch earnings",
     "earningsLoadFailed": "Failed to load earnings",

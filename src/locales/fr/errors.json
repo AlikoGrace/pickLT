@@ -239,6 +239,7 @@
       "error": "Échec de l’acceptation du déménagement"
     },
     "acceptRetry": "Échec de l’acceptation du déménagement. Veuillez réessayer.",
+    "adminAccount": "Les comptes administrateur ne peuvent pas s'inscrire comme déménageurs. Veuillez utiliser un compte distinct.",
     "clientCannotConvert": "Votre compte est enregistré en tant que client. Les comptes clients ne peuvent pas être convertis en comptes déménageur. Veuillez créer un nouveau compte pour vous inscrire comme déménageur.",
     "earningsFetchFailed": "Échec de la récupération des revenus",
     "earningsLoadFailed": "Échec du chargement des revenus",

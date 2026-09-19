@@ -239,6 +239,7 @@
       "error": "Taşınma kabul edilemedi"
     },
     "acceptRetry": "Taşınma kabul edilemedi. Lütfen tekrar deneyin.",
+    "adminAccount": "Yönetici hesapları nakliyeci olarak kayıt olamaz. Lütfen ayrı bir hesap kullanın.",
     "clientCannotConvert": "Hesabınız müşteri hesabı olarak kayıtlı. Müşteri hesapları nakliyeci hesabına dönüştürülemez. Nakliyeci olarak kaydolmak için lütfen yeni bir hesap oluşturun.",
     "earningsFetchFailed": "Kazanç bilgileri getirilemedi",
     "earningsLoadFailed": "Kazanç bilgileri yüklenemedi",
