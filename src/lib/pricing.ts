@@ -1,72 +1,190 @@
 /**
- * Shared quote maths for the web client.
+ * Admin-editable pricing registry — v3 (tiered engine), web port.
  *
- * Every rate the platform charges lives in the `pricing_config` collection and
- * is edited from the admin panel. The constants below are **defaults, not
- * fallback data to be shown**: a config that fails to load must never produce a
- * €0 quote, so the DB is an override layer over these. Worst case the web
- * prices exactly as the server's compiled defaults do.
+ * Every rate the platform charges lives in the `pricing_config` collection
+ * (key/value rows edited from the admin panel). The constants below are
+ * **compiled defaults**, not fallback data to be shown: a config that fails to
+ * load must never produce a €0 quote or a crash, so the DB is an override
+ * layer over these. Worst case the web prices at the documented defaults.
  *
- * This module exists because the formula used to be duplicated inline in two
- * pages, and the copies had drifted apart and away from the backend — the
- * mover-selection page was quoting a rate that did not exist on any mover and a
- * per-km figure a third above what `calculateprice` charges. One copy, one set
- * of keys, shared by every surface.
+ * Source of the default values: *MoveDNA — Simple Logistics Pricing Engine*
+ * v1.0 §3.1 (tier parameters), §5 (platform fee 8 %), and the Executive
+ * Framework §6. They are the documents' *illustrative* rates and must be
+ * validated in pilot — see `pickltmobile/.agent/plans/pricing/0.master.md` §5.
  *
- * `instantRouteBase` is a faithful port of `functions/calculateprice/src/main.js`
- * and `priceForMover` mirrors the mobile client's `lib/move-pricing.ts`. Both
- * must stay in lockstep with their counterparts; the cross-repo golden fixtures
- * planned in `capability-pricing-design.md` sub-plan 7 are what will pin that.
+ * This is the web port of `pickltmobile/lib/pricing-config.ts` (byte-identical
+ * there, in pickltadmin and in pickltmover). The key set and every value must
+ * match that file exactly; `pricing-parity.test.ts` pins the arithmetic
+ * downstream through the shared golden fixture. Edit the mobile file first.
+ *
+ * Key families (master plan §5):
+ *   tier.<light|regular|premium>.*  one profile per service tier
+ *   vehicle.charge.<class>          fixed vehicle charge by class
+ *   capacityM3.<class>              usable capacity per class (feasibility)
+ *   volume.*                        bounding-box → loaded volume calibration
+ *   items.*                         custom-item unit prices + suggestion rates
+ *   crew.*  handling.*  access.*    crew requirement, handling hours, access fees
+ *   packing.*  service.*  storage.* selectable services
+ *   platformFee.*  tax.*            customer-facing fee and VAT
+ *   pricing.minimumCharge           floor on the net price
+ *
+ * Wire tier values stay `light | regular | premium`; the customer sees
+ * Normal / Medium / Premium (master D1). `commissionRate` (driver-side, read by
+ * `writetaxledger`) is deliberately NOT here — it is an admin-registry key, not
+ * an engine input.
  */
 
 import type { TFunction } from 'i18next'
 import { vehicleCapacityLabel, type VehicleTierKey } from '@/lib/vehicle-capacity'
 
-export const PRICING_DEFAULTS: Record<string, number> = {
-  // ── Instant / route pricing (calculateprice) ──
-  'instant.baseRatePerKm': 1.5,
-  'instant.multiplier.light': 1.0,
-  'instant.multiplier.regular': 1.3,
-  'instant.multiplier.premium': 1.8,
-  'instant.floorSurchargeNoElevator': 15,
-  'instant.packing.none': 0,
-  'instant.packing.partial': 50,
-  'instant.packing.full': 120,
-  'instant.packing.unpacking': 180,
-  'instant.crew.1': 0,
-  'instant.crew.2': 30,
-  'instant.crew.3': 60,
-  'instant.crew.4plus': 100,
-  'instant.storagePerWeek': 25,
-  'instant.minimumPrice': 49,
+export const PRICING_DEFAULTS = {
+  // ── Service tiers (MoveDNA §3.1) ─────────────────────────────────────────
+  'tier.light.basePrice': 35,
+  'tier.light.distanceRatePerKm': 1.1,
+  'tier.light.crew': 1,
+  'tier.light.laborRatePerHour': 22,
+  'tier.light.minimumHours': 2,
+  'tier.light.packingAllowance': 0,
+  'tier.light.handlingAllowance': 0,
+  'tier.light.instantMultiplier': 1.2,
+  // Smallest vehicle class the tier is sold with: 0 small_van, 1 medium_truck, 2 large_truck.
+  'tier.light.minVehicleRank': 0,
 
-  // ── Per-mover surcharges (instant mover list) ──
-  'mover.crewSurchargePerHead': 10,
-  'mover.itemSurcharge': 1.5,
-  'mover.vehicle.small_van': 0,
-  'mover.vehicle.medium_truck': 10,
-  'mover.vehicle.large_truck': 25,
+  'tier.regular.basePrice': 55,
+  'tier.regular.distanceRatePerKm': 1.35,
+  'tier.regular.crew': 2,
+  'tier.regular.laborRatePerHour': 24,
+  'tier.regular.minimumHours': 2,
+  'tier.regular.packingAllowance': 30,
+  'tier.regular.handlingAllowance': 20,
+  'tier.regular.instantMultiplier': 1.15,
+  'tier.regular.minVehicleRank': 1,
 
-  // ── Load volume (lib/moveVolume.ts) ──
+  'tier.premium.basePrice': 85,
+  'tier.premium.distanceRatePerKm': 1.7,
+  'tier.premium.crew': 3,
+  'tier.premium.laborRatePerHour': 28,
+  'tier.premium.minimumHours': 2,
+  'tier.premium.packingAllowance': 65,
+  'tier.premium.handlingAllowance': 40,
+  'tier.premium.instantMultiplier': 1.1,
+  'tier.premium.minVehicleRank': 2,
+
+  // ── Vehicle (MoveDNA §3.1 vehicle charge; capacity bands unchanged) ──────
+  'vehicle.charge.small_van': 15,
+  'vehicle.charge.medium_truck': 25,
+  'vehicle.charge.large_truck': 45,
+  'capacityM3.small_van': 10,
+  'capacityM3.medium_truck': 25,
+  'capacityM3.large_truck': 45,
+
+  // ── Load volume (lib/moveVolume.ts) ──────────────────────────────────────
+  // Bounding-box volume understates the space a load occupies; 1.35 is the
+  // industry's usual correction. Custom items carry only a size band, anchored
+  // to real catalog items: box 0.096 m³, coffee table 0.297, armchair 0.729,
+  // 3-seater sofa 1.62.
   'volume.packingFactor': 1.35,
   'volume.custom.small': 0.1,
   'volume.custom.medium': 0.3,
   'volume.custom.large': 0.8,
   'volume.custom.extraLarge': 1.8,
-  'capacityM3.small_van': 10,
-  'capacityM3.medium_truck': 25,
-  'capacityM3.large_truck': 45,
+
+  // ── Items (owner requirement: every catalog item has an admin-set price) ─
+  // Catalog rows carry `unitPriceEur`; these are the unit prices for the
+  // custom-item size bands, and the rates behind the admin "Suggest price"
+  // helper (weight × perKg + volume × perM3).
+  'items.custom.small': 3,
+  'items.custom.medium': 6,
+  'items.custom.large': 12,
+  'items.custom.extraLarge': 25,
+  'items.suggest.perKg': 0.15,
+  'items.suggest.perM3': 10,
+
+  // ── Crew requirement (MoveDNA §6.3) ──────────────────────────────────────
+  'crew.m3PerMover': 15,
+  'crew.max': 4,
+
+  // ── Handling time + access surcharges ─────────────────────────────────────
+  // CALIBRATION PARAMETER: hours of physical handling per loaded m³ for one
+  // mover. Tune against completed-move timings.
+  'handling.hoursPerM3': 0.2,
+  'access.floorSurchargeNoElevator': 15,
+  'access.haltverbotFee': 0,
+
+  // ── Selectable services ───────────────────────────────────────────────────
+  'packing.none': 0,
+  'packing.partial': 50,
+  'packing.full': 120,
+  'packing.unpacking': 180,
+  'service.furniture_disassembly': 50,
+  'service.furniture_assembly': 50,
+  'service.tv_mount_remove': 50,
+  'service.appliance_disconnect': 50,
+  'service.appliance_connect': 50,
+  'service.disposal_entsorgung': 50,
+  'service.moveout_cleaning': 50,
+  // Storage is billed per week below; the service tick itself is free.
+  'service.temporary_storage': 0,
+  'storage.perWeek': 30,
+
+  // ── Platform fee, tax, floor (MoveDNA §2, §5) ─────────────────────────────
+  'platformFee.rate': 0.08,
+  'platformFee.fixed': 0,
+  'tax.vatRate': 0.19,
+  'pricing.minimumCharge': 49,
+} as const
+
+export type PricingKey = keyof typeof PRICING_DEFAULTS
+
+/** A partial override map, as read from `pricing_config` / `GET /api/pricing/config`. */
+export type PricingConfig = Partial<Record<PricingKey, number>>
+
+/** Older import name for the same shape; kept so call sites read naturally. */
+export type PricingRates = PricingConfig
+
+export function isPricingKey(key: string): key is PricingKey {
+  return Object.prototype.hasOwnProperty.call(PRICING_DEFAULTS, key)
 }
 
-/** A partial override map as returned by `GET /api/pricing/config`. */
-export type PricingRates = Record<string, number>
-
 /** Rate lookup: DB override when present and finite, else the compiled default. */
-export function rate(rates: PricingRates | null | undefined, key: string): number {
-  const v = rates?.[key]
-  if (typeof v === 'number' && Number.isFinite(v)) return v
-  const fallback = PRICING_DEFAULTS[key]
-  return typeof fallback === 'number' ? fallback : 0
+export function rate(config: PricingConfig | null | undefined, key: PricingKey): number {
+  const override = config?.[key]
+  if (typeof override === 'number' && Number.isFinite(override)) return override
+  return PRICING_DEFAULTS[key]
+}
+
+/**
+ * Rate lookup for a key assembled at runtime (`tier.${tier}.basePrice`,
+ * `service.${id}`). Returns `null` for a key the registry does not know, so a
+ * caller can decide between "0" (an unknown service costs nothing) and "fall
+ * back to a sibling key" (an unknown vehicle class prices as the smallest).
+ */
+export function rateOrNull(config: PricingConfig | null | undefined, key: string): number | null {
+  return isPricingKey(key) ? rate(config, key) : null
+}
+
+/**
+ * Turns raw `pricing_config` rows (or a `{ key: value }` map) into an override
+ * map. Unknown keys are dropped (a stale row can't inject a rate no consumer
+ * understands) and non-finite values are ignored so a bad edit degrades to the
+ * default rather than to NaN.
+ */
+export function toPricingConfig(
+  rows: { key?: unknown; value?: unknown }[] | Record<string, unknown> | null | undefined,
+): PricingConfig {
+  const out: PricingConfig = {}
+  if (!rows) return out
+  const entries: { key?: unknown; value?: unknown }[] = Array.isArray(rows)
+    ? rows
+    : Object.entries(rows).map(([key, value]) => ({ key, value }))
+  for (const row of entries) {
+    const k = typeof row.key === 'string' ? row.key : null
+    if (!k || !isPricingKey(k)) continue
+    const v = typeof row.value === 'number' ? row.value : Number(row.value)
+    if (!Number.isFinite(v)) continue
+    out[k] = v
+  }
+  return out
 }
 
 // ─── Vehicle classes ────────────────────────────────────────────────────────
@@ -120,105 +238,4 @@ export function vehicleCapacity(t: TFunction, v: VehicleType): string {
 /** Narrows an arbitrary stored value to a known class, defaulting to the smallest. */
 export function asVehicleType(v: string | null | undefined): VehicleType {
   return VEHICLE_TYPES.includes(v as VehicleType) ? (v as VehicleType) : 'small_van'
-}
-
-// ─── Instant route base ─────────────────────────────────────────────────────
-
-export interface InstantQuoteInput {
-  routeDistanceMeters: number
-  moveType?: string | null
-  packingServiceLevel?: string | null
-  crewSize?: number | string | null
-  pickupFloorLevel?: string | number | null
-  pickupElevator?: boolean | null
-  dropoffFloorLevel?: string | number | null
-  dropoffElevator?: boolean | null
-  storageWeeks?: number | null
-}
-
-export interface InstantQuoteBreakdown {
-  basePrice: number
-  distanceKm: number
-  moveTypeMultiplier: number
-  floorSurcharge: number
-  packingSurcharge: number
-  crewSurcharge: number
-  storageSurcharge: number
-  estimatedPrice: number
-}
-
-/**
- * The route base price — a faithful port of the `calculateprice` cloud function.
- *
- * Keep the order of operations identical to the server's: the multiplier applies
- * to the distance component only, and the minimum is a floor on the total after
- * surcharges, not on the base.
- */
-export function instantRouteBase(
-  input: InstantQuoteInput,
-  rates?: PricingRates | null
-): InstantQuoteBreakdown {
-  const distanceKm = (input.routeDistanceMeters || 0) / 1000
-
-  let basePrice = distanceKm * rate(rates, 'instant.baseRatePerKm')
-
-  const effectiveType = input.moveType || 'light'
-  const multiplier = rate(rates, `instant.multiplier.${effectiveType}`)
-  basePrice *= multiplier
-
-  let floorSurcharge = 0
-  const floorRate = rate(rates, 'instant.floorSurchargeNoElevator')
-  const pickupFloor = parseInt(String(input.pickupFloorLevel ?? '0'), 10) || 0
-  const dropoffFloor = parseInt(String(input.dropoffFloorLevel ?? '0'), 10) || 0
-  if (!input.pickupElevator && pickupFloor > 0) floorSurcharge += pickupFloor * floorRate
-  if (!input.dropoffElevator && dropoffFloor > 0) floorSurcharge += dropoffFloor * floorRate
-
-  const packingSurcharge = rate(rates, `instant.packing.${input.packingServiceLevel ?? 'none'}`)
-  const crewSurcharge = rate(rates, `instant.crew.${input.crewSize ?? 1}`)
-  const storageSurcharge = (input.storageWeeks || 0) * rate(rates, 'instant.storagePerWeek')
-
-  let estimatedPrice =
-    basePrice + floorSurcharge + packingSurcharge + crewSurcharge + storageSurcharge
-  estimatedPrice = Math.max(estimatedPrice, rate(rates, 'instant.minimumPrice'))
-  estimatedPrice = Math.round(estimatedPrice * 100) / 100
-
-  return {
-    basePrice: Math.round(basePrice * 100) / 100,
-    distanceKm: Math.round(distanceKm * 100) / 100,
-    moveTypeMultiplier: multiplier,
-    floorSurcharge,
-    packingSurcharge,
-    crewSurcharge,
-    storageSurcharge,
-    estimatedPrice,
-  }
-}
-
-// ─── Per-mover price ────────────────────────────────────────────────────────
-
-export interface MoverPricingFields {
-  vehicleType?: string | null
-  crewSize?: number | null
-}
-
-/**
- * The price shown against one mover in the selection list.
- *
- * Mirrors the mobile client's `priceForMover`. The mover affects the price only
- * through **declared capability** — crew size and vehicle class — never through
- * a rate they set themselves. Two movers with the same truck and crew quote the
- * same number, which is what keeps the list comparable and keeps a customer's
- * quote stable when a job is re-broadcast to a different mover.
- */
-export function priceForMover(
-  routeBaseEur: number,
-  mover: MoverPricingFields,
-  totalItems: number,
-  rates?: PricingRates | null
-): number {
-  const crewSize = Number(mover.crewSize) || 1
-  const crewSurcharge = Math.max(0, crewSize - 1) * rate(rates, 'mover.crewSurchargePerHead')
-  const itemSurcharge = Math.max(0, totalItems) * rate(rates, 'mover.itemSurcharge')
-  const vehicleSurcharge = rate(rates, `mover.vehicle.${asVehicleType(mover.vehicleType)}`)
-  return Math.round(routeBaseEur + crewSurcharge + itemSurcharge + vehicleSurcharge)
 }

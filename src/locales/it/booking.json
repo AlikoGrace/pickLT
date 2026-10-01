@@ -121,14 +121,14 @@
   "classification": {
     "itemMinimum": {
       "premium": "«{{item}}» richiede almeno un trasloco premium",
-      "regular": "«{{item}}» richiede almeno un trasloco standard"
+      "regular": "«{{item}}» richiede almeno un trasloco medio"
     },
     "keepCurrent": {
       "cta": "Mantieni attuale"
     },
     "nearLimit": {
-      "light": "Stai raggiungendo il limite del trasloco leggero",
-      "regular": "Stai raggiungendo il limite del trasloco standard"
+      "light": "Stai raggiungendo il limite del trasloco normale",
+      "regular": "Stai raggiungendo il limite del trasloco medio"
     },
     "notice": {
       "title": "Avviso di classificazione del trasloco"
@@ -147,13 +147,13 @@
         "cta": "Cambia tipo di trasloco"
       },
       "light": {
-        "cta": "Passa al trasloco leggero"
+        "cta": "Passa al trasloco normale"
       },
       "premium": {
         "cta": "Passa al trasloco premium"
       },
       "regular": {
-        "cta": "Passa al trasloco standard"
+        "cta": "Passa al trasloco medio"
       },
       "subtitle": "In base agli oggetti che hai scelto, ti consigliamo di passare da <0>{{from}}</0> a <1>{{to}}</1>.",
       "title": "Ti consigliamo un tipo di trasloco superiore"
@@ -690,16 +690,16 @@
     "a11y": "Seleziona il tipo di trasloco",
     "label": "Tipo di trasloco",
     "light": {
-      "body": "I traslochi leggeri usano un furgone piccolo.",
+      "body": "I traslochi normali usano un furgone piccolo e un traslocatore.",
       "helper": "Carico ridotto, pochi oggetti",
-      "label": "Trasloco leggero",
-      "short": "Leggero",
+      "label": "Trasloco normale",
+      "short": "Normale",
       "subtitle": "Perfetto per piccoli carichi: scatoloni, singoli mobili o un monolocale.",
-      "title": "Trasloco leggero"
+      "title": "Trasloco normale"
     },
     "placeholder": "Scegli un tipo di trasloco",
     "premium": {
-      "body": "I traslochi premium usano veicoli più grandi e una squadra di 2 o più persone.",
+      "body": "I traslochi premium usano un camion grande e una squadra di 3 persone.",
       "helper": "Trasloco con servizio completo",
       "label": "Trasloco premium",
       "short": "Premium",
@@ -707,12 +707,12 @@
       "title": "Trasloco premium"
     },
     "regular": {
-      "body": "I traslochi standard usano un veicolo medio e una squadra di 2 persone.",
+      "body": "I traslochi medi usano un camion medio e una squadra di 2 persone.",
       "helper": "Trasloco domestico standard",
-      "label": "Trasloco standard",
-      "short": "Standard",
+      "label": "Trasloco medio",
+      "short": "Medio",
       "subtitle": "Ideale per appartamenti con 1 o 2 camere da letto, con mobili ed elettrodomestici comuni.",
-      "title": "Trasloco standard"
+      "title": "Trasloco medio"
     },
     "section": {
       "title": "Tipo di trasloco"
@@ -1043,39 +1043,29 @@
       "label_one": "Servizi aggiuntivi ({{count}})",
       "label_other": "Servizi aggiuntivi ({{count}})"
     },
-    "baseFare": {
-      "label": "Tariffa base"
-    },
-    "baseRate": {
-      "fallback": {
-        "label": "Tariffa base"
+    "assumptions": {
+      "crew": {
+        "label": "Dimensione della squadra {{value}}"
       },
-      "light": {
-        "label": "Tariffa base (Trasloco leggero)"
+      "hours": {
+        "label": "Tempo fatturabile {{value}}"
       },
-      "premium": {
-        "label": "Tariffa base (Trasloco premium)"
+      "volume": {
+        "label": "Volume stimato {{value}}"
       },
-      "regular": {
-        "label": "Tariffa base (Trasloco standard)"
+      "weight": {
+        "label": "Peso stimato {{value}}"
       }
     },
-    "baseRateWithDistance": {
-      "fallback": {
-        "label": "Tariffa base ({{distance}})"
-      },
-      "light": {
-        "label": "Tariffa base (Trasloco leggero, {{distance}})"
-      },
-      "premium": {
-        "label": "Tariffa base (Trasloco premium, {{distance}})"
-      },
-      "regular": {
-        "label": "Tariffa base (Trasloco standard, {{distance}})"
-      }
+    "crewTooSmall": {
+      "helper_one": "{{count}} traslocatore nascosto: squadra troppo piccola per questo carico",
+      "helper_other": "{{count}} traslocatori nascosti: squadra troppo piccola per questo carico"
     },
-    "crew": {
-      "label": "Squadra ({{crew}})"
+    "discount": {
+      "label": "Sconto"
+    },
+    "estimate": {
+      "helper": "Stima: confermata quando il traslocatore accetta"
     },
     "estimatedTotal": {
       "label": "Totale stimato"
@@ -1083,18 +1073,66 @@
     "finalAfterReview": {
       "helper": "Prezzo definitivo confermato dopo la verifica"
     },
-    "floorSurcharge": {
-      "label": "Supplemento piano"
+    "header": {
+      "instant": {
+        "label": "{{tier}} · Trasloco immediato"
+      },
+      "scheduled": {
+        "label": "{{tier}} · Trasloco programmato"
+      }
+    },
+    "instantAdjustment": {
+      "label": "Prenotazione immediata (×{{multiplier}})"
     },
     "itemsCount": {
       "label_one": "Oggetti ({{count}})",
       "label_other": "Oggetti ({{count}})"
     },
-    "moverFare": {
-      "label": "Compenso del traslocatore"
+    "line": {
+      "base": {
+        "label": "Servizio base"
+      },
+      "distance": {
+        "label": "Distanza ({{km}} × {{rate}})"
+      },
+      "handling": {
+        "label": "Movimentazione e accesso"
+      },
+      "items": {
+        "label_one": "Oggetti ({{count}})",
+        "label_other": "Oggetti ({{count}})"
+      },
+      "labor": {
+        "label": "Manodopera ({{crew}} × {{rate}} × {{hours}})"
+      },
+      "packing": {
+        "label": "Imballaggio"
+      },
+      "services": {
+        "label": "Servizi aggiuntivi"
+      },
+      "storage": {
+        "label_one": "Deposito ({{count}} settimana)",
+        "label_other": "Deposito ({{count}} settimane)"
+      },
+      "vehicle": {
+        "label": "Veicolo ({{vehicle}})"
+      }
     },
-    "packingService": {
-      "label": "Servizio di imballaggio"
+    "minimumApplied": {
+      "helper": "Applicato l'importo minimo di {{amount}}"
+    },
+    "net": {
+      "label": "Subtotale senza IVA"
+    },
+    "operationalSubtotal": {
+      "label": "Subtotale operativo"
+    },
+    "perMover": {
+      "helper": "Il prezzo include la categoria di veicolo di questo traslocatore"
+    },
+    "platformFee": {
+      "label": "Commissione della piattaforma ({{rate}})"
     },
     "storage": {
       "label": "Deposito"

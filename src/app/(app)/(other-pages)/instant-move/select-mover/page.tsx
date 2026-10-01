@@ -1,15 +1,14 @@
 'use client'
 
 import { useMoveSearch, Coordinates } from '@/context/moveSearch'
-import { moverCapacityM3 } from '@/lib/moveVolume'
-import {
-  asVehicleType,
-  instantRouteBase,
-  priceForMover,
-  vehicleCapacity,
-  vehicleLabel,
-  type PricingRates,
-} from '@/lib/pricing'
+import { moverCapacityM3, moverFitsLoad } from '@/lib/moveVolume'
+import { asVehicleType, vehicleCapacity, vehicleLabel } from '@/lib/pricing'
+import { quoteForMover, type QuoteBreakdown, type QuoteInput } from '@/lib/pricingEngine'
+import { basketFromWire, kmFromMeters } from '@/lib/pricingInputs'
+import { useInventoryCatalog } from '@/hooks/useInventoryCatalog'
+import { usePricingConfig } from '@/hooks/usePricingConfig'
+import { useInventoryNames } from '@/lib/inventory-labels'
+import PriceBreakdown from '@/components/PriceBreakdown'
 import ButtonPrimary from '@/shared/ButtonPrimary'
 import ButtonSecondary from '@/shared/ButtonSecondary'
 import {
@@ -74,6 +73,29 @@ interface Mover {
 // on `medium_van` / `large_van` / `truck` / `car` — none of which the schema can
 // hold — so every mover rendered the fallback label and blurb.
 
+/** A listed mover with the v3 quote the customer would pay for them. */
+interface MoverWithQuote {
+  id: string
+  name: string
+  profilePhoto: string
+  rating: number
+  totalMoves: number
+  vehicleType: ReturnType<typeof asVehicleType>
+  vehicleName: string
+  vehiclePlate: string
+  crewSize: number
+  capacityM3: number
+  yearsExperience: number
+  languages: string[]
+  isVerified: boolean
+  price: number
+  quote: QuoteBreakdown
+  estimatedArrival: number
+  distanceKm: number
+  currentLatitude: number | null
+  currentLongitude: number | null
+}
+
 // Helper functions
 const formatDistance = (meters: number): string => {
   if (meters >= 1000) {
@@ -115,25 +137,11 @@ const SelectMoverPage = () => {
   const [routeDuration, setRouteDuration] = useState<number | null>(null)
   const [apiMovers, setApiMovers] = useState<Mover[]>([])
   const [fetchError, setFetchError] = useState<string | null>(null)
-  // Admin rate overrides. `{}` until the fetch lands (and if it fails), which
-  // means the compiled defaults apply — a config outage must show the previous
-  // price, never a blank or a zero.
-  const [pricingRates, setPricingRates] = useState<PricingRates>({})
-
-  useEffect(() => {
-    let cancelled = false
-    fetch('/api/pricing/config')
-      .then((r) => r.json())
-      .then((d) => {
-        if (!cancelled && d?.rates) setPricingRates(d.rates)
-      })
-      .catch(() => {
-        /* keep defaults */
-      })
-    return () => {
-      cancelled = true
-    }
-  }, [])
+  // Admin rate overrides (`{}` → compiled defaults) and the priced catalog —
+  // the two inputs the engine needs besides the basket and the route.
+  const pricingConfig = usePricingConfig()
+  const { catalog, ready: catalogReady } = useInventoryCatalog()
+  const inventoryNames = useInventoryNames()
 
   const inventoryCount = Object.values(inventory).reduce((sum, qty) => sum + qty, 0) + customItems.length
   const photoCount = (coverPhotoId ? 1 : 0) + galleryPhotoIds.length
@@ -204,41 +212,57 @@ const SelectMoverPage = () => {
     return () => clearTimeout(timer)
   }, [pickupCoordinates])
 
-  // Calculate prices for each mover
-  //
-  // This used to run its own formula — a €25 hardcoded base fee, a per-km rate
-  // read off `mover.baseRatePerKm` (a field that does not exist on
-  // mover_profiles, so it always fell through to a hardcoded 2.0 against the
-  // platform's 1.50), and a per-item fee keyed on vehicle types that are not in
-  // the schema enum, so every real mover hit its default arm. None of it read
-  // `pricing_config`, so admin rate edits never reached this page and the
-  // number shown here was not the number the backend would charge.
-  //
-  // It now shares `instantRouteBase` (a port of the calculateprice function)
-  // and `priceForMover` (parity with the mobile client) from `@/lib/pricing`.
-  const moversWithPrices = useMemo(() => {
-    if (!routeDistance || apiMovers.length === 0) return []
+  // The mover-independent part of the quote: tier, mode, route and basket.
+  // Each mover then only changes the vehicle line (pricing master D8) — the
+  // list is comparable because two movers with the same truck quote the same
+  // number, whatever crew they bring (master D7).
+  const quoteInput = useMemo<Omit<QuoteInput, 'vehicleType'> | null>(() => {
+    if (!routeDistance || !catalogReady) return null
+    return {
+      tier: moveType || 'regular',
+      mode: 'instant',
+      distanceKm: kmFromMeters(routeDistance),
+      durationSeconds: routeDuration ?? 0,
+      basket: basketFromWire(inventory, customItems),
+      catalog,
+    }
+  }, [routeDistance, routeDuration, catalogReady, catalog, moveType, inventory, customItems])
 
-    const distanceKm = routeDistance / 1000
+  // Price every mover with the shared v3 engine and gate out anyone the job
+  // exceeds: a vehicle that cannot hold the load, or a crew smaller than the
+  // load requires (master D7). The server repeats both the quote and the crew
+  // check on confirm, so this list is a preview, not the authority.
+  const { moversWithPrices, hiddenForCrew, hiddenForCapacity, loadedVolumeM3 } = useMemo(() => {
+    const empty = { moversWithPrices: [] as MoverWithQuote[], hiddenForCrew: 0, hiddenForCapacity: 0, loadedVolumeM3: 0 }
+    if (!quoteInput || apiMovers.length === 0) return empty
 
-    // The route base is mover-independent, so compute it once rather than per row.
-    const { estimatedPrice: routeBaseEur } = instantRouteBase(
-      { routeDistanceMeters: routeDistance, moveType },
-      pricingRates
-    )
+    const distanceKm = kmFromMeters(routeDistance)
+    let hiddenForCrew = 0
+    let hiddenForCapacity = 0
+    let loadedVolumeM3 = 0
+    const priced: MoverWithQuote[] = []
 
-    return apiMovers.map((mover) => {
+    for (const mover of apiMovers) {
       const crewSize = mover.crewSize || 1
       const vehicleType = asVehicleType(mover.vehicleType)
+      const { quote, eligible } = quoteForMover(quoteInput, { vehicleType, crewSize }, pricingConfig)
+      loadedVolumeM3 = quote.profile.loadedVolumeM3
 
-      const totalPrice = priceForMover(routeBaseEur, { vehicleType, crewSize }, inventoryCount, pricingRates)
+      if (!moverFitsLoad(quote.profile.loadedVolumeM3, { vehicleType, vehicleCapacity: mover.vehicleCapacity }, pricingConfig)) {
+        hiddenForCapacity += 1
+        continue
+      }
+      if (!eligible) {
+        hiddenForCrew += 1
+        continue
+      }
 
       // Estimated arrival from distance
       const estimatedArrival = mover.distanceKm
         ? Math.max(5, Math.round(mover.distanceKm * 3))
         : 15
 
-      return {
+      priced.push({
         id: mover.$id,
         name: mover.businessName || mover.fullName || 'Mover',
         profilePhoto: mover.profilePhotoUrl || mover.profilePhoto || '',
@@ -248,18 +272,23 @@ const SelectMoverPage = () => {
         vehicleName: [mover.vehicleBrand, mover.vehicleModel].filter(Boolean).join(' ') || vehicleLabel(t, vehicleType),
         vehiclePlate: mover.vehiclePlateNumber || '',
         crewSize,
-        capacityM3: moverCapacityM3({ vehicleType, vehicleCapacity: mover.vehicleCapacity }, pricingRates),
+        capacityM3: moverCapacityM3({ vehicleType, vehicleCapacity: mover.vehicleCapacity }, pricingConfig),
         yearsExperience: mover.yearsExperience || 0,
         languages: mover.languages || ['German'],
         isVerified: mover.verificationStatus === 'verified',
-        price: totalPrice,
+        // The customer pays the gross total (master D11); it varies by vehicle class only.
+        price: quote.total,
+        quote,
         estimatedArrival,
         distanceKm: mover.distanceKm || distanceKm,
         currentLatitude: mover.currentLatitude || null,
         currentLongitude: mover.currentLongitude || null,
-      }
-    }).sort((a, b) => a.price - b.price) // Sort by price
-  }, [routeDistance, inventoryCount, apiMovers, pricingRates, moveType, t])
+      })
+    }
+
+    priced.sort((a, b) => a.price - b.price) // Sort by price
+    return { moversWithPrices: priced, hiddenForCrew, hiddenForCapacity, loadedVolumeM3 }
+  }, [quoteInput, apiMovers, pricingConfig, routeDistance, t])
 
   const handleSelectMover = (moverId: string) => {
     setSelectedMover(moverId)
@@ -331,11 +360,13 @@ const SelectMoverPage = () => {
         dropoffLocation: dropoffLocation || null,
         dropoffLatitude: dropoffCoordinates?.latitude ?? null,
         dropoffLongitude: dropoffCoordinates?.longitude ?? null,
-        moveType: 'regular',
+        // The tier the user picked — this used to post a hardcoded 'regular'.
+        moveType: moveType || 'regular',
         inventoryItems: JSON.stringify(inventory),
         customItems: customItems.map((c) => JSON.stringify(c)),
         totalItemCount: inventoryCount,
-        estimatedPrice: mover.price,
+        // No price is sent: the server recomputes it from these inputs and the
+        // chosen mover's vehicle class (pricing master D5).
         coverPhotoId: uploadedCoverPhotoId,
         galleryPhotoIds: uploadedGalleryPhotoIds,
         routeDistanceMeters: routeDistance || null,
@@ -380,7 +411,7 @@ const SelectMoverPage = () => {
     router.push('/instant-move')
   }
 
-  if (isLoading) {
+  if (isLoading || !catalogReady) {
     return (
       <div className="min-h-screen bg-white dark:bg-neutral-900 flex flex-col items-center justify-center">
         <HugeiconsIcon
@@ -415,6 +446,18 @@ const SelectMoverPage = () => {
         <p className="text-neutral-500 dark:text-neutral-400 text-center max-w-sm mb-6">
           {fetchError || t('web:selectMover.empty.subtitle')}
         </p>
+        {!fetchError && (hiddenForCrew > 0 || hiddenForCapacity > 0) && (
+          <p className="text-sm text-amber-600 dark:text-amber-400 text-center max-w-sm mb-6">
+            {hiddenForCapacity > 0 &&
+              t('web:selectMover.capacityTooSmall.helper', { count: hiddenForCapacity, volume: formatVolumeM3(loadedVolumeM3) })}
+            {hiddenForCapacity > 0 && hiddenForCrew > 0 && ' '}
+            {hiddenForCrew > 0 &&
+              t('booking:pricing.crewTooSmall.helper', {
+                defaultValue: '{{count}} movers hidden: crew too small for this load',
+                count: hiddenForCrew,
+              })}
+          </p>
+        )}
         <div className="flex gap-3">
           <ButtonSecondary href="/instant-move/photos">
             {t('common:action.goBack.cta')}
@@ -629,7 +672,7 @@ const SelectMoverPage = () => {
                 </div>
               </div>
 
-              {/* Selection Indicator */}
+              {/* Selection Indicator + the itemised estimate for this mover */}
               {selectedMover === mover.id && (
                 <div className="mt-3 pt-3 border-t border-neutral-100 dark:border-neutral-700">
                   <div className="flex items-center justify-between text-sm">
@@ -642,11 +685,33 @@ const SelectMoverPage = () => {
                       })}
                     </span>
                   </div>
+                  <div className="mt-3" onClick={(e) => e.stopPropagation()}>
+                    <PriceBreakdown breakdown={mover.quote} compact itemNames={inventoryNames} />
+                    <p className="mt-2 text-xs text-neutral-500 dark:text-neutral-400">
+                      {t('booking:pricing.perMover.helper', {
+                        defaultValue: "Price includes this mover's vehicle class",
+                      })}
+                    </p>
+                  </div>
                 </div>
               )}
             </div>
           ))}
         </div>
+
+        {/* Gated movers */}
+        {(hiddenForCrew > 0 || hiddenForCapacity > 0) && (
+          <p className="mt-4 text-xs text-amber-600 dark:text-amber-400">
+            {hiddenForCapacity > 0 &&
+              t('web:selectMover.capacityTooSmall.helper', { count: hiddenForCapacity, volume: formatVolumeM3(loadedVolumeM3) })}
+            {hiddenForCapacity > 0 && hiddenForCrew > 0 && ' '}
+            {hiddenForCrew > 0 &&
+              t('booking:pricing.crewTooSmall.helper', {
+                defaultValue: '{{count}} movers hidden: crew too small for this load',
+                count: hiddenForCrew,
+              })}
+          </p>
+        )}
 
         {/* Pricing Info */}
         <div className="mt-6 rounded-xl bg-neutral-100 dark:bg-neutral-800/50 p-4">

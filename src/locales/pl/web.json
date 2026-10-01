@@ -50,24 +50,6 @@
       "error": "Nie udało się uzyskać dostępu do aparatu. Zezwól na dostęp do aparatu w przeglądarce albo wgraj zdjęcie."
     }
   },
-  "checkout": {
-    "confirmAndPay": {
-      "cta": "Potwierdź i zapłać {{amount}}"
-    },
-    "confirmMove": {
-      "cta": "Potwierdź przeprowadzkę · {{amount}}"
-    },
-    "editHint": {
-      "helper": "Kliknij dowolną sekcję, aby edytować szczegóły przeprowadzki."
-    },
-    "pay": {
-      "title": "Potwierdzenie i płatność"
-    },
-    "title": "Potwierdź przeprowadzkę",
-    "yourMove": {
-      "title": "Twoja przeprowadzka"
-    }
-  },
   "contact": {
     "address": {
       "label": "🗺 ADRES",
@@ -905,6 +887,11 @@
       }
     }
   },
+  "moverCard": {
+    "vehicleVerified": {
+      "badge": "Zweryfikowany pojazd"
+    }
+  },
   "moverDashboard": {
     "findMoves": {
       "cta": "Znajdź przeprowadzki"
@@ -1110,6 +1097,32 @@
       "cta": "Edytuj zdjęcia"
     }
   },
+  "pricing": {
+    "breakdown": {
+      "customItems": {
+        "label_few": "{{count}} własne przedmioty",
+        "label_many": "{{count}} własnych przedmiotów",
+        "label_one": "{{count}} własny przedmiot",
+        "label_other": "{{count}} własnego przedmiotu"
+      },
+      "hide": {
+        "cta": "Ukryj szczegóły ceny"
+      },
+      "included": {
+        "label": "wliczony"
+      },
+      "show": {
+        "cta": "Pokaż szczegóły ceny"
+      },
+      "title": "Zestawienie ceny",
+      "unpriced": {
+        "helper_few": "{{count}} przedmioty nie mają jeszcze ceny i są liczone jako zero; ostateczna wycena może być wyższa.",
+        "helper_many": "{{count}} przedmiotów nie ma jeszcze ceny i jest liczonych jako zero; ostateczna wycena może być wyższa.",
+        "helper_one": "{{count}} przedmiot nie ma jeszcze ceny i jest liczony jako zero; ostateczna wycena może być wyższa.",
+        "helper_other": "{{count}} przedmiotu nie ma jeszcze ceny i jest liczonych jako zero; ostateczna wycena może być wyższa."
+      }
+    }
+  },
   "scheduledMoves": {
     "book": {
       "cta": "Zarezerwuj zaplanowaną przeprowadzkę"
@@ -1172,6 +1185,12 @@
     "capacity": {
       "label": "pojemność {{volume}}"
     },
+    "capacityTooSmall": {
+      "helper_few": "{{count}} przewoźników ukrytych: pojazdy zbyt małe na {{volume}}.",
+      "helper_many": "{{count}} przewoźników ukrytych: pojazdy zbyt małe na {{volume}}.",
+      "helper_one": "{{count}} przewoźnik ukryty: pojazd zbyt mały na {{volume}}.",
+      "helper_other": "{{count}} przewoźnika ukrytych: pojazdy zbyt małe na {{volume}}."
+    },
     "confirm": {
       "cta": "Potwierdź · {{amount}}"
     },
@@ -1200,10 +1219,10 @@
     },
     "pricing": {
       "disclaimer": "Cena końcowa może się różnić w zależności od rzeczywistych warunków.",
-      "helper_few": "Ceny obejmują opłatę podstawową, dystans ({{distance}}), wielkość ekipy, pojemność pojazdu oraz obsługę {{count}} przedmiotów.",
-      "helper_many": "Ceny obejmują opłatę podstawową, dystans ({{distance}}), wielkość ekipy, pojemność pojazdu oraz obsługę {{count}} przedmiotów.",
-      "helper_one": "Ceny obejmują opłatę podstawową, dystans ({{distance}}), wielkość ekipy, pojemność pojazdu oraz obsługę {{count}} przedmiotu.",
-      "helper_other": "Ceny obejmują opłatę podstawową, dystans ({{distance}}), wielkość ekipy, pojemność pojazdu oraz obsługę {{count}} przedmiotu.",
+      "helper_few": "Ceny obejmują usługę podstawową, dystans ({{distance}}), pracę ekipy, klasę pojazdu przewoźnika oraz {{count}} przedmioty. VAT jest wliczony.",
+      "helper_many": "Ceny obejmują usługę podstawową, dystans ({{distance}}), pracę ekipy, klasę pojazdu przewoźnika oraz {{count}} przedmiotów. VAT jest wliczony.",
+      "helper_one": "Ceny obejmują usługę podstawową, dystans ({{distance}}), pracę ekipy, klasę pojazdu przewoźnika oraz {{count}} przedmiot. VAT jest wliczony.",
+      "helper_other": "Ceny obejmują usługę podstawową, dystans ({{distance}}), pracę ekipy, klasę pojazdu przewoźnika oraz {{count}} przedmiotu. VAT jest wliczony.",
       "title": "Jak działa wycena:"
     },
     "searching": {
@@ -1314,11 +1333,6 @@
     },
     "stepTotal": {
       "label": "/{{total}}"
-    }
-  },
-  "moverCard": {
-    "vehicleVerified": {
-      "badge": "Zweryfikowany pojazd"
     }
   }
 }

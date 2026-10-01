@@ -121,14 +121,14 @@
   "classification": {
     "itemMinimum": {
       "premium": "\"{{item}}\" requires at least a Premium move",
-      "regular": "\"{{item}}\" requires at least a Regular move"
+      "regular": "\"{{item}}\" requires at least a Medium move"
     },
     "keepCurrent": {
       "cta": "Keep current"
     },
     "nearLimit": {
-      "light": "You are approaching the limit for a Light move",
-      "regular": "You are approaching the limit for a Regular move"
+      "light": "You are approaching the limit for a Normal move",
+      "regular": "You are approaching the limit for a Medium move"
     },
     "notice": {
       "title": "Move classification notice"
@@ -147,13 +147,13 @@
         "cta": "Upgrade move type"
       },
       "light": {
-        "cta": "Upgrade to Light Move"
+        "cta": "Upgrade to Normal Move"
       },
       "premium": {
         "cta": "Upgrade to Premium Move"
       },
       "regular": {
-        "cta": "Upgrade to Regular Move"
+        "cta": "Upgrade to Medium Move"
       },
       "subtitle": "Based on your selected items, we recommend upgrading from <0>{{from}}</0> to <1>{{to}}</1>.",
       "title": "Move type upgrade recommended"
@@ -693,16 +693,16 @@
     "a11y": "Select move type",
     "label": "Type of move",
     "light": {
-      "body": "Light moves use a small van.",
+      "body": "Normal moves use a small van and one mover.",
       "helper": "Small load — few items",
-      "label": "Light Move",
-      "short": "Light",
+      "label": "Normal Move",
+      "short": "Normal",
       "subtitle": "Perfect for small loads — boxes, single furniture pieces, or a studio apartment.",
-      "title": "Light Move"
+      "title": "Normal Move"
     },
     "placeholder": "Choose a move type",
     "premium": {
-      "body": "Premium moves use larger vehicles and a 2+ person crew.",
+      "body": "Premium moves use a large truck and a 3-person crew.",
       "helper": "Full-service move",
       "label": "Premium Move",
       "short": "Premium",
@@ -710,12 +710,12 @@
       "title": "Premium Move"
     },
     "regular": {
-      "body": "Regular moves use a medium vehicle and a 2-person crew.",
+      "body": "Medium moves use a medium truck and a 2-person crew.",
       "helper": "Standard household move",
-      "label": "Regular Move",
-      "short": "Regular",
+      "label": "Medium Move",
+      "short": "Medium",
       "subtitle": "Ideal for 1–2 bedroom apartments with standard furniture and appliances.",
-      "title": "Regular Move"
+      "title": "Medium Move"
     },
     "section": {
       "title": "Type of Move"
@@ -1046,39 +1046,29 @@
       "label_one": "Additional services ({{count}})",
       "label_other": "Additional services ({{count}})"
     },
-    "baseFare": {
-      "label": "Base fare"
-    },
-    "baseRate": {
-      "fallback": {
-        "label": "Base rate"
+    "assumptions": {
+      "crew": {
+        "label": "Crew size {{value}}"
       },
-      "light": {
-        "label": "Base rate (Light Move)"
+      "hours": {
+        "label": "Billable time {{value}}"
       },
-      "premium": {
-        "label": "Base rate (Premium Move)"
+      "volume": {
+        "label": "Est. volume {{value}}"
       },
-      "regular": {
-        "label": "Base rate (Regular Move)"
+      "weight": {
+        "label": "Est. weight {{value}}"
       }
     },
-    "baseRateWithDistance": {
-      "fallback": {
-        "label": "Base rate ({{distance}})"
-      },
-      "light": {
-        "label": "Base rate (Light Move, {{distance}})"
-      },
-      "premium": {
-        "label": "Base rate (Premium Move, {{distance}})"
-      },
-      "regular": {
-        "label": "Base rate (Regular Move, {{distance}})"
-      }
+    "crewTooSmall": {
+      "helper_one": "{{count}} mover hidden: crew too small for this load",
+      "helper_other": "{{count}} movers hidden: crew too small for this load"
     },
-    "crew": {
-      "label": "Crew ({{crew}})"
+    "discount": {
+      "label": "Discount"
+    },
+    "estimate": {
+      "helper": "Estimate — confirmed when your mover accepts"
     },
     "estimatedTotal": {
       "label": "Estimated total"
@@ -1086,18 +1076,66 @@
     "finalAfterReview": {
       "helper": "Final price confirmed after review"
     },
-    "floorSurcharge": {
-      "label": "Floor surcharge"
+    "header": {
+      "instant": {
+        "label": "{{tier}} · Instant move"
+      },
+      "scheduled": {
+        "label": "{{tier}} · Scheduled move"
+      }
+    },
+    "instantAdjustment": {
+      "label": "Instant booking (×{{multiplier}})"
     },
     "itemsCount": {
       "label_one": "Items ({{count}})",
       "label_other": "Items ({{count}})"
     },
-    "moverFare": {
-      "label": "Mover fare"
+    "line": {
+      "base": {
+        "label": "Base service"
+      },
+      "distance": {
+        "label": "Distance ({{km}} × {{rate}})"
+      },
+      "handling": {
+        "label": "Handling & access"
+      },
+      "items": {
+        "label_one": "Items ({{count}})",
+        "label_other": "Items ({{count}})"
+      },
+      "labor": {
+        "label": "Crew labour ({{crew}} × {{rate}} × {{hours}})"
+      },
+      "packing": {
+        "label": "Packing"
+      },
+      "services": {
+        "label": "Additional services"
+      },
+      "storage": {
+        "label_one": "Storage ({{count}} week)",
+        "label_other": "Storage ({{count}} weeks)"
+      },
+      "vehicle": {
+        "label": "Vehicle ({{vehicle}})"
+      }
     },
-    "packingService": {
-      "label": "Packing service"
+    "minimumApplied": {
+      "helper": "Minimum charge of {{amount}} applied"
+    },
+    "net": {
+      "label": "Subtotal before VAT"
+    },
+    "operationalSubtotal": {
+      "label": "Operational subtotal"
+    },
+    "perMover": {
+      "helper": "Price includes this mover's vehicle class"
+    },
+    "platformFee": {
+      "label": "Platform fee ({{rate}})"
     },
     "storage": {
       "label": "Storage"

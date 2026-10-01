@@ -1446,6 +1446,41 @@
                     "size": 36,
                     "default": null,
                     "encrypt": false
+                },
+                {
+                    "key": "priceBreakdown",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "size": 16384,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "pricingVersion",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "size": 16,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "pricedAt",
+                    "type": "datetime",
+                    "required": false,
+                    "array": false,
+                    "default": null,
+                    "format": ""
+                },
+                {
+                    "key": "currency",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "size": 3,
+                    "default": "EUR",
+                    "encrypt": false
                 }
             ],
             "indexes": []
@@ -2013,6 +2048,24 @@
                         "regular",
                         "premium"
                     ]
+                },
+                {
+                    "key": "unitPriceEur",
+                    "type": "double",
+                    "required": false,
+                    "array": false,
+                    "default": null,
+                    "min": 0,
+                    "max": 1.7976931348623157e+308
+                },
+                {
+                    "key": "requiredCrew",
+                    "type": "integer",
+                    "required": false,
+                    "array": false,
+                    "default": 1,
+                    "min": 1,
+                    "max": 4
                 }
             ],
             "indexes": []
@@ -2447,6 +2500,148 @@
                     ],
                     "orders": [
                         "ASC"
+                    ]
+                }
+            ]
+        },
+        {
+            "$id": "pricing_events",
+            "$permissions": [],
+            "databaseId": "6990885c000627570048",
+            "name": "pricing_events",
+            "enabled": true,
+            "rowSecurity": false,
+            "columns": [
+                {
+                    "key": "entity",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "default": null,
+                    "format": "enum",
+                    "elements": [
+                        "pricing_config",
+                        "inventory_catalog"
+                    ]
+                },
+                {
+                    "key": "entityKey",
+                    "type": "text",
+                    "required": true,
+                    "array": false,
+                    "size": 64,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "action",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "default": null,
+                    "format": "enum",
+                    "elements": [
+                        "create",
+                        "update",
+                        "delete",
+                        "reset"
+                    ]
+                },
+                {
+                    "key": "field",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "size": 64,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "oldValue",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "size": 256,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "newValue",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "size": 256,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "actorId",
+                    "type": "text",
+                    "required": true,
+                    "array": false,
+                    "size": 36,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "actorEmail",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "size": 128,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "source",
+                    "type": "text",
+                    "required": true,
+                    "array": false,
+                    "size": 32,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "note",
+                    "type": "text",
+                    "required": false,
+                    "array": false,
+                    "size": 256,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "createdAt",
+                    "type": "datetime",
+                    "required": true,
+                    "array": false,
+                    "default": null,
+                    "format": ""
+                }
+            ],
+            "indexes": [
+                {
+                    "key": "by_entity_key",
+                    "type": "key",
+                    "status": "available",
+                    "columns": [
+                        "entity",
+                        "entityKey"
+                    ],
+                    "orders": [
+                        "ASC",
+                        "ASC"
+                    ]
+                },
+                {
+                    "key": "by_created",
+                    "type": "key",
+                    "status": "available",
+                    "columns": [
+                        "createdAt"
+                    ],
+                    "orders": [
+                        "DESC"
                     ]
                 }
             ]

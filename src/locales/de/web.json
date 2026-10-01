@@ -50,24 +50,6 @@
       "error": "Kein Zugriff auf die Kamera. Erlauben Sie den Kamerazugriff in Ihrem Browser oder laden Sie stattdessen ein Foto hoch."
     }
   },
-  "checkout": {
-    "confirmAndPay": {
-      "cta": "Bestätigen und {{amount}} bezahlen"
-    },
-    "confirmMove": {
-      "cta": "Umzug bestätigen · {{amount}}"
-    },
-    "editHint": {
-      "helper": "Klicken Sie auf einen Abschnitt, um Ihre Umzugsdetails zu bearbeiten."
-    },
-    "pay": {
-      "title": "Bestätigen und bezahlen"
-    },
-    "title": "Umzug bestätigen",
-    "yourMove": {
-      "title": "Ihr Umzug"
-    }
-  },
   "contact": {
     "address": {
       "label": "🗺 ADRESSE",
@@ -895,6 +877,11 @@
       }
     }
   },
+  "moverCard": {
+    "vehicleVerified": {
+      "badge": "Verifiziertes Fahrzeug"
+    }
+  },
   "moverDashboard": {
     "findMoves": {
       "cta": "Umzüge finden"
@@ -1100,6 +1087,28 @@
       "cta": "Fotos bearbeiten"
     }
   },
+  "pricing": {
+    "breakdown": {
+      "customItems": {
+        "label_one": "{{count}} eigener Gegenstand",
+        "label_other": "{{count}} eigene Gegenstände"
+      },
+      "hide": {
+        "cta": "Preisdetails ausblenden"
+      },
+      "included": {
+        "label": "inklusive"
+      },
+      "show": {
+        "cta": "Preisdetails anzeigen"
+      },
+      "title": "Preisaufstellung",
+      "unpriced": {
+        "helper_one": "{{count}} Gegenstand hat noch keinen Preis und wird mit null berechnet; der endgültige Preis kann höher ausfallen.",
+        "helper_other": "{{count}} Gegenstände haben noch keinen Preis und werden mit null berechnet; der endgültige Preis kann höher ausfallen."
+      }
+    }
+  },
   "scheduledMoves": {
     "book": {
       "cta": "Geplanten Umzug buchen"
@@ -1160,6 +1169,10 @@
     "capacity": {
       "label": "{{volume}} Ladevolumen"
     },
+    "capacityTooSmall": {
+      "helper_one": "{{count}} Umzugsprofi ausgeblendet: Fahrzeug zu klein für {{volume}}.",
+      "helper_other": "{{count}} Umzugsprofis ausgeblendet: Fahrzeuge zu klein für {{volume}}."
+    },
     "confirm": {
       "cta": "Bestätigen · {{amount}}"
     },
@@ -1184,8 +1197,8 @@
     },
     "pricing": {
       "disclaimer": "Der Endpreis kann je nach tatsächlichen Gegebenheiten abweichen.",
-      "helper_one": "Die Preise enthalten Grundgebühr, Entfernung ({{distance}}), Teamgröße, Ladevolumen des Fahrzeugs und das Handling für {{count}} Gegenstand.",
-      "helper_other": "Die Preise enthalten Grundgebühr, Entfernung ({{distance}}), Teamgröße, Ladevolumen des Fahrzeugs und das Handling für {{count}} Gegenstände.",
+      "helper_one": "Die Preise enthalten die Grundleistung, die Entfernung ({{distance}}), die Arbeitszeit des Teams, die Fahrzeugklasse des Umzugsprofis und {{count}} Gegenstand. Die Mehrwertsteuer ist enthalten.",
+      "helper_other": "Die Preise enthalten die Grundleistung, die Entfernung ({{distance}}), die Arbeitszeit des Teams, die Fahrzeugklasse des Umzugsprofis und {{count}} Gegenstände. Die Mehrwertsteuer ist enthalten.",
       "title": "So entsteht der Preis:"
     },
     "searching": {
@@ -1296,11 +1309,6 @@
     },
     "stepTotal": {
       "label": "/{{total}}"
-    }
-  },
-  "moverCard": {
-    "vehicleVerified": {
-      "badge": "Verifiziertes Fahrzeug"
     }
   }
 }

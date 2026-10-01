@@ -1,9 +1,18 @@
 import { Client, Databases, ID, Permission, Query, Role } from 'node-appwrite';
 
+import {
+  PricingReconcileError,
+  quoteColumns,
+  quoteInputFromRow,
+  quoteMove,
+  toPricingConfig,
+} from './pricing-engine.js';
+
 const DATABASE_ID = process.env.APPWRITE_DATABASE_ID;
 const MOVES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVES;
 const MOVE_STATUS_HISTORY_COLLECTION = process.env.APPWRITE_COLLECTION_MOVE_STATUS_HISTORY;
 const INVENTORY_CATALOG_COLLECTION = process.env.APPWRITE_COLLECTION_INVENTORY_CATALOG;
+const PRICING_CONFIG_COLLECTION = process.env.APPWRITE_COLLECTION_PRICING_CONFIG || 'pricing_config';
 
 // Move type thresholds
 const THRESHOLDS = {
@@ -73,9 +82,24 @@ function asTextArray(value) {
     .map((v) => (typeof v === 'string' ? v : JSON.stringify(v)));
 }
 
+/**
+ * Read admin rate overrides. Never throws: a config that fails to load prices
+ * at the compiled defaults rather than blocking the booking.
+ */
+async function loadOverrides(databases, error) {
+  try {
+    const res = await databases.listDocuments(DATABASE_ID, PRICING_CONFIG_COLLECTION, [Query.limit(200)]);
+    return toPricingConfig(res.documents);
+  } catch (e) {
+    error(`createmove: pricing config unavailable, using defaults: ${e.message}`);
+    return {};
+  }
+}
+
 export default async ({ req, res, log, error }) => {
   // Startup assertion. A missing id used to be swallowed by a guarded
   // `if (VAR)` and the function would silently do nothing; name it instead.
+  // APPWRITE_COLLECTION_PRICING_CONFIG is optional: defaults to `pricing_config`.
   const missingEnv = [
     'APPWRITE_COLLECTION_INVENTORY_CATALOG',
     'APPWRITE_COLLECTION_MOVES',
@@ -106,7 +130,12 @@ export default async ({ req, res, log, error }) => {
       return res.json({ error: 'clientId is required', fnCode: 'generic.badRequest' }, 400);
     }
 
-    // Fetch inventory catalog for server-side classification
+    // The catalog feeds both the classification and the quote, so it is read
+    // on every create (a move with only custom items still needs pricing).
+    const catalogRes = await databases.listDocuments(DATABASE_ID, INVENTORY_CATALOG_COLLECTION, [Query.limit(500)]);
+    const catalog = catalogRes.documents;
+
+    // Server-side classification
     let systemMoveType = moveType || 'light';
     let totalItemCount = 0;
     let totalWeightKg = 0;
@@ -117,8 +146,7 @@ export default async ({ req, res, log, error }) => {
         ? JSON.parse(moveData.inventoryItems)
         : moveData.inventoryItems;
 
-      const catalog = await databases.listDocuments(DATABASE_ID, INVENTORY_CATALOG_COLLECTION, [Query.limit(100)]);
-      const classification = classifyMoveServer(inventoryObj, catalog.documents, moveType || 'light');
+      const classification = classifyMoveServer(inventoryObj, catalog, moveType || 'light');
       systemMoveType = classification.recommendedType;
       totalItemCount = classification.totalItems;
       totalWeightKg = classification.totalWeightKg;
@@ -127,79 +155,93 @@ export default async ({ req, res, log, error }) => {
 
     const handle = generateHandle();
 
+    // The row as it will be written, minus the quote columns.
+    const data = {
+      handle,
+      clientId,
+      status: 'draft',
+      moveCategory: moveCategory || 'scheduled',
+      moveType: moveType || 'light',
+      systemMoveType,
+      moveDate: moveDate || null,
+      totalItemCount,
+      totalWeightKg,
+      totalVolumeCm3,
+      inventoryItems: asText(moveData.inventoryItems),
+      // Pickup
+      pickupLocation: asText(moveData.pickupLocation),
+      pickupLatitude: moveData.pickupLatitude || null,
+      pickupLongitude: moveData.pickupLongitude || null,
+      pickupStreetAddress: asText(moveData.pickupStreetAddress),
+      pickupApartmentUnit: asText(moveData.pickupApartmentUnit),
+      pickupFloorLevel: asText(moveData.pickupFloorLevel),
+      pickupElevator: moveData.pickupElevator ?? null,
+      pickupParking: asText(moveData.pickupParking),
+      pickupHaltverbot: moveData.pickupHaltverbot ?? null,
+      // Dropoff
+      dropoffLocation: asText(moveData.dropoffLocation),
+      dropoffLatitude: moveData.dropoffLatitude || null,
+      dropoffLongitude: moveData.dropoffLongitude || null,
+      dropoffStreetAddress: asText(moveData.dropoffStreetAddress),
+      dropoffApartmentUnit: asText(moveData.dropoffApartmentUnit),
+      dropoffFloorLevel: asText(moveData.dropoffFloorLevel),
+      dropoffElevator: moveData.dropoffElevator ?? null,
+      dropoffParking: asText(moveData.dropoffParking),
+      dropoffHaltverbot: moveData.dropoffHaltverbot ?? null,
+      // Other
+      homeType: moveData.homeType || null,
+      customItems: asTextArray(moveData.customItems),
+      packingServiceLevel: moveData.packingServiceLevel || null,
+      packingMaterials: asTextArray(moveData.packingMaterials),
+      packingNotes: asText(moveData.packingNotes),
+      arrivalWindow: asText(moveData.arrivalWindow),
+      flexibility: moveData.flexibility || null,
+      crewSize: asText(moveData.crewSize),
+      vehicleType: asText(moveData.vehicleType),
+      additionalServices: asTextArray(moveData.additionalServices),
+      storageWeeks: moveData.storageWeeks || 0,
+      coverPhotoId: asText(moveData.coverPhotoId),
+      galleryPhotoIds: asTextArray(moveData.galleryPhotoIds),
+      contactFullName: asText(moveData.contactFullName),
+      contactPhone: asText(moveData.contactPhone),
+      contactEmail: asText(moveData.contactEmail),
+      contactNotes: asText(moveData.contactNotes),
+      isBusinessMove: moveData.isBusinessMove ?? null,
+      companyName: asText(moveData.companyName),
+      vatId: asText(moveData.vatId),
+      routeDistanceMeters: moveData.routeDistanceMeters || null,
+      routeDurationSeconds: moveData.routeDurationSeconds || null,
+      // Pricing + payment. The SERVER is the price authority (pricing master
+      // plan D5): `estimatedPrice` and the breakdown are computed below from
+      // this very row. A client-sent `estimatedPrice` / `finalPrice` is
+      // ignored — before v3 the function persisted whatever the client posted.
+      finalPrice: null,
+      paymentMethod: asText(moveData.paymentMethod),
+      termsAccepted: moveData.termsAccepted ?? null,
+      privacyAccepted: moveData.privacyAccepted ?? null,
+    };
+
+    // Quote the row. The selected mover's class on the row (instant) sets the
+    // vehicle line; otherwise the engine picks the smallest class that fits.
+    const overrides = await loadOverrides(databases, error);
+    let breakdown;
+    try {
+      breakdown = quoteMove(quoteInputFromRow(data, catalog, null), overrides);
+    } catch (e) {
+      if (e instanceof PricingReconcileError) {
+        error(`createmove: quote did not reconcile: ${e.message}`);
+        return res.json({ error: 'Price could not be computed', fnCode: 'pricing.reconcile' }, 500);
+      }
+      throw e;
+    }
+    Object.assign(data, quoteColumns(breakdown, new Date().toISOString()));
+
     // Create the move document
     const move = await databases.createDocument(
       DATABASE_ID,
       MOVES_COLLECTION,
       ID.unique(),
-      {
-        handle,
-        clientId,
-        status: 'draft',
-        moveCategory: moveCategory || 'scheduled',
-        moveType: moveType || 'light',
-        systemMoveType,
-        moveDate: moveDate || null,
-        totalItemCount,
-        totalWeightKg,
-        totalVolumeCm3,
-        inventoryItems: asText(moveData.inventoryItems),
-        // Pickup
-        pickupLocation: asText(moveData.pickupLocation),
-        pickupLatitude: moveData.pickupLatitude || null,
-        pickupLongitude: moveData.pickupLongitude || null,
-        pickupStreetAddress: asText(moveData.pickupStreetAddress),
-        pickupApartmentUnit: asText(moveData.pickupApartmentUnit),
-        pickupFloorLevel: asText(moveData.pickupFloorLevel),
-        pickupElevator: moveData.pickupElevator ?? null,
-        pickupParking: asText(moveData.pickupParking),
-        pickupHaltverbot: moveData.pickupHaltverbot ?? null,
-        // Dropoff
-        dropoffLocation: asText(moveData.dropoffLocation),
-        dropoffLatitude: moveData.dropoffLatitude || null,
-        dropoffLongitude: moveData.dropoffLongitude || null,
-        dropoffStreetAddress: asText(moveData.dropoffStreetAddress),
-        dropoffApartmentUnit: asText(moveData.dropoffApartmentUnit),
-        dropoffFloorLevel: asText(moveData.dropoffFloorLevel),
-        dropoffElevator: moveData.dropoffElevator ?? null,
-        dropoffParking: asText(moveData.dropoffParking),
-        dropoffHaltverbot: moveData.dropoffHaltverbot ?? null,
-        // Other
-        homeType: moveData.homeType || null,
-        customItems: asTextArray(moveData.customItems),
-        packingServiceLevel: moveData.packingServiceLevel || null,
-        packingMaterials: asTextArray(moveData.packingMaterials),
-        packingNotes: asText(moveData.packingNotes),
-        arrivalWindow: asText(moveData.arrivalWindow),
-        flexibility: moveData.flexibility || null,
-        crewSize: asText(moveData.crewSize),
-        vehicleType: asText(moveData.vehicleType),
-        additionalServices: asTextArray(moveData.additionalServices),
-        storageWeeks: moveData.storageWeeks || 0,
-        coverPhotoId: asText(moveData.coverPhotoId),
-        galleryPhotoIds: asTextArray(moveData.galleryPhotoIds),
-        contactFullName: asText(moveData.contactFullName),
-        contactPhone: asText(moveData.contactPhone),
-        contactEmail: asText(moveData.contactEmail),
-        contactNotes: asText(moveData.contactNotes),
-        isBusinessMove: moveData.isBusinessMove ?? null,
-        companyName: asText(moveData.companyName),
-        vatId: asText(moveData.vatId),
-        routeDistanceMeters: moveData.routeDistanceMeters || null,
-        routeDurationSeconds: moveData.routeDurationSeconds || null,
-        // Pricing + payment — the client computes the quoted price and passes
-        // it in as estimatedPrice (and paymentMethod). These were previously
-        // dropped here, so every move persisted with estimatedPrice at its
-        // schema default and paymentMethod null, surfacing as €0 on the client,
-        // the mover, and in the moves row.
-        estimatedPrice:
-          typeof moveData.estimatedPrice === 'number' ? moveData.estimatedPrice : null,
-        finalPrice:
-          typeof moveData.finalPrice === 'number' ? moveData.finalPrice : null,
-        paymentMethod: asText(moveData.paymentMethod),
-        termsAccepted: moveData.termsAccepted ?? null,
-        privacyAccepted: moveData.privacyAccepted ?? null,
-      },
+      data,
       [
         // clientId is the client's Appwrite auth account id (users.$id ===
         // account.$id), so it is directly usable as Role.user(...). The client
@@ -229,7 +271,7 @@ export default async ({ req, res, log, error }) => {
       []
     );
 
-    log(`Move created: ${move.$id} (${handle}) for client ${clientId}`);
+    log(`Move created: ${move.$id} (${handle}) for client ${clientId} — €${breakdown.total} (${breakdown.tier}/${breakdown.mode})`);
 
     return res.json({
       success: true,

@@ -281,6 +281,10 @@
     "confirmFailed": "No se ha podido confirmar el pago",
     "notAwaiting": "Esta mudanza no está a la espera de pago. Vuelve a cargar la mudanza e inténtalo de nuevo."
   },
+  "pricing": {
+    "exceedsLargestVehicle": "Esta carga es demasiado grande para un solo vehículo. Ponte en contacto con el soporte.",
+    "reconcile": "No hemos podido calcular un precio fiable. Inténtalo de nuevo."
+  },
   "profile": {
     "emailChangeFailed": "No se ha podido cambiar el correo electrónico",
     "emailTaken": "Este correo electrónico ya lo utiliza otra cuenta",

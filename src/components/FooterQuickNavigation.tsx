@@ -47,7 +47,6 @@ const HIDDEN_PATHS = [
   '/add-listing',
   '/instant-move',
   '/move-preview',
-  '/checkout',
   '/pay-done',
 ]
 

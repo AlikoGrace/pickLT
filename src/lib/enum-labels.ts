@@ -49,7 +49,7 @@ const notSpecified = (t: TFunction) => t('common:value.notSpecified.empty')
  * - the booking wizard (`add-listing/5`) stores a **clock time**, `"08:00"`;
  * - the reschedule dialog (`move-details`) stores a named window,
  *   `morning` / `afternoon` / `evening`;
- * - `checkout` stores the literal `'now'` for an instant move.
+ * - older instant-move rows store the literal `'now'` (the retired `checkout` page wrote it).
  *
  * `formatLabel` left `"08:00"` alone (no underscore to split) and turned
  * `now` into the English word "Now" on every locale. The time is **data** and
@@ -154,7 +154,7 @@ export function packingLevelLabel(t: TFunction, value: string | null | undefined
 
 /**
  * Four storable values across the two `PaymentMethod` unions —
- * `checkout/PayWith.tsx` offers cash/card/paypal, `context/moveSearch.tsx`
+ * the retired `checkout/PayWith.tsx` offered cash/card/paypal, `context/moveSearch.tsx`
  * additionally carries `bank_transfer`. Each already had a translated key; they
  * simply live in three different places, which is why the map is explicit.
  */

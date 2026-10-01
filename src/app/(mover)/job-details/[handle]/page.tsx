@@ -29,6 +29,8 @@ import {
   useInventoryNames,
 } from '@/lib/inventory-labels'
 import { formatDateWith, formatMoney } from '@/lib/format'
+import PriceBreakdown from '@/components/PriceBreakdown'
+import { parseBreakdown } from '@/lib/pricingEngine'
 import { homeTypeLabel, moveSubtitle, moveTypeLabel } from '@/lib/move-subtitle'
 import { Trans, useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
@@ -107,6 +109,8 @@ interface MoveData {
   galleryPhotoIds: string[]
   routeDistanceMeters: number | null
   routeDurationSeconds: number | null
+  /** `moves.priceBreakdown` — v3 JSON written by the server; null on older rows. */
+  priceBreakdown?: string | null
   paymentMethod: string | null
   isBusinessMove: boolean
   companyName: string
@@ -231,6 +235,7 @@ function docToMoveData(doc: any): MoveData {
     isBusinessMove: doc.isBusinessMove ?? false,
     companyName: doc.companyName ?? '',
     vatId: doc.vatId ?? '',
+    priceBreakdown: doc.priceBreakdown ?? null,
   }
 }
 
@@ -490,6 +495,10 @@ export default function MoverMoveDetailsPage() {
     routeDistanceMeters, routeDurationSeconds, paymentMethod,
     isBusinessMove, companyName, vatId,
   } = move
+
+  // The itemised v3 estimate stored with the row (pricing master D13); null on
+  // moves booked before the engine — those show the plain total only.
+  const moveBreakdown = parseBreakdown(move.priceBreakdown)
 
   // Item labels come from the admin catalog, not from humanising the id — the
   // client picked "Sofa (2-seater)", not "Sofa 2seater".
@@ -757,6 +766,9 @@ export default function MoverMoveDetailsPage() {
                 <span className="font-semibold text-neutral-900 dark:text-neutral-100">{t('web:mover.earnings.label')}</span>
                 <span className="font-bold text-green-600 dark:text-green-400">{formatMoney(totalPrice)}</span>
               </div>
+              {moveBreakdown && (
+                <PriceBreakdown breakdown={moveBreakdown} compact showAssumptions={false} itemNames={inventoryNames} className="mt-3 !p-3" />
+              )}
               {paymentMethod && (
                 <div className="flex justify-between mt-2">
                   <span className="text-neutral-500 dark:text-neutral-400">{t('booking:payment.section.title')}</span>

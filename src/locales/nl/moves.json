@@ -56,10 +56,10 @@
     "typeAndCategory": {
       "light": {
         "instant": {
-          "subtitle": "Kleine verhuizing · Direct"
+          "subtitle": "Normale verhuizing · Direct"
         },
         "scheduled": {
-          "subtitle": "Kleine verhuizing · Gepland"
+          "subtitle": "Normale verhuizing · Gepland"
         }
       },
       "premium": {
@@ -72,31 +72,31 @@
       },
       "regular": {
         "instant": {
-          "subtitle": "Gewone verhuizing · Direct"
+          "subtitle": "Medium verhuizing · Direct"
         },
         "scheduled": {
-          "subtitle": "Gewone verhuizing · Gepland"
+          "subtitle": "Medium verhuizing · Gepland"
         }
       }
     },
     "typeAndDate": {
       "light": {
-        "subtitle": "Kleine verhuizing · {{date}}"
+        "subtitle": "Normale verhuizing · {{date}}"
       },
       "premium": {
         "subtitle": "Premium verhuizing · {{date}}"
       },
       "regular": {
-        "subtitle": "Gewone verhuizing · {{date}}"
+        "subtitle": "Medium verhuizing · {{date}}"
       }
     },
     "typeCategoryDate": {
       "light": {
         "instant": {
-          "subtitle": "Kleine verhuizing · Direct · {{date}}"
+          "subtitle": "Normale verhuizing · Direct · {{date}}"
         },
         "scheduled": {
-          "subtitle": "Kleine verhuizing · Gepland · {{date}}"
+          "subtitle": "Normale verhuizing · Gepland · {{date}}"
         }
       },
       "premium": {
@@ -109,10 +109,10 @@
       },
       "regular": {
         "instant": {
-          "subtitle": "Gewone verhuizing · Direct · {{date}}"
+          "subtitle": "Medium verhuizing · Direct · {{date}}"
         },
         "scheduled": {
-          "subtitle": "Gewone verhuizing · Gepland · {{date}}"
+          "subtitle": "Medium verhuizing · Gepland · {{date}}"
         }
       }
     }
@@ -222,10 +222,10 @@
     "typeAndCategory": {
       "light": {
         "instant": {
-          "value": "Klein · Direct"
+          "value": "Normaal · Direct"
         },
         "scheduled": {
-          "value": "Klein · Gepland"
+          "value": "Normaal · Gepland"
         }
       },
       "premium": {
@@ -238,10 +238,10 @@
       },
       "regular": {
         "instant": {
-          "value": "Gewoon · Direct"
+          "value": "Medium · Direct"
         },
         "scheduled": {
-          "value": "Gewoon · Gepland"
+          "value": "Medium · Gepland"
         }
       }
     },

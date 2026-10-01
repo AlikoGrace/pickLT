@@ -22,12 +22,17 @@ import {
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Fragment, useCallback, useEffect, useState } from 'react'
+import { Fragment, useCallback, useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { SectionHeading, SectionSubheading } from '@/components/listings/SectionHeading'
+import PriceBreakdown from '@/components/PriceBreakdown'
+import { useInventoryCatalog } from '@/hooks/useInventoryCatalog'
+import { usePricingConfig } from '@/hooks/usePricingConfig'
 import { formatInventoryLabel, useInventoryNames } from '@/lib/inventory-labels'
-import { formatDateWith, formatDistanceKm, formatMoney } from '@/lib/format'
-import { baseRateWithDistanceLabel, homeTypeLabel, moveTypeLabel } from '@/lib/move-subtitle'
+import { formatDateWith, formatMoney } from '@/lib/format'
+import { homeTypeLabel, moveTypeLabel } from '@/lib/move-subtitle'
+import { PricingReconcileError, quoteMove, type QuoteBreakdown } from '@/lib/pricingEngine'
+import { basketFromWire, floorsNoLiftFor, haltverbotCountFor, kmFromMeters } from '@/lib/pricingInputs'
 import { additionalServiceLabel, arrivalWindowLabel, dropoffParkingLabel, flexibilityLabel, floorLevelLabel, packingLevelLabel, parkingLabel, paymentMethodLabel, vehicleTypeLabel } from '@/lib/enum-labels'
 
 const SummaryRow = ({ label, value }: { label: string; value: React.ReactNode }) => (
@@ -140,24 +145,11 @@ const Page = () => {
 
   // ─── Map & location picker state ──────────────────────────
   const [routeInfo, setRouteInfo] = useState<RouteInfo | null>(null)
-  // Admin-editable rates; empty until loaded, and every lookup has a default, so
-  // the preview shows a correct price immediately and sharpens if a rate differs.
-  const [pricingRates, setPricingRates] = useState<Record<string, number>>({})
-
-  useEffect(() => {
-    let cancelled = false
-    fetch('/api/pricing/config')
-      .then((res) => (res.ok ? res.json() : { rates: {} }))
-      .then((data) => {
-        if (!cancelled && data?.rates) setPricingRates(data.rates)
-      })
-      .catch(() => {
-        // Defaults already cover this.
-      })
-    return () => {
-      cancelled = true
-    }
-  }, [])
+  // Admin-editable rates (empty → compiled defaults, so the preview shows a
+  // correct price immediately and sharpens if a rate differs) and the priced
+  // catalog the engine needs for the item line.
+  const pricingConfig = usePricingConfig()
+  const { catalog, ready: catalogReady } = useInventoryCatalog()
   const [locationPickerOpen, setLocationPickerOpen] = useState(false)
   const [editingLocationType, setEditingLocationType] = useState<'pickup' | 'dropoff'>('pickup')
 
@@ -181,52 +173,47 @@ const Page = () => {
     setRouteInfo(info)
   }, [])
 
-  // Calculate estimated price using the same formula as calculateprice cloud function
-  // Rates are admin-editable (`pricing_config`); these literals are the defaults
-  // the calculateprice function also compiles in, so a config outage previews the
-  // same price the server will charge rather than nothing at all.
-  const r = (key: string, fallback: number) => {
-    const v = pricingRates[key]
-    return typeof v === 'number' && Number.isFinite(v) ? v : fallback
-  }
-  const BASE_RATE_PER_KM = r('instant.baseRatePerKm', 1.50)
-  const MOVE_TYPE_MULTIPLIER: Record<string, number> = {
-    light: r('instant.multiplier.light', 1.0),
-    regular: r('instant.multiplier.regular', 1.3),
-    premium: r('instant.multiplier.premium', 1.8),
-  }
-  const FLOOR_SURCHARGE_NO_ELEVATOR = r('instant.floorSurchargeNoElevator', 15)
-  const PACKING_RATES: Record<string, number> = {
-    none: r('instant.packing.none', 0),
-    partial: r('instant.packing.partial', 50),
-    full: r('instant.packing.full', 120),
-    unpacking: r('instant.packing.unpacking', 180),
-  }
-  const CREW_RATES: Record<string, number> = {
-    '1': r('instant.crew.1', 0),
-    '2': r('instant.crew.2', 30),
-    '3': r('instant.crew.3', 60),
-    '4plus': r('instant.crew.4plus', 100),
-  }
-  const MINIMUM_PRICE = r('instant.minimumPrice', 49)
-
-  const distanceKm = ((routeInfo?.distance ?? routeDistanceMeters) || 0) / 1000
-  let basePrice = distanceKm * BASE_RATE_PER_KM * (MOVE_TYPE_MULTIPLIER[moveType || 'regular'] || 1.0)
-
-  let floorSurcharge = 0
-  const pFloor = parseInt(floorLevel || '0', 10)
-  const dFloor = parseInt(dropoffFloorLevel || '0', 10)
-  if (!elevatorAvailable && pFloor > 0) floorSurcharge += pFloor * FLOOR_SURCHARGE_NO_ELEVATOR
-  if (!dropoffElevatorAvailable && dFloor > 0) floorSurcharge += dFloor * FLOOR_SURCHARGE_NO_ELEVATOR
-
-  const packingPrice = PACKING_RATES[packingServiceLevel || 'none'] || 0
-  const crewPrice = CREW_RATES[crewSize || '1'] || 0
-  const storagePrice = (storageWeeks || 0) * r('instant.storagePerWeek', 25)
-  const servicesPrice = additionalServices.length * r('scheduled.serviceFlatFee', 50)
-
-  let totalPrice = basePrice + floorSurcharge + packingPrice + crewPrice + storagePrice + servicesPrice
-  totalPrice = Math.max(totalPrice, MINIMUM_PRICE)
-  totalPrice = Math.round(totalPrice * 100) / 100
+  // The estimate, from the same v3 engine the server runs on create (pricing
+  // master D5): this is a *display* of what the server will charge, never the
+  // number that gets persisted. No mover yet, so the vehicle class is the
+  // smallest that holds the load, floored by the tier (master D8).
+  const quote = useMemo<QuoteBreakdown | null>(() => {
+    if (!catalogReady) return null
+    try {
+      return quoteMove(
+        {
+          tier: moveType || 'regular',
+          mode: 'scheduled',
+          distanceKm: kmFromMeters(routeInfo?.distance ?? routeDistanceMeters),
+          durationSeconds: routeInfo?.duration ?? routeDurationSeconds ?? 0,
+          basket: basketFromWire(inventory, customItems),
+          catalog,
+          floorsNoLift: floorsNoLiftFor({
+            pickupFloorLevel: floorLevel,
+            pickupElevator: elevatorAvailable,
+            dropoffFloorLevel,
+            dropoffElevator: dropoffElevatorAvailable,
+          }),
+          haltverbotCount: haltverbotCountFor(pickupArrangeHaltverbot, dropoffArrangeHaltverbot),
+          packingLevel: packingServiceLevel ?? 'none',
+          services: additionalServices,
+          storageWeeks,
+        },
+        pricingConfig,
+      )
+    } catch (err) {
+      // A quote that does not reconcile is a bug, not a price. Show nothing
+      // rather than a wrong number; the server would refuse it too.
+      if (err instanceof PricingReconcileError) console.error('[move-preview] quote did not reconcile:', err)
+      else console.error('[move-preview] quote failed:', err)
+      return null
+    }
+  }, [
+    catalogReady, catalog, pricingConfig, moveType, routeInfo, routeDistanceMeters, routeDurationSeconds,
+    inventory, customItems, floorLevel, elevatorAvailable, dropoffFloorLevel, dropoffElevatorAvailable,
+    pickupArrangeHaltverbot, dropoffArrangeHaltverbot, packingServiceLevel, additionalServices, storageWeeks,
+  ])
+  const totalPrice = quote?.total ?? null
 
   // ─── Create scheduled move handler ────────────────────────
   const handleCreateMove = useCallback(async () => {
@@ -315,8 +302,8 @@ const Page = () => {
           vatId: contactInfo.vatId,
           routeDistanceMeters: routeInfo?.distance ?? routeDistanceMeters,
           routeDurationSeconds: routeInfo?.duration ?? routeDurationSeconds,
-          estimatedPrice: totalPrice,
-          finalPrice: totalPrice,
+          // No price is sent: the server recomputes it from these inputs
+          // (pricing master D5) and returns the breakdown it stored.
           paymentMethod,
         }),
       })
@@ -346,7 +333,7 @@ const Page = () => {
     dropoffParkingSituation, dropoffArrangeHaltverbot, packingServiceLevel, packingMaterials,
     packingNotes, arrivalWindow, flexibility, crewSize, vehicleType, additionalServices,
     storageWeeks, disposalItems, contactInfo, routeInfo, routeDistanceMeters,
-    routeDurationSeconds, totalPrice, paymentMethod, reset, router, t,
+    routeDurationSeconds, paymentMethod, reset, router, t,
   ])
 
   // Build gallery images array for header
@@ -730,51 +717,14 @@ const Page = () => {
 
         <Divider />
 
-        {/* Price breakdown */}
-        <DescriptionList>
-          <DescriptionTerm>
-            {baseRateWithDistanceLabel(t, moveType, formatDistanceKm(distanceKm))}
-          </DescriptionTerm>
-          <DescriptionDetails className="sm:text-right">{formatMoney(basePrice)}</DescriptionDetails>
-          {floorSurcharge > 0 && (
-            <>
-              <DescriptionTerm>{t('booking:pricing.floorSurcharge.label')}</DescriptionTerm>
-              <DescriptionDetails className="sm:text-right">{formatMoney(floorSurcharge)}</DescriptionDetails>
-            </>
-          )}
-          {packingPrice > 0 && (
-            <>
-              <DescriptionTerm>{t('moves:detail.packingService.label')}</DescriptionTerm>
-              <DescriptionDetails className="sm:text-right">{formatMoney(packingPrice)}</DescriptionDetails>
-            </>
-          )}
-          {crewPrice > 0 && (
-            <>
-              <DescriptionTerm>
-                {t('booking:pricing.crew.label', {
-                  crew: hasCrewCount ? t('moves:moverCount', { count: crewCount }) : crewSize,
-                })}
-              </DescriptionTerm>
-              <DescriptionDetails className="sm:text-right">{formatMoney(crewPrice)}</DescriptionDetails>
-            </>
-          )}
-          {servicesPrice > 0 && (
-            <>
-              <DescriptionTerm>
-                {t('booking:pricing.additionalServicesCount.label', { count: additionalServices.length })}
-              </DescriptionTerm>
-              <DescriptionDetails className="sm:text-right">{formatMoney(servicesPrice)}</DescriptionDetails>
-            </>
-          )}
-          {storagePrice > 0 && (
-            <>
-              <DescriptionTerm>{t('booking:pricing.storageWeeks.label', { count: storageWeeks })}</DescriptionTerm>
-              <DescriptionDetails className="sm:text-right">{formatMoney(storagePrice)}</DescriptionDetails>
-            </>
-          )}
-          <DescriptionTerm className="font-semibold text-neutral-900 dark:text-white">{t('booking:pricing.total.label')}</DescriptionTerm>
-          <DescriptionDetails className="font-semibold sm:text-right">{formatMoney(totalPrice)}</DescriptionDetails>
-        </DescriptionList>
+        {/* Price breakdown — the shared itemised estimate (pricing master D15) */}
+        {quote ? (
+          <PriceBreakdown breakdown={quote} itemNames={inventoryNames} />
+        ) : (
+          <p className="text-center text-sm text-neutral-500 dark:text-neutral-400">
+            {catalogReady ? t('errors:pricing.reconcile', { defaultValue: 'We could not compute a reliable price. Please try again.' }) : t('common:state.loading.label')}
+          </p>
+        )}
 
         {paymentMethod && (
           <>
@@ -827,7 +777,7 @@ const Page = () => {
         {/* SUBMIT */}
         <ButtonPrimary
           className="w-full"
-          disabled={!canProceed || isSubmitting}
+          disabled={!canProceed || isSubmitting || !quote}
           onClick={handleCreateMove}
         >
           {isSubmitting ? t('web:preview.creating.cta') : t('web:preview.complete.cta')}

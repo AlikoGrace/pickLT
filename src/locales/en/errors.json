@@ -281,6 +281,10 @@
     "confirmFailed": "Failed to confirm payment",
     "notAwaiting": "This move is not awaiting payment. Please reload the move and try again."
   },
+  "pricing": {
+    "exceedsLargestVehicle": "This load is too large for a single vehicle. Please contact support.",
+    "reconcile": "We could not compute a reliable price. Please try again."
+  },
   "profile": {
     "emailChangeFailed": "Failed to change email",
     "emailTaken": "This email is already in use by another account",

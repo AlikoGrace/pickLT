@@ -50,24 +50,6 @@
       "error": "Impossibile accedere alla fotocamera. Consenti l'accesso alla fotocamera nel browser oppure carica una foto."
     }
   },
-  "checkout": {
-    "confirmAndPay": {
-      "cta": "Conferma e paga {{amount}}"
-    },
-    "confirmMove": {
-      "cta": "Conferma il trasloco · {{amount}}"
-    },
-    "editHint": {
-      "helper": "Tocca una sezione qualsiasi per modificare i dettagli del trasloco."
-    },
-    "pay": {
-      "title": "Conferma e pagamento"
-    },
-    "title": "Conferma il tuo trasloco",
-    "yourMove": {
-      "title": "Il tuo trasloco"
-    }
-  },
   "contact": {
     "address": {
       "label": "🗺 INDIRIZZO",
@@ -895,6 +877,11 @@
       }
     }
   },
+  "moverCard": {
+    "vehicleVerified": {
+      "badge": "Veicolo verificato"
+    }
+  },
   "moverDashboard": {
     "findMoves": {
       "cta": "Trova traslochi"
@@ -1100,6 +1087,28 @@
       "cta": "Modifica le foto"
     }
   },
+  "pricing": {
+    "breakdown": {
+      "customItems": {
+        "label_one": "{{count}} oggetto personalizzato",
+        "label_other": "{{count}} oggetti personalizzati"
+      },
+      "hide": {
+        "cta": "Nascondi i dettagli del prezzo"
+      },
+      "included": {
+        "label": "inclusa"
+      },
+      "show": {
+        "cta": "Mostra i dettagli del prezzo"
+      },
+      "title": "Dettaglio del prezzo",
+      "unpriced": {
+        "helper_one": "{{count}} oggetto non ha ancora un prezzo ed è conteggiato a zero; il preventivo finale potrebbe essere più alto.",
+        "helper_other": "{{count}} oggetti non hanno ancora un prezzo e sono conteggiati a zero; il preventivo finale potrebbe essere più alto."
+      }
+    }
+  },
   "scheduledMoves": {
     "book": {
       "cta": "Prenota un trasloco programmato"
@@ -1160,6 +1169,10 @@
     "capacity": {
       "label": "capacità di {{volume}}"
     },
+    "capacityTooSmall": {
+      "helper_one": "{{count}} traslocatore nascosto: veicolo troppo piccolo per {{volume}}.",
+      "helper_other": "{{count}} traslocatori nascosti: veicoli troppo piccoli per {{volume}}."
+    },
     "confirm": {
       "cta": "Conferma · {{amount}}"
     },
@@ -1184,8 +1197,8 @@
     },
     "pricing": {
       "disclaimer": "Il prezzo finale può variare in base alle condizioni effettive.",
-      "helper_one": "I prezzi comprendono la tariffa base, la distanza ({{distance}}), la dimensione della squadra, la capacità del veicolo e la gestione di {{count}} oggetto.",
-      "helper_other": "I prezzi comprendono la tariffa base, la distanza ({{distance}}), la dimensione della squadra, la capacità del veicolo e la gestione di {{count}} oggetti.",
+      "helper_one": "I prezzi comprendono il servizio base, la distanza ({{distance}}), la manodopera della squadra, la classe di veicolo del traslocatore e {{count}} oggetto. L'IVA è inclusa.",
+      "helper_other": "I prezzi comprendono il servizio base, la distanza ({{distance}}), la manodopera della squadra, la classe di veicolo del traslocatore e {{count}} oggetti. L'IVA è inclusa.",
       "title": "Come funziona il prezzo:"
     },
     "searching": {
@@ -1296,11 +1309,6 @@
     },
     "stepTotal": {
       "label": "/{{total}}"
-    }
-  },
-  "moverCard": {
-    "vehicleVerified": {
-      "badge": "Veicolo verificato"
     }
   }
 }

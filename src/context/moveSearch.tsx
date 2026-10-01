@@ -145,6 +145,8 @@ export type StoredMove = {
   // Pricing
   estimatedPrice?: number | null
   finalPrice?: number | null
+  /** `moves.priceBreakdown` — v3 JSON written by the server; null on older rows. */
+  priceBreakdown?: string | null
 }
 
 // Inventory item with metadata

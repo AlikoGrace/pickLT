@@ -56,10 +56,10 @@
     "typeAndCategory": {
       "light": {
         "instant": {
-          "subtitle": "Mudanza ligera · Inmediata"
+          "subtitle": "Mudanza normal · Inmediata"
         },
         "scheduled": {
-          "subtitle": "Mudanza ligera · Programada"
+          "subtitle": "Mudanza normal · Programada"
         }
       },
       "premium": {
@@ -72,31 +72,31 @@
       },
       "regular": {
         "instant": {
-          "subtitle": "Mudanza estándar · Inmediata"
+          "subtitle": "Mudanza media · Inmediata"
         },
         "scheduled": {
-          "subtitle": "Mudanza estándar · Programada"
+          "subtitle": "Mudanza media · Programada"
         }
       }
     },
     "typeAndDate": {
       "light": {
-        "subtitle": "Mudanza ligera · {{date}}"
+        "subtitle": "Mudanza normal · {{date}}"
       },
       "premium": {
         "subtitle": "Mudanza premium · {{date}}"
       },
       "regular": {
-        "subtitle": "Mudanza estándar · {{date}}"
+        "subtitle": "Mudanza media · {{date}}"
       }
     },
     "typeCategoryDate": {
       "light": {
         "instant": {
-          "subtitle": "Mudanza ligera · Inmediata · {{date}}"
+          "subtitle": "Mudanza normal · Inmediata · {{date}}"
         },
         "scheduled": {
-          "subtitle": "Mudanza ligera · Programada · {{date}}"
+          "subtitle": "Mudanza normal · Programada · {{date}}"
         }
       },
       "premium": {
@@ -109,10 +109,10 @@
       },
       "regular": {
         "instant": {
-          "subtitle": "Mudanza estándar · Inmediata · {{date}}"
+          "subtitle": "Mudanza media · Inmediata · {{date}}"
         },
         "scheduled": {
-          "subtitle": "Mudanza estándar · Programada · {{date}}"
+          "subtitle": "Mudanza media · Programada · {{date}}"
         }
       }
     }
@@ -222,10 +222,10 @@
     "typeAndCategory": {
       "light": {
         "instant": {
-          "value": "Ligera · Inmediata"
+          "value": "Normal · Inmediata"
         },
         "scheduled": {
-          "value": "Ligera · Programada"
+          "value": "Normal · Programada"
         }
       },
       "premium": {
@@ -238,10 +238,10 @@
       },
       "regular": {
         "instant": {
-          "value": "Estándar · Inmediata"
+          "value": "Media · Inmediata"
         },
         "scheduled": {
-          "value": "Estándar · Programada"
+          "value": "Media · Programada"
         }
       }
     },

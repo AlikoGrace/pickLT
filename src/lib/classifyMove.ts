@@ -13,6 +13,15 @@ export interface InventoryItemDef {
   }
   classificationPoints: number
   moveTypeMinimum: MoveType
+  /**
+   * Admin-set price one unit of this item adds to a move (pricing master D6).
+   * Optional on the type because rows written before the column existed carry
+   * `null`; the engine prices those as 0 and lists them in
+   * `assumptions.unpricedItemIds`. Never used for classification.
+   */
+  unitPriceEur?: number | null
+  /** Movers needed to handle one unit safely (piano = 2). Default 1. */
+  requiredCrew?: number | null
 }
 
 // ─── Classification result ─────────────────────────────────

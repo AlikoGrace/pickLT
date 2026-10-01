@@ -50,24 +50,6 @@
       "error": "No se pudo acceder a la cámara. Permite el acceso a la cámara en tu navegador o sube una foto."
     }
   },
-  "checkout": {
-    "confirmAndPay": {
-      "cta": "Confirmar y pagar {{amount}}"
-    },
-    "confirmMove": {
-      "cta": "Confirmar la mudanza · {{amount}}"
-    },
-    "editHint": {
-      "helper": "Haz clic en cualquier sección para editar los detalles de tu mudanza."
-    },
-    "pay": {
-      "title": "Confirmación y pago"
-    },
-    "title": "Confirma tu mudanza",
-    "yourMove": {
-      "title": "Tu mudanza"
-    }
-  },
   "contact": {
     "address": {
       "label": "🗺 DIRECCIÓN",
@@ -895,6 +877,11 @@
       }
     }
   },
+  "moverCard": {
+    "vehicleVerified": {
+      "badge": "Vehículo verificado"
+    }
+  },
   "moverDashboard": {
     "findMoves": {
       "cta": "Buscar mudanzas"
@@ -1100,6 +1087,28 @@
       "cta": "Editar las fotos"
     }
   },
+  "pricing": {
+    "breakdown": {
+      "customItems": {
+        "label_one": "{{count}} objeto personalizado",
+        "label_other": "{{count}} objetos personalizados"
+      },
+      "hide": {
+        "cta": "Ocultar detalles del precio"
+      },
+      "included": {
+        "label": "incluido"
+      },
+      "show": {
+        "cta": "Mostrar detalles del precio"
+      },
+      "title": "Desglose del precio",
+      "unpriced": {
+        "helper_one": "{{count}} objeto aún no tiene precio y se cuenta a cero; el presupuesto final puede ser mayor.",
+        "helper_other": "{{count}} objetos aún no tienen precio y se cuentan a cero; el presupuesto final puede ser mayor."
+      }
+    }
+  },
   "scheduledMoves": {
     "book": {
       "cta": "Reservar una mudanza programada"
@@ -1160,6 +1169,10 @@
     "capacity": {
       "label": "{{volume}} de capacidad"
     },
+    "capacityTooSmall": {
+      "helper_one": "{{count}} transportista oculto: vehículo demasiado pequeño para {{volume}}.",
+      "helper_other": "{{count}} transportistas ocultos: vehículos demasiado pequeños para {{volume}}."
+    },
     "confirm": {
       "cta": "Confirmar · {{amount}}"
     },
@@ -1184,8 +1197,8 @@
     },
     "pricing": {
       "disclaimer": "El precio final puede variar según las condiciones reales.",
-      "helper_one": "Los precios incluyen la tarifa base, la distancia ({{distance}}), el tamaño del equipo, la capacidad del vehículo y la manipulación de {{count}} objeto.",
-      "helper_other": "Los precios incluyen la tarifa base, la distancia ({{distance}}), el tamaño del equipo, la capacidad del vehículo y la manipulación de {{count}} objetos.",
+      "helper_one": "Los precios incluyen el servicio base, la distancia ({{distance}}), la mano de obra del equipo, la clase de vehículo del transportista y {{count}} objeto. El IVA está incluido.",
+      "helper_other": "Los precios incluyen el servicio base, la distancia ({{distance}}), la mano de obra del equipo, la clase de vehículo del transportista y {{count}} objetos. El IVA está incluido.",
       "title": "Cómo se calcula el precio:"
     },
     "searching": {
@@ -1296,11 +1309,6 @@
     },
     "stepTotal": {
       "label": "/{{total}}"
-    }
-  },
-  "moverCard": {
-    "vehicleVerified": {
-      "badge": "Vehículo verificado"
     }
   }
 }

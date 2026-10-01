@@ -74,7 +74,7 @@ export async function getNavigation(): Promise<TNavigationItem[]> {
           children: [
             { id: '4-1', href: '/authors/truelock-alric', name: 'Author' },
             { id: '4-2', href: '/blog', name: 'Blog' },
-            { id: '4-3', href: '/checkout', name: 'Checkout' },
+            { id: '4-3', href: '/move-preview', name: 'Move preview' },
             { id: '4-5', href: '/contact', name: 'Contact' },
             { id: '4-6', href: '/login', name: 'Login/Signup' },
             { id: '4-7', href: '/add-listing/1', name: '+ Add listing' },

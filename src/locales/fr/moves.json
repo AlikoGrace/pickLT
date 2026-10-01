@@ -56,10 +56,10 @@
     "typeAndCategory": {
       "light": {
         "instant": {
-          "subtitle": "Déménagement léger · Immédiat"
+          "subtitle": "Déménagement normal · Immédiat"
         },
         "scheduled": {
-          "subtitle": "Déménagement léger · Planifié"
+          "subtitle": "Déménagement normal · Planifié"
         }
       },
       "premium": {
@@ -72,31 +72,31 @@
       },
       "regular": {
         "instant": {
-          "subtitle": "Déménagement standard · Immédiat"
+          "subtitle": "Déménagement medium · Immédiat"
         },
         "scheduled": {
-          "subtitle": "Déménagement standard · Planifié"
+          "subtitle": "Déménagement medium · Planifié"
         }
       }
     },
     "typeAndDate": {
       "light": {
-        "subtitle": "Déménagement léger · {{date}}"
+        "subtitle": "Déménagement normal · {{date}}"
       },
       "premium": {
         "subtitle": "Déménagement premium · {{date}}"
       },
       "regular": {
-        "subtitle": "Déménagement standard · {{date}}"
+        "subtitle": "Déménagement medium · {{date}}"
       }
     },
     "typeCategoryDate": {
       "light": {
         "instant": {
-          "subtitle": "Déménagement léger · Immédiat · {{date}}"
+          "subtitle": "Déménagement normal · Immédiat · {{date}}"
         },
         "scheduled": {
-          "subtitle": "Déménagement léger · Planifié · {{date}}"
+          "subtitle": "Déménagement normal · Planifié · {{date}}"
         }
       },
       "premium": {
@@ -109,10 +109,10 @@
       },
       "regular": {
         "instant": {
-          "subtitle": "Déménagement standard · Immédiat · {{date}}"
+          "subtitle": "Déménagement medium · Immédiat · {{date}}"
         },
         "scheduled": {
-          "subtitle": "Déménagement standard · Planifié · {{date}}"
+          "subtitle": "Déménagement medium · Planifié · {{date}}"
         }
       }
     }
@@ -222,10 +222,10 @@
     "typeAndCategory": {
       "light": {
         "instant": {
-          "value": "Léger · Immédiat"
+          "value": "Normal · Immédiat"
         },
         "scheduled": {
-          "value": "Léger · Planifié"
+          "value": "Normal · Planifié"
         }
       },
       "premium": {
@@ -238,10 +238,10 @@
       },
       "regular": {
         "instant": {
-          "value": "Standard · Immédiat"
+          "value": "Medium · Immédiat"
         },
         "scheduled": {
-          "value": "Standard · Planifié"
+          "value": "Medium · Planifié"
         }
       }
     },

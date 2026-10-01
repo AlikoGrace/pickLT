@@ -100,7 +100,6 @@ const protectedRoutes = [
   '/add-listing',
   '/instant-move',
   '/move-preview',
-  '/checkout',
   '/pay-done',
 ]
 

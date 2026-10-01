@@ -121,14 +121,14 @@
   "classification": {
     "itemMinimum": {
       "premium": "“{{item}}” vereist minstens een Premium verhuizing",
-      "regular": "“{{item}}” vereist minstens een Gewone verhuizing"
+      "regular": "“{{item}}” vereist minstens een Medium verhuizing"
     },
     "keepCurrent": {
       "cta": "Huidige behouden"
     },
     "nearLimit": {
-      "light": "Je nadert de grens van een Kleine verhuizing",
-      "regular": "Je nadert de grens van een Gewone verhuizing"
+      "light": "Je nadert de grens van een Normale verhuizing",
+      "regular": "Je nadert de grens van een Medium verhuizing"
     },
     "notice": {
       "title": "Melding over de indeling van je verhuizing"
@@ -147,13 +147,13 @@
         "cta": "Verhuistype upgraden"
       },
       "light": {
-        "cta": "Upgraden naar Kleine verhuizing"
+        "cta": "Upgraden naar Normale verhuizing"
       },
       "premium": {
         "cta": "Upgraden naar Premium verhuizing"
       },
       "regular": {
-        "cta": "Upgraden naar Gewone verhuizing"
+        "cta": "Upgraden naar Medium verhuizing"
       },
       "subtitle": "Op basis van je gekozen spullen raden we aan om te upgraden van <0>{{from}}</0> naar <1>{{to}}</1>.",
       "title": "Upgrade van het verhuistype aanbevolen"
@@ -690,16 +690,16 @@
     "a11y": "Verhuistype kiezen",
     "label": "Type verhuizing",
     "light": {
-      "body": "Kleine verhuizingen gaan met een kleine bestelbus.",
+      "body": "Normale verhuizingen gaan met een kleine bestelbus en één verhuizer.",
       "helper": "Kleine lading — weinig spullen",
-      "label": "Kleine verhuizing",
-      "short": "Klein",
+      "label": "Normale verhuizing",
+      "short": "Normaal",
       "subtitle": "Perfect voor kleine ladingen — dozen, losse meubelstukken of een studio.",
-      "title": "Kleine verhuizing"
+      "title": "Normale verhuizing"
     },
     "placeholder": "Kies een verhuistype",
     "premium": {
-      "body": "Premium verhuizingen gaan met grotere voertuigen en een team van 2 of meer personen.",
+      "body": "Premium verhuizingen gaan met een grote vrachtwagen en een team van 3 personen.",
       "helper": "Verhuizing met volledige service",
       "label": "Premium verhuizing",
       "short": "Premium",
@@ -707,12 +707,12 @@
       "title": "Premium verhuizing"
     },
     "regular": {
-      "body": "Gewone verhuizingen gaan met een middelgroot voertuig en een team van 2 personen.",
+      "body": "Medium verhuizingen gaan met een middelgrote vrachtwagen en een team van 2 personen.",
       "helper": "Gewone woningverhuizing",
-      "label": "Gewone verhuizing",
-      "short": "Gewoon",
+      "label": "Medium verhuizing",
+      "short": "Medium",
       "subtitle": "Ideaal voor appartementen met 1 of 2 slaapkamers met gewone meubels en apparatuur.",
-      "title": "Gewone verhuizing"
+      "title": "Medium verhuizing"
     },
     "section": {
       "title": "Type verhuizing"
@@ -1043,39 +1043,29 @@
       "label_one": "Extra diensten ({{count}})",
       "label_other": "Extra diensten ({{count}})"
     },
-    "baseFare": {
-      "label": "Basistarief"
-    },
-    "baseRate": {
-      "fallback": {
-        "label": "Basistarief"
+    "assumptions": {
+      "crew": {
+        "label": "Teamgrootte {{value}}"
       },
-      "light": {
-        "label": "Basistarief (Kleine verhuizing)"
+      "hours": {
+        "label": "Factureerbare tijd {{value}}"
       },
-      "premium": {
-        "label": "Basistarief (Premium verhuizing)"
+      "volume": {
+        "label": "Geschat volume {{value}}"
       },
-      "regular": {
-        "label": "Basistarief (Gewone verhuizing)"
+      "weight": {
+        "label": "Geschat gewicht {{value}}"
       }
     },
-    "baseRateWithDistance": {
-      "fallback": {
-        "label": "Basistarief ({{distance}})"
-      },
-      "light": {
-        "label": "Basistarief (Kleine verhuizing, {{distance}})"
-      },
-      "premium": {
-        "label": "Basistarief (Premium verhuizing, {{distance}})"
-      },
-      "regular": {
-        "label": "Basistarief (Gewone verhuizing, {{distance}})"
-      }
+    "crewTooSmall": {
+      "helper_one": "{{count}} verhuizer verborgen: team te klein voor deze lading",
+      "helper_other": "{{count}} verhuizers verborgen: team te klein voor deze lading"
     },
-    "crew": {
-      "label": "Team ({{crew}})"
+    "discount": {
+      "label": "Korting"
+    },
+    "estimate": {
+      "helper": "Schatting — definitief zodra je verhuizer accepteert"
     },
     "estimatedTotal": {
       "label": "Geschat totaal"
@@ -1083,18 +1073,66 @@
     "finalAfterReview": {
       "helper": "De definitieve prijs wordt na controle bevestigd"
     },
-    "floorSurcharge": {
-      "label": "Verdiepingstoeslag"
+    "header": {
+      "instant": {
+        "label": "{{tier}} · Directe verhuizing"
+      },
+      "scheduled": {
+        "label": "{{tier}} · Geplande verhuizing"
+      }
+    },
+    "instantAdjustment": {
+      "label": "Directe boeking (×{{multiplier}})"
     },
     "itemsCount": {
       "label_one": "Spullen ({{count}})",
       "label_other": "Spullen ({{count}})"
     },
-    "moverFare": {
-      "label": "Tarief verhuizer"
+    "line": {
+      "base": {
+        "label": "Basisdienst"
+      },
+      "distance": {
+        "label": "Afstand ({{km}} × {{rate}})"
+      },
+      "handling": {
+        "label": "Handling en toegang"
+      },
+      "items": {
+        "label_one": "Spullen ({{count}})",
+        "label_other": "Spullen ({{count}})"
+      },
+      "labor": {
+        "label": "Verhuizers ({{crew}} × {{rate}} × {{hours}})"
+      },
+      "packing": {
+        "label": "Inpakken"
+      },
+      "services": {
+        "label": "Extra diensten"
+      },
+      "storage": {
+        "label_one": "Opslag ({{count}} week)",
+        "label_other": "Opslag ({{count}} weken)"
+      },
+      "vehicle": {
+        "label": "Voertuig ({{vehicle}})"
+      }
     },
-    "packingService": {
-      "label": "Inpakservice"
+    "minimumApplied": {
+      "helper": "Minimumbedrag van {{amount}} toegepast"
+    },
+    "net": {
+      "label": "Subtotaal exclusief btw"
+    },
+    "operationalSubtotal": {
+      "label": "Operationeel subtotaal"
+    },
+    "perMover": {
+      "helper": "De prijs houdt rekening met de voertuigklasse van deze verhuizer"
+    },
+    "platformFee": {
+      "label": "Platformkosten ({{rate}})"
     },
     "storage": {
       "label": "Opslag"

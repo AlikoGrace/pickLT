@@ -281,6 +281,10 @@
     "confirmFailed": "Betaling kon niet worden bevestigd",
     "notAwaiting": "Deze verhuizing wacht niet op betaling. Laad de verhuizing opnieuw en probeer het nog eens."
   },
+  "pricing": {
+    "exceedsLargestVehicle": "Deze lading is te groot voor één voertuig. Neem contact op met de klantenservice.",
+    "reconcile": "We konden geen betrouwbare prijs berekenen. Probeer het opnieuw."
+  },
   "profile": {
     "emailChangeFailed": "E-mailadres wijzigen mislukt",
     "emailTaken": "Dit e-mailadres is al in gebruik bij een ander account",

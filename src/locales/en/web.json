@@ -50,24 +50,6 @@
       "error": "Could not access the camera. Allow camera access in your browser, or upload a photo instead."
     }
   },
-  "checkout": {
-    "confirmAndPay": {
-      "cta": "Confirm and pay {{amount}}"
-    },
-    "confirmMove": {
-      "cta": "Confirm move · {{amount}}"
-    },
-    "editHint": {
-      "helper": "Click on any section to edit your move details."
-    },
-    "pay": {
-      "title": "Confirm and pay"
-    },
-    "title": "Confirm your move",
-    "yourMove": {
-      "title": "Your move"
-    }
-  },
   "contact": {
     "address": {
       "label": "🗺 ADDRESS",
@@ -895,6 +877,11 @@
       }
     }
   },
+  "moverCard": {
+    "vehicleVerified": {
+      "badge": "Verified vehicle"
+    }
+  },
   "moverDashboard": {
     "findMoves": {
       "cta": "Find Moves"
@@ -1100,6 +1087,28 @@
       "cta": "Edit photos"
     }
   },
+  "pricing": {
+    "breakdown": {
+      "customItems": {
+        "label_one": "{{count}} custom item",
+        "label_other": "{{count}} custom items"
+      },
+      "hide": {
+        "cta": "Hide price details"
+      },
+      "included": {
+        "label": "included"
+      },
+      "show": {
+        "cta": "Show price details"
+      },
+      "title": "Price breakdown",
+      "unpriced": {
+        "helper_one": "{{count}} item has no price yet and is counted at zero; the final quote may be higher.",
+        "helper_other": "{{count}} items have no price yet and are counted at zero; the final quote may be higher."
+      }
+    }
+  },
   "scheduledMoves": {
     "book": {
       "cta": "Book a Scheduled Move"
@@ -1160,6 +1169,10 @@
     "capacity": {
       "label": "{{volume}} capacity"
     },
+    "capacityTooSmall": {
+      "helper_one": "{{count}} mover hidden: vehicle too small for {{volume}}.",
+      "helper_other": "{{count}} movers hidden: vehicles too small for {{volume}}."
+    },
     "confirm": {
       "cta": "Confirm · {{amount}}"
     },
@@ -1184,8 +1197,8 @@
     },
     "pricing": {
       "disclaimer": "Final price may vary based on actual conditions.",
-      "helper_one": "Prices include base fee, distance ({{distance}}), crew size, vehicle capacity, and handling for {{count}} item.",
-      "helper_other": "Prices include base fee, distance ({{distance}}), crew size, vehicle capacity, and handling for {{count}} items.",
+      "helper_one": "Prices include the base service, distance ({{distance}}), crew labour, the mover's vehicle class and {{count}} item. VAT is included.",
+      "helper_other": "Prices include the base service, distance ({{distance}}), crew labour, the mover's vehicle class and {{count}} items. VAT is included.",
       "title": "How pricing works:"
     },
     "searching": {
@@ -1296,11 +1309,6 @@
     },
     "stepTotal": {
       "label": "/{{total}}"
-    }
-  },
-  "moverCard": {
-    "vehicleVerified": {
-      "badge": "Verified vehicle"
     }
   }
 }

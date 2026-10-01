@@ -225,48 +225,6 @@ export function upgradeCta(t: TFunction, upgradeTo: unknown): string {
 }
 
 /**
- * The "Base rate (Light Move)" row in a price breakdown.
- *
- * Was `booking:pricing.baseRate.label` = `"Base rate ({{moveType}})"`, fed on
- * both web call sites by the local `formatLabel()` — a helper that title-cases
- * the database slug. So the tier word never reached the catalog at all and
- * `move-preview` rendered **"Basistarif (Light, 12 km)"** in German: not a
- * grammar problem, an untranslated string on screen. (`checkout` had the same
- * bug; mobile passed a translated title and so only had the grammar half.)
- *
- * Even translated, the slot could not work. German writes the tier as a
- * compound (*Premium-Umzug*), Polish inflects it for the case the surrounding
- * phrase governs, and Turkish picks the suffix from the sounds of the
- * preceding word — none of which a fragment frozen in another key can carry.
- * Three tiers (`MoveType`, `classify-move.ts`) is a closed enumeration, so it
- * is three whole labels, exactly as `moveSubtitle` above.
- *
- * `{{distance}}` stays a placeholder: it is data, pre-formatted for the locale
- * by `formatDistanceKm`, not a translated word (conventions §3.4).
- *
- * `fallback` covers a move with no type — the old shape rendered an empty
- * parenthesis there.
- */
-// i18n-keys: booking:pricing.baseRate.light.label, booking:pricing.baseRate.regular.label
-// i18n-keys: booking:pricing.baseRate.premium.label, booking:pricing.baseRate.fallback.label
-export function baseRateLabel(t: TFunction, moveType: unknown): string {
-  const type = asType(moveType)
-  return t(`booking:pricing.baseRate.${type ?? 'fallback'}.label`)
-}
-
-/** `baseRateLabel` with the route distance appended. Same argument, same shape. */
-// i18n-keys: booking:pricing.baseRateWithDistance.light.label, booking:pricing.baseRateWithDistance.regular.label
-// i18n-keys: booking:pricing.baseRateWithDistance.premium.label, booking:pricing.baseRateWithDistance.fallback.label
-export function baseRateWithDistanceLabel(
-  t: TFunction,
-  moveType: unknown,
-  distance: string
-): string {
-  const type = asType(moveType)
-  return t(`booking:pricing.baseRateWithDistance.${type ?? 'fallback'}.label`, { distance })
-}
-
-/**
  * "Apartment" / "Storage unit" on its own.
  *
  * Same root cause as `moveTypeLabel`: the detail pages fed their home-type row

@@ -281,6 +281,10 @@
     "confirmFailed": "Impossibile confermare il pagamento",
     "notAwaiting": "Questo trasloco non è in attesa di pagamento. Ricarica il trasloco e riprova."
   },
+  "pricing": {
+    "exceedsLargestVehicle": "Questo carico è troppo grande per un solo veicolo. Contatta l'assistenza.",
+    "reconcile": "Non è stato possibile calcolare un prezzo affidabile. Riprova."
+  },
   "profile": {
     "emailChangeFailed": "Impossibile cambiare l’e-mail",
     "emailTaken": "Questa e-mail è già utilizzata da un altro account",

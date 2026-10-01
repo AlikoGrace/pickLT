@@ -30,6 +30,8 @@ import {
   useInventoryNames,
 } from '@/lib/inventory-labels'
 import { formatDateWith, formatMoney, formatVolumeM3 } from '@/lib/format'
+import PriceBreakdown from '@/components/PriceBreakdown'
+import { parseBreakdown } from '@/lib/pricingEngine'
 import { homeTypeLabel, moveSubtitle, moveTypeLabel } from '@/lib/move-subtitle'
 import { useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
@@ -202,6 +204,7 @@ function docToStoredMove(doc: any): StoredMove {
     vatId: doc.vatId ?? '',
     estimatedPrice: doc.estimatedPrice ?? null,
     finalPrice: doc.finalPrice ?? null,
+    priceBreakdown: doc.priceBreakdown ?? null,
   }
 }
 
@@ -514,7 +517,12 @@ export default function MoveDetailsPage() {
     vatId,
     estimatedPrice,
     finalPrice,
+    priceBreakdown,
   } = move
+
+  // The itemised v3 estimate the server stored with the row (pricing master
+  // D13). Null on moves booked before the engine — those render the plain total.
+  const breakdown = parseBreakdown(priceBreakdown)
 
   const pickupDisplay = pickupStreetAddress || pickupLocation || t('booking:pickup.fallback.label')
   const dropoffDisplay = dropoffStreetAddress || dropoffLocation || t('booking:dropoff.fallback.label')
@@ -780,10 +788,14 @@ export default function MoveDetailsPage() {
                 </span>
               </div>
               <div className="my-4 border-t border-neutral-100 dark:border-neutral-700" />
-              <div className="flex justify-between text-base">
-                <span className="font-semibold text-neutral-900 dark:text-neutral-100">{t('common:label.total')}</span>
-                <span className="font-bold text-neutral-900 dark:text-neutral-100">{formatMoney(totalPrice)}</span>
-              </div>
+              {breakdown ? (
+                <PriceBreakdown breakdown={breakdown} compact itemNames={inventoryNames} className="!p-3" />
+              ) : (
+                <div className="flex justify-between text-base">
+                  <span className="font-semibold text-neutral-900 dark:text-neutral-100">{t('common:label.total')}</span>
+                  <span className="font-bold text-neutral-900 dark:text-neutral-100">{formatMoney(totalPrice)}</span>
+                </div>
+              )}
               {paymentMethod && (
                 <div className="flex justify-between mt-2">
                   <span className="text-neutral-500 dark:text-neutral-400">{t('booking:payment.section.title')}</span>

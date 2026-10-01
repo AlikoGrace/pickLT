@@ -50,24 +50,6 @@
       "error": "Impossible d'accéder à la caméra. Autorisez l'accès à la caméra dans votre navigateur ou importez plutôt une photo."
     }
   },
-  "checkout": {
-    "confirmAndPay": {
-      "cta": "Confirmer et payer {{amount}}"
-    },
-    "confirmMove": {
-      "cta": "Confirmer le déménagement · {{amount}}"
-    },
-    "editHint": {
-      "helper": "Cliquez sur une section pour modifier les détails de votre déménagement."
-    },
-    "pay": {
-      "title": "Confirmation et paiement"
-    },
-    "title": "Confirmez votre déménagement",
-    "yourMove": {
-      "title": "Votre déménagement"
-    }
-  },
   "contact": {
     "address": {
       "label": "🗺 ADRESSE",
@@ -895,6 +877,11 @@
       }
     }
   },
+  "moverCard": {
+    "vehicleVerified": {
+      "badge": "Véhicule vérifié"
+    }
+  },
   "moverDashboard": {
     "findMoves": {
       "cta": "Trouver des déménagements"
@@ -1100,6 +1087,28 @@
       "cta": "Modifier les photos"
     }
   },
+  "pricing": {
+    "breakdown": {
+      "customItems": {
+        "label_one": "{{count}} objet personnalisé",
+        "label_other": "{{count}} objets personnalisés"
+      },
+      "hide": {
+        "cta": "Masquer le détail du prix"
+      },
+      "included": {
+        "label": "incluse"
+      },
+      "show": {
+        "cta": "Afficher le détail du prix"
+      },
+      "title": "Détail du prix",
+      "unpriced": {
+        "helper_one": "{{count}} objet n'a pas encore de prix et est compté à zéro ; le devis final peut être plus élevé.",
+        "helper_other": "{{count}} objets n'ont pas encore de prix et sont comptés à zéro ; le devis final peut être plus élevé."
+      }
+    }
+  },
   "scheduledMoves": {
     "book": {
       "cta": "Réserver un déménagement planifié"
@@ -1160,6 +1169,10 @@
     "capacity": {
       "label": "{{volume}} de capacité"
     },
+    "capacityTooSmall": {
+      "helper_one": "{{count}} déménageur masqué : véhicule trop petit pour {{volume}}.",
+      "helper_other": "{{count}} déménageurs masqués : véhicules trop petits pour {{volume}}."
+    },
     "confirm": {
       "cta": "Confirmer · {{amount}}"
     },
@@ -1184,8 +1197,8 @@
     },
     "pricing": {
       "disclaimer": "Le prix final peut varier selon les conditions réelles.",
-      "helper_one": "Les prix comprennent le forfait de base, la distance ({{distance}}), la taille de l'équipe, la capacité du véhicule et la manutention de {{count}} objet.",
-      "helper_other": "Les prix comprennent le forfait de base, la distance ({{distance}}), la taille de l'équipe, la capacité du véhicule et la manutention de {{count}} objets.",
+      "helper_one": "Les prix comprennent la prestation de base, la distance ({{distance}}), la main-d'œuvre de l'équipe, la catégorie de véhicule du déménageur et {{count}} objet. La TVA est incluse.",
+      "helper_other": "Les prix comprennent la prestation de base, la distance ({{distance}}), la main-d'œuvre de l'équipe, la catégorie de véhicule du déménageur et {{count}} objets. La TVA est incluse.",
       "title": "Comment le prix est calculé :"
     },
     "searching": {
@@ -1296,11 +1309,6 @@
     },
     "stepTotal": {
       "label": "/{{total}}"
-    }
-  },
-  "moverCard": {
-    "vehicleVerified": {
-      "badge": "Véhicule vérifié"
     }
   }
 }

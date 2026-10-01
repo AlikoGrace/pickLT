@@ -121,14 +121,14 @@
   "classification": {
     "itemMinimum": {
       "premium": "« {{item}} » nécessite au minimum un déménagement premium",
-      "regular": "« {{item}} » nécessite au minimum un déménagement standard"
+      "regular": "« {{item}} » nécessite au minimum un déménagement medium"
     },
     "keepCurrent": {
       "cta": "Conserver l'actuel"
     },
     "nearLimit": {
-      "light": "Vous approchez de la limite du déménagement léger",
-      "regular": "Vous approchez de la limite du déménagement standard"
+      "light": "Vous approchez de la limite du déménagement normal",
+      "regular": "Vous approchez de la limite du déménagement medium"
     },
     "notice": {
       "title": "Information sur la classification du déménagement"
@@ -147,13 +147,13 @@
         "cta": "Changer de type de déménagement"
       },
       "light": {
-        "cta": "Passer au déménagement léger"
+        "cta": "Passer au déménagement normal"
       },
       "premium": {
         "cta": "Passer au déménagement premium"
       },
       "regular": {
-        "cta": "Passer au déménagement standard"
+        "cta": "Passer au déménagement medium"
       },
       "subtitle": "D'après les objets sélectionnés, nous vous recommandons de passer de <0>{{from}}</0> à <1>{{to}}</1>.",
       "title": "Changement de type de déménagement recommandé"
@@ -691,16 +691,16 @@
     "a11y": "Sélectionner le type de déménagement",
     "label": "Type de déménagement",
     "light": {
-      "body": "Les déménagements légers utilisent une petite camionnette.",
+      "body": "Les déménagements normaux utilisent une petite camionnette et un déménageur.",
       "helper": "Petit volume — quelques objets",
-      "label": "Déménagement léger",
-      "short": "Léger",
+      "label": "Déménagement normal",
+      "short": "Normal",
       "subtitle": "Parfait pour les petits volumes — cartons, meubles isolés ou un studio.",
-      "title": "Déménagement léger"
+      "title": "Déménagement normal"
     },
     "placeholder": "Choisissez un type de déménagement",
     "premium": {
-      "body": "Les déménagements premium utilisent de plus grands véhicules et une équipe de 2 personnes ou plus.",
+      "body": "Les déménagements premium utilisent un grand camion et une équipe de 3 personnes.",
       "helper": "Déménagement clé en main",
       "label": "Déménagement premium",
       "short": "Premium",
@@ -708,12 +708,12 @@
       "title": "Déménagement premium"
     },
     "regular": {
-      "body": "Les déménagements standard utilisent un véhicule moyen et une équipe de 2 personnes.",
+      "body": "Les déménagements medium utilisent un camion moyen et une équipe de 2 personnes.",
       "helper": "Déménagement standard d'un logement",
-      "label": "Déménagement standard",
-      "short": "Standard",
+      "label": "Déménagement medium",
+      "short": "Medium",
       "subtitle": "Idéal pour un appartement de 1 à 2 chambres avec meubles et électroménager courants.",
-      "title": "Déménagement standard"
+      "title": "Déménagement medium"
     },
     "section": {
       "title": "Type de déménagement"
@@ -1045,39 +1045,29 @@
       "label_one": "Service supplémentaire ({{count}})",
       "label_other": "Services supplémentaires ({{count}})"
     },
-    "baseFare": {
-      "label": "Tarif de base"
-    },
-    "baseRate": {
-      "fallback": {
-        "label": "Tarif de base"
+    "assumptions": {
+      "crew": {
+        "label": "Taille de l'équipe {{value}}"
       },
-      "light": {
-        "label": "Tarif de base (Déménagement léger)"
+      "hours": {
+        "label": "Temps facturable {{value}}"
       },
-      "premium": {
-        "label": "Tarif de base (Déménagement premium)"
+      "volume": {
+        "label": "Volume estimé {{value}}"
       },
-      "regular": {
-        "label": "Tarif de base (Déménagement standard)"
+      "weight": {
+        "label": "Poids estimé {{value}}"
       }
     },
-    "baseRateWithDistance": {
-      "fallback": {
-        "label": "Tarif de base ({{distance}})"
-      },
-      "light": {
-        "label": "Tarif de base (Déménagement léger, {{distance}})"
-      },
-      "premium": {
-        "label": "Tarif de base (Déménagement premium, {{distance}})"
-      },
-      "regular": {
-        "label": "Tarif de base (Déménagement standard, {{distance}})"
-      }
+    "crewTooSmall": {
+      "helper_one": "{{count}} déménageur masqué : équipe trop réduite pour ce chargement",
+      "helper_other": "{{count}} déménageurs masqués : équipe trop réduite pour ce chargement"
     },
-    "crew": {
-      "label": "Équipe ({{crew}})"
+    "discount": {
+      "label": "Remise"
+    },
+    "estimate": {
+      "helper": "Estimation — confirmée dès l'acceptation par votre déménageur"
     },
     "estimatedTotal": {
       "label": "Total estimé"
@@ -1085,18 +1075,66 @@
     "finalAfterReview": {
       "helper": "Prix définitif confirmé après vérification"
     },
-    "floorSurcharge": {
-      "label": "Supplément étage"
+    "header": {
+      "instant": {
+        "label": "{{tier}} · Déménagement immédiat"
+      },
+      "scheduled": {
+        "label": "{{tier}} · Déménagement planifié"
+      }
+    },
+    "instantAdjustment": {
+      "label": "Réservation immédiate (×{{multiplier}})"
     },
     "itemsCount": {
       "label_one": "Objet ({{count}})",
       "label_other": "Objets ({{count}})"
     },
-    "moverFare": {
-      "label": "Rémunération du déménageur"
+    "line": {
+      "base": {
+        "label": "Prestation de base"
+      },
+      "distance": {
+        "label": "Distance ({{km}} × {{rate}})"
+      },
+      "handling": {
+        "label": "Manutention et accès"
+      },
+      "items": {
+        "label_one": "Objets ({{count}})",
+        "label_other": "Objets ({{count}})"
+      },
+      "labor": {
+        "label": "Main-d'œuvre ({{crew}} × {{rate}} × {{hours}})"
+      },
+      "packing": {
+        "label": "Emballage"
+      },
+      "services": {
+        "label": "Services supplémentaires"
+      },
+      "storage": {
+        "label_one": "Stockage ({{count}} semaine)",
+        "label_other": "Stockage ({{count}} semaines)"
+      },
+      "vehicle": {
+        "label": "Véhicule ({{vehicle}})"
+      }
     },
-    "packingService": {
-      "label": "Service d'emballage"
+    "minimumApplied": {
+      "helper": "Montant minimum de {{amount}} appliqué"
+    },
+    "net": {
+      "label": "Sous-total hors TVA"
+    },
+    "operationalSubtotal": {
+      "label": "Sous-total opérationnel"
+    },
+    "perMover": {
+      "helper": "Le prix tient compte de la catégorie de véhicule de ce déménageur"
+    },
+    "platformFee": {
+      "label": "Frais de plateforme ({{rate}})"
     },
     "storage": {
       "label": "Stockage"

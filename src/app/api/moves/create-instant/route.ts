@@ -7,6 +7,8 @@ import { asText, asTextArray } from '@/lib/move-normalizers'
 import { movePermissions, moveRequestPermissions } from '@/lib/doc-permissions'
 import { directAssignmentBlock } from '@/lib/mover-gates'
 import { relId } from '@/lib/notify'
+import { PricingReconcileError, type QuoteBreakdown } from '@/lib/pricingEngine'
+import { quoteColumns, quoteMoveFields } from '@/lib/pricing-server'
 import { ID, Query } from 'node-appwrite'
 
 /**
@@ -18,8 +20,14 @@ import { ID, Query } from 'node-appwrite'
  * Body:
  *   moverProfileId — the chosen mover's profile ID
  *   pickup / dropoff location strings + coordinates
- *   moveType, inventoryItems, customItems, totalItemCount, estimatedPrice
+ *   moveType, inventoryItems, customItems, totalItemCount
  *   coverPhotoId?, galleryPhotoIds?, routeDistanceMeters?, routeDurationSeconds?
+ *
+ * The server is the price authority (pricing master D5): a client-sent
+ * `estimatedPrice` is ignored. The quote is recomputed here from the request
+ * with the chosen mover's vehicle class, and the row carries `estimatedPrice`,
+ * `priceBreakdown`, `pricingVersion`, `pricedAt`, `currency`, plus the charged
+ * `vehicleType` / `crewSize`. The breakdown is returned for the tracking page.
  */
 export async function POST(req: NextRequest) {
   const { t } = await getTranslations()
@@ -42,7 +50,6 @@ export async function POST(req: NextRequest) {
       inventoryItems,
       customItems,
       totalItemCount,
-      estimatedPrice,
       paymentMethod,
       coverPhotoId,
       galleryPhotoIds,
@@ -85,6 +92,50 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    // ── Price it (master D5) ────────────────────────────────
+    // The mover is known, so the vehicle line is their class (master D8). The
+    // mover's crew size never changes the price; the crew gate on the list
+    // already kept out anyone too small for the load.
+    let breakdown: QuoteBreakdown
+    try {
+      breakdown = await quoteMoveFields(
+        databases,
+        {
+          moveType,
+          routeDistanceMeters,
+          routeDurationSeconds,
+          inventoryItems,
+          customItems,
+          vehicleType: mover.vehicleType,
+        },
+        'instant',
+      )
+    } catch (err) {
+      if (err instanceof PricingReconcileError) {
+        console.error('[create-instant] quote did not reconcile:', err)
+        return NextResponse.json(
+          { error: t('errors:pricing.reconcile'), fnCode: 'pricing.reconcile' },
+          { status: 500 },
+        )
+      }
+      throw err
+    }
+    const priced = quoteColumns(breakdown)
+
+    // Crew gate (master D7), server side: the list hid movers whose crew is
+    // smaller than the load requires, but the list is a snapshot. Only applied
+    // when the crew relationship is on the document — an unloaded relation
+    // must not read as "works alone" and refuse every two-person job.
+    if (Array.isArray(mover.crew_members)) {
+      const crewSize = mover.crew_members.length + 1
+      if (crewSize < breakdown.profile.requiredCrew) {
+        return NextResponse.json(
+          { error: t('errors:instant.moverUnavailable.error'), fnCode: 'mover.crewTooSmall' },
+          { status: 400 }
+        )
+      }
+    }
+
     // Generate a human-readable handle
     const handle = `IM-${Date.now().toString(36).toUpperCase()}`
 
@@ -123,7 +174,9 @@ export async function POST(req: NextRequest) {
         customItems: asTextArray(customItems),
         totalItemCount: totalItemCount ?? 0,
 
-        estimatedPrice: estimatedPrice ?? null,
+        // Server-computed quote columns (master D13): estimatedPrice,
+        // priceBreakdown, pricingVersion, pricedAt, currency, vehicleType, crewSize.
+        ...priced,
         // Settled at completion; card charges run through the app's Stripe flow.
         paymentMethod: paymentMethod === 'card' ? 'card' : 'cash',
         routeDistanceMeters: routeDistanceMeters ?? null,
@@ -164,6 +217,8 @@ export async function POST(req: NextRequest) {
       moveId: move.$id,
       moveRequestId,
       handle,
+      estimatedPrice: breakdown.total,
+      breakdown,
     })
   } catch (err) {
     console.error('POST /api/moves/create-instant error:', err)

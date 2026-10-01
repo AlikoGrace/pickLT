@@ -121,14 +121,14 @@
   "classification": {
     "itemMinimum": {
       "premium": "\"{{item}}\" için en az Premium taşıma gerekir",
-      "regular": "\"{{item}}\" için en az Standart taşıma gerekir"
+      "regular": "\"{{item}}\" için en az Orta taşıma gerekir"
     },
     "keepCurrent": {
       "cta": "Mevcut kalsın"
     },
     "nearLimit": {
-      "light": "Hafif taşıma sınırına yaklaşıyorsunuz",
-      "regular": "Standart taşıma sınırına yaklaşıyorsunuz"
+      "light": "Normal taşıma sınırına yaklaşıyorsunuz",
+      "regular": "Orta taşıma sınırına yaklaşıyorsunuz"
     },
     "notice": {
       "title": "Taşıma sınıflandırması bildirimi"
@@ -147,13 +147,13 @@
         "cta": "Taşıma türünü yükselt"
       },
       "light": {
-        "cta": "Hafif taşımaya yükselt"
+        "cta": "Normal taşımaya yükselt"
       },
       "premium": {
         "cta": "Premium taşımaya yükselt"
       },
       "regular": {
-        "cta": "Standart taşımaya yükselt"
+        "cta": "Orta taşımaya yükselt"
       },
       "subtitle": "Seçtiğiniz eşyalara göre <0>{{from}}</0> yerine <1>{{to}}</1> seçmenizi öneriyoruz.",
       "title": "Taşıma türünü yükseltmenizi öneririz"
@@ -690,16 +690,16 @@
     "a11y": "Taşıma türünü seçin",
     "label": "Taşıma türü",
     "light": {
-      "body": "Hafif taşımalarda küçük bir panelvan kullanılır.",
+      "body": "Normal taşımalarda küçük bir panelvan ve bir nakliyeci kullanılır.",
       "helper": "Küçük yük — az sayıda eşya",
-      "label": "Hafif taşıma",
-      "short": "Hafif",
+      "label": "Normal taşıma",
+      "short": "Normal",
       "subtitle": "Küçük yükler için ideal — kolilar, tek parça mobilyalar veya bir stüdyo daire.",
-      "title": "Hafif taşıma"
+      "title": "Normal taşıma"
     },
     "placeholder": "Bir taşıma türü seçin",
     "premium": {
-      "body": "Premium taşımalarda daha büyük araçlar ve 2 veya daha fazla kişilik ekip kullanılır.",
+      "body": "Premium taşımalarda büyük bir kamyon ve 3 kişilik ekip kullanılır.",
       "helper": "Tam hizmet taşıma",
       "label": "Premium taşıma",
       "short": "Premium",
@@ -707,12 +707,12 @@
       "title": "Premium taşıma"
     },
     "regular": {
-      "body": "Standart taşımalarda orta boy bir araç ve 2 kişilik ekip kullanılır.",
+      "body": "Orta taşımalarda orta boy bir kamyon ve 2 kişilik ekip kullanılır.",
       "helper": "Standart ev taşıması",
-      "label": "Standart taşıma",
-      "short": "Standart",
+      "label": "Orta taşıma",
+      "short": "Orta",
       "subtitle": "1–2 yatak odalı daireler, standart mobilya ve beyaz eşya için uygun.",
-      "title": "Standart taşıma"
+      "title": "Orta taşıma"
     },
     "section": {
       "title": "Taşıma türü"
@@ -1043,39 +1043,29 @@
       "label_one": "Ek hizmetler ({{count}})",
       "label_other": "Ek hizmetler ({{count}})"
     },
-    "baseFare": {
-      "label": "Temel ücret"
-    },
-    "baseRate": {
-      "fallback": {
-        "label": "Temel ücret"
+    "assumptions": {
+      "crew": {
+        "label": "Ekip büyüklüğü {{value}}"
       },
-      "light": {
-        "label": "Temel ücret (Hafif taşıma)"
+      "hours": {
+        "label": "Faturalandırılan süre {{value}}"
       },
-      "premium": {
-        "label": "Temel ücret (Premium taşıma)"
+      "volume": {
+        "label": "Tahmini hacim {{value}}"
       },
-      "regular": {
-        "label": "Temel ücret (Standart taşıma)"
+      "weight": {
+        "label": "Tahmini ağırlık {{value}}"
       }
     },
-    "baseRateWithDistance": {
-      "fallback": {
-        "label": "Temel ücret ({{distance}})"
-      },
-      "light": {
-        "label": "Temel ücret (Hafif taşıma, {{distance}})"
-      },
-      "premium": {
-        "label": "Temel ücret (Premium taşıma, {{distance}})"
-      },
-      "regular": {
-        "label": "Temel ücret (Standart taşıma, {{distance}})"
-      }
+    "crewTooSmall": {
+      "helper_one": "{{count}} nakliyeci gizlendi: ekip bu yük için çok küçük",
+      "helper_other": "{{count}} nakliyeci gizlendi: ekip bu yük için çok küçük"
     },
-    "crew": {
-      "label": "Ekip ({{crew}})"
+    "discount": {
+      "label": "İndirim"
+    },
+    "estimate": {
+      "helper": "Tahmini fiyat — nakliyeciniz kabul ettiğinde kesinleşir"
     },
     "estimatedTotal": {
       "label": "Tahmini toplam"
@@ -1083,18 +1073,66 @@
     "finalAfterReview": {
       "helper": "Nihai fiyat inceleme sonrasında kesinleşir"
     },
-    "floorSurcharge": {
-      "label": "Kat farkı"
+    "header": {
+      "instant": {
+        "label": "{{tier}} · Anında taşıma"
+      },
+      "scheduled": {
+        "label": "{{tier}} · Planlı taşıma"
+      }
+    },
+    "instantAdjustment": {
+      "label": "Anında rezervasyon (×{{multiplier}})"
     },
     "itemsCount": {
       "label_one": "Eşyalar ({{count}})",
       "label_other": "Eşyalar ({{count}})"
     },
-    "moverFare": {
-      "label": "Nakliyeci ücreti"
+    "line": {
+      "base": {
+        "label": "Temel hizmet"
+      },
+      "distance": {
+        "label": "Mesafe ({{km}} × {{rate}})"
+      },
+      "handling": {
+        "label": "Taşıma ve erişim"
+      },
+      "items": {
+        "label_one": "Eşyalar ({{count}})",
+        "label_other": "Eşyalar ({{count}})"
+      },
+      "labor": {
+        "label": "Ekip işçiliği ({{crew}} × {{rate}} × {{hours}})"
+      },
+      "packing": {
+        "label": "Paketleme"
+      },
+      "services": {
+        "label": "Ek hizmetler"
+      },
+      "storage": {
+        "label_one": "Depolama ({{count}} hafta)",
+        "label_other": "Depolama ({{count}} hafta)"
+      },
+      "vehicle": {
+        "label": "Araç ({{vehicle}})"
+      }
     },
-    "packingService": {
-      "label": "Paketleme hizmeti"
+    "minimumApplied": {
+      "helper": "{{amount}} tutarında asgari ücret uygulandı"
+    },
+    "net": {
+      "label": "KDV hariç ara toplam"
+    },
+    "operationalSubtotal": {
+      "label": "Operasyonel ara toplam"
+    },
+    "perMover": {
+      "helper": "Fiyat, bu nakliyecinin araç sınıfını içerir"
+    },
+    "platformFee": {
+      "label": "Platform ücreti ({{rate}})"
     },
     "storage": {
       "label": "Depolama"

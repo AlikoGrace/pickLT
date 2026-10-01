@@ -50,24 +50,6 @@
       "error": "Kameraya erişilemedi. Tarayıcınızda kamera erişimine izin verin veya bunun yerine bir fotoğraf yükleyin."
     }
   },
-  "checkout": {
-    "confirmAndPay": {
-      "cta": "Onaylayın ve {{amount}} ödeyin"
-    },
-    "confirmMove": {
-      "cta": "Taşınmayı onayla · {{amount}}"
-    },
-    "editHint": {
-      "helper": "Taşınma ayrıntılarınızı düzenlemek için herhangi bir bölüme tıklayın."
-    },
-    "pay": {
-      "title": "Onay ve ödeme"
-    },
-    "title": "Taşınmanızı onaylayın",
-    "yourMove": {
-      "title": "Taşınmanız"
-    }
-  },
   "contact": {
     "address": {
       "label": "🗺 ADRES",
@@ -895,6 +877,11 @@
       }
     }
   },
+  "moverCard": {
+    "vehicleVerified": {
+      "badge": "Doğrulanmış araç"
+    }
+  },
   "moverDashboard": {
     "findMoves": {
       "cta": "Taşınma bul"
@@ -1100,6 +1087,28 @@
       "cta": "Fotoğrafları düzenle"
     }
   },
+  "pricing": {
+    "breakdown": {
+      "customItems": {
+        "label_one": "{{count}} özel eşya",
+        "label_other": "{{count}} özel eşya"
+      },
+      "hide": {
+        "cta": "Fiyat ayrıntılarını gizle"
+      },
+      "included": {
+        "label": "dahil"
+      },
+      "show": {
+        "cta": "Fiyat ayrıntılarını göster"
+      },
+      "title": "Fiyat dökümü",
+      "unpriced": {
+        "helper_one": "{{count}} eşyanın henüz fiyatı yok ve sıfır olarak hesaplanıyor; nihai teklif daha yüksek olabilir.",
+        "helper_other": "{{count}} eşyanın henüz fiyatı yok ve sıfır olarak hesaplanıyor; nihai teklif daha yüksek olabilir."
+      }
+    }
+  },
   "scheduledMoves": {
     "book": {
       "cta": "Planlı taşınma ayırt"
@@ -1160,6 +1169,10 @@
     "capacity": {
       "label": "{{volume}} kapasite"
     },
+    "capacityTooSmall": {
+      "helper_one": "{{count}} nakliyeci gizlendi: araç {{volume}} için çok küçük.",
+      "helper_other": "{{count}} nakliyeci gizlendi: araçlar {{volume}} için çok küçük."
+    },
     "confirm": {
       "cta": "Onayla · {{amount}}"
     },
@@ -1184,8 +1197,8 @@
     },
     "pricing": {
       "disclaimer": "Nihai fiyat, gerçek koşullara göre değişebilir.",
-      "helper_one": "Fiyatlara temel ücret, mesafe ({{distance}}), ekip büyüklüğü, araç kapasitesi ve {{count}} eşyanın taşınması dahildir.",
-      "helper_other": "Fiyatlara temel ücret, mesafe ({{distance}}), ekip büyüklüğü, araç kapasitesi ve {{count}} eşyanın taşınması dahildir.",
+      "helper_one": "Fiyatlara temel hizmet, mesafe ({{distance}}), ekip işçiliği, nakliyecinin araç sınıfı ve {{count}} eşya dahildir. KDV dahildir.",
+      "helper_other": "Fiyatlara temel hizmet, mesafe ({{distance}}), ekip işçiliği, nakliyecinin araç sınıfı ve {{count}} eşya dahildir. KDV dahildir.",
       "title": "Fiyatlandırma nasıl işler:"
     },
     "searching": {
@@ -1296,11 +1309,6 @@
     },
     "stepTotal": {
       "label": "/{{total}}"
-    }
-  },
-  "moverCard": {
-    "vehicleVerified": {
-      "badge": "Doğrulanmış araç"
     }
   }
 }

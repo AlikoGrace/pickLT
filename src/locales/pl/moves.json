@@ -58,10 +58,10 @@
     "typeAndCategory": {
       "light": {
         "instant": {
-          "subtitle": "Mała przeprowadzka · Natychmiastowa"
+          "subtitle": "Normalna przeprowadzka · Natychmiastowa"
         },
         "scheduled": {
-          "subtitle": "Mała przeprowadzka · Zaplanowana"
+          "subtitle": "Normalna przeprowadzka · Zaplanowana"
         }
       },
       "premium": {
@@ -74,31 +74,31 @@
       },
       "regular": {
         "instant": {
-          "subtitle": "Standardowa przeprowadzka · Natychmiastowa"
+          "subtitle": "Średnia przeprowadzka · Natychmiastowa"
         },
         "scheduled": {
-          "subtitle": "Standardowa przeprowadzka · Zaplanowana"
+          "subtitle": "Średnia przeprowadzka · Zaplanowana"
         }
       }
     },
     "typeAndDate": {
       "light": {
-        "subtitle": "Mała przeprowadzka · {{date}}"
+        "subtitle": "Normalna przeprowadzka · {{date}}"
       },
       "premium": {
         "subtitle": "Przeprowadzka premium · {{date}}"
       },
       "regular": {
-        "subtitle": "Standardowa przeprowadzka · {{date}}"
+        "subtitle": "Średnia przeprowadzka · {{date}}"
       }
     },
     "typeCategoryDate": {
       "light": {
         "instant": {
-          "subtitle": "Mała przeprowadzka · Natychmiastowa · {{date}}"
+          "subtitle": "Normalna przeprowadzka · Natychmiastowa · {{date}}"
         },
         "scheduled": {
-          "subtitle": "Mała przeprowadzka · Zaplanowana · {{date}}"
+          "subtitle": "Normalna przeprowadzka · Zaplanowana · {{date}}"
         }
       },
       "premium": {
@@ -111,10 +111,10 @@
       },
       "regular": {
         "instant": {
-          "subtitle": "Standardowa przeprowadzka · Natychmiastowa · {{date}}"
+          "subtitle": "Średnia przeprowadzka · Natychmiastowa · {{date}}"
         },
         "scheduled": {
-          "subtitle": "Standardowa przeprowadzka · Zaplanowana · {{date}}"
+          "subtitle": "Średnia przeprowadzka · Zaplanowana · {{date}}"
         }
       }
     }
@@ -224,10 +224,10 @@
     "typeAndCategory": {
       "light": {
         "instant": {
-          "value": "Mała · Natychmiastowa"
+          "value": "Normalna · Natychmiastowa"
         },
         "scheduled": {
-          "value": "Mała · Zaplanowana"
+          "value": "Normalna · Zaplanowana"
         }
       },
       "premium": {
@@ -240,10 +240,10 @@
       },
       "regular": {
         "instant": {
-          "value": "Standardowa · Natychmiastowa"
+          "value": "Średnia · Natychmiastowa"
         },
         "scheduled": {
-          "value": "Standardowa · Zaplanowana"
+          "value": "Średnia · Zaplanowana"
         }
       }
     },

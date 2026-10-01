@@ -50,24 +50,6 @@
       "error": "Geen toegang tot de camera. Sta cameratoegang toe in je browser of upload in plaats daarvan een foto."
     }
   },
-  "checkout": {
-    "confirmAndPay": {
-      "cta": "Bevestigen en {{amount}} betalen"
-    },
-    "confirmMove": {
-      "cta": "Verhuizing bevestigen · {{amount}}"
-    },
-    "editHint": {
-      "helper": "Klik op een sectie om je verhuisgegevens te bewerken."
-    },
-    "pay": {
-      "title": "Bevestigen en betalen"
-    },
-    "title": "Bevestig je verhuizing",
-    "yourMove": {
-      "title": "Je verhuizing"
-    }
-  },
   "contact": {
     "address": {
       "label": "🗺 ADRES",
@@ -895,6 +877,11 @@
       }
     }
   },
+  "moverCard": {
+    "vehicleVerified": {
+      "badge": "Geverifieerd voertuig"
+    }
+  },
   "moverDashboard": {
     "findMoves": {
       "cta": "Verhuizingen zoeken"
@@ -1100,6 +1087,28 @@
       "cta": "Foto's bewerken"
     }
   },
+  "pricing": {
+    "breakdown": {
+      "customItems": {
+        "label_one": "{{count}} eigen voorwerp",
+        "label_other": "{{count}} eigen voorwerpen"
+      },
+      "hide": {
+        "cta": "Prijsdetails verbergen"
+      },
+      "included": {
+        "label": "inbegrepen"
+      },
+      "show": {
+        "cta": "Prijsdetails tonen"
+      },
+      "title": "Prijsopbouw",
+      "unpriced": {
+        "helper_one": "{{count}} voorwerp heeft nog geen prijs en wordt op nul gerekend; de definitieve offerte kan hoger uitvallen.",
+        "helper_other": "{{count}} voorwerpen hebben nog geen prijs en worden op nul gerekend; de definitieve offerte kan hoger uitvallen."
+      }
+    }
+  },
   "scheduledMoves": {
     "book": {
       "cta": "Geplande verhuizing boeken"
@@ -1160,6 +1169,10 @@
     "capacity": {
       "label": "{{volume}} capaciteit"
     },
+    "capacityTooSmall": {
+      "helper_one": "{{count}} verhuizer verborgen: voertuig te klein voor {{volume}}.",
+      "helper_other": "{{count}} verhuizers verborgen: voertuigen te klein voor {{volume}}."
+    },
     "confirm": {
       "cta": "Bevestigen · {{amount}}"
     },
@@ -1184,8 +1197,8 @@
     },
     "pricing": {
       "disclaimer": "De uiteindelijke prijs kan afwijken op basis van de werkelijke omstandigheden.",
-      "helper_one": "De prijzen omvatten het basistarief, de afstand ({{distance}}), de teamgrootte, de laadruimte van het voertuig en het hanteren van {{count}} voorwerp.",
-      "helper_other": "De prijzen omvatten het basistarief, de afstand ({{distance}}), de teamgrootte, de laadruimte van het voertuig en het hanteren van {{count}} voorwerpen.",
+      "helper_one": "De prijzen omvatten de basisdienst, de afstand ({{distance}}), de arbeid van het team, de voertuigklasse van de verhuizer en {{count}} voorwerp. De btw is inbegrepen.",
+      "helper_other": "De prijzen omvatten de basisdienst, de afstand ({{distance}}), de arbeid van het team, de voertuigklasse van de verhuizer en {{count}} voorwerpen. De btw is inbegrepen.",
       "title": "Zo komt de prijs tot stand:"
     },
     "searching": {
@@ -1296,11 +1309,6 @@
     },
     "stepTotal": {
       "label": "/{{total}}"
-    }
-  },
-  "moverCard": {
-    "vehicleVerified": {
-      "badge": "Geverifieerd voertuig"
     }
   }
 }

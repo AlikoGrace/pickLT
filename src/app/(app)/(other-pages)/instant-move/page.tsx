@@ -25,6 +25,8 @@ import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { getMapboxDirections } from '@/utils/mapbox-directions'
 import { formatDistanceKm, formatMoney } from '@/lib/format'
+import PriceBreakdown from '@/components/PriceBreakdown'
+import { parseBreakdown } from '@/lib/pricingEngine'
 import { useTranslation } from 'react-i18next'
 
 // ─── Types ──────────────────────────────────────────────
@@ -68,6 +70,8 @@ interface MoveData {
   routeDistanceMeters: number | null
   routeDurationSeconds: number | null
   moverProfileId: string | null
+  /** `moves.priceBreakdown` — the v3 estimate the server stored on create. */
+  priceBreakdown?: string | null
 }
 
 type MovePhase =
@@ -337,6 +341,7 @@ const InstantMovePage = () => {
                 routeDistanceMeters: (doc.routeDistanceMeters as number) ?? null,
                 routeDurationSeconds: (doc.routeDurationSeconds as number) ?? null,
                 moverProfileId: newMoverProfileId,
+                priceBreakdown: (doc.priceBreakdown as string) ?? null,
               }
             }
             return {
@@ -593,6 +598,8 @@ const InstantMovePage = () => {
     : '?'
 
   const estimatedPrice = moveData?.estimatedPrice || 0
+  // Itemised estimate stored by `create-instant` (pricing master D13/D15).
+  const breakdown = parseBreakdown(moveData?.priceBreakdown)
   const itemCount = moveData?.totalItemCount || 0
   const pickupDisplay = moveData?.pickupLocation || t('booking:pickup.label')
   const dropoffDisplay = moveData?.dropoffLocation || t('booking:dropoff.label')
@@ -898,6 +905,11 @@ const InstantMovePage = () => {
             <div className="rounded-xl bg-primary-50 dark:bg-primary-900/20 p-3 text-center">
               <p className="text-sm text-primary-700 dark:text-primary-300">{t('track:hint.loadingSoon')}</p>
             </div>
+          )}
+
+          {/* The itemised estimate, once the mover is on the way (master D15) */}
+          {breakdown && (phase === 'mover_arriving' || phase === 'mover_arrived') && (
+            <PriceBreakdown breakdown={breakdown} compact className="bg-white/95 backdrop-blur-sm dark:bg-neutral-800/95 shadow-lg" />
           )}
 
           {/* Phase: loading — items being loaded */}

@@ -1,10 +1,20 @@
 import { Client, Databases, ID, Permission, Query, Role } from 'node-appwrite';
 
+import {
+  loadedVolumeM3,
+  moverCapacityM3,
+  parseCustomItems,
+  parseInventory,
+  requiredCrewFor,
+  toPricingConfig,
+} from './pricing-engine.js';
+
 const DATABASE_ID = process.env.APPWRITE_DATABASE_ID;
 const MOVES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVES;
 const MOVER_PROFILES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVER_PROFILES;
 const MOVE_REQUESTS_COLLECTION = process.env.APPWRITE_COLLECTION_MOVE_REQUESTS;
 const INVENTORY_CATALOG_COLLECTION = process.env.APPWRITE_COLLECTION_INVENTORY_CATALOG;
+const PRICING_CONFIG_COLLECTION = process.env.APPWRITE_COLLECTION_PRICING_CONFIG || 'pricing_config';
 
 const MAX_MOVERS = 10;
 const REQUEST_TIMEOUT_SECONDS = 60;
@@ -56,113 +66,42 @@ function vehicleServiceReady(profile, nowMs, tz) {
 }
 // --- end vehicle-service ---
 
-// ─── Load volume + vehicle capacity ─────────────────────────────────────────
+// ─── Load volume, vehicle capacity, crew requirement ────────────────────────
 //
-// Mirror of `lib/move-volume.ts` in the client app (functions cannot import app
-// code). Keep the two in step — these are the same compiled defaults
-// `PRICING_DEFAULTS` carries.
-//
-// Volume is recomputed here from the catalog rather than read off
+// All three come from `./pricing-engine.js`, the byte-identical mirror of the
+// apps' `lib/pricing-engine.ts` + `lib/move-volume.ts` (functions cannot import
+// app code). Volume is recomputed here from the catalog rather than read off
 // `moves.totalVolumeCm3`: that column is written by createmove but is null on
 // real production rows, and a client-supplied classification is not something
 // to trust for a gating decision (audit N7).
-const CUBIC_CM_PER_M3 = 1_000_000;
-const PACKING_FACTOR = 1.35;
-const CUSTOM_SIZE_M3 = { small: 0.1, medium: 0.3, large: 0.8, extra_large: 1.8 };
-const CAPACITY_M3 = { small_van: 10, medium_truck: 25, large_truck: 45 };
-
-// A declared capacity outside these bounds is treated as a typo — otherwise
-// "2000" in the capacity box makes a small van eligible for every job.
-const MIN_DECLARED_CAPACITY_M3 = 1;
-const MAX_DECLARED_CAPACITY_M3 = 120;
-
-/** A mover's own declared m³, or null when absent or implausible. */
-function declaredCapacityM3(vehicleCapacity) {
-  if (vehicleCapacity === null || vehicleCapacity === undefined) return null;
-  const n = typeof vehicleCapacity === 'number' ? vehicleCapacity : parseFloat(String(vehicleCapacity));
-  if (!Number.isFinite(n)) return null;
-  if (n < MIN_DECLARED_CAPACITY_M3 || n > MAX_DECLARED_CAPACITY_M3) return null;
-  return n;
-}
+//
+// The `pricing_config` overrides (capacity bands, `crew.m3PerMover`) are read
+// fail-open: an unreadable config gates on the compiled defaults.
 
 /**
- * What a specific mover can carry, m³.
- *
- * Declared figure wins over the class band — production has a `large_truck`
- * declaring 65 m³ against a 45 m³ band, and the band would wrongly exclude it
- * from the large jobs it exists for. Unknown class → smallest, so a mover with
- * neither a declared figure nor a recognised class fails closed.
+ * Read admin rate overrides. Never throws and never blocks a broadcast.
  */
-function capacityM3(mover) {
-  const declared = declaredCapacityM3(mover.vehicleCapacity);
-  if (declared !== null) return declared;
-  return CAPACITY_M3[mover.vehicleType] ?? CAPACITY_M3.small_van;
-}
-
-/** `moves.inventoryItems` is a JSON object string of itemId → quantity. */
-function parseInventory(raw) {
-  if (!raw) return {};
-  if (typeof raw === 'object') return raw;
+async function loadOverrides(databases, error) {
   try {
-    const parsed = JSON.parse(raw);
-    return parsed && typeof parsed === 'object' ? parsed : {};
-  } catch {
+    const res = await databases.listDocuments(DATABASE_ID, PRICING_CONFIG_COLLECTION, [Query.limit(200)]);
+    return toPricingConfig(res.documents);
+  } catch (e) {
+    error(`broadcast: pricing config unavailable, gating on defaults: ${e.message}`);
     return {};
   }
 }
 
-/** `moves.customItems` is an array of JSON strings. */
-function parseCustomItems(raw) {
-  if (!Array.isArray(raw)) return [];
-  const out = [];
-  for (const entry of raw) {
-    if (entry && typeof entry === 'object') {
-      out.push(entry);
-      continue;
-    }
-    try {
-      const parsed = JSON.parse(entry);
-      if (parsed && typeof parsed === 'object') out.push(parsed);
-    } catch {
-      // Unparseable row — skip it rather than fail the whole broadcast.
-    }
-  }
-  return out;
-}
-
 /**
- * Volume a vehicle must hold, m³.
- *
- * Bounding-box sums understate real loaded space (irregular shapes, stacking
- * gaps), so the packing factor is applied before any capacity comparison.
- * Returns 0 when nothing can be measured, which callers treat as "fits
- * anything" — an estimate must never be able to make a move unbookable.
+ * The crew gate's eligibility rule — the same one `quoteForMover` applies in
+ * the client's instant list (master D7): a mover whose declared crew is smaller
+ * than what the job needs is not offered it. An unknown crew size passes, so a
+ * profile written before the column existed is not silently excluded.
  */
-function loadedVolumeM3(move, catalog) {
-  const byId = new Map(catalog.map((i) => [i.itemId, i]));
-
-  let raw = 0;
-  for (const [itemId, qty] of Object.entries(parseInventory(move.inventoryItems))) {
-    const quantity = Number(qty);
-    if (!Number.isFinite(quantity) || quantity <= 0) continue;
-    const item = byId.get(itemId);
-    if (!item) continue;
-    const w = Number(item.widthCm);
-    const h = Number(item.heightCm);
-    const d = Number(item.depthCm);
-    if (!Number.isFinite(w) || !Number.isFinite(h) || !Number.isFinite(d)) continue;
-    if (w <= 0 || h <= 0 || d <= 0) continue;
-    raw += ((w * h * d) / CUBIC_CM_PER_M3) * quantity;
-  }
-
-  for (const ci of parseCustomItems(move.customItems)) {
-    const quantity = Number(ci.quantity);
-    if (!Number.isFinite(quantity) || quantity <= 0) continue;
-    // Unknown band → medium, never zero, so it cannot shrink the load.
-    raw += (CUSTOM_SIZE_M3[ci.approxSize] ?? CUSTOM_SIZE_M3.medium) * quantity;
-  }
-
-  return Math.round(raw * PACKING_FACTOR * 1000) / 1000;
+export function crewEligible(mover, requiredCrew) {
+  // Same rule as `quoteForMover` in pricing-engine: an unknown crew size (null,
+  // undefined, unparseable) is not "one mover" — it passes.
+  const crewSize = typeof mover.crewSize === 'number' ? mover.crewSize : NaN;
+  return !Number.isFinite(crewSize) || crewSize >= requiredCrew;
 }
 
 // Haversine distance in km
@@ -181,6 +120,7 @@ export default async ({ req, res, log, error }) => {
   // Startup assertion. A missing id used to be swallowed by a guarded
   // `if (VAR)` and the function would silently do nothing; name it instead.
   // CONFLICT_BUFFER_MS is optional: the code supplies a numeric default.
+  // APPWRITE_COLLECTION_PRICING_CONFIG is optional: defaults to `pricing_config`.
   const missingEnv = [
     'APPWRITE_COLLECTION_INVENTORY_CATALOG',
     'APPWRITE_COLLECTION_MOVER_PROFILES',
@@ -338,20 +278,21 @@ export default async ({ req, res, log, error }) => {
     if (INVENTORY_CATALOG_COLLECTION) {
       try {
         const res = await databases.listDocuments(DATABASE_ID, INVENTORY_CATALOG_COLLECTION, [
-          Query.limit(200),
+          Query.limit(500),
         ]);
         catalog = res.documents;
       } catch (e) {
         error(`broadcast: catalog unavailable, capacity gate disabled: ${e.message}`);
       }
     }
+    const overrides = await loadOverrides(databases, error);
 
-    const loadM3 = catalog.length > 0 ? loadedVolumeM3(move, catalog) : 0;
+    const loadM3 = catalog.length > 0 ? loadedVolumeM3(move.inventoryItems, move.customItems, catalog, overrides) : 0;
 
     let candidates = available;
     let capacityGated = false;
     if (loadM3 > 0) {
-      const fitting = available.filter(m => capacityM3(m) >= loadM3);
+      const fitting = available.filter(m => moverCapacityM3(m, overrides) >= loadM3);
       if (fitting.length > 0) {
         candidates = fitting;
         capacityGated = true;
@@ -359,7 +300,7 @@ export default async ({ req, res, log, error }) => {
         // Nobody nearby can carry it. Send to the biggest vehicles anyway so a
         // human can judge — a wrong estimate must not silently kill the move.
         candidates = [...available].sort(
-          (a, b) => capacityM3(b) - capacityM3(a)
+          (a, b) => moverCapacityM3(b, overrides) - moverCapacityM3(a, overrides)
         );
         error(
           `broadcast: no mover within range fits ${loadM3} m³ for move ${moveId}; ` +
@@ -368,11 +309,48 @@ export default async ({ req, res, log, error }) => {
       }
     }
 
+    // ── Crew gate (pricing master plan D7) ─────────────────────────────────
+    //
+    // The job's crew requirement comes from the load (m³ per mover) and the
+    // heaviest item's `requiredCrew` — the same `requiredCrewFor` the engine
+    // prices with, so a mover is hidden here exactly when the client's instant
+    // list hides them. The mover's actual crew never changes the price; it
+    // only decides eligibility. Same degradation rule as the capacity gate:
+    // never empty a non-empty pool — fall back to the largest crews and log.
+    const requiredCrew = catalog.length > 0
+      ? requiredCrewFor(
+          { counts: parseInventory(move.inventoryItems), customItems: parseCustomItems(move.customItems) },
+          catalog,
+          loadM3,
+          overrides,
+        )
+      : 1;
+
+    let crewGated = false;
+    if (requiredCrew > 1 && candidates.length > 0) {
+      const crewed = candidates.filter(m => crewEligible(m, requiredCrew));
+      if (crewed.length > 0) {
+        if (crewed.length < candidates.length) {
+          log(`crew gate: ${candidates.length - crewed.length}/${candidates.length} movers dropped (crew < ${requiredCrew})`);
+        }
+        candidates = crewed;
+        crewGated = true;
+      } else {
+        candidates = [...candidates].sort(
+          (a, b) => (Number(b.crewSize) || 0) - (Number(a.crewSize) || 0)
+        );
+        error(
+          `broadcast: no candidate mover has the ${requiredCrew} movers move ${moveId} needs; ` +
+          `falling back to the ${Math.min(candidates.length, MAX_MOVERS)} largest crews`
+        );
+      }
+    }
+
     const nearbyMovers = candidates.slice(0, MAX_MOVERS);
 
     if (nearbyMovers.length === 0) {
       log(`No nearby movers found for move ${moveId}`);
-      return res.json({ success: true, requestsSent: 0, vehicleGated, message: 'No nearby movers available' });
+      return res.json({ success: true, requestsSent: 0, vehicleGated, requiredCrew, crewGated, message: 'No nearby movers available' });
     }
 
     const now = new Date();
@@ -410,7 +388,8 @@ export default async ({ req, res, log, error }) => {
 
     log(
       `Broadcast ${requests.length} move requests for move ${moveId} ` +
-      `(load ${loadM3} m³, capacity gate ${capacityGated ? 'applied' : 'not applied'})`
+      `(load ${loadM3} m³, capacity gate ${capacityGated ? 'applied' : 'not applied'}, ` +
+      `crew ${requiredCrew}, crew gate ${crewGated ? 'applied' : 'not applied'})`
     );
 
     return res.json({
@@ -419,6 +398,8 @@ export default async ({ req, res, log, error }) => {
       loadVolumeM3: loadM3,
       capacityGated,
       vehicleGated,
+      requiredCrew,
+      crewGated,
       moversNotified: nearbyMovers.map(m => ({ id: m.$id, distanceKm: Math.round(m.distanceKm * 10) / 10 })),
     });
   } catch (err) {

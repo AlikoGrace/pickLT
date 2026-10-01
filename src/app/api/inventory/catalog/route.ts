@@ -3,7 +3,8 @@ import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
 import { resolveLocale } from '@/lib/i18n-server'
 import { compareLocalizedNames, localizedItemName } from '@/lib/inventory-i18n'
-import { Query } from 'node-appwrite'
+import { catalogDocToItemDef } from '@/lib/pricing-server'
+import { Query, type Models } from 'node-appwrite'
 
 /**
  * GET /api/inventory/catalog
@@ -13,7 +14,8 @@ import { Query } from 'node-appwrite'
  *
  * DB schema (per BACKEND_ARCHITECTURE.md):
  *   itemId, name, category, widthCm, heightCm, depthCm, weightKg,
- *   moveClassificationWeight, moveTypeMinimum, nameTranslations
+ *   moveClassificationWeight, moveTypeMinimum, nameTranslations,
+ *   unitPriceEur, requiredCrew (pricing v3; null until backfilled)
  *
  * `name` is resolved to the REQUEST'S LOCALE here rather than on the client
  * (master plan D7): every consumer — both wizard pages and `useInventoryNames`
@@ -35,24 +37,17 @@ export async function GET() {
       [Query.limit(500), Query.orderAsc('category')],
     )
 
-    // Map Appwrite documents to the shape the frontend expects
+    // Map Appwrite documents to the shape the frontend expects. The engine
+    // fields (`unitPriceEur`, `requiredCrew` — pricing master D6) ride along
+    // so every page that quotes can price the basket it classifies.
     const items = result.documents.map((doc) => ({
-      id: doc.itemId || doc.$id,
+      ...catalogDocToItemDef(doc as Models.Document & Record<string, unknown>),
       name: localizedItemName(
         { itemId: doc.itemId || doc.$id, name: doc.name, nameTranslations: doc.nameTranslations },
         locale,
       ),
       englishName: doc.name,
       nameTranslations: doc.nameTranslations ?? null,
-      category: doc.category,
-      meta: {
-        widthCm: doc.widthCm ?? 0,
-        heightCm: doc.heightCm ?? 0,
-        depthCm: doc.depthCm ?? 0,
-        weightKg: doc.weightKg ?? 0,
-      },
-      classificationPoints: doc.moveClassificationWeight ?? 3,
-      moveTypeMinimum: doc.moveTypeMinimum ?? 'light',
     }))
 
     // Collate by the localized name so the wizard's lists read alphabetically

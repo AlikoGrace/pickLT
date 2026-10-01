@@ -5,6 +5,8 @@ import { APPWRITE } from '@/lib/constants'
 import { getSessionUserId } from '@/lib/auth-session'
 import { asText, asTextArray } from '@/lib/move-normalizers'
 import { movePermissions } from '@/lib/doc-permissions'
+import { PricingReconcileError, type QuoteBreakdown } from '@/lib/pricingEngine'
+import { quoteColumns, quoteMoveFields } from '@/lib/pricing-server'
 import { ID } from 'node-appwrite'
 
 export const runtime = 'nodejs'
@@ -19,6 +21,13 @@ export const maxDuration = 60
  * movers will bid or be assigned later.
  *
  * Body: all the move data collected across steps 1–7 and the preview page.
+ *
+ * The server is the price authority (pricing master D5): client-sent
+ * `estimatedPrice` / `finalPrice` are ignored. The quote is recomputed here —
+ * no mover yet, so the vehicle class is the smallest that holds the load, never
+ * below the tier's minimum (master D8) — and the row carries `estimatedPrice`,
+ * `priceBreakdown`, `pricingVersion`, `pricedAt`, `currency`, plus the charged
+ * `vehicleType` / `crewSize` (which replace the wizard's guesses).
  */
 export async function POST(req: NextRequest) {
   const { t } = await getTranslations()
@@ -86,14 +95,51 @@ export async function POST(req: NextRequest) {
       // Route
       routeDistanceMeters,
       routeDurationSeconds,
-      // Pricing
-      estimatedPrice,
-      finalPrice,
       // Payment
       paymentMethod,
     } = body
 
     const { databases } = createAdminClient()
+
+    // ── Price it (master D5) ────────────────────────────────
+    // Row-shaped field names, so this quote and a later re-quote from the
+    // stored row read exactly the same inputs. The wizard's `vehicleType` is a
+    // preference, not a mover's class — `'multiple'` and the like are not
+    // classes, so the engine resolves the class from the load instead.
+    let breakdown: QuoteBreakdown
+    try {
+      breakdown = await quoteMoveFields(
+        databases,
+        {
+          moveType,
+          routeDistanceMeters,
+          routeDurationSeconds,
+          inventoryItems,
+          customItems,
+          vehicleType: null,
+          pickupFloorLevel: floorLevel,
+          pickupElevator: elevatorAvailable,
+          dropoffFloorLevel,
+          dropoffElevator: dropoffElevatorAvailable,
+          pickupHaltverbot,
+          dropoffHaltverbot,
+          packingServiceLevel,
+          additionalServices,
+          storageWeeks,
+        },
+        'scheduled',
+      )
+    } catch (err) {
+      if (err instanceof PricingReconcileError) {
+        console.error('[create-scheduled] quote did not reconcile:', err)
+        return NextResponse.json(
+          { error: t('errors:pricing.reconcile'), fnCode: 'pricing.reconcile' },
+          { status: 500 },
+        )
+      }
+      throw err
+    }
+    const priced = quoteColumns(breakdown)
 
     const handle = `SM-${Date.now().toString(36).toUpperCase()}`
 
@@ -150,9 +196,12 @@ export async function POST(req: NextRequest) {
         arrivalWindow: arrivalWindow || null,
         flexibility: flexibility || null,
 
-        // Crew & Vehicle
-        crewSize: crewSize || null,
-        vehicleType: vehicleType || null,
+        // Crew & Vehicle — the *charged* class and crew from the quote
+        // (master D13), written below with the other quote columns. The
+        // wizard's `crewSize` / `vehicleType` are kept only when the engine
+        // produced nothing, which it never does.
+        crewSize: priced.crewSize || crewSize || null,
+        vehicleType: priced.vehicleType || vehicleType || null,
 
         // Services
         additionalServices: asTextArray(additionalServices),
@@ -175,9 +224,15 @@ export async function POST(req: NextRequest) {
         routeDistanceMeters: routeDistanceMeters ?? null,
         routeDurationSeconds: routeDurationSeconds ?? null,
 
-        // Pricing
-        estimatedPrice: estimatedPrice ?? null,
-        finalPrice: finalPrice ?? null,
+        // Pricing — server-computed (master D5/D13): estimatedPrice,
+        // priceBreakdown, pricingVersion, pricedAt, currency (+ the
+        // vehicleType / crewSize above). `finalPrice` is set at completion.
+        estimatedPrice: priced.estimatedPrice,
+        priceBreakdown: priced.priceBreakdown,
+        pricingVersion: priced.pricingVersion,
+        pricedAt: priced.pricedAt,
+        currency: priced.currency,
+        finalPrice: null,
 
         // Payment
         paymentMethod: paymentMethod || null,
@@ -197,6 +252,8 @@ export async function POST(req: NextRequest) {
       success: true,
       moveId: move.$id,
       handle,
+      estimatedPrice: breakdown.total,
+      breakdown,
     })
   } catch (err) {
     console.error('POST /api/moves/create-scheduled error:', err)

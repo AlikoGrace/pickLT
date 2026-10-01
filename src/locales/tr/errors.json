@@ -281,6 +281,10 @@
     "confirmFailed": "Ödeme onaylanamadı",
     "notAwaiting": "Bu taşınma için ödeme beklenmiyor. Lütfen taşınmayı yeniden yükleyip tekrar deneyin."
   },
+  "pricing": {
+    "exceedsLargestVehicle": "Bu yük tek bir araç için çok büyük. Lütfen destek ekibiyle iletişime geçin.",
+    "reconcile": "Güvenilir bir fiyat hesaplayamadık. Lütfen tekrar deneyin."
+  },
   "profile": {
     "emailChangeFailed": "E-posta adresi değiştirilemedi",
     "emailTaken": "Bu e-posta adresi başka bir hesap tarafından kullanılıyor",

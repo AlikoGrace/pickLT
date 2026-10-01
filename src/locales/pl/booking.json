@@ -121,14 +121,14 @@
   "classification": {
     "itemMinimum": {
       "premium": "„{{item}}” wymaga co najmniej przeprowadzki premium",
-      "regular": "„{{item}}” wymaga co najmniej przeprowadzki standardowej"
+      "regular": "„{{item}}” wymaga co najmniej średniej przeprowadzki"
     },
     "keepCurrent": {
       "cta": "Zachowaj obecny"
     },
     "nearLimit": {
-      "light": "Zbliżasz się do limitu małej przeprowadzki",
-      "regular": "Zbliżasz się do limitu standardowej przeprowadzki"
+      "light": "Zbliżasz się do limitu normalnej przeprowadzki",
+      "regular": "Zbliżasz się do limitu średniej przeprowadzki"
     },
     "notice": {
       "title": "Informacja o klasyfikacji przeprowadzki"
@@ -149,13 +149,13 @@
         "cta": "Zmień rodzaj przeprowadzki"
       },
       "light": {
-        "cta": "Zmień na małą przeprowadzkę"
+        "cta": "Zmień na normalną przeprowadzkę"
       },
       "premium": {
         "cta": "Zmień na przeprowadzkę premium"
       },
       "regular": {
-        "cta": "Zmień na standardową przeprowadzkę"
+        "cta": "Zmień na średnią przeprowadzkę"
       },
       "subtitle": "Na podstawie wybranych rzeczy zalecamy zmianę z <0>{{from}}</0> na <1>{{to}}</1>.",
       "title": "Zalecana zmiana rodzaju przeprowadzki"
@@ -698,16 +698,16 @@
     "a11y": "Wybierz rodzaj przeprowadzki",
     "label": "Rodzaj przeprowadzki",
     "light": {
-      "body": "Małe przeprowadzki realizujemy małym busem.",
+      "body": "Normalne przeprowadzki realizujemy małym busem i jednym przewoźnikiem.",
       "helper": "Mały ładunek — kilka rzeczy",
-      "label": "Mała przeprowadzka",
-      "short": "Mała",
+      "label": "Normalna przeprowadzka",
+      "short": "Normalna",
       "subtitle": "Idealna przy niewielkim ładunku — kartony, pojedyncze meble lub kawalerka.",
-      "title": "Mała przeprowadzka"
+      "title": "Normalna przeprowadzka"
     },
     "placeholder": "Wybierz rodzaj przeprowadzki",
     "premium": {
-      "body": "Przeprowadzki premium realizujemy większymi pojazdami i ekipą liczącą 2 osoby lub więcej.",
+      "body": "Przeprowadzki premium realizujemy dużą ciężarówką i 3-osobową ekipą.",
       "helper": "Przeprowadzka z pełną obsługą",
       "label": "Przeprowadzka premium",
       "short": "Premium",
@@ -715,12 +715,12 @@
       "title": "Przeprowadzka premium"
     },
     "regular": {
-      "body": "Standardowe przeprowadzki realizujemy średnim pojazdem i 2-osobową ekipą.",
+      "body": "Średnie przeprowadzki realizujemy średnią ciężarówką i 2-osobową ekipą.",
       "helper": "Standardowa przeprowadzka domowa",
-      "label": "Standardowa przeprowadzka",
-      "short": "Standardowa",
+      "label": "Średnia przeprowadzka",
+      "short": "Średnia",
       "subtitle": "Dobra dla mieszkań 2–3-pokojowych ze zwykłymi meblami i sprzętem AGD.",
-      "title": "Standardowa przeprowadzka"
+      "title": "Średnia przeprowadzka"
     },
     "section": {
       "title": "Rodzaj przeprowadzki"
@@ -1062,39 +1062,31 @@
       "label_one": "Usługi dodatkowe ({{count}})",
       "label_other": "Usługi dodatkowe ({{count}})"
     },
-    "baseFare": {
-      "label": "Opłata podstawowa"
-    },
-    "baseRate": {
-      "fallback": {
-        "label": "Stawka podstawowa"
+    "assumptions": {
+      "crew": {
+        "label": "Liczebność ekipy {{value}}"
       },
-      "light": {
-        "label": "Stawka podstawowa (Mała przeprowadzka)"
+      "hours": {
+        "label": "Czas rozliczany {{value}}"
       },
-      "premium": {
-        "label": "Stawka podstawowa (Przeprowadzka premium)"
+      "volume": {
+        "label": "Szacowana objętość {{value}}"
       },
-      "regular": {
-        "label": "Stawka podstawowa (Standardowa przeprowadzka)"
+      "weight": {
+        "label": "Szacowana waga {{value}}"
       }
     },
-    "baseRateWithDistance": {
-      "fallback": {
-        "label": "Stawka podstawowa ({{distance}})"
-      },
-      "light": {
-        "label": "Stawka podstawowa (Mała przeprowadzka, {{distance}})"
-      },
-      "premium": {
-        "label": "Stawka podstawowa (Przeprowadzka premium, {{distance}})"
-      },
-      "regular": {
-        "label": "Stawka podstawowa (Standardowa przeprowadzka, {{distance}})"
-      }
+    "crewTooSmall": {
+      "helper_few": "Ukryto {{count}} przewoźników: ekipa za mała na ten ładunek",
+      "helper_many": "Ukryto {{count}} przewoźników: ekipa za mała na ten ładunek",
+      "helper_one": "Ukryto {{count}} przewoźnika: ekipa za mała na ten ładunek",
+      "helper_other": "Ukryto {{count}} przewoźnika: ekipa za mała na ten ładunek"
     },
-    "crew": {
-      "label": "Ekipa ({{crew}})"
+    "discount": {
+      "label": "Rabat"
+    },
+    "estimate": {
+      "helper": "Szacunek — potwierdzony, gdy przewoźnik zaakceptuje zlecenie"
     },
     "estimatedTotal": {
       "label": "Szacowana suma"
@@ -1102,8 +1094,16 @@
     "finalAfterReview": {
       "helper": "Cena końcowa potwierdzana po weryfikacji"
     },
-    "floorSurcharge": {
-      "label": "Dopłata za piętro"
+    "header": {
+      "instant": {
+        "label": "{{tier}} · Przeprowadzka natychmiastowa"
+      },
+      "scheduled": {
+        "label": "{{tier}} · Przeprowadzka zaplanowana"
+      }
+    },
+    "instantAdjustment": {
+      "label": "Rezerwacja natychmiastowa (×{{multiplier}})"
     },
     "itemsCount": {
       "label_few": "Przedmioty ({{count}})",
@@ -1111,11 +1111,55 @@
       "label_one": "Przedmioty ({{count}})",
       "label_other": "Przedmioty ({{count}})"
     },
-    "moverFare": {
-      "label": "Wynagrodzenie przewoźnika"
+    "line": {
+      "base": {
+        "label": "Usługa podstawowa"
+      },
+      "distance": {
+        "label": "Odległość ({{km}} × {{rate}})"
+      },
+      "handling": {
+        "label": "Obsługa i dostęp"
+      },
+      "items": {
+        "label_few": "Przedmioty ({{count}})",
+        "label_many": "Przedmioty ({{count}})",
+        "label_one": "Przedmioty ({{count}})",
+        "label_other": "Przedmioty ({{count}})"
+      },
+      "labor": {
+        "label": "Praca ekipy ({{crew}} × {{rate}} × {{hours}})"
+      },
+      "packing": {
+        "label": "Pakowanie"
+      },
+      "services": {
+        "label": "Usługi dodatkowe"
+      },
+      "storage": {
+        "label_few": "Przechowywanie ({{count}} tygodnie)",
+        "label_many": "Przechowywanie ({{count}} tygodni)",
+        "label_one": "Przechowywanie ({{count}} tydzień)",
+        "label_other": "Przechowywanie ({{count}} tygodnia)"
+      },
+      "vehicle": {
+        "label": "Pojazd ({{vehicle}})"
+      }
     },
-    "packingService": {
-      "label": "Usługa pakowania"
+    "minimumApplied": {
+      "helper": "Zastosowano kwotę minimalną {{amount}}"
+    },
+    "net": {
+      "label": "Suma częściowa bez VAT"
+    },
+    "operationalSubtotal": {
+      "label": "Suma częściowa operacyjna"
+    },
+    "perMover": {
+      "helper": "Cena uwzględnia klasę pojazdu tego przewoźnika"
+    },
+    "platformFee": {
+      "label": "Opłata platformy ({{rate}})"
     },
     "storage": {
       "label": "Przechowywanie"

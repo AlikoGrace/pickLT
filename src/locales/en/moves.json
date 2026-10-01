@@ -56,10 +56,10 @@
     "typeAndCategory": {
       "light": {
         "instant": {
-          "subtitle": "Light Move · Instant"
+          "subtitle": "Normal Move · Instant"
         },
         "scheduled": {
-          "subtitle": "Light Move · Scheduled"
+          "subtitle": "Normal Move · Scheduled"
         }
       },
       "premium": {
@@ -72,31 +72,31 @@
       },
       "regular": {
         "instant": {
-          "subtitle": "Regular Move · Instant"
+          "subtitle": "Medium Move · Instant"
         },
         "scheduled": {
-          "subtitle": "Regular Move · Scheduled"
+          "subtitle": "Medium Move · Scheduled"
         }
       }
     },
     "typeAndDate": {
       "light": {
-        "subtitle": "Light Move · {{date}}"
+        "subtitle": "Normal Move · {{date}}"
       },
       "premium": {
         "subtitle": "Premium Move · {{date}}"
       },
       "regular": {
-        "subtitle": "Regular Move · {{date}}"
+        "subtitle": "Medium Move · {{date}}"
       }
     },
     "typeCategoryDate": {
       "light": {
         "instant": {
-          "subtitle": "Light Move · Instant · {{date}}"
+          "subtitle": "Normal Move · Instant · {{date}}"
         },
         "scheduled": {
-          "subtitle": "Light Move · Scheduled · {{date}}"
+          "subtitle": "Normal Move · Scheduled · {{date}}"
         }
       },
       "premium": {
@@ -109,10 +109,10 @@
       },
       "regular": {
         "instant": {
-          "subtitle": "Regular Move · Instant · {{date}}"
+          "subtitle": "Medium Move · Instant · {{date}}"
         },
         "scheduled": {
-          "subtitle": "Regular Move · Scheduled · {{date}}"
+          "subtitle": "Medium Move · Scheduled · {{date}}"
         }
       }
     }
@@ -222,10 +222,10 @@
     "typeAndCategory": {
       "light": {
         "instant": {
-          "value": "Light · Instant"
+          "value": "Normal · Instant"
         },
         "scheduled": {
-          "value": "Light · Scheduled"
+          "value": "Normal · Scheduled"
         }
       },
       "premium": {
@@ -238,10 +238,10 @@
       },
       "regular": {
         "instant": {
-          "value": "Regular · Instant"
+          "value": "Medium · Instant"
         },
         "scheduled": {
-          "value": "Regular · Scheduled"
+          "value": "Medium · Scheduled"
         }
       }
     },

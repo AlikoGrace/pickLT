@@ -285,6 +285,10 @@
     "confirmFailed": "Nie udało się potwierdzić płatności",
     "notAwaiting": "Ta przeprowadzka nie oczekuje na płatność. Odśwież przeprowadzkę i spróbuj ponownie."
   },
+  "pricing": {
+    "exceedsLargestVehicle": "Ten ładunek jest za duży dla jednego pojazdu. Skontaktuj się z pomocą techniczną.",
+    "reconcile": "Nie udało się obliczyć wiarygodnej ceny. Spróbuj ponownie."
+  },
   "profile": {
     "emailChangeFailed": "Nie udało się zmienić adresu e-mail",
     "emailTaken": "Ten adres e-mail jest już używany przez inne konto",

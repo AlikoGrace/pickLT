@@ -121,14 +121,14 @@
   "classification": {
     "itemMinimum": {
       "premium": "„{{item}}“ erfordert mindestens einen Premium-Umzug",
-      "regular": "„{{item}}“ erfordert mindestens einen normalen Umzug"
+      "regular": "„{{item}}“ erfordert mindestens einen Medium-Umzug"
     },
     "keepCurrent": {
       "cta": "Beibehalten"
     },
     "nearLimit": {
-      "light": "Sie nähern sich der Grenze für einen kleinen Umzug",
-      "regular": "Sie nähern sich der Grenze für einen normalen Umzug"
+      "light": "Sie nähern sich der Grenze für einen normalen Umzug",
+      "regular": "Sie nähern sich der Grenze für einen Medium-Umzug"
     },
     "notice": {
       "title": "Hinweis zur Umzugseinstufung"
@@ -147,13 +147,13 @@
         "cta": "Umzugsart wechseln"
       },
       "light": {
-        "cta": "Auf kleinen Umzug wechseln"
+        "cta": "Auf normalen Umzug wechseln"
       },
       "premium": {
         "cta": "Auf Premium-Umzug wechseln"
       },
       "regular": {
-        "cta": "Auf normalen Umzug wechseln"
+        "cta": "Auf Medium-Umzug wechseln"
       },
       "subtitle": "Auf Basis Ihrer ausgewählten Gegenstände empfehlen wir den Wechsel von <0>{{from}}</0> zu <1>{{to}}</1>.",
       "title": "Höhere Umzugsart empfohlen"
@@ -690,16 +690,16 @@
     "a11y": "Umzugsart wählen",
     "label": "Umzugsart",
     "light": {
-      "body": "Kleine Umzüge werden mit einem kleinen Transporter durchgeführt.",
+      "body": "Normale Umzüge werden mit einem kleinen Transporter und einem Umzugshelfer durchgeführt.",
       "helper": "Geringe Menge — wenige Gegenstände",
-      "label": "Kleiner Umzug",
-      "short": "Klein",
+      "label": "Normaler Umzug",
+      "short": "Normal",
       "subtitle": "Ideal für kleine Mengen – Kartons, einzelne Möbelstücke oder eine Einzimmerwohnung.",
-      "title": "Kleiner Umzug"
+      "title": "Normaler Umzug"
     },
     "placeholder": "Umzugsart wählen",
     "premium": {
-      "body": "Premium-Umzüge werden mit größeren Fahrzeugen und einem Team von 2 oder mehr Personen durchgeführt.",
+      "body": "Premium-Umzüge werden mit einem großen Lkw und einem 3-köpfigen Team durchgeführt.",
       "helper": "Umzug mit Komplettservice",
       "label": "Premium-Umzug",
       "short": "Premium",
@@ -707,12 +707,12 @@
       "title": "Premium-Umzug"
     },
     "regular": {
-      "body": "Normale Umzüge werden mit einem mittelgroßen Fahrzeug und einem 2-köpfigen Team durchgeführt.",
+      "body": "Medium-Umzüge werden mit einem mittelgroßen Lkw und einem 2-köpfigen Team durchgeführt.",
       "helper": "Üblicher Haushaltsumzug",
-      "label": "Normaler Umzug",
-      "short": "Normal",
+      "label": "Medium-Umzug",
+      "short": "Medium",
       "subtitle": "Passend für 1- bis 2-Zimmer-Wohnungen mit üblichen Möbeln und Geräten.",
-      "title": "Normaler Umzug"
+      "title": "Medium-Umzug"
     },
     "section": {
       "title": "Umzugsart"
@@ -1044,39 +1044,29 @@
       "label_one": "Zusätzliche Leistungen ({{count}})",
       "label_other": "Zusätzliche Leistungen ({{count}})"
     },
-    "baseFare": {
-      "label": "Grundpreis"
-    },
-    "baseRate": {
-      "fallback": {
-        "label": "Grundpreis"
+    "assumptions": {
+      "crew": {
+        "label": "Teamgröße {{value}}"
       },
-      "light": {
-        "label": "Grundpreis (Kleiner Umzug)"
+      "hours": {
+        "label": "Abrechenbare Zeit {{value}}"
       },
-      "premium": {
-        "label": "Grundpreis (Premium-Umzug)"
+      "volume": {
+        "label": "Geschätztes Volumen {{value}}"
       },
-      "regular": {
-        "label": "Grundpreis (Normaler Umzug)"
+      "weight": {
+        "label": "Geschätztes Gewicht {{value}}"
       }
     },
-    "baseRateWithDistance": {
-      "fallback": {
-        "label": "Grundpreis ({{distance}})"
-      },
-      "light": {
-        "label": "Grundpreis (Kleiner Umzug, {{distance}})"
-      },
-      "premium": {
-        "label": "Grundpreis (Premium-Umzug, {{distance}})"
-      },
-      "regular": {
-        "label": "Grundpreis (Normaler Umzug, {{distance}})"
-      }
+    "crewTooSmall": {
+      "helper_one": "{{count}} Umzugshelfer ausgeblendet: Team zu klein für diese Ladung",
+      "helper_other": "{{count}} Umzugshelfer ausgeblendet: Team zu klein für diese Ladung"
     },
-    "crew": {
-      "label": "Team ({{crew}})"
+    "discount": {
+      "label": "Rabatt"
+    },
+    "estimate": {
+      "helper": "Schätzung — verbindlich, sobald Ihr Umzugshelfer annimmt"
     },
     "estimatedTotal": {
       "label": "Geschätzter Gesamtpreis"
@@ -1084,18 +1074,66 @@
     "finalAfterReview": {
       "helper": "Endpreis nach Prüfung bestätigt"
     },
-    "floorSurcharge": {
-      "label": "Etagenzuschlag"
+    "header": {
+      "instant": {
+        "label": "{{tier}} · Sofortumzug"
+      },
+      "scheduled": {
+        "label": "{{tier}} · Geplanter Umzug"
+      }
+    },
+    "instantAdjustment": {
+      "label": "Sofortbuchung (×{{multiplier}})"
     },
     "itemsCount": {
       "label_one": "Gegenstände ({{count}})",
       "label_other": "Gegenstände ({{count}})"
     },
-    "moverFare": {
-      "label": "Honorar des Umzugsprofis"
+    "line": {
+      "base": {
+        "label": "Grundleistung"
+      },
+      "distance": {
+        "label": "Entfernung ({{km}} × {{rate}})"
+      },
+      "handling": {
+        "label": "Handling & Zugang"
+      },
+      "items": {
+        "label_one": "Gegenstände ({{count}})",
+        "label_other": "Gegenstände ({{count}})"
+      },
+      "labor": {
+        "label": "Umzugshelfer ({{crew}} × {{rate}} × {{hours}})"
+      },
+      "packing": {
+        "label": "Verpackung"
+      },
+      "services": {
+        "label": "Zusatzleistungen"
+      },
+      "storage": {
+        "label_one": "Lagerung ({{count}} Woche)",
+        "label_other": "Lagerung ({{count}} Wochen)"
+      },
+      "vehicle": {
+        "label": "Fahrzeug ({{vehicle}})"
+      }
     },
-    "packingService": {
-      "label": "Packservice"
+    "minimumApplied": {
+      "helper": "Mindestbetrag von {{amount}} angewendet"
+    },
+    "net": {
+      "label": "Zwischensumme vor MwSt."
+    },
+    "operationalSubtotal": {
+      "label": "Operative Zwischensumme"
+    },
+    "perMover": {
+      "helper": "Der Preis berücksichtigt die Fahrzeugklasse dieses Umzugshelfers"
+    },
+    "platformFee": {
+      "label": "Plattformgebühr ({{rate}})"
     },
     "storage": {
       "label": "Lagerung"

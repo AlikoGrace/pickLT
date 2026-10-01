@@ -281,6 +281,10 @@
     "confirmFailed": "Zahlung konnte nicht bestätigt werden",
     "notAwaiting": "Für diesen Umzug steht keine Zahlung aus. Bitte laden Sie den Umzug neu und versuchen Sie es erneut."
   },
+  "pricing": {
+    "exceedsLargestVehicle": "Diese Ladung ist zu groß für ein einzelnes Fahrzeug. Bitte wenden Sie sich an den Support.",
+    "reconcile": "Wir konnten keinen zuverlässigen Preis berechnen. Bitte versuchen Sie es erneut."
+  },
   "profile": {
     "emailChangeFailed": "E-Mail-Adresse konnte nicht geändert werden",
     "emailTaken": "Diese E-Mail-Adresse wird bereits von einem anderen Konto verwendet",

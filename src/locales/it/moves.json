@@ -56,10 +56,10 @@
     "typeAndCategory": {
       "light": {
         "instant": {
-          "subtitle": "Trasloco leggero · Immediato"
+          "subtitle": "Trasloco normale · Immediato"
         },
         "scheduled": {
-          "subtitle": "Trasloco leggero · Programmato"
+          "subtitle": "Trasloco normale · Programmato"
         }
       },
       "premium": {
@@ -72,31 +72,31 @@
       },
       "regular": {
         "instant": {
-          "subtitle": "Trasloco standard · Immediato"
+          "subtitle": "Trasloco medio · Immediato"
         },
         "scheduled": {
-          "subtitle": "Trasloco standard · Programmato"
+          "subtitle": "Trasloco medio · Programmato"
         }
       }
     },
     "typeAndDate": {
       "light": {
-        "subtitle": "Trasloco leggero · {{date}}"
+        "subtitle": "Trasloco normale · {{date}}"
       },
       "premium": {
         "subtitle": "Trasloco premium · {{date}}"
       },
       "regular": {
-        "subtitle": "Trasloco standard · {{date}}"
+        "subtitle": "Trasloco medio · {{date}}"
       }
     },
     "typeCategoryDate": {
       "light": {
         "instant": {
-          "subtitle": "Trasloco leggero · Immediato · {{date}}"
+          "subtitle": "Trasloco normale · Immediato · {{date}}"
         },
         "scheduled": {
-          "subtitle": "Trasloco leggero · Programmato · {{date}}"
+          "subtitle": "Trasloco normale · Programmato · {{date}}"
         }
       },
       "premium": {
@@ -109,10 +109,10 @@
       },
       "regular": {
         "instant": {
-          "subtitle": "Trasloco standard · Immediato · {{date}}"
+          "subtitle": "Trasloco medio · Immediato · {{date}}"
         },
         "scheduled": {
-          "subtitle": "Trasloco standard · Programmato · {{date}}"
+          "subtitle": "Trasloco medio · Programmato · {{date}}"
         }
       }
     }
@@ -222,10 +222,10 @@
     "typeAndCategory": {
       "light": {
         "instant": {
-          "value": "Leggero · Immediato"
+          "value": "Normale · Immediato"
         },
         "scheduled": {
-          "value": "Leggero · Programmato"
+          "value": "Normale · Programmato"
         }
       },
       "premium": {
@@ -238,10 +238,10 @@
       },
       "regular": {
         "instant": {
-          "value": "Standard · Immediato"
+          "value": "Medio · Immediato"
         },
         "scheduled": {
-          "value": "Standard · Programmato"
+          "value": "Medio · Programmato"
         }
       }
     },

@@ -1,1943 +1,2377 @@
 {
-  "_note": "Shared pricing fixtures. Committed to pickltmobile and pickLT; both must reproduce these exactly. A diff here is a deliberate pricing change — never re-baseline to make a test pass. instantRouteBase expectations were captured from the deployed calculateprice function.",
-  "_generated": "2026-08-08",
-  "priceForMover": [
-    {
-      "routeBaseEur": 49,
-      "mover": {
-        "vehicleType": "small_van",
-        "crewSize": 1
-      },
-      "totalItems": 0,
-      "expected": 49
-    },
-    {
-      "routeBaseEur": 195,
-      "mover": {
-        "vehicleType": "small_van",
-        "crewSize": 1
-      },
-      "totalItems": 0,
-      "expected": 195
-    },
-    {
-      "routeBaseEur": 585.33,
-      "mover": {
-        "vehicleType": "small_van",
-        "crewSize": 1
-      },
-      "totalItems": 0,
-      "expected": 585
-    },
-    {
-      "routeBaseEur": 49,
-      "mover": {
-        "vehicleType": "small_van",
-        "crewSize": 1
-      },
-      "totalItems": 7,
-      "expected": 60
-    },
-    {
-      "routeBaseEur": 195,
-      "mover": {
-        "vehicleType": "small_van",
-        "crewSize": 1
-      },
-      "totalItems": 7,
-      "expected": 206
-    },
-    {
-      "routeBaseEur": 585.33,
-      "mover": {
-        "vehicleType": "small_van",
-        "crewSize": 1
-      },
-      "totalItems": 7,
-      "expected": 596
-    },
-    {
-      "routeBaseEur": 49,
-      "mover": {
-        "vehicleType": "small_van",
-        "crewSize": 1
-      },
-      "totalItems": 23,
-      "expected": 84
-    },
-    {
-      "routeBaseEur": 195,
-      "mover": {
-        "vehicleType": "small_van",
-        "crewSize": 1
-      },
-      "totalItems": 23,
-      "expected": 230
-    },
-    {
-      "routeBaseEur": 585.33,
-      "mover": {
-        "vehicleType": "small_van",
-        "crewSize": 1
-      },
-      "totalItems": 23,
-      "expected": 620
-    },
-    {
-      "routeBaseEur": 49,
-      "mover": {
-        "vehicleType": "small_van",
-        "crewSize": 2
-      },
-      "totalItems": 0,
-      "expected": 59
-    },
-    {
-      "routeBaseEur": 195,
-      "mover": {
-        "vehicleType": "small_van",
-        "crewSize": 2
-      },
-      "totalItems": 0,
-      "expected": 205
-    },
-    {
-      "routeBaseEur": 585.33,
-      "mover": {
-        "vehicleType": "small_van",
-        "crewSize": 2
-      },
-      "totalItems": 0,
-      "expected": 595
-    },
-    {
-      "routeBaseEur": 49,
-      "mover": {
-        "vehicleType": "small_van",
-        "crewSize": 2
-      },
-      "totalItems": 7,
-      "expected": 70
-    },
-    {
-      "routeBaseEur": 195,
-      "mover": {
-        "vehicleType": "small_van",
-        "crewSize": 2
-      },
-      "totalItems": 7,
-      "expected": 216
-    },
-    {
-      "routeBaseEur": 585.33,
-      "mover": {
-        "vehicleType": "small_van",
-        "crewSize": 2
-      },
-      "totalItems": 7,
-      "expected": 606
-    },
-    {
-      "routeBaseEur": 49,
-      "mover": {
-        "vehicleType": "small_van",
-        "crewSize": 2
-      },
-      "totalItems": 23,
-      "expected": 94
-    },
-    {
-      "routeBaseEur": 195,
-      "mover": {
-        "vehicleType": "small_van",
-        "crewSize": 2
-      },
-      "totalItems": 23,
-      "expected": 240
-    },
-    {
-      "routeBaseEur": 585.33,
-      "mover": {
-        "vehicleType": "small_van",
-        "crewSize": 2
-      },
-      "totalItems": 23,
-      "expected": 630
-    },
-    {
-      "routeBaseEur": 49,
-      "mover": {
-        "vehicleType": "small_van",
-        "crewSize": 4
-      },
-      "totalItems": 0,
-      "expected": 79
-    },
-    {
-      "routeBaseEur": 195,
-      "mover": {
-        "vehicleType": "small_van",
-        "crewSize": 4
-      },
-      "totalItems": 0,
-      "expected": 225
-    },
-    {
-      "routeBaseEur": 585.33,
-      "mover": {
-        "vehicleType": "small_van",
-        "crewSize": 4
-      },
-      "totalItems": 0,
-      "expected": 615
-    },
-    {
-      "routeBaseEur": 49,
-      "mover": {
-        "vehicleType": "small_van",
-        "crewSize": 4
-      },
-      "totalItems": 7,
-      "expected": 90
-    },
-    {
-      "routeBaseEur": 195,
-      "mover": {
-        "vehicleType": "small_van",
-        "crewSize": 4
-      },
-      "totalItems": 7,
-      "expected": 236
-    },
-    {
-      "routeBaseEur": 585.33,
-      "mover": {
-        "vehicleType": "small_van",
-        "crewSize": 4
-      },
-      "totalItems": 7,
-      "expected": 626
-    },
-    {
-      "routeBaseEur": 49,
-      "mover": {
-        "vehicleType": "small_van",
-        "crewSize": 4
-      },
-      "totalItems": 23,
-      "expected": 114
-    },
-    {
-      "routeBaseEur": 195,
-      "mover": {
-        "vehicleType": "small_van",
-        "crewSize": 4
-      },
-      "totalItems": 23,
-      "expected": 260
-    },
-    {
-      "routeBaseEur": 585.33,
-      "mover": {
-        "vehicleType": "small_van",
-        "crewSize": 4
-      },
-      "totalItems": 23,
-      "expected": 650
-    },
-    {
-      "routeBaseEur": 49,
-      "mover": {
-        "vehicleType": "medium_truck",
-        "crewSize": 1
-      },
-      "totalItems": 0,
-      "expected": 59
-    },
-    {
-      "routeBaseEur": 195,
-      "mover": {
-        "vehicleType": "medium_truck",
-        "crewSize": 1
-      },
-      "totalItems": 0,
-      "expected": 205
-    },
-    {
-      "routeBaseEur": 585.33,
-      "mover": {
-        "vehicleType": "medium_truck",
-        "crewSize": 1
-      },
-      "totalItems": 0,
-      "expected": 595
-    },
-    {
-      "routeBaseEur": 49,
-      "mover": {
-        "vehicleType": "medium_truck",
-        "crewSize": 1
-      },
-      "totalItems": 7,
-      "expected": 70
-    },
-    {
-      "routeBaseEur": 195,
-      "mover": {
-        "vehicleType": "medium_truck",
-        "crewSize": 1
-      },
-      "totalItems": 7,
-      "expected": 216
-    },
-    {
-      "routeBaseEur": 585.33,
-      "mover": {
-        "vehicleType": "medium_truck",
-        "crewSize": 1
-      },
-      "totalItems": 7,
-      "expected": 606
-    },
-    {
-      "routeBaseEur": 49,
-      "mover": {
-        "vehicleType": "medium_truck",
-        "crewSize": 1
-      },
-      "totalItems": 23,
-      "expected": 94
-    },
-    {
-      "routeBaseEur": 195,
-      "mover": {
-        "vehicleType": "medium_truck",
-        "crewSize": 1
-      },
-      "totalItems": 23,
-      "expected": 240
-    },
-    {
-      "routeBaseEur": 585.33,
-      "mover": {
-        "vehicleType": "medium_truck",
-        "crewSize": 1
-      },
-      "totalItems": 23,
-      "expected": 630
-    },
-    {
-      "routeBaseEur": 49,
-      "mover": {
-        "vehicleType": "medium_truck",
-        "crewSize": 2
-      },
-      "totalItems": 0,
-      "expected": 69
-    },
-    {
-      "routeBaseEur": 195,
-      "mover": {
-        "vehicleType": "medium_truck",
-        "crewSize": 2
-      },
-      "totalItems": 0,
-      "expected": 215
-    },
-    {
-      "routeBaseEur": 585.33,
-      "mover": {
-        "vehicleType": "medium_truck",
-        "crewSize": 2
-      },
-      "totalItems": 0,
-      "expected": 605
-    },
-    {
-      "routeBaseEur": 49,
-      "mover": {
-        "vehicleType": "medium_truck",
-        "crewSize": 2
-      },
-      "totalItems": 7,
-      "expected": 80
-    },
-    {
-      "routeBaseEur": 195,
-      "mover": {
-        "vehicleType": "medium_truck",
-        "crewSize": 2
-      },
-      "totalItems": 7,
-      "expected": 226
-    },
-    {
-      "routeBaseEur": 585.33,
-      "mover": {
-        "vehicleType": "medium_truck",
-        "crewSize": 2
-      },
-      "totalItems": 7,
-      "expected": 616
-    },
-    {
-      "routeBaseEur": 49,
-      "mover": {
-        "vehicleType": "medium_truck",
-        "crewSize": 2
-      },
-      "totalItems": 23,
-      "expected": 104
-    },
-    {
-      "routeBaseEur": 195,
-      "mover": {
-        "vehicleType": "medium_truck",
-        "crewSize": 2
-      },
-      "totalItems": 23,
-      "expected": 250
-    },
-    {
-      "routeBaseEur": 585.33,
-      "mover": {
-        "vehicleType": "medium_truck",
-        "crewSize": 2
-      },
-      "totalItems": 23,
-      "expected": 640
-    },
-    {
-      "routeBaseEur": 49,
-      "mover": {
-        "vehicleType": "medium_truck",
-        "crewSize": 4
-      },
-      "totalItems": 0,
-      "expected": 89
-    },
-    {
-      "routeBaseEur": 195,
-      "mover": {
-        "vehicleType": "medium_truck",
-        "crewSize": 4
-      },
-      "totalItems": 0,
-      "expected": 235
-    },
-    {
-      "routeBaseEur": 585.33,
-      "mover": {
-        "vehicleType": "medium_truck",
-        "crewSize": 4
-      },
-      "totalItems": 0,
-      "expected": 625
-    },
-    {
-      "routeBaseEur": 49,
-      "mover": {
-        "vehicleType": "medium_truck",
-        "crewSize": 4
-      },
-      "totalItems": 7,
-      "expected": 100
-    },
-    {
-      "routeBaseEur": 195,
-      "mover": {
-        "vehicleType": "medium_truck",
-        "crewSize": 4
-      },
-      "totalItems": 7,
-      "expected": 246
-    },
-    {
-      "routeBaseEur": 585.33,
-      "mover": {
-        "vehicleType": "medium_truck",
-        "crewSize": 4
-      },
-      "totalItems": 7,
-      "expected": 636
-    },
-    {
-      "routeBaseEur": 49,
-      "mover": {
-        "vehicleType": "medium_truck",
-        "crewSize": 4
-      },
-      "totalItems": 23,
-      "expected": 124
-    },
-    {
-      "routeBaseEur": 195,
-      "mover": {
-        "vehicleType": "medium_truck",
-        "crewSize": 4
-      },
-      "totalItems": 23,
-      "expected": 270
-    },
-    {
-      "routeBaseEur": 585.33,
-      "mover": {
-        "vehicleType": "medium_truck",
-        "crewSize": 4
-      },
-      "totalItems": 23,
-      "expected": 660
-    },
-    {
-      "routeBaseEur": 49,
-      "mover": {
-        "vehicleType": "large_truck",
-        "crewSize": 1
-      },
-      "totalItems": 0,
-      "expected": 74
-    },
-    {
-      "routeBaseEur": 195,
-      "mover": {
-        "vehicleType": "large_truck",
-        "crewSize": 1
-      },
-      "totalItems": 0,
-      "expected": 220
-    },
-    {
-      "routeBaseEur": 585.33,
-      "mover": {
-        "vehicleType": "large_truck",
-        "crewSize": 1
-      },
-      "totalItems": 0,
-      "expected": 610
-    },
-    {
-      "routeBaseEur": 49,
-      "mover": {
-        "vehicleType": "large_truck",
-        "crewSize": 1
-      },
-      "totalItems": 7,
-      "expected": 85
-    },
-    {
-      "routeBaseEur": 195,
-      "mover": {
-        "vehicleType": "large_truck",
-        "crewSize": 1
-      },
-      "totalItems": 7,
-      "expected": 231
-    },
-    {
-      "routeBaseEur": 585.33,
-      "mover": {
-        "vehicleType": "large_truck",
-        "crewSize": 1
-      },
-      "totalItems": 7,
-      "expected": 621
-    },
-    {
-      "routeBaseEur": 49,
-      "mover": {
-        "vehicleType": "large_truck",
-        "crewSize": 1
-      },
-      "totalItems": 23,
-      "expected": 109
-    },
-    {
-      "routeBaseEur": 195,
-      "mover": {
-        "vehicleType": "large_truck",
-        "crewSize": 1
-      },
-      "totalItems": 23,
-      "expected": 255
-    },
-    {
-      "routeBaseEur": 585.33,
-      "mover": {
-        "vehicleType": "large_truck",
-        "crewSize": 1
-      },
-      "totalItems": 23,
-      "expected": 645
-    },
-    {
-      "routeBaseEur": 49,
-      "mover": {
-        "vehicleType": "large_truck",
-        "crewSize": 2
-      },
-      "totalItems": 0,
-      "expected": 84
-    },
-    {
-      "routeBaseEur": 195,
-      "mover": {
-        "vehicleType": "large_truck",
-        "crewSize": 2
-      },
-      "totalItems": 0,
-      "expected": 230
-    },
-    {
-      "routeBaseEur": 585.33,
-      "mover": {
-        "vehicleType": "large_truck",
-        "crewSize": 2
-      },
-      "totalItems": 0,
-      "expected": 620
-    },
-    {
-      "routeBaseEur": 49,
-      "mover": {
-        "vehicleType": "large_truck",
-        "crewSize": 2
-      },
-      "totalItems": 7,
-      "expected": 95
-    },
-    {
-      "routeBaseEur": 195,
-      "mover": {
-        "vehicleType": "large_truck",
-        "crewSize": 2
-      },
-      "totalItems": 7,
-      "expected": 241
-    },
-    {
-      "routeBaseEur": 585.33,
-      "mover": {
-        "vehicleType": "large_truck",
-        "crewSize": 2
-      },
-      "totalItems": 7,
-      "expected": 631
-    },
-    {
-      "routeBaseEur": 49,
-      "mover": {
-        "vehicleType": "large_truck",
-        "crewSize": 2
-      },
-      "totalItems": 23,
-      "expected": 119
-    },
-    {
-      "routeBaseEur": 195,
-      "mover": {
-        "vehicleType": "large_truck",
-        "crewSize": 2
-      },
-      "totalItems": 23,
-      "expected": 265
-    },
-    {
-      "routeBaseEur": 585.33,
-      "mover": {
-        "vehicleType": "large_truck",
-        "crewSize": 2
-      },
-      "totalItems": 23,
-      "expected": 655
-    },
-    {
-      "routeBaseEur": 49,
-      "mover": {
-        "vehicleType": "large_truck",
-        "crewSize": 4
-      },
-      "totalItems": 0,
-      "expected": 104
-    },
-    {
-      "routeBaseEur": 195,
-      "mover": {
-        "vehicleType": "large_truck",
-        "crewSize": 4
-      },
-      "totalItems": 0,
-      "expected": 250
-    },
-    {
-      "routeBaseEur": 585.33,
-      "mover": {
-        "vehicleType": "large_truck",
-        "crewSize": 4
-      },
-      "totalItems": 0,
-      "expected": 640
-    },
-    {
-      "routeBaseEur": 49,
-      "mover": {
-        "vehicleType": "large_truck",
-        "crewSize": 4
-      },
-      "totalItems": 7,
-      "expected": 115
-    },
-    {
-      "routeBaseEur": 195,
-      "mover": {
-        "vehicleType": "large_truck",
-        "crewSize": 4
-      },
-      "totalItems": 7,
-      "expected": 261
-    },
-    {
-      "routeBaseEur": 585.33,
-      "mover": {
-        "vehicleType": "large_truck",
-        "crewSize": 4
-      },
-      "totalItems": 7,
-      "expected": 651
-    },
-    {
-      "routeBaseEur": 49,
-      "mover": {
-        "vehicleType": "large_truck",
-        "crewSize": 4
-      },
-      "totalItems": 23,
-      "expected": 139
-    },
-    {
-      "routeBaseEur": 195,
-      "mover": {
-        "vehicleType": "large_truck",
-        "crewSize": 4
-      },
-      "totalItems": 23,
-      "expected": 285
-    },
-    {
-      "routeBaseEur": 585.33,
-      "mover": {
-        "vehicleType": "large_truck",
-        "crewSize": 4
-      },
-      "totalItems": 23,
-      "expected": 675
-    }
-  ],
-  "instantRouteBase": [
-    {
-      "input": {
-        "routeDistanceMeters": 10000,
-        "moveType": "regular"
-      },
-      "expected": {
-        "basePrice": 19.5,
-        "distanceKm": 10,
-        "moveTypeMultiplier": 1.3,
-        "floorSurcharge": 0,
-        "packingSurcharge": 0,
-        "crewSurcharge": 0,
-        "storageSurcharge": 0,
-        "estimatedPrice": 49
-      }
-    },
-    {
-      "input": {
-        "routeDistanceMeters": 300000,
-        "moveType": "premium",
-        "packingServiceLevel": "full"
-      },
-      "expected": {
-        "basePrice": 810,
-        "distanceKm": 300,
-        "moveTypeMultiplier": 1.8,
-        "floorSurcharge": 0,
-        "packingSurcharge": 120,
-        "crewSurcharge": 0,
-        "storageSurcharge": 0,
-        "estimatedPrice": 930
-      }
-    },
-    {
-      "input": {
-        "routeDistanceMeters": 5000,
-        "moveType": "light"
-      },
-      "expected": {
-        "basePrice": 7.5,
-        "distanceKm": 5,
-        "moveTypeMultiplier": 1,
-        "floorSurcharge": 0,
-        "packingSurcharge": 0,
-        "crewSurcharge": 0,
-        "storageSurcharge": 0,
-        "estimatedPrice": 49
-      }
-    },
-    {
-      "input": {
-        "routeDistanceMeters": 120000,
-        "moveType": "regular",
-        "crewSize": 3,
-        "storageWeeks": 2
-      },
-      "expected": {
-        "basePrice": 234,
-        "distanceKm": 120,
-        "moveTypeMultiplier": 1.3,
-        "floorSurcharge": 0,
-        "packingSurcharge": 0,
-        "crewSurcharge": 60,
-        "storageSurcharge": 50,
-        "estimatedPrice": 344
-      }
-    },
-    {
-      "input": {
-        "routeDistanceMeters": 45000,
-        "moveType": "regular",
-        "pickupFloorLevel": "3",
-        "pickupElevator": false
-      },
-      "expected": {
-        "basePrice": 87.75,
-        "distanceKm": 45,
-        "moveTypeMultiplier": 1.3,
-        "floorSurcharge": 45,
-        "packingSurcharge": 0,
-        "crewSurcharge": 0,
-        "storageSurcharge": 0,
-        "estimatedPrice": 132.75
-      }
+  "_note": "Shared pricing v3 fixtures (master plan §6.4). Committed to pickltmobile and pickLT; the TS engine, the JS function mirror and the web port must all reproduce every field of every case exactly. A diff here is a deliberate pricing change — never re-baseline to make a test pass. The six movedna-* cases are MoveDNA §5 with an empty basket, 20 km, 1 h drive (2 billable hours). Regenerated 2026-10-01 (rates trace now includes the volume.custom.* bands read for custom items; no monetary value changed).",
+  "_generated": "2026-10-01",
+  "_engine": "v3",
+  "catalog": [
+    {
+      "itemId": "sofa_3seater",
+      "name": "Sofa (3-seater)",
+      "category": "living_room",
+      "widthCm": 200,
+      "heightCm": 90,
+      "depthCm": 90,
+      "weightKg": 70,
+      "moveClassificationWeight": 12,
+      "moveTypeMinimum": "regular",
+      "unitPriceEur": 26.7,
+      "requiredCrew": 1
+    },
+    {
+      "itemId": "cardboard_boxes",
+      "name": "Cardboard boxes",
+      "category": "boxes",
+      "widthCm": 60,
+      "heightCm": 40,
+      "depthCm": 40,
+      "weightKg": 10,
+      "moveClassificationWeight": 2,
+      "moveTypeMinimum": "light",
+      "unitPriceEur": 2.46,
+      "requiredCrew": 1
+    },
+    {
+      "itemId": "piano",
+      "name": "Piano",
+      "category": "special",
+      "widthCm": 150,
+      "heightCm": 130,
+      "depthCm": 60,
+      "weightKg": 200,
+      "moveClassificationWeight": 25,
+      "moveTypeMinimum": "premium",
+      "unitPriceEur": 41.7,
+      "requiredCrew": 2
+    },
+    {
+      "itemId": "wardrobe_large",
+      "name": "Wardrobe (large)",
+      "category": "bedroom",
+      "widthCm": 200,
+      "heightCm": 220,
+      "depthCm": 60,
+      "weightKg": 100,
+      "moveClassificationWeight": 18,
+      "moveTypeMinimum": "premium",
+      "unitPriceEur": 41.4,
+      "requiredCrew": 2
+    },
+    {
+      "itemId": "unpriced_lamp",
+      "name": "Lamp (no price yet)",
+      "category": "miscellaneous",
+      "widthCm": 40,
+      "heightCm": 160,
+      "depthCm": 40,
+      "weightKg": 3,
+      "moveClassificationWeight": 1,
+      "moveTypeMinimum": "light",
+      "unitPriceEur": null
     }
   ],
   "quoteMove": [
     {
+      "name": "movedna-light-scheduled",
       "input": {
-        "volumeM3": 8,
+        "tier": "light",
+        "mode": "scheduled",
+        "distanceKm": 20,
+        "durationSeconds": 3600,
+        "basket": {
+          "counts": {},
+          "customItems": []
+        },
+        "catalog": [
+          {
+            "itemId": "sofa_3seater",
+            "name": "Sofa (3-seater)",
+            "category": "living_room",
+            "widthCm": 200,
+            "heightCm": 90,
+            "depthCm": 90,
+            "weightKg": 70,
+            "moveClassificationWeight": 12,
+            "moveTypeMinimum": "regular",
+            "unitPriceEur": 26.7,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "cardboard_boxes",
+            "name": "Cardboard boxes",
+            "category": "boxes",
+            "widthCm": 60,
+            "heightCm": 40,
+            "depthCm": 40,
+            "weightKg": 10,
+            "moveClassificationWeight": 2,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": 2.46,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "piano",
+            "name": "Piano",
+            "category": "special",
+            "widthCm": 150,
+            "heightCm": 130,
+            "depthCm": 60,
+            "weightKg": 200,
+            "moveClassificationWeight": 25,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.7,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "wardrobe_large",
+            "name": "Wardrobe (large)",
+            "category": "bedroom",
+            "widthCm": 200,
+            "heightCm": 220,
+            "depthCm": 60,
+            "weightKg": 100,
+            "moveClassificationWeight": 18,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.4,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "unpriced_lamp",
+            "name": "Lamp (no price yet)",
+            "category": "miscellaneous",
+            "widthCm": 40,
+            "heightCm": 160,
+            "depthCm": 40,
+            "weightKg": 3,
+            "moveClassificationWeight": 1,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": null
+          }
+        ]
+      },
+      "expected": {
+        "version": "v3",
+        "currency": "EUR",
+        "tier": "light",
+        "mode": "scheduled",
+        "profile": {
+          "itemCount": 0,
+          "loadedVolumeM3": 0,
+          "rawVolumeM3": 0,
+          "weightKg": 0,
+          "requiredCrew": 1,
+          "crew": 1,
+          "vehicleType": "small_van",
+          "billableHours": 2,
+          "distanceKm": 20,
+          "durationHours": 1
+        },
+        "lines": {
+          "base": 35,
+          "distance": 22,
+          "vehicle": 15,
+          "labor": 44,
+          "items": 0,
+          "packing": 0,
+          "handling": 0,
+          "services": 0,
+          "storage": 0
+        },
+        "operationalSubtotal": 116,
+        "modeMultiplier": 1,
+        "modeAdjustment": 0,
+        "adjustedSubtotal": 116,
+        "platformFee": 9.28,
+        "discount": 0,
+        "minimumApplied": false,
+        "net": 125.28,
+        "vatRate": 0.19,
+        "vat": 23.8,
+        "total": 149.08,
+        "serviceLines": [],
+        "itemLines": [],
+        "rates": {
+          "access.floorSurchargeNoElevator": 15,
+          "access.haltverbotFee": 0,
+          "capacityM3.small_van": 10,
+          "crew.m3PerMover": 15,
+          "crew.max": 4,
+          "handling.hoursPerM3": 0.2,
+          "packing.none": 0,
+          "platformFee.fixed": 0,
+          "platformFee.rate": 0.08,
+          "pricing.minimumCharge": 49,
+          "storage.perWeek": 30,
+          "tax.vatRate": 0.19,
+          "tier.light.basePrice": 35,
+          "tier.light.crew": 1,
+          "tier.light.distanceRatePerKm": 1.1,
+          "tier.light.handlingAllowance": 0,
+          "tier.light.laborRatePerHour": 22,
+          "tier.light.minVehicleRank": 0,
+          "tier.light.minimumHours": 2,
+          "tier.light.packingAllowance": 0,
+          "vehicle.charge.small_van": 15,
+          "volume.packingFactor": 1.35
+        },
+        "assumptions": {
+          "unpricedItemIds": [],
+          "unknownItemIds": [],
+          "estimated": true
+        },
+        "flags": {
+          "exceedsLargestVehicle": false,
+          "crewCapped": false
+        }
+      }
+    },
+    {
+      "name": "movedna-light-instant",
+      "input": {
+        "tier": "light",
+        "mode": "instant",
+        "distanceKm": 20,
+        "durationSeconds": 3600,
+        "basket": {
+          "counts": {},
+          "customItems": []
+        },
+        "catalog": [
+          {
+            "itemId": "sofa_3seater",
+            "name": "Sofa (3-seater)",
+            "category": "living_room",
+            "widthCm": 200,
+            "heightCm": 90,
+            "depthCm": 90,
+            "weightKg": 70,
+            "moveClassificationWeight": 12,
+            "moveTypeMinimum": "regular",
+            "unitPriceEur": 26.7,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "cardboard_boxes",
+            "name": "Cardboard boxes",
+            "category": "boxes",
+            "widthCm": 60,
+            "heightCm": 40,
+            "depthCm": 40,
+            "weightKg": 10,
+            "moveClassificationWeight": 2,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": 2.46,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "piano",
+            "name": "Piano",
+            "category": "special",
+            "widthCm": 150,
+            "heightCm": 130,
+            "depthCm": 60,
+            "weightKg": 200,
+            "moveClassificationWeight": 25,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.7,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "wardrobe_large",
+            "name": "Wardrobe (large)",
+            "category": "bedroom",
+            "widthCm": 200,
+            "heightCm": 220,
+            "depthCm": 60,
+            "weightKg": 100,
+            "moveClassificationWeight": 18,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.4,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "unpriced_lamp",
+            "name": "Lamp (no price yet)",
+            "category": "miscellaneous",
+            "widthCm": 40,
+            "heightCm": 160,
+            "depthCm": 40,
+            "weightKg": 3,
+            "moveClassificationWeight": 1,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": null
+          }
+        ]
+      },
+      "expected": {
+        "version": "v3",
+        "currency": "EUR",
+        "tier": "light",
+        "mode": "instant",
+        "profile": {
+          "itemCount": 0,
+          "loadedVolumeM3": 0,
+          "rawVolumeM3": 0,
+          "weightKg": 0,
+          "requiredCrew": 1,
+          "crew": 1,
+          "vehicleType": "small_van",
+          "billableHours": 2,
+          "distanceKm": 20,
+          "durationHours": 1
+        },
+        "lines": {
+          "base": 35,
+          "distance": 22,
+          "vehicle": 15,
+          "labor": 44,
+          "items": 0,
+          "packing": 0,
+          "handling": 0,
+          "services": 0,
+          "storage": 0
+        },
+        "operationalSubtotal": 116,
+        "modeMultiplier": 1.2,
+        "modeAdjustment": 23.2,
+        "adjustedSubtotal": 139.2,
+        "platformFee": 11.14,
+        "discount": 0,
+        "minimumApplied": false,
+        "net": 150.34,
+        "vatRate": 0.19,
+        "vat": 28.56,
+        "total": 178.9,
+        "serviceLines": [],
+        "itemLines": [],
+        "rates": {
+          "access.floorSurchargeNoElevator": 15,
+          "access.haltverbotFee": 0,
+          "capacityM3.small_van": 10,
+          "crew.m3PerMover": 15,
+          "crew.max": 4,
+          "handling.hoursPerM3": 0.2,
+          "packing.none": 0,
+          "platformFee.fixed": 0,
+          "platformFee.rate": 0.08,
+          "pricing.minimumCharge": 49,
+          "storage.perWeek": 30,
+          "tax.vatRate": 0.19,
+          "tier.light.basePrice": 35,
+          "tier.light.crew": 1,
+          "tier.light.distanceRatePerKm": 1.1,
+          "tier.light.handlingAllowance": 0,
+          "tier.light.instantMultiplier": 1.2,
+          "tier.light.laborRatePerHour": 22,
+          "tier.light.minVehicleRank": 0,
+          "tier.light.minimumHours": 2,
+          "tier.light.packingAllowance": 0,
+          "vehicle.charge.small_van": 15,
+          "volume.packingFactor": 1.35
+        },
+        "assumptions": {
+          "unpricedItemIds": [],
+          "unknownItemIds": [],
+          "estimated": true
+        },
+        "flags": {
+          "exceedsLargestVehicle": false,
+          "crewCapped": false
+        }
+      }
+    },
+    {
+      "name": "movedna-regular-scheduled",
+      "input": {
+        "tier": "regular",
+        "mode": "scheduled",
+        "distanceKm": 20,
+        "durationSeconds": 3600,
+        "basket": {
+          "counts": {},
+          "customItems": []
+        },
+        "catalog": [
+          {
+            "itemId": "sofa_3seater",
+            "name": "Sofa (3-seater)",
+            "category": "living_room",
+            "widthCm": 200,
+            "heightCm": 90,
+            "depthCm": 90,
+            "weightKg": 70,
+            "moveClassificationWeight": 12,
+            "moveTypeMinimum": "regular",
+            "unitPriceEur": 26.7,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "cardboard_boxes",
+            "name": "Cardboard boxes",
+            "category": "boxes",
+            "widthCm": 60,
+            "heightCm": 40,
+            "depthCm": 40,
+            "weightKg": 10,
+            "moveClassificationWeight": 2,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": 2.46,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "piano",
+            "name": "Piano",
+            "category": "special",
+            "widthCm": 150,
+            "heightCm": 130,
+            "depthCm": 60,
+            "weightKg": 200,
+            "moveClassificationWeight": 25,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.7,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "wardrobe_large",
+            "name": "Wardrobe (large)",
+            "category": "bedroom",
+            "widthCm": 200,
+            "heightCm": 220,
+            "depthCm": 60,
+            "weightKg": 100,
+            "moveClassificationWeight": 18,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.4,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "unpriced_lamp",
+            "name": "Lamp (no price yet)",
+            "category": "miscellaneous",
+            "widthCm": 40,
+            "heightCm": 160,
+            "depthCm": 40,
+            "weightKg": 3,
+            "moveClassificationWeight": 1,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": null
+          }
+        ]
+      },
+      "expected": {
+        "version": "v3",
+        "currency": "EUR",
+        "tier": "regular",
+        "mode": "scheduled",
+        "profile": {
+          "itemCount": 0,
+          "loadedVolumeM3": 0,
+          "rawVolumeM3": 0,
+          "weightKg": 0,
+          "requiredCrew": 1,
+          "crew": 2,
+          "vehicleType": "medium_truck",
+          "billableHours": 2,
+          "distanceKm": 20,
+          "durationHours": 1
+        },
+        "lines": {
+          "base": 55,
+          "distance": 27,
+          "vehicle": 25,
+          "labor": 96,
+          "items": 0,
+          "packing": 30,
+          "handling": 20,
+          "services": 0,
+          "storage": 0
+        },
+        "operationalSubtotal": 253,
+        "modeMultiplier": 1,
+        "modeAdjustment": 0,
+        "adjustedSubtotal": 253,
+        "platformFee": 20.24,
+        "discount": 0,
+        "minimumApplied": false,
+        "net": 273.24,
+        "vatRate": 0.19,
+        "vat": 51.92,
+        "total": 325.16,
+        "serviceLines": [],
+        "itemLines": [],
+        "rates": {
+          "access.floorSurchargeNoElevator": 15,
+          "access.haltverbotFee": 0,
+          "capacityM3.medium_truck": 25,
+          "crew.m3PerMover": 15,
+          "crew.max": 4,
+          "handling.hoursPerM3": 0.2,
+          "packing.none": 0,
+          "platformFee.fixed": 0,
+          "platformFee.rate": 0.08,
+          "pricing.minimumCharge": 49,
+          "storage.perWeek": 30,
+          "tax.vatRate": 0.19,
+          "tier.regular.basePrice": 55,
+          "tier.regular.crew": 2,
+          "tier.regular.distanceRatePerKm": 1.35,
+          "tier.regular.handlingAllowance": 20,
+          "tier.regular.laborRatePerHour": 24,
+          "tier.regular.minVehicleRank": 1,
+          "tier.regular.minimumHours": 2,
+          "tier.regular.packingAllowance": 30,
+          "vehicle.charge.medium_truck": 25,
+          "volume.packingFactor": 1.35
+        },
+        "assumptions": {
+          "unpricedItemIds": [],
+          "unknownItemIds": [],
+          "estimated": true
+        },
+        "flags": {
+          "exceedsLargestVehicle": false,
+          "crewCapped": false
+        }
+      }
+    },
+    {
+      "name": "movedna-regular-instant",
+      "input": {
+        "tier": "regular",
+        "mode": "instant",
+        "distanceKm": 20,
+        "durationSeconds": 3600,
+        "basket": {
+          "counts": {},
+          "customItems": []
+        },
+        "catalog": [
+          {
+            "itemId": "sofa_3seater",
+            "name": "Sofa (3-seater)",
+            "category": "living_room",
+            "widthCm": 200,
+            "heightCm": 90,
+            "depthCm": 90,
+            "weightKg": 70,
+            "moveClassificationWeight": 12,
+            "moveTypeMinimum": "regular",
+            "unitPriceEur": 26.7,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "cardboard_boxes",
+            "name": "Cardboard boxes",
+            "category": "boxes",
+            "widthCm": 60,
+            "heightCm": 40,
+            "depthCm": 40,
+            "weightKg": 10,
+            "moveClassificationWeight": 2,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": 2.46,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "piano",
+            "name": "Piano",
+            "category": "special",
+            "widthCm": 150,
+            "heightCm": 130,
+            "depthCm": 60,
+            "weightKg": 200,
+            "moveClassificationWeight": 25,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.7,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "wardrobe_large",
+            "name": "Wardrobe (large)",
+            "category": "bedroom",
+            "widthCm": 200,
+            "heightCm": 220,
+            "depthCm": 60,
+            "weightKg": 100,
+            "moveClassificationWeight": 18,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.4,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "unpriced_lamp",
+            "name": "Lamp (no price yet)",
+            "category": "miscellaneous",
+            "widthCm": 40,
+            "heightCm": 160,
+            "depthCm": 40,
+            "weightKg": 3,
+            "moveClassificationWeight": 1,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": null
+          }
+        ]
+      },
+      "expected": {
+        "version": "v3",
+        "currency": "EUR",
+        "tier": "regular",
+        "mode": "instant",
+        "profile": {
+          "itemCount": 0,
+          "loadedVolumeM3": 0,
+          "rawVolumeM3": 0,
+          "weightKg": 0,
+          "requiredCrew": 1,
+          "crew": 2,
+          "vehicleType": "medium_truck",
+          "billableHours": 2,
+          "distanceKm": 20,
+          "durationHours": 1
+        },
+        "lines": {
+          "base": 55,
+          "distance": 27,
+          "vehicle": 25,
+          "labor": 96,
+          "items": 0,
+          "packing": 30,
+          "handling": 20,
+          "services": 0,
+          "storage": 0
+        },
+        "operationalSubtotal": 253,
+        "modeMultiplier": 1.15,
+        "modeAdjustment": 37.95,
+        "adjustedSubtotal": 290.95,
+        "platformFee": 23.28,
+        "discount": 0,
+        "minimumApplied": false,
+        "net": 314.23,
+        "vatRate": 0.19,
+        "vat": 59.7,
+        "total": 373.93,
+        "serviceLines": [],
+        "itemLines": [],
+        "rates": {
+          "access.floorSurchargeNoElevator": 15,
+          "access.haltverbotFee": 0,
+          "capacityM3.medium_truck": 25,
+          "crew.m3PerMover": 15,
+          "crew.max": 4,
+          "handling.hoursPerM3": 0.2,
+          "packing.none": 0,
+          "platformFee.fixed": 0,
+          "platformFee.rate": 0.08,
+          "pricing.minimumCharge": 49,
+          "storage.perWeek": 30,
+          "tax.vatRate": 0.19,
+          "tier.regular.basePrice": 55,
+          "tier.regular.crew": 2,
+          "tier.regular.distanceRatePerKm": 1.35,
+          "tier.regular.handlingAllowance": 20,
+          "tier.regular.instantMultiplier": 1.15,
+          "tier.regular.laborRatePerHour": 24,
+          "tier.regular.minVehicleRank": 1,
+          "tier.regular.minimumHours": 2,
+          "tier.regular.packingAllowance": 30,
+          "vehicle.charge.medium_truck": 25,
+          "volume.packingFactor": 1.35
+        },
+        "assumptions": {
+          "unpricedItemIds": [],
+          "unknownItemIds": [],
+          "estimated": true
+        },
+        "flags": {
+          "exceedsLargestVehicle": false,
+          "crewCapped": false
+        }
+      }
+    },
+    {
+      "name": "movedna-premium-scheduled",
+      "input": {
+        "tier": "premium",
+        "mode": "scheduled",
+        "distanceKm": 20,
+        "durationSeconds": 3600,
+        "basket": {
+          "counts": {},
+          "customItems": []
+        },
+        "catalog": [
+          {
+            "itemId": "sofa_3seater",
+            "name": "Sofa (3-seater)",
+            "category": "living_room",
+            "widthCm": 200,
+            "heightCm": 90,
+            "depthCm": 90,
+            "weightKg": 70,
+            "moveClassificationWeight": 12,
+            "moveTypeMinimum": "regular",
+            "unitPriceEur": 26.7,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "cardboard_boxes",
+            "name": "Cardboard boxes",
+            "category": "boxes",
+            "widthCm": 60,
+            "heightCm": 40,
+            "depthCm": 40,
+            "weightKg": 10,
+            "moveClassificationWeight": 2,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": 2.46,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "piano",
+            "name": "Piano",
+            "category": "special",
+            "widthCm": 150,
+            "heightCm": 130,
+            "depthCm": 60,
+            "weightKg": 200,
+            "moveClassificationWeight": 25,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.7,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "wardrobe_large",
+            "name": "Wardrobe (large)",
+            "category": "bedroom",
+            "widthCm": 200,
+            "heightCm": 220,
+            "depthCm": 60,
+            "weightKg": 100,
+            "moveClassificationWeight": 18,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.4,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "unpriced_lamp",
+            "name": "Lamp (no price yet)",
+            "category": "miscellaneous",
+            "widthCm": 40,
+            "heightCm": 160,
+            "depthCm": 40,
+            "weightKg": 3,
+            "moveClassificationWeight": 1,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": null
+          }
+        ]
+      },
+      "expected": {
+        "version": "v3",
+        "currency": "EUR",
+        "tier": "premium",
+        "mode": "scheduled",
+        "profile": {
+          "itemCount": 0,
+          "loadedVolumeM3": 0,
+          "rawVolumeM3": 0,
+          "weightKg": 0,
+          "requiredCrew": 1,
+          "crew": 3,
+          "vehicleType": "large_truck",
+          "billableHours": 2,
+          "distanceKm": 20,
+          "durationHours": 1
+        },
+        "lines": {
+          "base": 85,
+          "distance": 34,
+          "vehicle": 45,
+          "labor": 168,
+          "items": 0,
+          "packing": 65,
+          "handling": 40,
+          "services": 0,
+          "storage": 0
+        },
+        "operationalSubtotal": 437,
+        "modeMultiplier": 1,
+        "modeAdjustment": 0,
+        "adjustedSubtotal": 437,
+        "platformFee": 34.96,
+        "discount": 0,
+        "minimumApplied": false,
+        "net": 471.96,
+        "vatRate": 0.19,
+        "vat": 89.67,
+        "total": 561.63,
+        "serviceLines": [],
+        "itemLines": [],
+        "rates": {
+          "access.floorSurchargeNoElevator": 15,
+          "access.haltverbotFee": 0,
+          "capacityM3.large_truck": 45,
+          "crew.m3PerMover": 15,
+          "crew.max": 4,
+          "handling.hoursPerM3": 0.2,
+          "packing.none": 0,
+          "platformFee.fixed": 0,
+          "platformFee.rate": 0.08,
+          "pricing.minimumCharge": 49,
+          "storage.perWeek": 30,
+          "tax.vatRate": 0.19,
+          "tier.premium.basePrice": 85,
+          "tier.premium.crew": 3,
+          "tier.premium.distanceRatePerKm": 1.7,
+          "tier.premium.handlingAllowance": 40,
+          "tier.premium.laborRatePerHour": 28,
+          "tier.premium.minVehicleRank": 2,
+          "tier.premium.minimumHours": 2,
+          "tier.premium.packingAllowance": 65,
+          "vehicle.charge.large_truck": 45,
+          "volume.packingFactor": 1.35
+        },
+        "assumptions": {
+          "unpricedItemIds": [],
+          "unknownItemIds": [],
+          "estimated": true
+        },
+        "flags": {
+          "exceedsLargestVehicle": false,
+          "crewCapped": false
+        }
+      }
+    },
+    {
+      "name": "movedna-premium-instant",
+      "input": {
+        "tier": "premium",
+        "mode": "instant",
+        "distanceKm": 20,
+        "durationSeconds": 3600,
+        "basket": {
+          "counts": {},
+          "customItems": []
+        },
+        "catalog": [
+          {
+            "itemId": "sofa_3seater",
+            "name": "Sofa (3-seater)",
+            "category": "living_room",
+            "widthCm": 200,
+            "heightCm": 90,
+            "depthCm": 90,
+            "weightKg": 70,
+            "moveClassificationWeight": 12,
+            "moveTypeMinimum": "regular",
+            "unitPriceEur": 26.7,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "cardboard_boxes",
+            "name": "Cardboard boxes",
+            "category": "boxes",
+            "widthCm": 60,
+            "heightCm": 40,
+            "depthCm": 40,
+            "weightKg": 10,
+            "moveClassificationWeight": 2,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": 2.46,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "piano",
+            "name": "Piano",
+            "category": "special",
+            "widthCm": 150,
+            "heightCm": 130,
+            "depthCm": 60,
+            "weightKg": 200,
+            "moveClassificationWeight": 25,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.7,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "wardrobe_large",
+            "name": "Wardrobe (large)",
+            "category": "bedroom",
+            "widthCm": 200,
+            "heightCm": 220,
+            "depthCm": 60,
+            "weightKg": 100,
+            "moveClassificationWeight": 18,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.4,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "unpriced_lamp",
+            "name": "Lamp (no price yet)",
+            "category": "miscellaneous",
+            "widthCm": 40,
+            "heightCm": 160,
+            "depthCm": 40,
+            "weightKg": 3,
+            "moveClassificationWeight": 1,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": null
+          }
+        ]
+      },
+      "expected": {
+        "version": "v3",
+        "currency": "EUR",
+        "tier": "premium",
+        "mode": "instant",
+        "profile": {
+          "itemCount": 0,
+          "loadedVolumeM3": 0,
+          "rawVolumeM3": 0,
+          "weightKg": 0,
+          "requiredCrew": 1,
+          "crew": 3,
+          "vehicleType": "large_truck",
+          "billableHours": 2,
+          "distanceKm": 20,
+          "durationHours": 1
+        },
+        "lines": {
+          "base": 85,
+          "distance": 34,
+          "vehicle": 45,
+          "labor": 168,
+          "items": 0,
+          "packing": 65,
+          "handling": 40,
+          "services": 0,
+          "storage": 0
+        },
+        "operationalSubtotal": 437,
+        "modeMultiplier": 1.1,
+        "modeAdjustment": 43.7,
+        "adjustedSubtotal": 480.7,
+        "platformFee": 38.46,
+        "discount": 0,
+        "minimumApplied": false,
+        "net": 519.16,
+        "vatRate": 0.19,
+        "vat": 98.64,
+        "total": 617.8,
+        "serviceLines": [],
+        "itemLines": [],
+        "rates": {
+          "access.floorSurchargeNoElevator": 15,
+          "access.haltverbotFee": 0,
+          "capacityM3.large_truck": 45,
+          "crew.m3PerMover": 15,
+          "crew.max": 4,
+          "handling.hoursPerM3": 0.2,
+          "packing.none": 0,
+          "platformFee.fixed": 0,
+          "platformFee.rate": 0.08,
+          "pricing.minimumCharge": 49,
+          "storage.perWeek": 30,
+          "tax.vatRate": 0.19,
+          "tier.premium.basePrice": 85,
+          "tier.premium.crew": 3,
+          "tier.premium.distanceRatePerKm": 1.7,
+          "tier.premium.handlingAllowance": 40,
+          "tier.premium.instantMultiplier": 1.1,
+          "tier.premium.laborRatePerHour": 28,
+          "tier.premium.minVehicleRank": 2,
+          "tier.premium.minimumHours": 2,
+          "tier.premium.packingAllowance": 65,
+          "vehicle.charge.large_truck": 45,
+          "volume.packingFactor": 1.35
+        },
+        "assumptions": {
+          "unpricedItemIds": [],
+          "unknownItemIds": [],
+          "estimated": true
+        },
+        "flags": {
+          "exceedsLargestVehicle": false,
+          "crewCapped": false
+        }
+      }
+    },
+    {
+      "name": "items-priced-basket",
+      "input": {
+        "tier": "regular",
+        "mode": "scheduled",
+        "distanceKm": 12.5,
+        "durationSeconds": 1500,
+        "basket": {
+          "counts": {
+            "sofa_3seater": 2,
+            "cardboard_boxes": 10
+          },
+          "customItems": []
+        },
+        "catalog": [
+          {
+            "itemId": "sofa_3seater",
+            "name": "Sofa (3-seater)",
+            "category": "living_room",
+            "widthCm": 200,
+            "heightCm": 90,
+            "depthCm": 90,
+            "weightKg": 70,
+            "moveClassificationWeight": 12,
+            "moveTypeMinimum": "regular",
+            "unitPriceEur": 26.7,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "cardboard_boxes",
+            "name": "Cardboard boxes",
+            "category": "boxes",
+            "widthCm": 60,
+            "heightCm": 40,
+            "depthCm": 40,
+            "weightKg": 10,
+            "moveClassificationWeight": 2,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": 2.46,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "piano",
+            "name": "Piano",
+            "category": "special",
+            "widthCm": 150,
+            "heightCm": 130,
+            "depthCm": 60,
+            "weightKg": 200,
+            "moveClassificationWeight": 25,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.7,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "wardrobe_large",
+            "name": "Wardrobe (large)",
+            "category": "bedroom",
+            "widthCm": 200,
+            "heightCm": 220,
+            "depthCm": 60,
+            "weightKg": 100,
+            "moveClassificationWeight": 18,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.4,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "unpriced_lamp",
+            "name": "Lamp (no price yet)",
+            "category": "miscellaneous",
+            "widthCm": 40,
+            "heightCm": 160,
+            "depthCm": 40,
+            "weightKg": 3,
+            "moveClassificationWeight": 1,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": null
+          }
+        ],
+        "floorsNoLift": 2,
+        "packingLevel": "partial",
+        "services": [
+          "furniture_disassembly",
+          "furniture_assembly"
+        ]
+      },
+      "expected": {
+        "version": "v3",
+        "currency": "EUR",
+        "tier": "regular",
+        "mode": "scheduled",
+        "profile": {
+          "itemCount": 12,
+          "loadedVolumeM3": 5.67,
+          "rawVolumeM3": 4.2,
+          "weightKg": 240,
+          "requiredCrew": 1,
+          "crew": 2,
+          "vehicleType": "medium_truck",
+          "billableHours": 2,
+          "distanceKm": 12.5,
+          "durationHours": 0.417
+        },
+        "lines": {
+          "base": 55,
+          "distance": 16.88,
+          "vehicle": 25,
+          "labor": 96,
+          "items": 78,
+          "packing": 80,
+          "handling": 50,
+          "services": 100,
+          "storage": 0
+        },
+        "operationalSubtotal": 500.88,
+        "modeMultiplier": 1,
+        "modeAdjustment": 0,
+        "adjustedSubtotal": 500.88,
+        "platformFee": 40.07,
+        "discount": 0,
+        "minimumApplied": false,
+        "net": 540.95,
+        "vatRate": 0.19,
+        "vat": 102.78,
+        "total": 643.73,
+        "serviceLines": [
+          {
+            "key": "furniture_assembly",
+            "amountEur": 50
+          },
+          {
+            "key": "furniture_disassembly",
+            "amountEur": 50
+          }
+        ],
+        "itemLines": [
+          {
+            "key": "cardboard_boxes",
+            "qty": 10,
+            "unitEur": 2.46,
+            "amountEur": 24.6
+          },
+          {
+            "key": "sofa_3seater",
+            "qty": 2,
+            "unitEur": 26.7,
+            "amountEur": 53.4
+          }
+        ],
+        "rates": {
+          "access.floorSurchargeNoElevator": 15,
+          "access.haltverbotFee": 0,
+          "capacityM3.medium_truck": 25,
+          "crew.m3PerMover": 15,
+          "crew.max": 4,
+          "handling.hoursPerM3": 0.2,
+          "packing.partial": 50,
+          "platformFee.fixed": 0,
+          "platformFee.rate": 0.08,
+          "pricing.minimumCharge": 49,
+          "service.furniture_assembly": 50,
+          "service.furniture_disassembly": 50,
+          "storage.perWeek": 30,
+          "tax.vatRate": 0.19,
+          "tier.regular.basePrice": 55,
+          "tier.regular.crew": 2,
+          "tier.regular.distanceRatePerKm": 1.35,
+          "tier.regular.handlingAllowance": 20,
+          "tier.regular.laborRatePerHour": 24,
+          "tier.regular.minVehicleRank": 1,
+          "tier.regular.minimumHours": 2,
+          "tier.regular.packingAllowance": 30,
+          "vehicle.charge.medium_truck": 25,
+          "volume.packingFactor": 1.35
+        },
+        "assumptions": {
+          "unpricedItemIds": [],
+          "unknownItemIds": [],
+          "estimated": true
+        },
+        "flags": {
+          "exceedsLargestVehicle": false,
+          "crewCapped": false
+        }
+      }
+    },
+    {
+      "name": "crew-3-by-volume",
+      "input": {
+        "tier": "light",
+        "mode": "instant",
         "distanceKm": 8,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": null,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
+        "durationSeconds": 900,
+        "basket": {
+          "counts": {
+            "sofa_3seater": 20
+          },
+          "customItems": []
+        },
+        "catalog": [
+          {
+            "itemId": "sofa_3seater",
+            "name": "Sofa (3-seater)",
+            "category": "living_room",
+            "widthCm": 200,
+            "heightCm": 90,
+            "depthCm": 90,
+            "weightKg": 70,
+            "moveClassificationWeight": 12,
+            "moveTypeMinimum": "regular",
+            "unitPriceEur": 26.7,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "cardboard_boxes",
+            "name": "Cardboard boxes",
+            "category": "boxes",
+            "widthCm": 60,
+            "heightCm": 40,
+            "depthCm": 40,
+            "weightKg": 10,
+            "moveClassificationWeight": 2,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": 2.46,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "piano",
+            "name": "Piano",
+            "category": "special",
+            "widthCm": 150,
+            "heightCm": 130,
+            "depthCm": 60,
+            "weightKg": 200,
+            "moveClassificationWeight": 25,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.7,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "wardrobe_large",
+            "name": "Wardrobe (large)",
+            "category": "bedroom",
+            "widthCm": 200,
+            "heightCm": 220,
+            "depthCm": 60,
+            "weightKg": 100,
+            "moveClassificationWeight": 18,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.4,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "unpriced_lamp",
+            "name": "Lamp (no price yet)",
+            "category": "miscellaneous",
+            "widthCm": 40,
+            "heightCm": 160,
+            "depthCm": 40,
+            "weightKg": 3,
+            "moveClassificationWeight": 1,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": null
+          }
+        ]
       },
       "expected": {
-        "model": "local",
-        "volumeM3": 8,
-        "distanceKm": 8,
-        "billableHours": 2,
-        "hourlyRate": 75,
-        "labourCost": 150,
-        "distanceCost": 6.8,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 156.8,
-        "leadTimeFactor": 1.25,
-        "leadTimeAdjustment": 39.2,
-        "total": 196
+        "version": "v3",
+        "currency": "EUR",
+        "tier": "light",
+        "mode": "instant",
+        "profile": {
+          "itemCount": 20,
+          "loadedVolumeM3": 43.74,
+          "rawVolumeM3": 32.4,
+          "weightKg": 1400,
+          "requiredCrew": 3,
+          "crew": 3,
+          "vehicleType": "large_truck",
+          "billableHours": 3.25,
+          "distanceKm": 8,
+          "durationHours": 0.25
+        },
+        "lines": {
+          "base": 35,
+          "distance": 8.8,
+          "vehicle": 45,
+          "labor": 214.5,
+          "items": 534,
+          "packing": 0,
+          "handling": 0,
+          "services": 0,
+          "storage": 0
+        },
+        "operationalSubtotal": 837.3,
+        "modeMultiplier": 1.2,
+        "modeAdjustment": 167.46,
+        "adjustedSubtotal": 1004.76,
+        "platformFee": 80.38,
+        "discount": 0,
+        "minimumApplied": false,
+        "net": 1085.14,
+        "vatRate": 0.19,
+        "vat": 206.18,
+        "total": 1291.32,
+        "serviceLines": [],
+        "itemLines": [
+          {
+            "key": "sofa_3seater",
+            "qty": 20,
+            "unitEur": 26.7,
+            "amountEur": 534
+          }
+        ],
+        "rates": {
+          "access.floorSurchargeNoElevator": 15,
+          "access.haltverbotFee": 0,
+          "capacityM3.large_truck": 45,
+          "capacityM3.medium_truck": 25,
+          "capacityM3.small_van": 10,
+          "crew.m3PerMover": 15,
+          "crew.max": 4,
+          "handling.hoursPerM3": 0.2,
+          "packing.none": 0,
+          "platformFee.fixed": 0,
+          "platformFee.rate": 0.08,
+          "pricing.minimumCharge": 49,
+          "storage.perWeek": 30,
+          "tax.vatRate": 0.19,
+          "tier.light.basePrice": 35,
+          "tier.light.crew": 1,
+          "tier.light.distanceRatePerKm": 1.1,
+          "tier.light.handlingAllowance": 0,
+          "tier.light.instantMultiplier": 1.2,
+          "tier.light.laborRatePerHour": 22,
+          "tier.light.minVehicleRank": 0,
+          "tier.light.minimumHours": 2,
+          "tier.light.packingAllowance": 0,
+          "vehicle.charge.large_truck": 45,
+          "volume.packingFactor": 1.35
+        },
+        "assumptions": {
+          "unpricedItemIds": [],
+          "unknownItemIds": [],
+          "estimated": true
+        },
+        "flags": {
+          "exceedsLargestVehicle": false,
+          "crewCapped": false
+        }
       }
     },
     {
+      "name": "crew-2-by-required-crew",
       "input": {
-        "volumeM3": 8,
-        "distanceKm": 8,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 12,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
+        "tier": "light",
+        "mode": "scheduled",
+        "distanceKm": 5,
+        "durationSeconds": 600,
+        "basket": {
+          "counts": {
+            "piano": 1
+          },
+          "customItems": []
+        },
+        "catalog": [
+          {
+            "itemId": "sofa_3seater",
+            "name": "Sofa (3-seater)",
+            "category": "living_room",
+            "widthCm": 200,
+            "heightCm": 90,
+            "depthCm": 90,
+            "weightKg": 70,
+            "moveClassificationWeight": 12,
+            "moveTypeMinimum": "regular",
+            "unitPriceEur": 26.7,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "cardboard_boxes",
+            "name": "Cardboard boxes",
+            "category": "boxes",
+            "widthCm": 60,
+            "heightCm": 40,
+            "depthCm": 40,
+            "weightKg": 10,
+            "moveClassificationWeight": 2,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": 2.46,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "piano",
+            "name": "Piano",
+            "category": "special",
+            "widthCm": 150,
+            "heightCm": 130,
+            "depthCm": 60,
+            "weightKg": 200,
+            "moveClassificationWeight": 25,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.7,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "wardrobe_large",
+            "name": "Wardrobe (large)",
+            "category": "bedroom",
+            "widthCm": 200,
+            "heightCm": 220,
+            "depthCm": 60,
+            "weightKg": 100,
+            "moveClassificationWeight": 18,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.4,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "unpriced_lamp",
+            "name": "Lamp (no price yet)",
+            "category": "miscellaneous",
+            "widthCm": 40,
+            "heightCm": 160,
+            "depthCm": 40,
+            "weightKg": 3,
+            "moveClassificationWeight": 1,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": null
+          }
+        ],
+        "floorsNoLift": 1,
+        "haltverbotCount": 1
       },
       "expected": {
-        "model": "local",
-        "volumeM3": 8,
-        "distanceKm": 8,
-        "billableHours": 2,
-        "hourlyRate": 75,
-        "labourCost": 150,
-        "distanceCost": 6.8,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 156.8,
-        "leadTimeFactor": 1.15,
-        "leadTimeAdjustment": 23.52,
-        "total": 180.32
+        "version": "v3",
+        "currency": "EUR",
+        "tier": "light",
+        "mode": "scheduled",
+        "profile": {
+          "itemCount": 1,
+          "loadedVolumeM3": 1.58,
+          "rawVolumeM3": 1.17,
+          "weightKg": 200,
+          "requiredCrew": 2,
+          "crew": 2,
+          "vehicleType": "small_van",
+          "billableHours": 2,
+          "distanceKm": 5,
+          "durationHours": 0.167
+        },
+        "lines": {
+          "base": 35,
+          "distance": 5.5,
+          "vehicle": 15,
+          "labor": 88,
+          "items": 41.7,
+          "packing": 0,
+          "handling": 15,
+          "services": 0,
+          "storage": 0
+        },
+        "operationalSubtotal": 200.2,
+        "modeMultiplier": 1,
+        "modeAdjustment": 0,
+        "adjustedSubtotal": 200.2,
+        "platformFee": 16.02,
+        "discount": 0,
+        "minimumApplied": false,
+        "net": 216.22,
+        "vatRate": 0.19,
+        "vat": 41.08,
+        "total": 257.3,
+        "serviceLines": [],
+        "itemLines": [
+          {
+            "key": "piano",
+            "qty": 1,
+            "unitEur": 41.7,
+            "amountEur": 41.7
+          }
+        ],
+        "rates": {
+          "access.floorSurchargeNoElevator": 15,
+          "access.haltverbotFee": 0,
+          "capacityM3.small_van": 10,
+          "crew.m3PerMover": 15,
+          "crew.max": 4,
+          "handling.hoursPerM3": 0.2,
+          "packing.none": 0,
+          "platformFee.fixed": 0,
+          "platformFee.rate": 0.08,
+          "pricing.minimumCharge": 49,
+          "storage.perWeek": 30,
+          "tax.vatRate": 0.19,
+          "tier.light.basePrice": 35,
+          "tier.light.crew": 1,
+          "tier.light.distanceRatePerKm": 1.1,
+          "tier.light.handlingAllowance": 0,
+          "tier.light.laborRatePerHour": 22,
+          "tier.light.minVehicleRank": 0,
+          "tier.light.minimumHours": 2,
+          "tier.light.packingAllowance": 0,
+          "vehicle.charge.small_van": 15,
+          "volume.packingFactor": 1.35
+        },
+        "assumptions": {
+          "unpricedItemIds": [],
+          "unknownItemIds": [],
+          "estimated": true
+        },
+        "flags": {
+          "exceedsLargestVehicle": false,
+          "crewCapped": false
+        }
       }
     },
     {
+      "name": "exceeds-largest-vehicle",
       "input": {
-        "volumeM3": 8,
-        "distanceKm": 8,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 48,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "local",
-        "volumeM3": 8,
-        "distanceKm": 8,
-        "billableHours": 2,
-        "hourlyRate": 75,
-        "labourCost": 150,
-        "distanceCost": 6.8,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 156.8,
-        "leadTimeFactor": 1,
-        "leadTimeAdjustment": 0,
-        "total": 156.8
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 8,
-        "distanceKm": 8,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 96,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "local",
-        "volumeM3": 8,
-        "distanceKm": 8,
-        "billableHours": 2,
-        "hourlyRate": 75,
-        "labourCost": 150,
-        "distanceCost": 6.8,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 156.8,
-        "leadTimeFactor": 0.92,
-        "leadTimeAdjustment": -12.54,
-        "total": 144.26
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 8,
-        "distanceKm": 8,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 336,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "local",
-        "volumeM3": 8,
-        "distanceKm": 8,
-        "billableHours": 2,
-        "hourlyRate": 75,
-        "labourCost": 150,
-        "distanceCost": 6.8,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 156.8,
-        "leadTimeFactor": 0.85,
-        "leadTimeAdjustment": -23.52,
-        "total": 133.28
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 18,
-        "distanceKm": 15,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": null,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "local",
-        "volumeM3": 18,
-        "distanceKm": 15,
-        "billableHours": 2,
-        "hourlyRate": 75,
-        "labourCost": 150,
-        "distanceCost": 12.75,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 162.75,
-        "leadTimeFactor": 1.25,
-        "leadTimeAdjustment": 40.69,
-        "total": 203.44
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 18,
-        "distanceKm": 15,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 12,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "local",
-        "volumeM3": 18,
-        "distanceKm": 15,
-        "billableHours": 2,
-        "hourlyRate": 75,
-        "labourCost": 150,
-        "distanceCost": 12.75,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 162.75,
-        "leadTimeFactor": 1.15,
-        "leadTimeAdjustment": 24.41,
-        "total": 187.16
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 18,
-        "distanceKm": 15,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 48,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "local",
-        "volumeM3": 18,
-        "distanceKm": 15,
-        "billableHours": 2,
-        "hourlyRate": 75,
-        "labourCost": 150,
-        "distanceCost": 12.75,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 162.75,
-        "leadTimeFactor": 1,
-        "leadTimeAdjustment": 0,
-        "total": 162.75
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 18,
-        "distanceKm": 15,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 96,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "local",
-        "volumeM3": 18,
-        "distanceKm": 15,
-        "billableHours": 2,
-        "hourlyRate": 75,
-        "labourCost": 150,
-        "distanceCost": 12.75,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 162.75,
-        "leadTimeFactor": 0.92,
-        "leadTimeAdjustment": -13.02,
-        "total": 149.73
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 18,
-        "distanceKm": 15,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 336,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "local",
-        "volumeM3": 18,
-        "distanceKm": 15,
-        "billableHours": 2,
-        "hourlyRate": 75,
-        "labourCost": 150,
-        "distanceCost": 12.75,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 162.75,
-        "leadTimeFactor": 0.85,
-        "leadTimeAdjustment": -24.41,
-        "total": 138.34
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 28,
-        "distanceKm": 25,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": null,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "local",
-        "volumeM3": 28,
-        "distanceKm": 25,
-        "billableHours": 2.8,
-        "hourlyRate": 75,
-        "labourCost": 210,
-        "distanceCost": 21.25,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 231.25,
-        "leadTimeFactor": 1.25,
-        "leadTimeAdjustment": 57.81,
-        "total": 289.06
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 28,
-        "distanceKm": 25,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 12,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "local",
-        "volumeM3": 28,
-        "distanceKm": 25,
-        "billableHours": 2.8,
-        "hourlyRate": 75,
-        "labourCost": 210,
-        "distanceCost": 21.25,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 231.25,
-        "leadTimeFactor": 1.15,
-        "leadTimeAdjustment": 34.69,
-        "total": 265.94
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 28,
-        "distanceKm": 25,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 48,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "local",
-        "volumeM3": 28,
-        "distanceKm": 25,
-        "billableHours": 2.8,
-        "hourlyRate": 75,
-        "labourCost": 210,
-        "distanceCost": 21.25,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 231.25,
-        "leadTimeFactor": 1,
-        "leadTimeAdjustment": 0,
-        "total": 231.25
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 28,
-        "distanceKm": 25,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 96,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "local",
-        "volumeM3": 28,
-        "distanceKm": 25,
-        "billableHours": 2.8,
-        "hourlyRate": 75,
-        "labourCost": 210,
-        "distanceCost": 21.25,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 231.25,
-        "leadTimeFactor": 0.92,
-        "leadTimeAdjustment": -18.5,
-        "total": 212.75
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 28,
-        "distanceKm": 25,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 336,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "local",
-        "volumeM3": 28,
-        "distanceKm": 25,
-        "billableHours": 2.8,
-        "hourlyRate": 75,
-        "labourCost": 210,
-        "distanceCost": 21.25,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 231.25,
-        "leadTimeFactor": 0.85,
-        "leadTimeAdjustment": -34.69,
-        "total": 196.56
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 40,
+        "tier": "premium",
+        "mode": "scheduled",
         "distanceKm": 40,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": null,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
+        "durationSeconds": 2700,
+        "basket": {
+          "counts": {
+            "wardrobe_large": 30
+          },
+          "customItems": []
+        },
+        "catalog": [
+          {
+            "itemId": "sofa_3seater",
+            "name": "Sofa (3-seater)",
+            "category": "living_room",
+            "widthCm": 200,
+            "heightCm": 90,
+            "depthCm": 90,
+            "weightKg": 70,
+            "moveClassificationWeight": 12,
+            "moveTypeMinimum": "regular",
+            "unitPriceEur": 26.7,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "cardboard_boxes",
+            "name": "Cardboard boxes",
+            "category": "boxes",
+            "widthCm": 60,
+            "heightCm": 40,
+            "depthCm": 40,
+            "weightKg": 10,
+            "moveClassificationWeight": 2,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": 2.46,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "piano",
+            "name": "Piano",
+            "category": "special",
+            "widthCm": 150,
+            "heightCm": 130,
+            "depthCm": 60,
+            "weightKg": 200,
+            "moveClassificationWeight": 25,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.7,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "wardrobe_large",
+            "name": "Wardrobe (large)",
+            "category": "bedroom",
+            "widthCm": 200,
+            "heightCm": 220,
+            "depthCm": 60,
+            "weightKg": 100,
+            "moveClassificationWeight": 18,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.4,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "unpriced_lamp",
+            "name": "Lamp (no price yet)",
+            "category": "miscellaneous",
+            "widthCm": 40,
+            "heightCm": 160,
+            "depthCm": 40,
+            "weightKg": 3,
+            "moveClassificationWeight": 1,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": null
+          }
+        ]
       },
       "expected": {
-        "model": "local",
-        "volumeM3": 40,
-        "distanceKm": 40,
-        "billableHours": 4,
-        "hourlyRate": 75,
-        "labourCost": 300,
-        "distanceCost": 34,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 334,
-        "leadTimeFactor": 1.25,
-        "leadTimeAdjustment": 83.5,
-        "total": 417.5
+        "version": "v3",
+        "currency": "EUR",
+        "tier": "premium",
+        "mode": "scheduled",
+        "profile": {
+          "itemCount": 30,
+          "loadedVolumeM3": 106.92,
+          "rawVolumeM3": 79.2,
+          "weightKg": 3000,
+          "requiredCrew": 4,
+          "crew": 4,
+          "vehicleType": "large_truck",
+          "billableHours": 6.25,
+          "distanceKm": 40,
+          "durationHours": 0.75
+        },
+        "lines": {
+          "base": 85,
+          "distance": 68,
+          "vehicle": 45,
+          "labor": 700,
+          "items": 1242,
+          "packing": 65,
+          "handling": 40,
+          "services": 0,
+          "storage": 0
+        },
+        "operationalSubtotal": 2245,
+        "modeMultiplier": 1,
+        "modeAdjustment": 0,
+        "adjustedSubtotal": 2245,
+        "platformFee": 179.6,
+        "discount": 0,
+        "minimumApplied": false,
+        "net": 2424.6,
+        "vatRate": 0.19,
+        "vat": 460.67,
+        "total": 2885.27,
+        "serviceLines": [],
+        "itemLines": [
+          {
+            "key": "wardrobe_large",
+            "qty": 30,
+            "unitEur": 41.4,
+            "amountEur": 1242
+          }
+        ],
+        "rates": {
+          "access.floorSurchargeNoElevator": 15,
+          "access.haltverbotFee": 0,
+          "capacityM3.large_truck": 45,
+          "crew.m3PerMover": 15,
+          "crew.max": 4,
+          "handling.hoursPerM3": 0.2,
+          "packing.none": 0,
+          "platformFee.fixed": 0,
+          "platformFee.rate": 0.08,
+          "pricing.minimumCharge": 49,
+          "storage.perWeek": 30,
+          "tax.vatRate": 0.19,
+          "tier.premium.basePrice": 85,
+          "tier.premium.crew": 3,
+          "tier.premium.distanceRatePerKm": 1.7,
+          "tier.premium.handlingAllowance": 40,
+          "tier.premium.laborRatePerHour": 28,
+          "tier.premium.minVehicleRank": 2,
+          "tier.premium.minimumHours": 2,
+          "tier.premium.packingAllowance": 65,
+          "vehicle.charge.large_truck": 45,
+          "volume.packingFactor": 1.35
+        },
+        "assumptions": {
+          "unpricedItemIds": [],
+          "unknownItemIds": [],
+          "estimated": true
+        },
+        "flags": {
+          "exceedsLargestVehicle": true,
+          "crewCapped": true
+        }
       }
     },
     {
+      "name": "minimum-charge-applies",
       "input": {
-        "volumeM3": 40,
-        "distanceKm": 40,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 12,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "local",
-        "volumeM3": 40,
-        "distanceKm": 40,
-        "billableHours": 4,
-        "hourlyRate": 75,
-        "labourCost": 300,
-        "distanceCost": 34,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 334,
-        "leadTimeFactor": 1.15,
-        "leadTimeAdjustment": 50.1,
-        "total": 384.1
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 40,
-        "distanceKm": 40,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 48,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "local",
-        "volumeM3": 40,
-        "distanceKm": 40,
-        "billableHours": 4,
-        "hourlyRate": 75,
-        "labourCost": 300,
-        "distanceCost": 34,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 334,
-        "leadTimeFactor": 1,
-        "leadTimeAdjustment": 0,
-        "total": 334
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 40,
-        "distanceKm": 40,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 96,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "local",
-        "volumeM3": 40,
-        "distanceKm": 40,
-        "billableHours": 4,
-        "hourlyRate": 75,
-        "labourCost": 300,
-        "distanceCost": 34,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 334,
-        "leadTimeFactor": 0.92,
-        "leadTimeAdjustment": -26.72,
-        "total": 307.28
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 40,
-        "distanceKm": 40,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 336,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "local",
-        "volumeM3": 40,
-        "distanceKm": 40,
-        "billableHours": 4,
-        "hourlyRate": 75,
-        "labourCost": 300,
-        "distanceCost": 34,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 334,
-        "leadTimeFactor": 0.85,
-        "leadTimeAdjustment": -50.1,
-        "total": 283.9
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 18,
-        "distanceKm": 120,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": null,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "long_distance",
-        "volumeM3": 18,
-        "distanceKm": 120,
-        "billableHours": 1.8,
-        "hourlyRate": 75,
-        "labourCost": 135,
-        "distanceCost": 25.92,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 160.92,
-        "leadTimeFactor": 1.25,
-        "leadTimeAdjustment": 40.23,
-        "total": 201.15
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 18,
-        "distanceKm": 120,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 12,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "long_distance",
-        "volumeM3": 18,
-        "distanceKm": 120,
-        "billableHours": 1.8,
-        "hourlyRate": 75,
-        "labourCost": 135,
-        "distanceCost": 25.92,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 160.92,
-        "leadTimeFactor": 1.15,
-        "leadTimeAdjustment": 24.14,
-        "total": 185.06
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 18,
-        "distanceKm": 120,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 48,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "long_distance",
-        "volumeM3": 18,
-        "distanceKm": 120,
-        "billableHours": 1.8,
-        "hourlyRate": 75,
-        "labourCost": 135,
-        "distanceCost": 25.92,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 160.92,
-        "leadTimeFactor": 1,
-        "leadTimeAdjustment": 0,
-        "total": 160.92
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 18,
-        "distanceKm": 120,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 96,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "long_distance",
-        "volumeM3": 18,
-        "distanceKm": 120,
-        "billableHours": 1.8,
-        "hourlyRate": 75,
-        "labourCost": 135,
-        "distanceCost": 25.92,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 160.92,
-        "leadTimeFactor": 0.92,
-        "leadTimeAdjustment": -12.87,
-        "total": 148.05
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 18,
-        "distanceKm": 120,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 336,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "long_distance",
-        "volumeM3": 18,
-        "distanceKm": 120,
-        "billableHours": 1.8,
-        "hourlyRate": 75,
-        "labourCost": 135,
-        "distanceCost": 25.92,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 160.92,
-        "leadTimeFactor": 0.85,
-        "leadTimeAdjustment": -24.14,
-        "total": 136.78
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 40,
-        "distanceKm": 300,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": null,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "long_distance",
-        "volumeM3": 40,
-        "distanceKm": 300,
-        "billableHours": 4,
-        "hourlyRate": 75,
-        "labourCost": 300,
-        "distanceCost": 144,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 444,
-        "leadTimeFactor": 1.25,
-        "leadTimeAdjustment": 111,
-        "total": 555
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 40,
-        "distanceKm": 300,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 12,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "long_distance",
-        "volumeM3": 40,
-        "distanceKm": 300,
-        "billableHours": 4,
-        "hourlyRate": 75,
-        "labourCost": 300,
-        "distanceCost": 144,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 444,
-        "leadTimeFactor": 1.15,
-        "leadTimeAdjustment": 66.6,
-        "total": 510.6
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 40,
-        "distanceKm": 300,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 48,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "long_distance",
-        "volumeM3": 40,
-        "distanceKm": 300,
-        "billableHours": 4,
-        "hourlyRate": 75,
-        "labourCost": 300,
-        "distanceCost": 144,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 444,
-        "leadTimeFactor": 1,
-        "leadTimeAdjustment": 0,
-        "total": 444
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 40,
-        "distanceKm": 300,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 96,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "long_distance",
-        "volumeM3": 40,
-        "distanceKm": 300,
-        "billableHours": 4,
-        "hourlyRate": 75,
-        "labourCost": 300,
-        "distanceCost": 144,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 444,
-        "leadTimeFactor": 0.92,
-        "leadTimeAdjustment": -35.52,
-        "total": 408.48
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 40,
-        "distanceKm": 300,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 336,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "long_distance",
-        "volumeM3": 40,
-        "distanceKm": 300,
-        "billableHours": 4,
-        "hourlyRate": 75,
-        "labourCost": 300,
-        "distanceCost": 144,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 444,
-        "leadTimeFactor": 0.85,
-        "leadTimeAdjustment": -66.6,
-        "total": 377.4
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 40,
-        "distanceKm": 500,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": null,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "long_distance",
-        "volumeM3": 40,
-        "distanceKm": 500,
-        "billableHours": 4,
-        "hourlyRate": 75,
-        "labourCost": 300,
-        "distanceCost": 240,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 540,
-        "leadTimeFactor": 1.25,
-        "leadTimeAdjustment": 135,
-        "total": 675
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 40,
-        "distanceKm": 500,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 12,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "long_distance",
-        "volumeM3": 40,
-        "distanceKm": 500,
-        "billableHours": 4,
-        "hourlyRate": 75,
-        "labourCost": 300,
-        "distanceCost": 240,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 540,
-        "leadTimeFactor": 1.15,
-        "leadTimeAdjustment": 81,
-        "total": 621
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 40,
-        "distanceKm": 500,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 48,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "long_distance",
-        "volumeM3": 40,
-        "distanceKm": 500,
-        "billableHours": 4,
-        "hourlyRate": 75,
-        "labourCost": 300,
-        "distanceCost": 240,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 540,
-        "leadTimeFactor": 1,
-        "leadTimeAdjustment": 0,
-        "total": 540
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 40,
-        "distanceKm": 500,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 96,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "long_distance",
-        "volumeM3": 40,
-        "distanceKm": 500,
-        "billableHours": 4,
-        "hourlyRate": 75,
-        "labourCost": 300,
-        "distanceCost": 240,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 540,
-        "leadTimeFactor": 0.92,
-        "leadTimeAdjustment": -43.2,
-        "total": 496.8
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 40,
-        "distanceKm": 500,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 336,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "long_distance",
-        "volumeM3": 40,
-        "distanceKm": 500,
-        "billableHours": 4,
-        "hourlyRate": 75,
-        "labourCost": 300,
-        "distanceCost": 240,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 540,
-        "leadTimeFactor": 0.85,
-        "leadTimeAdjustment": -81,
-        "total": 459
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 0,
+        "tier": "light",
+        "mode": "scheduled",
         "distanceKm": 0,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": null,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
+        "durationSeconds": 0,
+        "basket": {
+          "counts": {},
+          "customItems": []
+        },
+        "catalog": [
+          {
+            "itemId": "sofa_3seater",
+            "name": "Sofa (3-seater)",
+            "category": "living_room",
+            "widthCm": 200,
+            "heightCm": 90,
+            "depthCm": 90,
+            "weightKg": 70,
+            "moveClassificationWeight": 12,
+            "moveTypeMinimum": "regular",
+            "unitPriceEur": 26.7,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "cardboard_boxes",
+            "name": "Cardboard boxes",
+            "category": "boxes",
+            "widthCm": 60,
+            "heightCm": 40,
+            "depthCm": 40,
+            "weightKg": 10,
+            "moveClassificationWeight": 2,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": 2.46,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "piano",
+            "name": "Piano",
+            "category": "special",
+            "widthCm": 150,
+            "heightCm": 130,
+            "depthCm": 60,
+            "weightKg": 200,
+            "moveClassificationWeight": 25,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.7,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "wardrobe_large",
+            "name": "Wardrobe (large)",
+            "category": "bedroom",
+            "widthCm": 200,
+            "heightCm": 220,
+            "depthCm": 60,
+            "weightKg": 100,
+            "moveClassificationWeight": 18,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.4,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "unpriced_lamp",
+            "name": "Lamp (no price yet)",
+            "category": "miscellaneous",
+            "widthCm": 40,
+            "heightCm": 160,
+            "depthCm": 40,
+            "weightKg": 3,
+            "moveClassificationWeight": 1,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": null
+          }
+        ],
+        "discountEur": 100
       },
       "expected": {
-        "model": "local",
-        "volumeM3": 0,
-        "distanceKm": 0,
-        "billableHours": 2,
-        "hourlyRate": 75,
-        "labourCost": 150,
-        "distanceCost": 0,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 150,
-        "leadTimeFactor": 1.25,
-        "leadTimeAdjustment": 37.5,
-        "total": 187.5
+        "version": "v3",
+        "currency": "EUR",
+        "tier": "light",
+        "mode": "scheduled",
+        "profile": {
+          "itemCount": 0,
+          "loadedVolumeM3": 0,
+          "rawVolumeM3": 0,
+          "weightKg": 0,
+          "requiredCrew": 1,
+          "crew": 1,
+          "vehicleType": "small_van",
+          "billableHours": 2,
+          "distanceKm": 0,
+          "durationHours": 0
+        },
+        "lines": {
+          "base": 35,
+          "distance": 0,
+          "vehicle": 15,
+          "labor": 44,
+          "items": 0,
+          "packing": 0,
+          "handling": 0,
+          "services": 0,
+          "storage": 0
+        },
+        "operationalSubtotal": 94,
+        "modeMultiplier": 1,
+        "modeAdjustment": 0,
+        "adjustedSubtotal": 94,
+        "platformFee": 7.52,
+        "discount": 100,
+        "minimumApplied": true,
+        "net": 49,
+        "vatRate": 0.19,
+        "vat": 9.31,
+        "total": 58.31,
+        "serviceLines": [],
+        "itemLines": [],
+        "rates": {
+          "access.floorSurchargeNoElevator": 15,
+          "access.haltverbotFee": 0,
+          "capacityM3.small_van": 10,
+          "crew.m3PerMover": 15,
+          "crew.max": 4,
+          "handling.hoursPerM3": 0.2,
+          "packing.none": 0,
+          "platformFee.fixed": 0,
+          "platformFee.rate": 0.08,
+          "pricing.minimumCharge": 49,
+          "storage.perWeek": 30,
+          "tax.vatRate": 0.19,
+          "tier.light.basePrice": 35,
+          "tier.light.crew": 1,
+          "tier.light.distanceRatePerKm": 1.1,
+          "tier.light.handlingAllowance": 0,
+          "tier.light.laborRatePerHour": 22,
+          "tier.light.minVehicleRank": 0,
+          "tier.light.minimumHours": 2,
+          "tier.light.packingAllowance": 0,
+          "vehicle.charge.small_van": 15,
+          "volume.packingFactor": 1.35
+        },
+        "assumptions": {
+          "unpricedItemIds": [],
+          "unknownItemIds": [],
+          "estimated": true
+        },
+        "flags": {
+          "exceedsLargestVehicle": false,
+          "crewCapped": false
+        }
       }
     },
     {
+      "name": "discount-path",
       "input": {
-        "volumeM3": 0,
-        "distanceKm": 0,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 12,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
+        "tier": "regular",
+        "mode": "instant",
+        "distanceKm": 20,
+        "durationSeconds": 3600,
+        "basket": {
+          "counts": {},
+          "customItems": []
+        },
+        "catalog": [
+          {
+            "itemId": "sofa_3seater",
+            "name": "Sofa (3-seater)",
+            "category": "living_room",
+            "widthCm": 200,
+            "heightCm": 90,
+            "depthCm": 90,
+            "weightKg": 70,
+            "moveClassificationWeight": 12,
+            "moveTypeMinimum": "regular",
+            "unitPriceEur": 26.7,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "cardboard_boxes",
+            "name": "Cardboard boxes",
+            "category": "boxes",
+            "widthCm": 60,
+            "heightCm": 40,
+            "depthCm": 40,
+            "weightKg": 10,
+            "moveClassificationWeight": 2,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": 2.46,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "piano",
+            "name": "Piano",
+            "category": "special",
+            "widthCm": 150,
+            "heightCm": 130,
+            "depthCm": 60,
+            "weightKg": 200,
+            "moveClassificationWeight": 25,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.7,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "wardrobe_large",
+            "name": "Wardrobe (large)",
+            "category": "bedroom",
+            "widthCm": 200,
+            "heightCm": 220,
+            "depthCm": 60,
+            "weightKg": 100,
+            "moveClassificationWeight": 18,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.4,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "unpriced_lamp",
+            "name": "Lamp (no price yet)",
+            "category": "miscellaneous",
+            "widthCm": 40,
+            "heightCm": 160,
+            "depthCm": 40,
+            "weightKg": 3,
+            "moveClassificationWeight": 1,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": null
+          }
+        ],
+        "discountEur": 25
       },
       "expected": {
-        "model": "local",
-        "volumeM3": 0,
-        "distanceKm": 0,
-        "billableHours": 2,
-        "hourlyRate": 75,
-        "labourCost": 150,
-        "distanceCost": 0,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 150,
-        "leadTimeFactor": 1.15,
-        "leadTimeAdjustment": 22.5,
-        "total": 172.5
+        "version": "v3",
+        "currency": "EUR",
+        "tier": "regular",
+        "mode": "instant",
+        "profile": {
+          "itemCount": 0,
+          "loadedVolumeM3": 0,
+          "rawVolumeM3": 0,
+          "weightKg": 0,
+          "requiredCrew": 1,
+          "crew": 2,
+          "vehicleType": "medium_truck",
+          "billableHours": 2,
+          "distanceKm": 20,
+          "durationHours": 1
+        },
+        "lines": {
+          "base": 55,
+          "distance": 27,
+          "vehicle": 25,
+          "labor": 96,
+          "items": 0,
+          "packing": 30,
+          "handling": 20,
+          "services": 0,
+          "storage": 0
+        },
+        "operationalSubtotal": 253,
+        "modeMultiplier": 1.15,
+        "modeAdjustment": 37.95,
+        "adjustedSubtotal": 290.95,
+        "platformFee": 23.28,
+        "discount": 25,
+        "minimumApplied": false,
+        "net": 289.23,
+        "vatRate": 0.19,
+        "vat": 54.95,
+        "total": 344.18,
+        "serviceLines": [],
+        "itemLines": [],
+        "rates": {
+          "access.floorSurchargeNoElevator": 15,
+          "access.haltverbotFee": 0,
+          "capacityM3.medium_truck": 25,
+          "crew.m3PerMover": 15,
+          "crew.max": 4,
+          "handling.hoursPerM3": 0.2,
+          "packing.none": 0,
+          "platformFee.fixed": 0,
+          "platformFee.rate": 0.08,
+          "pricing.minimumCharge": 49,
+          "storage.perWeek": 30,
+          "tax.vatRate": 0.19,
+          "tier.regular.basePrice": 55,
+          "tier.regular.crew": 2,
+          "tier.regular.distanceRatePerKm": 1.35,
+          "tier.regular.handlingAllowance": 20,
+          "tier.regular.instantMultiplier": 1.15,
+          "tier.regular.laborRatePerHour": 24,
+          "tier.regular.minVehicleRank": 1,
+          "tier.regular.minimumHours": 2,
+          "tier.regular.packingAllowance": 30,
+          "vehicle.charge.medium_truck": 25,
+          "volume.packingFactor": 1.35
+        },
+        "assumptions": {
+          "unpricedItemIds": [],
+          "unknownItemIds": [],
+          "estimated": true
+        },
+        "flags": {
+          "exceedsLargestVehicle": false,
+          "crewCapped": false
+        }
       }
     },
     {
+      "name": "custom-items-storage-unknown-and-unpriced",
       "input": {
-        "volumeM3": 0,
-        "distanceKm": 0,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 48,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
+        "tier": "regular",
+        "mode": "scheduled",
+        "distanceKm": 33.333,
+        "durationSeconds": 4321,
+        "basket": {
+          "counts": {
+            "unpriced_lamp": 2,
+            "ghost_item": 3,
+            "cardboard_boxes": 0
+          },
+          "customItems": [
+            {
+              "id": "c1",
+              "name": "Loom",
+              "quantity": 1,
+              "approxSize": "extra_large",
+              "approxWeight": 60
+            },
+            {
+              "id": "c2",
+              "name": "Bin",
+              "quantity": 3,
+              "approxSize": "small",
+              "approxWeight": 2
+            }
+          ]
+        },
+        "catalog": [
+          {
+            "itemId": "sofa_3seater",
+            "name": "Sofa (3-seater)",
+            "category": "living_room",
+            "widthCm": 200,
+            "heightCm": 90,
+            "depthCm": 90,
+            "weightKg": 70,
+            "moveClassificationWeight": 12,
+            "moveTypeMinimum": "regular",
+            "unitPriceEur": 26.7,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "cardboard_boxes",
+            "name": "Cardboard boxes",
+            "category": "boxes",
+            "widthCm": 60,
+            "heightCm": 40,
+            "depthCm": 40,
+            "weightKg": 10,
+            "moveClassificationWeight": 2,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": 2.46,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "piano",
+            "name": "Piano",
+            "category": "special",
+            "widthCm": 150,
+            "heightCm": 130,
+            "depthCm": 60,
+            "weightKg": 200,
+            "moveClassificationWeight": 25,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.7,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "wardrobe_large",
+            "name": "Wardrobe (large)",
+            "category": "bedroom",
+            "widthCm": 200,
+            "heightCm": 220,
+            "depthCm": 60,
+            "weightKg": 100,
+            "moveClassificationWeight": 18,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.4,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "unpriced_lamp",
+            "name": "Lamp (no price yet)",
+            "category": "miscellaneous",
+            "widthCm": 40,
+            "heightCm": 160,
+            "depthCm": 40,
+            "weightKg": 3,
+            "moveClassificationWeight": 1,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": null
+          }
+        ],
+        "storageWeeks": 3,
+        "services": [
+          "temporary_storage",
+          "moveout_cleaning",
+          "not_a_service",
+          "moveout_cleaning"
+        ],
+        "packingLevel": "full"
       },
       "expected": {
-        "model": "local",
-        "volumeM3": 0,
-        "distanceKm": 0,
-        "billableHours": 2,
-        "hourlyRate": 75,
-        "labourCost": 150,
-        "distanceCost": 0,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 150,
-        "leadTimeFactor": 1,
-        "leadTimeAdjustment": 0,
-        "total": 150
+        "version": "v3",
+        "currency": "EUR",
+        "tier": "regular",
+        "mode": "scheduled",
+        "profile": {
+          "itemCount": 6,
+          "loadedVolumeM3": 3.526,
+          "rawVolumeM3": 2.612,
+          "weightKg": 72,
+          "requiredCrew": 1,
+          "crew": 2,
+          "vehicleType": "medium_truck",
+          "billableHours": 2,
+          "distanceKm": 33.333,
+          "durationHours": 1.2
+        },
+        "lines": {
+          "base": 55,
+          "distance": 45,
+          "vehicle": 25,
+          "labor": 96,
+          "items": 34,
+          "packing": 150,
+          "handling": 20,
+          "services": 50,
+          "storage": 90
+        },
+        "operationalSubtotal": 565,
+        "modeMultiplier": 1,
+        "modeAdjustment": 0,
+        "adjustedSubtotal": 565,
+        "platformFee": 45.2,
+        "discount": 0,
+        "minimumApplied": false,
+        "net": 610.2,
+        "vatRate": 0.19,
+        "vat": 115.94,
+        "total": 726.14,
+        "serviceLines": [
+          {
+            "key": "moveout_cleaning",
+            "amountEur": 50
+          },
+          {
+            "key": "not_a_service",
+            "amountEur": 0
+          },
+          {
+            "key": "temporary_storage",
+            "amountEur": 0
+          }
+        ],
+        "itemLines": [
+          {
+            "key": "unpriced_lamp",
+            "qty": 2,
+            "unitEur": 0,
+            "amountEur": 0
+          },
+          {
+            "key": "custom:extra_large",
+            "qty": 1,
+            "unitEur": 25,
+            "amountEur": 25
+          },
+          {
+            "key": "custom:small",
+            "qty": 3,
+            "unitEur": 3,
+            "amountEur": 9
+          }
+        ],
+        "rates": {
+          "access.floorSurchargeNoElevator": 15,
+          "access.haltverbotFee": 0,
+          "capacityM3.medium_truck": 25,
+          "crew.m3PerMover": 15,
+          "crew.max": 4,
+          "handling.hoursPerM3": 0.2,
+          "items.custom.extraLarge": 25,
+          "items.custom.small": 3,
+          "packing.full": 120,
+          "platformFee.fixed": 0,
+          "platformFee.rate": 0.08,
+          "pricing.minimumCharge": 49,
+          "service.moveout_cleaning": 50,
+          "service.temporary_storage": 0,
+          "storage.perWeek": 30,
+          "tax.vatRate": 0.19,
+          "tier.regular.basePrice": 55,
+          "tier.regular.crew": 2,
+          "tier.regular.distanceRatePerKm": 1.35,
+          "tier.regular.handlingAllowance": 20,
+          "tier.regular.laborRatePerHour": 24,
+          "tier.regular.minVehicleRank": 1,
+          "tier.regular.minimumHours": 2,
+          "tier.regular.packingAllowance": 30,
+          "vehicle.charge.medium_truck": 25,
+          "volume.custom.extraLarge": 1.8,
+          "volume.custom.small": 0.1,
+          "volume.packingFactor": 1.35
+        },
+        "assumptions": {
+          "unpricedItemIds": [
+            "unpriced_lamp"
+          ],
+          "unknownItemIds": [
+            "ghost_item"
+          ],
+          "estimated": true
+        },
+        "flags": {
+          "exceedsLargestVehicle": false,
+          "crewCapped": false
+        }
       }
     },
     {
+      "name": "mover-vehicle-override",
       "input": {
-        "volumeM3": 0,
-        "distanceKm": 0,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 96,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
+        "tier": "light",
+        "mode": "instant",
+        "distanceKm": 3.2,
+        "durationSeconds": 420,
+        "basket": {
+          "counts": {
+            "cardboard_boxes": 5
+          },
+          "customItems": []
+        },
+        "catalog": [
+          {
+            "itemId": "sofa_3seater",
+            "name": "Sofa (3-seater)",
+            "category": "living_room",
+            "widthCm": 200,
+            "heightCm": 90,
+            "depthCm": 90,
+            "weightKg": 70,
+            "moveClassificationWeight": 12,
+            "moveTypeMinimum": "regular",
+            "unitPriceEur": 26.7,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "cardboard_boxes",
+            "name": "Cardboard boxes",
+            "category": "boxes",
+            "widthCm": 60,
+            "heightCm": 40,
+            "depthCm": 40,
+            "weightKg": 10,
+            "moveClassificationWeight": 2,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": 2.46,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "piano",
+            "name": "Piano",
+            "category": "special",
+            "widthCm": 150,
+            "heightCm": 130,
+            "depthCm": 60,
+            "weightKg": 200,
+            "moveClassificationWeight": 25,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.7,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "wardrobe_large",
+            "name": "Wardrobe (large)",
+            "category": "bedroom",
+            "widthCm": 200,
+            "heightCm": 220,
+            "depthCm": 60,
+            "weightKg": 100,
+            "moveClassificationWeight": 18,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.4,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "unpriced_lamp",
+            "name": "Lamp (no price yet)",
+            "category": "miscellaneous",
+            "widthCm": 40,
+            "heightCm": 160,
+            "depthCm": 40,
+            "weightKg": 3,
+            "moveClassificationWeight": 1,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": null
+          }
+        ],
+        "vehicleType": "large_truck"
       },
       "expected": {
-        "model": "local",
-        "volumeM3": 0,
-        "distanceKm": 0,
-        "billableHours": 2,
-        "hourlyRate": 75,
-        "labourCost": 150,
-        "distanceCost": 0,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 150,
-        "leadTimeFactor": 0.92,
-        "leadTimeAdjustment": -12,
-        "total": 138
-      }
-    },
-    {
-      "input": {
-        "volumeM3": 0,
-        "distanceKm": 0,
-        "vehicleType": "medium_truck",
-        "crewSize": 2,
-        "leadTimeHours": 336,
-        "floorsNoLift": 0,
-        "packingServiceLevel": "none",
-        "storageWeeks": 0
-      },
-      "expected": {
-        "model": "local",
-        "volumeM3": 0,
-        "distanceKm": 0,
-        "billableHours": 2,
-        "hourlyRate": 75,
-        "labourCost": 150,
-        "distanceCost": 0,
-        "accessSurcharge": 0,
-        "packingSurcharge": 0,
-        "storageSurcharge": 0,
-        "subtotal": 150,
-        "leadTimeFactor": 0.85,
-        "leadTimeAdjustment": -22.5,
-        "total": 127.5
+        "version": "v3",
+        "currency": "EUR",
+        "tier": "light",
+        "mode": "instant",
+        "profile": {
+          "itemCount": 5,
+          "loadedVolumeM3": 0.648,
+          "rawVolumeM3": 0.48,
+          "weightKg": 50,
+          "requiredCrew": 1,
+          "crew": 1,
+          "vehicleType": "large_truck",
+          "billableHours": 2,
+          "distanceKm": 3.2,
+          "durationHours": 0.117
+        },
+        "lines": {
+          "base": 35,
+          "distance": 3.52,
+          "vehicle": 45,
+          "labor": 44,
+          "items": 12.3,
+          "packing": 0,
+          "handling": 0,
+          "services": 0,
+          "storage": 0
+        },
+        "operationalSubtotal": 139.82,
+        "modeMultiplier": 1.2,
+        "modeAdjustment": 27.96,
+        "adjustedSubtotal": 167.78,
+        "platformFee": 13.42,
+        "discount": 0,
+        "minimumApplied": false,
+        "net": 181.2,
+        "vatRate": 0.19,
+        "vat": 34.43,
+        "total": 215.63,
+        "serviceLines": [],
+        "itemLines": [
+          {
+            "key": "cardboard_boxes",
+            "qty": 5,
+            "unitEur": 2.46,
+            "amountEur": 12.3
+          }
+        ],
+        "rates": {
+          "access.floorSurchargeNoElevator": 15,
+          "access.haltverbotFee": 0,
+          "crew.m3PerMover": 15,
+          "crew.max": 4,
+          "handling.hoursPerM3": 0.2,
+          "packing.none": 0,
+          "platformFee.fixed": 0,
+          "platformFee.rate": 0.08,
+          "pricing.minimumCharge": 49,
+          "storage.perWeek": 30,
+          "tax.vatRate": 0.19,
+          "tier.light.basePrice": 35,
+          "tier.light.crew": 1,
+          "tier.light.distanceRatePerKm": 1.1,
+          "tier.light.handlingAllowance": 0,
+          "tier.light.instantMultiplier": 1.2,
+          "tier.light.laborRatePerHour": 22,
+          "tier.light.minimumHours": 2,
+          "tier.light.packingAllowance": 0,
+          "vehicle.charge.large_truck": 45,
+          "volume.packingFactor": 1.35
+        },
+        "assumptions": {
+          "unpricedItemIds": [],
+          "unknownItemIds": [],
+          "estimated": true
+        },
+        "flags": {
+          "exceedsLargestVehicle": false,
+          "crewCapped": false
+        }
       }
     }
   ]

@@ -121,14 +121,14 @@
   "classification": {
     "itemMinimum": {
       "premium": "«{{item}}» requiere como mínimo una mudanza premium",
-      "regular": "«{{item}}» requiere como mínimo una mudanza estándar"
+      "regular": "«{{item}}» requiere como mínimo una mudanza media"
     },
     "keepCurrent": {
       "cta": "Mantener el actual"
     },
     "nearLimit": {
-      "light": "Te estás acercando al límite de una mudanza ligera",
-      "regular": "Te estás acercando al límite de una mudanza estándar"
+      "light": "Te estás acercando al límite de una mudanza normal",
+      "regular": "Te estás acercando al límite de una mudanza media"
     },
     "notice": {
       "title": "Aviso de clasificación de la mudanza"
@@ -147,13 +147,13 @@
         "cta": "Mejorar el tipo de mudanza"
       },
       "light": {
-        "cta": "Cambiar a mudanza ligera"
+        "cta": "Cambiar a mudanza normal"
       },
       "premium": {
         "cta": "Cambiar a mudanza premium"
       },
       "regular": {
-        "cta": "Cambiar a mudanza estándar"
+        "cta": "Cambiar a mudanza media"
       },
       "subtitle": "Según los objetos que has seleccionado, te recomendamos cambiar de <0>{{from}}</0> a <1>{{to}}</1>.",
       "title": "Te recomendamos cambiar de tipo de mudanza"
@@ -690,16 +690,16 @@
     "a11y": "Seleccionar el tipo de mudanza",
     "label": "Tipo de mudanza",
     "light": {
-      "body": "Las mudanzas ligeras usan una furgoneta pequeña.",
+      "body": "Las mudanzas normales usan una furgoneta pequeña y un transportista.",
       "helper": "Carga pequeña, pocos objetos",
-      "label": "Mudanza ligera",
-      "short": "Ligera",
+      "label": "Mudanza normal",
+      "short": "Normal",
       "subtitle": "Perfecta para cargas pequeñas: cajas, muebles sueltos o un estudio.",
-      "title": "Mudanza ligera"
+      "title": "Mudanza normal"
     },
     "placeholder": "Elige un tipo de mudanza",
     "premium": {
-      "body": "Las mudanzas premium usan vehículos más grandes y un equipo de 2 o más personas.",
+      "body": "Las mudanzas premium usan un camión grande y un equipo de 3 personas.",
       "helper": "Mudanza con servicio completo",
       "label": "Mudanza premium",
       "short": "Premium",
@@ -707,12 +707,12 @@
       "title": "Mudanza premium"
     },
     "regular": {
-      "body": "Las mudanzas estándar usan un vehículo mediano y un equipo de 2 personas.",
+      "body": "Las mudanzas medias usan un camión mediano y un equipo de 2 personas.",
       "helper": "Mudanza doméstica estándar",
-      "label": "Mudanza estándar",
-      "short": "Estándar",
+      "label": "Mudanza media",
+      "short": "Media",
       "subtitle": "Ideal para pisos de 1 o 2 dormitorios con muebles y electrodomésticos habituales.",
-      "title": "Mudanza estándar"
+      "title": "Mudanza media"
     },
     "section": {
       "title": "Tipo de mudanza"
@@ -1043,39 +1043,29 @@
       "label_one": "Servicios adicionales ({{count}})",
       "label_other": "Servicios adicionales ({{count}})"
     },
-    "baseFare": {
-      "label": "Tarifa base"
-    },
-    "baseRate": {
-      "fallback": {
-        "label": "Tarifa base"
+    "assumptions": {
+      "crew": {
+        "label": "Tamaño del equipo {{value}}"
       },
-      "light": {
-        "label": "Tarifa base (Mudanza ligera)"
+      "hours": {
+        "label": "Tiempo facturable {{value}}"
       },
-      "premium": {
-        "label": "Tarifa base (Mudanza premium)"
+      "volume": {
+        "label": "Volumen estimado {{value}}"
       },
-      "regular": {
-        "label": "Tarifa base (Mudanza estándar)"
+      "weight": {
+        "label": "Peso estimado {{value}}"
       }
     },
-    "baseRateWithDistance": {
-      "fallback": {
-        "label": "Tarifa base ({{distance}})"
-      },
-      "light": {
-        "label": "Tarifa base (Mudanza ligera, {{distance}})"
-      },
-      "premium": {
-        "label": "Tarifa base (Mudanza premium, {{distance}})"
-      },
-      "regular": {
-        "label": "Tarifa base (Mudanza estándar, {{distance}})"
-      }
+    "crewTooSmall": {
+      "helper_one": "{{count}} transportista oculto: equipo demasiado pequeño para esta carga",
+      "helper_other": "{{count}} transportistas ocultos: equipo demasiado pequeño para esta carga"
     },
-    "crew": {
-      "label": "Equipo ({{crew}})"
+    "discount": {
+      "label": "Descuento"
+    },
+    "estimate": {
+      "helper": "Estimación: se confirma cuando tu transportista acepta"
     },
     "estimatedTotal": {
       "label": "Total estimado"
@@ -1083,18 +1073,66 @@
     "finalAfterReview": {
       "helper": "El precio final se confirma tras la revisión"
     },
-    "floorSurcharge": {
-      "label": "Suplemento por planta"
+    "header": {
+      "instant": {
+        "label": "{{tier}} · Mudanza inmediata"
+      },
+      "scheduled": {
+        "label": "{{tier}} · Mudanza programada"
+      }
+    },
+    "instantAdjustment": {
+      "label": "Reserva inmediata (×{{multiplier}})"
     },
     "itemsCount": {
       "label_one": "Objetos ({{count}})",
       "label_other": "Objetos ({{count}})"
     },
-    "moverFare": {
-      "label": "Tarifa del transportista"
+    "line": {
+      "base": {
+        "label": "Servicio base"
+      },
+      "distance": {
+        "label": "Distancia ({{km}} × {{rate}})"
+      },
+      "handling": {
+        "label": "Manipulación y acceso"
+      },
+      "items": {
+        "label_one": "Objetos ({{count}})",
+        "label_other": "Objetos ({{count}})"
+      },
+      "labor": {
+        "label": "Mano de obra ({{crew}} × {{rate}} × {{hours}})"
+      },
+      "packing": {
+        "label": "Embalaje"
+      },
+      "services": {
+        "label": "Servicios adicionales"
+      },
+      "storage": {
+        "label_one": "Almacenamiento ({{count}} semana)",
+        "label_other": "Almacenamiento ({{count}} semanas)"
+      },
+      "vehicle": {
+        "label": "Vehículo ({{vehicle}})"
+      }
     },
-    "packingService": {
-      "label": "Servicio de embalaje"
+    "minimumApplied": {
+      "helper": "Se aplica el importe mínimo de {{amount}}"
+    },
+    "net": {
+      "label": "Subtotal sin IVA"
+    },
+    "operationalSubtotal": {
+      "label": "Subtotal operativo"
+    },
+    "perMover": {
+      "helper": "El precio incluye la categoría de vehículo de este transportista"
+    },
+    "platformFee": {
+      "label": "Comisión de la plataforma ({{rate}})"
     },
     "storage": {
       "label": "Almacenamiento"

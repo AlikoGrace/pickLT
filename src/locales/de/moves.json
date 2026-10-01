@@ -56,10 +56,10 @@
     "typeAndCategory": {
       "light": {
         "instant": {
-          "subtitle": "Kleiner Umzug · Sofort"
+          "subtitle": "Normaler Umzug · Sofort"
         },
         "scheduled": {
-          "subtitle": "Kleiner Umzug · Geplant"
+          "subtitle": "Normaler Umzug · Geplant"
         }
       },
       "premium": {
@@ -72,31 +72,31 @@
       },
       "regular": {
         "instant": {
-          "subtitle": "Normaler Umzug · Sofort"
+          "subtitle": "Medium-Umzug · Sofort"
         },
         "scheduled": {
-          "subtitle": "Normaler Umzug · Geplant"
+          "subtitle": "Medium-Umzug · Geplant"
         }
       }
     },
     "typeAndDate": {
       "light": {
-        "subtitle": "Kleiner Umzug · {{date}}"
+        "subtitle": "Normaler Umzug · {{date}}"
       },
       "premium": {
         "subtitle": "Premium-Umzug · {{date}}"
       },
       "regular": {
-        "subtitle": "Normaler Umzug · {{date}}"
+        "subtitle": "Medium-Umzug · {{date}}"
       }
     },
     "typeCategoryDate": {
       "light": {
         "instant": {
-          "subtitle": "Kleiner Umzug · Sofort · {{date}}"
+          "subtitle": "Normaler Umzug · Sofort · {{date}}"
         },
         "scheduled": {
-          "subtitle": "Kleiner Umzug · Geplant · {{date}}"
+          "subtitle": "Normaler Umzug · Geplant · {{date}}"
         }
       },
       "premium": {
@@ -109,10 +109,10 @@
       },
       "regular": {
         "instant": {
-          "subtitle": "Normaler Umzug · Sofort · {{date}}"
+          "subtitle": "Medium-Umzug · Sofort · {{date}}"
         },
         "scheduled": {
-          "subtitle": "Normaler Umzug · Geplant · {{date}}"
+          "subtitle": "Medium-Umzug · Geplant · {{date}}"
         }
       }
     }
@@ -222,10 +222,10 @@
     "typeAndCategory": {
       "light": {
         "instant": {
-          "value": "Klein · Sofort"
+          "value": "Normal · Sofort"
         },
         "scheduled": {
-          "value": "Klein · Geplant"
+          "value": "Normal · Geplant"
         }
       },
       "premium": {
@@ -238,10 +238,10 @@
       },
       "regular": {
         "instant": {
-          "value": "Normal · Sofort"
+          "value": "Medium · Sofort"
         },
         "scheduled": {
-          "value": "Normal · Geplant"
+          "value": "Medium · Geplant"
         }
       }
     },

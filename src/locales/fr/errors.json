@@ -281,6 +281,10 @@
     "confirmFailed": "Échec de la confirmation du paiement",
     "notAwaiting": "Ce déménagement n’est pas en attente de paiement. Veuillez recharger le déménagement et réessayer."
   },
+  "pricing": {
+    "exceedsLargestVehicle": "Ce chargement est trop volumineux pour un seul véhicule. Veuillez contacter l'assistance.",
+    "reconcile": "Nous n'avons pas pu calculer un prix fiable. Veuillez réessayer."
+  },
   "profile": {
     "emailChangeFailed": "Échec de la modification de l’adresse e-mail",
     "emailTaken": "Cette adresse e-mail est déjà utilisée par un autre compte",

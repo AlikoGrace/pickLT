@@ -56,10 +56,10 @@
     "typeAndCategory": {
       "light": {
         "instant": {
-          "subtitle": "Hafif taşıma · Anında"
+          "subtitle": "Normal taşıma · Anında"
         },
         "scheduled": {
-          "subtitle": "Hafif taşıma · Planlı"
+          "subtitle": "Normal taşıma · Planlı"
         }
       },
       "premium": {
@@ -72,31 +72,31 @@
       },
       "regular": {
         "instant": {
-          "subtitle": "Standart taşıma · Anında"
+          "subtitle": "Orta taşıma · Anında"
         },
         "scheduled": {
-          "subtitle": "Standart taşıma · Planlı"
+          "subtitle": "Orta taşıma · Planlı"
         }
       }
     },
     "typeAndDate": {
       "light": {
-        "subtitle": "Hafif taşıma · {{date}}"
+        "subtitle": "Normal taşıma · {{date}}"
       },
       "premium": {
         "subtitle": "Premium taşıma · {{date}}"
       },
       "regular": {
-        "subtitle": "Standart taşıma · {{date}}"
+        "subtitle": "Orta taşıma · {{date}}"
       }
     },
     "typeCategoryDate": {
       "light": {
         "instant": {
-          "subtitle": "Hafif taşıma · Anında · {{date}}"
+          "subtitle": "Normal taşıma · Anında · {{date}}"
         },
         "scheduled": {
-          "subtitle": "Hafif taşıma · Planlı · {{date}}"
+          "subtitle": "Normal taşıma · Planlı · {{date}}"
         }
       },
       "premium": {
@@ -109,10 +109,10 @@
       },
       "regular": {
         "instant": {
-          "subtitle": "Standart taşıma · Anında · {{date}}"
+          "subtitle": "Orta taşıma · Anında · {{date}}"
         },
         "scheduled": {
-          "subtitle": "Standart taşıma · Planlı · {{date}}"
+          "subtitle": "Orta taşıma · Planlı · {{date}}"
         }
       }
     }
@@ -222,10 +222,10 @@
     "typeAndCategory": {
       "light": {
         "instant": {
-          "value": "Hafif · Anında"
+          "value": "Normal · Anında"
         },
         "scheduled": {
-          "value": "Hafif · Planlı"
+          "value": "Normal · Planlı"
         }
       },
       "premium": {
@@ -238,10 +238,10 @@
       },
       "regular": {
         "instant": {
-          "value": "Standart · Anında"
+          "value": "Orta · Anında"
         },
         "scheduled": {
-          "value": "Standart · Planlı"
+          "value": "Orta · Planlı"
         }
       }
     },
