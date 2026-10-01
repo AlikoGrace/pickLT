@@ -1,6 +1,7 @@
 'use client'
 
 import { useAuth } from '@/context/auth'
+import { oauthErrorMessageKey, parseOAuthErrorParam } from '@/lib/oauth-error'
 import { Trans, useTranslation } from 'react-i18next'
 import Logo from '@/shared/Logo'
 import Link from 'next/link'
@@ -59,6 +60,16 @@ function LoginContent() {
     if (redirectPath) return redirectPath
     return isMover ? '/dashboard' : '/'
   }
+
+  // Appwrite's hosted OAuth lands here with `?error={...}` when it refused the
+  // sign-in — most often a Google e-mail that already belongs to a password or
+  // app-created account (409 user_already_exists). Say so instead of silently
+  // showing the choice screen again.
+  const oauthErrorRaw = searchParams.get('error')
+  useEffect(() => {
+    const key = oauthErrorMessageKey(parseOAuthErrorParam(oauthErrorRaw))
+    if (key) setError(t(key))
+  }, [oauthErrorRaw, t])
 
   // Redirect if authenticated AND phone is verified (useEffect avoids render-time setState)
   useEffect(() => {
