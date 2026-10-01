@@ -275,6 +275,11 @@
       "dateTime": {
         "label": "Neuer Termin"
       }
+    },
+    "map": {
+      "title": "Route",
+      "distanceDuration": "{{distance}} · {{duration}} Fahrzeit",
+      "distance": "{{distance}} Fahrstrecke"
     }
   },
   "mover": {

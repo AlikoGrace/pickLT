@@ -275,6 +275,11 @@
       "dateTime": {
         "label": "Nueva fecha y hora"
       }
+    },
+    "map": {
+      "title": "Ruta",
+      "distanceDuration": "{{distance}} · {{duration}} de trayecto",
+      "distance": "{{distance}} de recorrido"
     }
   },
   "mover": {

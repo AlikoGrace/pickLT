@@ -183,6 +183,15 @@
     "items": {
       "label": "Spullen"
     },
+    "map": {
+      "distance": {
+        "label": "{{distance}} route"
+      },
+      "distanceDuration": {
+        "label": "{{distance}} · {{duration}}"
+      },
+      "title": "Kaart"
+    },
     "moveDate": {
       "label": "Verhuisdatum"
     },

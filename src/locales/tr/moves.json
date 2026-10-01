@@ -183,6 +183,15 @@
     "items": {
       "label": "Eşyalar"
     },
+    "map": {
+      "distance": {
+        "label": "{{distance}} güzergâh"
+      },
+      "distanceDuration": {
+        "label": "{{distance}} · {{duration}}"
+      },
+      "title": "Harita"
+    },
     "moveDate": {
       "label": "Taşınma tarihi"
     },

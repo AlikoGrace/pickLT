@@ -275,6 +275,11 @@
       "dateTime": {
         "label": "New Date & Time"
       }
+    },
+    "map": {
+      "title": "Route",
+      "distanceDuration": "{{distance}} · {{duration}} drive",
+      "distance": "{{distance}} driving distance"
     }
   },
   "mover": {

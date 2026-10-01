@@ -31,6 +31,8 @@ import {
 } from '@/lib/inventory-labels'
 import { formatDateWith, formatMoney, formatVolumeM3 } from '@/lib/format'
 import PriceBreakdown from '@/components/PriceBreakdown'
+import MoveRouteMap from '@/components/MoveRouteMap'
+import { toCoordinate } from '@/lib/route-caption'
 import { parseBreakdown } from '@/lib/pricingEngine'
 import { homeTypeLabel, moveSubtitle, moveTypeLabel } from '@/lib/move-subtitle'
 import { useTranslation } from 'react-i18next'
@@ -198,6 +200,10 @@ function docToStoredMove(doc: any): StoredMove {
     galleryPhotoIds: doc.galleryPhotoIds ?? [],
     routeDistanceMeters: doc.routeDistanceMeters ?? null,
     routeDurationSeconds: doc.routeDurationSeconds ?? null,
+    pickupLatitude: doc.pickupLatitude ?? null,
+    pickupLongitude: doc.pickupLongitude ?? null,
+    dropoffLatitude: doc.dropoffLatitude ?? null,
+    dropoffLongitude: doc.dropoffLongitude ?? null,
     paymentMethod: doc.paymentMethod ?? null,
     isBusinessMove: doc.isBusinessMove ?? false,
     companyName: doc.companyName ?? '',
@@ -511,6 +517,10 @@ export default function MoveDetailsPage() {
     createdAt,
     routeDistanceMeters,
     routeDurationSeconds,
+    pickupLatitude,
+    pickupLongitude,
+    dropoffLatitude,
+    dropoffLongitude,
     paymentMethod,
     isBusinessMove,
     companyName,
@@ -680,6 +690,15 @@ export default function MoveDetailsPage() {
               </div>
             </div>
           </div>
+
+          {/* Route map — pickup, drop-off and the driven route, captioned with
+              the row's distance/duration (the figures the quote was priced on) */}
+          <MoveRouteMap
+            pickup={toCoordinate(pickupLatitude, pickupLongitude)}
+            dropoff={toCoordinate(dropoffLatitude, dropoffLongitude)}
+            distanceMeters={routeDistanceMeters}
+            durationSeconds={routeDurationSeconds}
+          />
 
           {/* Move Details */}
           <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm">

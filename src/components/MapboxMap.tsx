@@ -194,37 +194,10 @@ export const MapboxMap = ({
       </style>
       <!-- pulse ring -->
       <div style="position:absolute;width:56px;height:56px;border-radius:50%;background:rgba(79,70,229,.25);animation:mover-ping 1.8s cubic-bezier(0,.2,.6,1) infinite;top:50%;left:50%;transform:translate(-50%,-50%)"></div>
-      <!-- truck body -->
+      <!-- truck body: top-down 3D render, nose up; the marker's rotation
+           (setRotation(heading) below) turns it to face travel -->
       <div style="position:relative;animation:mover-bob 2s ease-in-out infinite;filter:drop-shadow(0 4px 10px rgba(0,0,0,.35))">
-        <!-- Aerial (top-down) truck — front points up -->
-        <svg width="40" height="54" viewBox="0 0 40 54" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- wheels (peeking out from under the body) -->
-          <rect x="4" y="13" width="5" height="9" rx="2.5" fill="#1e1b4b"/>
-          <rect x="31" y="13" width="5" height="9" rx="2.5" fill="#1e1b4b"/>
-          <rect x="4" y="33" width="5" height="9" rx="2.5" fill="#1e1b4b"/>
-          <rect x="31" y="33" width="5" height="9" rx="2.5" fill="#1e1b4b"/>
-          <!-- cargo box -->
-          <rect x="7" y="8" width="26" height="42" rx="5" fill="url(#cargo_grad)" stroke="#312e81" stroke-width="1.2"/>
-          <!-- roof ridges -->
-          <rect x="10" y="24" width="20" height="2" rx="1" fill="rgba(255,255,255,0.26)"/>
-          <rect x="10" y="30" width="20" height="2" rx="1" fill="rgba(255,255,255,0.20)"/>
-          <rect x="10" y="36" width="20" height="2" rx="1" fill="rgba(255,255,255,0.15)"/>
-          <!-- cab -->
-          <rect x="8" y="4" width="24" height="14" rx="5" fill="url(#cab_grad)" stroke="#312e81" stroke-width="1.2"/>
-          <!-- windshield -->
-          <path d="M11 7.5h18v3c0 .9-.7 1.6-1.6 1.6H12.6c-.9 0-1.6-.7-1.6-1.6v-3z" fill="#bfdbfe" stroke="#6366f1" stroke-width="0.6"/>
-          <!-- headlights -->
-          <rect x="10" y="4.6" width="3.2" height="2" rx="1" fill="#fbbf24"/>
-          <rect x="26.8" y="4.6" width="3.2" height="2" rx="1" fill="#fbbf24"/>
-          <defs>
-            <linearGradient id="cargo_grad" x1="20" y1="8" x2="20" y2="50" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#818cf8"/><stop offset="1" stop-color="#4f46e5"/>
-            </linearGradient>
-            <linearGradient id="cab_grad" x1="20" y1="4" x2="20" y2="18" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#6366f1"/><stop offset="1" stop-color="#4338ca"/>
-            </linearGradient>
-          </defs>
-        </svg>
+        <img src="/images/truck-marker-3d.png" alt="" width="44" height="44" draggable="false" style="display:block;width:44px;height:44px;object-fit:contain;pointer-events:none;user-select:none" />
       </div>
     `
     return el

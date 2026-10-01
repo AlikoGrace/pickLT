@@ -275,6 +275,11 @@
       "dateTime": {
         "label": "Nouvelle date et heure"
       }
+    },
+    "map": {
+      "title": "Itinéraire",
+      "distanceDuration": "{{distance}} · {{duration}} de trajet",
+      "distance": "{{distance}} de trajet"
     }
   },
   "mover": {

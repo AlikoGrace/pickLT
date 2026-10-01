@@ -183,6 +183,15 @@
     "items": {
       "label": "Items"
     },
+    "map": {
+      "distance": {
+        "label": "{{distance}} route"
+      },
+      "distanceDuration": {
+        "label": "{{distance}} · {{duration}}"
+      },
+      "title": "Map"
+    },
     "moveDate": {
       "label": "Move date"
     },

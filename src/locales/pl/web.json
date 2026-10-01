@@ -277,6 +277,11 @@
       "dateTime": {
         "label": "Nowa data i godzina"
       }
+    },
+    "map": {
+      "title": "Trasa",
+      "distanceDuration": "{{distance}} · {{duration}} jazdy",
+      "distance": "{{distance}} trasy"
     }
   },
   "mover": {

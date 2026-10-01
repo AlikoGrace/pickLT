@@ -183,6 +183,15 @@
     "items": {
       "label": "Objetos"
     },
+    "map": {
+      "distance": {
+        "label": "{{distance}} de ruta"
+      },
+      "distanceDuration": {
+        "label": "{{distance}} · {{duration}}"
+      },
+      "title": "Mapa"
+    },
     "moveDate": {
       "label": "Fecha de la mudanza"
     },

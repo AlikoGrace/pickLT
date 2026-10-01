@@ -185,6 +185,15 @@
     "items": {
       "label": "Przedmioty"
     },
+    "map": {
+      "distance": {
+        "label": "{{distance}} trasy"
+      },
+      "distanceDuration": {
+        "label": "{{distance}} · {{duration}}"
+      },
+      "title": "Mapa"
+    },
     "moveDate": {
       "label": "Data przeprowadzki"
     },

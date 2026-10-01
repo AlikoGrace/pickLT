@@ -136,6 +136,11 @@ export type StoredMove = {
   // Route
   routeDistanceMeters?: number | null
   routeDurationSeconds?: number | null
+  /** Geocoded endpoints from the row — what the details-page route map draws. */
+  pickupLatitude?: number | null
+  pickupLongitude?: number | null
+  dropoffLatitude?: number | null
+  dropoffLongitude?: number | null
   // Payment
   paymentMethod?: PaymentMethod | null
   // Business

@@ -30,6 +30,8 @@ import {
 } from '@/lib/inventory-labels'
 import { formatDateWith, formatMoney } from '@/lib/format'
 import PriceBreakdown from '@/components/PriceBreakdown'
+import MoveRouteMap from '@/components/MoveRouteMap'
+import { toCoordinate } from '@/lib/route-caption'
 import { parseBreakdown } from '@/lib/pricingEngine'
 import { homeTypeLabel, moveSubtitle, moveTypeLabel } from '@/lib/move-subtitle'
 import { Trans, useTranslation } from 'react-i18next'
@@ -109,6 +111,11 @@ interface MoveData {
   galleryPhotoIds: string[]
   routeDistanceMeters: number | null
   routeDurationSeconds: number | null
+  /** Geocoded endpoints from the row — what the route map draws. */
+  pickupLatitude: number | null
+  pickupLongitude: number | null
+  dropoffLatitude: number | null
+  dropoffLongitude: number | null
   /** `moves.priceBreakdown` — v3 JSON written by the server; null on older rows. */
   priceBreakdown?: string | null
   paymentMethod: string | null
@@ -231,6 +238,10 @@ function docToMoveData(doc: any): MoveData {
     galleryPhotoIds: doc.galleryPhotoIds ?? [],
     routeDistanceMeters: doc.routeDistanceMeters ?? null,
     routeDurationSeconds: doc.routeDurationSeconds ?? null,
+    pickupLatitude: doc.pickupLatitude ?? null,
+    pickupLongitude: doc.pickupLongitude ?? null,
+    dropoffLatitude: doc.dropoffLatitude ?? null,
+    dropoffLongitude: doc.dropoffLongitude ?? null,
     paymentMethod: doc.paymentMethod ?? null,
     isBusinessMove: doc.isBusinessMove ?? false,
     companyName: doc.companyName ?? '',
@@ -493,6 +504,7 @@ export default function MoverMoveDetailsPage() {
     contactInfo, totalPrice, bookingCode,
     coverPhotoId, galleryPhotoIds, createdAt,
     routeDistanceMeters, routeDurationSeconds, paymentMethod,
+    pickupLatitude, pickupLongitude, dropoffLatitude, dropoffLongitude,
     isBusinessMove, companyName, vatId,
   } = move
 
@@ -655,6 +667,15 @@ export default function MoverMoveDetailsPage() {
               </div>
             </div>
           </div>
+
+          {/* Route map — pickup, drop-off and the driven route, captioned with
+              the row's distance/duration (the figures the job was priced on) */}
+          <MoveRouteMap
+            pickup={toCoordinate(pickupLatitude, pickupLongitude)}
+            dropoff={toCoordinate(dropoffLatitude, dropoffLongitude)}
+            distanceMeters={routeDistanceMeters}
+            durationSeconds={routeDurationSeconds}
+          />
 
           {/* Move Details */}
           <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm">

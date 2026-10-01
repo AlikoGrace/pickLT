@@ -287,6 +287,32 @@ export function formatSeconds(
 }
 
 /**
+ * A drive time in seconds as hours and minutes: `1 hr 20 min` in en,
+ * `1 Std., 20 Min.` in de, `1 h 20 min` in fr — under an hour, just the
+ * minutes. Rounds to the nearest minute and never renders `0 min`.
+ *
+ * `~1h 20min` typed by hand reads as English to seven of the eight markets;
+ * CLDR knows the hour and minute abbreviations for all of them.
+ */
+export function formatDurationHm(seconds: Amount, options: NumberOptions = {}): string {
+  if (!isRenderable(seconds) || seconds <= 0) return options.fallback ?? EMPTY_VALUE
+  const locale = options.locale ?? getLocale()
+  const totalMinutes = Math.max(1, Math.round(seconds / 60))
+  const hours = Math.floor(totalMinutes / 60)
+  const minutes = totalMinutes % 60
+  const unit = (value: number, name: 'hour' | 'minute') =>
+    numberFormatter(locale, {
+      style: 'unit',
+      unit: name,
+      unitDisplay: 'short',
+      maximumFractionDigits: 0,
+    }).format(value)
+  if (hours === 0) return unit(minutes, 'minute')
+  if (minutes === 0) return unit(hours, 'hour')
+  return `${unit(hours, 'hour')} ${unit(minutes, 'minute')}`
+}
+
+/**
  * A distance in metres — the geofence radius and the last few hundred metres
  * of an approach, where kilometres would read as `0.1 km`.
  */

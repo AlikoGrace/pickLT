@@ -275,6 +275,11 @@
       "dateTime": {
         "label": "Nuova data e ora"
       }
+    },
+    "map": {
+      "title": "Percorso",
+      "distanceDuration": "{{distance}} · {{duration}} di viaggio",
+      "distance": "{{distance}} di percorso"
     }
   },
   "mover": {
