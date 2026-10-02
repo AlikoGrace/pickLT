@@ -8,7 +8,8 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Avatar from '@/shared/Avatar'
-import { formatDateWith, formatMoney } from '@/lib/format'
+import { formatDateWith, formatMoney, formatPercent } from '@/lib/format'
+import { payoutRatesFrom } from '@/lib/moverPayout'
 
 interface DashboardData {
   activeMoves: string[]
@@ -29,7 +30,10 @@ interface RecentMoveFromApi {
   dropoffAddress: string
   scheduledDate: string
   status: string
+  /** The customer's gross — not shown to the driver. */
   estimatedPrice: number
+  /** What the driver earns: net after the platform fee (plan 7). */
+  payout?: number
   moveCategory: string
   totalItems: number
   routeDistanceMeters: number | null
@@ -126,7 +130,7 @@ const DashboardPage = () => {
       ? formatDateWith(m.scheduledDate, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
       : '',
     status: mapApiMoveStatus(m.status),
-    amount: m.estimatedPrice || 0,
+    amount: m.payout ?? 0,
     moveTypeLabel: moveTypeLabelFor(m.moveCategory),
     itemCount: m.totalItems || 0,
     distance: m.routeDistanceMeters ? `${(m.routeDistanceMeters / 1000).toFixed(1)} km` : '—',
@@ -170,6 +174,8 @@ const DashboardPage = () => {
     {
       name: t('web:moverDashboard.stat.earningsThisMonth.label'),
       value: formatMoney(dashboard?.earningsThisMonth ?? 0, { compact: true }),
+      // Earnings are net of the platform fee (plan 7); say so under the figure.
+      helper: t('booking:pricing.payout.helper', { rate: formatPercent(payoutRatesFrom(null).feeRate) }),
       icon: CurrencyEuroIcon,
       href: '/earnings',
       color: 'bg-neutral-500',
@@ -246,6 +252,9 @@ const DashboardPage = () => {
             <p className="text-sm text-neutral-500 dark:text-neutral-400">
               {stat.name}
             </p>
+            {'helper' in stat && stat.helper && (
+              <p className="text-xs text-neutral-400 dark:text-neutral-500 mt-1">{stat.helper}</p>
+            )}
           </Link>
         ))}
       </div>

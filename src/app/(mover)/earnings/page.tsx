@@ -10,7 +10,8 @@ import {
   TruckIcon,
   ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline'
-import { formatDateWith, formatMoney } from '@/lib/format'
+import { formatDateWith, formatMoney, formatPercent } from '@/lib/format'
+import { payoutRatesFrom } from '@/lib/moverPayout'
 
 type TimePeriod = 'today' | 'week' | 'month' | 'year'
 
@@ -121,6 +122,10 @@ const EarningsPage = () => {
   }
 
   const total = data?.total || 0
+  // Every figure on this page is net of the platform fee (plan 7).
+  const payoutHelper = t('booking:pricing.payout.helper', {
+    rate: formatPercent(payoutRatesFrom(null).feeRate),
+  })
   const moves = data?.moves || 0
   const entries = data?.entries || []
   const averagePerMove = data?.averagePerMove || 0
@@ -178,6 +183,7 @@ const EarningsPage = () => {
             <ArrowTrendingUpIcon className="w-4 h-4" />
             <span>{periodCaption(period)}</span>
           </div>
+          <p className="text-xs opacity-80 mt-1">{payoutHelper}</p>
         </div>
         <div className="bg-white dark:bg-neutral-800 rounded-2xl p-4 shadow-sm">
           <div className="flex items-center gap-2 mb-2 text-neutral-500 dark:text-neutral-400">

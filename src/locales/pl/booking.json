@@ -1178,6 +1178,12 @@
     },
     "vat": {
       "label": "VAT ({{rate}})"
+    },
+    "payout": {
+      "helper": "Po opłacie platformy {{rate}}, bez VAT"
+    },
+    "customerPays": {
+      "label": "Klient płaci"
     }
   },
   "route": {

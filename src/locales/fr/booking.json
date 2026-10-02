@@ -1151,6 +1151,12 @@
     },
     "vat": {
       "label": "TVA ({{rate}})"
+    },
+    "payout": {
+      "helper": "Après les frais de plateforme de {{rate}}, hors TVA"
+    },
+    "customerPays": {
+      "label": "Le client paie"
     }
   },
   "route": {

@@ -4,6 +4,8 @@ import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
 import { Query } from 'node-appwrite'
 import { NextResponse } from 'next/server'
+import { loadPricingConfig } from '@/lib/pricing-server'
+import { moverPayoutEur } from '@/lib/moverPayout'
 
 // GET /api/mover/available-moves — Get move requests for the authenticated mover
 export async function GET() {
@@ -39,6 +41,10 @@ export async function GET() {
         Query.limit(50),
       ]
     )
+
+    // Rates for rows booked before the pricing engine (no stored breakdown);
+    // engine rows carry their own rates inside `priceBreakdown`.
+    const pricingConfig = await loadPricingConfig(databases)
 
     // For each move request, fetch the associated move details
     const movesWithDetails = await Promise.all(
@@ -87,6 +93,17 @@ export async function GET() {
               homeType: move.homeType,
               totalItemCount: move.totalItemCount,
               estimatedPrice: move.estimatedPrice,
+              finalPrice: move.finalPrice ?? null,
+              priceBreakdown: move.priceBreakdown ?? null,
+              // What the driver earns: net after the platform fee (plan 7).
+              payout: moverPayoutEur(
+                {
+                  estimatedPrice: move.estimatedPrice as number | null,
+                  finalPrice: move.finalPrice as number | null,
+                  priceBreakdown: move.priceBreakdown as string | null,
+                },
+                pricingConfig,
+              ),
               additionalServices: move.additionalServices || [],
               contactNotes: move.contactNotes,
               crewSize: move.crewSize,

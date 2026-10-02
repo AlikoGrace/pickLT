@@ -1149,6 +1149,12 @@
     },
     "vat": {
       "label": "Btw ({{rate}})"
+    },
+    "payout": {
+      "helper": "Na de platformkosten van {{rate}}, exclusief btw"
+    },
+    "customerPays": {
+      "label": "Klant betaalt"
     }
   },
   "route": {

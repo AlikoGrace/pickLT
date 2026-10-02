@@ -15,6 +15,7 @@ import { client } from '@/lib/appwrite'
 import { formatDateWith, formatMoney } from '@/lib/format'
 import { useTranslation } from 'react-i18next'
 import { arrivalWindowLabel, vehicleTypeLabel } from '@/lib/enum-labels'
+import { moverPayoutEur } from '@/lib/moverPayout'
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || ''
 const MOVES_COLLECTION = process.env.NEXT_PUBLIC_COLLECTION_MOVES || ''
@@ -27,7 +28,8 @@ interface ScheduledMove {
   pickupLocation: string | null
   dropoffLocation: string | null
   totalItemCount: number
-  estimatedPrice: number | null
+  /** What the driver earns — net after the platform fee (plan 7). */
+  payout: number
   vehicleType: string | null
   moveDate: string | null
   arrivalWindow: string | null
@@ -76,7 +78,14 @@ const ScheduledMovesPage = () => {
           pickupLocation: doc.pickupLocation ?? null,
           dropoffLocation: doc.dropoffLocation ?? null,
           totalItemCount: doc.totalItemCount ?? 0,
-          estimatedPrice: doc.estimatedPrice ?? null,
+          payout:
+            typeof doc.payout === 'number' && Number.isFinite(doc.payout)
+              ? doc.payout
+              : moverPayoutEur({
+                  estimatedPrice: doc.estimatedPrice ?? null,
+                  finalPrice: doc.finalPrice ?? null,
+                  priceBreakdown: doc.priceBreakdown ?? null,
+                }),
           vehicleType: doc.vehicleType ?? null,
           moveDate: doc.moveDate ?? null,
           arrivalWindow: doc.arrivalWindow ?? null,
@@ -223,10 +232,10 @@ const ScheduledMovesPage = () => {
               </div>
 
               {/* Price */}
-              {move.estimatedPrice != null && move.estimatedPrice > 0 && (
+              {move.payout > 0 && (
                 <div className="mt-3 text-right">
                   <span className="font-bold text-lg text-neutral-900 dark:text-neutral-100">
-                    {formatMoney(move.estimatedPrice)}
+                    {formatMoney(move.payout)}
                   </span>
                 </div>
               )}

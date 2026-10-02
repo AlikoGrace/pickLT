@@ -21,6 +21,7 @@ import { AVAILABLE_MOVES_POLL_SECONDS, NEARBY_MOVES_RADIUS_KM } from '@/lib/serv
 import { homeTypeAndMoveTypeBadge, moveTypeLabel } from '@/lib/move-subtitle'
 import { useTranslation } from 'react-i18next'
 import { arrivalWindowLabel, vehicleTypeLabel } from '@/lib/enum-labels'
+import { moverPayoutEur } from '@/lib/moverPayout'
 
 const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || ''
 const PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || ''
@@ -53,7 +54,12 @@ interface NearbyMove {
   dropoffElevator: boolean
   homeType: string | null
   totalItemCount: number
+  /** The customer's gross — not shown to the driver here. */
   estimatedPrice: number | null
+  finalPrice?: number | null
+  priceBreakdown?: string | null
+  /** Server-computed driver payout (net after the platform fee). */
+  payout?: number | null
   additionalServices: string[]
   crewSize: string | null
   vehicleType: string | null
@@ -88,6 +94,11 @@ const AvailableMovesPage = () => {
   const [moverCoords, setMoverCoords] = useState<{ latitude: number; longitude: number; heading?: number } | null>(null)
   const [hasBrowserGeo, setHasBrowserGeo] = useState(false)
   const [profileCoordsLoaded, setProfileCoordsLoaded] = useState(false)
+
+  // What the driver earns (plan 7): the API computes it; fall back to the
+  // same arithmetic client-side if an older response lacks the field.
+  const earnings = (m: NearbyMove): number =>
+    typeof m.payout === 'number' && Number.isFinite(m.payout) ? m.payout : moverPayoutEur(m)
 
   // 1. Fetch the mover's stored profile coordinates as an immediate fallback
   useEffect(() => {
@@ -187,7 +198,7 @@ const AvailableMovesPage = () => {
       id: m.id,
       lat: m.pickupLatitude!,
       lng: m.pickupLongitude!,
-      price: m.estimatedPrice || 0,
+      price: earnings(m),
       isSelected: selectedMove?.id === m.id,
     }))
 
@@ -367,7 +378,7 @@ const AvailableMovesPage = () => {
                           </p>
                         </div>
                         <span className="text-xl font-bold text-neutral-900 dark:text-neutral-100 ml-3 shrink-0">
-                          {formatMoneyRounded(selectedMove.estimatedPrice || 0)}
+                          {formatMoneyRounded(earnings(selectedMove))}
                         </span>
                       </div>
                       <div className="flex flex-wrap gap-1.5">
@@ -440,7 +451,7 @@ const AvailableMovesPage = () => {
                         </h3>
                       </div>
                       <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100 ml-3 shrink-0">
-                        {formatMoneyRounded(move.estimatedPrice || 0)}
+                        {formatMoneyRounded(earnings(move))}
                       </p>
                     </div>
 

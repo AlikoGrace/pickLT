@@ -243,11 +243,11 @@ export const MoverMapboxMap = ({
           @keyframes mover-ping{0%{transform:scale(1);opacity:.55}100%{transform:scale(2.4);opacity:0}}
           @keyframes mover-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
         </style>
-        <div style="position:absolute;width:56px;height:56px;border-radius:50%;background:rgba(79,70,229,.25);animation:mover-ping 1.8s cubic-bezier(0,.2,.6,1) infinite;top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+        <div style="position:absolute;width:112px;height:112px;border-radius:50%;background:rgba(79,70,229,.25);animation:mover-ping 1.8s cubic-bezier(0,.2,.6,1) infinite;top:50%;left:50%;transform:translate(-50%,-50%)"></div>
         <!-- truck body: top-down 3D render, nose up; setRotation(heading)
              below turns it to face travel -->
         <div style="position:relative;animation:mover-bob 2s ease-in-out infinite;filter:drop-shadow(0 4px 10px rgba(0,0,0,.35))">
-          <img src="/images/truck-marker-3d.png" alt="" width="44" height="44" draggable="false" style="display:block;width:44px;height:44px;object-fit:contain;pointer-events:none;user-select:none" />
+          <img src="/images/truck-marker-3d.png" alt="" width="88" height="88" draggable="false" style="display:block;width:88px;height:88px;object-fit:contain;pointer-events:none;user-select:none" />
         </div>
       `
 

@@ -1150,6 +1150,12 @@
     },
     "vat": {
       "label": "MwSt. ({{rate}})"
+    },
+    "payout": {
+      "helper": "Nach der Plattformgebühr von {{rate}}, ohne MwSt."
+    },
+    "customerPays": {
+      "label": "Kunde zahlt"
     }
   },
   "route": {

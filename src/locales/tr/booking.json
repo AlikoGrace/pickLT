@@ -1149,6 +1149,12 @@
     },
     "vat": {
       "label": "KDV ({{rate}})"
+    },
+    "payout": {
+      "helper": "{{rate}} platform ücreti düşüldükten sonra, KDV hariç"
+    },
+    "customerPays": {
+      "label": "Müşteri öder"
     }
   },
   "route": {

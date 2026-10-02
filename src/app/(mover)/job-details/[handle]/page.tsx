@@ -28,11 +28,12 @@ import {
   parseInventoryLines,
   useInventoryNames,
 } from '@/lib/inventory-labels'
-import { formatDateWith, formatMoney } from '@/lib/format'
+import { formatDateWith, formatMoney, formatPercent } from '@/lib/format'
 import PriceBreakdown from '@/components/PriceBreakdown'
 import MoveRouteMap from '@/components/MoveRouteMap'
 import { toCoordinate } from '@/lib/route-caption'
 import { parseBreakdown } from '@/lib/pricingEngine'
+import { moverPayoutEur, payoutRatesFrom } from '@/lib/moverPayout'
 import { homeTypeLabel, moveSubtitle, moveTypeLabel } from '@/lib/move-subtitle'
 import { Trans, useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
@@ -73,7 +74,10 @@ interface MoveData {
   handle: string
   status: MoveStatus
   createdAt: string
+  /** What the customer pays — `finalPrice` once set at completion, else the estimate. */
   totalPrice: number
+  /** `moves.finalPrice`, set when the move completes; null before that. */
+  finalPrice: number | null
   bookingCode: string
   moveType: string | null
   moveDate: string | null
@@ -195,7 +199,8 @@ function docToMoveData(doc: any): MoveData {
     handle: doc.handle ?? '',
     status: mapDbStatus(doc.status ?? ''),
     createdAt: doc.$createdAt ?? '',
-    totalPrice: doc.estimatedPrice ?? 0,
+    totalPrice: (typeof doc.finalPrice === 'number' && doc.finalPrice > 0 ? doc.finalPrice : doc.estimatedPrice) ?? 0,
+    finalPrice: typeof doc.finalPrice === 'number' ? doc.finalPrice : null,
     bookingCode: doc.handle ?? '',
     moveType: doc.moveType ?? doc.systemMoveType ?? null,
     moveDate: doc.moveDate ?? null,
@@ -501,7 +506,7 @@ export default function MoverMoveDetailsPage() {
     additionalServices, storageWeeks, disposalItems,
     crewSize, vehicleType, arrivalWindow, flexibility, inventoryCount,
     inventoryItems, customItems,
-    contactInfo, totalPrice, bookingCode,
+    contactInfo, totalPrice, finalPrice, bookingCode,
     coverPhotoId, galleryPhotoIds, createdAt,
     routeDistanceMeters, routeDurationSeconds, paymentMethod,
     pickupLatitude, pickupLongitude, dropoffLatitude, dropoffLongitude,
@@ -511,6 +516,18 @@ export default function MoverMoveDetailsPage() {
   // The itemised v3 estimate stored with the row (pricing master D13); null on
   // moves booked before the engine — those show the plain total only.
   const moveBreakdown = parseBreakdown(move.priceBreakdown)
+
+  // Drivers see what they EARN — net after the platform fee (plan 7, owner
+  // decision 2026-10-02). `totalPrice` stays the customer's gross for the
+  // breakdown card and the "Customer pays" line.
+  const payout = moverPayoutEur({
+    estimatedPrice: totalPrice,
+    finalPrice,
+    priceBreakdown: moveBreakdown,
+  })
+  const payoutHelper = t('booking:pricing.payout.helper', {
+    rate: formatPercent(payoutRatesFrom(moveBreakdown).feeRate),
+  })
 
   // Item labels come from the admin catalog, not from humanising the id — the
   // client picked "Sofa (2-seater)", not "Sofa 2seater".
@@ -563,8 +580,9 @@ export default function MoverMoveDetailsPage() {
         <div className="text-right">
           <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('web:mover.earnings.label')}</p>
           <p className="text-3xl font-bold text-green-600 dark:text-green-400">
-            {formatMoney(totalPrice)}
+            {formatMoney(payout)}
           </p>
+          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">{payoutHelper}</p>
         </div>
       </div>
 
@@ -785,7 +803,13 @@ export default function MoverMoveDetailsPage() {
               <div className="my-4 border-t border-neutral-100 dark:border-neutral-700" />
               <div className="flex justify-between text-base">
                 <span className="font-semibold text-neutral-900 dark:text-neutral-100">{t('web:mover.earnings.label')}</span>
-                <span className="font-bold text-green-600 dark:text-green-400">{formatMoney(totalPrice)}</span>
+                <span className="font-bold text-green-600 dark:text-green-400">{formatMoney(payout)}</span>
+              </div>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400 -mt-1">{payoutHelper}</p>
+              {/* The customer's gross — what the breakdown card below itemises. */}
+              <div className="flex justify-between mt-2">
+                <span className="text-neutral-500 dark:text-neutral-400">{t('booking:pricing.customerPays.label')}</span>
+                <span className="font-medium text-neutral-900 dark:text-neutral-100">{formatMoney(totalPrice)}</span>
               </div>
               {moveBreakdown && (
                 <PriceBreakdown breakdown={moveBreakdown} compact showAssumptions={false} itemNames={inventoryNames} className="mt-3 !p-3" />

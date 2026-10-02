@@ -5,6 +5,8 @@ import { APPWRITE } from '@/lib/constants'
 import { Query } from 'node-appwrite'
 import { NextRequest, NextResponse } from 'next/server'
 import { NEARBY_MOVES_RADIUS_KM } from '@/lib/service-limits'
+import { loadPricingConfig } from '@/lib/pricing-server'
+import { moverPayoutEur } from '@/lib/moverPayout'
 
 // The radius the empty state and the result count both quote. One constant, so
 // the sentence on screen cannot drift from the query that produced it.
@@ -125,6 +127,12 @@ export async function GET(req: NextRequest) {
       `[nearby-moves] after filtering: ${moves.length} moves within ${RADIUS_KM}km`
     )
 
+    // Rates for rows booked before the pricing engine (no stored breakdown);
+    // engine rows carry their own rates inside `priceBreakdown`.
+    const pricingConfig = moves.some((doc) => !doc.priceBreakdown)
+      ? await loadPricingConfig(databases)
+      : null
+
     // Pre-acceptance projection. Street addresses, exact coordinates and the
     // client's free-text notes are deliberately withheld until a mover is
     // assigned — the mover needs enough to price and accept the job, not
@@ -151,6 +159,18 @@ export async function GET(req: NextRequest) {
         inventoryItems: doc.inventoryItems,
         customItems: doc.customItems,
         estimatedPrice: doc.estimatedPrice,
+        finalPrice: doc.finalPrice ?? null,
+        priceBreakdown: doc.priceBreakdown ?? null,
+        // What the driver earns: net after the platform fee (plan 7). The
+        // customer's gross stays in `estimatedPrice`.
+        payout: moverPayoutEur(
+          {
+            estimatedPrice: doc.estimatedPrice as number | null,
+            finalPrice: doc.finalPrice as number | null,
+            priceBreakdown: doc.priceBreakdown as string | null,
+          },
+          pricingConfig,
+        ),
         additionalServices: doc.additionalServices || [],
         crewSize: doc.crewSize,
         vehicleType: doc.vehicleType,

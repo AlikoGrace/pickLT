@@ -4,6 +4,15 @@ import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
 import { Query } from 'node-appwrite'
 import { NextRequest, NextResponse } from 'next/server'
+import { loadPricingConfig } from '@/lib/pricing-server'
+import { parseBreakdown } from '@/lib/pricingEngine'
+import { moverPayoutFromGross, payoutRatesFrom } from '@/lib/moverPayout'
+
+const round2 = (n: number): number => Math.round(n * 100) / 100
+
+/** A relationship column may arrive as the id string or the related document. */
+const refId = (v: unknown): string | null =>
+  typeof v === 'string' ? v : ((v as { $id?: string } | null)?.$id ?? null)
 
 // GET /api/mover/earnings — Get earnings data for the authenticated mover
 export async function GET(request: NextRequest) {
@@ -78,30 +87,40 @@ export async function GET(request: NextRequest) {
       payments = paymentResult as unknown as typeof payments
     }
 
-    const totalEarnings = payments.documents.reduce((sum, p) => sum + ((p.amount as number) || 0), 0)
     const totalMoves = completedMoves.total
 
-    // Build earnings entries from completed moves
+    // Rates for rows booked before the pricing engine (no stored breakdown);
+    // engine rows carry their own rates inside `priceBreakdown`.
+    const pricingConfig = completedMoves.documents.some((m) => !m.priceBreakdown)
+      ? await loadPricingConfig(databases)
+      : null
+
+    // What the driver EARNED (plan 7): the settled payment (else the final or
+    // estimated price) is the customer's gross — strip VAT and the platform
+    // fee with the rates the move was priced with. The total is the sum of the
+    // entries, so the list and the headline cannot disagree.
     const entries = completedMoves.documents.map((move) => {
-      const payment = payments.documents.find(
-        (p) => p.moveId === move.$id
-      )
+      const payment = payments.documents.find((p) => refId(p.moveId) === move.$id)
+      const gross =
+        (payment?.amount as number) || (move.finalPrice as number) || (move.estimatedPrice as number) || 0
+      const rates = payoutRatesFrom(parseBreakdown(move.priceBreakdown), pricingConfig)
       return {
         id: move.$id,
         date: move.$createdAt,
         description: `${(move.pickupLocation as string)?.split(',')[0] || 'Pickup'} → ${(move.dropoffLocation as string)?.split(',')[0] || 'Dropoff'}`,
-        amount: (payment?.amount as number) || (move.finalPrice as number) || (move.estimatedPrice as number) || 0,
+        amount: moverPayoutFromGross(gross, rates),
         type: 'earning' as const,
         moveType: move.moveType,
       }
     })
+    const totalEarnings = round2(entries.reduce((sum, e) => sum + e.amount, 0))
 
     return NextResponse.json({
       total: totalEarnings,
       moves: totalMoves,
       entries,
       period,
-      averagePerMove: totalMoves > 0 ? Math.round(totalEarnings / totalMoves) : 0,
+      averagePerMove: totalMoves > 0 ? round2(totalEarnings / totalMoves) : 0,
     })
   } catch (error) {
     console.error('Error fetching earnings:', error)

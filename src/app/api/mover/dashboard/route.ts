@@ -4,6 +4,9 @@ import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
 import { Query } from 'node-appwrite'
 import { getSessionUserId } from '@/lib/auth-session'
+import { loadPricingConfig } from '@/lib/pricing-server'
+import { parseBreakdown } from '@/lib/pricingEngine'
+import { moverPayoutEur, moverPayoutFromGross, payoutRatesFrom } from '@/lib/moverPayout'
 
 /**
  * GET /api/mover/dashboard
@@ -88,16 +91,28 @@ export async function GET() {
     )
 
     // Filter payments for this mover's moves
-    const moverMoveIds = new Set(
-      [...activeMoves.documents, ...completedMoves.documents].map((m) => m.$id)
-    )
+    const moverMoves = [...activeMoves.documents, ...completedMoves.documents]
+    const moverMoveById = new Map(moverMoves.map((m) => [m.$id, m]))
     const moverPayments = payments.documents.filter(
-      (p) => moverMoveIds.has(p.moveId?.$id || p.moveId)
+      (p) => moverMoveById.has(p.moveId?.$id || p.moveId)
     )
-    const earningsThisMonth = moverPayments.reduce(
-      (sum, p) => sum + (p.amount || 0),
-      0
-    )
+
+    // Rates for rows booked before the pricing engine (no stored breakdown);
+    // engine rows carry their own rates inside `priceBreakdown`.
+    const pricingConfig = moverMoves.some((m) => !m.priceBreakdown)
+      ? await loadPricingConfig(databases)
+      : null
+
+    // What the driver EARNED this month (plan 7): a settled payment is the
+    // customer's gross, so strip VAT and the platform fee with the rates the
+    // move was priced with.
+    const earningsThisMonth = Math.round(
+      moverPayments.reduce((sum, p) => {
+        const move = moverMoveById.get(p.moveId?.$id || p.moveId)
+        const rates = payoutRatesFrom(parseBreakdown(move?.priceBreakdown), pricingConfig)
+        return sum + moverPayoutFromGross((p.amount as number) || 0, rates)
+      }, 0) * 100,
+    ) / 100
 
     // Active moves count: moves physically in progress (driving or on-site).
     // mover_accepted is intentionally excluded — it means accepted but not yet started;
@@ -126,6 +141,15 @@ export async function GET() {
       scheduledDate: doc.moveDate || null,
       status: doc.status,
       estimatedPrice: doc.estimatedPrice || 0,
+      // What the driver earns on this move: net after the platform fee.
+      payout: moverPayoutEur(
+        {
+          estimatedPrice: doc.estimatedPrice as number | null,
+          finalPrice: doc.finalPrice as number | null,
+          priceBreakdown: doc.priceBreakdown as string | null,
+        },
+        pricingConfig,
+      ),
       moveCategory: doc.moveCategory,
       totalItems: doc.totalItemCount || 0,
       routeDistanceMeters: doc.routeDistanceMeters || null,

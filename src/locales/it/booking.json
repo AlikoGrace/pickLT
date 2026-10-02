@@ -1149,6 +1149,12 @@
     },
     "vat": {
       "label": "IVA ({{rate}})"
+    },
+    "payout": {
+      "helper": "Dopo la commissione piattaforma del {{rate}}, IVA esclusa"
+    },
+    "customerPays": {
+      "label": "Il cliente paga"
     }
   },
   "route": {
