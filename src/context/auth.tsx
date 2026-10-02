@@ -137,13 +137,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       // (the Appwrite SDK session cookie lives on Appwrite's domain and
       //  is not accessible to our Next.js API routes or middleware)
       try {
-        await fetch('/api/auth/init-session', {
+        // Prove ownership of the session with a short-lived Appwrite JWT; the
+        // route resolves it server-side and signs our cookie for that user.
+        const { jwt } = await account.createJWT()
+        const initRes = await fetch('/api/auth/init-session', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ userId: appwriteUser.$id }),
+          body: JSON.stringify({ jwt }),
         })
-      } catch {
-        console.warn('Failed to initialize server session cookie')
+        if (!initRes.ok) {
+          const detail = await initRes.json().catch(() => ({}))
+          console.warn('[auth] init-session failed', initRes.status, detail?.error ?? '')
+        }
+      } catch (e) {
+        console.warn('Failed to initialize server session cookie', e)
       }
 
       // Check for pending user type from Google OAuth or email signup

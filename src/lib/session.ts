@@ -11,7 +11,7 @@ import crypto from 'crypto'
  *
  * Flow:
  * 1. Client authenticates via Appwrite Web SDK (Google/Email)
- * 2. Client calls POST /api/auth/init-session with { userId }
+ * 2. Client calls POST /api/auth/init-session with { jwt } (account.createJWT())
  * 3. Server verifies user + active session via admin SDK
  * 4. Server sets a signed httpOnly cookie on our domain
  * 5. All API routes verify this cookie via getSessionUserId()
