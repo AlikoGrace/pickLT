@@ -21,6 +21,13 @@
     },
     "version": {
       "label": "PickLT v{{version}}"
+    },
+    "country": {
+      "title": "Ülkeniz",
+      "helper": "Taşınmalarınızı ayırttığınız yer",
+      "updated": {
+        "success": "Ülke güncellendi"
+      }
     }
   },
   "auth": {
@@ -591,7 +598,10 @@
           "value": "Araç: {{ownership}}"
         },
         "vehicleLater": "Araç kayıttan sonra eklenecek ve taşıma alabilmeniz için doğrulanması gerekecektir.",
-        "platesOk": "Plaka ve araç fotoğrafları eklendi"
+        "platesOk": "Plaka ve araç fotoğrafları eklendi",
+        "rentalWindow": {
+          "value": "Kiralama bitişi: {{time}}"
+        }
       },
       "step": {
         "experience": {
@@ -621,7 +631,13 @@
       "ownership": {
         "title": "Araç mülkiyeti"
       },
-      "vehicleSubmitFailed": "Profiliniz kaydedildi, ancak araç gönderilemedi ({{error}}). Lütfen aracı panelden ekleyin."
+      "vehicleSubmitFailed": "Profiliniz kaydedildi, ancak araç gönderilemedi ({{error}}). Lütfen aracı panelden ekleyin.",
+      "vehicle": {
+        "rentalIntro": "Kiraladığınız aracı kiralama süresiyle birlikte kaydedin. Bu adımı atlayıp kiralamayı daha sonra panelinizden de ekleyebilirsiniz.",
+        "skip": {
+          "helper": "Kiralamayı daha sonra eklemek için alanları boş bırakın."
+        }
+      }
     },
     "request": {
       "categoryAndType": {
@@ -813,7 +829,14 @@
         "resubmitNote": "Lütfen aşağıdaki bilgileri düzeltip yeniden gönderin. Ret nedeni: {{reason}}",
         "keepPhoto": {
           "label": "Mevcut fotoğraf korunacak"
-        }
+        },
+        "renew": {
+          "title": "Kiralamayı yenile"
+        },
+        "addRental": {
+          "title": "Kiralama ekle"
+        },
+        "rentalNote": "Kiralık bir araç yalnızca girdiğiniz kiralama süresi içinde taşıma alır. Süreyi istediğiniz zaman uzatabilirsiniz."
       },
       "action": {
         "add": {
@@ -830,6 +853,9 @@
         },
         "view": {
           "cta": "Aracı görüntüle"
+        },
+        "renew": {
+          "cta": "Yeniden kirala"
         }
       },
       "state": {
@@ -868,6 +894,18 @@
         "vehicleRejected": {
           "title": "Araç onaylanmadı",
           "body": "Aracınız onaylanmadı. Lütfen bilgileri düzeltip yeniden gönderin."
+        },
+        "rentalActive": {
+          "title": "Kiralık araç kullanımda",
+          "body": "Kiralık aracınız doğrulandı ve kiralama süresi içinde. Süre sona erene kadar taşıma alırsınız."
+        },
+        "rentalExpiring": {
+          "title": "Kiralama yakında sona eriyor",
+          "body": "Kiralama süreniz bir saat içinde sona eriyor. Taşıma almaya devam etmek için süreyi uzatın."
+        },
+        "rentalExpired": {
+          "title": "Kiralama süresi sona erdi",
+          "body": "Kiralama süreniz sona erdi ve kullanımda araç yok. Taşıma almak için yeniden kiralayın, başka bir kiralama kaydedin veya kendi aracınızı kullanın."
         }
       },
       "confirm": {
@@ -888,6 +926,66 @@
         "helper": "Araç değişiklikleri ayrı olarak doğrulanır ve sürücü doğrulamanızı etkilemez.",
         "status": {
           "label": "{{vehicle}} · {{status}}"
+        }
+      },
+      "window": {
+        "title": "Kiralama süresi",
+        "until": {
+          "label": "Kiralama bitişi: {{time}}"
+        },
+        "progress": {
+          "a11y": "Kiralama süresinin kullanılan kısmı"
+        },
+        "custom": {
+          "label": "Bitiş tarihi ve saati"
+        },
+        "ended": {
+          "label": "Bitiş: {{time}}"
+        }
+      },
+      "renew": {
+        "title": "Kiralamayı yenile",
+        "subtitle": "Aynı araç, yeni süre. Bu kez aracı ne kadar süreyle kullanacağınızı belirtin.",
+        "submit": {
+          "cta": "Kiralama süresini onayla"
+        },
+        "failed": {
+          "error": "Kiralama yenilenemedi."
+        },
+        "photos": {
+          "title": "Yeni plaka fotoğrafları"
+        },
+        "doneVerified": {
+          "success": "Kiralama yenilendi. {{time}} tarihine kadar taşıma alırsınız."
+        },
+        "doneReview": {
+          "success": "Kiralama incelemeye gönderildi"
+        },
+        "noRental": {
+          "body": "Yenilenecek kayıtlı bir kiralık araç yok. Bunun yerine bir kiralama kaydedin."
+        }
+      },
+      "fleet": {
+        "title": "Araçlarınız",
+        "select": {
+          "cta": "Kullanıma al"
+        },
+        "selectFailed": {
+          "error": "Araç kullanıma alınamadı."
+        },
+        "selected": {
+          "success": "Kullanımdaki araç değiştirildi"
+        },
+        "noWindow": {
+          "label": "Kayıtlı kiralama süresi yok"
+        },
+        "ownedFallback": {
+          "helper": "Bir kiralama süresi sona erdiğinde kendi aracınız otomatik olarak devreye girer."
+        }
+      },
+      "banner": {
+        "countdown": {
+          "label": "Kiralamanızın bitmesine {{time}} kaldı"
         }
       }
     }
@@ -1282,6 +1380,9 @@
     },
     "verifyAndCreate": {
       "cta": "Doğrula ve hesap oluştur"
+    },
+    "country": {
+      "helper": "Taşınmalarınızı ayırtacağınız yer. Fiyatlar ve KDV, alım adresine göre belirlenir."
     }
   },
   "wizard": {

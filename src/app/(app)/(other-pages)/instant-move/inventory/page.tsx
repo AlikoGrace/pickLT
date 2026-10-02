@@ -82,6 +82,7 @@ const InstantMoveInventoryPage = () => {
     setPickupLocation,
     setDropoffLocation,
     setPickupCoordinates,
+    setPickupCountryCode,
     setDropoffCoordinates,
     moveType,
     inventory,
@@ -108,12 +109,13 @@ const InstantMoveInventoryPage = () => {
     if (editingLocationType === 'pickup') {
       setPickupLocation(location.fullAddress)
       setPickupCoordinates(location.coordinates)
+      setPickupCountryCode(location.countryCode ?? null)
     } else {
       setDropoffLocation(location.fullAddress)
       setDropoffCoordinates(location.coordinates)
     }
     setLocationPickerOpen(false)
-  }, [editingLocationType, setPickupLocation, setDropoffLocation, setPickupCoordinates, setDropoffCoordinates])
+  }, [editingLocationType, setPickupLocation, setDropoffLocation, setPickupCoordinates, setDropoffCoordinates, setPickupCountryCode])
 
   const handleRouteCalculated = useCallback((info: RouteInfo) => {
     setRouteInfo(info)

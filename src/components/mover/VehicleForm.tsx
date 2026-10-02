@@ -5,11 +5,12 @@ import { useEffect, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import CameraCaptureModal from '@/components/CameraCaptureModal'
+import RentalWindowPicker from '@/components/mover/RentalWindowPicker'
 import VehiclePhotoField from '@/components/mover/VehiclePhotoField'
 import type { VehicleDoc } from '@/lib/types'
 import { submitVehicle, uploadVehiclePhoto, VehicleApiError, type SubmitVehiclePayload } from '@/lib/vehicle-client'
 import { vehicleCapacityLabel } from '@/lib/vehicle-capacity'
-import { validateVehicleInput, type VehicleOwnership } from '@/lib/vehicle-service'
+import { validateVehicleInput, type RentalWindowInput, type VehicleOwnership } from '@/lib/vehicle-service'
 
 /** Stored slug → catalog segment. Never derive the slug from a label. */
 export const VEHICLE_TYPE_OPTIONS: { value: string; key: 'smallVan' | 'mediumTruck' | 'largeTruck' }[] = [
@@ -37,6 +38,8 @@ interface Props {
   initialOwnership: VehicleOwnership
   /** The rejected/pending vehicle to prefill and resubmit in place. */
   prefill?: VehicleDoc | null
+  /** Hide the ownership choice (a rental added next to an own vehicle is always rented). */
+  lockOwnership?: boolean
   onSuccess: () => Promise<void> | void
   /** Extra content rendered above the submit button (a note about the change). */
   note?: ReactNode
@@ -63,9 +66,16 @@ const inputClass =
  * `/vehicle/setup` for add / change / resubmit; the registration wizard
  * carries the same fields inline because they are part of a bigger form.
  */
-export default function VehicleForm({ mode, source, initialOwnership, prefill, onSuccess, note }: Props) {
+export default function VehicleForm({ mode, source, initialOwnership, prefill, lockOwnership, onSuccess, note }: Props) {
   const { t } = useTranslation()
   const [ownership, setOwnership] = useState<VehicleOwnership>(initialOwnership)
+  // Plan wave-2026-10/1 R1: every rental carries a window. Defaults to a day;
+  // the prefilled row's own window is kept on a resubmission.
+  const [rental, setRental] = useState<RentalWindowInput>(() => ({
+    hours: prefill?.rentalEndAt ? null : 24,
+    endAt: prefill?.rentalEndAt ?? null,
+    provider: prefill?.rentalProvider ?? '',
+  }))
   const [fields, setFields] = useState({
     registrationNumber: prefill?.registrationNumber ?? '',
     brand: prefill?.brand ?? '',
@@ -109,19 +119,24 @@ export default function VehicleForm({ mode, source, initialOwnership, prefill, o
 
   const hasPhoto = (kind: PhotoKind) => !!(photos[kind].file || photos[kind].existingUrl)
 
-  const codes = validateVehicleInput({
-    ownership,
-    ...fields,
-    frontPlatePhoto: hasPhoto('front') ? 'pending' : '',
-    rearPlatePhoto: hasPhoto('rear') ? 'pending' : '',
-    fullVehiclePhoto: hasPhoto('full') ? 'pending' : '',
-  })
+  const codes = validateVehicleInput(
+    {
+      ownership,
+      ...fields,
+      rental,
+      frontPlatePhoto: hasPhoto('front') ? 'pending' : '',
+      rearPlatePhoto: hasPhoto('rear') ? 'pending' : '',
+      fullVehiclePhoto: hasPhoto('full') ? 'pending' : '',
+    },
+    { requireRentalWindow: true },
+  )
   const valid = codes.length === 0
 
   const handleSubmit = async () => {
     if (!valid) {
       // i18n-keys: errors:vehicle.photosRequired, errors:vehicle.plateInvalid, errors:vehicle.fieldsRequired,
-      // errors:vehicle.typeInvalid, errors:vehicle.capacityOutOfRange, errors:vehicle.yearInvalid
+      // errors:vehicle.typeInvalid, errors:vehicle.capacityOutOfRange, errors:vehicle.yearInvalid,
+      // errors:vehicle.rentalWindowRequired, errors:vehicle.rentalWindowInvalid, errors:vehicle.rentalWindowTooLong
       setError(t(`errors:${codes[0]}`))
       return
     }
@@ -151,6 +166,7 @@ export default function VehicleForm({ mode, source, initialOwnership, prefill, o
         fullVehiclePhoto,
         source,
         vehicleId: mode === 'resubmit' ? (prefill?.$id ?? null) : null,
+        rental: ownership === 'rented' ? rental : null,
       })
       await onSuccess()
     } catch (err) {
@@ -168,6 +184,7 @@ export default function VehicleForm({ mode, source, initialOwnership, prefill, o
   return (
     <div className="space-y-5">
       {/* Ownership */}
+      {!lockOwnership && (
       <div>
         <RequiredLabel>{t('booking:vehicle.ownership.label')}</RequiredLabel>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -208,6 +225,15 @@ export default function VehicleForm({ mode, source, initialOwnership, prefill, o
           </p>
         )}
       </div>
+      )}
+
+      {/* Rental period (R1) — the window decides how long the driver receives moves */}
+      {ownership === 'rented' && (
+        <>
+          <RentalWindowPicker value={rental} onChange={setRental} disabled={submitting} />
+          <p className="text-xs text-neutral-500 dark:text-neutral-400">{t('web:mover.vehicle.setup.rentalNote')}</p>
+        </>
+      )}
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>

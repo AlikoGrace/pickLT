@@ -11,6 +11,9 @@ import { t } from '@/lib/i18n-runtime'
 
 export type UserType = 'client' | 'mover'
 
+/** localStorage key the sign-up page writes the chosen country to, read once by the first sync. */
+export const PENDING_COUNTRY_KEY = 'picklt_pending_country'
+
 // The user shape consumed across the app — combines Appwrite auth + Appwrite profile
 export type User = {
   // Appwrite Auth user ID
@@ -24,6 +27,8 @@ export type User = {
   userType: UserType
   emailVerified: boolean
   phoneVerified: boolean
+  /** ISO-3166-1 alpha-2 chosen at sign-up / in the account page (plan wave-2026-10/4 C7). */
+  countryCode?: string | null
   // Mover-specific fields (loaded from mover_profiles)
   moverDetails?: {
     profileId: string
@@ -52,6 +57,12 @@ export type User = {
     currentVehicleId?: string | null
     vehicleConfirmedServiceDate?: string | null
     vehicleReconfirmRequired?: boolean
+    // Rental window of the vehicle in service + the owned fallback (plan wave-2026-10/1).
+    vehicleRentalStartAt?: string | null
+    vehicleRentalEndAt?: string | null
+    vehicleRentalHours?: number | null
+    ownedVehicleId?: string | null
+    countryCode?: string | null
   }
 }
 
@@ -157,6 +168,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const pendingUserType = typeof window !== 'undefined'
         ? localStorage.getItem('picklt_pending_user_type') || undefined
         : undefined
+      // The country chosen on the sign-up page (plan wave-2026-10/4 C7) rides
+      // along on the first sync, the same way as the pending user type.
+      const pendingCountry = typeof window !== 'undefined'
+        ? localStorage.getItem(PENDING_COUNTRY_KEY) || undefined
+        : undefined
 
       // Sync with our users collection via API
       const res = await fetch('/api/auth/sync-user', {
@@ -170,12 +186,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           emailVerified: appwriteUser.emailVerification ?? false,
           phoneVerified: appwriteUser.phoneVerification ?? false,
           userType: pendingUserType,
+          countryCode: pendingCountry,
         }),
       })
 
       // Clear the pending user type after sync
       if (pendingUserType && typeof window !== 'undefined') {
         localStorage.removeItem('picklt_pending_user_type')
+      }
+      if (pendingCountry && typeof window !== 'undefined') {
+        localStorage.removeItem(PENDING_COUNTRY_KEY)
       }
 
       if (!res.ok) throw new Error(t('errors:auth.syncFailed'))
@@ -195,6 +215,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         userType: (userDoc.userType as UserType) ?? 'client',
         emailVerified: userDoc.emailVerified ?? false,
         phoneVerified: userDoc.phoneVerified ?? false,
+        countryCode: userDoc.countryCode ?? null,
         ...(moverProfile && {
           moverDetails: {
             profileId: moverProfile.$id,
@@ -223,6 +244,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             currentVehicleId: moverProfile.currentVehicleId ?? null,
             vehicleConfirmedServiceDate: moverProfile.vehicleConfirmedServiceDate ?? null,
             vehicleReconfirmRequired: moverProfile.vehicleReconfirmRequired === true,
+            vehicleRentalStartAt: moverProfile.vehicleRentalStartAt ?? null,
+            vehicleRentalEndAt: moverProfile.vehicleRentalEndAt ?? null,
+            vehicleRentalHours: moverProfile.vehicleRentalHours ?? null,
+            ownedVehicleId: moverProfile.ownedVehicleId ?? null,
+            countryCode: moverProfile.countryCode ?? null,
           },
         }),
       }

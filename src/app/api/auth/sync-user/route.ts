@@ -4,6 +4,8 @@ import { createAdminClient, withRetry } from '@/lib/appwrite-server'
 import { getSessionUserId } from '@/lib/auth-session'
 import { APPWRITE } from '@/lib/constants'
 import { userDocPermissions } from '@/lib/doc-permissions'
+import { isCountryCode } from '@/lib/countryCode'
+import { writeDroppingUnknownAttributes } from '@/lib/appwrite-write'
 import { Query } from 'node-appwrite'
 
 /**
@@ -16,8 +18,10 @@ import { Query } from 'node-appwrite'
  *
  * Identity and the verification flags come from the session and the Appwrite
  * Auth record, never from the request body: the body is attacker-controlled and
- * this route writes with the admin key. `userType` is the one caller-supplied
- * field, and it is honoured only when creating the document.
+ * this route writes with the admin key. `userType` is honoured only when
+ * creating the document; `countryCode` (ISO2, plan wave-2026-10/4 C7 — the
+ * country the client chose at sign-up or in the account page) is accepted on
+ * create and, when the caller sets it, on update.
  */
 export async function POST(req: NextRequest) {
   const { t } = await getTranslations()
@@ -28,7 +32,8 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json().catch(() => ({}))
-    const { profilePhoto, userType: requestedUserType } = body
+    const { profilePhoto, userType: requestedUserType, countryCode: requestedCountry } = body
+    const countryCode: string | null = isCountryCode(requestedCountry) ? requestedCountry.toUpperCase() : null
 
     const { databases, users } = createAdminClient()
 
@@ -63,42 +68,48 @@ export async function POST(req: NextRequest) {
     if (isNew || !userDoc) {
       // Create new user document with authId as $id
       isNew = true
-      userDoc = await withRetry(() =>
-        databases.createDocument(
-          APPWRITE.DATABASE_ID,
-          APPWRITE.COLLECTIONS.USERS,
-          authId,
-          {
-            email: email || '',
-            fullName: fullName || (email ? email.split('@')[0] : 'User'),
-            phone: phone || null,
-            profilePhoto: profilePhoto || null,
-            userType: requestedUserType === 'mover' ? 'mover' : 'client',
-            emailVerified: emailVerified ?? false,
-            phoneVerified: phoneVerified ?? false,
-          },
-          // The document id IS the auth account id, so the owner grant is the
-          // same id. Matches what functions/syncuser and functions/googleauth
-          // already write.
-          userDocPermissions(authId)
-        )
+      userDoc = await writeDroppingUnknownAttributes(
+        {
+          email: email || '',
+          fullName: fullName || (email ? email.split('@')[0] : 'User'),
+          phone: phone || null,
+          profilePhoto: profilePhoto || null,
+          userType: requestedUserType === 'mover' ? 'mover' : 'client',
+          emailVerified: emailVerified ?? false,
+          phoneVerified: phoneVerified ?? false,
+          countryCode,
+        },
+        (data) =>
+          withRetry(() =>
+            databases.createDocument(
+              APPWRITE.DATABASE_ID,
+              APPWRITE.COLLECTIONS.USERS,
+              authId,
+              data,
+              // The document id IS the auth account id, so the owner grant is the
+              // same id. Matches what functions/syncuser and functions/googleauth
+              // already write.
+              userDocPermissions(authId),
+            ),
+          ),
+        'sync-user',
       )
     } else {
       // Update existing user with latest auth data
-      userDoc = await withRetry(() =>
-        databases.updateDocument(
-          APPWRITE.DATABASE_ID,
-          APPWRITE.COLLECTIONS.USERS,
-          authId,
-          {
-            email,
-            fullName: fullName || userDoc.fullName,
-            phone: phone || userDoc.phone,
-            profilePhoto: profilePhoto || userDoc.profilePhoto,
-            emailVerified,
-            phoneVerified,
-          }
-        )
+      userDoc = await writeDroppingUnknownAttributes(
+        {
+          email,
+          fullName: fullName || userDoc.fullName,
+          phone: phone || userDoc.phone,
+          profilePhoto: profilePhoto || userDoc.profilePhoto,
+          emailVerified,
+          phoneVerified,
+          // Only when the caller set it: an absent value leaves the stored country alone.
+          ...(countryCode ? { countryCode } : {}),
+        },
+        (data) =>
+          withRetry(() => databases.updateDocument(APPWRITE.DATABASE_ID, APPWRITE.COLLECTIONS.USERS, authId, data)),
+        'sync-user',
       )
     }
 

@@ -255,7 +255,8 @@
     "startRouteRetry": "Route konnte nicht gestartet werden. Bitte versuchen Sie es erneut.",
     "vehicleNotReady": "Bestätigen oder verifizieren Sie Ihr Fahrzeug, bevor Sie online gehen oder Umzüge annehmen.",
     "withdrawFailed": "Rücktritt vom Umzug fehlgeschlagen",
-    "withdrawRetry": "Rücktritt fehlgeschlagen. Bitte versuchen Sie es erneut."
+    "withdrawRetry": "Rücktritt fehlgeschlagen. Bitte versuchen Sie es erneut.",
+    "countryMismatch": "Dieser Umzug findet in {{country}} statt; Ihr Konto ist in einem anderen Land registriert."
   },
   "movers": {
     "fetchFailed": "Umzugsprofis konnten nicht abgerufen werden",
@@ -351,6 +352,16 @@
     "saveFailed": "Fahrzeugdaten konnten nicht gespeichert werden",
     "typeInvalid": "Wählen Sie einen Fahrzeugtyp.",
     "updateFailed": "Fahrzeugdaten konnten nicht aktualisiert werden",
-    "yearInvalid": "Geben Sie ein vierstelliges Jahr ein."
+    "yearInvalid": "Geben Sie ein vierstelliges Jahr ein.",
+    "rentalWindowRequired": "Bitte angeben, wie lange Sie das Mietfahrzeug haben.",
+    "rentalWindowInvalid": "Geben Sie ein Mietende in der Zukunft an.",
+    "rentalWindowTooLong": "Eine Miete kann höchstens 30 Tage am Stück abdecken. Sie können sie später verlängern.",
+    "rentalExpired": "Ihr Mietzeitraum ist abgelaufen. Registrieren Sie erneut ein Mietfahrzeug.",
+    "notInWindow": "Dieses Fahrzeug ist derzeit nicht für Einsätze verfügbar.",
+    "notOwnVehicle": "Dieses Fahrzeug gehört nicht zu Ihrem Konto."
+  },
+  "country": {
+    "notLive": "PickLT ist in {{country}} noch nicht verfügbar.",
+    "required": "Bitte wählen Sie Ihr Land."
   }
 }

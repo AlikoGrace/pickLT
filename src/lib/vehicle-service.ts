@@ -29,7 +29,13 @@ export type VehicleEventAction =
   | 'verified'
   | 'rejected'
   | 'retired'
-  | 'reconfirm_required';
+  | 'reconfirm_required'
+  // Wave 2026-10 (plan `wave-2026-10/1`): rental windows and the two-vehicle fleet.
+  | 'renewed'
+  | 'expired'
+  | 'fallback'
+  | 'selected'
+  | 'expiring_soon';
 
 export type VehicleEventSource =
   | 'registration'
@@ -38,7 +44,9 @@ export type VehicleEventSource =
   | 'post_move'
   | 'admin'
   | 'system'
-  | 'backfill';
+  | 'backfill'
+  | 'renewal'
+  | 'cron';
 
 /** The spec's visibility/access states (§10), plus the two owned-driver extensions. */
 export type VehicleServiceState =
@@ -50,6 +58,12 @@ export type VehicleServiceState =
   | 'RENTAL_CHANGE_PENDING'
   | 'RENTAL_DAILY_CONFIRMATION_REQUIRED'
   | 'RENTAL_VERIFIED_TODAY'
+  /** Rental with a window, inside it and ready (plan wave-2026-10/1 R1). */
+  | 'RENTAL_ACTIVE'
+  /** Inside the window but ≤ `RENTAL_EXPIRING_MS` left — still ready, prompt to extend (R9). */
+  | 'RENTAL_EXPIRING'
+  /** The window has ended and no owned vehicle took over (R4). */
+  | 'RENTAL_EXPIRED'
   | 'VEHICLE_REJECTED';
 
 /** The subset of `mover_profiles` the predicate reads. Every field is optional
@@ -61,9 +75,157 @@ export interface VehicleProfileFields {
   currentVehicleId?: string | null;
   vehicleConfirmedServiceDate?: string | null;
   vehicleReconfirmRequired?: boolean | null;
+  /**
+   * Rental window of the vehicle IN SERVICE (plan wave-2026-10/1 R2), snapshotted
+   * on the profile so this predicate stays profile-only. Null on an owned vehicle
+   * in service and on rentals registered before windows existed (legacy: the
+   * daily-confirmation regime keeps applying to those until their next renewal).
+   */
+  vehicleRentalStartAt?: string | null;
+  vehicleRentalEndAt?: string | null;
+  vehicleRentalHours?: number | null;
+  /** The driver's verified OWNED vehicle, if any — the fallback when a rental ends (R3/R4). */
+  ownedVehicleId?: string | null;
 }
 
 export const DEFAULT_PLATFORM_TZ = 'Europe/Berlin';
+
+// ── Rental windows (plan wave-2026-10/1) ──────────────────────────────────────
+
+/** Quick-pick durations offered by the window picker, in hours. */
+export const RENTAL_DURATION_PRESETS_HOURS: readonly number[] = [4, 8, 24, 48, 72, 168];
+/** Longest window a single registration may cover (30 days); longer rentals renew. */
+export const MAX_RENTAL_HOURS = 720;
+/** Rentals longer than this keep the daily SAME/CHANGE tap inside the window (R7). */
+export const DAILY_CONFIRM_MIN_HOURS = 24;
+/** "Rental ends soon" from this much time before the end (R9). */
+export const RENTAL_EXPIRING_MS = 60 * 60 * 1000;
+/** Same plate renewed within this many days after its last window stays verified (R5). */
+export const RENEWAL_GRACE_DAYS = 30;
+
+const HOUR_MS = 60 * 60 * 1000;
+
+function parseIsoMs(value: string | null | undefined): number | null {
+  if (typeof value !== 'string' || value.trim() === '') return null;
+  const ms = Date.parse(value);
+  return Number.isFinite(ms) ? ms : null;
+}
+
+/** Hours of the window in service: the snapshot when present, else derived from the two instants. */
+export function rentalWindowHours(profile: VehicleProfileFields | null | undefined): number | null {
+  if (!profile) return null;
+  if (typeof profile.vehicleRentalHours === 'number' && Number.isFinite(profile.vehicleRentalHours)) {
+    return profile.vehicleRentalHours;
+  }
+  const start = parseIsoMs(profile.vehicleRentalStartAt);
+  const end = parseIsoMs(profile.vehicleRentalEndAt);
+  if (start == null || end == null || end <= start) return null;
+  return Math.round(((end - start) / HOUR_MS) * 100) / 100;
+}
+
+/** Milliseconds until the window in service ends; `null` when there is no window; ≤ 0 once ended. */
+export function rentalRemainingMs(profile: VehicleProfileFields | null | undefined, nowMs: number): number | null {
+  const end = parseIsoMs(profile?.vehicleRentalEndAt);
+  return end == null ? null : end - nowMs;
+}
+
+/** True when the window in service has an end and it has passed. */
+export function rentalWindowEnded(profile: VehicleProfileFields | null | undefined, nowMs: number): boolean {
+  const remaining = rentalRemainingMs(profile, nowMs);
+  return remaining != null && remaining <= 0;
+}
+
+/**
+ * Whether the rental in service still asks for the daily SAME/CHANGE tap (R7):
+ * legacy rentals (no window) always; windowed rentals only when longer than a day.
+ */
+export function rentalNeedsDailyConfirm(profile: VehicleProfileFields | null | undefined): boolean {
+  if (!profile || profile.vehicleOwnership !== 'rented') return false;
+  if (parseIsoMs(profile.vehicleRentalEndAt) == null) return true;
+  const hours = rentalWindowHours(profile);
+  return hours == null ? true : hours > DAILY_CONFIRM_MIN_HOURS;
+}
+
+export interface RentalWindowInput {
+  /** ISO instant; defaults to "now" when omitted. */
+  startAt?: string | null;
+  /** ISO instant; one of `endAt` / `hours` is required. */
+  endAt?: string | null;
+  hours?: number | string | null;
+  provider?: string | null;
+}
+
+export interface RentalWindow {
+  startAt: string;
+  endAt: string;
+  hours: number;
+  provider: string | null;
+}
+
+export type RentalWindowValidationCode =
+  | 'vehicle.rentalWindowRequired'
+  | 'vehicle.rentalWindowInvalid'
+  | 'vehicle.rentalWindowTooLong';
+
+/**
+ * Normalises a window. The end wins when both `endAt` and `hours` are given.
+ * Returns the codes (`fnCode` on the wire, `errors:vehicle.*` in the apps) or
+ * the resolved window. Run client-side before the call and server-side in
+ * `submitvehicle` — the same function, the same answer.
+ */
+export function resolveRentalWindow(
+  input: RentalWindowInput | null | undefined,
+  nowMs: number,
+): { ok: true; window: RentalWindow } | { ok: false; codes: RentalWindowValidationCode[] } {
+  if (!input || (input.endAt == null && (input.hours == null || String(input.hours).trim() === ''))) {
+    return { ok: false, codes: ['vehicle.rentalWindowRequired'] };
+  }
+  const startMs = input.startAt ? parseIsoMs(input.startAt) : nowMs;
+  if (startMs == null) return { ok: false, codes: ['vehicle.rentalWindowInvalid'] };
+  let endMs: number | null = null;
+  if (input.endAt != null && String(input.endAt).trim() !== '') {
+    endMs = parseIsoMs(String(input.endAt));
+  } else {
+    const h = Number(input.hours);
+    if (!Number.isFinite(h) || h <= 0) return { ok: false, codes: ['vehicle.rentalWindowInvalid'] };
+    endMs = startMs + h * HOUR_MS;
+  }
+  if (endMs == null || endMs <= startMs || endMs <= nowMs) {
+    return { ok: false, codes: ['vehicle.rentalWindowInvalid'] };
+  }
+  const hours = Math.round(((endMs - startMs) / HOUR_MS) * 100) / 100;
+  if (hours > MAX_RENTAL_HOURS) return { ok: false, codes: ['vehicle.rentalWindowTooLong'] };
+  const provider = typeof input.provider === 'string' && input.provider.trim() ? input.provider.trim().slice(0, 120) : null;
+  return {
+    ok: true,
+    window: { startAt: new Date(startMs).toISOString(), endAt: new Date(endMs).toISOString(), hours, provider },
+  };
+}
+
+/**
+ * R5: a renewal of the SAME verified rental keeps `verified` (no new photos)
+ * when its last window ended no more than `RENEWAL_GRACE_DAYS` ago (or has not
+ * ended yet — an extension) and the row was never rejected. Otherwise it goes
+ * back to review.
+ */
+export function canAutoRenew(
+  vehicle:
+    | { status?: string | null; rentalEndAt?: string | null; rejectionReason?: string | null; expiredAt?: string | null }
+    | null
+    | undefined,
+  nowMs: number,
+): boolean {
+  if (!vehicle) return false;
+  // A rental the `expirerentals` cron has already closed is `retired` with
+  // `expiredAt` set; it was verified when its window ended, so it renews under
+  // the same grace rule. Rows retired for any other reason stay ineligible.
+  const wasVerified = vehicle.status === 'verified' || (vehicle.status === 'retired' && !!vehicle.expiredAt);
+  if (!wasVerified) return false;
+  if (vehicle.rejectionReason) return false;
+  const end = parseIsoMs(vehicle.rentalEndAt);
+  if (end == null) return true; // legacy rental without a window: first window, same plates
+  return nowMs - end <= RENEWAL_GRACE_DAYS * 24 * HOUR_MS;
+}
 
 /**
  * Calendar date (`YYYY-MM-DD`) of `nowMs` in `tz`. `en-CA` is the locale whose
@@ -110,6 +272,23 @@ export function vehicleServiceReady(
   if (!profile.currentVehicleId) return false;
   if (profile.vehicleOwnership === 'rented') {
     if (profile.vehicleReconfirmRequired === true) return false;
+    // Plan wave-2026-10/1 §5: a windowed rental is ready until its end instant;
+    // the daily tap applies only to multi-day windows. Legacy rentals (no
+    // window) keep the confirmed-today rule unchanged.
+    const endMs = parseIsoMs(profile.vehicleRentalEndAt);
+    if (endMs != null) {
+      if (nowMs >= endMs) return false;
+      const hours =
+        typeof profile.vehicleRentalHours === 'number' && Number.isFinite(profile.vehicleRentalHours)
+          ? profile.vehicleRentalHours
+          : (() => {
+              const start = parseIsoMs(profile.vehicleRentalStartAt);
+              return start == null || endMs <= start ? null : (endMs - start) / HOUR_MS;
+            })();
+      const daily = hours == null ? true : hours > DAILY_CONFIRM_MIN_HOURS;
+      if (daily && profile.vehicleConfirmedServiceDate !== serviceDate(nowMs, tz)) return false;
+      return true;
+    }
     if (profile.vehicleConfirmedServiceDate !== serviceDate(nowMs, tz)) return false;
   }
   return true;
@@ -143,6 +322,14 @@ export function vehicleServiceState(
   }
   // verified
   if (profile.vehicleReconfirmRequired === true) return 'RENTAL_DAILY_CONFIRMATION_REQUIRED';
+  const remaining = rentalRemainingMs(profile, nowMs);
+  if (remaining != null) {
+    if (remaining <= 0) return 'RENTAL_EXPIRED';
+    if (rentalNeedsDailyConfirm(profile) && profile.vehicleConfirmedServiceDate !== serviceDate(nowMs, tz)) {
+      return 'RENTAL_DAILY_CONFIRMATION_REQUIRED';
+    }
+    return remaining <= RENTAL_EXPIRING_MS ? 'RENTAL_EXPIRING' : 'RENTAL_ACTIVE';
+  }
   if (profile.vehicleConfirmedServiceDate !== serviceDate(nowMs, tz)) {
     return 'RENTAL_DAILY_CONFIRMATION_REQUIRED';
   }
@@ -157,6 +344,7 @@ export const RESTRICTED_VEHICLE_STATES: ReadonlySet<VehicleServiceState> = new S
   'RENTAL_VEHICLE_REVIEW',
   'RENTAL_CHANGE_PENDING',
   'RENTAL_DAILY_CONFIRMATION_REQUIRED',
+  'RENTAL_EXPIRED',
   'VEHICLE_REJECTED',
 ]);
 
@@ -183,6 +371,8 @@ export interface VehicleFormInput {
   frontPlatePhoto: string;
   rearPlatePhoto: string;
   fullVehiclePhoto: string;
+  /** Required for rented vehicles once the wave-2026-10 rules are on (`requireRentalWindow`). */
+  rental?: RentalWindowInput | null;
 }
 
 /**
@@ -196,10 +386,24 @@ export type VehicleValidationCode =
   | 'vehicle.fieldsRequired'
   | 'vehicle.typeInvalid'
   | 'vehicle.capacityOutOfRange'
-  | 'vehicle.yearInvalid';
+  | 'vehicle.yearInvalid'
+  | RentalWindowValidationCode;
 
-export function validateVehicleInput(input: Partial<VehicleFormInput>): VehicleValidationCode[] {
+export interface ValidateVehicleOptions {
+  /** Demand a valid rental window when `ownership === 'rented'` (plan wave-2026-10/1 R1). */
+  requireRentalWindow?: boolean;
+  nowMs?: number;
+}
+
+export function validateVehicleInput(
+  input: Partial<VehicleFormInput>,
+  opts: ValidateVehicleOptions = {},
+): VehicleValidationCode[] {
   const codes: VehicleValidationCode[] = [];
+  if (opts.requireRentalWindow && input.ownership === 'rented') {
+    const r = resolveRentalWindow(input.rental ?? null, opts.nowMs ?? Date.now());
+    if (!r.ok) codes.push(...r.codes);
+  }
   const has = (v: unknown) => typeof v === 'string' && v.trim().length > 0;
   if (!has(input.frontPlatePhoto) || !has(input.rearPlatePhoto) || !has(input.fullVehiclePhoto)) {
     codes.push('vehicle.photosRequired');

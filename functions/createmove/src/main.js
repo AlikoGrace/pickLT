@@ -1,6 +1,8 @@
 import { Client, Databases, ID, Permission, Query, Role } from 'node-appwrite';
 
+import { resolveMoveCountry, warnIfNoMapboxToken } from './move-country.js';
 import {
+  GLOBAL_PRICING_SCOPE,
   PricingReconcileError,
   quoteColumns,
   quoteInputFromRow,
@@ -10,6 +12,9 @@ import {
 
 const DATABASE_ID = process.env.APPWRITE_DATABASE_ID;
 const MOVES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVES;
+// Optional: only read to fall back to the client's own country (plan
+// wave-2026-10/4 C2) when neither the pickup nor the body names one.
+const USERS_COLLECTION = process.env.APPWRITE_COLLECTION_USERS;
 const MOVE_STATUS_HISTORY_COLLECTION = process.env.APPWRITE_COLLECTION_MOVE_STATUS_HISTORY;
 const INVENTORY_CATALOG_COLLECTION = process.env.APPWRITE_COLLECTION_INVENTORY_CATALOG;
 const PRICING_CONFIG_COLLECTION = process.env.APPWRITE_COLLECTION_PRICING_CONFIG || 'pricing_config';
@@ -83,17 +88,45 @@ function asTextArray(value) {
 }
 
 /**
- * Read admin rate overrides. Never throws: a config that fails to load prices
- * at the compiled defaults rather than blocking the booking.
+ * Read admin rate overrides for the pickup country: the GLOBAL layer plus the
+ * country's own rows (plan wave-2026-10/4 C4/C5). Never throws: a config that
+ * fails to load prices at the compiled defaults rather than blocking the booking.
+ *
+ * Before the schema step adds `pricing_config.country` the filtered query is
+ * rejected (unknown attribute); that falls back to the unscoped legacy load so
+ * a function deployed ahead of the schema still prices on the admin's rates.
  */
-async function loadOverrides(databases, error) {
+let warnedLegacyConfig = false;
+async function loadOverrides(databases, error, countryCode) {
+  const scopes = countryCode ? [GLOBAL_PRICING_SCOPE, countryCode] : [GLOBAL_PRICING_SCOPE];
   try {
-    const res = await databases.listDocuments(DATABASE_ID, PRICING_CONFIG_COLLECTION, [Query.limit(200)]);
-    return toPricingConfig(res.documents);
+    const res = await databases.listDocuments(DATABASE_ID, PRICING_CONFIG_COLLECTION, [
+      Query.equal('country', scopes),
+      Query.limit(400),
+    ]);
+    return toPricingConfig(res.documents, countryCode);
   } catch (e) {
-    error(`createmove: pricing config unavailable, using defaults: ${e.message}`);
-    return {};
+    if (!warnedLegacyConfig) {
+      warnedLegacyConfig = true;
+      error(`createmove: country-scoped pricing config query failed (${e.message}); loading unscoped`);
+    }
+    try {
+      const res = await databases.listDocuments(DATABASE_ID, PRICING_CONFIG_COLLECTION, [Query.limit(200)]);
+      return toPricingConfig(res.documents, countryCode);
+    } catch (e2) {
+      error(`createmove: pricing config unavailable, using defaults: ${e2.message}`);
+      return {};
+    }
   }
+}
+
+/** The client's `users.countryCode`, or null — the last signal before the default. */
+function userCountryLoader(databases, userId) {
+  if (!USERS_COLLECTION || !userId) return undefined;
+  return async () => {
+    const user = await databases.getDocument(DATABASE_ID, USERS_COLLECTION, userId);
+    return user ? user.countryCode : null;
+  };
 }
 
 export default async ({ req, res, log, error }) => {
@@ -221,9 +254,22 @@ export default async ({ req, res, log, error }) => {
       privacyAccepted: moveData.privacyAccepted ?? null,
     };
 
+    // Pickup country (plan wave-2026-10/4 C2): reverse-geocoded from the
+    // pickup, else the client's `pickupCountryCode` hint, else the client's own
+    // country, else DE. Stored on the row; the quote is priced in that market.
+    warnIfNoMapboxToken('createmove', log);
+    const country = await resolveMoveCountry({
+      row: data,
+      body: moveData,
+      pickupChanged: true,
+      loadUserCountry: userCountryLoader(databases, clientId),
+      error,
+    });
+    data.countryCode = country.countryCode;
+
     // Quote the row. The selected mover's class on the row (instant) sets the
     // vehicle line; otherwise the engine picks the smallest class that fits.
-    const overrides = await loadOverrides(databases, error);
+    const overrides = await loadOverrides(databases, error, country.countryCode);
     let breakdown;
     try {
       breakdown = quoteMove(quoteInputFromRow(data, catalog, null), overrides);
@@ -271,7 +317,10 @@ export default async ({ req, res, log, error }) => {
       []
     );
 
-    log(`Move created: ${move.$id} (${handle}) for client ${clientId} — €${breakdown.total} (${breakdown.tier}/${breakdown.mode})`);
+    log(
+      `Move created: ${move.$id} (${handle}) for client ${clientId} — €${breakdown.total} ` +
+        `(${breakdown.tier}/${breakdown.mode}, ${country.countryCode} via ${country.source})`,
+    );
 
     return res.json({
       success: true,

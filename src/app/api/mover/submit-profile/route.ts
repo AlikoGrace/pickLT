@@ -4,9 +4,11 @@ import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
 import { getSessionUserId } from '@/lib/auth-session'
 import { sanctionedCountryRejection } from '@/lib/sanctions'
+import { writeDroppingUnknownAttributes } from '@/lib/appwrite-write'
 import { writeNotification } from '@/lib/notify'
 import { moverProfilePermissions } from '@/lib/doc-permissions'
 import { resolveOwnershipWrite } from '@/lib/mover-gates'
+import { countryName, countryToIso2, isCountryCode } from '@/lib/countryCode'
 import { ID, Query } from 'node-appwrite'
 
 /**
@@ -40,10 +42,20 @@ export async function POST(req: NextRequest) {
       businessPostcode,
       primaryCity,
       primaryCountry,
+      countryCode: requestedCountryCode,
       vehicleOwnership,
       languages,
       yearsExperience,
     } = body
+
+    // Plan wave-2026-10/4 C1/C7: the profile stores the ISO2 code AND the English
+    // name (`primaryCountry`, the legacy display/sanctions field). Either may be
+    // sent; the other is derived through the shared resolver.
+    const countryCode: string | null = isCountryCode(requestedCountryCode)
+      ? requestedCountryCode.toUpperCase()
+      : countryToIso2(primaryCountry)
+    const primaryCountryName: string | null =
+      (typeof primaryCountry === 'string' && primaryCountry.trim()) || countryName(countryCode) || null
 
     // Master D10: the profile carries only the ownership declaration. The
     // vehicle itself is its own row, submitted through `POST /api/mover/vehicle`
@@ -59,7 +71,7 @@ export async function POST(req: NextRequest) {
     const { databases, users } = createAdminClient()
 
     // ── T9 sanctions gate (mirrors functions/submitmoverprofile) ──────────
-    const sanctionsRejection = await sanctionedCountryRejection(databases, primaryCountry)
+    const sanctionsRejection = await sanctionedCountryRejection(databases, primaryCountryName)
     if (sanctionsRejection) {
       return NextResponse.json({ error: sanctionsRejection }, { status: 403 })
     }
@@ -125,7 +137,8 @@ export async function POST(req: NextRequest) {
       businessStreet: businessStreet || null,
       businessPostcode: businessPostcode || null,
       primaryCity: primaryCity || null,
-      primaryCountry: primaryCountry || null,
+      primaryCountry: primaryCountryName,
+      countryCode,
       // The six legacy `vehicle*` columns are no longer written here: they are
       // the server-side snapshot of the *verified* vehicle (master D2), written
       // only by the admin verify route and the backfill.
@@ -145,21 +158,19 @@ export async function POST(req: NextRequest) {
     let profile
     if (existing.total > 0) {
       // Update the existing profile instead of creating a duplicate
-      profile = await databases.updateDocument(
-        APPWRITE.DATABASE_ID,
-        APPWRITE.COLLECTIONS.MOVER_PROFILES,
-        existing.documents[0].$id,
-        {
-          ...profilePayload,
-          verificationStatus: 'pending_verification',
-        }
+      profile = await writeDroppingUnknownAttributes(
+        { ...profilePayload, verificationStatus: 'pending_verification' },
+        (data) =>
+          databases.updateDocument(
+            APPWRITE.DATABASE_ID,
+            APPWRITE.COLLECTIONS.MOVER_PROFILES,
+            existing.documents[0].$id,
+            data,
+          ),
       )
     } else {
       // Create a brand-new mover profile
-      profile = await databases.createDocument(
-        APPWRITE.DATABASE_ID,
-        APPWRITE.COLLECTIONS.MOVER_PROFILES,
-        ID.unique(),
+      profile = await writeDroppingUnknownAttributes(
         {
           userId,
           ...profilePayload,
@@ -172,10 +183,17 @@ export async function POST(req: NextRequest) {
           currentLatitude: null,
           currentLongitude: null,
         },
-        // KYC-grade row (SSN, tax number, licence photo, VAT, business
-        // address): owner read only, no client-session write path. `userId` is
-        // the session's auth account id — the profile's own $id is not a role.
-        moverProfilePermissions(userId)
+        (data) =>
+          databases.createDocument(
+            APPWRITE.DATABASE_ID,
+            APPWRITE.COLLECTIONS.MOVER_PROFILES,
+            ID.unique(),
+            data,
+            // KYC-grade row (SSN, tax number, licence photo, VAT, business
+            // address): owner read only, no client-session write path. `userId` is
+            // the session's auth account id — the profile's own $id is not a role.
+            moverProfilePermissions(userId),
+          ),
       )
     }
 

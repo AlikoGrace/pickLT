@@ -21,6 +21,13 @@
     },
     "version": {
       "label": "PickLT v{{version}}"
+    },
+    "country": {
+      "title": "Your country",
+      "helper": "Where you book moves",
+      "updated": {
+        "success": "Country updated"
+      }
     }
   },
   "auth": {
@@ -591,7 +598,10 @@
           "value": "Vehicle: {{ownership}}"
         },
         "vehicleLater": "The vehicle will be added after registration and must be verified before you receive moves.",
-        "platesOk": "Number plate and vehicle photos attached"
+        "platesOk": "Number plate and vehicle photos attached",
+        "rentalWindow": {
+          "value": "Rented until {{time}}"
+        }
       },
       "step": {
         "experience": {
@@ -621,7 +631,13 @@
       "ownership": {
         "title": "Vehicle ownership"
       },
-      "vehicleSubmitFailed": "Your profile has been saved, but the vehicle could not be submitted ({{error}}). Please add it from the dashboard."
+      "vehicleSubmitFailed": "Your profile has been saved, but the vehicle could not be submitted ({{error}}). Please add it from the dashboard.",
+      "vehicle": {
+        "rentalIntro": "Register the vehicle you rent together with its rental period. You can also skip this step and add the rental later from your dashboard.",
+        "skip": {
+          "helper": "Leave the fields empty to add the rental later."
+        }
+      }
     },
     "request": {
       "categoryAndType": {
@@ -813,7 +829,14 @@
         "resubmitNote": "Please correct the details below and submit again. Reason for the rejection: {{reason}}",
         "keepPhoto": {
           "label": "Current photo will be kept"
-        }
+        },
+        "renew": {
+          "title": "Renew rental"
+        },
+        "addRental": {
+          "title": "Add a rental"
+        },
+        "rentalNote": "A rented vehicle receives moves only inside the rental period you enter. You can extend it at any time."
       },
       "action": {
         "add": {
@@ -830,6 +853,9 @@
         },
         "view": {
           "cta": "View vehicle"
+        },
+        "renew": {
+          "cta": "Rent again"
         }
       },
       "state": {
@@ -868,6 +894,18 @@
         "vehicleRejected": {
           "title": "Vehicle not approved",
           "body": "Your vehicle submission was not approved. Please correct the details and resubmit."
+        },
+        "rentalActive": {
+          "title": "Rental vehicle in service",
+          "body": "Your rental vehicle is verified and inside its rental period. You receive moves until the period ends."
+        },
+        "rentalExpiring": {
+          "title": "Rental ends soon",
+          "body": "Your rental period ends within the hour. Extend it to keep receiving moves."
+        },
+        "rentalExpired": {
+          "title": "Rental period ended",
+          "body": "Your rental period has ended and no vehicle is in service. Rent again, register another rental or use your own vehicle to receive moves."
         }
       },
       "confirm": {
@@ -888,6 +926,66 @@
         "helper": "Vehicle changes are verified separately and do not affect your driver verification.",
         "status": {
           "label": "{{vehicle}} · {{status}}"
+        }
+      },
+      "window": {
+        "title": "Rental period",
+        "until": {
+          "label": "Rented until {{time}}"
+        },
+        "progress": {
+          "a11y": "Share of the rental period used"
+        },
+        "custom": {
+          "label": "End date & time"
+        },
+        "ended": {
+          "label": "Ended {{time}}"
+        }
+      },
+      "renew": {
+        "title": "Renew rental",
+        "subtitle": "Same vehicle, new period. Tell us how long you have it this time.",
+        "submit": {
+          "cta": "Confirm rental period"
+        },
+        "failed": {
+          "error": "The rental could not be renewed."
+        },
+        "photos": {
+          "title": "Fresh plate photos"
+        },
+        "doneVerified": {
+          "success": "Rental renewed. You receive moves until {{time}}."
+        },
+        "doneReview": {
+          "success": "Rental submitted for review"
+        },
+        "noRental": {
+          "body": "There is no rental vehicle on file to renew. Register a rental instead."
+        }
+      },
+      "fleet": {
+        "title": "Your vehicles",
+        "select": {
+          "cta": "Put in service"
+        },
+        "selectFailed": {
+          "error": "The vehicle could not be put in service."
+        },
+        "selected": {
+          "success": "Vehicle in service changed"
+        },
+        "noWindow": {
+          "label": "No rental period on file"
+        },
+        "ownedFallback": {
+          "helper": "When a rental period ends, your own vehicle takes over automatically."
+        }
+      },
+      "banner": {
+        "countdown": {
+          "label": "Your rental ends in {{time}}"
         }
       }
     }
@@ -1282,6 +1380,9 @@
     },
     "verifyAndCreate": {
       "cta": "Verify & create account"
+    },
+    "country": {
+      "helper": "Where you will book moves. Prices and VAT follow the pickup address."
     }
   },
   "wizard": {

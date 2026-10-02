@@ -11,6 +11,7 @@ import {
   formatVolumeM3,
   formatWeightKg,
 } from '@/lib/format'
+import { countryFlag, localizedCountryName } from '@/lib/countryCode'
 import { formatInventoryLabel } from '@/lib/inventory-labels'
 import { additionalServiceLabel } from '@/lib/enum-labels'
 import { asVehicleType, vehicleLabel } from '@/lib/pricing'
@@ -239,10 +240,19 @@ export default function PriceBreakdown({
   confirmed = false,
   className = '',
 }: PriceBreakdownProps) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [open, setOpen] = useState(!compact)
 
   const rows = breakdownRows(t, b)
+  // The market the quote was priced for (plan wave-2026-10/4 C8): a small chip
+  // with the country and the quote's OWN VAT rate, only on quotes that carry one.
+  const locale = i18n.resolvedLanguage ?? i18n.language
+  const countryChip = b.countryCode
+    ? t('common:country.pricesFor.label', {
+        country: `${countryFlag(b.countryCode)} ${localizedCountryName(b.countryCode, locale)}`.trim(),
+        rate: formatPercent(b.vatRate),
+      })
+    : null
   const visible = rows.filter((r) => r.always || r.amount !== 0)
   const headline = rows[rows.length - 1]
 
@@ -260,6 +270,11 @@ export default function PriceBreakdown({
             {t('web:pricing.breakdown.title')}
           </p>
           <p className="text-sm font-semibold text-neutral-900 dark:text-white">{breakdownHeader(t, b)}</p>
+          {countryChip && (
+            <span className="mt-1 inline-flex items-center rounded-full bg-neutral-100 px-2 py-0.5 text-[11px] font-medium text-neutral-600 dark:bg-neutral-700 dark:text-neutral-300">
+              {countryChip}
+            </span>
+          )}
         </div>
         <div className="text-right">
           <p className="text-xl font-bold text-primary-600">{formatMoney(b.total)}</p>

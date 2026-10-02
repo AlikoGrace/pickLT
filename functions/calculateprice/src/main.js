@@ -1,6 +1,8 @@
 import { Client, Databases, Query } from 'node-appwrite';
 
+import { resolveMoveCountry, warnIfNoMapboxToken } from './move-country.js';
 import {
+  GLOBAL_PRICING_SCOPE,
   PricingReconcileError,
   quoteColumns,
   quoteInputFromRow,
@@ -10,6 +12,9 @@ import {
 
 const DATABASE_ID = process.env.APPWRITE_DATABASE_ID;
 const MOVES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVES;
+// Optional: only read to fall back to the client's own country (plan
+// wave-2026-10/4 C2) when neither the pickup nor the body names one.
+const USERS_COLLECTION = process.env.APPWRITE_COLLECTION_USERS;
 const INVENTORY_CATALOG_COLLECTION = process.env.APPWRITE_COLLECTION_INVENTORY_CATALOG;
 const PRICING_CONFIG_COLLECTION = process.env.APPWRITE_COLLECTION_PRICING_CONFIG || 'pricing_config';
 
@@ -34,17 +39,45 @@ const PRICING_CONFIG_COLLECTION = process.env.APPWRITE_COLLECTION_PRICING_CONFIG
  */
 
 /**
- * Read admin rate overrides. Never throws and never blocks a quote: on any
- * failure the caller proceeds on the compiled defaults.
+ * Read admin rate overrides for the pickup country: the GLOBAL layer plus the
+ * country's own rows (plan wave-2026-10/4 C4/C5). Never throws and never
+ * blocks a quote: on any failure the caller proceeds on the compiled defaults.
+ *
+ * Before the schema step adds `pricing_config.country` the filtered query is
+ * rejected (unknown attribute); that falls back to the unscoped legacy load so
+ * a function deployed ahead of the schema still prices on the admin's rates.
  */
-async function loadOverrides(databases, error) {
+let warnedLegacyConfig = false;
+async function loadOverrides(databases, error, countryCode) {
+  const scopes = countryCode ? [GLOBAL_PRICING_SCOPE, countryCode] : [GLOBAL_PRICING_SCOPE];
   try {
-    const res = await databases.listDocuments(DATABASE_ID, PRICING_CONFIG_COLLECTION, [Query.limit(200)]);
-    return toPricingConfig(res.documents);
+    const res = await databases.listDocuments(DATABASE_ID, PRICING_CONFIG_COLLECTION, [
+      Query.equal('country', scopes),
+      Query.limit(400),
+    ]);
+    return toPricingConfig(res.documents, countryCode);
   } catch (e) {
-    error(`[calculateprice] pricing config unavailable, using defaults: ${e.message}`);
-    return {};
+    if (!warnedLegacyConfig) {
+      warnedLegacyConfig = true;
+      error(`[calculateprice] country-scoped pricing config query failed (${e.message}); loading unscoped`);
+    }
+    try {
+      const res = await databases.listDocuments(DATABASE_ID, PRICING_CONFIG_COLLECTION, [Query.limit(200)]);
+      return toPricingConfig(res.documents, countryCode);
+    } catch (e2) {
+      error(`[calculateprice] pricing config unavailable, using defaults: ${e2.message}`);
+      return {};
+    }
   }
+}
+
+/** The caller's `users.countryCode`, or null — the last signal before the default. */
+function userCountryLoader(databases, userId) {
+  if (!USERS_COLLECTION || !userId) return undefined;
+  return async () => {
+    const user = await databases.getDocument(DATABASE_ID, USERS_COLLECTION, userId);
+    return user ? user.countryCode : null;
+  };
 }
 
 async function loadCatalog(databases) {
@@ -71,6 +104,9 @@ function rowFromBody(body) {
     packingServiceLevel: body.packingServiceLevel,
     additionalServices: body.additionalServices,
     storageWeeks: body.storageWeeks,
+    // Pickup coordinates feed the country resolution (reverse geocode), not the price.
+    pickupLatitude: body.pickupLatitude,
+    pickupLongitude: body.pickupLongitude,
   };
 }
 
@@ -135,12 +171,28 @@ export default async ({ req, res, log, error }) => {
       }
     }
 
-    const [overrides, catalog] = await Promise.all([loadOverrides(databases, error), loadCatalog(databases)]);
+    // Pickup country (plan wave-2026-10/4 C2): the row's own code, else the
+    // pickup reverse-geocoded, else the client's hint (PREVIEW only — on a
+    // persist the body may not steer the price), else the client's country,
+    // else DE. Prices and VAT follow it.
+    warnIfNoMapboxToken('calculateprice', log);
+    const callerId = req.headers['x-appwrite-user-id'] || null;
+    const baseRow = move ?? rowFromBody(body);
+    const country = await resolveMoveCountry({
+      row: baseRow,
+      body: move ? null : body,
+      loadUserCountry: userCountryLoader(databases, callerId),
+      error,
+    });
+    const row = { ...baseRow, countryCode: country.countryCode };
+
+    const [overrides, catalog] = await Promise.all([
+      loadOverrides(databases, error, country.countryCode),
+      loadCatalog(databases),
+    ]);
 
     const vehicleOverride = typeof body.vehicleType === 'string' && body.vehicleType ? body.vehicleType : null;
-    const input = move
-      ? quoteInputFromRow(move, catalog, vehicleOverride)
-      : quoteInputFromRow(rowFromBody(body), catalog, null);
+    const input = quoteInputFromRow(row, catalog, move ? vehicleOverride : null);
 
     let breakdown;
     try {
@@ -165,7 +217,7 @@ export default async ({ req, res, log, error }) => {
     log(
       `calculateprice[v3] ${breakdown.tier}/${breakdown.mode} ${breakdown.profile.loadedVolumeM3} m³ ` +
         `${breakdown.profile.distanceKm} km crew ${breakdown.profile.crew} ${breakdown.profile.vehicleType} ` +
-        `→ €${breakdown.total}${moveId ? ` (persisted on ${moveId})` : ' (preview)'}`,
+        `→ €${breakdown.total} [${country.countryCode} via ${country.source}]${moveId ? ` (persisted on ${moveId})` : ' (preview)'}`,
     );
 
     return res.json({ success: true, estimatedPrice: breakdown.total, breakdown });

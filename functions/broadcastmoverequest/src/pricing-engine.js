@@ -116,17 +116,38 @@ export function rateOrNull(config, key) {
   return isPricingKey(key) ? rate(config, key) : null;
 }
 
-/** Raw `pricing_config` rows → override map. Unknown keys and non-finite values are dropped. */
-export function toPricingConfig(rows) {
-  const out = {};
+/**
+ * Raw `pricing_config` rows → override map. Unknown keys and non-finite values
+ * are dropped.
+ *
+ * Country scoping (plan `wave-2026-10/4` C4): a row carries `country` —
+ * `'GLOBAL'` (or no column at all, for rows written before the wave) for the
+ * base rate, or an ISO-3166-1 alpha-2 code for an override that applies only to
+ * moves departing from that country. The effective config for `countryCode` is
+ * the GLOBAL layer with that country's rows laid over it; rows for other
+ * countries are ignored. Without a `countryCode` only the GLOBAL layer applies.
+ */
+export const GLOBAL_PRICING_SCOPE = 'GLOBAL';
+
+export function pricingRowScope(row) {
+  const c = typeof row.country === 'string' ? row.country.trim().toUpperCase() : '';
+  return c === '' ? GLOBAL_PRICING_SCOPE : c;
+}
+
+export function toPricingConfig(rows, countryCode) {
+  const cc = typeof countryCode === 'string' && countryCode.trim() ? countryCode.trim().toUpperCase() : null;
+  const base = {};
+  const scoped = {};
   for (const row of rows) {
     const k = typeof row.key === 'string' ? row.key : null;
     if (!k || !isPricingKey(k)) continue;
     const v = typeof row.value === 'number' ? row.value : Number(row.value);
     if (!Number.isFinite(v)) continue;
-    out[k] = v;
+    const scope = pricingRowScope(row);
+    if (scope === GLOBAL_PRICING_SCOPE) base[k] = v;
+    else if (cc && scope === cc) scoped[k] = v;
   }
-  return out;
+  return { ...base, ...scoped };
 }
 
 // ── Volume (mirror of lib/move-volume.ts) ──────────────────────────────────
@@ -566,9 +587,15 @@ export function quoteMove(input, config) {
     throw new PricingReconcileError('non-integer cents');
   }
 
+  const countryCode =
+    typeof input.countryCode === 'string' && /^[A-Za-z]{2}$/.test(input.countryCode.trim())
+      ? input.countryCode.trim().toUpperCase()
+      : null;
+
   return {
     version: 'v3',
     currency: 'EUR',
+    ...(countryCode ? { countryCode } : {}),
     tier,
     mode,
     profile: {
@@ -718,10 +745,16 @@ export function quoteInputFromRow(row, catalog, vehicleTypeOverride) {
     services,
     storageWeeks: nonNegative(row.storageWeeks),
     discountEur: 0,
+    // Pickup country (plan wave-2026-10/4 C2) — resolved by the function before
+    // quoting and stored on the row; the engine only echoes it on the breakdown.
+    countryCode: typeof row.countryCode === 'string' ? row.countryCode : null,
   };
 }
 
-/** The five quote columns + the charged class/crew, as written to `moves`. */
+/**
+ * The five quote columns + the charged class/crew, as written to `moves`; plus
+ * the pickup `countryCode` the quote was priced for when the breakdown names one.
+ */
 export function quoteColumns(breakdown, pricedAtIso) {
   return {
     estimatedPrice: breakdown.total,
@@ -731,6 +764,9 @@ export function quoteColumns(breakdown, pricedAtIso) {
     currency: 'EUR',
     vehicleType: breakdown.profile.vehicleType,
     crewSize: String(breakdown.profile.crew),
+    ...(typeof breakdown.countryCode === 'string' && breakdown.countryCode
+      ? { countryCode: breakdown.countryCode }
+      : {}),
   };
 }
 

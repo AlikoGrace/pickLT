@@ -24,19 +24,50 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState, useRef } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
+import CountrySelect, { countryBlocked } from '@/components/CountrySelect'
+import { countryFlag, localizedCountryName } from '@/lib/countryCode'
 import { formatFileSizeMb } from '@/lib/format'
 import { AVATAR_UPLOAD_MAX_MB } from '@/lib/service-limits'
+import { GlobeEuropeAfricaIcon } from '@heroicons/react/24/outline'
 
 const APP_VERSION = '1.0.0'
 const OTP_DIGITS = 6
 
-type ModalType = 'editName' | 'changeEmail' | 'changePhone' | null
+type ModalType = 'editName' | 'changeEmail' | 'changePhone' | 'country' | null
 
 export default function AccountPage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const locale = i18n.resolvedLanguage ?? i18n.language
   const { user, updateUser, logout, refreshProfile, isAuthenticated, isLoading } = useAuth()
   const router = useRouter()
   const [activeModal, setActiveModal] = useState<ModalType>(null)
+  // Country (plan wave-2026-10/4 C7) — editable; a non-live market cannot be saved.
+  const [country, setCountry] = useState(user?.countryCode ?? '')
+  const handleSaveCountry = async () => {
+    if (!country || countryBlocked(country)) return
+    setIsSaving(true)
+    setError('')
+    try {
+      const res = await fetch('/api/user/profile', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ countryCode: country }),
+      })
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        throw new Error(data.error || t('errors:generic.saveFailed'))
+      }
+      updateUser({ countryCode: country })
+      await refreshProfile()
+      setActiveModal(null)
+      setSuccess(t('web:account.country.updated.success'))
+      setTimeout(() => setSuccess(''), 3000)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t('errors:generic.saveFailed'))
+    } finally {
+      setIsSaving(false)
+    }
+  }
   const [isSaving, setIsSaving] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
   const [error, setError] = useState('')
@@ -274,6 +305,18 @@ export default function AccountPage() {
           },
         },
         {
+          icon: GlobeEuropeAfricaIcon,
+          label: t('common:country.label'),
+          description: user?.countryCode
+            ? `${countryFlag(user.countryCode)} ${localizedCountryName(user.countryCode, locale)}`
+            : t('web:account.country.helper'),
+          action: () => {
+            setCountry(user?.countryCode ?? '')
+            setError('')
+            setActiveModal('country')
+          },
+        },
+        {
           icon: CreditCardIcon,
           label: t('profile:paymentMethods.label'),
           description: t('profile:paymentMethods.helper'),
@@ -476,6 +519,35 @@ export default function AccountPage() {
                     <button
                       onClick={handleSaveName}
                       disabled={isSaving || !fullName.trim()}
+                      className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-full font-medium hover:bg-primary-700 transition-colors disabled:opacity-50"
+                    >
+                      {isSaving ? t('common:state.saving.label') : t('common:action.save.cta')}
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Country (plan wave-2026-10/4 C7) */}
+            {activeModal === 'country' && (
+              <>
+                <h3 className="text-xl font-bold text-neutral-900 dark:text-neutral-100 mb-1">
+                  {t('web:account.country.title')}
+                </h3>
+                <p className="mb-4 text-sm text-neutral-500 dark:text-neutral-400">{t('web:signup.country.helper')}</p>
+                <div className="space-y-4">
+                  <CountrySelect id="account-country" value={country} onChange={setCountry} />
+                  {error && <p className="text-sm text-red-500">{error}</p>}
+                  <div className="flex gap-3">
+                    <button
+                      onClick={closeModal}
+                      className="flex-1 px-4 py-2 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-full font-medium hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
+                    >
+                      {t('common:action.cancel.cta')}
+                    </button>
+                    <button
+                      onClick={handleSaveCountry}
+                      disabled={isSaving || !country || countryBlocked(country)}
                       className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-full font-medium hover:bg-primary-700 transition-colors disabled:opacity-50"
                     >
                       {isSaving ? t('common:state.saving.label') : t('common:action.save.cta')}

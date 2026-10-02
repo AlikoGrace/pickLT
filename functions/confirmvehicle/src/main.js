@@ -11,6 +11,8 @@ import { Client, Databases, ID, Permission, Query, Role } from 'node-appwrite';
  * Body:  { source: 'login'|'post_move', moveId?, note? }
  *        `note` is an optional device/session id, kept on the audit row.
  * Reply: { ok: true, serviceDate, profile }
+ *        409 `vehicle.rentalExpired` once the rental window in service has
+ *        ended (plan wave-2026-10/1 §6) — renew instead of confirming.
  *
  * Identity is always `x-appwrite-user-id`, never the body. The service day is
  * computed server-side in PLATFORM_TZ so a phone with a wrong clock or a
@@ -26,8 +28,8 @@ const SOURCES = ['login', 'post_move'];
 
 // --- vehicle-service (mirror) ---
 /**
- * Mirror of pickltmobile/lib/vehicle-service.ts (master plan §5). Do not edit
- * here; edit the TS module and re-copy. The client parity test compares them.
+ * Mirror of pickltmobile/lib/vehicle-service.ts (master plan §5 + wave-2026-10/1 §5).
+ * Do not edit here; edit the TS module and re-copy. The client parity test compares them.
  */
 function serviceDate(nowMs, tz) {
   var zone = tz || 'Europe/Berlin';
@@ -55,6 +57,15 @@ function serviceDate(nowMs, tz) {
   return y + '-' + m + '-' + d;
 }
 
+function vehicleServiceParseMs(value) {
+  if (typeof value !== 'string' || value.trim() === '') return null;
+  var ms = Date.parse(value);
+  return isFinite(ms) ? ms : null;
+}
+
+// Rentals longer than this keep the daily SAME/CHANGE tap inside their window.
+var VEHICLE_DAILY_CONFIRM_MIN_HOURS = 24;
+
 function vehicleServiceReady(profile, nowMs, tz) {
   if (!profile) return false;
   if (profile.verificationStatus !== 'verified') return false;
@@ -62,6 +73,20 @@ function vehicleServiceReady(profile, nowMs, tz) {
   if (!profile.currentVehicleId) return false;
   if (profile.vehicleOwnership === 'rented') {
     if (profile.vehicleReconfirmRequired === true) return false;
+    var endMs = vehicleServiceParseMs(profile.vehicleRentalEndAt);
+    if (endMs != null) {
+      if (nowMs >= endMs) return false;
+      var hours = null;
+      if (typeof profile.vehicleRentalHours === 'number' && isFinite(profile.vehicleRentalHours)) {
+        hours = profile.vehicleRentalHours;
+      } else {
+        var startMs = vehicleServiceParseMs(profile.vehicleRentalStartAt);
+        if (startMs != null && endMs > startMs) hours = (endMs - startMs) / 3600000;
+      }
+      var daily = hours == null ? true : hours > VEHICLE_DAILY_CONFIRM_MIN_HOURS;
+      if (daily && profile.vehicleConfirmedServiceDate !== serviceDate(nowMs, tz)) return false;
+      return true;
+    }
     if (profile.vehicleConfirmedServiceDate !== serviceDate(nowMs, tz)) return false;
   }
   return true;
@@ -149,6 +174,16 @@ export default async ({ req, res, log, error }) => {
     }
 
     const nowMs = Date.now();
+    // Plan wave-2026-10/1 §6: a windowed rental cannot be confirmed past its
+    // end — SAME is not a renewal. The driver renews (`submitvehicle`
+    // mode:'renew') or registers another rental instead.
+    const rentalEndMs = vehicleServiceParseMs(profile.vehicleRentalEndAt);
+    if (rentalEndMs != null && nowMs >= rentalEndMs) {
+      return res.json(
+        { ok: false, error: 'Your rental period has ended. Register a rental again to continue.', fnCode: 'vehicle.rentalExpired', fnParams: { rentalEndAt: profile.vehicleRentalEndAt } },
+        409,
+      );
+    }
     const nowIso = new Date(nowMs).toISOString();
     const today = serviceDate(nowMs, PLATFORM_TZ);
     // A post-move confirmation belongs to the move that raised it. The app

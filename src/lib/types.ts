@@ -16,6 +16,8 @@ export interface UserDoc extends AppwriteDoc {
   userType: 'client' | 'mover' | null
   emailVerified: boolean
   phoneVerified: boolean
+  /** ISO-3166-1 alpha-2 the client chose at sign-up (plan wave-2026-10/4 C7). */
+  countryCode?: string | null
   // Relationships
   mover_profiles: MoverProfileDoc | null
   moves: MoveDoc[]
@@ -60,6 +62,13 @@ export interface MoverProfileDoc extends AppwriteDoc {
   vehicleConfirmedAt?: string | null
   vehicleConfirmedServiceDate?: string | null
   vehicleReconfirmRequired?: boolean | null
+  // Rental windows + two-vehicle fleet (plan wave-2026-10/1 R2/R3).
+  vehicleRentalStartAt?: string | null
+  vehicleRentalEndAt?: string | null
+  vehicleRentalHours?: number | null
+  ownedVehicleId?: string | null
+  /** ISO2 of the mover's market (plan wave-2026-10/4 C1); `primaryCountry` keeps the English name. */
+  countryCode?: string | null
   // Relationships
   crew_members: CrewMemberDoc[]
   moves: MoveDoc[]
@@ -299,6 +308,14 @@ export interface VehicleDoc extends AppwriteDoc {
   verifiedAt: string | null
   reviewedBy: string | null
   retiredAt: string | null
+  // Rental window (plan wave-2026-10/1 R1); null on owned vehicles and on
+  // rentals registered before windows existed.
+  rentalStartAt?: string | null
+  rentalEndAt?: string | null
+  rentalHours?: number | null
+  rentalProvider?: string | null
+  expiredAt?: string | null
+  renewalCount?: number | null
 }
 
 export type VehicleEventAction =
@@ -310,6 +327,11 @@ export type VehicleEventAction =
   | 'rejected'
   | 'retired'
   | 'reconfirm_required'
+  | 'renewed'
+  | 'expired'
+  | 'fallback'
+  | 'selected'
+  | 'expiring_soon'
 
 export interface VehicleEventDoc extends AppwriteDoc {
   moverProfileId: string

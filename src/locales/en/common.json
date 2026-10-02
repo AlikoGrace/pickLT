@@ -606,6 +606,21 @@
     },
     "verified": {
       "label": "Vehicle verified"
+    },
+    "renewed": {
+      "label": "Rental renewed"
+    },
+    "expired": {
+      "label": "Rental period ended"
+    },
+    "fallback": {
+      "label": "Switched back to own vehicle"
+    },
+    "selected": {
+      "label": "Vehicle in service changed"
+    },
+    "expiringSoon": {
+      "label": "Rental ending soon"
     }
   },
   "vehicleOwnership": {
@@ -650,6 +665,19 @@
     },
     "map": {
       "label": "Map"
+    }
+  },
+  "country": {
+    "label": "Country",
+    "pricesFor": {
+      "label": "Prices for {{country}} · VAT {{rate}}"
+    },
+    "notAvailable": {
+      "title": "Not available in your country yet",
+      "body": "PickLT is not open in {{country}} yet. We will let you know when it is."
+    },
+    "select": {
+      "label": "Select your country"
     }
   }
 }

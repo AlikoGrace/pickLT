@@ -255,7 +255,8 @@
     "startRouteRetry": "Route kon niet worden gestart. Probeer het opnieuw.",
     "vehicleNotReady": "Bevestig of verifieer uw voertuig voordat u online gaat of verhuizingen accepteert.",
     "withdrawFailed": "Terugtrekken uit de verhuizing mislukt",
-    "withdrawRetry": "Terugtrekken mislukt. Probeer het opnieuw."
+    "withdrawRetry": "Terugtrekken mislukt. Probeer het opnieuw.",
+    "countryMismatch": "Deze verhuizing is in {{country}}; je account is in een ander land geregistreerd."
   },
   "movers": {
     "fetchFailed": "Verhuizers konden niet worden opgehaald",
@@ -351,6 +352,16 @@
     "saveFailed": "Voertuiggegevens konden niet worden opgeslagen",
     "typeInvalid": "Kies een voertuigtype.",
     "updateFailed": "Voertuiggegevens konden niet worden bijgewerkt",
-    "yearInvalid": "Voer een jaartal van vier cijfers in."
+    "yearInvalid": "Voer een jaartal van vier cijfers in.",
+    "rentalWindowRequired": "Geef aan hoe lang je het huurvoertuig hebt.",
+    "rentalWindowInvalid": "Voer een huureinde in de toekomst in.",
+    "rentalWindowTooLong": "Een huur kan maximaal 30 dagen tegelijk beslaan. Je kunt later verlengen.",
+    "rentalExpired": "Je huurperiode is afgelopen. Registreer opnieuw een huurvoertuig om door te gaan.",
+    "notInWindow": "Dit voertuig is op dit moment niet beschikbaar voor dienst.",
+    "notOwnVehicle": "Dit voertuig hoort niet bij jouw account."
+  },
+  "country": {
+    "notLive": "PickLT is nog niet beschikbaar in {{country}}.",
+    "required": "Kies je land."
   }
 }

@@ -70,6 +70,8 @@ const Page = () => {
     setPickupLocation,
     setDropoffLocation,
     setPickupCoordinates,
+    setPickupCountryCode,
+    pickupCountryCode,
     setDropoffCoordinates,
     moveDate,
     moveType,
@@ -148,7 +150,8 @@ const Page = () => {
   // Admin-editable rates (empty → compiled defaults, so the preview shows a
   // correct price immediately and sharpens if a rate differs) and the priced
   // catalog the engine needs for the item line.
-  const pricingConfig = usePricingConfig()
+  // Per pickup country (plan wave-2026-10/4 C5): the market's VAT and tariff.
+  const pricingConfig = usePricingConfig(pickupCountryCode)
   const { catalog, ready: catalogReady } = useInventoryCatalog()
   const [locationPickerOpen, setLocationPickerOpen] = useState(false)
   const [editingLocationType, setEditingLocationType] = useState<'pickup' | 'dropoff'>('pickup')
@@ -162,12 +165,13 @@ const Page = () => {
     if (editingLocationType === 'pickup') {
       setPickupLocation(location.fullAddress)
       setPickupCoordinates(location.coordinates)
+      setPickupCountryCode(location.countryCode ?? null)
     } else {
       setDropoffLocation(location.fullAddress)
       setDropoffCoordinates(location.coordinates)
     }
     setLocationPickerOpen(false)
-  }, [editingLocationType, setPickupLocation, setDropoffLocation, setPickupCoordinates, setDropoffCoordinates])
+  }, [editingLocationType, setPickupLocation, setDropoffLocation, setPickupCoordinates, setDropoffCoordinates, setPickupCountryCode])
 
   const handleRouteCalculated = useCallback((info: RouteInfo) => {
     setRouteInfo(info)
@@ -198,6 +202,7 @@ const Page = () => {
           packingLevel: packingServiceLevel ?? 'none',
           services: additionalServices,
           storageWeeks,
+          countryCode: pickupCountryCode,
         },
         pricingConfig,
       )
@@ -212,7 +217,7 @@ const Page = () => {
     catalogReady, catalog, pricingConfig, moveType, routeInfo, routeDistanceMeters, routeDurationSeconds,
     inventory, customItems, floorLevel, elevatorAvailable, dropoffFloorLevel, dropoffElevatorAvailable,
     pickupArrangeHaltverbot, dropoffArrangeHaltverbot, packingServiceLevel, additionalServices, storageWeeks,
-  ])
+  , pickupCountryCode])
   const totalPrice = quote?.total ?? null
 
   // ─── Create scheduled move handler ────────────────────────
@@ -305,6 +310,8 @@ const Page = () => {
           // No price is sent: the server recomputes it from these inputs
           // (pricing master D5) and returns the breakdown it stored.
           paymentMethod,
+          // Geocoder hint for the pickup country (C2); the server re-derives it.
+          pickupCountryCode,
         }),
       })
 
@@ -333,7 +340,7 @@ const Page = () => {
     dropoffParkingSituation, dropoffArrangeHaltverbot, packingServiceLevel, packingMaterials,
     packingNotes, arrivalWindow, flexibility, crewSize, vehicleType, additionalServices,
     storageWeeks, disposalItems, contactInfo, routeInfo, routeDistanceMeters,
-    routeDurationSeconds, paymentMethod, reset, router, t,
+    routeDurationSeconds, paymentMethod, pickupCountryCode, reset, router, t,
   ])
 
   // Build gallery images array for header

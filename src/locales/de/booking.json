@@ -1414,6 +1414,71 @@
     },
     "yearShort": {
       "label": "Baujahr"
+    },
+    "rental": {
+      "window": {
+        "label": "Mietzeitraum"
+      },
+      "duration": {
+        "label": "Wie lange haben Sie das Fahrzeug?"
+      },
+      "preset": {
+        "hours": "{{count}} Std.",
+        "oneDay": "1 Tag",
+        "days": "{{count}} Tage",
+        "week": "1 Woche",
+        "custom": "Enddatum und Uhrzeit wählen"
+      },
+      "startNow": {
+        "label": "Beginnt jetzt"
+      },
+      "endsAt": {
+        "label": "Gemietet bis"
+      },
+      "remaining": {
+        "label": "Noch {{time}}"
+      },
+      "provider": {
+        "label": "Vermieter (optional)"
+      },
+      "extend": {
+        "cta": "Miete verlängern"
+      },
+      "rentAgain": {
+        "cta": "Erneut mieten"
+      },
+      "rentAnother": {
+        "cta": "Anderes Mietfahrzeug registrieren"
+      },
+      "useOwn": {
+        "cta": "Eigenes Fahrzeug nutzen"
+      },
+      "addRental": {
+        "cta": "Mietfahrzeug für einen Zeitraum hinzufügen"
+      },
+      "inService": {
+        "label": "Fahrzeug im Einsatz"
+      },
+      "expired": {
+        "title": "Ihr Mietzeitraum ist abgelaufen",
+        "body": "Registrieren Sie erneut ein Mietfahrzeug, um Aufträge zu erhalten."
+      },
+      "expiring": {
+        "title": "Miete endet bald",
+        "body": "Ihre Miete endet um {{time}}. Verlängern Sie sie, um weiter Aufträge zu erhalten."
+      },
+      "renewAutoVerified": {
+        "helper": "Dasselbe Fahrzeug wie zuvor – keine neuen Fotos nötig."
+      },
+      "renewNeedsReview": {
+        "helper": "Es ist eine Weile her – bitte neue Kennzeichenfotos zur Prüfung hochladen."
+      },
+      "maxHint": {
+        "helper": "Bis zu 30 Tage pro Registrierung. Längere Mieten können verlängert werden."
+      },
+      "broadcastsUntil": {
+        "label": "Sie erhalten Aufträge bis {{time}}"
+      }
     }
   }
 }

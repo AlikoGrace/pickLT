@@ -229,7 +229,8 @@ describe('submitVehicle', () => {
     })
     const { vehicle, profile: p } = await submitVehicle(db, {
       userId: 'user_1',
-      body: { ...goodBody, ownership: 'rented', source: 'login' },
+      // Every rental carries a window since wave 2026-10 (R1).
+      body: { ...goodBody, ownership: 'rented', source: 'login', rental: { hours: 8 } },
       nowMs: NOW,
     })
     const old = db.store.vehicles.find((v) => v.$id === 'v_cur')!
@@ -476,5 +477,265 @@ describe('withoutPhotoPlaceholders (backfilled rows, D14)', () => {
     expect(out).toMatchObject({ frontPlatePhoto: null, fullVehiclePhoto: null })
     expect(out?.rearPlatePhoto).toMatch(/^https:/)
     expect(repo.withoutPhotoPlaceholders(null)).toBeNull()
+  })
+})
+
+// ── Wave 2026-10 (plan `wave-2026-10/1`): rental windows, renewals, the fleet ──
+
+const { renewRental, selectVehicle, getFleet } = repo
+
+const rentedBody = { ...goodBody, ownership: 'rented', registrationNumber: 'R-NT 1', rental: { hours: 8 } }
+
+const ownedVerified = (over: AnyDoc = {}): AnyDoc => ({
+  $id: 'veh_own',
+  moverProfileId: 'prof_1',
+  ownerUserId: 'user_1',
+  ownership: 'owned',
+  status: 'verified',
+  isCurrent: true,
+  brand: 'VW',
+  model: 'Crafter',
+  year: '2021',
+  registrationNumber: 'B-OWN 1',
+  registrationNormalized: 'BOWN1',
+  vehicleType: 'large_truck',
+  capacityM3: 30,
+  submittedAt: '2026-09-01T00:00:00.000Z',
+  ...over,
+})
+
+const rentalVerified = (over: AnyDoc = {}): AnyDoc => ({
+  $id: 'veh_rent',
+  moverProfileId: 'prof_1',
+  ownerUserId: 'user_1',
+  ownership: 'rented',
+  status: 'verified',
+  isCurrent: false,
+  brand: 'Ford',
+  model: 'Transit',
+  year: '2023',
+  registrationNumber: 'R-NT 1',
+  registrationNormalized: 'RNT1',
+  vehicleType: 'medium_truck',
+  capacityM3: 15,
+  rentalStartAt: '2026-09-17T08:00:00.000Z',
+  rentalEndAt: '2026-09-17T16:00:00.000Z',
+  rentalHours: 8,
+  renewalCount: 0,
+  submittedAt: '2026-09-17T08:00:00.000Z',
+  ...over,
+})
+
+describe('submitVehicle — rental windows (R1) and own + rent (R3/R8)', () => {
+  it('400 vehicle.rentalWindowRequired when a rental has no window; ≤ 30 days', async () => {
+    const db = fakeDb({ mover_profiles: [profile()] })
+    const missing = await failure(submitVehicle(db, { userId: 'user_1', body: { ...rentedBody, rental: null }, nowMs: NOW }))
+    expect([missing.fnCode, missing.status]).toEqual(['vehicle.rentalWindowRequired', 400])
+    const long = await failure(submitVehicle(db, { userId: 'user_1', body: { ...rentedBody, rental: { hours: 721 } }, nowMs: NOW }))
+    expect(long.fnCode).toBe('vehicle.rentalWindowTooLong')
+  })
+
+  it('writes the window on the vehicle and the profile snapshot', async () => {
+    const db = fakeDb({ mover_profiles: [profile()] })
+    const { vehicle, profile: p } = await submitVehicle(db, { userId: 'user_1', body: rentedBody, nowMs: NOW })
+    expect(vehicle.rentalStartAt).toBe(new Date(NOW).toISOString())
+    expect(vehicle.rentalEndAt).toBe(new Date(NOW + 8 * 3600_000).toISOString())
+    expect(vehicle.rentalHours).toBe(8)
+    expect(p.vehicleRentalEndAt).toBe(vehicle.rentalEndAt)
+    expect(p.vehicleRentalHours).toBe(8)
+    expect(p.vehicleOwnership).toBe('rented')
+    expect(p.currentVehicleId).toBe(vehicle.$id)
+  })
+
+  it('an owned driver adding a rental keeps the own vehicle in service (R3)', async () => {
+    const db = fakeDb({
+      mover_profiles: [profile({ vehicleStatus: 'verified', currentVehicleId: 'veh_own' })],
+      vehicles: [ownedVerified()],
+    })
+    const { vehicle, profile: p } = await submitVehicle(db, { userId: 'user_1', body: rentedBody, nowMs: NOW })
+    expect(vehicle.isCurrent).toBe(false)
+    expect(vehicle.status).toBe('pending_review')
+    expect(vehicle.replacesVehicleId).toBeNull()
+    const own = db.store.vehicles.find((v) => v.$id === 'veh_own')!
+    expect(own.status).toBe('verified')
+    expect(own.isCurrent).toBe(true)
+    expect(p.currentVehicleId).toBe('veh_own')
+    expect(p.vehicleStatus).toBe('verified')
+    expect(p.vehicleOwnership).toBe('owned')
+    expect(p.ownedVehicleId).toBe('veh_own')
+    expect(db.store.vehicle_events.map((e) => e.action)).toEqual(['submitted'])
+  })
+
+  it('a rented driver replacing the rental still retires the old one', async () => {
+    const db = fakeDb({
+      mover_profiles: [profile({ vehicleOwnership: 'rented', vehicleStatus: 'verified', currentVehicleId: 'veh_rent' })],
+      vehicles: [rentalVerified({ isCurrent: true })],
+    })
+    const { vehicle } = await submitVehicle(db, { userId: 'user_1', body: { ...rentedBody, registrationNumber: 'R-NT 2' }, nowMs: NOW })
+    expect(vehicle.replacesVehicleId).toBe('veh_rent')
+    expect(db.store.vehicles.find((v) => v.$id === 'veh_rent')!.status).toBe('retired')
+  })
+})
+
+describe('renewRental (R5)', () => {
+  it('within the grace period the same plates stay verified and go in service', async () => {
+    const db = fakeDb({
+      mover_profiles: [profile({ vehicleOwnership: 'rented', vehicleStatus: 'none', currentVehicleId: 'veh_rent', vehicleRentalEndAt: '2026-09-17T16:00:00.000Z' })],
+      vehicles: [rentalVerified({ status: 'retired', expiredAt: '2026-09-17T16:00:01.000Z', isCurrent: true })],
+    })
+    const { vehicle, profile: p, autoVerified } = await renewRental(db, { userId: 'user_1', vehicleId: 'veh_rent', rental: { hours: 4 }, nowMs: NOW })
+    expect(autoVerified).toBe(true)
+    expect(vehicle.status).toBe('verified')
+    expect(vehicle.renewalCount).toBe(1)
+    expect(vehicle.expiredAt).toBeNull()
+    expect(vehicle.rentalEndAt).toBe(new Date(NOW + 4 * 3600_000).toISOString())
+    expect(p.vehicleStatus).toBe('verified')
+    expect(p.currentVehicleId).toBe('veh_rent')
+    expect(p.vehicleRentalEndAt).toBe(vehicle.rentalEndAt)
+    expect(p.vehicleConfirmedServiceDate).toBe(TODAY)
+    expect(p.vehicleBrand).toBe('Ford')
+    const ev = db.store.vehicle_events[0]
+    expect([ev.action, ev.source]).toEqual(['renewed', 'renewal'])
+  })
+
+  it('after the grace period the rental goes back to review (needs photos when rejected)', async () => {
+    const db = fakeDb({
+      mover_profiles: [profile({ vehicleOwnership: 'rented', vehicleStatus: 'none', currentVehicleId: 'veh_rent' })],
+      vehicles: [rentalVerified({ rentalEndAt: '2026-07-01T16:00:00.000Z' })],
+    })
+    const r = await renewRental(db, { userId: 'user_1', vehicleId: 'veh_rent', rental: { hours: 24 }, nowMs: NOW })
+    expect(r.autoVerified).toBe(false)
+    expect(r.vehicle.status).toBe('pending_review')
+    expect(r.profile.vehicleStatus).toBe('pending_review')
+    expect(db.store.vehicle_events[0].action).toBe('resubmitted')
+
+    const rejected = fakeDb({
+      mover_profiles: [profile({ vehicleOwnership: 'rented' })],
+      vehicles: [rentalVerified({ status: 'rejected', rejectionReason: 'blurry' })],
+    })
+    const err = await failure(renewRental(rejected, { userId: 'user_1', vehicleId: 'veh_rent', rental: { hours: 24 }, nowMs: NOW }))
+    expect(err.fnCode).toBe('vehicle.photosRequired')
+  })
+
+  it('an own vehicle in service keeps the service while the renewal is reviewed (R8)', async () => {
+    const db = fakeDb({
+      mover_profiles: [profile({ vehicleStatus: 'verified', currentVehicleId: 'veh_own' })],
+      vehicles: [ownedVerified(), rentalVerified({ rentalEndAt: '2026-07-01T16:00:00.000Z' })],
+    })
+    const r = await renewRental(db, { userId: 'user_1', vehicleId: 'veh_rent', rental: { hours: 24 }, nowMs: NOW })
+    expect(r.autoVerified).toBe(false)
+    expect(r.profile.currentVehicleId).toBe('veh_own')
+    expect(r.profile.ownedVehicleId).toBe('veh_own')
+    expect(r.vehicle.isCurrent).toBe(false)
+  })
+
+  it('refuses other movers\' vehicles, owned vehicles and bad windows', async () => {
+    const db = fakeDb({
+      mover_profiles: [profile(), { ...profile(), $id: 'prof_2', userId: 'user_2' }],
+      vehicles: [ownedVerified(), rentalVerified()],
+    })
+    expect((await failure(renewRental(db, { userId: 'user_2', vehicleId: 'veh_rent', rental: { hours: 4 }, nowMs: NOW }))).fnCode).toBe('vehicle.notOwnVehicle')
+    expect((await failure(renewRental(db, { userId: 'user_1', vehicleId: 'veh_own', rental: { hours: 4 }, nowMs: NOW }))).fnCode).toBe('vehicle.notRental')
+    expect((await failure(renewRental(db, { userId: 'user_1', vehicleId: 'veh_rent', rental: null, nowMs: NOW }))).fnCode).toBe('vehicle.rentalWindowRequired')
+    expect((await failure(renewRental(db, { userId: 'user_1', vehicleId: 'nope', rental: { hours: 4 }, nowMs: NOW }))).status).toBe(404)
+  })
+})
+
+describe('selectVehicle (R6)', () => {
+  const fleetDb = () =>
+    fakeDb({
+      mover_profiles: [profile({ vehicleOwnership: 'rented', vehicleStatus: 'verified', currentVehicleId: 'veh_rent', vehicleRentalEndAt: '2026-09-18T20:00:00.000Z', ownedVehicleId: 'veh_own' })],
+      vehicles: [ownedVerified({ isCurrent: false }), rentalVerified({ isCurrent: true, rentalEndAt: '2026-09-18T20:00:00.000Z' })],
+    })
+
+  it('puts the own vehicle in service: pointer, ownership, snapshot, window cleared, flags, event', async () => {
+    const db = fleetDb()
+    const { profile: p } = await selectVehicle(db, { userId: 'user_1', vehicleId: 'veh_own', nowMs: NOW })
+    expect(p.currentVehicleId).toBe('veh_own')
+    expect(p.vehicleOwnership).toBe('owned')
+    expect(p.vehicleRentalEndAt).toBeNull()
+    expect(p.vehicleBrand).toBe('VW')
+    expect(p.vehicleCapacity).toBe('30')
+    expect(db.store.vehicles.find((v) => v.$id === 'veh_own')!.isCurrent).toBe(true)
+    expect(db.store.vehicles.find((v) => v.$id === 'veh_rent')!.isCurrent).toBe(false)
+    expect(db.store.vehicle_events[0].action).toBe('selected')
+  })
+
+  it('switching back to an active rental snapshots its window and confirms today', async () => {
+    const db = fleetDb()
+    await selectVehicle(db, { userId: 'user_1', vehicleId: 'veh_own', nowMs: NOW })
+    const { profile: p } = await selectVehicle(db, { userId: 'user_1', vehicleId: 'veh_rent', nowMs: NOW })
+    expect(p.vehicleOwnership).toBe('rented')
+    expect(p.vehicleRentalEndAt).toBe('2026-09-18T20:00:00.000Z')
+    expect(p.vehicleConfirmedServiceDate).toBe(TODAY)
+  })
+
+  it('403 notOwnVehicle, 409 notVerified, 409 notInWindow', async () => {
+    const db = fakeDb({
+      mover_profiles: [profile(), { ...profile(), $id: 'prof_2', userId: 'user_2' }],
+      vehicles: [ownedVerified({ status: 'pending_review' }), rentalVerified({ rentalEndAt: '2026-09-17T16:00:00.000Z' })],
+    })
+    const other = await failure(selectVehicle(db, { userId: 'user_2', vehicleId: 'veh_own', nowMs: NOW }))
+    expect([other.fnCode, other.status]).toEqual(['vehicle.notOwnVehicle', 403])
+    const pending = await failure(selectVehicle(db, { userId: 'user_1', vehicleId: 'veh_own', nowMs: NOW }))
+    expect([pending.fnCode, pending.status]).toEqual(['vehicle.notVerified', 409])
+    const ended = await failure(selectVehicle(db, { userId: 'user_1', vehicleId: 'veh_rent', nowMs: NOW }))
+    expect([ended.fnCode, ended.status]).toEqual(['vehicle.notInWindow', 409])
+  })
+})
+
+describe('confirmVehicleSame — ended window', () => {
+  it('409 vehicle.rentalExpired once the window in service has ended', async () => {
+    const db = fakeDb({
+      mover_profiles: [profile({ vehicleOwnership: 'rented', vehicleStatus: 'verified', currentVehicleId: 'veh_rent', vehicleRentalEndAt: '2026-09-18T11:00:00.000Z' })],
+    })
+    const err = await failure(confirmVehicleSame(db, { userId: 'user_1', source: 'login', nowMs: NOW }))
+    expect([err.fnCode, err.status]).toEqual(['vehicle.rentalExpired', 409])
+  })
+})
+
+describe('schema / enum staging fallbacks', () => {
+  it('drops an attribute the collection does not know and retries', async () => {
+    const db = fakeDb({ mover_profiles: [profile()] })
+    const update = db.updateDocument.bind(db)
+    db.updateDocument = async (d: string, col: string, id: string, data: AnyDoc) => {
+      if ('vehicleRentalEndAt' in data) throw new Error('Invalid document structure: Unknown attribute: "vehicleRentalEndAt"')
+      return update(d, col, id, data)
+    }
+    const { profile: p } = await submitVehicle(db, { userId: 'user_1', body: rentedBody, nowMs: NOW })
+    expect(p.vehicleStatus).toBe('pending_review')
+    expect('vehicleRentalEndAt' in p).toBe(false)
+  })
+
+  it('writes the nearest legacy enum value when the new action/source is rejected', async () => {
+    const db = fakeDb({
+      mover_profiles: [profile({ vehicleOwnership: 'rented', vehicleStatus: 'verified', currentVehicleId: 'veh_rent' })],
+      vehicles: [rentalVerified({ isCurrent: true })],
+    })
+    const create = db.createDocument.bind(db)
+    db.createDocument = async (d: string, col: string, id: string, data: AnyDoc, perms?: string[]) => {
+      if (col === 'vehicle_events' && (data.action === 'renewed' || data.source === 'renewal')) {
+        throw new Error('Invalid document structure: Attribute "action" has invalid type. Value must be one of (submitted, …)')
+      }
+      return create(d, col, id, data, perms)
+    }
+    await renewRental(db, { userId: 'user_1', vehicleId: 'veh_rent', rental: { hours: 4 }, nowMs: NOW })
+    const ev = db.store.vehicle_events[0]
+    expect([ev.action, ev.source]).toEqual(['resubmitted', 'settings'])
+    expect(ev.note).toContain('[renewed/renewal]')
+  })
+})
+
+describe('getFleet (R3)', () => {
+  it('lists non-retired vehicles plus the newest rental even when retired', async () => {
+    const db = fakeDb({
+      vehicles: [
+        ownedVerified(),
+        rentalVerified({ status: 'retired', expiredAt: '2026-09-17T16:00:01.000Z' }),
+        rentalVerified({ $id: 'veh_old', status: 'retired', submittedAt: '2026-08-01T00:00:00.000Z' }),
+      ],
+    })
+    const fleet = await getFleet(db, 'prof_1')
+    expect(fleet.map((v) => v.$id)).toEqual(['veh_own', 'veh_rent'])
   })
 })

@@ -1,18 +1,24 @@
 'use client'
 
 import { useAuth } from '@/context/auth'
-import { formatVolumeM3, languageName, regionName } from '@/lib/format'
+import { formatDateTime, formatVolumeM3, languageName } from '@/lib/format'
 import { vehicleCapacityLabel } from '@/lib/vehicle-capacity'
 import { compressImage } from '@/utils/compressImage'
 import CameraCaptureModal from '@/components/CameraCaptureModal'
+import RentalWindowPicker from '@/components/mover/RentalWindowPicker'
 import VehiclePhotoField from '@/components/mover/VehiclePhotoField'
 import {
   canGoNext as stepCanGoNext,
+  onboardingRentalWindow,
   stepsForOwnership,
+  vehicleStepSkipped,
+  type CompleteProfileFields,
   type CompleteProfileStep,
 } from '@/lib/complete-profile-validation'
+import { countryFlag, countryName, localizedCountryName } from '@/lib/countryCode'
+import { SUPPORTED_COUNTRIES } from '@/lib/supportedCountries'
 import { submitVehicle, uploadVehiclePhoto } from '@/lib/vehicle-client'
-import type { VehicleOwnership } from '@/lib/vehicle-service'
+import type { RentalWindowInput, VehicleOwnership } from '@/lib/vehicle-service'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
@@ -62,39 +68,15 @@ const LANGUAGES_OPTIONS: { value: string; code: string }[] = [
   { value: 'Portuguese', code: 'pt' },
 ]
 
-/** Same contract as `LANGUAGES_OPTIONS`: `value` is the stored English name
- *  (`lib/sanctions.ts` maps those spellings to ISO2), `code` is display-only. */
-const COUNTRIES: { value: string; code: string }[] = [
-  { value: 'Germany', code: 'DE' },
-  { value: 'Austria', code: 'AT' },
-  { value: 'Switzerland', code: 'CH' },
-  { value: 'Netherlands', code: 'NL' },
-  { value: 'Belgium', code: 'BE' },
-  { value: 'France', code: 'FR' },
-  { value: 'Luxembourg', code: 'LU' },
-  { value: 'Denmark', code: 'DK' },
-  { value: 'Poland', code: 'PL' },
-  { value: 'Czech Republic', code: 'CZ' },
-  { value: 'United Kingdom', code: 'GB' },
-  { value: 'Ireland', code: 'IE' },
-  { value: 'Spain', code: 'ES' },
-  { value: 'Italy', code: 'IT' },
-  { value: 'Portugal', code: 'PT' },
-  { value: 'Sweden', code: 'SE' },
-  { value: 'Norway', code: 'NO' },
-  { value: 'Finland', code: 'FI' },
-  { value: 'United States', code: 'US' },
-  { value: 'Canada', code: 'CA' },
-]
-
 /**
- * Stored value → display name. Value-to-label only; there is deliberately no
- * label-to-value lookup anywhere in this file.
+ * The shared supported-country list (plan wave-2026-10/4 C3/C7), live markets
+ * first. The option value is the ISO2 code; the profile stores the code AND
+ * the English name (`primaryCountry`, the legacy display/sanctions field),
+ * derived through the shared resolver — never from a label.
  */
-function countryLabel(value: string, locale: string): string {
-  const option = COUNTRIES.find((c) => c.value === value)
-  return option ? regionName(option.code, locale) : value
-}
+const COUNTRY_OPTIONS: string[] = [...SUPPORTED_COUNTRIES]
+  .sort((a, b) => Number(b.live) - Number(a.live))
+  .map((c) => c.code)
 
 type Step = CompleteProfileStep
 
@@ -180,6 +162,7 @@ export default function CompleteProfilePage() {
     businessPostcode: '',
     primaryCity: '',
     primaryCountry: '',
+    countryCode: '',
     vehicleOwnership: '' as VehicleOwnership | '',
     frontPlatePhoto: null as File | null,
     frontPlatePreview: '',
@@ -193,6 +176,8 @@ export default function CompleteProfilePage() {
     vehicleCapacity: '',
     vehicleRegistration: '',
     vehicleType: '' as string,
+    // Rental window for a rented driver's vehicle (plan wave-2026-10/1 R1).
+    rental: { hours: 24, endAt: null, provider: '' } as RentalWindowInput,
     yearsExperience: '',
     languages: [] as string[],
   })
@@ -256,8 +241,7 @@ export default function CompleteProfilePage() {
 
   // The rule lives in `lib/complete-profile-validation.ts` (unit-tested); the
   // page only maps `File | null` to presence booleans.
-  const canGoNext = () =>
-    stepCanGoNext(currentStep, {
+  const validationFields = (): CompleteProfileFields => ({
       fullName: form.fullName,
       phone: form.phone,
       driversLicense: form.driversLicense,
@@ -276,9 +260,13 @@ export default function CompleteProfilePage() {
       hasFrontPlatePhoto: form.frontPlatePhoto !== null,
       hasRearPlatePhoto: form.rearPlatePhoto !== null,
       hasFullVehiclePhoto: form.fullVehiclePhoto !== null,
+      rentalHours: form.rental.hours != null ? String(form.rental.hours) : '',
+      rentalEndAt: form.rental.endAt ?? '',
       yearsExperience: form.yearsExperience,
       languages: form.languages,
-    })
+  })
+  const canGoNext = () => stepCanGoNext(currentStep, validationFields())
+  const rentalSkipped = form.vehicleOwnership === 'rented' && vehicleStepSkipped(validationFields())
 
   const goNext = () => {
     if (stepIdx < STEPS.length - 1) {
@@ -359,6 +347,7 @@ export default function CompleteProfilePage() {
           businessPostcode: form.businessPostcode,
           primaryCity: form.primaryCity,
           primaryCountry: form.primaryCountry,
+          countryCode: form.countryCode || undefined,
           // Master D10: the profile carries the ownership declaration only;
           // the vehicle is submitted as its own record right after.
           vehicleOwnership: form.vehicleOwnership || 'owned',
@@ -372,11 +361,17 @@ export default function CompleteProfilePage() {
         throw new Error(data.error || t('errors:mover.profileSubmitFailed'))
       }
 
-      // Second call: the owned driver's vehicle (same evidence standard as a
-      // rental driver adding one later — D5). A failure here does not undo the
-      // profile: `vehicleStatus` stays `none` and the dashboard prompts.
+      // Second call: the driver's vehicle (same evidence standard for owned and
+      // rented — D5; a rental carries its window, plan wave-2026-10/1 §7). A
+      // rental driver who skipped the step adds it later. A failure here does
+      // not undo the profile: `vehicleStatus` stays `none` and the dashboard prompts.
       let vehicleFailed = false
-      if (form.vehicleOwnership === 'owned' && form.frontPlatePhoto && form.rearPlatePhoto && form.fullVehiclePhoto) {
+      const registerVehicle =
+        (form.vehicleOwnership === 'owned' || (form.vehicleOwnership === 'rented' && !rentalSkipped)) &&
+        form.frontPlatePhoto &&
+        form.rearPlatePhoto &&
+        form.fullVehiclePhoto
+      if (registerVehicle && form.frontPlatePhoto && form.rearPlatePhoto && form.fullVehiclePhoto) {
         try {
           const [frontPlatePhoto, rearPlatePhoto, fullVehiclePhoto] = await Promise.all([
             uploadVehiclePhoto(form.frontPlatePhoto),
@@ -384,7 +379,8 @@ export default function CompleteProfilePage() {
             uploadVehiclePhoto(form.fullVehiclePhoto),
           ])
           await submitVehicle({
-            ownership: 'owned',
+            ownership: form.vehicleOwnership === 'rented' ? 'rented' : 'owned',
+            rental: form.vehicleOwnership === 'rented' ? form.rental : null,
             registrationNumber: form.vehicleRegistration.trim(),
             brand: form.vehicleBrand.trim(),
             model: form.vehicleModel.trim(),
@@ -801,14 +797,18 @@ export default function CompleteProfilePage() {
                 {t('common:field.country.label')}
               </RequiredLabel>
               <select
-                value={form.primaryCountry}
+                value={form.countryCode}
                 aria-required="true"
-                onChange={(e) => updateForm({ primaryCountry: e.target.value })}
+                onChange={(e) =>
+                  updateForm({ countryCode: e.target.value, primaryCountry: countryName(e.target.value) ?? '' })
+                }
                 className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
               >
                 <option value="">{t('common:field.country.placeholder')}</option>
-                {COUNTRIES.map((c) => (
-                  <option key={c.code} value={c.value}>{regionName(c.code, locale)}</option>
+                {COUNTRY_OPTIONS.map((code) => (
+                  <option key={code} value={code}>
+                    {countryFlag(code)} {localizedCountryName(code, locale)}
+                  </option>
                 ))}
               </select>
             </div>
@@ -881,13 +881,21 @@ export default function CompleteProfilePage() {
           </div>
         )}
 
-        {/* Step 4: Vehicle Details (owned drivers only) */}
+        {/* Step 4: Vehicle Details — owned drivers, and rented drivers with their rental period (skippable) */}
 
         {currentStep === 'vehicle' && (
           <div className="space-y-5">
             <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
               {t('booking:vehicle.title')}
             </h2>
+            {form.vehicleOwnership === 'rented' && (
+              <>
+                <p className="rounded-xl bg-primary-50 p-3 text-sm text-primary-800 dark:bg-primary-900/20 dark:text-primary-200">
+                  {t('web:mover.onboarding.vehicle.rentalIntro')}
+                </p>
+                <RentalWindowPicker value={form.rental} onChange={(rental) => updateForm({ rental })} />
+              </>
+            )}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
@@ -1034,6 +1042,9 @@ export default function CompleteProfilePage() {
                 onFile={(f) => setPhoto('full', f)}
               />
             </div>
+            {form.vehicleOwnership === 'rented' && rentalSkipped && (
+              <p className="text-xs text-neutral-500 dark:text-neutral-400">{t('web:mover.onboarding.vehicle.skip.helper')}</p>
+            )}
           </div>
         )}
 
@@ -1132,7 +1143,7 @@ export default function CompleteProfilePage() {
                 <p className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">
                   {t('web:mover.onboarding.review.location.value', {
                     city: form.primaryCity,
-                    country: countryLabel(form.primaryCountry, locale),
+                    country: form.countryCode ? localizedCountryName(form.countryCode, locale) : form.primaryCountry,
                   })}
                 </p>
                 {form.driversLicensePhotoPreview && (
@@ -1165,10 +1176,18 @@ export default function CompleteProfilePage() {
                     ownership: t(`common:vehicleOwnership.${form.vehicleOwnership === 'rented' ? 'rented' : 'owned'}.label`),
                   })}
                 </p>
-                {form.vehicleOwnership === 'rented' ? (
+                {rentalSkipped ? (
                   <p className="text-sm text-neutral-500">{t('web:mover.onboarding.review.vehicleLater')}</p>
                 ) : (
                 <>
+                {form.vehicleOwnership === 'rented' && (() => {
+                  const w = onboardingRentalWindow(validationFields())
+                  return w ? (
+                    <p className="text-sm text-neutral-900 dark:text-neutral-100">
+                      {t('web:mover.onboarding.review.rentalWindow.value', { time: formatDateTime(w.endAt) })}
+                    </p>
+                  ) : null
+                })()}
                 <p className="text-sm text-neutral-900 dark:text-neutral-100">
                   {t('web:mover.onboarding.review.vehicleName.value', {
                     brand: form.vehicleBrand,

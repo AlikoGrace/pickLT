@@ -137,6 +137,14 @@
     "verified": {
       "body": "Uw voertuig {{plate}} is geverifieerd. U kunt weer verhuizingen ontvangen.",
       "title": "Voertuig geverifieerd"
+    },
+    "rentalExpiring": {
+      "title": "Huur loopt bijna af",
+      "body": "Je huurvoertuig {{plate}} eindigt om {{time}}. Verleng om verhuizingen te blijven ontvangen."
+    },
+    "rentalExpired": {
+      "title": "Huurperiode afgelopen",
+      "body": "Je huurperiode voor {{plate}} is afgelopen. Huur opnieuw om verhuizingen te ontvangen."
     }
   },
   "verification": {

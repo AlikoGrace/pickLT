@@ -1,7 +1,9 @@
 'use client'
 
+import CountrySelect, { countryBlocked } from '@/components/CountrySelect'
 import GoogleSignInButton from '@/components/GoogleSignInButton'
-import { useAuth } from '@/context/auth'
+import { PENDING_COUNTRY_KEY, useAuth } from '@/context/auth'
+import { localizedCountryName } from '@/lib/countryCode'
 import { Trans, useTranslation } from 'react-i18next'
 import Logo from '@/shared/Logo'
 import Link from 'next/link'
@@ -23,11 +25,16 @@ import { HugeiconsIcon } from '@hugeicons/react'
  * 1. Choose Google OAuth or Email/Password
  * 2. After account creation, mandatory phone OTP verification
  * 3. Once phone verified → redirect to destination
+ *
+ * Clients pick their country first (plan wave-2026-10/4 C3/C7): a market PickLT
+ * is not open in yet blocks sign-up with a friendly notice; a live one is stored
+ * on `users.countryCode` through the first `sync-user` call. Movers choose their
+ * country on the complete-profile wizard instead.
  */
 type Step = 'choice' | 'email' | 'phone-enter' | 'phone-verify'
 
 function SignupContent() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const searchParams = useSearchParams()
   const router = useRouter()
   const type = searchParams.get('type') || 'client'
@@ -47,6 +54,32 @@ function SignupContent() {
   } = useAuth()
 
   const [step, setStep] = useState<Step>('choice')
+  // Country (clients only). Kept in localStorage until the first sync, like the pending user type.
+  const [country, setCountry] = useState(() => {
+    if (typeof window === 'undefined') return ''
+    try {
+      return localStorage.getItem(PENDING_COUNTRY_KEY) || ''
+    } catch {
+      return ''
+    }
+  })
+  const needsCountry = !isMover
+  const countryReady = !needsCountry || (!!country && !countryBlocked(country))
+  const handleCountryChange = (code: string) => {
+    setCountry(code)
+    setError('')
+    try {
+      if (code && !countryBlocked(code)) localStorage.setItem(PENDING_COUNTRY_KEY, code)
+      else localStorage.removeItem(PENDING_COUNTRY_KEY)
+    } catch {
+      /* storage unavailable: the account page can set it later */
+    }
+  }
+  const countryError = () => {
+    if (!country) return t('errors:country.required')
+    if (countryBlocked(country)) return t('errors:country.notLive', { country: localizedCountryName(country, i18n.resolvedLanguage ?? i18n.language) })
+    return ''
+  }
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -94,6 +127,10 @@ function SignupContent() {
 
   // Hosted-OAuth fallback — only when NEXT_PUBLIC_GOOGLE_CLIENT_ID is unset.
   const handleGoogleSignup = () => {
+    if (!countryReady) {
+      setError(countryError())
+      return
+    }
     loginWithGoogle(getRedirectUrl(), isMover ? 'mover' : 'client')
   }
 
@@ -101,6 +138,10 @@ function SignupContent() {
   // the same call as login; the effects above take over once authenticated.
   const handleGoogleCredential = async (idToken: string) => {
     setError('')
+    if (!countryReady) {
+      setError(countryError())
+      return
+    }
     await loginWithGoogleIdToken(idToken, isMover ? 'mover' : 'client')
   }
 
@@ -108,6 +149,10 @@ function SignupContent() {
     e.preventDefault()
     setError('')
 
+    if (!countryReady) {
+      setError(countryError())
+      return
+    }
     if (password.length < 8) {
       setError(t('auth:signup.passwordTooShort.error'))
       return
@@ -237,13 +282,26 @@ function SignupContent() {
                 : t('web:signup.clientSubtitle')}
             </p>
 
+            {/* Country first (plan wave-2026-10/4 C7) — the market the client books in */}
+            {needsCountry && (
+              <div className="text-left">
+                <label htmlFor="signup-country" className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                  {t('common:country.label')}
+                </label>
+                <CountrySelect id="signup-country" value={country} onChange={handleCountryChange} required />
+                <p className="mt-1 text-xs text-neutral-400 dark:text-neutral-500">{t('web:signup.country.helper')}</p>
+              </div>
+            )}
+
             {/* Google — GIS + googleauth, hosted OAuth as the fallback */}
-            <GoogleSignInButton
-              text="signup_with"
-              onCredential={handleGoogleCredential}
-              onError={setError}
-              fallback={handleGoogleSignup}
-            />
+            <div className={countryReady ? '' : 'pointer-events-none opacity-50'} aria-disabled={!countryReady}>
+              <GoogleSignInButton
+                text="signup_with"
+                onCredential={handleGoogleCredential}
+                onError={setError}
+                fallback={handleGoogleSignup}
+              />
+            </div>
 
             <div className="relative my-4">
               <div className="absolute inset-0 flex items-center">
@@ -258,8 +316,16 @@ function SignupContent() {
 
             {/* Email */}
             <button
-              onClick={() => { setStep('email'); setError('') }}
-              className="flex w-full items-center justify-center gap-3 rounded-xl border border-neutral-200 bg-white px-4 py-3 text-sm font-medium text-neutral-900 transition hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700"
+              onClick={() => {
+                if (!countryReady) {
+                  setError(countryError())
+                  return
+                }
+                setStep('email')
+                setError('')
+              }}
+              disabled={!countryReady}
+              className="flex w-full items-center justify-center gap-3 rounded-xl border border-neutral-200 bg-white px-4 py-3 text-sm font-medium text-neutral-900 transition hover:bg-neutral-50 disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700"
             >
               <HugeiconsIcon icon={Mail01Icon} size={20} strokeWidth={1.5} />
               {t('auth:signup.email.cta')}

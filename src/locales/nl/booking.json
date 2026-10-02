@@ -1413,6 +1413,71 @@
     },
     "yearShort": {
       "label": "Bouwjaar"
+    },
+    "rental": {
+      "window": {
+        "label": "Huurperiode"
+      },
+      "duration": {
+        "label": "Hoe lang heb je het voertuig?"
+      },
+      "preset": {
+        "hours": "{{count}} u",
+        "oneDay": "1 dag",
+        "days": "{{count}} dagen",
+        "week": "1 week",
+        "custom": "Kies een einddatum en -tijd"
+      },
+      "startNow": {
+        "label": "Begint nu"
+      },
+      "endsAt": {
+        "label": "Gehuurd tot"
+      },
+      "remaining": {
+        "label": "Nog {{time}}"
+      },
+      "provider": {
+        "label": "Verhuurder (optioneel)"
+      },
+      "extend": {
+        "cta": "Huur verlengen"
+      },
+      "rentAgain": {
+        "cta": "Opnieuw huren"
+      },
+      "rentAnother": {
+        "cta": "Ander huurvoertuig registreren"
+      },
+      "useOwn": {
+        "cta": "Mijn eigen voertuig gebruiken"
+      },
+      "addRental": {
+        "cta": "Huurvoertuig voor een periode toevoegen"
+      },
+      "inService": {
+        "label": "Voertuig in dienst"
+      },
+      "expired": {
+        "title": "Je huurperiode is afgelopen",
+        "body": "Registreer opnieuw een huurvoertuig om verhuizingen te ontvangen."
+      },
+      "expiring": {
+        "title": "Huur loopt bijna af",
+        "body": "Je huur eindigt om {{time}}. Verleng om verhuizingen te blijven ontvangen."
+      },
+      "renewAutoVerified": {
+        "helper": "Hetzelfde voertuig als eerder — geen nieuwe foto’s nodig."
+      },
+      "renewNeedsReview": {
+        "helper": "Het is een tijd geleden — voeg nieuwe kentekenfoto’s toe ter controle."
+      },
+      "maxHint": {
+        "helper": "Maximaal 30 dagen per registratie. Langere huur kan worden verlengd."
+      },
+      "broadcastsUntil": {
+        "label": "Je ontvangt verhuizingen tot {{time}}"
+      }
     }
   }
 }

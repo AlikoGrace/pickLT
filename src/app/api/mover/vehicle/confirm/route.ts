@@ -2,7 +2,8 @@ import { getTranslations } from '@/lib/i18n-server'
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { getSessionUserId } from '@/lib/auth-session'
-import { confirmVehicleSame, vehicleErrorMessage, VehicleRepoError, webAuditNote } from '@/lib/vehicle-repo'
+import { confirmVehicleSame, VehicleRepoError, webAuditNote } from '@/lib/vehicle-repo'
+import { profileVehicleFields, repoErrorResponse } from '@/lib/vehicle-route-utils'
 
 /**
  * POST /api/mover/vehicle/confirm — the web port of `confirmvehicle`
@@ -26,25 +27,9 @@ export async function POST(req: NextRequest) {
       moveId: typeof body.moveId === 'string' ? body.moveId : null,
       note: webAuditNote(body.note, req.headers.get('user-agent')),
     })
-    return NextResponse.json({
-      ok: true,
-      serviceDate,
-      profile: {
-        vehicleOwnership: profile.vehicleOwnership ?? 'owned',
-        vehicleStatus: profile.vehicleStatus ?? 'none',
-        currentVehicleId: profile.currentVehicleId ?? null,
-        vehicleConfirmedAt: profile.vehicleConfirmedAt ?? null,
-        vehicleConfirmedServiceDate: profile.vehicleConfirmedServiceDate ?? null,
-        vehicleReconfirmRequired: profile.vehicleReconfirmRequired === true,
-      },
-    })
+    return NextResponse.json({ ok: true, serviceDate, profile: profileVehicleFields(profile) })
   } catch (err) {
-    if (err instanceof VehicleRepoError) {
-      return NextResponse.json(
-        { error: vehicleErrorMessage(t, err.fnCode), fnCode: err.fnCode },
-        { status: err.status }
-      )
-    }
+    if (err instanceof VehicleRepoError) return repoErrorResponse(err, t)
     console.error('POST /api/mover/vehicle/confirm error:', err)
     return NextResponse.json({ error: t('errors:generic.internal') }, { status: 500 })
   }

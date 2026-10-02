@@ -1416,6 +1416,71 @@
     },
     "yearShort": {
       "label": "Year"
+    },
+    "rental": {
+      "window": {
+        "label": "Rental period"
+      },
+      "duration": {
+        "label": "How long do you have the vehicle?"
+      },
+      "preset": {
+        "hours": "{{count}} h",
+        "oneDay": "1 day",
+        "days": "{{count}} days",
+        "week": "1 week",
+        "custom": "Pick an end date & time"
+      },
+      "startNow": {
+        "label": "Starts now"
+      },
+      "endsAt": {
+        "label": "Rented until"
+      },
+      "remaining": {
+        "label": "{{time}} left"
+      },
+      "provider": {
+        "label": "Rental company (optional)"
+      },
+      "extend": {
+        "cta": "Extend rental"
+      },
+      "rentAgain": {
+        "cta": "Rent again"
+      },
+      "rentAnother": {
+        "cta": "Register another rental"
+      },
+      "useOwn": {
+        "cta": "Use my own vehicle"
+      },
+      "addRental": {
+        "cta": "Add a rental for a period"
+      },
+      "inService": {
+        "label": "Vehicle in service"
+      },
+      "expired": {
+        "title": "Your rental period has ended",
+        "body": "Register a rental again to receive moves."
+      },
+      "expiring": {
+        "title": "Rental ends soon",
+        "body": "Your rental ends at {{time}}. Extend it to keep receiving moves."
+      },
+      "renewAutoVerified": {
+        "helper": "Same vehicle as before — no new photos needed."
+      },
+      "renewNeedsReview": {
+        "helper": "It has been a while — please add fresh plate photos for review."
+      },
+      "maxHint": {
+        "helper": "Up to 30 days per registration. Longer rentals can be extended."
+      },
+      "broadcastsUntil": {
+        "label": "You receive moves until {{time}}"
+      }
     }
   }
 }

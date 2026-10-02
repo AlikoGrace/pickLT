@@ -21,6 +21,13 @@
     },
     "version": {
       "label": "PickLT v{{version}}"
+    },
+    "country": {
+      "title": "Je land",
+      "helper": "Waar je verhuizingen boekt",
+      "updated": {
+        "success": "Land bijgewerkt"
+      }
     }
   },
   "auth": {
@@ -591,7 +598,10 @@
           "value": "Voertuig: {{ownership}}"
         },
         "vehicleLater": "Het voertuig wordt na de registratie toegevoegd en moet worden geverifieerd voordat u verhuizingen ontvangt.",
-        "platesOk": "Foto's van kentekenplaten en voertuig toegevoegd"
+        "platesOk": "Foto's van kentekenplaten en voertuig toegevoegd",
+        "rentalWindow": {
+          "value": "Gehuurd tot {{time}}"
+        }
       },
       "step": {
         "experience": {
@@ -621,7 +631,13 @@
       "ownership": {
         "title": "Voertuigeigendom"
       },
-      "vehicleSubmitFailed": "Uw profiel is opgeslagen, maar het voertuig kon niet worden ingediend ({{error}}). Voeg het toe via het dashboard."
+      "vehicleSubmitFailed": "Uw profiel is opgeslagen, maar het voertuig kon niet worden ingediend ({{error}}). Voeg het toe via het dashboard.",
+      "vehicle": {
+        "rentalIntro": "Registreer het voertuig dat u huurt samen met de huurperiode. U kunt deze stap ook overslaan en de huur later vanuit uw dashboard toevoegen.",
+        "skip": {
+          "helper": "Laat de velden leeg om de huur later toe te voegen."
+        }
+      }
     },
     "request": {
       "categoryAndType": {
@@ -813,7 +829,14 @@
         "resubmitNote": "Corrigeer de onderstaande gegevens en dien ze opnieuw in. Reden van de afwijzing: {{reason}}",
         "keepPhoto": {
           "label": "Huidige foto blijft behouden"
-        }
+        },
+        "renew": {
+          "title": "Huur verlengen"
+        },
+        "addRental": {
+          "title": "Huur toevoegen"
+        },
+        "rentalNote": "Een huurvoertuig ontvangt alleen verhuizingen binnen de huurperiode die u opgeeft. U kunt deze op elk moment verlengen."
       },
       "action": {
         "add": {
@@ -830,6 +853,9 @@
         },
         "view": {
           "cta": "Voertuig bekijken"
+        },
+        "renew": {
+          "cta": "Opnieuw huren"
         }
       },
       "state": {
@@ -868,6 +894,18 @@
         "vehicleRejected": {
           "title": "Voertuig niet goedgekeurd",
           "body": "Uw voertuig is niet goedgekeurd. Corrigeer de gegevens en dien ze opnieuw in."
+        },
+        "rentalActive": {
+          "title": "Huurvoertuig in gebruik",
+          "body": "Uw huurvoertuig is geverifieerd en bevindt zich binnen de huurperiode. U ontvangt verhuizingen tot de periode afloopt."
+        },
+        "rentalExpiring": {
+          "title": "Huur loopt binnenkort af",
+          "body": "Uw huurperiode loopt binnen een uur af. Verleng deze om verhuizingen te blijven ontvangen."
+        },
+        "rentalExpired": {
+          "title": "Huurperiode afgelopen",
+          "body": "Uw huurperiode is afgelopen en er is geen voertuig in gebruik. Huur opnieuw, registreer een andere huur of gebruik uw eigen voertuig om verhuizingen te ontvangen."
         }
       },
       "confirm": {
@@ -888,6 +926,66 @@
         "helper": "Voertuigwijzigingen worden afzonderlijk geverifieerd en hebben geen invloed op uw chauffeursverificatie.",
         "status": {
           "label": "{{vehicle}} · {{status}}"
+        }
+      },
+      "window": {
+        "title": "Huurperiode",
+        "until": {
+          "label": "Gehuurd tot {{time}}"
+        },
+        "progress": {
+          "a11y": "Verstreken deel van de huurperiode"
+        },
+        "custom": {
+          "label": "Einddatum en -tijd"
+        },
+        "ended": {
+          "label": "Afgelopen {{time}}"
+        }
+      },
+      "renew": {
+        "title": "Huur verlengen",
+        "subtitle": "Hetzelfde voertuig, een nieuwe periode. Laat ons weten hoe lang u het deze keer heeft.",
+        "submit": {
+          "cta": "Huurperiode bevestigen"
+        },
+        "failed": {
+          "error": "De huur kon niet worden verlengd."
+        },
+        "photos": {
+          "title": "Nieuwe kentekenfoto's"
+        },
+        "doneVerified": {
+          "success": "Huur verlengd. U ontvangt verhuizingen tot {{time}}."
+        },
+        "doneReview": {
+          "success": "Huur ingediend ter beoordeling"
+        },
+        "noRental": {
+          "body": "Er is geen huurvoertuig geregistreerd om te verlengen. Registreer in plaats daarvan een huur."
+        }
+      },
+      "fleet": {
+        "title": "Uw voertuigen",
+        "select": {
+          "cta": "In gebruik nemen"
+        },
+        "selectFailed": {
+          "error": "Het voertuig kon niet in gebruik worden genomen."
+        },
+        "selected": {
+          "success": "Voertuig in gebruik gewijzigd"
+        },
+        "noWindow": {
+          "label": "Geen huurperiode geregistreerd"
+        },
+        "ownedFallback": {
+          "helper": "Wanneer een huurperiode afloopt, neemt uw eigen voertuig het automatisch over."
+        }
+      },
+      "banner": {
+        "countdown": {
+          "label": "Uw huur eindigt over {{time}}"
         }
       }
     }
@@ -1282,6 +1380,9 @@
     },
     "verifyAndCreate": {
       "cta": "Verifiëren en account aanmaken"
+    },
+    "country": {
+      "helper": "Waar je verhuizingen gaat boeken. Prijzen en btw volgen het ophaaladres."
     }
   },
   "wizard": {

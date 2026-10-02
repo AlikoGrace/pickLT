@@ -606,6 +606,21 @@
     },
     "verified": {
       "label": "Araç doğrulandı"
+    },
+    "renewed": {
+      "label": "Kiralama yenilendi"
+    },
+    "expired": {
+      "label": "Kiralama süresi doldu"
+    },
+    "fallback": {
+      "label": "Kendi araca geri dönüldü"
+    },
+    "selected": {
+      "label": "Hizmetteki araç değiştirildi"
+    },
+    "expiringSoon": {
+      "label": "Kiralama yakında bitiyor"
     }
   },
   "vehicleOwnership": {
@@ -650,6 +665,19 @@
     },
     "map": {
       "label": "Harita"
+    }
+  },
+  "country": {
+    "label": "Ülke",
+    "pricesFor": {
+      "label": "{{country}} fiyatları · KDV {{rate}}"
+    },
+    "notAvailable": {
+      "title": "Ülkenizde henüz kullanılamıyor",
+      "body": "PickLT henüz {{country}} için açılmadı. Açıldığında size haber vereceğiz."
+    },
+    "select": {
+      "label": "Ülkenizi seçin"
     }
   }
 }

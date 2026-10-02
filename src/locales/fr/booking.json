@@ -1415,6 +1415,71 @@
     },
     "yearShort": {
       "label": "Année"
+    },
+    "rental": {
+      "window": {
+        "label": "Période de location"
+      },
+      "duration": {
+        "label": "Pendant combien de temps avez-vous le véhicule ?"
+      },
+      "preset": {
+        "hours": "{{count}} h",
+        "oneDay": "1 jour",
+        "days": "{{count}} jours",
+        "week": "1 semaine",
+        "custom": "Choisir une date et une heure de fin"
+      },
+      "startNow": {
+        "label": "Commence maintenant"
+      },
+      "endsAt": {
+        "label": "Loué jusqu’au"
+      },
+      "remaining": {
+        "label": "{{time}} restantes"
+      },
+      "provider": {
+        "label": "Loueur (facultatif)"
+      },
+      "extend": {
+        "cta": "Prolonger la location"
+      },
+      "rentAgain": {
+        "cta": "Louer à nouveau"
+      },
+      "rentAnother": {
+        "cta": "Enregistrer une autre location"
+      },
+      "useOwn": {
+        "cta": "Utiliser mon propre véhicule"
+      },
+      "addRental": {
+        "cta": "Ajouter une location pour une période"
+      },
+      "inService": {
+        "label": "Véhicule en service"
+      },
+      "expired": {
+        "title": "Votre période de location est terminée",
+        "body": "Enregistrez à nouveau une location pour recevoir des déménagements."
+      },
+      "expiring": {
+        "title": "La location se termine bientôt",
+        "body": "Votre location se termine à {{time}}. Prolongez-la pour continuer à recevoir des déménagements."
+      },
+      "renewAutoVerified": {
+        "helper": "Même véhicule qu’avant : aucune nouvelle photo nécessaire."
+      },
+      "renewNeedsReview": {
+        "helper": "Cela fait un moment : ajoutez de nouvelles photos des plaques pour vérification."
+      },
+      "maxHint": {
+        "helper": "Jusqu’à 30 jours par enregistrement. Les locations plus longues peuvent être prolongées."
+      },
+      "broadcastsUntil": {
+        "label": "Vous recevez des déménagements jusqu’à {{time}}"
+      }
     }
   }
 }

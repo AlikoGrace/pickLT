@@ -4,6 +4,7 @@ import {
   ArrowPathIcon,
   CheckCircleIcon,
   ClockIcon,
+  KeyIcon,
   PhotoIcon,
   PlusIcon,
   TruckIcon,
@@ -16,21 +17,36 @@ import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/context/auth'
 import { vehicleTypeLabel } from '@/lib/enum-labels'
 import { formatDateTime, formatVolumeM3 } from '@/lib/format'
-import { fetchVehicleOverview, type VehicleOverview } from '@/lib/vehicle-client'
+import { formatRemaining, rentalProgress } from '@/lib/rental-time'
+import type { VehicleDoc } from '@/lib/types'
+import { fetchVehicleOverview, selectVehicle, VehicleApiError, type VehicleOverview } from '@/lib/vehicle-client'
 import { STATE_KEY, vehicleEventLabel, vehicleOwnershipLabel, vehicleStatusLabel } from '@/lib/vehicle-labels'
-import { vehicleServiceState } from '@/lib/vehicle-service'
+import { rentalRemainingMs, vehicleServiceState } from '@/lib/vehicle-service'
 
 /**
  * `/vehicle` — the driver's vehicle: current record, status (with the
  * rejection reason), the three evidence photos and the audit history
  * (spec §10/§16). The action that restores service is the primary button.
+ *
+ * Wave 2026-10 (plan `wave-2026-10/1` §7): a rental in service shows its
+ * window card ("Rented until … · 3 h 20 min left", progress, Extend); the fleet
+ * list (owned + rental) carries the one-tap "Vehicle in service" control (R6);
+ * an ended rental offers Rent again / Register another rental / Use my own vehicle.
  */
 export default function VehiclePage() {
   const { t } = useTranslation()
   const { refreshProfile } = useAuth()
   const [data, setData] = useState<VehicleOverview | null>(null)
   const [error, setError] = useState('')
+  const [notice, setNotice] = useState('')
   const [loading, setLoading] = useState(true)
+  const [selecting, setSelecting] = useState<string | null>(null)
+  // Ticks once a minute so the countdown and the state follow the clock.
+  const [nowMs, setNowMs] = useState(() => Date.now())
+  useEffect(() => {
+    const id = setInterval(() => setNowMs(Date.now()), 60_000)
+    return () => clearInterval(id)
+  }, [])
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -54,7 +70,43 @@ export default function VehiclePage() {
 
   const vehicle = data?.vehicle ?? null
   const profile = data?.profile ?? null
-  const state = profile ? vehicleServiceState(profile, vehicle, Date.now()) : null
+  const fleet = data?.fleet ?? []
+  const state = profile ? vehicleServiceState(profile, vehicle, nowMs) : null
+  const remainingMs = profile ? rentalRemainingMs(profile, nowMs) : null
+  const windowed = profile?.vehicleOwnership === 'rented' && profile.vehicleRentalEndAt != null
+
+  // Rows for the CTAs: the newest rental (for "Rent again") and the verified own vehicle.
+  const newestRental = fleet.find((v) => v.ownership === 'rented') ?? null
+  const ownedVerified = fleet.find((v) => v.ownership === 'owned' && v.status === 'verified') ?? null
+  const ownedInService = ownedVerified != null && ownedVerified.$id === profile?.currentVehicleId
+  const renewHref = (v: VehicleDoc) => `/vehicle/setup?mode=renew&vehicleId=${encodeURIComponent(v.$id)}`
+
+  const handleSelect = async (v: VehicleDoc) => {
+    setSelecting(v.$id)
+    setError('')
+    setNotice('')
+    try {
+      await selectVehicle(v.$id)
+      setNotice(t('web:mover.vehicle.fleet.selected.success'))
+      await Promise.all([load(), refreshProfile()])
+    } catch (err) {
+      if (err instanceof VehicleApiError && err.fnCode) {
+        // i18n-keys: errors:vehicle.notOwnVehicle, errors:vehicle.notVerified, errors:vehicle.notInWindow, errors:vehicle.notFound
+        setError(t(`errors:${err.fnCode}`, { defaultValue: err.message }))
+      } else {
+        setError(err instanceof Error ? err.message : t('web:mover.vehicle.fleet.selectFailed.error'))
+      }
+    } finally {
+      setSelecting(null)
+    }
+  }
+
+  /** Can this fleet row be put in service right now (R6)? */
+  const selectable = (v: VehicleDoc) => {
+    if (v.status !== 'verified' || v.$id === profile?.currentVehicleId) return false
+    if (v.ownership === 'rented' && v.rentalEndAt) return Date.parse(v.rentalEndAt) > nowMs
+    return true
+  }
 
   const statusTone =
     vehicle?.status === 'verified'
@@ -64,6 +116,11 @@ export default function VehiclePage() {
         : 'text-amber-600 dark:text-amber-400'
   const StatusIcon =
     vehicle?.status === 'verified' ? CheckCircleIcon : vehicle?.status === 'rejected' ? XCircleIcon : ClockIcon
+
+  const primaryBtn =
+    'inline-flex items-center gap-1.5 rounded-full bg-primary-600 px-4 py-2 text-sm font-semibold text-white hover:bg-primary-700'
+  const secondaryBtn =
+    'inline-flex items-center gap-1.5 rounded-full border border-neutral-200 px-4 py-2 text-sm font-semibold text-neutral-700 hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-neutral-700'
 
   return (
     <div className="mx-auto max-w-3xl p-4 pb-24 lg:p-6 lg:pb-6">
@@ -80,6 +137,9 @@ export default function VehiclePage() {
           </button>
         </div>
       )}
+      {notice && (
+        <div className="mb-4 rounded-xl bg-green-50 p-3 text-sm text-green-700 dark:bg-green-900/20 dark:text-green-300">{notice}</div>
+      )}
 
       {loading && !data ? (
         <div className="flex justify-center py-16">
@@ -94,7 +154,8 @@ export default function VehiclePage() {
                   web:mover.vehicle.state.ownPendingVehicle.title, web:mover.vehicle.state.ownVehicleReview.title,
                   web:mover.vehicle.state.rentalPendingVehicle.title, web:mover.vehicle.state.rentalVehicleReview.title,
                   web:mover.vehicle.state.rentalChangePending.title, web:mover.vehicle.state.rentalDailyConfirmationRequired.title,
-                  web:mover.vehicle.state.vehicleRejected.title */}
+                  web:mover.vehicle.state.rentalActive.title, web:mover.vehicle.state.rentalExpiring.title,
+                  web:mover.vehicle.state.rentalExpired.title, web:mover.vehicle.state.vehicleRejected.title */}
               <p className="text-base font-semibold text-neutral-900 dark:text-neutral-100">
                 {t(`web:mover.vehicle.state.${STATE_KEY[state]}.title`)}
               </p>
@@ -102,32 +163,104 @@ export default function VehiclePage() {
                   web:mover.vehicle.state.ownPendingVehicle.body, web:mover.vehicle.state.ownVehicleReview.body,
                   web:mover.vehicle.state.rentalPendingVehicle.body, web:mover.vehicle.state.rentalVehicleReview.body,
                   web:mover.vehicle.state.rentalChangePending.body, web:mover.vehicle.state.rentalDailyConfirmationRequired.body,
-                  web:mover.vehicle.state.vehicleRejected.body */}
+                  web:mover.vehicle.state.rentalActive.body, web:mover.vehicle.state.rentalExpiring.body,
+                  web:mover.vehicle.state.rentalExpired.body, web:mover.vehicle.state.vehicleRejected.body */}
               <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-300">
                 {t(`web:mover.vehicle.state.${STATE_KEY[state]}.body`)}
               </p>
-              {profile?.vehicleOwnership === 'rented' && profile.vehicleConfirmedServiceDate && (
+              {profile?.vehicleOwnership === 'rented' && !windowed && profile.vehicleConfirmedServiceDate && (
                 <p className="mt-2 text-xs text-neutral-500 dark:text-neutral-400">
                   {t('web:mover.vehicle.confirmedFor.label', { date: profile.vehicleConfirmedServiceDate })}
                 </p>
               )}
+
+              {/* Window card (R1/R9): rented until, remaining, progress, Extend */}
+              {windowed && remainingMs != null && remainingMs > 0 && profile && (
+                <div className="mt-4 rounded-xl bg-primary-50 p-4 dark:bg-primary-900/20">
+                  <p className="text-xs font-medium uppercase text-primary-700 dark:text-primary-300">
+                    {t('web:mover.vehicle.window.title')}
+                  </p>
+                  <p className="mt-1 text-sm font-semibold text-neutral-900 dark:text-neutral-100">
+                    {t('web:mover.vehicle.window.until.label', { time: formatDateTime(profile.vehicleRentalEndAt) })}
+                  </p>
+                  <p className="text-sm text-neutral-700 dark:text-neutral-200">
+                    {t('booking:vehicle.rental.remaining.label', { time: formatRemaining(remainingMs) })}
+                  </p>
+                  <div
+                    role="progressbar"
+                    aria-label={t('web:mover.vehicle.window.progress.a11y')}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-valuenow={Math.round(rentalProgress(profile.vehicleRentalStartAt, profile.vehicleRentalEndAt, nowMs) * 100)}
+                    className="mt-2 h-2 w-full overflow-hidden rounded-full bg-white dark:bg-neutral-700"
+                  >
+                    <div
+                      className="h-full rounded-full bg-primary-600 transition-[width]"
+                      style={{ width: `${Math.round(rentalProgress(profile.vehicleRentalStartAt, profile.vehicleRentalEndAt, nowMs) * 100)}%` }}
+                    />
+                  </div>
+                  {vehicle?.rentalProvider && (
+                    <p className="mt-2 text-xs text-neutral-500 dark:text-neutral-400">
+                      {t('booking:vehicle.rental.provider.label')}: {vehicle.rentalProvider}
+                    </p>
+                  )}
+                </div>
+              )}
+
               <div className="mt-4 flex flex-wrap gap-2">
                 {(state === 'OWN_PENDING_VEHICLE' || state === 'RENTAL_PENDING_VEHICLE') && (
-                  <Link href="/vehicle/setup?mode=add" className="inline-flex items-center gap-1.5 rounded-full bg-primary-600 px-4 py-2 text-sm font-semibold text-white hover:bg-primary-700">
+                  <Link href="/vehicle/setup?mode=add" className={primaryBtn}>
                     <PlusIcon className="h-4 w-4" />
                     {t('web:mover.vehicle.action.add.cta')}
                   </Link>
                 )}
                 {state === 'VEHICLE_REJECTED' && (
-                  <Link href="/vehicle/setup?mode=resubmit" className="inline-flex items-center gap-1.5 rounded-full bg-primary-600 px-4 py-2 text-sm font-semibold text-white hover:bg-primary-700">
+                  <Link href="/vehicle/setup?mode=resubmit" className={primaryBtn}>
                     <ArrowPathIcon className="h-4 w-4" />
                     {t('web:mover.vehicle.action.resubmit.cta')}
                   </Link>
                 )}
-                {(state === 'OWN_VERIFIED' || state === 'RENTAL_VERIFIED_TODAY' || state === 'RENTAL_DAILY_CONFIRMATION_REQUIRED') && (
-                  <Link href="/vehicle/setup?mode=change" className="inline-flex items-center gap-1.5 rounded-full border border-neutral-200 px-4 py-2 text-sm font-semibold text-neutral-700 hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-neutral-700">
+                {(state === 'RENTAL_ACTIVE' || state === 'RENTAL_EXPIRING') && vehicle && (
+                  <Link href={renewHref(vehicle)} className={state === 'RENTAL_EXPIRING' ? primaryBtn : secondaryBtn}>
+                    <ClockIcon className="h-4 w-4" />
+                    {t('booking:vehicle.rental.extend.cta')}
+                  </Link>
+                )}
+                {state === 'RENTAL_EXPIRED' && (
+                  <>
+                    {newestRental && (
+                      <Link href={renewHref(newestRental)} className={primaryBtn}>
+                        <ArrowPathIcon className="h-4 w-4" />
+                        {t('booking:vehicle.rental.rentAgain.cta')}
+                      </Link>
+                    )}
+                    <Link href="/vehicle/setup?mode=add&ownership=rented" className={secondaryBtn}>
+                      <PlusIcon className="h-4 w-4" />
+                      {t('booking:vehicle.rental.rentAnother.cta')}
+                    </Link>
+                    {ownedVerified && (
+                      <button type="button" onClick={() => handleSelect(ownedVerified)} disabled={selecting !== null} className={secondaryBtn}>
+                        <KeyIcon className="h-4 w-4" />
+                        {t('booking:vehicle.rental.useOwn.cta')}
+                      </button>
+                    )}
+                  </>
+                )}
+                {(state === 'OWN_VERIFIED' ||
+                  state === 'RENTAL_VERIFIED_TODAY' ||
+                  state === 'RENTAL_ACTIVE' ||
+                  state === 'RENTAL_EXPIRING' ||
+                  state === 'RENTAL_DAILY_CONFIRMATION_REQUIRED') && (
+                  <Link href="/vehicle/setup?mode=change" className={secondaryBtn}>
                     <ArrowPathIcon className="h-4 w-4" />
                     {t('web:mover.vehicle.action.change.cta')}
+                  </Link>
+                )}
+                {/* R3: an owned driver may add a rental for a period without giving up the own vehicle */}
+                {state === 'OWN_VERIFIED' && !fleet.some((v) => v.ownership === 'rented' && v.status !== 'retired') && (
+                  <Link href="/vehicle/setup?mode=add&ownership=rented" className={secondaryBtn}>
+                    <PlusIcon className="h-4 w-4" />
+                    {t('booking:vehicle.rental.addRental.cta')}
                   </Link>
                 )}
               </div>
@@ -177,6 +310,12 @@ export default function VehiclePage() {
                     <dd className="text-neutral-800 dark:text-neutral-200">{formatDateTime(vehicle.verifiedAt)}</dd>
                   </div>
                 )}
+                {vehicle.ownership === 'rented' && vehicle.rentalEndAt && (
+                  <div>
+                    <dt className="text-xs uppercase text-neutral-400">{t('booking:vehicle.rental.endsAt.label')}</dt>
+                    <dd className="text-neutral-800 dark:text-neutral-200">{formatDateTime(vehicle.rentalEndAt)}</dd>
+                  </div>
+                )}
               </dl>
 
               <h3 className="mt-5 mb-2 text-sm font-semibold text-neutral-900 dark:text-neutral-100">
@@ -217,6 +356,72 @@ export default function VehiclePage() {
             )
           )}
 
+          {/* Fleet (R3/R6): owned + rental, with the one in service marked */}
+          {fleet.length > 1 && (
+            <div className="mb-6 rounded-2xl bg-white p-5 shadow-sm dark:bg-neutral-800">
+              <h2 className="mb-1 text-base font-semibold text-neutral-900 dark:text-neutral-100">
+                {t('web:mover.vehicle.fleet.title')}
+              </h2>
+              {ownedVerified && !ownedInService && (
+                <p className="mb-3 text-xs text-neutral-500 dark:text-neutral-400">{t('web:mover.vehicle.fleet.ownedFallback.helper')}</p>
+              )}
+              <ul className="divide-y divide-neutral-100 dark:divide-neutral-700" role="radiogroup" aria-label={t('booking:vehicle.rental.inService.label')}>
+                {fleet.map((v) => {
+                  const inService = v.$id === profile?.currentVehicleId
+                  const ended = v.ownership === 'rented' && v.rentalEndAt ? Date.parse(v.rentalEndAt) <= nowMs : false
+                  return (
+                    <li key={v.$id} className="flex items-start gap-3 py-3">
+                      <input
+                        type="radio"
+                        name="vehicleInService"
+                        aria-label={`${t('booking:vehicle.rental.inService.label')}: ${[v.brand, v.model].filter(Boolean).join(' ')}`}
+                        checked={inService}
+                        disabled={!selectable(v) || selecting !== null}
+                        onChange={() => handleSelect(v)}
+                        className="mt-1 h-4 w-4 accent-primary-600"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                          {[v.brand, v.model, v.year].filter(Boolean).join(' ')}
+                          <span className="ml-2 font-mono text-xs tracking-wider text-neutral-500 dark:text-neutral-400">{v.registrationNumber}</span>
+                        </p>
+                        <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                          {vehicleOwnershipLabel(t, v.ownership)} · {vehicleStatusLabel(t, v.status)}
+                          {v.ownership === 'rented' &&
+                            (v.rentalEndAt
+                              ? ` · ${
+                                  ended
+                                    ? t('web:mover.vehicle.window.ended.label', { time: formatDateTime(v.rentalEndAt) })
+                                    : t('web:mover.vehicle.window.until.label', { time: formatDateTime(v.rentalEndAt) })
+                                }`
+                              : ` · ${t('web:mover.vehicle.fleet.noWindow.label')}`)}
+                        </p>
+                      </div>
+                      {inService ? (
+                        <span className="flex-shrink-0 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700 dark:bg-green-900/30 dark:text-green-300">
+                          {t('booking:vehicle.rental.inService.label')}
+                        </span>
+                      ) : v.ownership === 'rented' && ended ? (
+                        <Link href={renewHref(v)} className="flex-shrink-0 text-xs font-semibold text-primary-600 hover:underline dark:text-primary-400">
+                          {t('booking:vehicle.rental.rentAgain.cta')}
+                        </Link>
+                      ) : selectable(v) ? (
+                        <button
+                          type="button"
+                          onClick={() => handleSelect(v)}
+                          disabled={selecting !== null}
+                          className="flex-shrink-0 text-xs font-semibold text-primary-600 hover:underline disabled:opacity-50 dark:text-primary-400"
+                        >
+                          {t('web:mover.vehicle.fleet.select.cta')}
+                        </button>
+                      ) : null}
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
+          )}
+
           {/* History */}
           <div className="rounded-2xl bg-white p-5 shadow-sm dark:bg-neutral-800">
             <h2 className="mb-3 text-base font-semibold text-neutral-900 dark:text-neutral-100">
@@ -232,7 +437,9 @@ export default function VehiclePage() {
                       <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
                         {vehicleEventLabel(t, e.action)}
                       </p>
-                      {e.note && <p className="truncate text-xs text-neutral-500 dark:text-neutral-400">{e.note}</p>}
+                      {e.note && !e.note.startsWith('{') && (
+                        <p className="truncate text-xs text-neutral-500 dark:text-neutral-400">{e.note}</p>
+                      )}
                     </div>
                     <time dateTime={e.at} className="flex-shrink-0 text-xs text-neutral-500 dark:text-neutral-400">
                       {formatDateTime(e.at)}

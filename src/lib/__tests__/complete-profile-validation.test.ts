@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest'
 import {
   ALL_STEPS,
   canGoNext,
+  onboardingRentalWindow,
   stepsForOwnership,
+  vehicleStepSkipped,
   type CompleteProfileFields,
 } from '../complete-profile-validation'
 
@@ -30,10 +32,42 @@ const complete: CompleteProfileFields = {
 }
 
 describe('stepsForOwnership', () => {
-  it('a rental driver skips the vehicle step (master D10); everyone else walks all six', () => {
-    expect(stepsForOwnership('rented')).toEqual(['personal', 'verification', 'ownership', 'experience', 'review'])
+  it('every driver walks all six steps — a rental is registered with its window during onboarding (wave 2026-10)', () => {
+    expect(stepsForOwnership('rented')).toEqual([...ALL_STEPS])
     expect(stepsForOwnership('owned')).toEqual([...ALL_STEPS])
     expect(stepsForOwnership('')).toEqual([...ALL_STEPS])
+  })
+})
+
+describe('rented vehicle step (plan wave-2026-10/1 §7)', () => {
+  const NOW = Date.parse('2026-10-02T10:00:00Z')
+  const rented: CompleteProfileFields = { ...complete, vehicleOwnership: 'rented' }
+  const empty: CompleteProfileFields = {
+    ...rented,
+    vehicleBrand: '',
+    vehicleModel: '',
+    vehicleYear: '',
+    vehicleCapacity: '',
+    vehicleRegistration: '',
+    vehicleType: '',
+    hasFrontPlatePhoto: false,
+    hasRearPlatePhoto: false,
+    hasFullVehiclePhoto: false,
+  }
+  it('a filled-in rental needs a window', () => {
+    expect(canGoNext('vehicle', rented, NOW)).toBe(false)
+    expect(canGoNext('vehicle', { ...rented, rentalHours: '8' }, NOW)).toBe(true)
+    expect(canGoNext('vehicle', { ...rented, rentalEndAt: '2026-10-03T10:00:00Z' }, NOW)).toBe(true)
+    expect(canGoNext('vehicle', { ...rented, rentalEndAt: '2026-10-01T10:00:00Z' }, NOW)).toBe(false)
+    expect(onboardingRentalWindow({ ...rented, rentalHours: '8' }, NOW)?.endAt).toBe('2026-10-02T18:00:00.000Z')
+    expect(onboardingRentalWindow(complete, NOW)).toBeNull()
+  })
+  it('an untouched step is a skip for a rental driver only', () => {
+    expect(vehicleStepSkipped(empty)).toBe(true)
+    expect(canGoNext('vehicle', empty, NOW)).toBe(true)
+    expect(vehicleStepSkipped({ ...empty, vehicleBrand: 'VW' })).toBe(false)
+    expect(canGoNext('vehicle', { ...empty, vehicleBrand: 'VW' }, NOW)).toBe(false)
+    expect(canGoNext('vehicle', { ...empty, vehicleOwnership: 'owned' }, NOW)).toBe(false)
   })
 })
 

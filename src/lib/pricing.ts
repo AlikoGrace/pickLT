@@ -168,23 +168,53 @@ export function rateOrNull(config: PricingConfig | null | undefined, key: string
  * map. Unknown keys are dropped (a stale row can't inject a rate no consumer
  * understands) and non-finite values are ignored so a bad edit degrades to the
  * default rather than to NaN.
+ *
+ * Country scoping (plan `wave-2026-10/4` C4): a row carries `country` —
+ * `'GLOBAL'` (or no column at all, for rows written before the wave) for the
+ * base rate, or an ISO-3166-1 alpha-2 code for an override that applies only to
+ * moves departing from that country. The effective config for `countryCode` is
+ * the GLOBAL layer with that country's rows laid over it; rows for other
+ * countries are ignored. Without a `countryCode` only the GLOBAL layer applies.
+ *
+ * A `{ key: value }` map (what `GET /api/pricing/config` returns, already
+ * merged server-side) is read as a GLOBAL layer. Same arithmetic as
+ * `pickltmobile/lib/pricing-config.ts`.
  */
+export const GLOBAL_PRICING_SCOPE = 'GLOBAL'
+
+export interface PricingConfigRow {
+  key?: unknown
+  value?: unknown
+  /** `'GLOBAL'` | ISO2; absent on legacy rows (treated as GLOBAL). */
+  country?: unknown
+}
+
+export function pricingRowScope(row: PricingConfigRow): string {
+  const c = typeof row.country === 'string' ? row.country.trim().toUpperCase() : ''
+  return c === '' ? GLOBAL_PRICING_SCOPE : c
+}
+
 export function toPricingConfig(
-  rows: { key?: unknown; value?: unknown }[] | Record<string, unknown> | null | undefined,
+  rows: PricingConfigRow[] | Record<string, unknown> | null | undefined,
+  countryCode?: string | null,
 ): PricingConfig {
-  const out: PricingConfig = {}
-  if (!rows) return out
-  const entries: { key?: unknown; value?: unknown }[] = Array.isArray(rows)
+  if (!rows) return {}
+  const entries: PricingConfigRow[] = Array.isArray(rows)
     ? rows
     : Object.entries(rows).map(([key, value]) => ({ key, value }))
+  const cc = typeof countryCode === 'string' && countryCode.trim() ? countryCode.trim().toUpperCase() : null
+  const base: PricingConfig = {}
+  const scoped: PricingConfig = {}
   for (const row of entries) {
     const k = typeof row.key === 'string' ? row.key : null
     if (!k || !isPricingKey(k)) continue
     const v = typeof row.value === 'number' ? row.value : Number(row.value)
     if (!Number.isFinite(v)) continue
-    out[k] = v
+    const scope = pricingRowScope(row)
+    if (scope === GLOBAL_PRICING_SCOPE) base[k] = v
+    else if (cc && scope === cc) scoped[k] = v
   }
-  return out
+  return { ...base, ...scoped }
 }
 
 // ─── Vehicle classes ────────────────────────────────────────────────────────

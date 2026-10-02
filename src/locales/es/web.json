@@ -21,6 +21,13 @@
     },
     "version": {
       "label": "PickLT v{{version}}"
+    },
+    "country": {
+      "title": "Tu país",
+      "helper": "Donde reservas mudanzas",
+      "updated": {
+        "success": "País actualizado"
+      }
     }
   },
   "auth": {
@@ -591,7 +598,10 @@
           "value": "Vehículo: {{ownership}}"
         },
         "vehicleLater": "El vehículo se añadirá después del registro y deberá verificarse antes de que reciba mudanzas.",
-        "platesOk": "Fotos de las placas y del vehículo adjuntas"
+        "platesOk": "Fotos de las placas y del vehículo adjuntas",
+        "rentalWindow": {
+          "value": "Alquilado hasta {{time}}"
+        }
       },
       "step": {
         "experience": {
@@ -621,7 +631,13 @@
       "ownership": {
         "title": "Propiedad del vehículo"
       },
-      "vehicleSubmitFailed": "Su perfil se ha guardado, pero no se pudo enviar el vehículo ({{error}}). Añádalo desde el panel."
+      "vehicleSubmitFailed": "Su perfil se ha guardado, pero no se pudo enviar el vehículo ({{error}}). Añádalo desde el panel.",
+      "vehicle": {
+        "rentalIntro": "Registre el vehículo que alquila junto con su periodo de alquiler. También puede omitir este paso y añadir el alquiler más tarde desde su panel.",
+        "skip": {
+          "helper": "Deje los campos vacíos para añadir el alquiler más tarde."
+        }
+      }
     },
     "request": {
       "categoryAndType": {
@@ -813,7 +829,14 @@
         "resubmitNote": "Corrija los datos siguientes y envíelos de nuevo. Motivo del rechazo: {{reason}}",
         "keepPhoto": {
           "label": "Se conservará la foto actual"
-        }
+        },
+        "renew": {
+          "title": "Renovar alquiler"
+        },
+        "addRental": {
+          "title": "Añadir un alquiler"
+        },
+        "rentalNote": "Un vehículo de alquiler recibe mudanzas solo dentro del periodo de alquiler que indique. Puede ampliarlo en cualquier momento."
       },
       "action": {
         "add": {
@@ -830,6 +853,9 @@
         },
         "view": {
           "cta": "Ver vehículo"
+        },
+        "renew": {
+          "cta": "Alquilar de nuevo"
         }
       },
       "state": {
@@ -868,6 +894,18 @@
         "vehicleRejected": {
           "title": "Vehículo no aprobado",
           "body": "Su vehículo no ha sido aprobado. Corrija los datos y envíelos de nuevo."
+        },
+        "rentalActive": {
+          "title": "Vehículo de alquiler en servicio",
+          "body": "Su vehículo de alquiler está verificado y dentro de su periodo de alquiler. Recibirá mudanzas hasta que termine el periodo."
+        },
+        "rentalExpiring": {
+          "title": "El alquiler termina pronto",
+          "body": "Su periodo de alquiler termina en menos de una hora. Amplíelo para seguir recibiendo mudanzas."
+        },
+        "rentalExpired": {
+          "title": "Periodo de alquiler finalizado",
+          "body": "Su periodo de alquiler ha finalizado y no hay ningún vehículo en servicio. Alquile de nuevo, registre otro alquiler o utilice su propio vehículo para recibir mudanzas."
         }
       },
       "confirm": {
@@ -888,6 +926,66 @@
         "helper": "Los cambios de vehículo se verifican por separado y no afectan a su verificación como conductor.",
         "status": {
           "label": "{{vehicle}} · {{status}}"
+        }
+      },
+      "window": {
+        "title": "Periodo de alquiler",
+        "until": {
+          "label": "Alquilado hasta {{time}}"
+        },
+        "progress": {
+          "a11y": "Parte del periodo de alquiler consumida"
+        },
+        "custom": {
+          "label": "Fecha y hora de fin"
+        },
+        "ended": {
+          "label": "Finalizado {{time}}"
+        }
+      },
+      "renew": {
+        "title": "Renovar alquiler",
+        "subtitle": "Mismo vehículo, nuevo periodo. Indíquenos cuánto tiempo lo tendrá esta vez.",
+        "submit": {
+          "cta": "Confirmar periodo de alquiler"
+        },
+        "failed": {
+          "error": "No se ha podido renovar el alquiler."
+        },
+        "photos": {
+          "title": "Fotos nuevas de la matrícula"
+        },
+        "doneVerified": {
+          "success": "Alquiler renovado. Recibirá mudanzas hasta {{time}}."
+        },
+        "doneReview": {
+          "success": "Alquiler enviado para revisión"
+        },
+        "noRental": {
+          "body": "No hay ningún vehículo de alquiler registrado que renovar. Registre un alquiler en su lugar."
+        }
+      },
+      "fleet": {
+        "title": "Sus vehículos",
+        "select": {
+          "cta": "Poner en servicio"
+        },
+        "selectFailed": {
+          "error": "No se ha podido poner el vehículo en servicio."
+        },
+        "selected": {
+          "success": "Vehículo en servicio cambiado"
+        },
+        "noWindow": {
+          "label": "Sin periodo de alquiler registrado"
+        },
+        "ownedFallback": {
+          "helper": "Cuando termina un periodo de alquiler, su propio vehículo pasa a estar en servicio automáticamente."
+        }
+      },
+      "banner": {
+        "countdown": {
+          "label": "Su alquiler termina en {{time}}"
         }
       }
     }
@@ -1282,6 +1380,9 @@
     },
     "verifyAndCreate": {
       "cta": "Verificar y crear la cuenta"
+    },
+    "country": {
+      "helper": "Donde reservarás mudanzas. Los precios y el IVA dependen de la dirección de recogida."
     }
   },
   "wizard": {

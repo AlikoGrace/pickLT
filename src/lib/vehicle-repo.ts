@@ -1,14 +1,20 @@
 import type { TFunction } from 'i18next'
 import { ID, Query } from 'node-appwrite'
 
+import { writeDroppingUnknownAttributes } from './appwrite-write'
 import { APPWRITE, PLATFORM_TZ } from './constants'
 import { vehiclePermissions } from './doc-permissions'
 import { profileOwnershipOnSubmit } from './mover-gates'
 import { relId, writeNotification } from './notify'
 import {
+  canAutoRenew,
   normalizePlate,
+  rentalWindowEnded,
+  resolveRentalWindow,
   serviceDate,
   validateVehicleInput,
+  type RentalWindow,
+  type RentalWindowInput,
   type VehicleEventAction,
   type VehicleEventSource,
   type VehicleOwnership,
@@ -26,9 +32,18 @@ import {
  * `__tests__/vehicle-validation.test.ts`; the routes pass
  * `createAdminClient().databases`.
  *
- * Invariants (master D1/D2): nothing here touches `verificationStatus` or the
- * six legacy `vehicle*` snapshot columns — those belong to driver KYC and to
- * the admin verify route respectively.
+ * Invariants (master D1/D2): nothing here touches `verificationStatus`. The
+ * six legacy `vehicle*` snapshot columns are written by the admin verify route
+ * — and, since plan `wave-2026-10/1` R6, by `selectVehicle` / `renewRental`,
+ * which only ever copy them from a row that is already `verified` (the D2
+ * rule "only verified vehicles feed pricing" is preserved; the writer set grew).
+ *
+ * Schema/enum staging: the wave's columns (`vehicles.rental*`,
+ * `mover_profiles.vehicleRental*`, `ownedVehicleId`) and enum values
+ * (`renewed`, `selected`, `renewal`, …) may reach production after this code.
+ * Writes therefore retry without an attribute Appwrite does not know yet, and
+ * event writes fall back to the nearest existing enum value — the same
+ * self-healing pattern `writeNotification` uses for notification types.
  */
 
 /** Appwrite rows are schemaless at the SDK boundary. */
@@ -79,7 +94,10 @@ export function vehicleErrorMessage(t: TFunction, fnCode: string): string {
   // i18n-keys: errors:vehicle.photosRequired, errors:vehicle.plateInvalid,
   // errors:vehicle.fieldsRequired, errors:vehicle.typeInvalid, errors:vehicle.capacityOutOfRange,
   // errors:vehicle.yearInvalid, errors:vehicle.plateInUse, errors:vehicle.notFound,
-  // errors:vehicle.notPending, errors:vehicle.notRental, errors:vehicle.notVerified
+  // errors:vehicle.notPending, errors:vehicle.notRental, errors:vehicle.notVerified,
+  // errors:vehicle.rentalWindowRequired, errors:vehicle.rentalWindowInvalid,
+  // errors:vehicle.rentalWindowTooLong, errors:vehicle.rentalExpired, errors:vehicle.notInWindow,
+  // errors:vehicle.notOwnVehicle
   return t(`errors:${fnCode}`)
 }
 
@@ -103,6 +121,8 @@ export interface SubmitVehicleBody {
   moveId?: string | null
   /** Optional device/session id for the audit note. */
   note?: string | null
+  /** Rental window (plan wave-2026-10/1 R1) — required when `ownership === 'rented'`. */
+  rental?: RentalWindowInput | null
 }
 
 const DB = () => APPWRITE.DATABASE_ID
@@ -111,6 +131,55 @@ const VEHICLES = () => APPWRITE.COLLECTIONS.VEHICLES
 const EVENTS = () => APPWRITE.COLLECTIONS.VEHICLE_EVENTS
 
 const str = (v: unknown): string => (typeof v === 'string' ? v.trim() : '')
+
+/** Writes that may carry the wave's new columns retry without any attribute the schema lacks (see `appwrite-write.ts`). */
+const updateDoc = (db: VehicleDb, col: string, id: string, data: Record<string, unknown>) =>
+  writeDroppingUnknownAttributes(data, (d) => db.updateDocument(DB(), col, id, d), 'vehicle-repo')
+const createDoc = (db: VehicleDb, col: string, data: Record<string, unknown>, permissions?: string[]) =>
+  writeDroppingUnknownAttributes(data, (d) => db.createDocument(DB(), col, ID.unique(), d, permissions), 'vehicle-repo')
+
+/**
+ * The legacy `mover_profiles.vehicle*` snapshot of the vehicle IN SERVICE
+ * (master D2) — the columns pricing and the client lists read. Same mapping as
+ * the admin verify route (`pickltadmin/src/lib/vehicle-decision.ts`).
+ */
+export function snapshotColumns(vehicle: AnyDoc): Record<string, unknown> {
+  return {
+    vehicleBrand: vehicle.brand ?? null,
+    vehicleModel: vehicle.model ?? null,
+    vehicleYear: vehicle.year ?? null,
+    vehicleRegistration: vehicle.registrationNumber ?? null,
+    vehicleType: vehicle.vehicleType ?? null,
+    vehicleCapacity: vehicle.capacityM3 != null ? String(vehicle.capacityM3) : '',
+  }
+}
+
+/** Profile window fields for a vehicle put in service: the rental's window, or nulls for an owned one. */
+export function profileWindowColumns(vehicle: AnyDoc | null): Record<string, unknown> {
+  const rented = vehicle?.ownership === 'rented'
+  return {
+    vehicleRentalStartAt: rented ? (vehicle?.rentalStartAt ?? null) : null,
+    vehicleRentalEndAt: rented ? (vehicle?.rentalEndAt ?? null) : null,
+    vehicleRentalHours: rented && typeof vehicle?.rentalHours === 'number' ? vehicle.rentalHours : null,
+  }
+}
+
+/** `vehicles` columns of a resolved window (null when the vehicle is owned). */
+export function vehicleWindowColumns(window: RentalWindow | null): Record<string, unknown> {
+  return {
+    rentalStartAt: window?.startAt ?? null,
+    rentalEndAt: window?.endAt ?? null,
+    rentalHours: window?.hours ?? null,
+    rentalProvider: window?.provider ?? null,
+  }
+}
+
+/** Resolve the body's window for a rented vehicle, or throw the 400 the contract names. */
+export function requireRentalWindow(input: RentalWindowInput | null | undefined, nowMs: number): RentalWindow {
+  const r = resolveRentalWindow(input ?? null, nowMs)
+  if (!r.ok) throw new VehicleRepoError(r.codes[0], 400, r.codes)
+  return r.window
+}
 
 /** Resolve the caller's profile; `null` when the session is not a mover. */
 export async function getMoverProfileByUserId(db: VehicleDb, userId: string): Promise<AnyDoc | null> {
@@ -160,29 +229,69 @@ interface EventInput {
   at: string
 }
 
+/**
+ * Wave-2026-10 enum values → the nearest value that existed before the enums
+ * were widened (plan §4: "writers fall back to existing values until widened").
+ * The note keeps the intended action so the audit trail stays readable.
+ */
+const LEGACY_ACTION: Partial<Record<VehicleEventAction, VehicleEventAction>> = {
+  renewed: 'resubmitted',
+  selected: 'confirmed_same',
+  expired: 'retired',
+  fallback: 'retired',
+  expiring_soon: 'confirmed_same',
+}
+const LEGACY_SOURCE: Partial<Record<VehicleEventSource, VehicleEventSource>> = {
+  renewal: 'settings',
+  cron: 'system',
+}
+
 /** One append-only `vehicle_events` row; owner-readable like the vehicle itself. */
 export async function appendVehicleEvent(db: VehicleDb, e: EventInput): Promise<AnyDoc> {
-  return db.createDocument(
-    DB(),
-    EVENTS(),
-    ID.unique(),
-    {
-      moverProfileId: e.moverProfileId,
-      ownerUserId: e.ownerUserId,
-      vehicleId: e.vehicleId ?? null,
-      moveId: e.moveId ?? null,
-      action: e.action,
-      previousStatus: e.previousStatus ?? null,
-      newStatus: e.newStatus ?? null,
-      source: e.source,
-      serviceDate: e.serviceDate ?? null,
-      actorId: e.actorId,
-      actorRole: e.actorRole,
-      note: e.note ? String(e.note).slice(0, 512) : null,
-      at: e.at,
-    },
-    vehiclePermissions(e.ownerUserId),
-  )
+  const row = (action: VehicleEventAction, source: VehicleEventSource, note: string | null) => ({
+    moverProfileId: e.moverProfileId,
+    ownerUserId: e.ownerUserId,
+    vehicleId: e.vehicleId ?? null,
+    moveId: e.moveId ?? null,
+    action,
+    previousStatus: e.previousStatus ?? null,
+    newStatus: e.newStatus ?? null,
+    source,
+    serviceDate: e.serviceDate ?? null,
+    actorId: e.actorId,
+    actorRole: e.actorRole,
+    note: note ? String(note).slice(0, 512) : null,
+    at: e.at,
+  })
+  const perms = vehiclePermissions(e.ownerUserId)
+  try {
+    return await db.createDocument(DB(), EVENTS(), ID.unique(), row(e.action, e.source, e.note ?? null), perms)
+  } catch (err) {
+    const action = LEGACY_ACTION[e.action]
+    const source = LEGACY_SOURCE[e.source]
+    if (!action && !source) throw err
+    console.warn(`[vehicle-repo] vehicle_events enum rejected ${e.action}/${e.source}; writing legacy values:`, err)
+    const note = [`[${e.action}/${e.source}]`, e.note ?? ''].filter(Boolean).join(' ')
+    return db.createDocument(DB(), EVENTS(), ID.unique(), row(action ?? e.action, source ?? e.source, note), perms)
+  }
+}
+
+/**
+ * The mover's fleet (plan wave-2026-10/1 R3): every non-retired vehicle, plus
+ * the newest rental even when the cron has retired it — that row is what
+ * "Rent again" renews. Newest first.
+ */
+export async function getFleet(db: VehicleDb, moverProfileId: string): Promise<AnyDoc[]> {
+  const res = await db.listDocuments(DB(), VEHICLES(), [
+    Query.equal('moverProfileId', [moverProfileId]),
+    Query.orderDesc('submittedAt'),
+    Query.limit(25),
+  ])
+  const rows = res.documents
+  const active = rows.filter((v) => v.status !== 'retired')
+  const newestRental = rows.find((v) => v.ownership === 'rented')
+  if (newestRental && !active.some((v) => v.$id === newestRental.$id)) active.push(newestRental)
+  return active
 }
 
 /**
@@ -291,6 +400,9 @@ export async function submitVehicle(
   }
   const codes = validateVehicleInput(input)
   if (codes.length) throw new VehicleRepoError(codes[0], 400, codes)
+  // Plan wave-2026-10/1 R1: every rental has a window. Validated with the same
+  // function the browser ran, so the same `fnCode` comes back either way.
+  const window: RentalWindow | null = ownership === 'rented' ? requireRentalWindow(body.rental, nowMs) : null
 
   const registrationNumber = input.registrationNumber.toUpperCase()
   const registrationNormalized = normalizePlate(registrationNumber)
@@ -340,9 +452,15 @@ export async function submitVehicle(
     rearPlatePhoto: input.rearPlatePhoto,
     fullVehiclePhoto: input.fullVehiclePhoto,
     checks,
+    ...vehicleWindowColumns(window),
   }
 
   let vehicle: AnyDoc
+  // R3/R8: an owned driver whose verified own vehicle is in service may ADD a
+  // rental for a period. The owned vehicle is not retired and stays in service
+  // (the profile stays verified); the rental is reviewed in the background and
+  // the admin verify route puts it in service once approved.
+  let keepsOwnedInService = false
   const vehicleId = str(body.vehicleId)
   if (vehicleId) {
     // Resubmission: must be the caller's own pending/rejected vehicle.
@@ -356,13 +474,14 @@ export async function submitVehicle(
     const prev = existing.status as VehicleStatus
     if (prev !== 'pending_review' && prev !== 'rejected') throw new VehicleRepoError('vehicle.notPending', 409)
 
-    vehicle = await db.updateDocument(DB(), VEHICLES(), vehicleId, {
+    vehicle = await updateDoc(db, VEHICLES(), vehicleId, {
       ...fields,
       status: 'pending_review',
       rejectionReason: null,
-      isCurrent: true,
+      isCurrent: existing.isCurrent !== false,
       submittedAt: now,
     })
+    keepsOwnedInService = existing.isCurrent === false && !!profile.currentVehicleId
     await appendVehicleEvent(db, {
       moverProfileId: profile.$id,
       ownerUserId,
@@ -379,9 +498,13 @@ export async function submitVehicle(
       at: now,
     })
   } else {
-    // Retire whatever is current, then create the replacement.
+    // Retire whatever is current, then create the replacement — unless the
+    // current vehicle is the driver's verified OWN vehicle and this is a
+    // rental added alongside it (R3).
     const current = await getCurrentVehicle(db, profile.$id)
-    if (current) {
+    keepsOwnedInService =
+      !!current && current.ownership === 'owned' && current.status === 'verified' && ownership === 'rented'
+    if (current && !keepsOwnedInService) {
       await db.updateDocument(DB(), VEHICLES(), current.$id, {
         status: 'retired',
         isCurrent: false,
@@ -403,22 +526,23 @@ export async function submitVehicle(
       })
     }
 
-    vehicle = await db.createDocument(
-      DB(),
+    vehicle = await createDoc(
+      db,
       VEHICLES(),
-      ID.unique(),
       {
         moverProfileId: profile.$id,
         ownerUserId,
         ...fields,
         status: 'pending_review',
         rejectionReason: null,
-        isCurrent: true,
-        replacesVehicleId: current?.$id ?? null,
+        isCurrent: !keepsOwnedInService,
+        replacesVehicleId: keepsOwnedInService ? null : (current?.$id ?? null),
         submittedAt: now,
         verifiedAt: null,
         reviewedBy: null,
         retiredAt: null,
+        expiredAt: null,
+        renewalCount: 0,
       },
       vehiclePermissions(ownerUserId),
     )
@@ -437,7 +561,7 @@ export async function submitVehicle(
       note: body.note ?? null,
       at: now,
     })
-    if (source === 'login' || source === 'post_move') {
+    if ((source === 'login' || source === 'post_move') && !keepsOwnedInService) {
       await appendVehicleEvent(db, {
         moverProfileId: profile.$id,
         ownerUserId,
@@ -455,14 +579,245 @@ export async function submitVehicle(
     }
   }
 
-  const updatedProfile = await db.updateDocument(DB(), PROFILES(), profile.$id, {
-    vehicleOwnership: profileOwnershipOnSubmit(profile.vehicleOwnership, ownership),
-    currentVehicleId: vehicle.$id,
-    vehicleStatus: 'pending_review',
-    vehicleReconfirmRequired: false,
-    vehicleConfirmedServiceDate: null,
-  })
+  const updatedProfile = keepsOwnedInService
+    ? await updateDoc(db, PROFILES(), profile.$id, {
+        // The own vehicle keeps the service; only remember it as the fallback (R4).
+        ownedVehicleId: profile.ownedVehicleId ?? profile.currentVehicleId,
+      })
+    : await updateDoc(db, PROFILES(), profile.$id, {
+        vehicleOwnership: profileOwnershipOnSubmit(profile.vehicleOwnership, ownership),
+        currentVehicleId: vehicle.$id,
+        vehicleStatus: 'pending_review',
+        vehicleReconfirmRequired: false,
+        vehicleConfirmedServiceDate: null,
+        ...profileWindowColumns(vehicle),
+      })
 
+  return { vehicle, profile: updatedProfile }
+}
+
+export interface RenewRentalParams {
+  userId: string
+  vehicleId: string
+  rental: RentalWindowInput | null | undefined
+  /** Fresh plate photos — used only when the renewal needs review again. */
+  frontPlatePhoto?: string | null
+  rearPlatePhoto?: string | null
+  fullVehiclePhoto?: string | null
+  note?: string | null
+  nowMs?: number
+  tz?: string
+}
+
+/**
+ * Plan wave-2026-10/1 R5 — "Rent again" / "Extend" for the SAME rental row:
+ * only the window is new. When `canAutoRenew` holds (verified, never rejected,
+ * last window ended ≤ 30 days ago or not yet) the vehicle stays `verified`,
+ * goes (back) into service with the window snapshot and today's confirmation,
+ * `renewalCount` grows and the audit gets `renewed`/`renewal`. Otherwise the
+ * row returns to `pending_review` (photos re-requested) with `resubmitted`.
+ */
+export async function renewRental(
+  db: VehicleDb,
+  params: RenewRentalParams,
+): Promise<{ vehicle: AnyDoc; profile: AnyDoc; autoVerified: boolean }> {
+  const nowMs = params.nowMs ?? Date.now()
+  const tz = params.tz ?? PLATFORM_TZ
+  const now = new Date(nowMs).toISOString()
+  const today = serviceDate(nowMs, tz)
+
+  const profile = await requireProfile(db, params.userId)
+  const ownerUserId = relId(profile.userId) ?? params.userId
+
+  let vehicle: AnyDoc
+  try {
+    vehicle = await db.getDocument(DB(), VEHICLES(), str(params.vehicleId))
+  } catch {
+    throw new VehicleRepoError('vehicle.notFound', 404)
+  }
+  if (vehicle.moverProfileId !== profile.$id) throw new VehicleRepoError('vehicle.notOwnVehicle', 403)
+  if (vehicle.ownership !== 'rented') throw new VehicleRepoError('vehicle.notRental', 400)
+
+  const window = requireRentalWindow(params.rental, nowMs)
+  const previous = { startAt: vehicle.rentalStartAt ?? null, endAt: vehicle.rentalEndAt ?? null }
+  // `canAutoRenew` also accepts a rental the cron closed (`retired` + `expiredAt`): same verified plates (R5).
+  const auto = canAutoRenew(vehicle, nowMs)
+  const prevStatus = (vehicle.status ?? null) as string | null
+
+  const photos =
+    str(params.frontPlatePhoto) && str(params.rearPlatePhoto) && str(params.fullVehiclePhoto)
+      ? {
+          frontPlatePhoto: str(params.frontPlatePhoto),
+          rearPlatePhoto: str(params.rearPlatePhoto),
+          fullVehiclePhoto: str(params.fullVehiclePhoto),
+        }
+      : {}
+  if (!auto && !Object.keys(photos).length && vehicle.rejectionReason) {
+    // A rejected rental needs new evidence before it can be reviewed again.
+    throw new VehicleRepoError('vehicle.photosRequired', 400, ['vehicle.photosRequired'])
+  }
+
+  const ownedInService =
+    !!profile.currentVehicleId && profile.currentVehicleId !== vehicle.$id && profile.vehicleOwnership !== 'rented'
+
+  if (auto) {
+    // Any other current row of this mover steps aside; the owned vehicle (if
+    // that is what was in service) stays verified and remains the fallback.
+    const others = await db.listDocuments(DB(), VEHICLES(), [
+      Query.equal('moverProfileId', [profile.$id]),
+      Query.equal('isCurrent', [true]),
+      Query.limit(10),
+    ])
+    for (const other of others.documents) {
+      if (other.$id !== vehicle.$id) await db.updateDocument(DB(), VEHICLES(), other.$id, { isCurrent: false })
+    }
+    const updated = await updateDoc(db, VEHICLES(), vehicle.$id, {
+      ...vehicleWindowColumns(window),
+      status: 'verified',
+      isCurrent: true,
+      retiredAt: null,
+      expiredAt: null,
+      renewalCount: (typeof vehicle.renewalCount === 'number' ? vehicle.renewalCount : 0) + 1,
+    })
+    const updatedProfile = await updateDoc(db, PROFILES(), profile.$id, {
+      currentVehicleId: vehicle.$id,
+      vehicleOwnership: 'rented',
+      vehicleStatus: 'verified',
+      vehicleReconfirmRequired: false,
+      vehicleConfirmedAt: now,
+      vehicleConfirmedServiceDate: today,
+      ...profileWindowColumns(updated),
+      ...(ownedInService ? { ownedVehicleId: profile.ownedVehicleId ?? profile.currentVehicleId } : {}),
+      ...snapshotColumns(updated),
+    })
+    await appendVehicleEvent(db, {
+      moverProfileId: profile.$id,
+      ownerUserId,
+      vehicleId: vehicle.$id,
+      action: 'renewed',
+      previousStatus: prevStatus,
+      newStatus: 'verified',
+      source: 'renewal',
+      serviceDate: today,
+      actorId: params.userId,
+      actorRole: 'mover',
+      note: JSON.stringify({ previous, next: { startAt: window.startAt, endAt: window.endAt }, note: params.note ?? null }),
+      at: now,
+    })
+    return { vehicle: updated, profile: updatedProfile, autoVerified: true }
+  }
+
+  // Back to review: the rental is the pending row; an own vehicle in service
+  // keeps the service meanwhile (R8), a rental in service is replaced in place.
+  const updated = await updateDoc(db, VEHICLES(), vehicle.$id, {
+    ...vehicleWindowColumns(window),
+    ...photos,
+    status: 'pending_review',
+    rejectionReason: null,
+    isCurrent: !ownedInService,
+    retiredAt: null,
+    expiredAt: null,
+    submittedAt: now,
+  })
+  const updatedProfile = ownedInService
+    ? await updateDoc(db, PROFILES(), profile.$id, {
+        ownedVehicleId: profile.ownedVehicleId ?? profile.currentVehicleId,
+      })
+    : await updateDoc(db, PROFILES(), profile.$id, {
+        currentVehicleId: vehicle.$id,
+        vehicleOwnership: 'rented',
+        vehicleStatus: 'pending_review',
+        vehicleReconfirmRequired: false,
+        vehicleConfirmedServiceDate: null,
+        ...profileWindowColumns(updated),
+      })
+  await appendVehicleEvent(db, {
+    moverProfileId: profile.$id,
+    ownerUserId,
+    vehicleId: vehicle.$id,
+    action: 'resubmitted',
+    previousStatus: prevStatus,
+    newStatus: 'pending_review',
+    source: 'renewal',
+    serviceDate: today,
+    actorId: params.userId,
+    actorRole: 'mover',
+    note: JSON.stringify({ previous, next: { startAt: window.startAt, endAt: window.endAt }, note: params.note ?? null }),
+    at: now,
+  })
+  return { vehicle: updated, profile: updatedProfile, autoVerified: false }
+}
+
+/**
+ * Plan wave-2026-10/1 R6 — the one-tap "Vehicle in service" control. The
+ * chosen row must be the mover's, `verified`, and (for a rental with a window)
+ * inside it. Writes `currentVehicleId`, `vehicleOwnership` (= the chosen
+ * vehicle's), the snapshot columns, the window fields and the `isCurrent`
+ * flags; a rental put in service counts as confirmed for today.
+ */
+export async function selectVehicle(
+  db: VehicleDb,
+  params: { userId: string; vehicleId: string; note?: string | null; nowMs?: number; tz?: string },
+): Promise<{ vehicle: AnyDoc; profile: AnyDoc }> {
+  const nowMs = params.nowMs ?? Date.now()
+  const tz = params.tz ?? PLATFORM_TZ
+  const now = new Date(nowMs).toISOString()
+  const today = serviceDate(nowMs, tz)
+
+  const profile = await requireProfile(db, params.userId)
+  const ownerUserId = relId(profile.userId) ?? params.userId
+
+  let vehicle: AnyDoc
+  try {
+    vehicle = await db.getDocument(DB(), VEHICLES(), str(params.vehicleId))
+  } catch {
+    throw new VehicleRepoError('vehicle.notFound', 404)
+  }
+  if (vehicle.moverProfileId !== profile.$id) throw new VehicleRepoError('vehicle.notOwnVehicle', 403)
+  if (vehicle.status !== 'verified') throw new VehicleRepoError('vehicle.notVerified', 409)
+  if (vehicle.ownership === 'rented') {
+    const end = typeof vehicle.rentalEndAt === 'string' ? Date.parse(vehicle.rentalEndAt) : NaN
+    if (Number.isFinite(end) && nowMs >= end) throw new VehicleRepoError('vehicle.notInWindow', 409)
+  }
+
+  const mine = await db.listDocuments(DB(), VEHICLES(), [
+    Query.equal('moverProfileId', [profile.$id]),
+    Query.notEqual('status', 'retired'),
+    Query.limit(25),
+  ])
+  for (const row of mine.documents) {
+    const shouldBeCurrent = row.$id === vehicle.$id
+    if ((row.isCurrent === true) !== shouldBeCurrent) {
+      await db.updateDocument(DB(), VEHICLES(), row.$id, { isCurrent: shouldBeCurrent })
+    }
+  }
+  const previousId = profile.currentVehicleId ?? null
+  const rented = vehicle.ownership === 'rented'
+  const updatedProfile = await updateDoc(db, PROFILES(), profile.$id, {
+    currentVehicleId: vehicle.$id,
+    vehicleOwnership: rented ? 'rented' : 'owned',
+    vehicleStatus: 'verified',
+    vehicleReconfirmRequired: false,
+    vehicleConfirmedAt: rented ? now : (profile.vehicleConfirmedAt ?? null),
+    vehicleConfirmedServiceDate: rented ? today : null,
+    ...profileWindowColumns(vehicle),
+    ...snapshotColumns(vehicle),
+    ...(rented ? {} : { ownedVehicleId: vehicle.$id }),
+  })
+  await appendVehicleEvent(db, {
+    moverProfileId: profile.$id,
+    ownerUserId,
+    vehicleId: vehicle.$id,
+    action: 'selected',
+    previousStatus: 'verified',
+    newStatus: 'verified',
+    source: 'settings',
+    serviceDate: today,
+    actorId: params.userId,
+    actorRole: 'mover',
+    note: JSON.stringify({ previousVehicleId: previousId, note: params.note ?? null }),
+    at: now,
+  })
   return { vehicle, profile: updatedProfile }
 }
 
@@ -487,6 +842,8 @@ export async function confirmVehicleSame(
   if (profile.vehicleStatus !== 'verified' || !profile.currentVehicleId) {
     throw new VehicleRepoError('vehicle.notVerified', 409)
   }
+  // Plan wave-2026-10/1 §6: a confirmation cannot revive a window that has ended.
+  if (rentalWindowEnded(profile, nowMs)) throw new VehicleRepoError('vehicle.rentalExpired', 409)
   const ownerUserId = relId(profile.userId) ?? params.userId
 
   const updated = await db.updateDocument(DB(), PROFILES(), profile.$id, {

@@ -1,6 +1,8 @@
 import { Client, Databases, ID, Permission, Query, Role } from 'node-appwrite';
 
+import { countryMatches, countryToIso2, moverCountryCode } from './country-code.js';
 import {
+  GLOBAL_PRICING_SCOPE,
   loadedVolumeM3,
   moverCapacityM3,
   parseCustomItems,
@@ -24,8 +26,8 @@ const PLATFORM_TZ = process.env.PLATFORM_TZ || 'Europe/Berlin';
 
 // --- vehicle-service (mirror) ---
 /**
- * Mirror of pickltmobile/lib/vehicle-service.ts (master plan §5). Do not edit
- * here; edit the TS module and re-copy. The client parity test compares them.
+ * Mirror of pickltmobile/lib/vehicle-service.ts (master plan §5 + wave-2026-10/1 §5).
+ * Do not edit here; edit the TS module and re-copy. The client parity test compares them.
  */
 function serviceDate(nowMs, tz) {
   var zone = tz || 'Europe/Berlin';
@@ -53,6 +55,15 @@ function serviceDate(nowMs, tz) {
   return y + '-' + m + '-' + d;
 }
 
+function vehicleServiceParseMs(value) {
+  if (typeof value !== 'string' || value.trim() === '') return null;
+  var ms = Date.parse(value);
+  return isFinite(ms) ? ms : null;
+}
+
+// Rentals longer than this keep the daily SAME/CHANGE tap inside their window.
+var VEHICLE_DAILY_CONFIRM_MIN_HOURS = 24;
+
 function vehicleServiceReady(profile, nowMs, tz) {
   if (!profile) return false;
   if (profile.verificationStatus !== 'verified') return false;
@@ -60,6 +71,20 @@ function vehicleServiceReady(profile, nowMs, tz) {
   if (!profile.currentVehicleId) return false;
   if (profile.vehicleOwnership === 'rented') {
     if (profile.vehicleReconfirmRequired === true) return false;
+    var endMs = vehicleServiceParseMs(profile.vehicleRentalEndAt);
+    if (endMs != null) {
+      if (nowMs >= endMs) return false;
+      var hours = null;
+      if (typeof profile.vehicleRentalHours === 'number' && isFinite(profile.vehicleRentalHours)) {
+        hours = profile.vehicleRentalHours;
+      } else {
+        var startMs = vehicleServiceParseMs(profile.vehicleRentalStartAt);
+        if (startMs != null && endMs > startMs) hours = (endMs - startMs) / 3600000;
+      }
+      var daily = hours == null ? true : hours > VEHICLE_DAILY_CONFIRM_MIN_HOURS;
+      if (daily && profile.vehicleConfirmedServiceDate !== serviceDate(nowMs, tz)) return false;
+      return true;
+    }
     if (profile.vehicleConfirmedServiceDate !== serviceDate(nowMs, tz)) return false;
   }
   return true;
@@ -79,15 +104,34 @@ function vehicleServiceReady(profile, nowMs, tz) {
 // fail-open: an unreadable config gates on the compiled defaults.
 
 /**
- * Read admin rate overrides. Never throws and never blocks a broadcast.
+ * Read admin rate overrides for the move's country: the GLOBAL layer plus the
+ * country's own rows (plan wave-2026-10/4 C4/C5). Never throws and never
+ * blocks a broadcast.
+ *
+ * Before the schema step adds `pricing_config.country` the filtered query is
+ * rejected (unknown attribute); that falls back to the unscoped legacy load.
  */
-async function loadOverrides(databases, error) {
+let warnedLegacyConfig = false;
+async function loadOverrides(databases, error, countryCode) {
+  const scopes = countryCode ? [GLOBAL_PRICING_SCOPE, countryCode] : [GLOBAL_PRICING_SCOPE];
   try {
-    const res = await databases.listDocuments(DATABASE_ID, PRICING_CONFIG_COLLECTION, [Query.limit(200)]);
-    return toPricingConfig(res.documents);
+    const res = await databases.listDocuments(DATABASE_ID, PRICING_CONFIG_COLLECTION, [
+      Query.equal('country', scopes),
+      Query.limit(400),
+    ]);
+    return toPricingConfig(res.documents, countryCode);
   } catch (e) {
-    error(`broadcast: pricing config unavailable, gating on defaults: ${e.message}`);
-    return {};
+    if (!warnedLegacyConfig) {
+      warnedLegacyConfig = true;
+      error(`broadcast: country-scoped pricing config query failed (${e.message}); loading unscoped`);
+    }
+    try {
+      const res = await databases.listDocuments(DATABASE_ID, PRICING_CONFIG_COLLECTION, [Query.limit(200)]);
+      return toPricingConfig(res.documents, countryCode);
+    } catch (e2) {
+      error(`broadcast: pricing config unavailable, gating on defaults: ${e2.message}`);
+      return {};
+    }
   }
 }
 
@@ -233,8 +277,21 @@ export default async ({ req, res, log, error }) => {
       log(`vehicle gate: ${vehicleGated}/${fresh.length} fresh movers dropped (vehicle not service-ready)`);
     }
 
+    // Country gate (plan wave-2026-10/4 C6): a move is offered only to movers
+    // working in its pickup country — the client's segregation ask, and it keeps
+    // a mover from ending up under another country's VAT. A null on EITHER side
+    // (rows from before the country columns) keeps today's radius-only matching.
+    const moveCountry = countryToIso2(move.countryCode);
+    const inCountry = ready.filter(m => countryMatches(moverCountryCode(m), moveCountry));
+    const countryGated = ready.length - inCountry.length;
+    if (!moveCountry) {
+      log(`country gate: move ${moveId} has no countryCode — radius-only matching (legacy row)`);
+    } else if (countryGated > 0) {
+      log(`country gate: ${countryGated}/${ready.length} ready movers dropped (not in ${moveCountry})`);
+    }
+
     // Calculate distances and sort by proximity
-    const inRange = ready
+    const inRange = inCountry
       .map(m => ({
         ...m,
         distanceKm: haversineKm(
@@ -285,7 +342,7 @@ export default async ({ req, res, log, error }) => {
         error(`broadcast: catalog unavailable, capacity gate disabled: ${e.message}`);
       }
     }
-    const overrides = await loadOverrides(databases, error);
+    const overrides = await loadOverrides(databases, error, moveCountry);
 
     const loadM3 = catalog.length > 0 ? loadedVolumeM3(move.inventoryItems, move.customItems, catalog, overrides) : 0;
 
@@ -350,7 +407,7 @@ export default async ({ req, res, log, error }) => {
 
     if (nearbyMovers.length === 0) {
       log(`No nearby movers found for move ${moveId}`);
-      return res.json({ success: true, requestsSent: 0, vehicleGated, requiredCrew, crewGated, message: 'No nearby movers available' });
+      return res.json({ success: true, requestsSent: 0, vehicleGated, countryGated, requiredCrew, crewGated, message: 'No nearby movers available' });
     }
 
     const now = new Date();
@@ -398,6 +455,7 @@ export default async ({ req, res, log, error }) => {
       loadVolumeM3: loadM3,
       capacityGated,
       vehicleGated,
+      countryGated,
       requiredCrew,
       crewGated,
       moversNotified: nearbyMovers.map(m => ({ id: m.$id, distanceKm: Math.round(m.distanceKm * 10) / 10 })),

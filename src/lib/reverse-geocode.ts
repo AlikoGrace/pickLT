@@ -1,4 +1,5 @@
 import { mapboxLanguage } from './mapbox-language'
+import { countryCodeFromFeature } from './moveCountry'
 
 /**
  * Reverse-geocoding that can actually name a building.
@@ -16,6 +17,8 @@ export interface ReverseGeocodeHit {
   name: string
   fullAddress: string
   coordinates: { latitude: number; longitude: number }
+  /** ISO2 from the feature's country context (plan wave-2026-10/4 C2); null when absent. */
+  countryCode: string | null
 }
 
 /** Nearby places for a coordinate, nearest first. */
@@ -50,6 +53,7 @@ export async function reverseGeocodePlaces(
           name,
           fullAddress: p.full_address || p.place_formatted || name,
           coordinates: { latitude, longitude },
+          countryCode: countryCodeFromFeature(f),
         }
       })
       .filter(Boolean) as ReverseGeocodeHit[]

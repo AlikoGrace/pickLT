@@ -21,6 +21,13 @@
     },
     "version": {
       "label": "PickLT v{{version}}"
+    },
+    "country": {
+      "title": "Il tuo Paese",
+      "helper": "Dove prenoti i traslochi",
+      "updated": {
+        "success": "Paese aggiornato"
+      }
     }
   },
   "auth": {
@@ -591,7 +598,10 @@
           "value": "Veicolo: {{ownership}}"
         },
         "vehicleLater": "Il veicolo verrà aggiunto dopo la registrazione e dovrà essere verificato prima che Lei riceva traslochi.",
-        "platesOk": "Foto delle targhe e del veicolo allegate"
+        "platesOk": "Foto delle targhe e del veicolo allegate",
+        "rentalWindow": {
+          "value": "Noleggiato fino al {{time}}"
+        }
       },
       "step": {
         "experience": {
@@ -621,7 +631,13 @@
       "ownership": {
         "title": "Proprietà del veicolo"
       },
-      "vehicleSubmitFailed": "Il Suo profilo è stato salvato, ma non è stato possibile inviare il veicolo ({{error}}). Lo aggiunga dalla dashboard."
+      "vehicleSubmitFailed": "Il Suo profilo è stato salvato, ma non è stato possibile inviare il veicolo ({{error}}). Lo aggiunga dalla dashboard.",
+      "vehicle": {
+        "rentalIntro": "Registri il veicolo che noleggia insieme al relativo periodo di noleggio. Può anche saltare questo passaggio e aggiungere il noleggio in seguito dalla Sua dashboard.",
+        "skip": {
+          "helper": "Lasci i campi vuoti per aggiungere il noleggio in seguito."
+        }
+      }
     },
     "request": {
       "categoryAndType": {
@@ -813,7 +829,14 @@
         "resubmitNote": "Corregga i dati riportati di seguito e li invii di nuovo. Motivo del rifiuto: {{reason}}",
         "keepPhoto": {
           "label": "La foto attuale verrà mantenuta"
-        }
+        },
+        "renew": {
+          "title": "Rinnova noleggio"
+        },
+        "addRental": {
+          "title": "Aggiungi un noleggio"
+        },
+        "rentalNote": "Un veicolo a noleggio riceve traslochi solo all'interno del periodo di noleggio indicato. Può prolungarlo in qualsiasi momento."
       },
       "action": {
         "add": {
@@ -830,6 +853,9 @@
         },
         "view": {
           "cta": "Vedi veicolo"
+        },
+        "renew": {
+          "cta": "Noleggia di nuovo"
         }
       },
       "state": {
@@ -868,6 +894,18 @@
         "vehicleRejected": {
           "title": "Veicolo non approvato",
           "body": "Il Suo veicolo non è stato approvato. Corregga i dati e li invii di nuovo."
+        },
+        "rentalActive": {
+          "title": "Veicolo a noleggio in servizio",
+          "body": "Il Suo veicolo a noleggio è verificato e all'interno del periodo di noleggio. Riceverà traslochi fino alla fine del periodo."
+        },
+        "rentalExpiring": {
+          "title": "Il noleggio termina a breve",
+          "body": "Il Suo periodo di noleggio termina entro un'ora. Lo prolunghi per continuare a ricevere traslochi."
+        },
+        "rentalExpired": {
+          "title": "Periodo di noleggio terminato",
+          "body": "Il Suo periodo di noleggio è terminato e nessun veicolo è in servizio. Noleggi di nuovo, registri un altro noleggio o utilizzi il Suo veicolo per ricevere traslochi."
         }
       },
       "confirm": {
@@ -888,6 +926,66 @@
         "helper": "Le modifiche al veicolo vengono verificate separatamente e non influiscono sulla Sua verifica come autista.",
         "status": {
           "label": "{{vehicle}} · {{status}}"
+        }
+      },
+      "window": {
+        "title": "Periodo di noleggio",
+        "until": {
+          "label": "Noleggiato fino al {{time}}"
+        },
+        "progress": {
+          "a11y": "Quota del periodo di noleggio trascorsa"
+        },
+        "custom": {
+          "label": "Data e ora di fine"
+        },
+        "ended": {
+          "label": "Terminato {{time}}"
+        }
+      },
+      "renew": {
+        "title": "Rinnova noleggio",
+        "subtitle": "Stesso veicolo, nuovo periodo. Ci indichi per quanto tempo lo avrà questa volta.",
+        "submit": {
+          "cta": "Conferma periodo di noleggio"
+        },
+        "failed": {
+          "error": "Non è stato possibile rinnovare il noleggio."
+        },
+        "photos": {
+          "title": "Nuove foto della targa"
+        },
+        "doneVerified": {
+          "success": "Noleggio rinnovato. Riceverà traslochi fino al {{time}}."
+        },
+        "doneReview": {
+          "success": "Noleggio inviato per la revisione"
+        },
+        "noRental": {
+          "body": "Non risulta alcun veicolo a noleggio da rinnovare. Registri invece un noleggio."
+        }
+      },
+      "fleet": {
+        "title": "I Suoi veicoli",
+        "select": {
+          "cta": "Metti in servizio"
+        },
+        "selectFailed": {
+          "error": "Non è stato possibile mettere in servizio il veicolo."
+        },
+        "selected": {
+          "success": "Veicolo in servizio cambiato"
+        },
+        "noWindow": {
+          "label": "Nessun periodo di noleggio registrato"
+        },
+        "ownedFallback": {
+          "helper": "Quando un periodo di noleggio termina, il Suo veicolo subentra automaticamente."
+        }
+      },
+      "banner": {
+        "countdown": {
+          "label": "Il Suo noleggio termina tra {{time}}"
         }
       }
     }
@@ -1282,6 +1380,9 @@
     },
     "verifyAndCreate": {
       "cta": "Verifica e crea l’account"
+    },
+    "country": {
+      "helper": "Dove prenoterai i traslochi. Prezzi e IVA seguono l'indirizzo di ritiro."
     }
   },
   "wizard": {

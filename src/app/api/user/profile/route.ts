@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
 import { getSessionUserId } from '@/lib/auth-session'
+import { isCountryCode } from '@/lib/countryCode'
+import { writeDroppingUnknownAttributes } from '@/lib/appwrite-write'
 
 /**
  * GET /api/user/profile
@@ -36,6 +38,7 @@ export async function GET() {
  * Update user profile fields.
  * - fullName: Updates both the Appwrite Auth account name AND the users collection.
  * - profilePhoto: Updates the users collection.
+ * - countryCode: ISO2 (plan wave-2026-10/4 C7), validated against the shared country table.
  * - email/phone: NOT allowed here. Use dedicated /api/user/change-email or /api/user/change-phone.
  */
 export async function PATCH(req: NextRequest) {
@@ -56,6 +59,12 @@ export async function PATCH(req: NextRequest) {
         updates[field] = body[field]
       }
     }
+    if (body.countryCode !== undefined) {
+      if (!isCountryCode(body.countryCode)) {
+        return NextResponse.json({ error: t('errors:country.required'), fnCode: 'country.required' }, { status: 400 })
+      }
+      updates.countryCode = String(body.countryCode).toUpperCase()
+    }
 
     if (Object.keys(updates).length === 0) {
       return NextResponse.json({ error: t('errors:validation.noFields') }, { status: 400 })
@@ -73,11 +82,10 @@ export async function PATCH(req: NextRequest) {
       }
     }
 
-    const updatedUser = await databases.updateDocument(
-      APPWRITE.DATABASE_ID,
-      APPWRITE.COLLECTIONS.USERS,
-      userId,
-      updates
+    const updatedUser = await writeDroppingUnknownAttributes(
+      updates,
+      (data) => databases.updateDocument(APPWRITE.DATABASE_ID, APPWRITE.COLLECTIONS.USERS, userId, data),
+      'user-profile',
     )
 
     return NextResponse.json({ user: updatedUser })

@@ -255,7 +255,8 @@
     "startRouteRetry": "Rota başlatılamadı. Lütfen tekrar deneyin.",
     "vehicleNotReady": "Çevrimiçi olmadan veya taşınma kabul etmeden önce aracınızı onaylayın veya doğrulatın.",
     "withdrawFailed": "Taşınmadan geri çekilme işlemi başarısız oldu",
-    "withdrawRetry": "Geri çekilme işlemi başarısız oldu. Lütfen tekrar deneyin."
+    "withdrawRetry": "Geri çekilme işlemi başarısız oldu. Lütfen tekrar deneyin.",
+    "countryMismatch": "Bu taşıma {{country}} içinde; hesabınız başka bir ülkede kayıtlı."
   },
   "movers": {
     "fetchFailed": "Nakliyeciler getirilemedi",
@@ -351,6 +352,16 @@
     "saveFailed": "Araç bilgileri kaydedilemedi",
     "typeInvalid": "Bir araç türü seçin.",
     "updateFailed": "Araç bilgileri güncellenemedi",
-    "yearInvalid": "Dört haneli bir yıl girin."
+    "yearInvalid": "Dört haneli bir yıl girin.",
+    "rentalWindowRequired": "Kiralık aracın ne kadar süre sizde olacağını belirtin.",
+    "rentalWindowInvalid": "Gelecekte bir kiralama bitişi girin.",
+    "rentalWindowTooLong": "Bir kiralama tek seferde en fazla 30 günü kapsayabilir. Daha sonra uzatabilirsiniz.",
+    "rentalExpired": "Kiralama süreniz sona erdi. Devam etmek için yeniden bir kiralama kaydedin.",
+    "notInWindow": "Bu araç şu anda hizmet için uygun değil.",
+    "notOwnVehicle": "Bu araç hesabınıza ait değil."
+  },
+  "country": {
+    "notLive": "PickLT henüz {{country}} için kullanılamıyor.",
+    "required": "Lütfen ülkenizi seçin."
   }
 }

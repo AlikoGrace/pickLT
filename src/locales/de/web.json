@@ -21,6 +21,13 @@
     },
     "version": {
       "label": "PickLT v{{version}}"
+    },
+    "country": {
+      "title": "Ihr Land",
+      "helper": "Wo Sie Umzüge buchen",
+      "updated": {
+        "success": "Land aktualisiert"
+      }
     }
   },
   "auth": {
@@ -591,7 +598,10 @@
           "value": "Fahrzeug: {{ownership}}"
         },
         "vehicleLater": "Das Fahrzeug wird nach der Registrierung hinzugefügt und muss verifiziert werden, bevor Sie Umzüge erhalten.",
-        "platesOk": "Kennzeichen- und Fahrzeugfotos angehängt"
+        "platesOk": "Kennzeichen- und Fahrzeugfotos angehängt",
+        "rentalWindow": {
+          "value": "Gemietet bis {{time}}"
+        }
       },
       "step": {
         "experience": {
@@ -621,7 +631,13 @@
       "ownership": {
         "title": "Fahrzeugbesitz"
       },
-      "vehicleSubmitFailed": "Ihr Profil wurde gespeichert, aber das Fahrzeug konnte nicht eingereicht werden ({{error}}). Bitte fügen Sie es über das Dashboard hinzu."
+      "vehicleSubmitFailed": "Ihr Profil wurde gespeichert, aber das Fahrzeug konnte nicht eingereicht werden ({{error}}). Bitte fügen Sie es über das Dashboard hinzu.",
+      "vehicle": {
+        "rentalIntro": "Registrieren Sie das Fahrzeug, das Sie mieten, zusammen mit seiner Mietdauer. Sie können diesen Schritt auch überspringen und die Miete später über Ihr Dashboard hinzufügen.",
+        "skip": {
+          "helper": "Lassen Sie die Felder leer, um die Miete später hinzuzufügen."
+        }
+      }
     },
     "request": {
       "categoryAndType": {
@@ -813,7 +829,14 @@
         "resubmitNote": "Bitte korrigieren Sie die folgenden Angaben und reichen Sie sie erneut ein. Grund der Ablehnung: {{reason}}",
         "keepPhoto": {
           "label": "Aktuelles Foto wird beibehalten"
-        }
+        },
+        "renew": {
+          "title": "Miete verlängern"
+        },
+        "addRental": {
+          "title": "Miete hinzufügen"
+        },
+        "rentalNote": "Ein Mietfahrzeug erhält Umzüge nur innerhalb der Mietdauer, die Sie angeben. Sie können sie jederzeit verlängern."
       },
       "action": {
         "add": {
@@ -830,6 +853,9 @@
         },
         "view": {
           "cta": "Fahrzeug ansehen"
+        },
+        "renew": {
+          "cta": "Erneut mieten"
         }
       },
       "state": {
@@ -868,6 +894,18 @@
         "vehicleRejected": {
           "title": "Fahrzeug nicht freigegeben",
           "body": "Ihr Fahrzeug wurde nicht freigegeben. Bitte korrigieren Sie die Angaben und reichen Sie sie erneut ein."
+        },
+        "rentalActive": {
+          "title": "Mietfahrzeug im Einsatz",
+          "body": "Ihr Mietfahrzeug ist verifiziert und befindet sich innerhalb seiner Mietdauer. Sie erhalten Umzüge, bis die Mietdauer endet."
+        },
+        "rentalExpiring": {
+          "title": "Miete endet bald",
+          "body": "Ihre Mietdauer endet innerhalb der nächsten Stunde. Verlängern Sie sie, um weiterhin Umzüge zu erhalten."
+        },
+        "rentalExpired": {
+          "title": "Mietdauer abgelaufen",
+          "body": "Ihre Mietdauer ist abgelaufen und kein Fahrzeug ist im Einsatz. Mieten Sie erneut, registrieren Sie eine weitere Miete oder nutzen Sie Ihr eigenes Fahrzeug, um Umzüge zu erhalten."
         }
       },
       "confirm": {
@@ -888,6 +926,66 @@
         "helper": "Fahrzeugänderungen werden separat verifiziert und haben keinen Einfluss auf Ihre Fahrerverifizierung.",
         "status": {
           "label": "{{vehicle}} · {{status}}"
+        }
+      },
+      "window": {
+        "title": "Mietdauer",
+        "until": {
+          "label": "Gemietet bis {{time}}"
+        },
+        "progress": {
+          "a11y": "Verbrauchter Anteil der Mietdauer"
+        },
+        "custom": {
+          "label": "Enddatum & Uhrzeit"
+        },
+        "ended": {
+          "label": "Beendet {{time}}"
+        }
+      },
+      "renew": {
+        "title": "Miete verlängern",
+        "subtitle": "Gleiches Fahrzeug, neue Mietdauer. Sagen Sie uns, wie lange Sie es dieses Mal haben.",
+        "submit": {
+          "cta": "Mietdauer bestätigen"
+        },
+        "failed": {
+          "error": "Die Miete konnte nicht verlängert werden."
+        },
+        "photos": {
+          "title": "Neue Kennzeichenfotos"
+        },
+        "doneVerified": {
+          "success": "Miete verlängert. Sie erhalten Umzüge bis {{time}}."
+        },
+        "doneReview": {
+          "success": "Miete zur Prüfung eingereicht"
+        },
+        "noRental": {
+          "body": "Es ist kein Mietfahrzeug hinterlegt, das verlängert werden könnte. Registrieren Sie stattdessen eine Miete."
+        }
+      },
+      "fleet": {
+        "title": "Ihre Fahrzeuge",
+        "select": {
+          "cta": "In Einsatz nehmen"
+        },
+        "selectFailed": {
+          "error": "Das Fahrzeug konnte nicht in Einsatz genommen werden."
+        },
+        "selected": {
+          "success": "Fahrzeug im Einsatz geändert"
+        },
+        "noWindow": {
+          "label": "Keine Mietdauer hinterlegt"
+        },
+        "ownedFallback": {
+          "helper": "Wenn eine Mietdauer endet, übernimmt automatisch Ihr eigenes Fahrzeug."
+        }
+      },
+      "banner": {
+        "countdown": {
+          "label": "Ihre Miete endet in {{time}}"
         }
       }
     }
@@ -1282,6 +1380,9 @@
     },
     "verifyAndCreate": {
       "cta": "Verifizieren & Konto erstellen"
+    },
+    "country": {
+      "helper": "Wo Sie Umzüge buchen werden. Preise und MwSt. richten sich nach der Abholadresse."
     }
   },
   "wizard": {

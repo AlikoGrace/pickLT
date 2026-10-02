@@ -606,6 +606,21 @@
     },
     "verified": {
       "label": "Vehículo verificado"
+    },
+    "renewed": {
+      "label": "Alquiler renovado"
+    },
+    "expired": {
+      "label": "Periodo de alquiler terminado"
+    },
+    "fallback": {
+      "label": "Vuelta al vehículo propio"
+    },
+    "selected": {
+      "label": "Vehículo en servicio cambiado"
+    },
+    "expiringSoon": {
+      "label": "El alquiler termina pronto"
     }
   },
   "vehicleOwnership": {
@@ -650,6 +665,19 @@
     },
     "map": {
       "label": "Mapa"
+    }
+  },
+  "country": {
+    "label": "País",
+    "pricesFor": {
+      "label": "Precios para {{country}} · IVA {{rate}}"
+    },
+    "notAvailable": {
+      "title": "Aún no disponible en tu país",
+      "body": "PickLT todavía no ha abierto en {{country}}. Te avisaremos cuando lo haga."
+    },
+    "select": {
+      "label": "Selecciona tu país"
     }
   }
 }

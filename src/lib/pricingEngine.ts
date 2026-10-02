@@ -100,6 +100,13 @@ export interface QuoteInput {
   storageWeeks?: number
   /** Euros. No UI yet; reserved for promotions (master §10). */
   discountEur?: number
+  /**
+   * ISO-3166-1 alpha-2 of the PICKUP country (plan `wave-2026-10/4` C2) — the
+   * market whose VAT and tariff this quote was priced with. The caller resolves
+   * the matching config (`toPricingConfig(rows, countryCode)`); the engine only
+   * records it on the breakdown so a stored quote names its market.
+   */
+  countryCode?: string | null
 }
 
 export interface QuoteLine {
@@ -137,6 +144,8 @@ export interface QuoteLines {
 export interface QuoteBreakdown {
   version: 'v3'
   currency: 'EUR'
+  /** Pickup country the quote was priced for (ISO2); absent on quotes from before the country wave. */
+  countryCode?: string | null
   tier: ServiceTier
   mode: BookingMode
   profile: QuoteProfile
@@ -536,9 +545,15 @@ export function quoteMove(input: QuoteInput, config?: PricingConfig | null): Quo
     throw new PricingReconcileError('non-integer cents')
   }
 
+  const countryCode =
+    typeof input.countryCode === 'string' && /^[A-Za-z]{2}$/.test(input.countryCode.trim())
+      ? input.countryCode.trim().toUpperCase()
+      : null
+
   return {
     version: 'v3',
     currency: 'EUR',
+    ...(countryCode ? { countryCode } : {}),
     tier,
     mode,
     profile: {

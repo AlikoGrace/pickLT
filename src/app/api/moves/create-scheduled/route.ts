@@ -7,6 +7,8 @@ import { asText, asTextArray } from '@/lib/move-normalizers'
 import { movePermissions } from '@/lib/doc-permissions'
 import { PricingReconcileError, type QuoteBreakdown } from '@/lib/pricingEngine'
 import { quoteColumns, quoteMoveFields } from '@/lib/pricing-server'
+import { resolveMoveCountry } from '@/lib/moveCountry'
+import { writeDroppingUnknownAttributes } from '@/lib/appwrite-write'
 import { ID } from 'node-appwrite'
 
 export const runtime = 'nodejs'
@@ -28,6 +30,11 @@ export const maxDuration = 60
  * below the tier's minimum (master D8) — and the row carries `estimatedPrice`,
  * `priceBreakdown`, `pricingVersion`, `pricedAt`, `currency`, plus the charged
  * `vehicleType` / `crewSize` (which replace the wizard's guesses).
+ *
+ * The move's country is the PICKUP country (plan wave-2026-10/4 C2): reverse
+ * geocoded server-side, with the client's `pickupCountryCode` hint and the
+ * client's own country as fallbacks. It selects the pricing config (VAT,
+ * tariff) and is stored on the row and inside the breakdown.
  */
 export async function POST(req: NextRequest) {
   const { t } = await getTranslations()
@@ -97,9 +104,26 @@ export async function POST(req: NextRequest) {
       routeDurationSeconds,
       // Payment
       paymentMethod,
+      // Country hint from the geocoder (C2)
+      pickupCountryCode,
     } = body
 
     const { databases } = createAdminClient()
+
+    // ── Country (plan wave-2026-10/4 C2) ─────────────────────
+    let userCountryCode: unknown = null
+    try {
+      const userDoc = await databases.getDocument(APPWRITE.DATABASE_ID, APPWRITE.COLLECTIONS.USERS, userId)
+      userCountryCode = userDoc.countryCode
+    } catch {
+      /* no user row → the default market */
+    }
+    const countryCode = await resolveMoveCountry({
+      pickupLatitude,
+      pickupLongitude,
+      pickupCountryCode,
+      userCountryCode,
+    })
 
     // ── Price it (master D5) ────────────────────────────────
     // Row-shaped field names, so this quote and a later re-quote from the
@@ -128,6 +152,7 @@ export async function POST(req: NextRequest) {
           storageWeeks,
         },
         'scheduled',
+        countryCode,
       )
     } catch (err) {
       if (err instanceof PricingReconcileError) {
@@ -144,13 +169,12 @@ export async function POST(req: NextRequest) {
     const handle = `SM-${Date.now().toString(36).toUpperCase()}`
 
     const moveId = ID.unique()
-    const move = await databases.createDocument(
-      APPWRITE.DATABASE_ID,
-      APPWRITE.COLLECTIONS.MOVES,
-      moveId,
+    const move = await writeDroppingUnknownAttributes(
       {
         handle,
         clientId: userId,
+        // Pickup country (C2) — the market this move is priced and matched in.
+        countryCode,
         status: 'booked',
         moveCategory: 'scheduled',
         moveType: moveType || 'regular',
@@ -241,11 +265,19 @@ export async function POST(req: NextRequest) {
         termsAccepted: true,
         privacyAccepted: true,
       },
-      // No mover is chosen yet, so only the client is granted. The mover's read
-      // is added when acceptance sets `moverProfileId` (plan Task 2.2), and
-      // browsing unassigned work goes through the redacting `listavailablemoves`
-      // function (plan hard case A) rather than a direct read.
-      movePermissions(userId)
+      (data) =>
+        databases.createDocument(
+          APPWRITE.DATABASE_ID,
+          APPWRITE.COLLECTIONS.MOVES,
+          moveId,
+          data,
+          // No mover is chosen yet, so only the client is granted. The mover's read
+          // is added when acceptance sets `moverProfileId` (plan Task 2.2), and
+          // browsing unassigned work goes through the redacting `listavailablemoves`
+          // function (plan hard case A) rather than a direct read.
+          movePermissions(userId),
+        ),
+      'create-scheduled',
     )
 
     return NextResponse.json({
@@ -254,6 +286,7 @@ export async function POST(req: NextRequest) {
       handle,
       estimatedPrice: breakdown.total,
       breakdown,
+      countryCode,
     })
   } catch (err) {
     console.error('POST /api/moves/create-scheduled error:', err)

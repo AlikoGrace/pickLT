@@ -121,6 +121,7 @@ const SelectMoverPage = () => {
     pickupLocation,
     dropoffLocation,
     pickupCoordinates,
+    pickupCountryCode,
     dropoffCoordinates,
     inventory,
     customItems,
@@ -139,7 +140,8 @@ const SelectMoverPage = () => {
   const [fetchError, setFetchError] = useState<string | null>(null)
   // Admin rate overrides (`{}` → compiled defaults) and the priced catalog —
   // the two inputs the engine needs besides the basket and the route.
-  const pricingConfig = usePricingConfig()
+  // Per pickup country (plan wave-2026-10/4 C5): the market's VAT and tariff.
+  const pricingConfig = usePricingConfig(pickupCountryCode)
   const { catalog, ready: catalogReady } = useInventoryCatalog()
   const inventoryNames = useInventoryNames()
 
@@ -192,7 +194,9 @@ const SelectMoverPage = () => {
         const lat = pickupCoordinates?.latitude || 52.52
         const lng = pickupCoordinates?.longitude || 13.405
 
-        const res = await fetch(`/api/movers/nearby?lat=${lat}&lng=${lng}&radiusKm=25`)
+        // Country-scoped (C6): only movers in the pickup's market.
+        const country = pickupCountryCode ? `&country=${encodeURIComponent(pickupCountryCode)}` : ''
+        const res = await fetch(`/api/movers/nearby?lat=${lat}&lng=${lng}&radiusKm=25${country}`)
         if (!res.ok) {
           const errData = await res.json().catch(() => ({}))
           throw new Error(errData.error || t('errors:movers.fetchFailed'))
@@ -210,7 +214,7 @@ const SelectMoverPage = () => {
     // Small delay for better UX
     const timer = setTimeout(fetchMovers, 1000)
     return () => clearTimeout(timer)
-  }, [pickupCoordinates])
+  }, [pickupCoordinates, pickupCountryCode])
 
   // The mover-independent part of the quote: tier, mode, route and basket.
   // Each mover then only changes the vehicle line (pricing master D8) — the
@@ -225,8 +229,9 @@ const SelectMoverPage = () => {
       durationSeconds: routeDuration ?? 0,
       basket: basketFromWire(inventory, customItems),
       catalog,
+      countryCode: pickupCountryCode,
     }
-  }, [routeDistance, routeDuration, catalogReady, catalog, moveType, inventory, customItems])
+  }, [routeDistance, routeDuration, catalogReady, catalog, moveType, inventory, customItems, pickupCountryCode])
 
   // Price every mover with the shared v3 engine and gate out anyone the job
   // exceeds: a vehicle that cannot hold the load, or a crew smaller than the
@@ -372,6 +377,8 @@ const SelectMoverPage = () => {
         routeDistanceMeters: routeDistance || null,
         routeDurationSeconds: routeDuration || null,
         paymentMethod,
+        // Geocoder hint for the pickup country (C2); the server re-derives it.
+        pickupCountryCode,
       }
       console.log(
         `[select-mover] Creating move — cover: ${createBody.coverPhotoId ? 'URL' : 'null'}, gallery: ${createBody.galleryPhotoIds.length}`

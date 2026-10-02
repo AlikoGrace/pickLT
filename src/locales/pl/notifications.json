@@ -141,6 +141,14 @@
     "verified": {
       "body": "Pana/Pani pojazd {{plate}} został zweryfikowany. Może Pan/Pani ponownie otrzymywać przeprowadzki.",
       "title": "Pojazd zweryfikowany"
+    },
+    "rentalExpiring": {
+      "title": "Wynajem wkrótce się kończy",
+      "body": "Wynajem pojazdu {{plate}} kończy się o {{time}}. Przedłuż go, aby nadal otrzymywać przeprowadzki."
+    },
+    "rentalExpired": {
+      "title": "Okres wynajmu zakończony",
+      "body": "Okres wynajmu pojazdu {{plate}} dobiegł końca. Wynajmij ponownie, aby otrzymywać przeprowadzki."
     }
   },
   "verification": {

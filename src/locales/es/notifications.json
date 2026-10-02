@@ -137,6 +137,14 @@
     "verified": {
       "body": "Su vehículo {{plate}} ha sido verificado. Ya puede volver a recibir mudanzas.",
       "title": "Vehículo verificado"
+    },
+    "rentalExpiring": {
+      "title": "El alquiler termina pronto",
+      "body": "Tu vehículo alquilado {{plate}} termina a las {{time}}. Amplíalo para seguir recibiendo mudanzas."
+    },
+    "rentalExpired": {
+      "title": "Periodo de alquiler terminado",
+      "body": "Tu periodo de alquiler de {{plate}} ha terminado. Alquila de nuevo para recibir mudanzas."
     }
   },
   "verification": {

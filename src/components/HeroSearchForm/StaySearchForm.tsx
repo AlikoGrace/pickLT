@@ -23,6 +23,7 @@ export const StaySearchForm = ({ className, formStyle = 'default' }: Props) => {
     setPickupLocation,
     setDropoffLocation,
     setPickupCoordinates,
+    setPickupCountryCode,
     setDropoffCoordinates,
     setMoveType: setContextMoveType,
   } = useMoveSearch()
@@ -41,6 +42,7 @@ export const StaySearchForm = ({ className, formStyle = 'default' }: Props) => {
     setPickupData(location)
     if (location) {
       setPickupLocation(location.fullAddress)
+      setPickupCountryCode(location.countryCode ?? null)
       if (location.coordinates) {
         console.log('StaySearchForm - Setting pickup coordinates:', location.coordinates)
         setPickupCoordinates({
@@ -51,6 +53,7 @@ export const StaySearchForm = ({ className, formStyle = 'default' }: Props) => {
     } else {
       setPickupLocation('')
       setPickupCoordinates(null)
+      setPickupCountryCode(null)
     }
   }
 

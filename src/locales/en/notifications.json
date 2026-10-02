@@ -137,6 +137,14 @@
     "verified": {
       "body": "Your vehicle {{plate}} has been verified. You can receive moves again.",
       "title": "Vehicle verified"
+    },
+    "rentalExpiring": {
+      "title": "Rental ends soon",
+      "body": "Your rented vehicle {{plate}} ends at {{time}}. Extend it to keep receiving moves."
+    },
+    "rentalExpired": {
+      "title": "Rental period ended",
+      "body": "Your rental period for {{plate}} has ended. Rent again to receive moves."
     }
   },
   "verification": {

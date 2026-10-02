@@ -1,3 +1,4 @@
+import { countryToIso2 } from './countryCode'
 import { vehicleServiceReady, type VehicleOwnership, type VehicleProfileFields } from './vehicle-service'
 
 /**
@@ -102,4 +103,17 @@ export function resolveOwnershipWrite(
 export function profileOwnershipOnSubmit(current: unknown, requested: VehicleOwnership): VehicleOwnership {
   if (current === 'rented' && requested === 'owned') return 'rented'
   return requested
+}
+
+/**
+ * Country-scoped matching (plan `wave-2026-10/4` C6): a mover is offered a move
+ * only in their own country. Legacy rows — a mover without `countryCode` or a
+ * move whose country is unknown — keep today's radius-only behaviour, so the
+ * backfill can land after the code. Same rule as `broadcastmoverequest` /
+ * `listnearbymovers`.
+ */
+export function moverMatchesCountry(mover: AnyDoc | null | undefined, moveCountryCode: unknown): boolean {
+  const moverCc = countryToIso2(mover?.countryCode)
+  const moveCc = countryToIso2(moveCountryCode)
+  return moverCc == null || moveCc == null || moverCc === moveCc
 }

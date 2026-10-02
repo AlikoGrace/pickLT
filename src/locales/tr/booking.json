@@ -1413,6 +1413,71 @@
     },
     "yearShort": {
       "label": "Yıl"
+    },
+    "rental": {
+      "window": {
+        "label": "Kiralama süresi"
+      },
+      "duration": {
+        "label": "Araç ne kadar süre sizde olacak?"
+      },
+      "preset": {
+        "hours": "{{count}} sa",
+        "oneDay": "1 gün",
+        "days": "{{count}} gün",
+        "week": "1 hafta",
+        "custom": "Bitiş tarihi ve saati seçin"
+      },
+      "startNow": {
+        "label": "Şimdi başlıyor"
+      },
+      "endsAt": {
+        "label": "Şu tarihe kadar kiralı"
+      },
+      "remaining": {
+        "label": "{{time}} kaldı"
+      },
+      "provider": {
+        "label": "Kiralama şirketi (isteğe bağlı)"
+      },
+      "extend": {
+        "cta": "Kiralamayı uzat"
+      },
+      "rentAgain": {
+        "cta": "Yeniden kirala"
+      },
+      "rentAnother": {
+        "cta": "Başka bir kiralık araç kaydet"
+      },
+      "useOwn": {
+        "cta": "Kendi aracımı kullan"
+      },
+      "addRental": {
+        "cta": "Belirli bir süre için kiralık araç ekle"
+      },
+      "inService": {
+        "label": "Hizmetteki araç"
+      },
+      "expired": {
+        "title": "Kiralama süreniz sona erdi",
+        "body": "Taşıma almaya devam etmek için yeniden bir kiralama kaydedin."
+      },
+      "expiring": {
+        "title": "Kiralama yakında bitiyor",
+        "body": "Kiralamanız {{time}} saatinde bitiyor. Taşıma almaya devam etmek için uzatın."
+      },
+      "renewAutoVerified": {
+        "helper": "Öncekiyle aynı araç — yeni fotoğraf gerekmez."
+      },
+      "renewNeedsReview": {
+        "helper": "Üzerinden zaman geçti — inceleme için yeni plaka fotoğrafları ekleyin."
+      },
+      "maxHint": {
+        "helper": "Kayıt başına en fazla 30 gün. Daha uzun kiralamalar uzatılabilir."
+      },
+      "broadcastsUntil": {
+        "label": "{{time}} saatine kadar taşıma alırsınız"
+      }
     }
   }
 }

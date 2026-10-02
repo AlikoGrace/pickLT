@@ -32,12 +32,20 @@ const ACTION_KEY: Record<string, string> = {
   rejected: 'rejected',
   retired: 'retired',
   reconfirm_required: 'reconfirmRequired',
+  // Wave 2026-10 (plan `wave-2026-10/1`): rental windows and the two-vehicle fleet.
+  renewed: 'renewed',
+  expired: 'expired',
+  fallback: 'fallback',
+  selected: 'selected',
+  expiring_soon: 'expiringSoon',
 }
 
 // i18n-keys: common:vehicleEvent.submitted.label, common:vehicleEvent.resubmitted.label,
 // common:vehicleEvent.confirmedSame.label, common:vehicleEvent.changeRequested.label,
 // common:vehicleEvent.verified.label, common:vehicleEvent.rejected.label,
-// common:vehicleEvent.retired.label, common:vehicleEvent.reconfirmRequired.label
+// common:vehicleEvent.retired.label, common:vehicleEvent.reconfirmRequired.label,
+// common:vehicleEvent.renewed.label, common:vehicleEvent.expired.label, common:vehicleEvent.fallback.label,
+// common:vehicleEvent.selected.label, common:vehicleEvent.expiringSoon.label
 export function vehicleEventLabel(t: TFunction, action: string | null | undefined): string {
   const key = ACTION_KEY[String(action ?? '')]
   return key ? t(`common:vehicleEvent.${key}.label`) : String(action ?? '')
@@ -58,6 +66,9 @@ export const STATE_KEY: Record<VehicleServiceState, string> = {
   RENTAL_CHANGE_PENDING: 'rentalChangePending',
   RENTAL_DAILY_CONFIRMATION_REQUIRED: 'rentalDailyConfirmationRequired',
   RENTAL_VERIFIED_TODAY: 'rentalVerifiedToday',
+  RENTAL_ACTIVE: 'rentalActive',
+  RENTAL_EXPIRING: 'rentalExpiring',
+  RENTAL_EXPIRED: 'rentalExpired',
   VEHICLE_REJECTED: 'vehicleRejected',
 }
 
@@ -65,13 +76,16 @@ export const STATE_KEY: Record<VehicleServiceState, string> = {
  * The action that restores service in a restricted state, as a setup mode /
  * route (master §5 table, spec §10 "exactly what action restores service").
  */
-export type VehicleAction = 'add' | 'change' | 'resubmit' | 'confirm' | 'view' | null
+export type VehicleAction = 'add' | 'change' | 'resubmit' | 'confirm' | 'renew' | 'view' | null
 
 export function vehicleActionFor(state: VehicleServiceState): VehicleAction {
   switch (state) {
     case 'OWN_PENDING_VEHICLE':
     case 'RENTAL_PENDING_VEHICLE':
       return 'add'
+    case 'RENTAL_EXPIRED':
+      // "Rent again": the same verified plates, only a new window (R5).
+      return 'renew'
     case 'VEHICLE_REJECTED':
       return 'resubmit'
     case 'RENTAL_DAILY_CONFIRMATION_REQUIRED':

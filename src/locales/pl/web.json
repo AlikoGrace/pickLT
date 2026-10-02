@@ -21,6 +21,13 @@
     },
     "version": {
       "label": "PickLT v{{version}}"
+    },
+    "country": {
+      "title": "Twój kraj",
+      "helper": "Gdzie rezerwujesz przeprowadzki",
+      "updated": {
+        "success": "Kraj zaktualizowany"
+      }
     }
   },
   "auth": {
@@ -599,7 +606,10 @@
           "value": "Pojazd: {{ownership}}"
         },
         "vehicleLater": "Pojazd zostanie dodany po rejestracji i musi zostać zweryfikowany, zanim będą Państwo otrzymywać przeprowadzki.",
-        "platesOk": "Dołączono zdjęcia tablic i pojazdu"
+        "platesOk": "Dołączono zdjęcia tablic i pojazdu",
+        "rentalWindow": {
+          "value": "Wynajęty do {{time}}"
+        }
       },
       "step": {
         "experience": {
@@ -629,7 +639,13 @@
       "ownership": {
         "title": "Własność pojazdu"
       },
-      "vehicleSubmitFailed": "Profil został zapisany, ale nie udało się przesłać pojazdu ({{error}}). Proszę dodać go z poziomu panelu."
+      "vehicleSubmitFailed": "Profil został zapisany, ale nie udało się przesłać pojazdu ({{error}}). Proszę dodać go z poziomu panelu.",
+      "vehicle": {
+        "rentalIntro": "Proszę zarejestrować wynajmowany pojazd wraz z okresem wynajmu. Można też pominąć ten krok i dodać wynajem później z poziomu panelu.",
+        "skip": {
+          "helper": "Proszę pozostawić pola puste, aby dodać wynajem później."
+        }
+      }
     },
     "request": {
       "categoryAndType": {
@@ -823,7 +839,14 @@
         "resubmitNote": "Proszę poprawić poniższe dane i przesłać je ponownie. Powód odrzucenia: {{reason}}",
         "keepPhoto": {
           "label": "Obecne zdjęcie zostanie zachowane"
-        }
+        },
+        "renew": {
+          "title": "Odnów wynajem"
+        },
+        "addRental": {
+          "title": "Dodaj wynajem"
+        },
+        "rentalNote": "Wynajęty pojazd otrzymuje przeprowadzki tylko w podanym okresie wynajmu. Można go przedłużyć w dowolnym momencie."
       },
       "action": {
         "add": {
@@ -840,6 +863,9 @@
         },
         "view": {
           "cta": "Zobacz pojazd"
+        },
+        "renew": {
+          "cta": "Wynajmij ponownie"
         }
       },
       "state": {
@@ -878,6 +904,18 @@
         "vehicleRejected": {
           "title": "Pojazd nie został zatwierdzony",
           "body": "Pojazd nie został zatwierdzony. Proszę poprawić dane i przesłać je ponownie."
+        },
+        "rentalActive": {
+          "title": "Wynajęty pojazd w użyciu",
+          "body": "Wynajęty pojazd jest zweryfikowany i znajduje się w okresie wynajmu. Przeprowadzki będą dostępne do końca tego okresu."
+        },
+        "rentalExpiring": {
+          "title": "Wynajem wkrótce się kończy",
+          "body": "Okres wynajmu kończy się w ciągu godziny. Proszę go przedłużyć, aby nadal otrzymywać przeprowadzki."
+        },
+        "rentalExpired": {
+          "title": "Okres wynajmu zakończony",
+          "body": "Okres wynajmu dobiegł końca i żaden pojazd nie jest w użyciu. Aby otrzymywać przeprowadzki, proszę wynająć pojazd ponownie, zarejestrować inny wynajem lub skorzystać z własnego pojazdu."
         }
       },
       "confirm": {
@@ -898,6 +936,66 @@
         "helper": "Zmiany pojazdu są weryfikowane osobno i nie wpływają na weryfikację kierowcy.",
         "status": {
           "label": "{{vehicle}} · {{status}}"
+        }
+      },
+      "window": {
+        "title": "Okres wynajmu",
+        "until": {
+          "label": "Wynajęty do {{time}}"
+        },
+        "progress": {
+          "a11y": "Wykorzystana część okresu wynajmu"
+        },
+        "custom": {
+          "label": "Data i godzina zakończenia"
+        },
+        "ended": {
+          "label": "Zakończony {{time}}"
+        }
+      },
+      "renew": {
+        "title": "Odnów wynajem",
+        "subtitle": "Ten sam pojazd, nowy okres. Proszę podać, na jak długo mają go Państwo tym razem.",
+        "submit": {
+          "cta": "Potwierdź okres wynajmu"
+        },
+        "failed": {
+          "error": "Nie udało się odnowić wynajmu."
+        },
+        "photos": {
+          "title": "Nowe zdjęcia tablicy rejestracyjnej"
+        },
+        "doneVerified": {
+          "success": "Wynajem odnowiony. Przeprowadzki będą dostępne do {{time}}."
+        },
+        "doneReview": {
+          "success": "Wynajem przesłany do weryfikacji"
+        },
+        "noRental": {
+          "body": "Brak zarejestrowanego wynajętego pojazdu do odnowienia. Zamiast tego proszę zarejestrować wynajem."
+        }
+      },
+      "fleet": {
+        "title": "Państwa pojazdy",
+        "select": {
+          "cta": "Ustaw jako używany"
+        },
+        "selectFailed": {
+          "error": "Nie udało się ustawić pojazdu jako używanego."
+        },
+        "selected": {
+          "success": "Zmieniono używany pojazd"
+        },
+        "noWindow": {
+          "label": "Brak zarejestrowanego okresu wynajmu"
+        },
+        "ownedFallback": {
+          "helper": "Po zakończeniu okresu wynajmu własny pojazd automatycznie przejmuje jego rolę."
+        }
+      },
+      "banner": {
+        "countdown": {
+          "label": "Wynajem kończy się za {{time}}"
         }
       }
     }
@@ -1306,6 +1404,9 @@
     },
     "verifyAndCreate": {
       "cta": "Zweryfikuj i załóż konto"
+    },
+    "country": {
+      "helper": "Gdzie będziesz rezerwować przeprowadzki. Ceny i VAT zależą od adresu odbioru."
     }
   },
   "wizard": {

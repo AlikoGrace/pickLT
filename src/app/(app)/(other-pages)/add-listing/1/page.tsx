@@ -70,7 +70,7 @@ const PageContent = () => {
     setParkingSituation,
   } = useMoveSearch()
 
-  const { pickupLocation, dropoffLocation, setPickupLocation, setDropoffLocation, setMoveType, pickupCoordinates, dropoffCoordinates, setPickupCoordinates, setDropoffCoordinates } = useMoveSearch()
+  const { pickupLocation, dropoffLocation, setPickupLocation, setDropoffLocation, setMoveType, pickupCoordinates, dropoffCoordinates, setPickupCoordinates, setDropoffCoordinates, setPickupCountryCode } = useMoveSearch()
   const searchParams = useSearchParams()
   const [formErrors, setFormErrors] = useState<Record<string, string>>({})
 
@@ -88,12 +88,13 @@ const PageContent = () => {
     if (editingLocationType === 'pickup') {
       setPickupLocation(location.fullAddress)
       setPickupCoordinates(location.coordinates)
+      setPickupCountryCode(location.countryCode ?? null)
     } else {
       setDropoffLocation(location.fullAddress)
       setDropoffCoordinates(location.coordinates)
     }
     setLocationPickerOpen(false)
-  }, [editingLocationType, setPickupLocation, setDropoffLocation, setPickupCoordinates, setDropoffCoordinates])
+  }, [editingLocationType, setPickupLocation, setDropoffLocation, setPickupCoordinates, setDropoffCoordinates, setPickupCountryCode])
 
   const handleRouteCalculated = useCallback((info: RouteInfo) => {
     setRouteInfo(info)

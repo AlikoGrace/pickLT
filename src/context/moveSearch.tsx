@@ -190,6 +190,8 @@ type MoveSearchState = {
   dropoffLocation: string
   pickupCoordinates: Coordinates | null
   dropoffCoordinates: Coordinates | null
+  /** ISO2 of the pickup address from the geocoder (plan wave-2026-10/4 C2); the server re-derives it. */
+  pickupCountryCode: string | null
   moveDate: string | null // ISO date YYYY-MM-DD
   moveType: MoveTypeKey | null
   isInstantMove: boolean // true for instant move, false for scheduled
@@ -269,6 +271,7 @@ type MoveSearchActions = {
   setDropoffLocation: (v: string) => void
   setPickupCoordinates: (c: Coordinates | null) => void
   setDropoffCoordinates: (c: Coordinates | null) => void
+  setPickupCountryCode: (code: string | null) => void
   setMoveDate: (d: string | null) => void
   setMoveType: (t: MoveTypeKey | null) => void
   setIsInstantMove: (b: boolean) => void
@@ -359,6 +362,7 @@ const defaultState: MoveSearchState = {
   dropoffLocation: '',
   pickupCoordinates: null,
   dropoffCoordinates: null,
+  pickupCountryCode: null,
   moveDate: null,
   moveType: null,
   isInstantMove: false,
@@ -448,6 +452,7 @@ const MoveSearchContext = createContext<MoveSearchState & MoveSearchActions>({
   setDropoffLocation: () => {},
   setPickupCoordinates: () => {},
   setDropoffCoordinates: () => {},
+  setPickupCountryCode: () => {},
   setMoveDate: () => {},
   setMoveType: () => {},
   setIsInstantMove: () => {},
@@ -534,6 +539,7 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
   const [dropoffLocation, setDropoffLocation] = useState<string>(defaultState.dropoffLocation)
   const [pickupCoordinates, setPickupCoordinates] = useState<Coordinates | null>(defaultState.pickupCoordinates)
   const [dropoffCoordinates, setDropoffCoordinates] = useState<Coordinates | null>(defaultState.dropoffCoordinates)
+  const [pickupCountryCode, setPickupCountryCode] = useState<string | null>(defaultState.pickupCountryCode)
   const [moveDate, setMoveDate] = useState<string | null>(defaultState.moveDate)
   const [moveType, setMoveType] = useState<MoveTypeKey | null>(defaultState.moveType)
   const [isInstantMove, setIsInstantMove] = useState<boolean>(defaultState.isInstantMove)
@@ -616,6 +622,7 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
     if (saved.dropoffLocation) setDropoffLocation(saved.dropoffLocation as string)
     if (saved.pickupCoordinates) setPickupCoordinates(saved.pickupCoordinates as Coordinates)
     if (saved.dropoffCoordinates) setDropoffCoordinates(saved.dropoffCoordinates as Coordinates)
+    if (typeof saved.pickupCountryCode === 'string') setPickupCountryCode(saved.pickupCountryCode)
     if (saved.moveDate) setMoveDate(saved.moveDate as string)
     if (saved.moveType) setMoveType(saved.moveType as MoveTypeKey)
     if (saved.isInstantMove != null) setIsInstantMove(saved.isInstantMove as boolean)
@@ -706,6 +713,7 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
         dropoffLocation,
         pickupCoordinates,
         dropoffCoordinates,
+        pickupCountryCode,
         moveDate,
         moveType,
         isInstantMove,
@@ -772,7 +780,7 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
       if (saveTimeout.current) clearTimeout(saveTimeout.current)
     }
   }, [
-    pickupLocation, dropoffLocation, pickupCoordinates, dropoffCoordinates,
+    pickupLocation, dropoffLocation, pickupCoordinates, dropoffCoordinates, pickupCountryCode,
     moveDate, moveType, isInstantMove,
     homeType, floorLevel, elevatorAvailable, parkingSituation,
     pickupStreetAddress, pickupApartmentUnit, pickupAccessNotes,
@@ -915,6 +923,7 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
     setDropoffLocation(defaultState.dropoffLocation)
     setPickupCoordinates(defaultState.pickupCoordinates)
     setDropoffCoordinates(defaultState.dropoffCoordinates)
+    setPickupCountryCode(defaultState.pickupCountryCode)
     setMoveDate(defaultState.moveDate)
     setMoveType(defaultState.moveType)
     setIsInstantMove(defaultState.isInstantMove)
@@ -977,6 +986,7 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
         dropoffLocation,
         pickupCoordinates,
         dropoffCoordinates,
+        pickupCountryCode,
         moveDate,
         moveType,
         isInstantMove,
@@ -1048,6 +1058,7 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
         setDropoffLocation,
         setPickupCoordinates,
         setDropoffCoordinates,
+        setPickupCountryCode,
         setMoveDate,
         setMoveType,
         setIsInstantMove,

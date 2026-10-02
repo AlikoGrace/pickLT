@@ -255,7 +255,8 @@
     "startRouteRetry": "Échec du démarrage de l’itinéraire. Veuillez réessayer.",
     "vehicleNotReady": "Confirmez ou faites vérifier votre véhicule avant de passer en ligne ou d'accepter des déménagements.",
     "withdrawFailed": "Échec du retrait du déménagement",
-    "withdrawRetry": "Échec du retrait. Veuillez réessayer."
+    "withdrawRetry": "Échec du retrait. Veuillez réessayer.",
+    "countryMismatch": "Ce déménagement a lieu en {{country}} ; votre compte est enregistré dans un autre pays."
   },
   "movers": {
     "fetchFailed": "Échec de la récupération des déménageurs",
@@ -351,6 +352,16 @@
     "saveFailed": "Échec de l’enregistrement des informations du véhicule",
     "typeInvalid": "Choisissez un type de véhicule.",
     "updateFailed": "Échec de la mise à jour des informations du véhicule",
-    "yearInvalid": "Saisissez une année à quatre chiffres."
+    "yearInvalid": "Saisissez une année à quatre chiffres.",
+    "rentalWindowRequired": "Indiquez pendant combien de temps vous avez le véhicule loué.",
+    "rentalWindowInvalid": "Indiquez une fin de location dans le futur.",
+    "rentalWindowTooLong": "Une location couvre au maximum 30 jours à la fois. Vous pourrez la prolonger.",
+    "rentalExpired": "Votre période de location est terminée. Enregistrez à nouveau une location pour continuer.",
+    "notInWindow": "Ce véhicule n’est pas disponible pour le service en ce moment.",
+    "notOwnVehicle": "Ce véhicule n’appartient pas à votre compte."
+  },
+  "country": {
+    "notLive": "PickLT n’est pas encore disponible en {{country}}.",
+    "required": "Veuillez choisir votre pays."
   }
 }

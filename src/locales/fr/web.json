@@ -21,6 +21,13 @@
     },
     "version": {
       "label": "PickLT v{{version}}"
+    },
+    "country": {
+      "title": "Votre pays",
+      "helper": "Là où vous réservez vos déménagements",
+      "updated": {
+        "success": "Pays mis à jour"
+      }
     }
   },
   "auth": {
@@ -591,7 +598,10 @@
           "value": "Véhicule : {{ownership}}"
         },
         "vehicleLater": "Le véhicule sera ajouté après l'inscription et devra être vérifié avant que vous receviez des déménagements.",
-        "platesOk": "Photos des plaques et du véhicule jointes"
+        "platesOk": "Photos des plaques et du véhicule jointes",
+        "rentalWindow": {
+          "value": "Loué jusqu'au {{time}}"
+        }
       },
       "step": {
         "experience": {
@@ -621,7 +631,13 @@
       "ownership": {
         "title": "Propriété du véhicule"
       },
-      "vehicleSubmitFailed": "Votre profil a été enregistré, mais le véhicule n'a pas pu être transmis ({{error}}). Veuillez l'ajouter depuis le tableau de bord."
+      "vehicleSubmitFailed": "Votre profil a été enregistré, mais le véhicule n'a pas pu être transmis ({{error}}). Veuillez l'ajouter depuis le tableau de bord.",
+      "vehicle": {
+        "rentalIntro": "Enregistrez le véhicule que vous louez ainsi que sa période de location. Vous pouvez aussi passer cette étape et ajouter la location plus tard depuis votre tableau de bord.",
+        "skip": {
+          "helper": "Laissez les champs vides pour ajouter la location plus tard."
+        }
+      }
     },
     "request": {
       "categoryAndType": {
@@ -813,7 +829,14 @@
         "resubmitNote": "Veuillez corriger les informations ci-dessous et les transmettre à nouveau. Motif du refus : {{reason}}",
         "keepPhoto": {
           "label": "La photo actuelle sera conservée"
-        }
+        },
+        "renew": {
+          "title": "Renouveler la location"
+        },
+        "addRental": {
+          "title": "Ajouter une location"
+        },
+        "rentalNote": "Un véhicule de location ne reçoit des déménagements que pendant la période de location que vous indiquez. Vous pouvez la prolonger à tout moment."
       },
       "action": {
         "add": {
@@ -830,6 +853,9 @@
         },
         "view": {
           "cta": "Voir le véhicule"
+        },
+        "renew": {
+          "cta": "Louer à nouveau"
         }
       },
       "state": {
@@ -868,6 +894,18 @@
         "vehicleRejected": {
           "title": "Véhicule non approuvé",
           "body": "Votre véhicule n'a pas été approuvé. Veuillez corriger les informations et les transmettre à nouveau."
+        },
+        "rentalActive": {
+          "title": "Véhicule de location en service",
+          "body": "Votre véhicule de location est vérifié et se trouve dans sa période de location. Vous recevez des déménagements jusqu'à la fin de la période."
+        },
+        "rentalExpiring": {
+          "title": "La location se termine bientôt",
+          "body": "Votre période de location se termine dans moins d'une heure. Prolongez-la pour continuer à recevoir des déménagements."
+        },
+        "rentalExpired": {
+          "title": "Période de location terminée",
+          "body": "Votre période de location est terminée et aucun véhicule n'est en service. Louez à nouveau, enregistrez une autre location ou utilisez votre propre véhicule pour recevoir des déménagements."
         }
       },
       "confirm": {
@@ -888,6 +926,66 @@
         "helper": "Les changements de véhicule sont vérifiés séparément et n'affectent pas la vérification de votre profil de chauffeur.",
         "status": {
           "label": "{{vehicle}} · {{status}}"
+        }
+      },
+      "window": {
+        "title": "Période de location",
+        "until": {
+          "label": "Loué jusqu'au {{time}}"
+        },
+        "progress": {
+          "a11y": "Part de la période de location écoulée"
+        },
+        "custom": {
+          "label": "Date et heure de fin"
+        },
+        "ended": {
+          "label": "Terminée {{time}}"
+        }
+      },
+      "renew": {
+        "title": "Renouveler la location",
+        "subtitle": "Même véhicule, nouvelle période. Indiquez-nous pour combien de temps vous le louez cette fois.",
+        "submit": {
+          "cta": "Confirmer la période de location"
+        },
+        "failed": {
+          "error": "La location n'a pas pu être renouvelée."
+        },
+        "photos": {
+          "title": "Nouvelles photos de la plaque"
+        },
+        "doneVerified": {
+          "success": "Location renouvelée. Vous recevez des déménagements jusqu'au {{time}}."
+        },
+        "doneReview": {
+          "success": "Location transmise pour examen"
+        },
+        "noRental": {
+          "body": "Aucun véhicule de location à renouveler n'est enregistré. Enregistrez plutôt une location."
+        }
+      },
+      "fleet": {
+        "title": "Vos véhicules",
+        "select": {
+          "cta": "Mettre en service"
+        },
+        "selectFailed": {
+          "error": "Le véhicule n'a pas pu être mis en service."
+        },
+        "selected": {
+          "success": "Véhicule en service modifié"
+        },
+        "noWindow": {
+          "label": "Aucune période de location enregistrée"
+        },
+        "ownedFallback": {
+          "helper": "À la fin d'une période de location, votre propre véhicule prend automatiquement le relais."
+        }
+      },
+      "banner": {
+        "countdown": {
+          "label": "Votre location se termine dans {{time}}"
         }
       }
     }
@@ -1282,6 +1380,9 @@
     },
     "verifyAndCreate": {
       "cta": "Vérifier et créer le compte"
+    },
+    "country": {
+      "helper": "Là où vous réserverez vos déménagements. Les prix et la TVA dépendent de l'adresse de prise en charge."
     }
   },
   "wizard": {

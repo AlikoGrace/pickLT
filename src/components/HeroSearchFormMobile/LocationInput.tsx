@@ -1,6 +1,7 @@
 'use client'
 
 import { reverseGeocodeBest } from '@/lib/reverse-geocode'
+import { countryCodeFromFeature } from '@/lib/moveCountry'
 import { composeAddressLabel } from '@/lib/address-label'
 import { Search01Icon } from '@/components/Icons'
 import { MapPinIcon } from '@heroicons/react/24/outline'
@@ -20,6 +21,8 @@ export type LocationSuggestion = {
     latitude: number
     longitude: number
   }
+  /** ISO2 from the geocoder's country context (plan wave-2026-10/4 C2); null when absent. */
+  countryCode?: string | null
 }
 
 // ─── Mapbox helpers ──────────────────────────────────────────
@@ -64,6 +67,7 @@ async function searchLocations(
           latitude: props.coordinates?.latitude ?? feature.geometry?.coordinates?.[1],
           longitude: props.coordinates?.longitude ?? feature.geometry?.coordinates?.[0],
         },
+        countryCode: countryCodeFromFeature(feature),
       }
     })
   } catch (error) {
@@ -83,6 +87,7 @@ async function reverseGeocode(lat: number, lng: number): Promise<LocationSuggest
     name: hit.name,
     fullAddress: hit.fullAddress,
     coordinates: { latitude: lat, longitude: lng },
+    countryCode: hit.countryCode ?? null,
   }
 }
 

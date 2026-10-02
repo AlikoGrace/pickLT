@@ -3,6 +3,7 @@
 import { compressImage } from '@/utils/compressImage'
 import { t } from '@/lib/i18n-runtime'
 import type { VehicleDoc, VehicleEventDoc } from '@/lib/types'
+import type { RentalWindowInput } from '@/lib/vehicle-service'
 
 /**
  * Browser-side calls behind the vehicle screens. Errors carry the server's
@@ -34,11 +35,18 @@ export interface ProfileVehicleFields {
   vehicleConfirmedAt: string | null
   vehicleConfirmedServiceDate: string | null
   vehicleReconfirmRequired: boolean
+  // Rental window of the vehicle in service + the owned fallback (plan wave-2026-10/1).
+  vehicleRentalStartAt: string | null
+  vehicleRentalEndAt: string | null
+  vehicleRentalHours: number | null
+  ownedVehicleId: string | null
 }
 
 export interface VehicleOverview {
   profile: ProfileVehicleFields
   vehicle: VehicleDoc | null
+  /** Owned + rental rows (R3): every non-retired vehicle plus the newest rental. */
+  fleet: VehicleDoc[]
   history: VehicleEventDoc[]
 }
 
@@ -74,6 +82,8 @@ export interface SubmitVehiclePayload {
   fullVehiclePhoto: string
   source: 'registration' | 'settings' | 'login' | 'post_move'
   vehicleId?: string | null
+  /** Required for a rented vehicle (plan wave-2026-10/1 R1). */
+  rental?: RentalWindowInput | null
 }
 
 export async function submitVehicle(payload: SubmitVehiclePayload): Promise<{ vehicle: VehicleDoc; profile: ProfileVehicleFields }> {
@@ -93,4 +103,37 @@ export async function confirmVehicleSame(source: 'login' | 'post_move', moveId?:
     body: JSON.stringify({ source, moveId: moveId ?? null }),
   })
   if (!res.ok) throw await readError(res, t('web:mover.vehicle.confirmFailed.error'))
+}
+
+export interface RenewRentalPayload {
+  vehicleId: string
+  rental: RentalWindowInput
+  /** Fresh plate photos, when the renewal needs review again (R5). */
+  frontPlatePhoto?: string | null
+  rearPlatePhoto?: string | null
+  fullVehiclePhoto?: string | null
+}
+
+/** "Rent again" / "Extend" the same rental (R5). `autoVerified` false = back to review. */
+export async function renewRental(
+  payload: RenewRentalPayload,
+): Promise<{ autoVerified: boolean; vehicle: VehicleDoc; profile: ProfileVehicleFields }> {
+  const res = await fetch('/api/mover/vehicle/renew', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  })
+  if (!res.ok) throw await readError(res, t('web:mover.vehicle.renew.failed.error'))
+  return res.json()
+}
+
+/** Put one of the mover's verified vehicles in service (R6). */
+export async function selectVehicle(vehicleId: string): Promise<{ vehicle: VehicleDoc; profile: ProfileVehicleFields }> {
+  const res = await fetch('/api/mover/vehicle/select', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ vehicleId }),
+  })
+  if (!res.ok) throw await readError(res, t('web:mover.vehicle.fleet.selectFailed.error'))
+  return res.json()
 }

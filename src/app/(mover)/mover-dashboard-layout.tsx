@@ -10,7 +10,7 @@ import VehicleConfirmModal from '@/components/mover/VehicleConfirmModal'
 import VehicleStatusBanner from '@/components/mover/VehicleStatusBanner'
 import type { VehicleDoc } from '@/lib/types'
 import { fetchVehicleOverview } from '@/lib/vehicle-client'
-import { vehicleServiceReady, vehicleServiceState } from '@/lib/vehicle-service'
+import { rentalRemainingMs, vehicleServiceReady, vehicleServiceState } from '@/lib/vehicle-service'
 import {
   Bars3Icon,
   CalendarDaysIcon,
@@ -215,18 +215,23 @@ const MoverDashboardLayout = ({ children }: Props) => {
   // The current `vehicles` row is only needed to tell a first rental review
   // from a CHANGE review, and for the rejection reason / plate in the prompts.
   const [currentVehicle, setCurrentVehicle] = useState<VehicleDoc | null>(null)
+  // The newest rental row — what the expired sheet's "Rent again" renews (R5).
+  const [newestRentalId, setNewestRentalId] = useState<string | null>(null)
   const profileId = moverDetails?.profileId
   const currentVehicleId = moverDetails?.currentVehicleId ?? null
   const vehicleStatus = moverDetails?.vehicleStatus ?? 'none'
   useEffect(() => {
-    if (!profileId || !currentVehicleId) {
+    if (!profileId) {
       setCurrentVehicle(null)
+      setNewestRentalId(null)
       return
     }
     let cancelled = false
     fetchVehicleOverview()
       .then((d) => {
-        if (!cancelled) setCurrentVehicle(d.vehicle)
+        if (cancelled) return
+        setCurrentVehicle(d.vehicle)
+        setNewestRentalId(d.fleet.find((v) => v.ownership === 'rented')?.$id ?? null)
       })
       .catch(() => {
         /* the banner degrades to the profile-only state */
@@ -237,6 +242,7 @@ const MoverDashboardLayout = ({ children }: Props) => {
   }, [profileId, currentVehicleId, vehicleStatus])
   const vehicleState = vehicleServiceState(moverDetails, currentVehicle, nowMs)
   const isServiceReady = vehicleServiceReady(moverDetails, nowMs)
+  const vehicleRemainingMs = rentalRemainingMs(moverDetails, nowMs)
 
   // Hide the mobile header and its offset on full-screen map pages
   const isMapPage = MAP_PAGES.some((p) => pathname === p || pathname.startsWith(p + '/'))
@@ -309,10 +315,14 @@ const MoverDashboardLayout = ({ children }: Props) => {
   // state, so it survives a reload; hidden on the vehicle pages (where the
   // driver may be mid-CHANGE) and on the active-move screen (a move in
   // progress must be finished first — the prompt shows when it ends).
+  // A windowed rental of ≤ 24 h never sees the daily prompt (R7):
+  // `vehicleServiceState` only returns the confirmation state for legacy and
+  // multi-day rentals (and after a move, D12). An ended window shows the
+  // expired sheet instead (R4).
   const showConfirmModal =
     hasCompletedProfile &&
     isVerified &&
-    vehicleState === 'RENTAL_DAILY_CONFIRMATION_REQUIRED' &&
+    (vehicleState === 'RENTAL_DAILY_CONFIRMATION_REQUIRED' || vehicleState === 'RENTAL_EXPIRED') &&
     !isOnCompleteProfilePage &&
     !isOnVehiclePages &&
     !pathname.startsWith('/active-move')
@@ -512,7 +522,11 @@ const MoverDashboardLayout = ({ children }: Props) => {
         )}
         {/* Vehicle state banner — every non-ready state names the restoring action */}
         {hasCompletedProfile && !isOnCompleteProfilePage && !isOnVehiclePages && !showConfirmModal && (
-          <VehicleStatusBanner state={vehicleState} rejectionReason={currentVehicle?.rejectionReason ?? null} />
+          <VehicleStatusBanner
+            state={vehicleState}
+            rejectionReason={currentVehicle?.rejectionReason ?? null}
+            rentalRemainingMs={vehicleRemainingMs}
+          />
         )}
         <div className="min-h-screen">{children}</div>
       </main>
@@ -520,6 +534,9 @@ const MoverDashboardLayout = ({ children }: Props) => {
       <VehicleConfirmModal
         open={showConfirmModal}
         postMove={moverDetails?.vehicleReconfirmRequired === true}
+        expired={vehicleState === 'RENTAL_EXPIRED'}
+        ownedVehicleId={moverDetails?.ownedVehicleId ?? null}
+        rentalVehicleId={newestRentalId ?? currentVehicleId}
         vehicleLabel={currentVehicle ? [currentVehicle.brand, currentVehicle.model].filter(Boolean).join(' ') : null}
         plate={currentVehicle?.registrationNumber ?? null}
         onConfirmed={() => refreshProfile()}

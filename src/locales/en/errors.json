@@ -255,7 +255,8 @@
     "startRouteRetry": "Failed to start route. Please try again.",
     "vehicleNotReady": "Confirm or verify your vehicle before going online or accepting moves.",
     "withdrawFailed": "Failed to withdraw from move",
-    "withdrawRetry": "Failed to withdraw. Please try again."
+    "withdrawRetry": "Failed to withdraw. Please try again.",
+    "countryMismatch": "This move is in {{country}}; your account is registered in another country."
   },
   "movers": {
     "fetchFailed": "Failed to fetch movers",
@@ -351,6 +352,16 @@
     "saveFailed": "Failed to save vehicle info",
     "typeInvalid": "Choose a vehicle type.",
     "updateFailed": "Failed to update vehicle info",
-    "yearInvalid": "Enter a four-digit year."
+    "yearInvalid": "Enter a four-digit year.",
+    "rentalWindowRequired": "Tell us how long you have the rented vehicle.",
+    "rentalWindowInvalid": "Enter a rental end that is in the future.",
+    "rentalWindowTooLong": "A rental can cover at most 30 days at a time. You can extend it later.",
+    "rentalExpired": "Your rental period has ended. Register a rental again to continue.",
+    "notInWindow": "This vehicle is not available for service right now.",
+    "notOwnVehicle": "This vehicle does not belong to your account."
+  },
+  "country": {
+    "notLive": "PickLT is not available in {{country}} yet.",
+    "required": "Please choose your country."
   }
 }

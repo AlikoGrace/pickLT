@@ -1,6 +1,7 @@
 'use client'
 
 import { reverseGeocodeBest } from '@/lib/reverse-geocode'
+import { countryCodeFromFeature } from '@/lib/moveCountry'
 import { composeAddressLabel } from '@/lib/address-label'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import mapboxgl from 'mapbox-gl'
@@ -22,6 +23,8 @@ export interface PickedLocation {
     latitude: number
     longitude: number
   }
+  /** ISO2 from the geocoder's country context (plan wave-2026-10/4 C2); null when absent. */
+  countryCode?: string | null
 }
 
 interface MapLocationPickerProps {
@@ -67,6 +70,7 @@ async function forwardGeocode(
           latitude: props.coordinates?.latitude ?? f.geometry?.coordinates?.[1],
           longitude: props.coordinates?.longitude ?? f.geometry?.coordinates?.[0],
         },
+        countryCode: countryCodeFromFeature(f),
       }
     })
   } catch {
@@ -84,6 +88,7 @@ async function reverseGeocode(lat: number, lng: number): Promise<PickedLocation 
     name: hit.name,
     fullAddress: hit.fullAddress,
     coordinates: { latitude: lat, longitude: lng },
+    countryCode: hit.countryCode ?? null,
   }
 }
 

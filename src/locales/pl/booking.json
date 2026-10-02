@@ -1446,6 +1446,71 @@
     },
     "yearShort": {
       "label": "Rok"
+    },
+    "rental": {
+      "window": {
+        "label": "Okres wynajmu"
+      },
+      "duration": {
+        "label": "Na jak długo masz pojazd?"
+      },
+      "preset": {
+        "hours": "{{count}} godz.",
+        "oneDay": "1 dzień",
+        "days": "{{count}} dni",
+        "week": "1 tydzień",
+        "custom": "Wybierz datę i godzinę zakończenia"
+      },
+      "startNow": {
+        "label": "Zaczyna się teraz"
+      },
+      "endsAt": {
+        "label": "Wynajęty do"
+      },
+      "remaining": {
+        "label": "Pozostało {{time}}"
+      },
+      "provider": {
+        "label": "Wypożyczalnia (opcjonalnie)"
+      },
+      "extend": {
+        "cta": "Przedłuż wynajem"
+      },
+      "rentAgain": {
+        "cta": "Wynajmij ponownie"
+      },
+      "rentAnother": {
+        "cta": "Zarejestruj inny wynajęty pojazd"
+      },
+      "useOwn": {
+        "cta": "Użyj własnego pojazdu"
+      },
+      "addRental": {
+        "cta": "Dodaj wynajem na określony czas"
+      },
+      "inService": {
+        "label": "Pojazd w użyciu"
+      },
+      "expired": {
+        "title": "Twój okres wynajmu dobiegł końca",
+        "body": "Zarejestruj wynajem ponownie, aby otrzymywać przeprowadzki."
+      },
+      "expiring": {
+        "title": "Wynajem wkrótce się kończy",
+        "body": "Twój wynajem kończy się o {{time}}. Przedłuż go, aby nadal otrzymywać przeprowadzki."
+      },
+      "renewAutoVerified": {
+        "helper": "Ten sam pojazd co wcześniej — nowe zdjęcia nie są potrzebne."
+      },
+      "renewNeedsReview": {
+        "helper": "Minęło trochę czasu — dodaj nowe zdjęcia tablic do weryfikacji."
+      },
+      "maxHint": {
+        "helper": "Do 30 dni na jedną rejestrację. Dłuższy wynajem można przedłużyć."
+      },
+      "broadcastsUntil": {
+        "label": "Otrzymujesz przeprowadzki do {{time}}"
+      }
     }
   }
 }

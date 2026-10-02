@@ -137,6 +137,14 @@
     "verified": {
       "body": "Votre véhicule {{plate}} a été vérifié. Vous pouvez à nouveau recevoir des déménagements.",
       "title": "Véhicule vérifié"
+    },
+    "rentalExpiring": {
+      "title": "La location se termine bientôt",
+      "body": "Votre véhicule loué {{plate}} se termine à {{time}}. Prolongez pour continuer à recevoir des déménagements."
+    },
+    "rentalExpired": {
+      "title": "Période de location terminée",
+      "body": "Votre période de location pour {{plate}} est terminée. Louez à nouveau pour recevoir des déménagements."
     }
   },
   "verification": {

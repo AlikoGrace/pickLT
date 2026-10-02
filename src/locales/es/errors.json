@@ -255,7 +255,8 @@
     "startRouteRetry": "No se ha podido iniciar la ruta. Inténtalo de nuevo.",
     "vehicleNotReady": "Confirme o verifique su vehículo antes de conectarse o aceptar mudanzas.",
     "withdrawFailed": "No se ha podido retirar de la mudanza",
-    "withdrawRetry": "No se ha podido retirar. Inténtalo de nuevo."
+    "withdrawRetry": "No se ha podido retirar. Inténtalo de nuevo.",
+    "countryMismatch": "Esta mudanza es en {{country}}; tu cuenta está registrada en otro país."
   },
   "movers": {
     "fetchFailed": "No se han podido obtener los transportistas",
@@ -351,6 +352,16 @@
     "saveFailed": "No se ha podido guardar la información del vehículo",
     "typeInvalid": "Elija un tipo de vehículo.",
     "updateFailed": "No se ha podido actualizar la información del vehículo",
-    "yearInvalid": "Introduzca un año de cuatro dígitos."
+    "yearInvalid": "Introduzca un año de cuatro dígitos.",
+    "rentalWindowRequired": "Indica durante cuánto tiempo tienes el vehículo alquilado.",
+    "rentalWindowInvalid": "Indica un fin de alquiler en el futuro.",
+    "rentalWindowTooLong": "Un alquiler puede cubrir como máximo 30 días seguidos. Podrás ampliarlo después.",
+    "rentalExpired": "Tu periodo de alquiler ha terminado. Registra de nuevo un alquiler para continuar.",
+    "notInWindow": "Este vehículo no está disponible para el servicio ahora mismo.",
+    "notOwnVehicle": "Este vehículo no pertenece a tu cuenta."
+  },
+  "country": {
+    "notLive": "PickLT aún no está disponible en {{country}}.",
+    "required": "Elige tu país."
   }
 }

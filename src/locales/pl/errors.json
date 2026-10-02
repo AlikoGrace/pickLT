@@ -259,7 +259,8 @@
     "startRouteRetry": "Nie udało się rozpocząć trasy. Spróbuj ponownie.",
     "vehicleNotReady": "Proszę potwierdzić lub zweryfikować pojazd przed przejściem w tryb online lub przyjęciem przeprowadzki.",
     "withdrawFailed": "Nie udało się wycofać z przeprowadzki",
-    "withdrawRetry": "Nie udało się wycofać. Spróbuj ponownie."
+    "withdrawRetry": "Nie udało się wycofać. Spróbuj ponownie.",
+    "countryMismatch": "Ta przeprowadzka odbywa się w kraju: {{country}}; Twoje konto jest zarejestrowane w innym kraju."
   },
   "movers": {
     "fetchFailed": "Nie udało się pobrać przewoźników",
@@ -355,6 +356,16 @@
     "saveFailed": "Nie udało się zapisać danych pojazdu",
     "typeInvalid": "Proszę wybrać typ pojazdu.",
     "updateFailed": "Nie udało się zaktualizować danych pojazdu",
-    "yearInvalid": "Proszę wpisać czterocyfrowy rok."
+    "yearInvalid": "Proszę wpisać czterocyfrowy rok.",
+    "rentalWindowRequired": "Podaj, na jak długo masz wynajęty pojazd.",
+    "rentalWindowInvalid": "Podaj koniec wynajmu w przyszłości.",
+    "rentalWindowTooLong": "Wynajem może obejmować maksymalnie 30 dni naraz. Możesz go później przedłużyć.",
+    "rentalExpired": "Twój okres wynajmu dobiegł końca. Zarejestruj wynajem ponownie, aby kontynuować.",
+    "notInWindow": "Ten pojazd nie jest teraz dostępny do pracy.",
+    "notOwnVehicle": "Ten pojazd nie należy do Twojego konta."
+  },
+  "country": {
+    "notLive": "PickLT nie jest jeszcze dostępny w kraju: {{country}}.",
+    "required": "Wybierz swój kraj."
   }
 }

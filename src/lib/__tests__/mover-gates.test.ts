@@ -4,6 +4,7 @@ import {
   LOCATION_FRESHNESS_MS,
   directAssignmentBlock,
   mayMarkOnline,
+  moverMatchesCountry,
   resolveOwnershipWrite,
   startGate,
 } from '../mover-gates'
@@ -144,5 +145,15 @@ describe('rented → owned needs admin approval (master D16)', () => {
     expect(resolveOwnershipWrite('owned', false, 'owned')).toEqual({ ok: true, write: 'owned' })
     // Create has no stored value to protect.
     expect(resolveOwnershipWrite('owned', true, undefined)).toEqual({ ok: true, write: 'owned' })
+  })
+})
+
+describe('moverMatchesCountry (nearby, plan wave-2026-10/4 C6)', () => {
+  it('matches equal codes in any case and lets legacy nulls through', () => {
+    expect(moverMatchesCountry(mover({ countryCode: 'DE' }), 'de')).toBe(true)
+    expect(moverMatchesCountry(mover({ countryCode: 'DE' }), 'IT')).toBe(false)
+    expect(moverMatchesCountry(mover({ countryCode: null }), 'IT')).toBe(true)
+    expect(moverMatchesCountry(mover({ countryCode: 'DE' }), null)).toBe(true)
+    expect(moverMatchesCountry(mover({ countryCode: 'Germany' }), 'DE')).toBe(true)
   })
 })

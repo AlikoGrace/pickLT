@@ -137,6 +137,14 @@
     "verified": {
       "body": "Ihr Fahrzeug {{plate}} wurde verifiziert. Sie können wieder Umzüge erhalten.",
       "title": "Fahrzeug verifiziert"
+    },
+    "rentalExpiring": {
+      "title": "Miete endet bald",
+      "body": "Ihr Mietfahrzeug {{plate}} läuft um {{time}} aus. Verlängern Sie, um weiter Aufträge zu erhalten."
+    },
+    "rentalExpired": {
+      "title": "Mietzeitraum beendet",
+      "body": "Ihr Mietzeitraum für {{plate}} ist abgelaufen. Mieten Sie erneut, um Aufträge zu erhalten."
     }
   },
   "verification": {

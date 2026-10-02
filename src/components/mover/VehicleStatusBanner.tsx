@@ -10,6 +10,7 @@ import clsx from 'clsx'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 
+import { formatRemaining } from '@/lib/rental-time'
 import { STATE_KEY, vehicleActionFor } from '@/lib/vehicle-labels'
 import { RESTRICTED_VEHICLE_STATES, type VehicleServiceState } from '@/lib/vehicle-service'
 
@@ -17,8 +18,13 @@ interface Props {
   state: VehicleServiceState
   /** From the current `vehicles` row, shown in the rejected state. */
   rejectionReason?: string | null
+  /** Milliseconds left in the rental window in service (plan wave-2026-10/1 R9); null without a window. */
+  rentalRemainingMs?: number | null
   className?: string
 }
+
+/** A ready rental shows its countdown from this much time before the end (§7). */
+export const COUNTDOWN_FROM_MS = 24 * 60 * 60 * 1000
 
 /** Where each restoring action lives. `confirm` is handled by the modal, so it links to the status page. */
 export function vehicleActionHref(state: VehicleServiceState): string {
@@ -27,6 +33,8 @@ export function vehicleActionHref(state: VehicleServiceState): string {
       return '/vehicle/setup?mode=add'
     case 'resubmit':
       return '/vehicle/setup?mode=resubmit'
+    case 'renew':
+      return '/vehicle/setup?mode=renew'
     default:
       return '/vehicle'
   }
@@ -37,16 +45,22 @@ export function vehicleActionHref(state: VehicleServiceState): string {
  * dashboard always shows what action restores service). Sits under the KYC
  * banner in the mover layout; renders nothing when the driver is ready.
  */
-export default function VehicleStatusBanner({ state, rejectionReason, className }: Props) {
+export default function VehicleStatusBanner({ state, rejectionReason, rentalRemainingMs, className }: Props) {
   const { t } = useTranslation()
-  if (!RESTRICTED_VEHICLE_STATES.has(state)) return null
+  // A ready rental inside its last day: a countdown with "Extend" (R9), not a restriction.
+  const countdown =
+    (state === 'RENTAL_ACTIVE' || state === 'RENTAL_EXPIRING') &&
+    rentalRemainingMs != null &&
+    rentalRemainingMs > 0 &&
+    rentalRemainingMs <= COUNTDOWN_FROM_MS
+  if (!RESTRICTED_VEHICLE_STATES.has(state) && !countdown) return null
 
   const key = STATE_KEY[state]
-  const action = vehicleActionFor(state)
+  const action = countdown ? 'extend' : vehicleActionFor(state)
   const tone =
     state === 'VEHICLE_REJECTED'
       ? 'red'
-      : state === 'RENTAL_DAILY_CONFIRMATION_REQUIRED'
+      : state === 'RENTAL_DAILY_CONFIRMATION_REQUIRED' || countdown
         ? 'blue'
         : action === 'add'
           ? 'orange'
@@ -57,16 +71,23 @@ export default function VehicleStatusBanner({ state, rejectionReason, className 
   // i18n-keys: web:mover.vehicle.state.ownPendingVehicle.title, web:mover.vehicle.state.ownVehicleReview.title,
   // web:mover.vehicle.state.rentalPendingVehicle.title, web:mover.vehicle.state.rentalVehicleReview.title,
   // web:mover.vehicle.state.rentalChangePending.title, web:mover.vehicle.state.rentalDailyConfirmationRequired.title,
+  // web:mover.vehicle.state.rentalExpiring.title, web:mover.vehicle.state.rentalExpired.title,
   // web:mover.vehicle.state.vehicleRejected.title
-  const title = t(`web:mover.vehicle.state.${key}.title`)
+  const title = countdown ? t('booking:vehicle.rental.expiring.title') : t(`web:mover.vehicle.state.${key}.title`)
   // i18n-keys: web:mover.vehicle.state.ownPendingVehicle.body, web:mover.vehicle.state.ownVehicleReview.body,
   // web:mover.vehicle.state.rentalPendingVehicle.body, web:mover.vehicle.state.rentalVehicleReview.body,
   // web:mover.vehicle.state.rentalChangePending.body, web:mover.vehicle.state.rentalDailyConfirmationRequired.body,
+  // web:mover.vehicle.state.rentalExpiring.body, web:mover.vehicle.state.rentalExpired.body,
   // web:mover.vehicle.state.vehicleRejected.body
-  const body = t(`web:mover.vehicle.state.${key}.body`)
+  const body = countdown
+    ? t('web:mover.vehicle.banner.countdown.label', { time: formatRemaining(rentalRemainingMs) })
+    : t(`web:mover.vehicle.state.${key}.body`)
   // i18n-keys: web:mover.vehicle.action.add.cta, web:mover.vehicle.action.resubmit.cta,
-  // web:mover.vehicle.action.confirmToday.cta, web:mover.vehicle.action.view.cta
-  const cta = t(`web:mover.vehicle.action.${action === 'confirm' ? 'confirmToday' : action ?? 'view'}.cta`)
+  // web:mover.vehicle.action.confirmToday.cta, web:mover.vehicle.action.renew.cta, web:mover.vehicle.action.view.cta
+  const cta =
+    action === 'extend'
+      ? t('booking:vehicle.rental.extend.cta')
+      : t(`web:mover.vehicle.action.${action === 'confirm' ? 'confirmToday' : action ?? 'view'}.cta`)
 
   return (
     <div
@@ -122,7 +143,7 @@ export default function VehicleStatusBanner({ state, rejectionReason, className 
           </p>
         </div>
         <Link
-          href={vehicleActionHref(state)}
+          href={countdown ? '/vehicle/setup?mode=renew' : vehicleActionHref(state)}
           className="flex-shrink-0 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-neutral-800 shadow-sm ring-1 ring-neutral-200 transition hover:bg-neutral-50 dark:bg-neutral-800 dark:text-neutral-100 dark:ring-neutral-700 dark:hover:bg-neutral-700"
         >
           {cta}

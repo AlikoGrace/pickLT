@@ -137,6 +137,14 @@
     "verified": {
       "body": "{{plate}} plakalı aracınız doğrulandı. Yeniden taşınma alabilirsiniz.",
       "title": "Araç doğrulandı"
+    },
+    "rentalExpiring": {
+      "title": "Kiralama yakında bitiyor",
+      "body": "Kiralık aracınız {{plate}} {{time}} saatinde bitiyor. Taşıma almaya devam etmek için uzatın."
+    },
+    "rentalExpired": {
+      "title": "Kiralama süresi doldu",
+      "body": "{{plate}} için kiralama süreniz doldu. Taşıma almak için yeniden kiralayın."
     }
   },
   "verification": {

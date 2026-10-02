@@ -1413,6 +1413,71 @@
     },
     "yearShort": {
       "label": "Anno"
+    },
+    "rental": {
+      "window": {
+        "label": "Periodo di noleggio"
+      },
+      "duration": {
+        "label": "Per quanto tempo hai il veicolo?"
+      },
+      "preset": {
+        "hours": "{{count}} h",
+        "oneDay": "1 giorno",
+        "days": "{{count}} giorni",
+        "week": "1 settimana",
+        "custom": "Scegli data e ora di fine"
+      },
+      "startNow": {
+        "label": "Inizia adesso"
+      },
+      "endsAt": {
+        "label": "Noleggiato fino a"
+      },
+      "remaining": {
+        "label": "{{time}} rimanenti"
+      },
+      "provider": {
+        "label": "Società di noleggio (facoltativo)"
+      },
+      "extend": {
+        "cta": "Prolunga il noleggio"
+      },
+      "rentAgain": {
+        "cta": "Noleggia di nuovo"
+      },
+      "rentAnother": {
+        "cta": "Registra un altro veicolo a noleggio"
+      },
+      "useOwn": {
+        "cta": "Usa il mio veicolo"
+      },
+      "addRental": {
+        "cta": "Aggiungi un noleggio per un periodo"
+      },
+      "inService": {
+        "label": "Veicolo in servizio"
+      },
+      "expired": {
+        "title": "Il tuo periodo di noleggio è terminato",
+        "body": "Registra di nuovo un noleggio per ricevere traslochi."
+      },
+      "expiring": {
+        "title": "Il noleggio termina a breve",
+        "body": "Il tuo noleggio termina alle {{time}}. Prolungalo per continuare a ricevere traslochi."
+      },
+      "renewAutoVerified": {
+        "helper": "Stesso veicolo di prima: non servono nuove foto."
+      },
+      "renewNeedsReview": {
+        "helper": "È passato un po’ di tempo: aggiungi nuove foto delle targhe per la verifica."
+      },
+      "maxHint": {
+        "helper": "Fino a 30 giorni per registrazione. I noleggi più lunghi possono essere prolungati."
+      },
+      "broadcastsUntil": {
+        "label": "Ricevi traslochi fino alle {{time}}"
+      }
     }
   }
 }

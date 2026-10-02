@@ -1413,6 +1413,71 @@
     },
     "yearShort": {
       "label": "Año"
+    },
+    "rental": {
+      "window": {
+        "label": "Periodo de alquiler"
+      },
+      "duration": {
+        "label": "¿Durante cuánto tiempo tienes el vehículo?"
+      },
+      "preset": {
+        "hours": "{{count}} h",
+        "oneDay": "1 día",
+        "days": "{{count}} días",
+        "week": "1 semana",
+        "custom": "Elegir fecha y hora de fin"
+      },
+      "startNow": {
+        "label": "Empieza ahora"
+      },
+      "endsAt": {
+        "label": "Alquilado hasta"
+      },
+      "remaining": {
+        "label": "Quedan {{time}}"
+      },
+      "provider": {
+        "label": "Empresa de alquiler (opcional)"
+      },
+      "extend": {
+        "cta": "Ampliar alquiler"
+      },
+      "rentAgain": {
+        "cta": "Alquilar de nuevo"
+      },
+      "rentAnother": {
+        "cta": "Registrar otro vehículo de alquiler"
+      },
+      "useOwn": {
+        "cta": "Usar mi propio vehículo"
+      },
+      "addRental": {
+        "cta": "Añadir un alquiler por un periodo"
+      },
+      "inService": {
+        "label": "Vehículo en servicio"
+      },
+      "expired": {
+        "title": "Tu periodo de alquiler ha terminado",
+        "body": "Registra de nuevo un alquiler para recibir mudanzas."
+      },
+      "expiring": {
+        "title": "El alquiler termina pronto",
+        "body": "Tu alquiler termina a las {{time}}. Amplíalo para seguir recibiendo mudanzas."
+      },
+      "renewAutoVerified": {
+        "helper": "El mismo vehículo que antes: no hacen falta fotos nuevas."
+      },
+      "renewNeedsReview": {
+        "helper": "Ha pasado un tiempo: añade fotos nuevas de las matrículas para su revisión."
+      },
+      "maxHint": {
+        "helper": "Hasta 30 días por registro. Los alquileres más largos se pueden ampliar."
+      },
+      "broadcastsUntil": {
+        "label": "Recibes mudanzas hasta las {{time}}"
+      }
     }
   }
 }

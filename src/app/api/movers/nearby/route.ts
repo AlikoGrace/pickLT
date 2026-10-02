@@ -4,7 +4,8 @@ import { createAdminClient, withRetry } from '@/lib/appwrite-server'
 import { APPWRITE, PLATFORM_TZ } from '@/lib/constants'
 import { Query } from 'node-appwrite'
 import { getSessionUserId } from '@/lib/auth-session'
-import { isLocationFresh } from '@/lib/mover-gates'
+import { isLocationFresh, moverMatchesCountry } from '@/lib/mover-gates'
+import { countryToIso2 } from '@/lib/countryCode'
 import { vehicleServiceReady } from '@/lib/vehicle-service'
 
 /** Appwrite rows are schemaless at the SDK boundary. */
@@ -48,6 +49,7 @@ function publicMover(mover: AnyDoc, distanceKm: number) {
     languages: mover.languages,
     primaryCity: mover.primaryCity,
     primaryCountry: mover.primaryCountry,
+    countryCode: mover.countryCode ?? null,
     crewSize: mover.crewSize,
     currentLatitude: coarsen(mover.currentLatitude),
     currentLongitude: coarsen(mover.currentLongitude),
@@ -58,7 +60,10 @@ function publicMover(mover: AnyDoc, distanceKm: number) {
 /**
  * GET /api/movers/nearby
  * Find verified, online movers near a given coordinate
- * Query params: ?lat=52.52&lng=13.405&radiusKm=15
+ * Query params: ?lat=52.52&lng=13.405&radiusKm=15&country=DE
+ * `country` (ISO2, plan wave-2026-10/4 C6) is the PICKUP country; movers in
+ * another country are left out, movers/moves without a country keep the
+ * radius-only behaviour.
  */
 export async function GET(req: NextRequest) {
   const { t } = await getTranslations()
@@ -80,6 +85,7 @@ export async function GET(req: NextRequest) {
     if (!lat || !lng) {
       return NextResponse.json({ error: 'lat and lng are required' }, { status: 400 })
     }
+    const moveCountry = countryToIso2(searchParams.get('country'))
 
     const { databases } = createAdminClient()
 
@@ -106,6 +112,8 @@ export async function GET(req: NextRequest) {
       // vehicle, and for rental drivers today's SAME confirmation. Every mover
       // that reaches the client therefore carries a verified vehicle.
       .filter((mover) => isLocationFresh(mover, nowMs) && vehicleServiceReady(mover as AnyDoc, nowMs, PLATFORM_TZ))
+      // Country segregation (C6): the mover's market must be the pickup's.
+      .filter((mover) => moverMatchesCountry(mover, moveCountry))
       .filter((mover) => {
         if (!mover.currentLatitude || !mover.currentLongitude) return false
         const dist = haversineKm(lat, lng, mover.currentLatitude, mover.currentLongitude)

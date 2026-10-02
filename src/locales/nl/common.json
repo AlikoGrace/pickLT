@@ -606,6 +606,21 @@
     },
     "verified": {
       "label": "Voertuig geverifieerd"
+    },
+    "renewed": {
+      "label": "Huur verlengd"
+    },
+    "expired": {
+      "label": "Huurperiode afgelopen"
+    },
+    "fallback": {
+      "label": "Teruggeschakeld naar eigen voertuig"
+    },
+    "selected": {
+      "label": "Voertuig in dienst gewijzigd"
+    },
+    "expiringSoon": {
+      "label": "Huur loopt bijna af"
     }
   },
   "vehicleOwnership": {
@@ -650,6 +665,19 @@
     },
     "map": {
       "label": "Kaart"
+    }
+  },
+  "country": {
+    "label": "Land",
+    "pricesFor": {
+      "label": "Prijzen voor {{country}} · btw {{rate}}"
+    },
+    "notAvailable": {
+      "title": "Nog niet beschikbaar in jouw land",
+      "body": "PickLT is nog niet open in {{country}}. We laten het weten zodra dat zo is."
+    },
+    "select": {
+      "label": "Selecteer je land"
     }
   }
 }

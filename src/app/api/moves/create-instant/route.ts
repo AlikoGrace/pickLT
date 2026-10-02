@@ -9,7 +9,9 @@ import { directAssignmentBlock } from '@/lib/mover-gates'
 import { relId } from '@/lib/notify'
 import { PricingReconcileError, type QuoteBreakdown } from '@/lib/pricingEngine'
 import { quoteColumns, quoteMoveFields } from '@/lib/pricing-server'
-import { ID, Query } from 'node-appwrite'
+import { resolveMoveCountry } from '@/lib/moveCountry'
+import { writeDroppingUnknownAttributes } from '@/lib/appwrite-write'
+import { ID } from 'node-appwrite'
 
 /**
  * POST /api/moves/create-instant
@@ -28,6 +30,11 @@ import { ID, Query } from 'node-appwrite'
  * with the chosen mover's vehicle class, and the row carries `estimatedPrice`,
  * `priceBreakdown`, `pricingVersion`, `pricedAt`, `currency`, plus the charged
  * `vehicleType` / `crewSize`. The breakdown is returned for the tracking page.
+ *
+ * The move's country is the PICKUP country (plan wave-2026-10/4 C2): reverse
+ * geocoded server-side, with the client's `pickupCountryCode` hint and the
+ * client's own country as fallbacks. It selects the pricing config (VAT,
+ * tariff) and is stored on the row and inside the breakdown.
  */
 export async function POST(req: NextRequest) {
   const { t } = await getTranslations()
@@ -55,6 +62,7 @@ export async function POST(req: NextRequest) {
       galleryPhotoIds,
       routeDistanceMeters,
       routeDurationSeconds,
+      pickupCountryCode,
     } = body
 
     if (!moverProfileId) {
@@ -92,6 +100,21 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    // ── Country (plan wave-2026-10/4 C2) ─────────────────────
+    let userCountryCode: unknown = null
+    try {
+      const userDoc = await databases.getDocument(APPWRITE.DATABASE_ID, APPWRITE.COLLECTIONS.USERS, userId)
+      userCountryCode = userDoc.countryCode
+    } catch {
+      /* no user row → the default market */
+    }
+    const countryCode = await resolveMoveCountry({
+      pickupLatitude,
+      pickupLongitude,
+      pickupCountryCode,
+      userCountryCode,
+    })
+
     // ── Price it (master D5) ────────────────────────────────
     // The mover is known, so the vehicle line is their class (master D8). The
     // mover's crew size never changes the price; the crew gate on the list
@@ -109,6 +132,7 @@ export async function POST(req: NextRequest) {
           vehicleType: mover.vehicleType,
         },
         'instant',
+        countryCode,
       )
     } catch (err) {
       if (err instanceof PricingReconcileError) {
@@ -146,12 +170,11 @@ export async function POST(req: NextRequest) {
 
     // ── Create the move document ────────────────────────────
     const moveId = ID.unique()
-    const move = await databases.createDocument(
-      APPWRITE.DATABASE_ID,
-      APPWRITE.COLLECTIONS.MOVES,
-      moveId,
+    const move = await writeDroppingUnknownAttributes(
       {
         handle,
+        // Pickup country (C2) — the market this move is priced and matched in.
+        countryCode,
         clientId: userId,
         moverProfileId: moverProfileId,
         status: 'mover_assigned',
@@ -188,10 +211,18 @@ export async function POST(req: NextRequest) {
         termsAccepted: true,
         privacyAccepted: true,
       },
-      // `userId` (the session subject) is the client's auth id. `delete` is
-      // required by the mobile client's discardDraftMove; no client-session
-      // update path exists, so no `update` grant.
-      movePermissions(userId, moverUserId)
+      (data) =>
+        databases.createDocument(
+          APPWRITE.DATABASE_ID,
+          APPWRITE.COLLECTIONS.MOVES,
+          moveId,
+          data,
+          // `userId` (the session subject) is the client's auth id. `delete` is
+          // required by the mobile client's discardDraftMove; no client-session
+          // update path exists, so no `update` grant.
+          movePermissions(userId, moverUserId),
+        ),
+      'create-instant',
     )
 
     // ── Create a move_request targeting the mover ───────────
@@ -219,6 +250,7 @@ export async function POST(req: NextRequest) {
       handle,
       estimatedPrice: breakdown.total,
       breakdown,
+      countryCode,
     })
   } catch (err) {
     console.error('POST /api/moves/create-instant error:', err)

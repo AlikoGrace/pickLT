@@ -137,6 +137,14 @@
     "verified": {
       "body": "Il Suo veicolo {{plate}} è stato verificato. Può ricevere di nuovo traslochi.",
       "title": "Veicolo verificato"
+    },
+    "rentalExpiring": {
+      "title": "Il noleggio termina a breve",
+      "body": "Il tuo veicolo a noleggio {{plate}} termina alle {{time}}. Prolungalo per continuare a ricevere traslochi."
+    },
+    "rentalExpired": {
+      "title": "Periodo di noleggio terminato",
+      "body": "Il periodo di noleggio di {{plate}} è terminato. Noleggia di nuovo per ricevere traslochi."
     }
   },
   "verification": {

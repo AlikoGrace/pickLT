@@ -2,7 +2,8 @@ import type { Databases, Models } from 'node-appwrite'
 import { Query } from 'node-appwrite'
 import { APPWRITE } from '@/lib/constants'
 import type { InventoryItemDef } from '@/lib/classifyMove'
-import { toPricingConfig, type PricingConfig } from '@/lib/pricing'
+import { countryToIso2 } from '@/lib/countryCode'
+import { GLOBAL_PRICING_SCOPE, toPricingConfig, type PricingConfig, type PricingConfigRow } from '@/lib/pricing'
 import {
   basketFromWire,
   floorsNoLiftFor,
@@ -73,17 +74,44 @@ export async function loadCatalog(databases: Databases): Promise<InventoryItemDe
   return res.documents.map((d) => catalogDocToItemDef(d as Models.Document & Record<string, unknown>))
 }
 
+/** Appwrite's "no such attribute" failure, for the pre-schema fallback below. */
+function isUnknownAttributeError(err: unknown, attribute: string): boolean {
+  const msg = err instanceof Error ? err.message : String(err ?? '')
+  return /attribute/i.test(msg) && new RegExp(attribute, 'i').test(msg)
+}
+
 /**
  * Admin rate overrides. Any failure yields `{}` — the compiled defaults then
  * apply, which is the documented degradation: a config outage must never
  * produce a €0 quote or block a booking.
+ *
+ * Country scoping (plan `wave-2026-10/4` C4/C5): with a `countryCode` the
+ * query fetches the GLOBAL layer and that country's rows (limit 400, so the
+ * 200-row ceiling of one country cannot truncate the base) and
+ * `toPricingConfig` lays the country over the base. Until the `country`
+ * attribute exists on the collection the filtered query fails; the loader then
+ * falls back to the unfiltered read, which `toPricingConfig` still scopes
+ * correctly (rows without the column are GLOBAL).
  */
-export async function loadPricingConfig(databases: Databases): Promise<PricingConfig> {
+export async function loadPricingConfig(databases: Databases, countryCode?: string | null): Promise<PricingConfig> {
+  const cc = countryToIso2(countryCode)
   try {
+    if (cc) {
+      try {
+        const res = await databases.listDocuments(APPWRITE.DATABASE_ID, PRICING_CONFIG_COLLECTION, [
+          Query.equal('country', [GLOBAL_PRICING_SCOPE, cc]),
+          Query.limit(400),
+        ])
+        return toPricingConfig(res.documents as PricingConfigRow[], cc)
+      } catch (err) {
+        if (!isUnknownAttributeError(err, 'country')) throw err
+        console.warn('[pricing] pricing_config has no `country` attribute yet; loading unscoped')
+      }
+    }
     const res = await databases.listDocuments(APPWRITE.DATABASE_ID, PRICING_CONFIG_COLLECTION, [
-      Query.limit(200),
+      Query.limit(400),
     ])
-    return toPricingConfig(res.documents as { key?: unknown; value?: unknown }[])
+    return toPricingConfig(res.documents as PricingConfigRow[], cc)
   } catch (err) {
     console.warn('[pricing] config unavailable, pricing at compiled defaults:', err)
     return {}
@@ -118,9 +146,13 @@ export function quoteInputFromMove(
   fields: MovePricingFields,
   catalog: InventoryItemDef[],
   mode: BookingMode,
+  countryCode?: string | null,
 ): QuoteInput {
   const storage = Number(fields.storageWeeks)
   return {
+    // The market the quote is priced for (plan wave-2026-10/4 C2); the engine
+    // stamps it on the breakdown so the stored quote names its country.
+    ...(countryToIso2(countryCode) ? { countryCode: countryToIso2(countryCode) } : {}),
     tier: isServiceTier(fields.moveType) ? fields.moveType : 'regular',
     mode,
     distanceKm: kmFromMeters(fields.routeDistanceMeters),
@@ -166,7 +198,8 @@ export async function quoteMoveFields(
   databases: Databases,
   fields: MovePricingFields,
   mode: BookingMode,
+  countryCode?: string | null,
 ): Promise<QuoteBreakdown> {
-  const [catalog, config] = await Promise.all([loadCatalog(databases), loadPricingConfig(databases)])
-  return quoteMove(quoteInputFromMove(fields, catalog, mode), config)
+  const [catalog, config] = await Promise.all([loadCatalog(databases), loadPricingConfig(databases, countryCode)])
+  return quoteMove(quoteInputFromMove(fields, catalog, mode, countryCode), config)
 }
