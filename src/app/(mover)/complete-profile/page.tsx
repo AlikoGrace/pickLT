@@ -473,7 +473,7 @@ export default function CompleteProfilePage() {
               <div key={step.key} className="flex flex-1 items-center">
                 <div className="flex flex-col items-center">
                   <div
-                    className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
+                    className={`flex h-9 w-9 items-center justify-center rounded-full transition-colors sm:h-10 sm:w-10 ${
                       isCompleted
                         ? 'bg-primary-600 text-white'
                         : isActive
@@ -501,7 +501,7 @@ export default function CompleteProfilePage() {
                 </div>
                 {idx < STEPS.length - 1 && (
                   <div
-                    className={`mx-2 h-0.5 flex-1 rounded ${
+                    className={`mx-1 h-0.5 flex-1 rounded sm:mx-2 ${
                       idx < stepIdx ? 'bg-primary-600' : 'bg-neutral-200 dark:bg-neutral-700'
                     }`}
                   />
@@ -513,7 +513,7 @@ export default function CompleteProfilePage() {
       </div>
 
       {/* Form Card */}
-      <div className="mx-auto max-w-2xl rounded-2xl bg-white p-6 shadow-sm dark:bg-neutral-800">
+      <div className="mx-auto max-w-2xl rounded-2xl bg-white p-4 shadow-sm sm:p-6 dark:bg-neutral-800">
         {/* Step 1: Personal Info */}
         {currentStep === 'personal' && (
           <div className="space-y-5">
@@ -1254,7 +1254,7 @@ export default function CompleteProfilePage() {
         )}
 
         {/* Navigation buttons */}
-        <div className="mt-8 flex items-center justify-between">
+        <div className="mt-8 flex items-center justify-between gap-3">
           <button
             onClick={goBack}
             disabled={stepIdx === 0}

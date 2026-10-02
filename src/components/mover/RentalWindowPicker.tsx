@@ -55,7 +55,7 @@ export default function RentalWindowPicker({ value, onChange, nowMs, disabled }:
   const maxLocal = isoToLocalDateTime(new Date(now + MAX_RENTAL_HOURS * 60 * 60 * 1000).toISOString())
 
   return (
-    <div className="space-y-4 rounded-xl border border-neutral-200 p-4 dark:border-neutral-700">
+    <div className="space-y-4 rounded-xl border border-neutral-200 p-3 sm:p-4 dark:border-neutral-700">
       <div>
         <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">{t('booking:vehicle.rental.window.label')}</p>
         <p className="text-xs text-neutral-500 dark:text-neutral-400">{t('booking:vehicle.rental.duration.label')}</p>
@@ -72,7 +72,7 @@ export default function RentalWindowPicker({ value, onChange, nowMs, disabled }:
               aria-checked={active}
               disabled={disabled}
               onClick={() => onChange({ ...value, hours, endAt: null })}
-              className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
+              className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors max-sm:min-h-10 ${
                 active
                   ? 'bg-primary-600 text-white'
                   : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-600'
@@ -88,7 +88,7 @@ export default function RentalWindowPicker({ value, onChange, nowMs, disabled }:
           aria-checked={customSelected}
           disabled={disabled}
           onClick={() => onChange({ ...value, hours: null, endAt: value.endAt ?? new Date(now + 24 * 60 * 60 * 1000).toISOString() })}
-          className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
+          className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors max-sm:min-h-10 ${
             customSelected
               ? 'bg-primary-600 text-white'
               : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-600'
@@ -110,7 +110,7 @@ export default function RentalWindowPicker({ value, onChange, nowMs, disabled }:
             max={maxLocal}
             disabled={disabled}
             onChange={(e) => onChange({ ...value, hours: null, endAt: localDateTimeToIso(e.target.value) ?? '' })}
-            className={inputClass}
+            className={`${inputClass} min-w-0 max-w-full appearance-none`}
           />
         </div>
       )}

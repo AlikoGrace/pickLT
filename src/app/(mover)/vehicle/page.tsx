@@ -118,9 +118,9 @@ export default function VehiclePage() {
     vehicle?.status === 'verified' ? CheckCircleIcon : vehicle?.status === 'rejected' ? XCircleIcon : ClockIcon
 
   const primaryBtn =
-    'inline-flex items-center gap-1.5 rounded-full bg-primary-600 px-4 py-2 text-sm font-semibold text-white hover:bg-primary-700'
+    'inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-primary-600 px-4 py-2 text-sm max-sm:min-h-11 sm:w-auto sm:justify-start font-semibold text-white hover:bg-primary-700'
   const secondaryBtn =
-    'inline-flex items-center gap-1.5 rounded-full border border-neutral-200 px-4 py-2 text-sm font-semibold text-neutral-700 hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-neutral-700'
+    'inline-flex w-full items-center justify-center gap-1.5 rounded-full border border-neutral-200 px-4 py-2 text-sm max-sm:min-h-11 sm:w-auto sm:justify-start font-semibold text-neutral-700 hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-neutral-700'
 
   return (
     <div className="mx-auto max-w-3xl p-4 pb-24 lg:p-6 lg:pb-6">
@@ -130,9 +130,9 @@ export default function VehiclePage() {
       </div>
 
       {error && (
-        <div className="mb-4 flex items-center justify-between rounded-xl bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
-          <span>{error}</span>
-          <button type="button" onClick={load} className="font-medium underline">
+        <div className="mb-4 flex items-center justify-between gap-3 rounded-xl bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
+          <span className="min-w-0 break-words">{error}</span>
+          <button type="button" onClick={load} className="min-h-10 flex-shrink-0 px-1 font-medium underline">
             {t('common:action.retry.cta')}
           </button>
         </div>
@@ -278,7 +278,7 @@ export default function VehiclePage() {
                   <p className="font-semibold text-neutral-900 dark:text-neutral-100">
                     {[vehicle.brand, vehicle.model, vehicle.year].filter(Boolean).join(' ')}
                   </p>
-                  <p className="font-mono text-sm tracking-wider text-neutral-700 dark:text-neutral-200">
+                  <p className="font-mono text-sm tracking-wider break-all text-neutral-700 dark:text-neutral-200">
                     {vehicle.registrationNumber}
                   </p>
                   <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
@@ -287,7 +287,7 @@ export default function VehiclePage() {
                     {` · ${vehicleOwnershipLabel(t, vehicle.ownership)}`}
                   </p>
                 </div>
-                <div className={`flex items-center gap-1 text-sm font-medium ${statusTone}`}>
+                <div className={`flex flex-shrink-0 items-center gap-1 text-sm font-medium whitespace-nowrap ${statusTone}`}>
                   <StatusIcon className="h-5 w-5" />
                   {vehicleStatusLabel(t, vehicle.status)}
                 </div>
@@ -299,7 +299,7 @@ export default function VehiclePage() {
                 </p>
               )}
 
-              <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
+              <dl className="mt-4 grid grid-cols-1 gap-3 text-sm min-[400px]:grid-cols-2">
                 <div>
                   <dt className="text-xs uppercase text-neutral-400">{t('web:mover.vehicle.submittedAt.label')}</dt>
                   <dd className="text-neutral-800 dark:text-neutral-200">{formatDateTime(vehicle.submittedAt)}</dd>
@@ -370,7 +370,7 @@ export default function VehiclePage() {
                   const inService = v.$id === profile?.currentVehicleId
                   const ended = v.ownership === 'rented' && v.rentalEndAt ? Date.parse(v.rentalEndAt) <= nowMs : false
                   return (
-                    <li key={v.$id} className="flex items-start gap-3 py-3">
+                    <li key={v.$id} className="flex flex-wrap items-start gap-x-3 gap-y-1 py-3 sm:flex-nowrap">
                       <input
                         type="radio"
                         name="vehicleInService"
@@ -378,9 +378,9 @@ export default function VehiclePage() {
                         checked={inService}
                         disabled={!selectable(v) || selecting !== null}
                         onChange={() => handleSelect(v)}
-                        className="mt-1 h-4 w-4 accent-primary-600"
+                        className="mt-0.5 h-5 w-5 flex-shrink-0 accent-primary-600 sm:mt-1 sm:h-4 sm:w-4"
                       />
-                      <div className="min-w-0 flex-1">
+                      <div className="min-w-0 flex-1 max-sm:basis-[calc(100%-2rem)]">
                         <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
                           {[v.brand, v.model, v.year].filter(Boolean).join(' ')}
                           <span className="ml-2 font-mono text-xs tracking-wider text-neutral-500 dark:text-neutral-400">{v.registrationNumber}</span>
@@ -398,11 +398,11 @@ export default function VehiclePage() {
                         </p>
                       </div>
                       {inService ? (
-                        <span className="flex-shrink-0 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700 dark:bg-green-900/30 dark:text-green-300">
+                        <span className="ml-8 flex-shrink-0 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700 sm:ml-0 dark:bg-green-900/30 dark:text-green-300">
                           {t('booking:vehicle.rental.inService.label')}
                         </span>
                       ) : v.ownership === 'rented' && ended ? (
-                        <Link href={renewHref(v)} className="flex-shrink-0 text-xs font-semibold text-primary-600 hover:underline dark:text-primary-400">
+                        <Link href={renewHref(v)} className="ml-8 inline-flex min-h-10 flex-shrink-0 items-center text-xs font-semibold text-primary-600 hover:underline sm:ml-0 sm:min-h-0 dark:text-primary-400">
                           {t('booking:vehicle.rental.rentAgain.cta')}
                         </Link>
                       ) : selectable(v) ? (
@@ -410,7 +410,7 @@ export default function VehiclePage() {
                           type="button"
                           onClick={() => handleSelect(v)}
                           disabled={selecting !== null}
-                          className="flex-shrink-0 text-xs font-semibold text-primary-600 hover:underline disabled:opacity-50 dark:text-primary-400"
+                          className="ml-8 inline-flex min-h-10 flex-shrink-0 items-center text-xs font-semibold text-primary-600 hover:underline disabled:opacity-50 sm:ml-0 sm:min-h-0 dark:text-primary-400"
                         >
                           {t('web:mover.vehicle.fleet.select.cta')}
                         </button>

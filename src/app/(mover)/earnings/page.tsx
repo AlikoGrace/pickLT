@@ -172,25 +172,25 @@ const EarningsPage = () => {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-2 gap-4 mb-6">
-        <div className="bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl p-4 text-white">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-6">
+        <div className="min-w-0 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl p-4 text-white">
           <div className="flex items-center gap-2 mb-2">
             <BanknotesIcon className="w-5 h-5" />
             <span className="text-sm opacity-90">{t('web:mover.earnings.total.label')}</span>
           </div>
-          <p className="text-3xl font-bold mb-1">{formatMoney(total, { compact: true })}</p>
+          <p className="text-2xl sm:text-3xl font-bold break-words mb-1">{formatMoney(total, { compact: true })}</p>
           <div className="flex items-center gap-1 text-sm">
             <ArrowTrendingUpIcon className="w-4 h-4" />
             <span>{periodCaption(period)}</span>
           </div>
           <p className="text-xs opacity-80 mt-1">{payoutHelper}</p>
         </div>
-        <div className="bg-white dark:bg-neutral-800 rounded-2xl p-4 shadow-sm">
+        <div className="min-w-0 bg-white dark:bg-neutral-800 rounded-2xl p-4 shadow-sm">
           <div className="flex items-center gap-2 mb-2 text-neutral-500 dark:text-neutral-400">
             <TruckIcon className="w-5 h-5" />
             <span className="text-sm">{t('web:mover.earnings.movesCompleted.label')}</span>
           </div>
-          <p className="text-3xl font-bold text-neutral-900 dark:text-neutral-100 mb-1">
+          <p className="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-neutral-100 mb-1">
             {moves}
           </p>
           <p className="text-sm text-neutral-500 dark:text-neutral-400">
@@ -287,8 +287,8 @@ const EarningsPage = () => {
 
       {/* Payout Section */}
       <div className="mt-8 bg-neutral-100 dark:bg-neutral-800 rounded-2xl p-4">
-        <div className="flex items-center justify-between mb-4">
-          <div>
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+          <div className="min-w-0">
             <p className="text-sm text-neutral-500 dark:text-neutral-400">
               {t('web:mover.earnings.payoutAvailable.label')}
             </p>
@@ -296,7 +296,7 @@ const EarningsPage = () => {
               {formatMoney(Number(total))}
             </p>
           </div>
-          <button className="px-4 py-2 bg-primary-600 text-white rounded-full text-sm font-medium hover:bg-primary-700 transition-colors">
+          <button className="px-4 py-2 max-sm:min-h-10 bg-primary-600 text-white rounded-full text-sm font-medium hover:bg-primary-700 transition-colors">
             {t('web:mover.earnings.requestPayout.cta')}
           </button>
         </div>

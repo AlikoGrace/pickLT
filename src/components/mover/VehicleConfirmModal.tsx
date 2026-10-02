@@ -81,7 +81,7 @@ export default function VehicleConfirmModal({
         aria-modal="true"
         aria-labelledby="vehicle-expired-title"
       >
-        <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl dark:bg-neutral-800">
+        <div className="max-h-[calc(100dvh-2rem)] w-full max-w-md overflow-y-auto rounded-2xl bg-white p-5 shadow-xl sm:p-6 dark:bg-neutral-800">
           <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/30">
             <TruckIcon className="h-6 w-6 text-amber-600 dark:text-amber-400" />
           </div>
@@ -94,7 +94,7 @@ export default function VehicleConfirmModal({
           {(vehicleLabel || plate) && (
             <div className="mt-4 rounded-xl bg-neutral-50 p-3 text-center dark:bg-neutral-700/50">
               {vehicleLabel && <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">{vehicleLabel}</p>}
-              {plate && <p className="mt-0.5 font-mono text-sm tracking-wider text-neutral-600 dark:text-neutral-300">{plate}</p>}
+              {plate && <p className="mt-0.5 font-mono text-sm tracking-wider break-all text-neutral-600 dark:text-neutral-300">{plate}</p>}
             </div>
           )}
           {error && <p className="mt-3 text-center text-sm text-red-500">{error}</p>}
@@ -153,7 +153,7 @@ export default function VehicleConfirmModal({
       aria-modal="true"
       aria-labelledby="vehicle-confirm-title"
     >
-      <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl dark:bg-neutral-800">
+      <div className="max-h-[calc(100dvh-2rem)] w-full max-w-md overflow-y-auto rounded-2xl bg-white p-5 shadow-xl sm:p-6 dark:bg-neutral-800">
         <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-900/30">
           <TruckIcon className="h-6 w-6 text-primary-600 dark:text-primary-400" />
         </div>
@@ -169,7 +169,7 @@ export default function VehicleConfirmModal({
               <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">{vehicleLabel}</p>
             )}
             {plate && (
-              <p className="mt-0.5 font-mono text-sm tracking-wider text-neutral-600 dark:text-neutral-300">{plate}</p>
+              <p className="mt-0.5 font-mono text-sm tracking-wider break-all text-neutral-600 dark:text-neutral-300">{plate}</p>
             )}
           </div>
         )}

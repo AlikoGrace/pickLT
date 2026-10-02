@@ -265,20 +265,20 @@ export default function PriceBreakdown({
       aria-label={t('web:pricing.breakdown.title')}
     >
       <header className="mb-3 flex items-start justify-between gap-3">
-        <div>
+        <div className="min-w-0">
           <p className="text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
             {t('web:pricing.breakdown.title')}
           </p>
           <p className="text-sm font-semibold text-neutral-900 dark:text-white">{breakdownHeader(t, b)}</p>
           {countryChip && (
-            <span className="mt-1 inline-flex items-center rounded-full bg-neutral-100 px-2 py-0.5 text-[11px] font-medium text-neutral-600 dark:bg-neutral-700 dark:text-neutral-300">
+            <span className="mt-1 inline-flex max-w-full items-center rounded-full bg-neutral-100 px-2 py-0.5 text-left text-[11px] break-words font-medium text-neutral-600 dark:bg-neutral-700 dark:text-neutral-300">
               {countryChip}
             </span>
           )}
         </div>
-        <div className="text-right">
-          <p className="text-xl font-bold text-primary-600">{formatMoney(b.total)}</p>
-          <p className="text-[11px] text-neutral-500 dark:text-neutral-400">
+        <div className="flex-shrink-0 text-right">
+          <p className="text-xl font-bold whitespace-nowrap text-primary-600">{formatMoney(b.total)}</p>
+          <p className="max-w-[9rem] text-[11px] text-neutral-500 sm:max-w-none dark:text-neutral-400">
             {t('booking:pricing.vat.label', { defaultValue: 'VAT ({{rate}})', rate: formatPercent(b.vatRate) })}{' '}
             {t('web:pricing.breakdown.included.label')}
           </p>
@@ -290,7 +290,7 @@ export default function PriceBreakdown({
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
-          className="mb-2 text-sm font-medium text-primary-600 hover:underline"
+          className="mb-2 text-sm font-medium text-primary-600 hover:underline max-sm:min-h-10"
         >
           {open ? t('web:pricing.breakdown.hide.cta') : t('web:pricing.breakdown.show.cta')}
         </button>

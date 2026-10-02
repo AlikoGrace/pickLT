@@ -429,16 +429,16 @@ const MoverDashboardLayout = ({ children }: Props) => {
 
       {/* Mobile Header — hidden on full-screen map pages */}
       <header className={clsx(
-        'fixed left-0 right-0 top-0 z-30 flex h-16 items-center justify-between border-b border-neutral-200 bg-white px-4 dark:border-neutral-700 dark:bg-neutral-800',
+        'fixed left-0 right-0 top-0 z-30 flex h-16 items-center justify-between gap-2 border-b border-neutral-200 bg-white px-4 dark:border-neutral-700 dark:bg-neutral-800',
         isMapPage ? 'hidden' : 'lg:hidden',
       )}>
-        <div className="flex items-center gap-2">
-          <Logo className="w-20" />
-          <span className="rounded-full bg-primary-100 px-2 py-0.5 text-xs font-medium text-primary-700 dark:bg-primary-900/30 dark:text-primary-400">
+        <div className="flex min-w-0 items-center gap-2">
+          <Logo className="w-20 flex-shrink-0" />
+          <span className="min-w-0 truncate rounded-full bg-primary-100 px-2 py-0.5 text-xs font-medium text-primary-700 dark:bg-primary-900/30 dark:text-primary-400">
             {t('web:mover.roleLabel')}
           </span>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-shrink-0 items-center gap-1 min-[400px]:gap-2">
           <LanguageDropdown panelClassName="w-56" />
           <SwitchDarkMode className="!h-9 !w-9 !text-xl" />
           <button className="rounded-full p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700">
@@ -487,7 +487,7 @@ const MoverDashboardLayout = ({ children }: Props) => {
               ) : (
                 <ClockIcon className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-500" />
               )}
-              <div>
+              <div className="min-w-0 flex-1">
                 <p className={clsx(
                   'text-sm font-semibold',
                   verificationStatus === 'rejected'
@@ -554,10 +554,10 @@ const MoverDashboardLayout = ({ children }: Props) => {
             return (
               <div
                 key={item.key}
-                className="flex flex-col items-center gap-1 px-3 py-1 text-neutral-300 dark:text-neutral-600 cursor-not-allowed"
+                className="flex min-w-0 flex-1 flex-col items-center gap-1 px-1 py-1 text-neutral-300 sm:flex-none sm:px-3 dark:text-neutral-600 cursor-not-allowed"
               >
                 <item.icon className="h-6 w-6" />
-                <span className="text-xs font-medium">{item.name}</span>
+                <span className="max-w-full truncate text-xs font-medium">{item.name}</span>
               </div>
             )
           }
@@ -567,14 +567,14 @@ const MoverDashboardLayout = ({ children }: Props) => {
               key={item.key}
               href={item.href}
               className={clsx(
-                'flex flex-col items-center gap-1 px-3 py-1',
+                'flex min-h-11 min-w-0 flex-1 flex-col items-center gap-1 px-1 py-1 sm:flex-none sm:px-3',
                 isActive
                   ? 'text-primary-600 dark:text-primary-400'
                   : 'text-neutral-500 dark:text-neutral-400'
               )}
             >
               <item.icon className="h-6 w-6" />
-              <span className="text-xs font-medium">{item.name}</span>
+              <span className="max-w-full truncate text-xs font-medium">{item.name}</span>
             </Link>
           )
         })}

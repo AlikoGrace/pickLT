@@ -100,7 +100,7 @@ export default function VehicleStatusBanner({ state, rejectionReason, rentalRema
         className,
       )}
     >
-      <div className="mx-auto flex max-w-3xl items-start gap-3">
+      <div className="mx-auto flex max-w-3xl flex-wrap items-start gap-x-3 gap-y-2 sm:flex-nowrap">
         <Icon
           className={clsx(
             'mt-0.5 h-5 w-5 flex-shrink-0',
@@ -110,7 +110,7 @@ export default function VehicleStatusBanner({ state, rejectionReason, rentalRema
             tone === 'blue' && 'text-primary-600',
           )}
         />
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0 flex-1 max-sm:basis-[calc(100%-2rem)]">
           <p
             className={clsx(
               'text-sm font-semibold',
@@ -144,7 +144,7 @@ export default function VehicleStatusBanner({ state, rejectionReason, rentalRema
         </div>
         <Link
           href={countdown ? '/vehicle/setup?mode=renew' : vehicleActionHref(state)}
-          className="flex-shrink-0 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-neutral-800 shadow-sm ring-1 ring-neutral-200 transition hover:bg-neutral-50 dark:bg-neutral-800 dark:text-neutral-100 dark:ring-neutral-700 dark:hover:bg-neutral-700"
+          className="flex-shrink-0 rounded-full bg-white px-3 py-1.5 text-xs font-semibold max-sm:ml-8 max-sm:inline-flex max-sm:min-h-10 max-sm:items-center text-neutral-800 shadow-sm ring-1 ring-neutral-200 transition hover:bg-neutral-50 dark:bg-neutral-800 dark:text-neutral-100 dark:ring-neutral-700 dark:hover:bg-neutral-700"
         >
           {cta}
         </Link>

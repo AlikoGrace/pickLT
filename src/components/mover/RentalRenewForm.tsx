@@ -94,7 +94,7 @@ export default function RentalRenewForm({ vehicle, onSuccess }: Props) {
           <p className="font-semibold text-neutral-900 dark:text-neutral-100">
             {[vehicle.brand, vehicle.model, vehicle.year].filter(Boolean).join(' ')}
           </p>
-          <p className="font-mono text-sm tracking-wider text-neutral-700 dark:text-neutral-200">{vehicle.registrationNumber}</p>
+          <p className="font-mono text-sm tracking-wider break-all text-neutral-700 dark:text-neutral-200">{vehicle.registrationNumber}</p>
           {vehicle.rentalEndAt && (
             <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
               {t('web:mover.vehicle.window.ended.label', { time: formatDateTime(vehicle.rentalEndAt) })}

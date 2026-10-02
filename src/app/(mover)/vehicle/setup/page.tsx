@@ -123,7 +123,7 @@ function VehicleSetupInner() {
 
   return (
     <div className="mx-auto max-w-2xl p-4 pb-24 lg:p-6 lg:pb-6">
-      <Link href="/vehicle" className="mb-4 inline-flex items-center gap-1 text-sm text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200">
+      <Link href="/vehicle" className="mb-4 inline-flex min-h-10 items-center gap-1 text-sm text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200">
         <ChevronLeftIcon className="h-4 w-4" />
         {t('common:action.back.cta')}
       </Link>
@@ -139,7 +139,7 @@ function VehicleSetupInner() {
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-600 border-t-transparent" />
         </div>
       ) : effectiveMode === 'renew' ? (
-        <div className="rounded-2xl bg-white p-6 shadow-sm dark:bg-neutral-800">
+        <div className="rounded-2xl bg-white p-4 shadow-sm sm:p-6 dark:bg-neutral-800">
           {renewTarget ? (
             <RentalRenewForm
               vehicle={renewTarget}
@@ -159,7 +159,7 @@ function VehicleSetupInner() {
           )}
         </div>
       ) : (
-        <div className="rounded-2xl bg-white p-6 shadow-sm dark:bg-neutral-800">
+        <div className="rounded-2xl bg-white p-4 shadow-sm sm:p-6 dark:bg-neutral-800">
           <VehicleForm
             mode={effectiveMode}
             source={source}

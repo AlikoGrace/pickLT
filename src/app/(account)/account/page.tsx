@@ -382,9 +382,9 @@ export default function AccountPage() {
       )}
 
       {/* Profile Card */}
-      <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm mb-8">
-        <div className="flex items-center gap-5">
-          <div className="relative">
+      <div className="bg-white dark:bg-neutral-800 rounded-2xl p-4 sm:p-6 shadow-sm mb-8">
+        <div className="flex items-center gap-4 sm:gap-5">
+          <div className="relative flex-shrink-0">
             <Avatar
               src={user?.profilePhoto || undefined}
               initials={!user?.profilePhoto ? initials : undefined}
@@ -412,11 +412,11 @@ export default function AccountPage() {
               className="hidden"
             />
           </div>
-          <div className="flex-1">
-            <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+          <div className="min-w-0 flex-1">
+            <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 break-words">
               {user?.fullName || t('common:person.unnamed.label')}
             </h2>
-            <p className="text-sm text-neutral-500 dark:text-neutral-400">
+            <p className="text-sm text-neutral-500 dark:text-neutral-400 truncate">
               {user?.email || 'email@example.com'}
             </p>
             {user?.phone && (
@@ -446,10 +446,10 @@ export default function AccountPage() {
                       : ''
                   }`}
                 >
-                  <div className="w-10 h-10 rounded-full bg-neutral-100 dark:bg-neutral-700 flex items-center justify-center">
+                  <div className="w-10 h-10 flex-shrink-0 rounded-full bg-neutral-100 dark:bg-neutral-700 flex items-center justify-center">
                     <item.icon className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
                   </div>
-                  <div className="flex-1 text-left">
+                  <div className="min-w-0 flex-1 text-left">
                     <p className="font-medium text-neutral-900 dark:text-neutral-100">
                       {item.label}
                     </p>
@@ -457,7 +457,7 @@ export default function AccountPage() {
                       {item.description}
                     </p>
                   </div>
-                  <ChevronRightIcon className="w-5 h-5 text-neutral-400" />
+                  <ChevronRightIcon className="w-5 h-5 flex-shrink-0 text-neutral-400" />
                 </button>
               ))}
             </div>
@@ -481,10 +481,10 @@ export default function AccountPage() {
       {/* ─── MODALS ────────────────────────────────────────── */}
       {activeModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 w-full max-w-md relative">
+          <div className="bg-white dark:bg-neutral-800 rounded-2xl p-5 sm:p-6 w-full max-w-md relative max-h-[calc(100dvh-2rem)] overflow-y-auto">
             <button
               onClick={closeModal}
-              className="absolute top-4 right-4 p-1 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-700"
+              className="absolute top-3 right-3 p-2 sm:top-4 sm:right-4 sm:p-1 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-700"
             >
               <XMarkIcon className="w-5 h-5 text-neutral-400" />
             </button>

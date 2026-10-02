@@ -48,7 +48,7 @@ export default function CountrySelect({ id, value, onChange, required, disabled,
         onChange={(e) => onChange(e.target.value)}
         className={
           className ??
-          'w-full rounded-xl border border-neutral-200 bg-white px-4 py-3 text-sm text-neutral-900 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white'
+          'w-full min-w-0 rounded-xl border border-neutral-200 bg-white px-4 py-3 text-base text-neutral-900 sm:text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white'
         }
       >
         <option value="">{t('common:country.select.label')}</option>

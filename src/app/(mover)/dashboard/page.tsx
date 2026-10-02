@@ -236,17 +236,17 @@ const DashboardPage = () => {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-8">
         {stats.map((stat) => (
           <Link
             key={stat.name}
             href={stat.href}
-            className="bg-white dark:bg-neutral-800 rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow"
+            className="min-w-0 bg-white dark:bg-neutral-800 rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow"
           >
             <div className={`w-10 h-10 ${stat.color} rounded-xl flex items-center justify-center mb-3`}>
               <stat.icon className="w-5 h-5 text-white" />
             </div>
-            <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+            <p className="text-xl sm:text-2xl font-bold break-words text-neutral-900 dark:text-neutral-100">
               {stat.value}
             </p>
             <p className="text-sm text-neutral-500 dark:text-neutral-400">

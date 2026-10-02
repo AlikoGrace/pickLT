@@ -236,7 +236,7 @@ function SignupContent() {
 
   return (
     <div className="container pb-16">
-      <div className="my-16 flex justify-center">
+      <div className="my-10 flex justify-center sm:my-16">
         <Logo className="w-32" />
       </div>
 

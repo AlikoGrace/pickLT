@@ -561,7 +561,7 @@ export default function MoverMoveDetailsPage() {
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-8">
-        <div className="flex-1">
+        <div className="min-w-0 flex-1">
           <div className="flex items-center gap-3 mb-2">
             <Badge color={getStatusBadgeColor(status)}>
               {getStatusLabel(status, t)}
@@ -570,14 +570,14 @@ export default function MoverMoveDetailsPage() {
               #{bookingCode}
             </span>
           </div>
-          <h1 className="text-2xl lg:text-3xl font-semibold text-neutral-900 dark:text-neutral-100">
+          <h1 className="text-2xl lg:text-3xl font-semibold break-words text-neutral-900 dark:text-neutral-100">
             {pickupDisplay.split(',')[0]} &rarr; {dropoffDisplay.split(',')[0]}
           </h1>
           <p className="text-neutral-500 dark:text-neutral-400 mt-1">
             {moveSubtitle(t, moveType, null, formatDate(moveDate, t))}
           </p>
         </div>
-        <div className="text-right">
+        <div className="sm:text-right">
           <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('web:mover.earnings.label')}</p>
           <p className="text-3xl font-bold text-green-600 dark:text-green-400">
             {formatMoney(payout)}
@@ -801,7 +801,7 @@ export default function MoverMoveDetailsPage() {
                 </span>
               </div>
               <div className="my-4 border-t border-neutral-100 dark:border-neutral-700" />
-              <div className="flex justify-between text-base">
+              <div className="flex justify-between gap-3 text-base">
                 <span className="font-semibold text-neutral-900 dark:text-neutral-100">{t('web:mover.earnings.label')}</span>
                 <span className="font-bold text-green-600 dark:text-green-400">{formatMoney(payout)}</span>
               </div>

@@ -571,7 +571,7 @@ const SelectMoverPage = () => {
                 }
               `}
             >
-              <div className="flex items-start gap-4">
+              <div className="flex items-start gap-3 sm:gap-4">
                 {/* Mover Photo */}
                 <div className="relative shrink-0">
                   {mover.profilePhoto ? (
@@ -604,13 +604,13 @@ const SelectMoverPage = () => {
                 {/* Mover Info */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-semibold text-neutral-900 dark:text-white">
+                    <h3 className="min-w-0 break-words font-semibold text-neutral-900 dark:text-white">
                       {mover.name}
                     </h3>
                   </div>
                   
                   {/* Rating & Experience */}
-                  <div className="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400 mb-2">
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-neutral-500 dark:text-neutral-400 mb-2">
                     {mover.rating > 0 && (
                       <>
                         <span className="flex items-center gap-1">
@@ -630,7 +630,7 @@ const SelectMoverPage = () => {
                   </div>
 
                   {/* Vehicle Info */}
-                  <div className="flex items-center gap-2 text-sm">
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
                     <HugeiconsIcon 
                       icon={DeliveryTruck01Icon} 
                       size={16} 
@@ -653,7 +653,7 @@ const SelectMoverPage = () => {
                   </div>
 
                   {/* Capacity & Crew */}
-                  <div className="flex items-center gap-4 mt-2 text-xs text-neutral-500 dark:text-neutral-400">
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 text-xs text-neutral-500 dark:text-neutral-400">
                     <span className="flex items-center gap-1">
                       <HugeiconsIcon icon={WeightScale01Icon} size={14} strokeWidth={1.5} />
                       {t('web:selectMover.capacity.label', { volume: formatVolumeM3(mover.capacityM3) })}
@@ -682,7 +682,7 @@ const SelectMoverPage = () => {
               {/* Selection Indicator + the itemised estimate for this mover */}
               {selectedMover === mover.id && (
                 <div className="mt-3 pt-3 border-t border-neutral-100 dark:border-neutral-700">
-                  <div className="flex items-center justify-between text-sm">
+                  <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-sm">
                     <span className="text-primary-600 dark:text-primary-400 font-medium">
                       {t('common:state.selected.label')}
                     </span>
