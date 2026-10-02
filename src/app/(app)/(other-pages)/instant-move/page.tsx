@@ -909,7 +909,7 @@ const InstantMovePage = () => {
 
           {/* The itemised estimate, once the mover is on the way (master D15) */}
           {breakdown && (phase === 'mover_arriving' || phase === 'mover_arrived') && (
-            <PriceBreakdown breakdown={breakdown} compact className="bg-white/95 backdrop-blur-sm dark:bg-neutral-800/95 shadow-lg" />
+            <PriceBreakdown breakdown={breakdown} compact confirmed className="bg-white/95 backdrop-blur-sm dark:bg-neutral-800/95 shadow-lg" />
           )}
 
           {/* Phase: loading — items being loaded */}

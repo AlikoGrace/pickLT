@@ -31,6 +31,7 @@ import {
 } from '@/lib/inventory-labels'
 import { formatDateWith, formatMoney, formatVolumeM3 } from '@/lib/format'
 import PriceBreakdown from '@/components/PriceBreakdown'
+import { isPriceConfirmed } from '@/components/PriceBreakdown'
 import MoveRouteMap from '@/components/MoveRouteMap'
 import { toCoordinate } from '@/lib/route-caption'
 import { parseBreakdown } from '@/lib/pricingEngine'
@@ -808,7 +809,7 @@ export default function MoveDetailsPage() {
               </div>
               <div className="my-4 border-t border-neutral-100 dark:border-neutral-700" />
               {breakdown ? (
-                <PriceBreakdown breakdown={breakdown} compact itemNames={inventoryNames} className="!p-3" />
+                <PriceBreakdown breakdown={breakdown} compact itemNames={inventoryNames} confirmed={isPriceConfirmed(rawStatus)} className="!p-3" />
               ) : (
                 <div className="flex justify-between text-base">
                   <span className="font-semibold text-neutral-900 dark:text-neutral-100">{t('common:label.total')}</span>

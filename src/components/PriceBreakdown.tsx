@@ -38,7 +38,27 @@ export interface PriceBreakdownProps {
   showAssumptions?: boolean
   /** Catalog id → localised name, for the per-item lines. */
   itemNames?: Map<string, string> | null
+  /** The mover has accepted at this price: drop the "estimate — confirmed when…" note. */
+  confirmed?: boolean
   className?: string
+}
+
+/**
+ * Statuses in which the price is still an estimate (no mover has accepted).
+ * Mirrors `PRICE_PENDING_STATUSES` in the mobile repo's `lib/pricing-labels.ts`.
+ */
+export const PRICE_PENDING_STATUSES: ReadonlySet<string> = new Set([
+  'draft',
+  'pending',
+  'pending_payment',
+  'paid',
+  'booked',
+  'mover_assigned',
+])
+
+/** True once a mover has accepted the move at this price. Unknown status → not confirmed. */
+export function isPriceConfirmed(status: string | null | undefined): boolean {
+  return typeof status === 'string' && status.length > 0 && !PRICE_PENDING_STATUSES.has(status)
 }
 
 export interface BreakdownRow {
@@ -216,6 +236,7 @@ export default function PriceBreakdown({
   compact = false,
   showAssumptions = true,
   itemNames,
+  confirmed = false,
   className = '',
 }: PriceBreakdownProps) {
   const { t } = useTranslation()
@@ -332,11 +353,13 @@ export default function PriceBreakdown({
               })}
             </li>
           </ul>
-          <p className="mt-2">
-            {t('booking:pricing.estimate.helper', {
-              defaultValue: 'Estimate — confirmed when your mover accepts',
-            })}
-          </p>
+          {!confirmed && (
+            <p className="mt-2">
+              {t('booking:pricing.estimate.helper', {
+                defaultValue: 'Estimate — confirmed when your mover accepts',
+              })}
+            </p>
+          )}
           {b.assumptions.unpricedItemIds.length > 0 && (
             <p className="mt-1 text-amber-600 dark:text-amber-400">
               {t('web:pricing.breakdown.unpriced.helper', { count: b.assumptions.unpricedItemIds.length })}
