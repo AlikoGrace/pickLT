@@ -1,4 +1,4 @@
-import { Client, Account, Databases, Storage } from 'appwrite'
+import { Client, Account, Databases, Functions, Storage } from 'appwrite'
 
 // ─── Appwrite Client SDK (for browser / client-side) ───
 const client = new Client()
@@ -8,5 +8,8 @@ const client = new Client()
 export const account = new Account(client)
 export const databases = new Databases(client)
 export const storage = new Storage(client)
+// Cloud-function executions from the browser (e.g. `googleauth`, which is
+// executable by guests so the Google sign-in path can mint a session).
+export const functions = new Functions(client)
 
 export { client }

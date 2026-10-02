@@ -23,6 +23,16 @@
       "label": "PickLT v{{version}}"
     }
   },
+  "auth": {
+    "google": {
+      "emailNotVerified": {
+        "error": "La dirección de correo electrónico de su cuenta de Google no está verificada. Verifíquela en Google e inténtelo de nuevo."
+      },
+      "notConfigured": {
+        "error": "El inicio de sesión con Google no está disponible en este sitio por el momento. Inicie sesión con su correo electrónico y contraseña."
+      }
+    }
+  },
   "authGate": {
     "redirecting": {
       "label": "Redirigiendo al inicio de sesión…"

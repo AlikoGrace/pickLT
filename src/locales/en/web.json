@@ -23,6 +23,16 @@
       "label": "PickLT v{{version}}"
     }
   },
+  "auth": {
+    "google": {
+      "emailNotVerified": {
+        "error": "Your Google account's e-mail address is not verified. Verify it with Google, then try again."
+      },
+      "notConfigured": {
+        "error": "Google sign-in is not available on this site right now. Please sign in with your e-mail address and password."
+      }
+    }
+  },
   "authGate": {
     "redirecting": {
       "label": "Redirecting to sign in..."

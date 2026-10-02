@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import { account } from '@/lib/appwrite'
 import { OAuthProvider } from 'appwrite'
+import { exchangeGoogleIdToken } from '@/lib/googleauth-client'
 import type { UserDoc, MoverProfileDoc, CrewMemberDoc } from '@/lib/types'
 // Non-component `t` (see src/lib/i18n-runtime.ts): these throws happen inside
 // callbacks, not in render, so there is no hook to read from here.
@@ -81,6 +82,12 @@ type AuthActions = {
   updateCrewMember: (id: string, updates: Partial<CrewMember>) => void
   removeCrewMember: (id: string) => void
   loginWithGoogle: (redirectTo?: string, intendedUserType?: UserType) => void
+  /**
+   * Google sign-in through the `googleauth` function (same path as the mobile
+   * apps): exchanges a Google ID token for a session. Rejects with a
+   * `GoogleAuthError` (see `googleAuthErrorKey`) when the function refuses.
+   */
+  loginWithGoogleIdToken: (idToken: string, intendedUserType?: UserType) => Promise<void>
   loginWithEmail: (email: string, password: string) => Promise<void>
   signupWithEmail: (email: string, password: string, name: string, intendedUserType?: UserType) => Promise<void>
   // Phone verification (mandatory step after Google/Email auth)
@@ -107,6 +114,7 @@ const AuthContext = createContext<AuthState & AuthActions>({
   updateCrewMember: () => {},
   removeCrewMember: () => {},
   loginWithGoogle: () => {},
+  loginWithGoogleIdToken: async () => {},
   loginWithEmail: async () => {},
   signupWithEmail: async () => {},
   setPhoneForVerification: async () => {},
@@ -260,6 +268,29 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     account.createOAuth2Session(OAuthProvider.Google, successUrl, failureUrl)
   }
 
+  /**
+   * Google sign-in via `googleauth` (parity with `pickltmobile/lib/oauth.ts`).
+   * Unlike the hosted flow above there is no redirect: the GIS button hands us
+   * an ID token, the function finds-or-creates the Appwrite user by e-mail and
+   * mints `{ userId, secret }`, and the session is created right here. That is
+   * what lets an account the mobile app created sign in on the web.
+   */
+  const loginWithGoogleIdToken = async (idToken: string, intendedUserType?: UserType) => {
+    if (intendedUserType && typeof window !== 'undefined') {
+      localStorage.setItem('picklt_pending_user_type', intendedUserType)
+    }
+    const { userId, secret } = await exchangeGoogleIdToken(idToken, intendedUserType ?? 'client')
+    // Appwrite refuses to create a session while one is active; drop a stale
+    // one first (the mobile client does the same).
+    try {
+      await account.deleteSession('current')
+    } catch {
+      // No active session — the normal case.
+    }
+    await account.createSession({ userId, secret })
+    await loadSession()
+  }
+
   const loginWithEmail = async (email: string, password: string) => {
     await account.createEmailPasswordSession(email, password)
     await loadSession()
@@ -361,6 +392,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         updateCrewMember,
         removeCrewMember,
         loginWithGoogle,
+        loginWithGoogleIdToken,
         loginWithEmail,
         signupWithEmail,
         setPhoneForVerification,

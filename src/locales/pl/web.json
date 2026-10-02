@@ -23,6 +23,16 @@
       "label": "PickLT v{{version}}"
     }
   },
+  "auth": {
+    "google": {
+      "emailNotVerified": {
+        "error": "Adres e-mail Państwa konta Google nie został zweryfikowany. Proszę zweryfikować go w Google i spróbować ponownie."
+      },
+      "notConfigured": {
+        "error": "Logowanie przez Google jest obecnie niedostępne w tej witrynie. Proszę zalogować się za pomocą adresu e-mail i hasła."
+      }
+    }
+  },
   "authGate": {
     "redirecting": {
       "label": "Przekierowanie do logowania…"

@@ -34,6 +34,10 @@ export const APPWRITE = {
     UPDATE_MOVER_LOCATION: process.env.NEXT_PUBLIC_FUNCTION_UPDATE_MOVER_LOCATION!,
     UPDATE_MOVE_STATUS: process.env.NEXT_PUBLIC_FUNCTION_UPDATE_MOVE_STATUS!,
     SUBMIT_REVIEW: process.env.NEXT_PUBLIC_FUNCTION_SUBMIT_REVIEW!,
+    // Google sign-in via the same function the mobile apps use (verifies a
+    // Google ID token, finds-or-creates the Appwrite user by e-mail, mints a
+    // login token). Slug id, stable across environments; the env is an override.
+    GOOGLEAUTH: process.env.NEXT_PUBLIC_FUNCTION_GOOGLEAUTH ?? 'googleauth',
     // PROCESS_PAYMENT and SEND_NOTIFICATION are intentionally absent.
     // processpayment marked moves paid with no authentication and no payment
     // provider; sendnotification wrote a notification to any userId with no

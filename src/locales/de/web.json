@@ -23,6 +23,16 @@
       "label": "PickLT v{{version}}"
     }
   },
+  "auth": {
+    "google": {
+      "emailNotVerified": {
+        "error": "Die E-Mail-Adresse Ihres Google-Kontos ist nicht bestätigt. Bestätigen Sie sie bei Google und versuchen Sie es erneut."
+      },
+      "notConfigured": {
+        "error": "Die Anmeldung mit Google ist auf dieser Website derzeit nicht verfügbar. Bitte melden Sie sich mit E-Mail-Adresse und Passwort an."
+      }
+    }
+  },
   "authGate": {
     "redirecting": {
       "label": "Weiterleitung zur Anmeldung…"

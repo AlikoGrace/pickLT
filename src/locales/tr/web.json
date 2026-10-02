@@ -23,6 +23,16 @@
       "label": "PickLT v{{version}}"
     }
   },
+  "auth": {
+    "google": {
+      "emailNotVerified": {
+        "error": "Google hesabınızın e-posta adresi doğrulanmamış. Lütfen Google üzerinden doğrulayıp tekrar deneyin."
+      },
+      "notConfigured": {
+        "error": "Google ile giriş şu anda bu sitede kullanılamıyor. Lütfen e-posta adresiniz ve şifrenizle giriş yapın."
+      }
+    }
+  },
   "authGate": {
     "redirecting": {
       "label": "Giriş sayfasına yönlendiriliyorsunuz…"

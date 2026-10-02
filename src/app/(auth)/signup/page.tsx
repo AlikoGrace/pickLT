@@ -1,5 +1,6 @@
 'use client'
 
+import GoogleSignInButton from '@/components/GoogleSignInButton'
 import { useAuth } from '@/context/auth'
 import { Trans, useTranslation } from 'react-i18next'
 import Logo from '@/shared/Logo'
@@ -7,7 +8,6 @@ import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Suspense, useEffect, useState } from 'react'
 import {
-  GoogleIcon,
   Mail01Icon,
   SmartPhone01Icon,
   ViewIcon,
@@ -36,6 +36,7 @@ function SignupContent() {
 
   const {
     loginWithGoogle,
+    loginWithGoogleIdToken,
     signupWithEmail,
     setPhoneForVerification,
     sendPhoneVerification,
@@ -91,8 +92,16 @@ function SignupContent() {
     )
   }
 
+  // Hosted-OAuth fallback — only when NEXT_PUBLIC_GOOGLE_CLIENT_ID is unset.
   const handleGoogleSignup = () => {
     loginWithGoogle(getRedirectUrl(), isMover ? 'mover' : 'client')
+  }
+
+  // GIS path: `googleauth` finds-or-creates the account by e-mail, so this is
+  // the same call as login; the effects above take over once authenticated.
+  const handleGoogleCredential = async (idToken: string) => {
+    setError('')
+    await loginWithGoogleIdToken(idToken, isMover ? 'mover' : 'client')
   }
 
   const handleEmailSignup = async (e: React.FormEvent) => {
@@ -228,14 +237,13 @@ function SignupContent() {
                 : t('web:signup.clientSubtitle')}
             </p>
 
-            {/* Google OAuth */}
-            <button
-              onClick={handleGoogleSignup}
-              className="flex w-full items-center justify-center gap-3 rounded-xl border border-neutral-200 bg-white px-4 py-3 text-sm font-medium text-neutral-900 transition hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700"
-            >
-              <HugeiconsIcon icon={GoogleIcon} size={20} strokeWidth={1.5} />
-              {t('auth:login.google.cta')}
-            </button>
+            {/* Google — GIS + googleauth, hosted OAuth as the fallback */}
+            <GoogleSignInButton
+              text="signup_with"
+              onCredential={handleGoogleCredential}
+              onError={setError}
+              fallback={handleGoogleSignup}
+            />
 
             <div className="relative my-4">
               <div className="absolute inset-0 flex items-center">

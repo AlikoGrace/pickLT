@@ -23,6 +23,16 @@
       "label": "PickLT v{{version}}"
     }
   },
+  "auth": {
+    "google": {
+      "emailNotVerified": {
+        "error": "Het e-mailadres van uw Google-account is niet geverifieerd. Verifieer het bij Google en probeer het opnieuw."
+      },
+      "notConfigured": {
+        "error": "Inloggen met Google is op dit moment niet beschikbaar op deze site. Log in met uw e-mailadres en wachtwoord."
+      }
+    }
+  },
   "authGate": {
     "redirecting": {
       "label": "Doorsturen naar inloggen…"
