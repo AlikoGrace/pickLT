@@ -1,6 +1,6 @@
 import type { TFunction } from 'i18next'
 
-import type { VehicleServiceState } from './vehicle-service'
+import type { VehicleProfileFields, VehicleServiceState } from './vehicle-service'
 
 /**
  * Stored enum → catalog key segment. Value-to-label only; nothing derives a
@@ -97,4 +97,31 @@ export function vehicleActionFor(state: VehicleServiceState): VehicleAction {
     default:
       return null
   }
+}
+
+/**
+ * R4 without an owned vehicle: `expirerentals` clears the profile to
+ * `vehicleStatus='none'`, which the shared predicate reads as "no vehicle
+ * yet". When the driver's newest rental was retired by expiry, it is
+ * `RENTAL_EXPIRED` instead, so the dashboard offers Rent again on that row.
+ * Same rule as the mover app's `withExpiredRental` (lib/vehicle-form.ts).
+ */
+export function withExpiredRental(
+  state: VehicleServiceState,
+  profile: Pick<VehicleProfileFields, 'vehicleOwnership' | 'currentVehicleId'> | null | undefined,
+  expiredRental: { ownership?: string | null; expiredAt?: string | null } | null | undefined,
+): VehicleServiceState {
+  if (state !== 'RENTAL_PENDING_VEHICLE') return state
+  if (profile?.currentVehicleId) return state
+  if (!expiredRental || expiredRental.ownership !== 'rented' || !expiredRental.expiredAt) return state
+  return 'RENTAL_EXPIRED'
+}
+
+/** "Brand Model · PLATE" — proper nouns and a plate, not prose, so no catalog key. */
+export function vehicleSummaryLine(
+  v: { brand?: string | null; model?: string | null; registrationNumber?: string | null } | null | undefined,
+): string | null {
+  if (!v) return null
+  const name = [v.brand, v.model].filter(Boolean).join(' ')
+  return [name, v.registrationNumber].filter(Boolean).join(' · ') || null
 }

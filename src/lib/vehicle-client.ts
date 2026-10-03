@@ -48,6 +48,10 @@ export interface VehicleOverview {
   /** Owned + rental rows (R3): every non-retired vehicle plus the newest rental. */
   fleet: VehicleDoc[]
   history: VehicleEventDoc[]
+  /** With nothing current: the rental `expirerentals` retired last (R4), else null. */
+  expiredRental?: VehicleDoc | null
+  /** The rows the history names (retired included), by id. */
+  historyVehicles?: Record<string, { brand: string | null; model: string | null; registrationNumber: string | null }>
 }
 
 export async function fetchVehicleOverview(): Promise<VehicleOverview> {

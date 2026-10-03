@@ -295,6 +295,39 @@ export async function getFleet(db: VehicleDb, moverProfileId: string): Promise<A
 }
 
 /**
+ * The mover's newest rental that `expirerentals` retired when its window
+ * closed (`expiredAt` set) — what "Rent again" renews once no vehicle is in
+ * service (R4/R5). `null` when the mover never had one expire.
+ */
+export async function getLastExpiredRental(db: VehicleDb, moverProfileId: string): Promise<AnyDoc | null> {
+  const res = await db.listDocuments(DB(), VEHICLES(), [
+    Query.equal('moverProfileId', [moverProfileId]),
+    Query.equal('ownership', ['rented']),
+    Query.isNotNull('expiredAt'),
+    Query.orderDesc('expiredAt'),
+    Query.limit(1),
+  ])
+  return res.documents[0] ?? null
+}
+
+/**
+ * The rows a history names, retired ones included (an expired rental, a
+ * replaced vehicle), in one query — so each event can say which vehicle it
+ * was about. Scoped to the mover so an event can never surface another
+ * driver's row.
+ */
+export async function getVehiclesByIds(db: VehicleDb, moverProfileId: string, ids: readonly unknown[]): Promise<AnyDoc[]> {
+  const unique = [...new Set(ids.filter((id): id is string => typeof id === 'string' && id.length > 0))]
+  if (unique.length === 0) return []
+  const res = await db.listDocuments(DB(), VEHICLES(), [
+    Query.equal('$id', unique),
+    Query.equal('moverProfileId', [moverProfileId]),
+    Query.limit(unique.length),
+  ])
+  return res.documents
+}
+
+/**
  * Master §6.1. Validates, rejects a plate another driver holds, then either
  * resubmits `vehicleId` in place or retires the current vehicle and creates
  * the new one. Updates the profile's vehicle pointer/status and clears the

@@ -20,7 +20,14 @@ import { formatDateTime, formatVolumeM3 } from '@/lib/format'
 import { formatRemaining, rentalProgress } from '@/lib/rental-time'
 import type { VehicleDoc } from '@/lib/types'
 import { fetchVehicleOverview, selectVehicle, VehicleApiError, type VehicleOverview } from '@/lib/vehicle-client'
-import { STATE_KEY, vehicleEventLabel, vehicleOwnershipLabel, vehicleStatusLabel } from '@/lib/vehicle-labels'
+import {
+  STATE_KEY,
+  vehicleEventLabel,
+  vehicleOwnershipLabel,
+  vehicleStatusLabel,
+  vehicleSummaryLine,
+  withExpiredRental,
+} from '@/lib/vehicle-labels'
 import { rentalRemainingMs, vehicleServiceState } from '@/lib/vehicle-service'
 
 /**
@@ -71,12 +78,15 @@ export default function VehiclePage() {
   const vehicle = data?.vehicle ?? null
   const profile = data?.profile ?? null
   const fleet = data?.fleet ?? []
-  const state = profile ? vehicleServiceState(profile, vehicle, nowMs) : null
+  // After an expiry the profile is cleared (R4); the expired row turns "add a vehicle" into RENTAL_EXPIRED.
+  const expiredRental = data?.expiredRental ?? null
+  const state = profile ? withExpiredRental(vehicleServiceState(profile, vehicle, nowMs), profile, expiredRental) : null
   const remainingMs = profile ? rentalRemainingMs(profile, nowMs) : null
   const windowed = profile?.vehicleOwnership === 'rented' && profile.vehicleRentalEndAt != null
 
   // Rows for the CTAs: the newest rental (for "Rent again") and the verified own vehicle.
-  const newestRental = fleet.find((v) => v.ownership === 'rented') ?? null
+  // The fleet keeps the newest rental even once retired; the expired row backs it up (R4/R5).
+  const newestRental = fleet.find((v) => v.ownership === 'rented') ?? expiredRental
   const ownedVerified = fleet.find((v) => v.ownership === 'owned' && v.status === 'verified') ?? null
   const ownedInService = ownedVerified != null && ownedVerified.$id === profile?.currentVehicleId
   const renewHref = (v: VehicleDoc) => `/vehicle/setup?mode=renew&vehicleId=${encodeURIComponent(v.$id)}`
@@ -431,12 +441,18 @@ export default function VehiclePage() {
               <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('web:mover.vehicle.history.empty')}</p>
             ) : (
               <ul className="divide-y divide-neutral-100 dark:divide-neutral-700">
-                {data?.history.map((e) => (
+                {data?.history.map((e) => {
+                  // Which vehicle: brand, model and plate are proper nouns, not prose.
+                  const evVehicle = vehicleSummaryLine(e.vehicleId ? data.historyVehicles?.[e.vehicleId] : null)
+                  return (
                   <li key={e.$id} className="flex items-start justify-between gap-3 py-2.5">
                     <div className="min-w-0">
                       <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
                         {vehicleEventLabel(t, e.action)}
                       </p>
+                      {evVehicle && (
+                        <p className="truncate text-xs text-neutral-700 dark:text-neutral-200">{evVehicle}</p>
+                      )}
                       {e.note && !e.note.startsWith('{') && (
                         <p className="truncate text-xs text-neutral-500 dark:text-neutral-400">{e.note}</p>
                       )}
@@ -445,7 +461,8 @@ export default function VehiclePage() {
                       {formatDateTime(e.at)}
                     </time>
                   </li>
-                ))}
+                  )
+                })}
               </ul>
             )}
           </div>

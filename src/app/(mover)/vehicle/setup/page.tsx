@@ -60,8 +60,10 @@ function VehicleSetupInner() {
         const v = d.vehicle
         setPrefill(v && (v.status === 'rejected' || v.status === 'pending_review') ? v : null)
         // Renew: the row named in the URL, else the newest rental on file.
-        const byId = vehicleIdParam ? d.fleet.find((f) => f.$id === vehicleIdParam && f.ownership === 'rented') : null
-        setRenewTarget(byId ?? d.fleet.find((f) => f.ownership === 'rented') ?? null)
+        // The expired rental (R4) counts too: the fleet only keeps the newest rental once retired.
+        const rentals = d.expiredRental ? [...d.fleet, d.expiredRental] : d.fleet
+        const byId = vehicleIdParam ? rentals.find((f) => f.$id === vehicleIdParam && f.ownership === 'rented') : null
+        setRenewTarget(byId ?? d.fleet.find((f) => f.ownership === 'rented') ?? d.expiredRental ?? null)
         setOwnVerifiedInService(
           d.profile.vehicleOwnership !== 'rented' &&
             d.profile.vehicleStatus === 'verified' &&

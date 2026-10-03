@@ -6,10 +6,12 @@ import { useLocationBroadcast } from '@/hooks/useLocationBroadcast'
 import Logo from '@/shared/Logo'
 import SwitchDarkMode from '@/shared/SwitchDarkMode'
 import LanguageDropdown from '@/components/Header/LanguageDropdown'
+import NotifyDropdown from '@/components/Header/NotifyDropdown'
 import VehicleConfirmModal from '@/components/mover/VehicleConfirmModal'
 import VehicleStatusBanner from '@/components/mover/VehicleStatusBanner'
 import type { VehicleDoc } from '@/lib/types'
 import { fetchVehicleOverview } from '@/lib/vehicle-client'
+import { withExpiredRental } from '@/lib/vehicle-labels'
 import { rentalRemainingMs, vehicleServiceReady, vehicleServiceState } from '@/lib/vehicle-service'
 import {
   Bars3Icon,
@@ -20,7 +22,6 @@ import {
   UserGroupIcon,
   UserCircleIcon,
   ArrowRightOnRectangleIcon,
-  BellIcon,
   TruckIcon,
   BanknotesIcon,
   DocumentTextIcon,
@@ -217,6 +218,9 @@ const MoverDashboardLayout = ({ children }: Props) => {
   const [currentVehicle, setCurrentVehicle] = useState<VehicleDoc | null>(null)
   // The newest rental row — what the expired sheet's "Rent again" renews (R5).
   const [newestRentalId, setNewestRentalId] = useState<string | null>(null)
+  // With nothing current, the rental the cron retired last (R4): it names the
+  // expired prompt and turns the cleared profile into RENTAL_EXPIRED.
+  const [expiredRental, setExpiredRental] = useState<VehicleDoc | null>(null)
   const profileId = moverDetails?.profileId
   const currentVehicleId = moverDetails?.currentVehicleId ?? null
   const vehicleStatus = moverDetails?.vehicleStatus ?? 'none'
@@ -224,6 +228,7 @@ const MoverDashboardLayout = ({ children }: Props) => {
     if (!profileId) {
       setCurrentVehicle(null)
       setNewestRentalId(null)
+      setExpiredRental(null)
       return
     }
     let cancelled = false
@@ -232,6 +237,7 @@ const MoverDashboardLayout = ({ children }: Props) => {
         if (cancelled) return
         setCurrentVehicle(d.vehicle)
         setNewestRentalId(d.fleet.find((v) => v.ownership === 'rented')?.$id ?? null)
+        setExpiredRental(d.expiredRental ?? null)
       })
       .catch(() => {
         /* the banner degrades to the profile-only state */
@@ -240,7 +246,9 @@ const MoverDashboardLayout = ({ children }: Props) => {
       cancelled = true
     }
   }, [profileId, currentVehicleId, vehicleStatus])
-  const vehicleState = vehicleServiceState(moverDetails, currentVehicle, nowMs)
+  const vehicleState = withExpiredRental(vehicleServiceState(moverDetails, currentVehicle, nowMs), moverDetails, expiredRental)
+  // After an expiry nothing is current; the expired rental names the prompt and the banner.
+  const shownVehicle = currentVehicle ?? (vehicleState === 'RENTAL_EXPIRED' ? expiredRental : null)
   const isServiceReady = vehicleServiceReady(moverDetails, nowMs)
   const vehicleRemainingMs = rentalRemainingMs(moverDetails, nowMs)
 
@@ -441,9 +449,12 @@ const MoverDashboardLayout = ({ children }: Props) => {
         <div className="flex flex-shrink-0 items-center gap-1 min-[400px]:gap-2">
           <LanguageDropdown panelClassName="w-56" />
           <SwitchDarkMode className="!h-9 !w-9 !text-xl" />
-          <button className="rounded-full p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700">
-            <BellIcon className="h-6 w-6 text-neutral-600 dark:text-neutral-300" />
-          </button>
+          {/* The shared bell (feed + mark-read); it used to be a button that did nothing. */}
+          <NotifyDropdown
+            className="flex"
+            itemHref="/dashboard"
+            buttonClassName="!m-0 !p-2 text-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-700"
+          />
           <div className="h-8 w-8 overflow-hidden rounded-full bg-neutral-200 dark:bg-neutral-700">
             <Link href="/settings">
             {user?.profilePhoto ? (
@@ -526,6 +537,9 @@ const MoverDashboardLayout = ({ children }: Props) => {
             state={vehicleState}
             rejectionReason={currentVehicle?.rejectionReason ?? null}
             rentalRemainingMs={vehicleRemainingMs}
+            rentalEndAt={moverDetails?.vehicleRentalEndAt ?? null}
+            vehicle={shownVehicle}
+            showCurrentWhenReady={pathname === '/dashboard'}
           />
         )}
         <div className="min-h-screen">{children}</div>
@@ -536,9 +550,9 @@ const MoverDashboardLayout = ({ children }: Props) => {
         postMove={moverDetails?.vehicleReconfirmRequired === true}
         expired={vehicleState === 'RENTAL_EXPIRED'}
         ownedVehicleId={moverDetails?.ownedVehicleId ?? null}
-        rentalVehicleId={newestRentalId ?? currentVehicleId}
-        vehicleLabel={currentVehicle ? [currentVehicle.brand, currentVehicle.model].filter(Boolean).join(' ') : null}
-        plate={currentVehicle?.registrationNumber ?? null}
+        rentalVehicleId={newestRentalId ?? expiredRental?.$id ?? currentVehicleId}
+        vehicleLabel={shownVehicle ? [shownVehicle.brand, shownVehicle.model].filter(Boolean).join(' ') : null}
+        plate={shownVehicle?.registrationNumber ?? null}
         onConfirmed={() => refreshProfile()}
       />
 
