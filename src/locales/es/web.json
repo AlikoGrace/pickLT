@@ -1017,7 +1017,7 @@
         "credit": {
           "body": "Ganancias de pagos con tarjeta que guardamos para usted. Las comisiones de futuras mudanzas en efectivo se descuentan primero de aquí."
         },
-        "helper": "Una mudanza en efectivo suma su comisión de la plataforma a su saldo; una mudanza con tarjeta suma sus ganancias."
+        "helper": "Una mudanza en efectivo suma su comisión de la plataforma a su saldo, con vencimiento en 24 horas — si sigue sin pagar, las mudanzas se pausan; una mudanza con tarjeta suma sus ganancias."
       },
       "history": {
         "title": "Historial del saldo",
@@ -1091,7 +1091,7 @@
         "reason": "Desconectado: comisiones de la plataforma sin pagar. Pague para volver a recibir mudanzas."
       },
       "cashMove": {
-        "label": "Comisión de la plataforma en esta mudanza: {{amount}} — se añade a su saldo"
+        "label": "Comisión de la plataforma en esta mudanza: {{amount}} — páguela en 24 horas para seguir recibiendo mudanzas"
       }
     }
   },

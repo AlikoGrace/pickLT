@@ -30,7 +30,7 @@ const breakdown = {
 }
 
 describe('fee-ledger — postings', () => {
-  it('a cash move owes exactly the quote platform fee, due 7 days after completion', () => {
+  it('a cash move owes exactly the quote platform fee, due 24 hours after completion', () => {
     const p = postingForCompletedMove(
       { $id: 'm1', paymentMethod: 'cash', estimatedPrice: 363.12, priceBreakdown: JSON.stringify(breakdown), completedAt: iso(NOW) },
       iso(NOW),
@@ -38,7 +38,7 @@ describe('fee-ledger — postings', () => {
     expect(p).toEqual({
       kind: 'cash_fee_due',
       amountCents: -2260,
-      dueAt: iso(NOW + 7 * DAY),
+      dueAt: iso(NOW + DAY),
       idempotencyKey: 'move:m1:cash_fee_due',
     })
   })
@@ -58,9 +58,9 @@ describe('fee-ledger — postings', () => {
   })
 })
 
-describe('fee-ledger — standing (owner D2: 7 days grace, restricted at 7 days overdue or > €100)', () => {
-  const debt = (cents: number, dueMs: number): LedgerEntryLike => ({
-    kind: 'cash_fee_due',
+describe('fee-ledger — standing (cash: due 24 h, cut off at the due time; other debts 7 + 7 days; > €100 always)', () => {
+  const debt = (cents: number, dueMs: number, kind = 'cash_fee_due'): LedgerEntryLike => ({
+    kind,
     amountCents: -cents,
     dueAt: iso(dueMs),
     createdAt: iso(dueMs - 7 * DAY),
@@ -75,11 +75,23 @@ describe('fee-ledger — standing (owner D2: 7 days grace, restricted at 7 days 
     expect(computeFeeStanding([], NOW)).toMatchObject({ balanceCents: 0, owedCents: 0, standing: 'ok', oldestUnpaidDueAt: null })
   })
 
-  it('owed but not yet due → due; just past due → overdue; 7 days past due → restricted', () => {
-    expect(computeFeeStanding([debt(2260, NOW + DAY)], NOW).standing).toBe('due')
-    expect(computeFeeStanding([debt(2260, NOW - 1000)], NOW).standing).toBe('overdue')
-    expect(computeFeeStanding([debt(2260, NOW - 7 * DAY + 1000)], NOW).standing).toBe('overdue')
-    expect(computeFeeStanding([debt(2260, NOW - 7 * DAY)], NOW).standing).toBe('restricted')
+  it('a cash fee: due within its 24 h, restricted the moment the 24 h are up', () => {
+    expect(computeFeeStanding([debt(2260, NOW + 1000)], NOW).standing).toBe('due')
+    expect(computeFeeStanding([debt(2260, NOW)], NOW).standing).toBe('restricted')
+    expect(computeFeeStanding([debt(2260, NOW - 1000)], NOW).standing).toBe('restricted')
+  })
+
+  it('an admin charge: due → overdue after its due date → restricted 7 days later', () => {
+    expect(computeFeeStanding([debt(2260, NOW + DAY, 'charge')], NOW).standing).toBe('due')
+    expect(computeFeeStanding([debt(2260, NOW - 1000, 'charge')], NOW).standing).toBe('overdue')
+    expect(computeFeeStanding([debt(2260, NOW - 7 * DAY + 1000, 'charge')], NOW).standing).toBe('overdue')
+    expect(computeFeeStanding([debt(2260, NOW - 7 * DAY, 'charge')], NOW).standing).toBe('restricted')
+  })
+
+  it('a late cash fee restricts even when an older charge is still within its allowance', () => {
+    const r = computeFeeStanding([debt(1000, NOW - 2 * DAY, 'charge'), debt(2260, NOW - 1000)], NOW)
+    expect(r.standing).toBe('restricted')
+    expect(r.oldestUnpaidDueAt).toBe(iso(NOW - 2 * DAY))
   })
 
   it('more than €100 owed → restricted even before anything is due; exactly €100 is not', () => {
@@ -117,9 +129,10 @@ describe('fee-ledger — policy and gate', () => {
   it('parseFeePolicy: defaults, GLOBAL, per-market override, junk ignored', () => {
     expect(parseFeePolicy(null)).toEqual(DEFAULT_FEE_POLICY)
     expect(parseFeePolicy('not json')).toEqual(DEFAULT_FEE_POLICY)
-    const raw = JSON.stringify({ GLOBAL: { graceDays: 5 }, GH: { restrictBalanceCents: 5000, graceDays: -1 } })
-    expect(parseFeePolicy(raw, 'gh')).toEqual({ ...DEFAULT_FEE_POLICY, graceDays: 5, restrictBalanceCents: 5000 })
-    expect(parseFeePolicy(raw, 'DE')).toEqual({ ...DEFAULT_FEE_POLICY, graceDays: 5 })
+    const raw = JSON.stringify({ GLOBAL: { graceDays: 5, cashGraceHours: 12 }, GH: { restrictBalanceCents: 5000, graceDays: -1 } })
+    expect(parseFeePolicy(raw, 'gh')).toEqual({ ...DEFAULT_FEE_POLICY, graceDays: 5, cashGraceHours: 12, restrictBalanceCents: 5000 })
+    expect(parseFeePolicy(raw, 'DE')).toEqual({ ...DEFAULT_FEE_POLICY, graceDays: 5, cashGraceHours: 12 })
+    expect(DEFAULT_FEE_POLICY).toMatchObject({ cashGraceHours: 24, cashRestrictOverdueHours: 0 })
     expect(parseFeePolicy({ restrictOverdueDays: 3 }, 'DE')).toEqual({ ...DEFAULT_FEE_POLICY, restrictOverdueDays: 3 })
   })
 

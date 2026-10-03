@@ -1017,7 +1017,7 @@
         "credit": {
           "body": "Guadagni dei pagamenti con carta custoditi per Lei. Le commissioni dei prossimi traslochi in contanti vengono detratte prima da qui."
         },
-        "helper": "Un trasloco in contanti aggiunge al Suo saldo la commissione della piattaforma; un trasloco con carta aggiunge i Suoi guadagni."
+        "helper": "Un trasloco in contanti aggiunge al Suo saldo la commissione della piattaforma, da pagare entro 24 ore — se resta non pagata, i traslochi vengono sospesi; un trasloco con carta aggiunge i Suoi guadagni."
       },
       "history": {
         "title": "Movimenti del saldo",
@@ -1091,7 +1091,7 @@
         "reason": "Offline: commissioni della piattaforma non pagate. Paghi per ricevere di nuovo traslochi."
       },
       "cashMove": {
-        "label": "Commissione della piattaforma su questo trasloco: {{amount}} — aggiunta al Suo saldo"
+        "label": "Commissione della piattaforma su questo trasloco: {{amount}} — la paghi entro 24 ore per continuare a ricevere traslochi"
       }
     }
   },

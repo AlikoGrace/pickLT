@@ -1017,7 +1017,7 @@
         "credit": {
           "body": "Verdiensten uit kaartbetalingen die we voor u vasthouden. Platformkosten van latere contante verhuizingen worden hier eerst mee verrekend."
         },
-        "helper": "Een contante verhuizing voegt de platformkosten toe aan uw saldo; een kaartverhuizing voegt uw verdiensten toe."
+        "helper": "Een contante verhuizing voegt de platformkosten toe aan uw saldo, te betalen binnen 24 uur — blijven ze onbetaald, dan worden verhuizingen gepauzeerd; een kaartverhuizing voegt uw verdiensten toe."
       },
       "history": {
         "title": "Saldogeschiedenis",
@@ -1091,7 +1091,7 @@
         "reason": "Offline: onbetaalde platformkosten. Betaal om weer verhuizingen te ontvangen."
       },
       "cashMove": {
-        "label": "Platformkosten voor deze verhuizing: {{amount}} — toegevoegd aan uw saldo"
+        "label": "Platformkosten voor deze verhuizing: {{amount}} — betaal binnen 24 uur om verhuizingen te blijven ontvangen"
       }
     }
   },

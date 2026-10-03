@@ -1017,7 +1017,7 @@
         "credit": {
           "body": "Kartlı ödemelerden sizin için tutulan kazançlar. Sonraki nakit taşımaların platform ücretleri önce buradan düşülür."
         },
-        "helper": "Nakit bir taşıma, platform ücretini bakiyenize ekler; kartlı bir taşıma kazancınızı ekler."
+        "helper": "Nakit bir taşıma, platform ücretini bakiyenize ekler ve ücret 24 saat içinde ödenmelidir — ödenmezse taşımalar duraklatılır; kartlı bir taşıma kazancınızı ekler."
       },
       "history": {
         "title": "Bakiye geçmişi",
@@ -1091,7 +1091,7 @@
         "reason": "Çevrimdışı: ödenmemiş platform ücretleri. Yeniden taşıma almak için ödeyin."
       },
       "cashMove": {
-        "label": "Bu taşımadaki platform ücreti: {{amount}} — bakiyenize eklendi"
+        "label": "Bu taşımadaki platform ücreti: {{amount}} — taşıma almaya devam etmek için 24 saat içinde ödeyin"
       }
     }
   },

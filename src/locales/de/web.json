@@ -1017,7 +1017,7 @@
         "credit": {
           "body": "Für Sie verwahrter Verdienst aus Kartenzahlungen. Plattformgebühren späterer Barzahlungsumzüge werden zuerst damit verrechnet."
         },
-        "helper": "Ein Barzahlungsumzug fügt Ihrem Saldo die Plattformgebühr hinzu, ein Kartenzahlungsumzug Ihren Verdienst."
+        "helper": "Ein Barzahlungsumzug fügt Ihrem Saldo die Plattformgebühr hinzu, fällig innerhalb von 24 Stunden – bleibt sie unbezahlt, werden Umzüge pausiert; ein Kartenzahlungsumzug fügt Ihren Verdienst hinzu."
       },
       "history": {
         "title": "Saldoverlauf",
@@ -1091,7 +1091,7 @@
         "reason": "Offline: unbezahlte Plattformgebühren. Bezahlen Sie, um wieder Umzüge zu erhalten."
       },
       "cashMove": {
-        "label": "Plattformgebühr für diesen Umzug: {{amount}} – wird Ihrem Saldo hinzugefügt"
+        "label": "Plattformgebühr für diesen Umzug: {{amount}} – zahlen Sie innerhalb von 24 Stunden, um weiterhin Umzüge zu erhalten"
       }
     }
   },

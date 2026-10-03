@@ -42,6 +42,8 @@ export type FeeStanding = 'ok' | 'due' | 'overdue' | 'restricted'
 
 export interface FeePolicy {
   /** A cash move's fee falls due this many days after completion. */
+  cashGraceHours: number
+  cashRestrictOverdueHours: number
   graceDays: number
   /** Restricted once the oldest unpaid fee is this many days past due. */
   restrictOverdueDays: number
@@ -53,13 +55,16 @@ export interface FeePolicy {
 
 /** Owner decision D2 (2026-10-03); overridable per market in `platform_config.fee_policy`. */
 export const DEFAULT_FEE_POLICY: FeePolicy = {
+  cashGraceHours: 24,
+  cashRestrictOverdueHours: 0,
   graceDays: 7,
   restrictOverdueDays: 7,
   restrictBalanceCents: 10000,
   suspendSuggestDays: 30,
 }
 
-const DAY_MS = 24 * 60 * 60 * 1000
+const HOUR_MS = 60 * 60 * 1000
+const DAY_MS = 24 * HOUR_MS
 
 export interface LedgerEntryLike {
   kind: LedgerKind | string
@@ -103,13 +108,15 @@ export function parseFeePolicy(raw: unknown, countryCode?: string | null): FeePo
   }
   if (!doc || typeof doc !== 'object' || Array.isArray(doc)) return { ...DEFAULT_FEE_POLICY }
   const table = doc as Record<string, unknown>
-  const looksBare = ['graceDays', 'restrictOverdueDays', 'restrictBalanceCents', 'suspendSuggestDays'].some((k) => k in table)
+  const looksBare = Object.keys(DEFAULT_FEE_POLICY).some((k) => k in table)
   const global = (looksBare ? table : table.GLOBAL) as Record<string, unknown> | undefined
   const code = typeof countryCode === 'string' ? countryCode.trim().toUpperCase() : ''
   const market = (code && !looksBare ? table[code] : undefined) as Record<string, unknown> | undefined
   const pick = (key: keyof FeePolicy): number =>
     positiveInt(market?.[key], positiveInt(global?.[key], DEFAULT_FEE_POLICY[key]))
   return {
+    cashGraceHours: pick('cashGraceHours'),
+    cashRestrictOverdueHours: pick('cashRestrictOverdueHours'),
     graceDays: pick('graceDays'),
     restrictOverdueDays: pick('restrictOverdueDays'),
     restrictBalanceCents: pick('restrictBalanceCents'),
@@ -163,7 +170,7 @@ export interface LedgerPosting {
 /**
  * What a completed move posts to the ledger: a card move credits the driver's
  * payout (the platform holds the money), anything else is cash in the
- * driver's hand and debits the platform fee, due `graceDays` later. Null when
+ * driver's hand and debits the platform fee, due `cashGraceHours` later. Null when
  * there is nothing to post (no price, or a zero fee/payout).
  */
 export function postingForCompletedMove(
@@ -183,15 +190,17 @@ export function postingForCompletedMove(
   return {
     kind: 'cash_fee_due',
     amountCents: -fee,
-    dueAt: new Date(Date.parse(completedAt) + policy.graceDays * DAY_MS).toISOString(),
+    dueAt: new Date(Date.parse(completedAt) + policy.cashGraceHours * HOUR_MS).toISOString(),
     idempotencyKey: `move:${move.$id}:cash_fee_due`,
   }
 }
 
 /**
  * Balance and standing from the ledger. Credits pay off debts oldest-due
- * first (FIFO), so the age that matters is that of the oldest debt still
- * uncovered. A debt without `dueAt` is due when it was created.
+ * first (FIFO); each debt still (partly) unpaid then has a due time and a
+ * cut-off — a cash fee's cut-off is its due time (+ `cashRestrictOverdueHours`),
+ * any other debt's is `restrictOverdueDays` after its due date. A debt without
+ * `dueAt` is due when it was created.
  */
 export function computeFeeStanding(
   entries: readonly LedgerEntryLike[],
@@ -200,39 +209,44 @@ export function computeFeeStanding(
 ): FeeStandingResult {
   let balanceCents = 0
   let credit = 0
-  const debts: { cents: number; dueMs: number }[] = []
+  const debts: { cents: number; dueMs: number; cutoffMs: number }[] = []
   for (const e of entries) {
     const amount = isNum(e.amountCents) ? Math.round(e.amountCents) : 0
     balanceCents += amount
     if (amount > 0) credit += amount
     else if (amount < 0) {
-      const due = Date.parse(e.dueAt ?? e.createdAt)
-      debts.push({ cents: -amount, dueMs: Number.isFinite(due) ? due : nowMs })
+      const parsed = Date.parse(e.dueAt ?? e.createdAt)
+      const dueMs = Number.isFinite(parsed) ? parsed : nowMs
+      const allowance =
+        e.kind === 'cash_fee_due' ? policy.cashRestrictOverdueHours * HOUR_MS : policy.restrictOverdueDays * DAY_MS
+      debts.push({ cents: -amount, dueMs, cutoffMs: dueMs + allowance })
     }
   }
   debts.sort((a, b) => a.dueMs - b.dueMs)
-  let oldestUnpaidMs: number | null = null
+  const unpaid: { dueMs: number; cutoffMs: number }[] = []
   for (const d of debts) {
     if (credit >= d.cents) {
       credit -= d.cents
       continue
     }
-    oldestUnpaidMs = d.dueMs
-    break
+    credit = 0
+    unpaid.push(d)
   }
 
   const owedCents = Math.max(0, -balanceCents)
   // Owing nothing on balance means every debt is covered, whatever the order.
-  if (owedCents === 0) oldestUnpaidMs = null
+  if (owedCents === 0) unpaid.length = 0
+  const oldestUnpaidMs = unpaid.length ? Math.min(...unpaid.map((d) => d.dueMs)) : null
 
   let standing: FeeStanding = 'ok'
   let suspendSuggested = false
   if (owedCents > 0) {
-    const daysPastDue = oldestUnpaidMs == null ? 0 : (nowMs - oldestUnpaidMs) / DAY_MS
-    if (owedCents > policy.restrictBalanceCents || daysPastDue >= policy.restrictOverdueDays) standing = 'restricted'
-    else if (daysPastDue > 0) standing = 'overdue'
+    const cutOff = unpaid.some((d) => nowMs >= d.cutoffMs)
+    const pastDue = unpaid.some((d) => nowMs > d.dueMs)
+    if (owedCents > policy.restrictBalanceCents || cutOff) standing = 'restricted'
+    else if (pastDue) standing = 'overdue'
     else standing = 'due'
-    suspendSuggested = daysPastDue >= policy.suspendSuggestDays
+    suspendSuggested = oldestUnpaidMs != null && nowMs - oldestUnpaidMs >= policy.suspendSuggestDays * DAY_MS
   }
   return {
     balanceCents,

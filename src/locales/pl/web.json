@@ -1027,7 +1027,7 @@
         "credit": {
           "body": "Zarobki z płatności kartą przechowywane przez PickLT. Opłaty platformy za kolejne przeprowadzki gotówkowe są najpierw z nich potrącane."
         },
-        "helper": "Przeprowadzka opłacona gotówką dodaje do salda opłatę platformy, a opłacona kartą — zarobki."
+        "helper": "Przeprowadzka opłacona gotówką dodaje do salda opłatę platformy, płatną w ciągu 24 godzin — jeśli pozostanie nieopłacona, zlecenia zostaną wstrzymane; opłacona kartą dodaje zarobki."
       },
       "history": {
         "title": "Historia salda",
@@ -1101,7 +1101,7 @@
         "reason": "Offline: niezapłacone opłaty platformy. Proszę zapłacić, aby znów otrzymywać przeprowadzki."
       },
       "cashMove": {
-        "label": "Opłata platformy za tę przeprowadzkę: {{amount}} — doliczona do salda"
+        "label": "Opłata platformy za tę przeprowadzkę: {{amount}} — zapłać w ciągu 24 godzin, aby nadal otrzymywać zlecenia"
       }
     }
   },
