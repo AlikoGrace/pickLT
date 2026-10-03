@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { vehicleSummaryLine, withExpiredRental } from '../vehicle-labels'
+import { mayBeExpiredRental, vehicleSummaryLine, withExpiredRental } from '../vehicle-labels'
 
 describe('withExpiredRental (R4 — mirrors the mover app)', () => {
   const cleared = { vehicleOwnership: 'rented', currentVehicleId: null }
@@ -30,6 +30,24 @@ describe('withExpiredRental (R4 — mirrors the mover app)', () => {
     )
     expect(withExpiredRental('RENTAL_VEHICLE_REVIEW', cleared, expiredRow)).toBe('RENTAL_VEHICLE_REVIEW')
     expect(withExpiredRental('OWN_VERIFIED', cleared, expiredRow)).toBe('OWN_VERIFIED')
+  })
+})
+
+describe('mayBeExpiredRental (useVehicleReadiness only reads vehicles when it can matter)', () => {
+  it('a cleared profile reading "add vehicle" may be an expired rental', () => {
+    expect(mayBeExpiredRental('RENTAL_PENDING_VEHICLE', { currentVehicleId: null })).toBe(true)
+  })
+  it('anything else, a current vehicle, or no profile: no lookup', () => {
+    expect(mayBeExpiredRental('RENTAL_PENDING_VEHICLE', { currentVehicleId: 'veh_1' })).toBe(false)
+    expect(mayBeExpiredRental('RENTAL_PENDING_VEHICLE', null)).toBe(false)
+    expect(mayBeExpiredRental('OWN_PENDING_VEHICLE', { currentVehicleId: null })).toBe(false)
+    expect(mayBeExpiredRental('RENTAL_ACTIVE', { currentVehicleId: null })).toBe(false)
+  })
+  it('composes with withExpiredRental into "Rent again" for the accept gates', () => {
+    const profile = { vehicleOwnership: 'rented' as const, currentVehicleId: null }
+    const state = 'RENTAL_PENDING_VEHICLE' as const
+    expect(mayBeExpiredRental(state, profile)).toBe(true)
+    expect(withExpiredRental(state, profile, { ownership: 'rented', expiredAt: '2026-10-03T00:00:00Z' })).toBe('RENTAL_EXPIRED')
   })
 })
 

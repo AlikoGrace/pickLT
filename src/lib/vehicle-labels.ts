@@ -117,6 +117,24 @@ export function withExpiredRental(
   return 'RENTAL_EXPIRED'
 }
 
+/**
+ * Whether `withExpiredRental` could change this state, i.e. whether a caller
+ * that only has the profile needs the expired-rental row at all. Lets the
+ * accept gates skip the vehicle read for every other driver.
+ */
+export function mayBeExpiredRental(
+  state: VehicleServiceState,
+  profile: Pick<VehicleProfileFields, 'currentVehicleId'> | null | undefined,
+): boolean {
+  return state === 'RENTAL_PENDING_VEHICLE' && !!profile && !profile.currentVehicleId
+}
+
+/**
+ * "Use my own vehicle" after a rental ended, for a driver without a verified
+ * owned vehicle: the add form with "Own vehicle" pre-picked (mover-app parity).
+ */
+export const USE_OWN_ADD_HREF = '/vehicle/setup?mode=add&source=settings&ownership=owned'
+
 /** "Brand Model · PLATE" — proper nouns and a plate, not prose, so no catalog key. */
 export function vehicleSummaryLine(
   v: { brand?: string | null; model?: string | null; registrationNumber?: string | null } | null | undefined,

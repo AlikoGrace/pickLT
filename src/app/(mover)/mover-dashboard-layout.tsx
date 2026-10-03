@@ -540,6 +540,7 @@ const MoverDashboardLayout = ({ children }: Props) => {
             rentalEndAt={moverDetails?.vehicleRentalEndAt ?? null}
             vehicle={shownVehicle}
             showCurrentWhenReady={pathname === '/dashboard'}
+            ownedVehicleId={moverDetails?.ownedVehicleId ?? null}
           />
         )}
         <div className="min-h-screen">{children}</div>

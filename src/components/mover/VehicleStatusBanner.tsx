@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next'
 
 import { formatDateTime } from '@/lib/format'
 import { formatRemaining } from '@/lib/rental-time'
-import { STATE_KEY, vehicleActionFor, vehicleSummaryLine } from '@/lib/vehicle-labels'
+import { STATE_KEY, USE_OWN_ADD_HREF, vehicleActionFor, vehicleSummaryLine } from '@/lib/vehicle-labels'
 import { RESTRICTED_VEHICLE_STATES, type VehicleServiceState } from '@/lib/vehicle-service'
 
 interface Props {
@@ -29,6 +29,12 @@ interface Props {
   vehicle?: { brand?: string | null; model?: string | null; registrationNumber?: string | null } | null
   /** Dashboard only: a ready driver sees the vehicle in service as a green card (mover app parity). */
   showCurrentWhenReady?: boolean
+  /**
+   * RENTAL_EXPIRED: the verified own vehicle, if any. "Use my own vehicle"
+   * then opens the status page (which switches to it); without one it opens
+   * the add form with "Own vehicle" pre-picked (mover-app parity).
+   */
+  ownedVehicleId?: string | null
   className?: string
 }
 
@@ -66,6 +72,7 @@ export default function VehicleStatusBanner({
   rentalEndAt,
   vehicle,
   showCurrentWhenReady = false,
+  ownedVehicleId,
   className,
 }: Props) {
   const { t } = useTranslation()
@@ -251,6 +258,11 @@ export default function VehicleStatusBanner({
         >
           {cta}
         </Link>
+        {state === 'RENTAL_EXPIRED' && (
+          <Link href={ownedVehicleId ? '/vehicle' : USE_OWN_ADD_HREF} className={ctaClass}>
+            {t('booking:vehicle.rental.useOwn.cta')}
+          </Link>
+        )}
       </div>
     </div>
   )

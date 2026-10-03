@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { confirmVehicleSame, selectVehicle, VehicleApiError } from '@/lib/vehicle-client'
+import { USE_OWN_ADD_HREF } from '@/lib/vehicle-labels'
 
 interface Props {
   open: boolean
@@ -117,16 +118,16 @@ export default function VehicleConfirmModal({
             >
               {t('booking:vehicle.rental.rentAnother.cta')}
             </button>
-            {ownedVehicleId && (
-              <button
-                type="button"
-                onClick={handleUseOwn}
-                disabled={busy}
-                className="w-full rounded-full border border-neutral-200 px-4 py-3 text-sm font-semibold text-neutral-700 transition hover:bg-neutral-100 disabled:opacity-50 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-neutral-700"
-              >
-                {t('booking:vehicle.rental.useOwn.cta')}
-              </button>
-            )}
+            {/* With a verified owned vehicle this switches back to it; without one it
+                opens the add form with "Own vehicle" picked (mover-app parity). */}
+            <button
+              type="button"
+              onClick={ownedVehicleId ? handleUseOwn : () => router.push(USE_OWN_ADD_HREF)}
+              disabled={busy}
+              className="w-full rounded-full border border-neutral-200 px-4 py-3 text-sm font-semibold text-neutral-700 transition hover:bg-neutral-100 disabled:opacity-50 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-neutral-700"
+            >
+              {t('booking:vehicle.rental.useOwn.cta')}
+            </button>
           </div>
         </div>
       </div>

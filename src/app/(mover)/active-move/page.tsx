@@ -6,6 +6,7 @@ import { useLocationBroadcast } from '@/hooks/useLocationBroadcast'
 import { useMoverLocationPolling } from '@/hooks/useMoverLocationPolling'
 import { client, databases } from '@/lib/appwrite'
 import { isMoveStartable } from '@/lib/schedule-timing'
+import { ACTIVE_MOVE_RECONCILE_MS, activeMoveOutcome } from '@/lib/active-move-reconcile'
 import type { RealtimeResponseEvent, Models } from 'appwrite'
 import { Query } from 'appwrite'
 import ButtonPrimary from '@/shared/ButtonPrimary'
@@ -134,17 +135,65 @@ export default function ActiveMovePage() {
     }, []),
   })
 
+  // Latest move id / phase for the reconcile read (its callback outlives renders).
+  const moveIdRef = useRef<string | null>(null)
+  const phaseRef = useRef<MovePhase>('en_route')
+  useEffect(() => {
+    moveIdRef.current = (move?.$id as string | undefined) ?? null
+  }, [move?.$id])
+  useEffect(() => {
+    phaseRef.current = phase
+  }, [phase])
+
+  // Client cancelled: show a notice before clearing, auto-dismissed after 6 seconds.
+  const showClientCancelled = useCallback((doc: Record<string, unknown>) => {
+    cancelledMoveRef.current = { ...doc }
+    setCancelledByClient(true)
+    setMove(null)
+    if (cancelTimerRef.current) clearTimeout(cancelTimerRef.current)
+    cancelTimerRef.current = setTimeout(() => {
+      setCancelledByClient(false)
+      cancelledMoveRef.current = null
+    }, 6_000)
+  }, [])
+
+  // The active read no longer returns the move on screen: read that move to
+  // tell completion (keep the completed screen) from a cancel (notice) from
+  // anything else that ended it (empty state).
+  const settleMissingMove = useCallback(
+    async (moveId: string) => {
+      let doc: Record<string, unknown> | null = null
+      try {
+        const res = await fetch(`/api/moves/${moveId}/full`, { cache: 'no-store' })
+        if (res.ok) doc = ((await res.json()).move as Record<string, unknown> | undefined) ?? null
+      } catch {
+        /* the active read already said it is not active */
+      }
+      if (moveIdRef.current !== moveId) return
+      const outcome = activeMoveOutcome(doc?.status as string | undefined)
+      if (outcome === 'active') return
+      if (outcome === 'completed') setPhase('completed')
+      else if (outcome === 'cancelled_by_client' && doc) showClientCancelled(doc)
+      else setMove(null)
+    },
+    [showClientCancelled],
+  )
+
   // ── Fetch the active move from server API ─────────────────
-  // Uses admin SDK to bypass permission issues with relationship fields
+  // Uses admin SDK to bypass permission issues with relationship fields.
+  // Also the reconcile read (focus / visibility / every 15 s) for a realtime
+  // event the socket missed.
   const fetchActiveMove = useCallback(async () => {
     if (!moverProfileId) return
     try {
-      const res = await fetch('/api/mover/active-move')
+      const res = await fetch('/api/mover/active-move', { cache: 'no-store' })
       if (res.ok) {
         const data = await res.json()
         if (data.move) {
           setMove(data.move)
           mapStatusToPhase(data.move.status as string)
+        } else if (moveIdRef.current && phaseRef.current !== 'completed') {
+          await settleMissingMove(moveIdRef.current)
         }
       }
     } catch (err) {
@@ -152,11 +201,28 @@ export default function ActiveMovePage() {
     } finally {
       setIsLoading(false)
     }
-  }, [moverProfileId])
+  }, [moverProfileId, settleMissingMove])
 
   useEffect(() => {
     fetchActiveMove()
   }, [fetchActiveMove])
+
+  // A socket torn down while the tab was hidden never throws and nothing is
+  // replayed, so re-read on return and on a slow interval (mover app parity).
+  useEffect(() => {
+    if (!moverProfileId) return
+    const reconcile = () => {
+      if (document.visibilityState === 'visible') void fetchActiveMove()
+    }
+    document.addEventListener('visibilitychange', reconcile)
+    window.addEventListener('focus', reconcile)
+    const id = setInterval(reconcile, ACTIVE_MOVE_RECONCILE_MS)
+    return () => {
+      document.removeEventListener('visibilitychange', reconcile)
+      window.removeEventListener('focus', reconcile)
+      clearInterval(id)
+    }
+  }, [moverProfileId, fetchActiveMove])
 
   // ── Auto-transition mover_accepted → mover_en_route (INSTANT only) ───────
   // For an instant dispatch, opening this page means "I'm on my way". A
@@ -215,14 +281,7 @@ export default function ActiveMovePage() {
           const status = doc.status as string
           // If the client cancelled, show a notice before clearing
           if (status === 'cancelled_by_client') {
-            cancelledMoveRef.current = { ...doc }
-            setCancelledByClient(true)
-            setMove(null)
-            // Auto-dismiss after 6 seconds
-            cancelTimerRef.current = setTimeout(() => {
-              setCancelledByClient(false)
-              cancelledMoveRef.current = null
-            }, 6_000)
+            showClientCancelled(doc)
             return
           }
           // Other cancellations / disputes — clear immediately
@@ -253,7 +312,7 @@ export default function ActiveMovePage() {
     )
 
     return () => unsubscribe()
-  }, [move?.$id, moverProfileId])
+  }, [move?.$id, moverProfileId, showClientCancelled])
 
   const mapStatusToPhase = (status: string) => {
     switch (status) {

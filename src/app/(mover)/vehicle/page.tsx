@@ -22,6 +22,7 @@ import type { VehicleDoc } from '@/lib/types'
 import { fetchVehicleOverview, selectVehicle, VehicleApiError, type VehicleOverview } from '@/lib/vehicle-client'
 import {
   STATE_KEY,
+  USE_OWN_ADD_HREF,
   vehicleEventLabel,
   vehicleOwnershipLabel,
   vehicleStatusLabel,
@@ -248,11 +249,17 @@ export default function VehiclePage() {
                       <PlusIcon className="h-4 w-4" />
                       {t('booking:vehicle.rental.rentAnother.cta')}
                     </Link>
-                    {ownedVerified && (
+                    {/* No verified owned vehicle: register one, "Own vehicle" pre-picked (mover-app parity). */}
+                    {ownedVerified ? (
                       <button type="button" onClick={() => handleSelect(ownedVerified)} disabled={selecting !== null} className={secondaryBtn}>
                         <KeyIcon className="h-4 w-4" />
                         {t('booking:vehicle.rental.useOwn.cta')}
                       </button>
+                    ) : (
+                      <Link href={USE_OWN_ADD_HREF} className={secondaryBtn}>
+                        <KeyIcon className="h-4 w-4" />
+                        {t('booking:vehicle.rental.useOwn.cta')}
+                      </Link>
                     )}
                   </>
                 )}

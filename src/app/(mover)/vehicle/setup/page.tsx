@@ -26,7 +26,8 @@ const SOURCES: SubmitVehiclePayload['source'][] = ['registration', 'settings', '
  *
  * Wave 2026-10 (plan `wave-2026-10/1`): `mode=renew` renews a rental — the same
  * row, a new window (R5); `ownership=rented` on `mode=add` registers a rental
- * next to a verified own vehicle without giving it up (R3).
+ * next to a verified own vehicle without giving it up (R3); `ownership=owned`
+ * on `mode=add` pre-selects "Own vehicle" (Use my own vehicle after an expiry).
  */
 function VehicleSetupInner() {
   const { t } = useTranslation()
@@ -86,7 +87,15 @@ function VehicleSetupInner() {
 
   const effectiveMode: Mode = mode === 'resubmit' && !prefill ? 'add' : mode
   const addingRental = effectiveMode === 'add' && ownershipParam === 'rented'
-  const initialOwnership = addingRental ? 'rented' : user?.moverDetails?.vehicleOwnership === 'rented' ? 'rented' : 'owned'
+  // `ownership=owned` on add pre-picks "Own vehicle" without locking it ("Use my own vehicle" after a rental ended).
+  const addingOwned = effectiveMode === 'add' && ownershipParam === 'owned'
+  const initialOwnership = addingRental
+    ? 'rented'
+    : addingOwned
+      ? 'owned'
+      : user?.moverDetails?.vehicleOwnership === 'rented'
+        ? 'rented'
+        : 'owned'
 
   if (done) {
     return (

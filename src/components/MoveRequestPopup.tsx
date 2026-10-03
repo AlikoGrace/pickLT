@@ -688,7 +688,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
             {/* Not service-ready: the accept gate would refuse (403), so say why
                 and where to fix it. Declining stays available. */}
             {vehicle.restricted && (
-              <VehicleStatusBanner state={vehicle.state} className="mb-3 rounded-xl border" />
+              <VehicleStatusBanner state={vehicle.state} ownedVehicleId={user?.moverDetails?.ownedVehicleId ?? null} className="mb-3 rounded-xl border" />
             )}
             <div className="flex gap-3">
             <button
@@ -944,7 +944,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
 
           {/* Sticky bottom action bar */}
           <div className="sticky bottom-0 border-t border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
-            {vehicle.restricted && <VehicleStatusBanner state={vehicle.state} />}
+            {vehicle.restricted && <VehicleStatusBanner state={vehicle.state} ownedVehicleId={user?.moverDetails?.ownedVehicleId ?? null} />}
             <div className="max-w-6xl mx-auto px-4 lg:px-8 py-3 flex gap-3">
               <button
                 onClick={() => { setShowDetails(false); handleDecline() }}

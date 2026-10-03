@@ -829,7 +829,7 @@ export default function MoverMoveDetailsPage() {
                 {/* Not service-ready: the accept gate would refuse (403), so say
                     why and where to fix it instead of offering the click. */}
                 {canAccept && vehicle.restricted && (
-                  <VehicleStatusBanner state={vehicle.state} className="rounded-xl border" />
+                  <VehicleStatusBanner state={vehicle.state} ownedVehicleId={user?.moverDetails?.ownedVehicleId ?? null} className="rounded-xl border" />
                 )}
                 {canAccept && (
                   <button
