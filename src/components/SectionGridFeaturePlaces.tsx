@@ -16,6 +16,7 @@ import {
 } from '@/lib/move-ui-category'
 import MoveCard from './MoveCard'
 import SectionTabHeader from './SectionTabHeader'
+import { useRefetchOnReturn } from '@/hooks/useRefetchOnReturn'
 
 function mapDbStatus(dbStatus: string): MoveStatus {
   if (['draft', 'booked', 'pending_payment', 'paid', 'mover_assigned'].includes(dbStatus)) return 'pending'
@@ -115,6 +116,7 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
       fetchMoves()
     }
   }, [fetchMoves, authLoading])
+  useRefetchOnReturn(fetchMoves)
 
   const status = moveUiCategoryStatus(activeTab)
   const filteredMoves = (

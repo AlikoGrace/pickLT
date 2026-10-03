@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { useCallback, useEffect, useState, Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 import { client } from '@/lib/appwrite'
+import { useRefetchOnReturn } from '@/hooks/useRefetchOnReturn'
 
 /** Map database status → display‑level MoveStatus */
 function mapDbStatus(dbStatus: string): MoveStatus {
@@ -136,6 +137,7 @@ function MyMovesContent() {
   useEffect(() => {
     fetchMoves()
   }, [fetchMoves])
+  useRefetchOnReturn(fetchMoves)
 
   // Appwrite realtime subscription — re-fetch moves on any update
   useEffect(() => {
