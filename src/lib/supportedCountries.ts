@@ -32,15 +32,15 @@ export const GLOBAL_PRICING_SCOPE = 'GLOBAL';
 
 export const SUPPORTED_COUNTRIES: readonly SupportedCountry[] = [
   { code: 'DE', currency: 'EUR', vatRate: 0.19, live: true, timeZone: 'Europe/Berlin' },
-  { code: 'AT', currency: 'EUR', vatRate: 0.2, live: false, timeZone: 'Europe/Vienna' },
-  { code: 'NL', currency: 'EUR', vatRate: 0.21, live: false, timeZone: 'Europe/Amsterdam' },
-  { code: 'BE', currency: 'EUR', vatRate: 0.21, live: false, timeZone: 'Europe/Brussels' },
-  { code: 'FR', currency: 'EUR', vatRate: 0.2, live: false, timeZone: 'Europe/Paris' },
-  { code: 'IT', currency: 'EUR', vatRate: 0.22, live: false, timeZone: 'Europe/Rome' },
-  { code: 'ES', currency: 'EUR', vatRate: 0.21, live: false, timeZone: 'Europe/Madrid' },
-  { code: 'PT', currency: 'EUR', vatRate: 0.23, live: false, timeZone: 'Europe/Lisbon' },
-  { code: 'IE', currency: 'EUR', vatRate: 0.23, live: false, timeZone: 'Europe/Dublin' },
-  { code: 'LU', currency: 'EUR', vatRate: 0.17, live: false, timeZone: 'Europe/Luxembourg' },
+  { code: 'AT', currency: 'EUR', vatRate: 0.2, live: true, timeZone: 'Europe/Vienna' },
+  { code: 'NL', currency: 'EUR', vatRate: 0.21, live: true, timeZone: 'Europe/Amsterdam' },
+  { code: 'BE', currency: 'EUR', vatRate: 0.21, live: true, timeZone: 'Europe/Brussels' },
+  { code: 'FR', currency: 'EUR', vatRate: 0.2, live: true, timeZone: 'Europe/Paris' },
+  { code: 'IT', currency: 'EUR', vatRate: 0.22, live: true, timeZone: 'Europe/Rome' },
+  { code: 'ES', currency: 'EUR', vatRate: 0.21, live: true, timeZone: 'Europe/Madrid' },
+  { code: 'PT', currency: 'EUR', vatRate: 0.23, live: true, timeZone: 'Europe/Lisbon' },
+  { code: 'IE', currency: 'EUR', vatRate: 0.23, live: true, timeZone: 'Europe/Dublin' },
+  { code: 'LU', currency: 'EUR', vatRate: 0.17, live: true, timeZone: 'Europe/Luxembourg' },
 ];
 
 /** The market everything defaulted to before countries existed. */
