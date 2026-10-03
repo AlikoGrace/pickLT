@@ -7,6 +7,7 @@ import { useMoverLocationPolling } from '@/hooks/useMoverLocationPolling'
 import { client, databases } from '@/lib/appwrite'
 import { isMoveStartable } from '@/lib/schedule-timing'
 import { ACTIVE_MOVE_RECONCILE_MS, activeMoveOutcome } from '@/lib/active-move-reconcile'
+import { claimMoveCancellation, markMoveCancellationExplained } from '@/lib/cancellation-alerts'
 import type { RealtimeResponseEvent, Models } from 'appwrite'
 import { Query } from 'appwrite'
 import ButtonPrimary from '@/shared/ButtonPrimary'
@@ -145,8 +146,14 @@ export default function ActiveMovePage() {
     phaseRef.current = phase
   }, [phase])
 
+  // This page explains a client cancel for its own move (below), so the
+  // site-wide cancellation popup holds off for the move on screen.
+  const claimedMoveId = (move?.$id as string | undefined) ?? null
+  useEffect(() => (claimedMoveId ? claimMoveCancellation(claimedMoveId) : undefined), [claimedMoveId])
+
   // Client cancelled: show a notice before clearing, auto-dismissed after 6 seconds.
   const showClientCancelled = useCallback((doc: Record<string, unknown>) => {
+    if (typeof doc.$id === 'string') markMoveCancellationExplained(doc.$id)
     cancelledMoveRef.current = { ...doc }
     setCancelledByClient(true)
     setMove(null)

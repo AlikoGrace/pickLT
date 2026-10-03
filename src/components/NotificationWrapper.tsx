@@ -4,6 +4,8 @@ import { ReactNode, useEffect, useRef, useCallback } from 'react'
 import { useAuth } from '@/context/auth'
 import { client } from '@/lib/appwrite'
 import { useTranslation } from 'react-i18next'
+import CancellationAlerts from '@/components/CancellationAlerts'
+import { requestCancellationCheck } from '@/lib/cancellation-alerts'
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || ''
 const MOVES_COLLECTION = process.env.NEXT_PUBLIC_COLLECTION_MOVES || ''
@@ -187,6 +189,8 @@ export default function NotificationWrapper({ children, role }: NotificationWrap
       const eventKey = `${payload.$id}-${payload.status}`
       if (processedEvents.current.has(eventKey)) return
       processedEvents.current.add(eventKey)
+      // A status change on one of our moves may be a cancel: look for its popup now.
+      requestCancellationCheck()
 
       if (payload.status === 'mover_accepted') {
         playChime(5000)
@@ -292,6 +296,8 @@ export default function NotificationWrapper({ children, role }: NotificationWrap
       const eventKey = `${payload.$id}-${payload.status}`
       if (processedEvents.current.has(eventKey)) return
       processedEvents.current.add(eventKey)
+      // A status change on one of our moves may be a cancel: look for its popup now.
+      requestCancellationCheck()
 
       if (payload.status === 'cancelled_by_client') {
         playChime(5000)
@@ -323,5 +329,10 @@ export default function NotificationWrapper({ children, role }: NotificationWrap
     }
   }, [role, handleClientNotification, handleMoverRequestNotification, handleMoverMoveNotification])
 
-  return <>{children}</>
+  return (
+    <>
+      {children}
+      <CancellationAlerts />
+    </>
+  )
 }

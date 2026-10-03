@@ -28,6 +28,7 @@ import { formatDistanceKm, formatMoney } from '@/lib/format'
 import PriceBreakdown from '@/components/PriceBreakdown'
 import { parseBreakdown } from '@/lib/pricingEngine'
 import { useTranslation } from 'react-i18next'
+import { claimMoveCancellation, markMoveCancellationExplained } from '@/lib/cancellation-alerts'
 
 // ─── Types ──────────────────────────────────────────────
 interface MoverInfo {
@@ -272,6 +273,11 @@ const InstantMovePage = () => {
     setRouteInfo(info)
   }, [])
 
+  // This page explains a mover cancel for its own move (below), so the
+  // site-wide cancellation popup holds off for the move on screen.
+  const claimedMoveId = moveData?.$id ?? null
+  useEffect(() => (claimedMoveId ? claimMoveCancellation(claimedMoveId) : undefined), [claimedMoveId])
+
   // ─── Realtime subscription for move status changes ────
   useEffect(() => {
     const moveId = moveIdRef.current
@@ -390,6 +396,7 @@ const InstantMovePage = () => {
               setPhase('completed')
               break
             case 'cancelled_by_mover':
+              markMoveCancellationExplained(moveId)
               alert(t('track:mover.cancelled.searching'))
               router.push('/instant-move/select-mover')
               break

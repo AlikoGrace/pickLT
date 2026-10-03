@@ -4,11 +4,12 @@ import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
 import { Query } from 'node-appwrite'
 import { getSessionUserId } from '@/lib/auth-session'
+import { notificationListFilters } from '@/lib/notification-list-query'
 
 /**
  * GET /api/notifications
  * List notifications for the current user
- * Query params: ?unreadOnly=true&limit=50
+ * Query params: ?unreadOnly=true&limit=50&type=move_cancelled&since=<iso>
  */
 export async function GET(req: Request) {
   const { t } = await getTranslations()
@@ -21,6 +22,7 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url)
     const unreadOnly = searchParams.get('unreadOnly') === 'true'
     const limit = parseInt(searchParams.get('limit') || '50', 10)
+    const { type, since } = notificationListFilters(searchParams)
 
     const { databases } = createAdminClient()
 
@@ -33,6 +35,8 @@ export async function GET(req: Request) {
     if (unreadOnly) {
       queries.push(Query.equal('isRead', false))
     }
+    if (type) queries.push(Query.equal('type', type))
+    if (since) queries.push(Query.greaterThan('$createdAt', since))
 
     const notifications = await databases.listDocuments(
       APPWRITE.DATABASE_ID,
