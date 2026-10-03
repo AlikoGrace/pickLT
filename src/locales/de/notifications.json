@@ -165,5 +165,23 @@
       "body": "Herzlichen Glückwunsch! Ihr Umzugsprofi-Profil wurde verifiziert. Sie können jetzt Umzüge annehmen.",
       "title": "Profil verifiziert"
     }
+  },
+  "fees": {
+    "due": {
+      "title": "Plattformgebühr fällig",
+      "body": "Sie schulden {{amount}} {{currency}} an Plattformgebühren, fällig bis {{dueDate}}."
+    },
+    "overdue": {
+      "title": "Plattformgebühr überfällig",
+      "body": "Ihre Plattformgebühr von {{amount}} {{currency}} war am {{dueDate}} fällig. Bezahlen Sie jetzt, um weiterhin Aufträge zu erhalten."
+    },
+    "restricted": {
+      "title": "Aufträge pausiert",
+      "body": "Sie schulden {{amount}} {{currency}} an Plattformgebühren. Bis zur Zahlung können Sie nicht online gehen oder Aufträge annehmen."
+    },
+    "paid": {
+      "title": "Plattformgebühren bezahlt",
+      "body": "Wir haben {{amount}} {{currency}} erhalten. Ihr Plattformsaldo ist ausgeglichen und Sie können wieder Aufträge erhalten."
+    }
   }
 }

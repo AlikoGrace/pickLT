@@ -165,5 +165,23 @@
       "body": "Félicitations ! Votre profil déménageur a été vérifié. Vous pouvez maintenant accepter des déménagements.",
       "title": "Profil vérifié"
     }
+  },
+  "fees": {
+    "due": {
+      "title": "Frais de plateforme à régler",
+      "body": "Vous devez {{amount}} {{currency}} de frais de plateforme, à régler avant le {{dueDate}}."
+    },
+    "overdue": {
+      "title": "Frais de plateforme en retard",
+      "body": "Vos frais de plateforme de {{amount}} {{currency}} étaient dus le {{dueDate}}. Payez maintenant pour continuer à recevoir des déménagements."
+    },
+    "restricted": {
+      "title": "Déménagements suspendus",
+      "body": "Vous devez {{amount}} {{currency}} de frais de plateforme. Vous ne pouvez ni passer en ligne ni accepter de déménagements avant leur paiement."
+    },
+    "paid": {
+      "title": "Frais de plateforme réglés",
+      "body": "Nous avons reçu {{amount}} {{currency}}. Votre solde plateforme est réglé et vous pouvez de nouveau recevoir des déménagements."
+    }
   }
 }

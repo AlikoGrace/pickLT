@@ -165,5 +165,23 @@
       "body": "Gefeliciteerd! Je verhuizersprofiel is geverifieerd. Je kunt nu verhuizingen accepteren.",
       "title": "Profiel geverifieerd"
     }
+  },
+  "fees": {
+    "due": {
+      "title": "Platformkosten te betalen",
+      "body": "Je bent {{amount}} {{currency}} aan platformkosten verschuldigd, te betalen vóór {{dueDate}}."
+    },
+    "overdue": {
+      "title": "Platformkosten achterstallig",
+      "body": "Je platformkosten van {{amount}} {{currency}} moesten op {{dueDate}} betaald zijn. Betaal nu om verhuizingen te blijven ontvangen."
+    },
+    "restricted": {
+      "title": "Verhuizingen gepauzeerd",
+      "body": "Je bent {{amount}} {{currency}} aan platformkosten verschuldigd. Tot je betaalt kun je niet online gaan of verhuizingen accepteren."
+    },
+    "paid": {
+      "title": "Platformkosten betaald",
+      "body": "We hebben {{amount}} {{currency}} ontvangen. Uw platformsaldo is vereffend en u kunt weer verhuizingen ontvangen."
+    }
   }
 }

@@ -6,6 +6,8 @@ import { Query } from 'node-appwrite'
 import { NextResponse } from 'next/server'
 import { loadPricingConfig } from '@/lib/pricing-server'
 import { moverPayoutEur } from '@/lib/moverPayout'
+import { feeRestricted } from '@/lib/mover-gates'
+import { feeRestrictedResponse } from '@/lib/mover-auth'
 
 // GET /api/mover/available-moves — Get move requests for the authenticated mover
 export async function GET() {
@@ -29,6 +31,10 @@ export async function GET() {
     if (!moverProfile) {
       return NextResponse.json({ error: t('errors:mover.profileNotFound') }, { status: 404 })
     }
+
+    // A fee-restricted driver is not offered requests (plan fees §5, the
+    // `listavailablemoves` gate).
+    if (feeRestricted(moverProfile)) return feeRestrictedResponse()
 
     // Get pending move requests for this mover
     const moveRequests = await databases.listDocuments(

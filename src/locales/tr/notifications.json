@@ -165,5 +165,23 @@
       "body": "Tebrikler! Nakliyeci profiliniz doğrulandı. Artık taşınma işlerini kabul edebilirsiniz.",
       "title": "Profil doğrulandı"
     }
+  },
+  "fees": {
+    "due": {
+      "title": "Platform ücreti ödenecek",
+      "body": "{{amount}} {{currency}} platform ücreti borcunuz var, son ödeme {{dueDate}}."
+    },
+    "overdue": {
+      "title": "Platform ücreti gecikti",
+      "body": "{{amount}} {{currency}} tutarındaki platform ücretinizin son ödeme tarihi {{dueDate}} idi. Taşıma almaya devam etmek için şimdi ödeyin."
+    },
+    "restricted": {
+      "title": "Taşımalar durduruldu",
+      "body": "{{amount}} {{currency}} platform ücreti borcunuz var. Ödenene kadar çevrimiçi olamaz ve taşıma kabul edemezsiniz."
+    },
+    "paid": {
+      "title": "Platform ücretleri ödendi",
+      "body": "{{amount}} {{currency}} tutarındaki ödemenizi aldık. Platform bakiyeniz kapatıldı ve yeniden taşıma alabilirsiniz."
+    }
   }
 }

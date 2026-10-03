@@ -988,6 +988,111 @@
           "label": "Uw huur eindigt over {{time}}"
         }
       }
+    },
+    "fees": {
+      "balance": {
+        "title": "Platformsaldo",
+        "owe": {
+          "label": "U bent verschuldigd"
+        },
+        "owed": {
+          "label": "PickLT houdt voor u vast"
+        },
+        "settled": {
+          "label": "Alles voldaan",
+          "body": "U bent geen platformkosten verschuldigd."
+        },
+        "due": {
+          "body": "Te betalen vóór {{date}}."
+        },
+        "dueNow": {
+          "body": "Nu te betalen."
+        },
+        "overdue": {
+          "body": "Achterstallig sinds {{date}}. Betaal nu om verhuizingen te blijven ontvangen."
+        },
+        "restricted": {
+          "body": "Tot uw platformkosten betaald zijn, kunt u niet online gaan of verhuizingen accepteren."
+        },
+        "credit": {
+          "body": "Verdiensten uit kaartbetalingen die we voor u vasthouden. Platformkosten van latere contante verhuizingen worden hier eerst mee verrekend."
+        },
+        "helper": "Een contante verhuizing voegt de platformkosten toe aan uw saldo; een kaartverhuizing voegt uw verdiensten toe."
+      },
+      "history": {
+        "title": "Saldogeschiedenis",
+        "empty": "Nog geen boekingen.",
+        "move": {
+          "label": "Verhuizing {{handle}}"
+        },
+        "loadMore": {
+          "cta": "Meer tonen"
+        }
+      },
+      "kind": {
+        "cashFeeDue": {
+          "label": "Platformkosten (contant)"
+        },
+        "cardEarning": {
+          "label": "Verdiensten kaartverhuizing"
+        },
+        "driverPayment": {
+          "label": "Uw betaling"
+        },
+        "payout": {
+          "label": "Uitbetaling"
+        },
+        "adjustment": {
+          "label": "Correctie"
+        },
+        "waiver": {
+          "label": "Kosten kwijtgescholden"
+        },
+        "charge": {
+          "label": "Afschrijving"
+        }
+      },
+      "pay": {
+        "cta": "Nu betalen",
+        "amount": {
+          "cta": "{{amount}} betalen"
+        },
+        "title": "Uw platformkosten betalen",
+        "paying": {
+          "cta": "Bezig met betalen…"
+        },
+        "cancel": {
+          "cta": "Annuleren"
+        },
+        "success": "Betaling ontvangen. Uw saldo is bijgewerkt.",
+        "unavailable": "Betalen met kaart is nu niet beschikbaar. Neem contact op met support om op een andere manier te betalen.",
+        "secure": {
+          "helper": "Kaartbetalingen worden veilig verwerkt door Stripe."
+        }
+      },
+      "banner": {
+        "due": {
+          "title": "Platformkosten te betalen",
+          "body": "U bent {{amount}} aan platformkosten van contante verhuizingen verschuldigd, te betalen vóór {{date}}."
+        },
+        "overdue": {
+          "title": "Platformkosten achterstallig",
+          "body": "U bent {{amount}} aan platformkosten verschuldigd, achterstallig sinds {{date}}. Betaal nu om verhuizingen te blijven ontvangen."
+        },
+        "restricted": {
+          "title": "Verhuisaanvragen gepauzeerd",
+          "body": "U bent {{amount}} aan platformkosten verschuldigd. Tot dit betaald is, kunt u niet online gaan of verhuizingen accepteren."
+        },
+        "summary": {
+          "label": "{{amount}} openstaand"
+        }
+      },
+      "offline": {
+        "reason": "Offline: onbetaalde platformkosten. Betaal om weer verhuizingen te ontvangen."
+      },
+      "cashMove": {
+        "label": "Platformkosten voor deze verhuizing: {{amount}} — toegevoegd aan uw saldo"
+      }
     }
   },
   "moverCard": {

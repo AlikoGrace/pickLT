@@ -31,6 +31,12 @@ export type NotifyType =
   | 'vehicle_verified'
   | 'vehicle_rejected'
   | 'vehicle_confirmation_required'
+  // Fee balance (plan fees/0.master.md §11): i18nKey `fees.*`, params
+  // `{ amount, currency, dueDate }`; `system` fallback until the enum is widened.
+  | 'fee_due'
+  | 'fee_overdue'
+  | 'fee_restricted'
+  | 'fee_paid'
   | 'system'
 
 /**

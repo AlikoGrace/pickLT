@@ -363,5 +363,12 @@
   "country": {
     "notLive": "PickLT is nog niet beschikbaar in {{country}}.",
     "required": "Kies je land."
+  },
+  "fees": {
+    "restricted": "Je hebt onbetaalde platformkosten. Betaal je saldo om online te gaan en verhuizingen te accepteren.",
+    "nothingOwed": "Je hebt geen platformkosten te betalen.",
+    "loadFailed": "Uw platformsaldo kon niet worden geladen.",
+    "payFailed": "De betaling van de kosten kon niet worden voltooid. Probeer het opnieuw.",
+    "payUnavailable": "Betalen met kaart is nu niet beschikbaar. Probeer het later opnieuw of neem contact op met support."
   }
 }

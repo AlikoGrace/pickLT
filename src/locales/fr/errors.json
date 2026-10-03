@@ -363,5 +363,12 @@
   "country": {
     "notLive": "PickLT n’est pas encore disponible en {{country}}.",
     "required": "Veuillez choisir votre pays."
+  },
+  "fees": {
+    "restricted": "Vous avez des frais de plateforme impayés. Réglez votre solde pour passer en ligne et accepter des déménagements.",
+    "nothingOwed": "Vous n’avez aucuns frais de plateforme à payer.",
+    "loadFailed": "Impossible de charger votre solde de plateforme.",
+    "payFailed": "Le paiement des frais n’a pas pu aboutir. Veuillez réessayer.",
+    "payUnavailable": "Le paiement par carte n’est pas disponible pour le moment. Réessayez plus tard ou contactez le support."
   }
 }

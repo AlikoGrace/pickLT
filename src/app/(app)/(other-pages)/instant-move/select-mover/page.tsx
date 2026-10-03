@@ -400,7 +400,7 @@ const SelectMoverPage = () => {
         // client can pick someone else instead of tracking a move that was
         // never created.
         const data = await res.json().catch(() => ({}))
-        if (typeof data.fnCode === 'string' && data.fnCode.startsWith('mover.')) {
+        if (typeof data.fnCode === 'string' && (data.fnCode.startsWith('mover.') || data.fnCode === 'fees.restricted')) {
           setApiMovers((prev) => prev.filter((m) => m.$id !== selectedMover))
           setSelectedMover(null)
           setConfirmError(data.error || t('errors:instant.moverUnavailable.error'))

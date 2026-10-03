@@ -988,6 +988,111 @@
           "label": "Ihre Miete endet in {{time}}"
         }
       }
+    },
+    "fees": {
+      "balance": {
+        "title": "Plattformsaldo",
+        "owe": {
+          "label": "Sie schulden"
+        },
+        "owed": {
+          "label": "PickLT verwahrt für Sie"
+        },
+        "settled": {
+          "label": "Alles beglichen",
+          "body": "Sie schulden keine Plattformgebühren."
+        },
+        "due": {
+          "body": "Fällig bis {{date}}."
+        },
+        "dueNow": {
+          "body": "Jetzt fällig."
+        },
+        "overdue": {
+          "body": "Überfällig seit {{date}}. Zahlen Sie jetzt, um weiterhin Umzüge zu erhalten."
+        },
+        "restricted": {
+          "body": "Bis Ihre Plattformgebühren bezahlt sind, können Sie nicht online gehen und keine Umzüge annehmen."
+        },
+        "credit": {
+          "body": "Für Sie verwahrter Verdienst aus Kartenzahlungen. Plattformgebühren späterer Barzahlungsumzüge werden zuerst damit verrechnet."
+        },
+        "helper": "Ein Barzahlungsumzug fügt Ihrem Saldo die Plattformgebühr hinzu, ein Kartenzahlungsumzug Ihren Verdienst."
+      },
+      "history": {
+        "title": "Saldoverlauf",
+        "empty": "Noch keine Einträge.",
+        "move": {
+          "label": "Umzug {{handle}}"
+        },
+        "loadMore": {
+          "cta": "Mehr anzeigen"
+        }
+      },
+      "kind": {
+        "cashFeeDue": {
+          "label": "Plattformgebühr (Barzahlung)"
+        },
+        "cardEarning": {
+          "label": "Verdienst aus Kartenzahlung"
+        },
+        "driverPayment": {
+          "label": "Ihre Zahlung"
+        },
+        "payout": {
+          "label": "Auszahlung"
+        },
+        "adjustment": {
+          "label": "Korrektur"
+        },
+        "waiver": {
+          "label": "Gebühr erlassen"
+        },
+        "charge": {
+          "label": "Belastung"
+        }
+      },
+      "pay": {
+        "cta": "Jetzt bezahlen",
+        "amount": {
+          "cta": "{{amount}} bezahlen"
+        },
+        "title": "Plattformgebühren bezahlen",
+        "paying": {
+          "cta": "Zahlung läuft…"
+        },
+        "cancel": {
+          "cta": "Abbrechen"
+        },
+        "success": "Zahlung erhalten. Ihr Saldo wurde aktualisiert.",
+        "unavailable": "Kartenzahlung ist gerade nicht verfügbar. Wenden Sie sich an den Support, um anders zu bezahlen.",
+        "secure": {
+          "helper": "Kartenzahlungen werden sicher von Stripe abgewickelt."
+        }
+      },
+      "banner": {
+        "due": {
+          "title": "Plattformgebühren fällig",
+          "body": "Sie schulden {{amount}} an Plattformgebühren aus Barzahlungsumzügen, fällig bis {{date}}."
+        },
+        "overdue": {
+          "title": "Plattformgebühren überfällig",
+          "body": "Sie schulden {{amount}} an Plattformgebühren, überfällig seit {{date}}. Zahlen Sie jetzt, damit Sie weiterhin Umzüge erhalten."
+        },
+        "restricted": {
+          "title": "Umzugsanfragen pausiert",
+          "body": "Sie schulden {{amount}} an Plattformgebühren. Bis zur Zahlung können Sie nicht online gehen und keine Umzüge annehmen."
+        },
+        "summary": {
+          "label": "{{amount}} offen"
+        }
+      },
+      "offline": {
+        "reason": "Offline: unbezahlte Plattformgebühren. Bezahlen Sie, um wieder Umzüge zu erhalten."
+      },
+      "cashMove": {
+        "label": "Plattformgebühr für diesen Umzug: {{amount}} – wird Ihrem Saldo hinzugefügt"
+      }
     }
   },
   "moverCard": {

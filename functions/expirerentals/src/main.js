@@ -32,6 +32,63 @@ const NOTIFICATIONS_COLLECTION = process.env.APPWRITE_COLLECTION_NOTIFICATIONS;
 const VEHICLES_COLLECTION = process.env.APPWRITE_COLLECTION_VEHICLES || 'vehicles';
 const VEHICLE_EVENTS_COLLECTION = process.env.APPWRITE_COLLECTION_VEHICLE_EVENTS || 'vehicle_events';
 const PLATFORM_TZ = process.env.PLATFORM_TZ || 'Europe/Berlin';
+const PLATFORM_CONFIG_COLLECTION = process.env.APPWRITE_COLLECTION_PLATFORM_CONFIG || 'platform_config';
+
+/**
+ * Wall-clock zone per market for the `{{time}}` a driver reads. Mirrors the
+ * compiled list in `lib/supported-countries.ts`; the operator's
+ * `platform_config.supported_countries` row overrides and extends it (that is
+ * where a test market like GH / Africa/Accra lives). Device pass 2026-10-03: a
+ * Kumasi driver read "ends at 19:47" (Berlin) for a 17:47 end.
+ */
+const COMPILED_MARKET_TZ = {
+  DE: 'Europe/Berlin',
+  AT: 'Europe/Vienna',
+  NL: 'Europe/Amsterdam',
+  BE: 'Europe/Brussels',
+  FR: 'Europe/Paris',
+  IT: 'Europe/Rome',
+  ES: 'Europe/Madrid',
+  PT: 'Europe/Lisbon',
+  IE: 'Europe/Dublin',
+  LU: 'Europe/Luxembourg',
+};
+
+function isValidZone(zone) {
+  try {
+    new Intl.DateTimeFormat('en-GB', { timeZone: zone });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/** Compiled zones overlaid with the operator row (`[{ code, timeZone }]`); malformed entries are skipped. */
+export function marketTimeZones(rawSupportedCountries) {
+  const zones = { ...COMPILED_MARKET_TZ };
+  let list = rawSupportedCountries;
+  if (typeof list === 'string') {
+    try {
+      list = JSON.parse(list);
+    } catch {
+      list = null;
+    }
+  }
+  if (Array.isArray(list)) {
+    for (const entry of list) {
+      const code = typeof entry?.code === 'string' ? entry.code.trim().toUpperCase() : '';
+      const zone = typeof entry?.timeZone === 'string' ? entry.timeZone.trim() : '';
+      if (/^[A-Z]{2}$/.test(code) && zone && isValidZone(zone)) zones[code] = zone;
+    }
+  }
+  return zones;
+}
+
+/** The zone a driver's times are shown in: their market's, else the platform's. */
+export function zoneForCountry(countryCode, zones) {
+  const code = typeof countryCode === 'string' ? countryCode.trim().toUpperCase() : '';
+  return (code && zones?.[code]) || PLATFORM_TZ;
+}
 
 // --- vehicle-service (mirror) ---
 /**
@@ -381,6 +438,17 @@ export default async ({ req, res, log, error }) => {
   const soonIso = new Date(nowMs + RENTAL_EXPIRING_MS).toISOString();
   const summary = { expired: 0, fallback: 0, cleared: 0, skippedActiveMove: 0, warned: 0, errors: 0 };
 
+  let zones = marketTimeZones(null);
+  try {
+    const cfg = await databases.listDocuments(DATABASE_ID, PLATFORM_CONFIG_COLLECTION, [
+      Query.equal('key', 'supported_countries'),
+      Query.limit(1),
+    ]);
+    zones = marketTimeZones(cfg.documents[0]?.value ?? null);
+  } catch (e) {
+    log(`[expirerentals] supported_countries not readable (${e.message}) — compiled market zones`);
+  }
+
   // ── 1. Windows that have ended ─────────────────────────────────────────────
   const expireOne = async (vehicle) => {
     const profile = await getOrNull(databases, MOVER_PROFILES_COLLECTION, vehicle.moverProfileId);
@@ -438,7 +506,7 @@ export default async ({ req, res, log, error }) => {
 
     await notify(databases, ownerUserId, 'vehicle_rental_expired', {
       plate: vehicle.registrationNumber ?? '',
-      time: formatEndTime(vehicle.rentalEndAt, nowMs, PLATFORM_TZ),
+      time: formatEndTime(vehicle.rentalEndAt, nowMs, zoneForCountry(profile?.countryCode, zones)),
     }, vehicle.$id, error);
   };
   await pageThrough(databases, [
@@ -457,11 +525,9 @@ export default async ({ req, res, log, error }) => {
       Query.limit(10),
     ]);
     if (hasExpiringEventForWindow(recent.documents, vehicle.rentalEndAt)) return;
-    let ownerUserId = vehicle.ownerUserId || null;
-    if (!ownerUserId) {
-      const profile = await getOrNull(databases, MOVER_PROFILES_COLLECTION, vehicle.moverProfileId);
-      ownerUserId = relId(profile?.userId);
-    }
+    // The profile also carries the market whose clock the driver reads.
+    const profile = await getOrNull(databases, MOVER_PROFILES_COLLECTION, vehicle.moverProfileId);
+    const ownerUserId = vehicle.ownerUserId || relId(profile?.userId);
     const event = await writeEvent(databases, ownerUserId, {
       moverProfileId: vehicle.moverProfileId,
       vehicleId: vehicle.$id,
@@ -480,7 +546,7 @@ export default async ({ req, res, log, error }) => {
     }
     await notify(databases, ownerUserId, 'vehicle_rental_expiring', {
       plate: vehicle.registrationNumber ?? '',
-      time: formatEndTime(vehicle.rentalEndAt, nowMs, PLATFORM_TZ),
+      time: formatEndTime(vehicle.rentalEndAt, nowMs, zoneForCountry(profile?.countryCode, zones)),
     }, vehicle.$id, error);
     summary.warned += 1;
     log(`[expirerentals] ${vehicle.$id} ends at ${vehicle.rentalEndAt} — warned`);

@@ -137,6 +137,15 @@ export function vehiclePermissions(ownerAuthId: string): string[] {
 }
 
 /**
+ * `mover_ledger` — the driver reads their own fee-balance rows (plan
+ * `fees/0.master.md` §11); the ledger is append-only and server-written, so
+ * there is no `update`/`delete` grant. `driverAuthId` is the profile's `userId`.
+ */
+export function moverLedgerPermissions(driverAuthId: string): string[] {
+  return [Permission.read(Role.user(driverAuthId))]
+}
+
+/**
  * Storage permissions for `/api/user/upload-photo`, keyed on the `purpose`
  * field the caller sends. A selfie is an avatar rendered by bare `<img>` tags
  * across four apps with no Appwrite identity, so it keeps whatever the bucket

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { Suspense, useState, useEffect, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   ArrowTrendingUpIcon,
@@ -12,6 +12,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { formatDateWith, formatMoney, formatPercent } from '@/lib/format'
 import { payoutRatesFrom } from '@/lib/moverPayout'
+import FeeBalanceCard from '@/components/mover/FeeBalanceCard'
 
 type TimePeriod = 'today' | 'week' | 'month' | 'year'
 
@@ -153,6 +154,11 @@ const EarningsPage = () => {
           </button>
         </div>
       </div>
+
+      {/* Platform balance — fees owed on cash moves (plan fees/0.master.md §6) */}
+      <Suspense fallback={null}>
+        <FeeBalanceCard />
+      </Suspense>
 
       {/* Period Selector */}
       <div className="flex gap-2 mb-6 overflow-x-auto pb-2 scrollbar-hide">

@@ -69,6 +69,13 @@ export interface MoverProfileDoc extends AppwriteDoc {
   ownedVehicleId?: string | null
   /** ISO2 of the mover's market (plan wave-2026-10/4 C1); `primaryCountry` keeps the English name. */
   countryCode?: string | null
+  // Fee-balance snapshot (plan fees/0.master.md §11), written by the ledger writers.
+  feeBalanceCents?: number | null
+  feeOwedCents?: number | null
+  feeOldestDueAt?: string | null
+  feeStanding?: 'ok' | 'due' | 'overdue' | 'restricted' | null
+  feeStandingSince?: string | null
+  feeSuspendSuggested?: boolean | null
   // Relationships
   crew_members: CrewMemberDoc[]
   moves: MoveDoc[]
@@ -271,6 +278,11 @@ export type NotificationType =
   | 'vehicle_verified'
   | 'vehicle_rejected'
   | 'vehicle_confirmation_required'
+  // Fee balance (plan fees/0.master.md §11)
+  | 'fee_due'
+  | 'fee_overdue'
+  | 'fee_restricted'
+  | 'fee_paid'
   | 'system'
 
 export interface NotificationDoc extends AppwriteDoc {

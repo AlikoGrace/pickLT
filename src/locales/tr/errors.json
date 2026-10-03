@@ -363,5 +363,12 @@
   "country": {
     "notLive": "PickLT henüz {{country}} için kullanılamıyor.",
     "required": "Lütfen ülkenizi seçin."
+  },
+  "fees": {
+    "restricted": "Ödenmemiş platform ücretleriniz var. Çevrimiçi olmak ve taşıma kabul etmek için bakiyenizi ödeyin.",
+    "nothingOwed": "Ödenecek platform ücretiniz yok.",
+    "loadFailed": "Platform bakiyeniz yüklenemedi.",
+    "payFailed": "Ücret ödemesi tamamlanamadı. Lütfen tekrar deneyin.",
+    "payUnavailable": "Kartla ödeme şu anda kullanılamıyor. Lütfen daha sonra tekrar deneyin veya destekle iletişime geçin."
   }
 }

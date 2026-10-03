@@ -363,5 +363,12 @@
   "country": {
     "notLive": "PickLT aún no está disponible en {{country}}.",
     "required": "Elige tu país."
+  },
+  "fees": {
+    "restricted": "Tienes comisiones de la plataforma sin pagar. Paga tu saldo para conectarte y aceptar mudanzas.",
+    "nothingOwed": "No tienes comisiones de la plataforma pendientes.",
+    "loadFailed": "No se pudo cargar su saldo con la plataforma.",
+    "payFailed": "No se pudo completar el pago de las comisiones. Inténtelo de nuevo.",
+    "payUnavailable": "El pago con tarjeta no está disponible en este momento. Inténtelo más tarde o contacte con soporte."
   }
 }

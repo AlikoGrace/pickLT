@@ -988,6 +988,111 @@
           "label": "Su alquiler termina en {{time}}"
         }
       }
+    },
+    "fees": {
+      "balance": {
+        "title": "Saldo con la plataforma",
+        "owe": {
+          "label": "Usted debe"
+        },
+        "owed": {
+          "label": "PickLT le guarda"
+        },
+        "settled": {
+          "label": "Todo liquidado",
+          "body": "No debe ninguna comisión de la plataforma."
+        },
+        "due": {
+          "body": "Vence el {{date}}."
+        },
+        "dueNow": {
+          "body": "Vence ahora."
+        },
+        "overdue": {
+          "body": "Vencido desde el {{date}}. Pague ahora para seguir recibiendo mudanzas."
+        },
+        "restricted": {
+          "body": "No podrá conectarse ni aceptar mudanzas hasta que pague las comisiones de la plataforma."
+        },
+        "credit": {
+          "body": "Ganancias de pagos con tarjeta que guardamos para usted. Las comisiones de futuras mudanzas en efectivo se descuentan primero de aquí."
+        },
+        "helper": "Una mudanza en efectivo suma su comisión de la plataforma a su saldo; una mudanza con tarjeta suma sus ganancias."
+      },
+      "history": {
+        "title": "Historial del saldo",
+        "empty": "Aún no hay movimientos.",
+        "move": {
+          "label": "Mudanza {{handle}}"
+        },
+        "loadMore": {
+          "cta": "Ver más"
+        }
+      },
+      "kind": {
+        "cashFeeDue": {
+          "label": "Comisión de la plataforma (efectivo)"
+        },
+        "cardEarning": {
+          "label": "Ganancias de mudanza con tarjeta"
+        },
+        "driverPayment": {
+          "label": "Su pago"
+        },
+        "payout": {
+          "label": "Abono"
+        },
+        "adjustment": {
+          "label": "Ajuste"
+        },
+        "waiver": {
+          "label": "Comisión condonada"
+        },
+        "charge": {
+          "label": "Cargo"
+        }
+      },
+      "pay": {
+        "cta": "Pagar ahora",
+        "amount": {
+          "cta": "Pagar {{amount}}"
+        },
+        "title": "Pagar las comisiones de la plataforma",
+        "paying": {
+          "cta": "Pagando…"
+        },
+        "cancel": {
+          "cta": "Cancelar"
+        },
+        "success": "Pago recibido. Su saldo se ha actualizado.",
+        "unavailable": "El pago con tarjeta no está disponible ahora. Contacte con soporte para pagar de otra forma.",
+        "secure": {
+          "helper": "Los pagos con tarjeta los procesa Stripe de forma segura."
+        }
+      },
+      "banner": {
+        "due": {
+          "title": "Comisiones de la plataforma pendientes",
+          "body": "Debe {{amount}} en comisiones de la plataforma por mudanzas en efectivo; vencen el {{date}}."
+        },
+        "overdue": {
+          "title": "Comisiones de la plataforma vencidas",
+          "body": "Debe {{amount}} en comisiones de la plataforma, vencidas desde el {{date}}. Pague ahora para seguir recibiendo mudanzas."
+        },
+        "restricted": {
+          "title": "Solicitudes de mudanza en pausa",
+          "body": "Debe {{amount}} en comisiones de la plataforma. No podrá conectarse ni aceptar mudanzas hasta que lo pague."
+        },
+        "summary": {
+          "label": "{{amount}} pendientes"
+        }
+      },
+      "offline": {
+        "reason": "Desconectado: comisiones de la plataforma sin pagar. Pague para volver a recibir mudanzas."
+      },
+      "cashMove": {
+        "label": "Comisión de la plataforma en esta mudanza: {{amount}} — se añade a su saldo"
+      }
     }
   },
   "moverCard": {

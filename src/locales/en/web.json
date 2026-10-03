@@ -988,6 +988,111 @@
           "label": "Your rental ends in {{time}}"
         }
       }
+    },
+    "fees": {
+      "balance": {
+        "title": "Platform balance",
+        "owe": {
+          "label": "You owe"
+        },
+        "owed": {
+          "label": "PickLT holds for you"
+        },
+        "settled": {
+          "label": "All settled",
+          "body": "You don’t owe any platform fees."
+        },
+        "due": {
+          "body": "Due by {{date}}."
+        },
+        "dueNow": {
+          "body": "Due now."
+        },
+        "overdue": {
+          "body": "Overdue since {{date}}. Pay now to keep receiving moves."
+        },
+        "restricted": {
+          "body": "You can’t go online or accept moves until your platform fees are paid."
+        },
+        "credit": {
+          "body": "Card earnings held for you. Platform fees on later cash moves are paid from this first."
+        },
+        "helper": "A cash move adds its platform fee to your balance; a card move adds your earnings."
+      },
+      "history": {
+        "title": "Balance history",
+        "empty": "No entries yet.",
+        "move": {
+          "label": "Move {{handle}}"
+        },
+        "loadMore": {
+          "cta": "Show more"
+        }
+      },
+      "kind": {
+        "cashFeeDue": {
+          "label": "Platform fee (cash move)"
+        },
+        "cardEarning": {
+          "label": "Card move earnings"
+        },
+        "driverPayment": {
+          "label": "Your payment"
+        },
+        "payout": {
+          "label": "Payout"
+        },
+        "adjustment": {
+          "label": "Adjustment"
+        },
+        "waiver": {
+          "label": "Fee waived"
+        },
+        "charge": {
+          "label": "Charge"
+        }
+      },
+      "pay": {
+        "cta": "Pay now",
+        "amount": {
+          "cta": "Pay {{amount}}"
+        },
+        "title": "Pay your platform fees",
+        "paying": {
+          "cta": "Paying…"
+        },
+        "cancel": {
+          "cta": "Cancel"
+        },
+        "success": "Payment received. Your balance is updated.",
+        "unavailable": "Card payment isn’t available right now. Contact support to pay another way.",
+        "secure": {
+          "helper": "Card payments are processed securely by Stripe."
+        }
+      },
+      "banner": {
+        "due": {
+          "title": "Platform fees due",
+          "body": "You owe {{amount}} in platform fees from cash moves, due by {{date}}."
+        },
+        "overdue": {
+          "title": "Platform fees overdue",
+          "body": "You owe {{amount}} in platform fees, overdue since {{date}}. Pay now so you keep receiving moves."
+        },
+        "restricted": {
+          "title": "Move requests paused",
+          "body": "You owe {{amount}} in platform fees. You can’t go online or accept moves until it’s paid."
+        },
+        "summary": {
+          "label": "{{amount}} owed"
+        }
+      },
+      "offline": {
+        "reason": "Offline: unpaid platform fees. Pay to receive moves again."
+      },
+      "cashMove": {
+        "label": "Platform fee on this move: {{amount}} — added to your balance"
+      }
     }
   },
   "moverCard": {

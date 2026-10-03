@@ -63,6 +63,10 @@ export type User = {
     vehicleRentalHours?: number | null
     ownedVehicleId?: string | null
     countryCode?: string | null
+    // Fee-balance snapshot (plan fees/0.master.md §11); legacy rows read as ok.
+    feeOwedCents?: number
+    feeOldestDueAt?: string | null
+    feeStanding?: 'ok' | 'due' | 'overdue' | 'restricted'
   }
 }
 
@@ -249,6 +253,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             vehicleRentalHours: moverProfile.vehicleRentalHours ?? null,
             ownedVehicleId: moverProfile.ownedVehicleId ?? null,
             countryCode: moverProfile.countryCode ?? null,
+            feeOwedCents: moverProfile.feeOwedCents ?? 0,
+            feeOldestDueAt: moverProfile.feeOldestDueAt ?? null,
+            feeStanding: moverProfile.feeStanding ?? 'ok',
           },
         }),
       }

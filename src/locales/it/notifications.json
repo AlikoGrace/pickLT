@@ -165,5 +165,23 @@
       "body": "Congratulazioni! Il tuo profilo traslocatore è stato verificato. Ora puoi accettare traslochi.",
       "title": "Profilo verificato"
     }
+  },
+  "fees": {
+    "due": {
+      "title": "Commissione piattaforma da pagare",
+      "body": "Devi {{amount}} {{currency}} di commissioni della piattaforma, entro il {{dueDate}}."
+    },
+    "overdue": {
+      "title": "Commissione piattaforma scaduta",
+      "body": "La tua commissione della piattaforma di {{amount}} {{currency}} scadeva il {{dueDate}}. Paga ora per continuare a ricevere traslochi."
+    },
+    "restricted": {
+      "title": "Traslochi sospesi",
+      "body": "Devi {{amount}} {{currency}} di commissioni della piattaforma. Non puoi andare online né accettare traslochi finché non le paghi."
+    },
+    "paid": {
+      "title": "Commissioni della piattaforma pagate",
+      "body": "Abbiamo ricevuto {{amount}} {{currency}}. Il tuo saldo con la piattaforma è saldato e puoi di nuovo ricevere traslochi."
+    }
   }
 }

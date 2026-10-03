@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next'
 import Avatar from '@/shared/Avatar'
 import { formatDateWith, formatMoney, formatPercent } from '@/lib/format'
 import { payoutRatesFrom } from '@/lib/moverPayout'
+import { feeStandingAllowsWork } from '@/lib/feeLedger'
 
 interface DashboardData {
   activeMoves: string[]
@@ -61,6 +62,8 @@ const DashboardPage = () => {
   const [loading, setLoading] = useState(true)
 
   const isVerified = user?.moverDetails?.verificationStatus === 'verified'
+  // Unpaid platform fees past the limit (plan fees §5): no going online, no new moves.
+  const feeRestricted = !feeStandingAllowsWork(user?.moverDetails)
 
   useEffect(() => {
     const fetchDashboard = async () => {
@@ -267,13 +270,28 @@ const DashboardPage = () => {
         <div className="flex flex-wrap gap-3">
           {isVerified ? (
             <>
-              <Link
-                href="/available-moves"
-                className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-full text-sm font-medium hover:bg-primary-700 transition-colors"
-              >
-                <TruckIcon className="w-4 h-4" />
-                {t('web:moverDashboard.findMoves.cta')}
-              </Link>
+              {feeRestricted ? (
+                <div className="flex flex-col gap-1">
+                  <div
+                    aria-disabled="true"
+                    className="flex items-center gap-2 px-4 py-2 bg-neutral-200 dark:bg-neutral-700 text-neutral-400 dark:text-neutral-500 rounded-full text-sm font-medium cursor-not-allowed"
+                  >
+                    <TruckIcon className="w-4 h-4" />
+                    {t('web:moverDashboard.findMoves.cta')}
+                  </div>
+                  <Link href="/earnings" className="px-1 text-xs text-red-600 dark:text-red-400 hover:underline">
+                    {t('web:mover.fees.offline.reason')}
+                  </Link>
+                </div>
+              ) : (
+                <Link
+                  href="/available-moves"
+                  className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-full text-sm font-medium hover:bg-primary-700 transition-colors"
+                >
+                  <TruckIcon className="w-4 h-4" />
+                  {t('web:moverDashboard.findMoves.cta')}
+                </Link>
+              )}
               <Link
                 href="/my-crew"
                 className="flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 rounded-full text-sm font-medium hover:bg-neutral-200 dark:hover:bg-neutral-600 transition-colors"

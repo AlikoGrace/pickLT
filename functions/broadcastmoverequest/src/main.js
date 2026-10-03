@@ -91,6 +91,18 @@ function vehicleServiceReady(profile, nowMs, tz) {
 }
 // --- end vehicle-service ---
 
+// --- fee-standing (mirror) ---
+/**
+ * Mirror of pickltmobile/lib/fee-ledger.ts feeStandingAllowsWork (fees master plan §5, D2).
+ * Do not edit here; edit the TS module and re-copy. The parity test compares them.
+ * A driver whose unpaid platform fees reached `restricted` gets no broadcasts,
+ * cannot go online and cannot accept; legacy profiles without the field work.
+ */
+function feeStandingAllowsWork(profile) {
+  return (profile ? profile.feeStanding : undefined) !== 'restricted';
+}
+// --- end fee-standing (mirror) ---
+
 // ─── Load volume, vehicle capacity, crew requirement ────────────────────────
 //
 // All three come from `./pricing-engine.js`, the byte-identical mirror of the
@@ -277,17 +289,25 @@ export default async ({ req, res, log, error }) => {
       log(`vehicle gate: ${vehicleGated}/${fresh.length} fresh movers dropped (vehicle not service-ready)`);
     }
 
+    // Fee gate (fees master plan §5, D2): a driver whose unpaid platform fees
+    // put them in `restricted` is not offered new moves until they pay.
+    const workable = ready.filter(m => feeStandingAllowsWork(m));
+    const feeGated = ready.length - workable.length;
+    if (feeGated > 0) {
+      log(`fee gate: ${feeGated}/${ready.length} ready movers dropped (platform fees restricted)`);
+    }
+
     // Country gate (plan wave-2026-10/4 C6): a move is offered only to movers
     // working in its pickup country — the client's segregation ask, and it keeps
     // a mover from ending up under another country's VAT. A null on EITHER side
     // (rows from before the country columns) keeps today's radius-only matching.
     const moveCountry = countryToIso2(move.countryCode);
-    const inCountry = ready.filter(m => countryMatches(moverCountryCode(m), moveCountry));
-    const countryGated = ready.length - inCountry.length;
+    const inCountry = workable.filter(m => countryMatches(moverCountryCode(m), moveCountry));
+    const countryGated = workable.length - inCountry.length;
     if (!moveCountry) {
       log(`country gate: move ${moveId} has no countryCode — radius-only matching (legacy row)`);
     } else if (countryGated > 0) {
-      log(`country gate: ${countryGated}/${ready.length} ready movers dropped (not in ${moveCountry})`);
+      log(`country gate: ${countryGated}/${workable.length} ready movers dropped (not in ${moveCountry})`);
     }
 
     // Calculate distances and sort by proximity
@@ -407,7 +427,7 @@ export default async ({ req, res, log, error }) => {
 
     if (nearbyMovers.length === 0) {
       log(`No nearby movers found for move ${moveId}`);
-      return res.json({ success: true, requestsSent: 0, vehicleGated, countryGated, requiredCrew, crewGated, message: 'No nearby movers available' });
+      return res.json({ success: true, requestsSent: 0, vehicleGated, feeGated, countryGated, requiredCrew, crewGated, message: 'No nearby movers available' });
     }
 
     const now = new Date();
@@ -455,6 +475,7 @@ export default async ({ req, res, log, error }) => {
       loadVolumeM3: loadM3,
       capacityGated,
       vehicleGated,
+      feeGated,
       countryGated,
       requiredCrew,
       crewGated,

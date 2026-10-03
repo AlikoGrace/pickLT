@@ -363,5 +363,12 @@
   "country": {
     "notLive": "PickLT is not available in {{country}} yet.",
     "required": "Please choose your country."
+  },
+  "fees": {
+    "restricted": "You have unpaid platform fees. Pay your balance to go online and accept moves.",
+    "nothingOwed": "You have no platform fees to pay.",
+    "loadFailed": "Could not load your platform balance.",
+    "payFailed": "Could not complete the fee payment. Please try again.",
+    "payUnavailable": "Card payment isn’t available right now. Please try again later or contact support."
   }
 }

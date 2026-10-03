@@ -165,5 +165,23 @@
       "body": "Congratulations! Your mover profile has been verified. You can now accept moves.",
       "title": "Profile verified"
     }
+  },
+  "fees": {
+    "due": {
+      "title": "Platform fee due",
+      "body": "You owe {{amount}} {{currency}} in platform fees, due by {{dueDate}}."
+    },
+    "overdue": {
+      "title": "Platform fee overdue",
+      "body": "Your platform fee of {{amount}} {{currency}} was due on {{dueDate}}. Pay now to keep receiving moves."
+    },
+    "restricted": {
+      "title": "Moves paused",
+      "body": "You owe {{amount}} {{currency}} in platform fees. You cannot go online or accept moves until it is paid."
+    },
+    "paid": {
+      "title": "Platform fees paid",
+      "body": "We received {{amount}} {{currency}}. Your platform balance is settled and you can receive moves again."
+    }
   }
 }

@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest'
 
 import {
+  FEES_RESTRICTED,
   LOCATION_FRESHNESS_MS,
   directAssignmentBlock,
+  feeRestricted,
   mayMarkOnline,
   moverMatchesCountry,
   resolveOwnershipWrite,
@@ -62,7 +64,7 @@ describe('directAssignmentBlock (create-instant, parity with createpriorityreque
 describe('startGate (update-move-status)', () => {
   it('blocks leaving mover_assigned when the driver is not service-ready', () => {
     const gate = startGate({ status: 'mover_assigned' }, rentedToday({ vehicleReconfirmRequired: true }), NOW, TZ)
-    expect(gate).toEqual({ blocked: true, vehicleId: null })
+    expect(gate).toEqual({ blocked: true, vehicleId: null, fnCode: 'mover.vehicleNotReady' })
   })
 
   it('snapshots the current vehicle when leaving mover_assigned with none on the move (D13)', () => {
@@ -155,5 +157,37 @@ describe('moverMatchesCountry (nearby, plan wave-2026-10/4 C6)', () => {
     expect(moverMatchesCountry(mover({ countryCode: null }), 'IT')).toBe(true)
     expect(moverMatchesCountry(mover({ countryCode: 'DE' }), null)).toBe(true)
     expect(moverMatchesCountry(mover({ countryCode: 'Germany' }), 'DE')).toBe(true)
+  })
+})
+
+describe('fee-standing gate (plan fees/0.master.md §5)', () => {
+  it('only a restricted standing blocks; due / overdue / legacy rows keep working', () => {
+    expect(feeRestricted(mover({ feeStanding: 'restricted' }))).toBe(true)
+    for (const feeStanding of ['ok', 'due', 'overdue', null, undefined]) {
+      expect(feeRestricted(mover({ feeStanding }))).toBe(false)
+    }
+    expect(feeRestricted(null)).toBe(false)
+  })
+
+  it('a restricted mover cannot be pinned by a client (create-instant) — fees.restricted', () => {
+    expect(directAssignmentBlock(mover({ feeStanding: 'restricted' }), NOW, TZ)).toBe(FEES_RESTRICTED)
+    expect(FEES_RESTRICTED).toBe('fees.restricted')
+    expect(directAssignmentBlock(mover({ feeStanding: 'overdue' }), NOW, TZ)).toBeNull()
+    // The earlier reasons keep their order: an offline restricted mover reads as offline.
+    expect(directAssignmentBlock(mover({ feeStanding: 'restricted', isOnline: false }), NOW, TZ)).toBe('mover.offline')
+  })
+
+  it('the heartbeat never marks a restricted mover online', () => {
+    expect(mayMarkOnline(mover({ feeStanding: 'restricted' }), NOW, TZ)).toBe(false)
+    expect(mayMarkOnline(mover({ feeStanding: 'due' }), NOW, TZ)).toBe(true)
+  })
+
+  it('a restricted mover cannot start a pinned (mover_assigned) move; moves under way stay ungated', () => {
+    expect(startGate({ status: 'mover_assigned' }, mover({ feeStanding: 'restricted' }), NOW, TZ)).toEqual({
+      blocked: true,
+      vehicleId: null,
+      fnCode: FEES_RESTRICTED,
+    })
+    expect(startGate({ status: 'loading' }, mover({ feeStanding: 'restricted' }), NOW, TZ)).toEqual({ blocked: false, vehicleId: null })
   })
 })

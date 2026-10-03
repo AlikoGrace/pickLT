@@ -4,7 +4,7 @@ import { createAdminClient, withRetry } from '@/lib/appwrite-server'
 import { APPWRITE, PLATFORM_TZ } from '@/lib/constants'
 import { Query } from 'node-appwrite'
 import { getSessionUserId } from '@/lib/auth-session'
-import { isLocationFresh, moverMatchesCountry } from '@/lib/mover-gates'
+import { feeRestricted, isLocationFresh, moverMatchesCountry } from '@/lib/mover-gates'
 import { countryToIso2 } from '@/lib/countryCode'
 import { vehicleServiceReady } from '@/lib/vehicle-service'
 
@@ -112,6 +112,8 @@ export async function GET(req: NextRequest) {
       // vehicle, and for rental drivers today's SAME confirmation. Every mover
       // that reaches the client therefore carries a verified vehicle.
       .filter((mover) => isLocationFresh(mover, nowMs) && vehicleServiceReady(mover as AnyDoc, nowMs, PLATFORM_TZ))
+      // Fee balance (plan fees §5): a restricted driver is never listed.
+      .filter((mover) => !feeRestricted(mover))
       // Country segregation (C6): the mover's market must be the pickup's.
       .filter((mover) => moverMatchesCountry(mover, moveCountry))
       .filter((mover) => {

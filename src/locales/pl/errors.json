@@ -367,5 +367,12 @@
   "country": {
     "notLive": "PickLT nie jest jeszcze dostępny w kraju: {{country}}.",
     "required": "Wybierz swój kraj."
+  },
+  "fees": {
+    "restricted": "Masz nieopłacone opłaty platformy. Ureguluj saldo, aby przejść w tryb online i przyjmować przeprowadzki.",
+    "nothingOwed": "Nie masz opłat platformy do zapłaty.",
+    "loadFailed": "Nie udało się wczytać salda wobec platformy.",
+    "payFailed": "Nie udało się dokończyć płatności opłat. Proszę spróbować ponownie.",
+    "payUnavailable": "Płatność kartą jest teraz niedostępna. Proszę spróbować później lub skontaktować się z pomocą."
   }
 }

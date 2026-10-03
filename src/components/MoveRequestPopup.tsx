@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/context/auth'
 import VehicleStatusBanner from '@/components/mover/VehicleStatusBanner'
 import { useVehicleReadiness } from '@/hooks/useVehicleReadiness'
+import { feeStandingAllowsWork } from '@/lib/feeLedger'
 import { client, databases } from '@/lib/appwrite'
 import { Query } from 'appwrite'
 import type { RealtimeResponseEvent, Models } from 'appwrite'
@@ -274,6 +275,9 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
 
   const moverProfileId = user?.moverDetails?.profileId
   const isVerifiedMover = user?.moverDetails?.verificationStatus === 'verified'
+  // Never shown while the fee balance is restricted (plan fees §6); the
+  // functions stop broadcasting to them, this covers a request already in flight.
+  const feeBlocked = !feeStandingAllowsWork(user?.moverDetails)
   const router = useRouter()
   const [incoming, setIncoming] = useState<IncomingRequest | null>(null)
   const [isAccepting, setIsAccepting] = useState(false)
@@ -289,7 +293,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
 
   // Countdown timer + alarm sound
   useEffect(() => {
-    if (!incoming) {
+    if (!incoming || feeBlocked) {
       alertRef.current?.stop()
       return
     }
@@ -324,7 +328,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
       if (timerRef.current) clearInterval(timerRef.current)
       alertRef.current?.stop()
     }
-  }, [incoming])
+  }, [incoming, feeBlocked])
 
   // Fetch full move details via the SERVER API route (uses admin SDK, bypasses permissions)
   const fetchMoveDetails = useCallback(async (moveId: string): Promise<MoveDetails | null> => {
@@ -492,7 +496,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
   }, [incoming])
 
   const renderPopup = () => {
-    if (!incoming) return null
+    if (!incoming || feeBlocked) return null
 
     const move = incoming.move
 

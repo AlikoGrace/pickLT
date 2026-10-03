@@ -1,6 +1,7 @@
 import { getTranslations } from '@/lib/i18n-server'
 import { createAdminClient } from '@/lib/appwrite-server'
-import { requireVerifiedMover, isErrorResponse } from '@/lib/mover-auth'
+import { requireVerifiedMover, isErrorResponse, feeRestrictedResponse } from '@/lib/mover-auth'
+import { feeRestricted } from '@/lib/mover-gates'
 import { APPWRITE } from '@/lib/constants'
 import { Query } from 'node-appwrite'
 import { NextRequest, NextResponse } from 'next/server'
@@ -48,6 +49,8 @@ export async function GET(req: NextRequest) {
     const auth = await requireVerifiedMover()
     if (isErrorResponse(auth)) return auth
     const { userId } = auth
+    // A fee-restricted driver is not shown the marketplace (plan fees §5).
+    if (feeRestricted(auth.moverProfile)) return feeRestrictedResponse()
 
     const { searchParams } = req.nextUrl
     let lat = parseFloat(searchParams.get('lat') || '')

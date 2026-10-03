@@ -201,3 +201,26 @@ describe('parseNotificationData', () => {
     }
   })
 })
+
+describe('fee-balance notifications (plan fees/0.master.md §11)', () => {
+  const params = { amount: '22.60', currency: 'EUR', dueDate: '2026-10-27' }
+  const row = (key: string) => ({
+    title: 'stored title',
+    body: 'stored body',
+    data: JSON.stringify({ i18nKey: key, i18nParams: params }),
+  })
+
+  it('every fees.* key the writers emit renders, with its params, in en and de', () => {
+    for (const key of ['fees.due', 'fees.overdue', 'fees.restricted', 'fees.paid']) {
+      for (const t of [en, de]) {
+        const { title, body } = resolveNotificationText(row(key), t)
+        expect(title).not.toBe('stored title')
+        expect(body).not.toBe('stored body')
+        expect(body).toContain('22.60')
+        expect(body).not.toMatch(/\{\{/)
+      }
+    }
+    expect(resolveNotificationText(row('fees.due'), en).body).toContain('2026-10-27')
+    expect(resolveNotificationText(row('fees.restricted'), de).title).toBe('Aufträge pausiert')
+  })
+})

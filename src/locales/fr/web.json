@@ -988,6 +988,111 @@
           "label": "Votre location se termine dans {{time}}"
         }
       }
+    },
+    "fees": {
+      "balance": {
+        "title": "Solde de plateforme",
+        "owe": {
+          "label": "Vous devez"
+        },
+        "owed": {
+          "label": "PickLT conserve pour vous"
+        },
+        "settled": {
+          "label": "Tout est réglé",
+          "body": "Vous ne devez aucuns frais de plateforme."
+        },
+        "due": {
+          "body": "À régler avant le {{date}}."
+        },
+        "dueNow": {
+          "body": "À régler maintenant."
+        },
+        "overdue": {
+          "body": "En retard depuis le {{date}}. Payez maintenant pour continuer à recevoir des déménagements."
+        },
+        "restricted": {
+          "body": "Vous ne pouvez ni vous connecter ni accepter de déménagements tant que vos frais de plateforme ne sont pas réglés."
+        },
+        "credit": {
+          "body": "Revenus des paiements par carte conservés pour vous. Les frais de plateforme des prochains déménagements en espèces y sont imputés en premier."
+        },
+        "helper": "Un déménagement payé en espèces ajoute ses frais de plateforme à votre solde ; un déménagement payé par carte y ajoute vos revenus."
+      },
+      "history": {
+        "title": "Historique du solde",
+        "empty": "Aucune opération pour le moment.",
+        "move": {
+          "label": "Déménagement {{handle}}"
+        },
+        "loadMore": {
+          "cta": "Afficher plus"
+        }
+      },
+      "kind": {
+        "cashFeeDue": {
+          "label": "Frais de plateforme (espèces)"
+        },
+        "cardEarning": {
+          "label": "Revenus d’un déménagement par carte"
+        },
+        "driverPayment": {
+          "label": "Votre paiement"
+        },
+        "payout": {
+          "label": "Versement"
+        },
+        "adjustment": {
+          "label": "Ajustement"
+        },
+        "waiver": {
+          "label": "Frais annulés"
+        },
+        "charge": {
+          "label": "Débit"
+        }
+      },
+      "pay": {
+        "cta": "Payer maintenant",
+        "amount": {
+          "cta": "Payer {{amount}}"
+        },
+        "title": "Payer vos frais de plateforme",
+        "paying": {
+          "cta": "Paiement en cours…"
+        },
+        "cancel": {
+          "cta": "Annuler"
+        },
+        "success": "Paiement reçu. Votre solde a été mis à jour.",
+        "unavailable": "Le paiement par carte n’est pas disponible pour le moment. Contactez le support pour payer autrement.",
+        "secure": {
+          "helper": "Les paiements par carte sont traités de manière sécurisée par Stripe."
+        }
+      },
+      "banner": {
+        "due": {
+          "title": "Frais de plateforme à payer",
+          "body": "Vous devez {{amount}} de frais de plateforme sur des déménagements en espèces, à régler avant le {{date}}."
+        },
+        "overdue": {
+          "title": "Frais de plateforme en retard",
+          "body": "Vous devez {{amount}} de frais de plateforme, en retard depuis le {{date}}. Payez maintenant pour continuer à recevoir des déménagements."
+        },
+        "restricted": {
+          "title": "Demandes de déménagement suspendues",
+          "body": "Vous devez {{amount}} de frais de plateforme. Vous ne pouvez ni vous connecter ni accepter de déménagements tant qu’ils ne sont pas réglés."
+        },
+        "summary": {
+          "label": "{{amount}} dus"
+        }
+      },
+      "offline": {
+        "reason": "Hors ligne : frais de plateforme impayés. Payez pour recevoir à nouveau des déménagements."
+      },
+      "cashMove": {
+        "label": "Frais de plateforme sur ce déménagement : {{amount}} — ajoutés à votre solde"
+      }
     }
   },
   "moverCard": {

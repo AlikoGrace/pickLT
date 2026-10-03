@@ -998,6 +998,111 @@
           "label": "Wynajem kończy się za {{time}}"
         }
       }
+    },
+    "fees": {
+      "balance": {
+        "title": "Saldo wobec platformy",
+        "owe": {
+          "label": "Do zapłaty"
+        },
+        "owed": {
+          "label": "Środki przechowywane przez PickLT"
+        },
+        "settled": {
+          "label": "Wszystko rozliczone",
+          "body": "Nie ma żadnych zaległych opłat platformy."
+        },
+        "due": {
+          "body": "Termin zapłaty: {{date}}."
+        },
+        "dueNow": {
+          "body": "Płatne od razu."
+        },
+        "overdue": {
+          "body": "Zaległe od {{date}}. Proszę zapłacić teraz, aby nadal otrzymywać przeprowadzki."
+        },
+        "restricted": {
+          "body": "Do czasu zapłaty opłat platformy nie można przejść do trybu online ani przyjmować przeprowadzek."
+        },
+        "credit": {
+          "body": "Zarobki z płatności kartą przechowywane przez PickLT. Opłaty platformy za kolejne przeprowadzki gotówkowe są najpierw z nich potrącane."
+        },
+        "helper": "Przeprowadzka opłacona gotówką dodaje do salda opłatę platformy, a opłacona kartą — zarobki."
+      },
+      "history": {
+        "title": "Historia salda",
+        "empty": "Brak wpisów.",
+        "move": {
+          "label": "Przeprowadzka {{handle}}"
+        },
+        "loadMore": {
+          "cta": "Pokaż więcej"
+        }
+      },
+      "kind": {
+        "cashFeeDue": {
+          "label": "Opłata platformy (gotówka)"
+        },
+        "cardEarning": {
+          "label": "Zarobek z przeprowadzki kartą"
+        },
+        "driverPayment": {
+          "label": "Wpłata"
+        },
+        "payout": {
+          "label": "Wypłata"
+        },
+        "adjustment": {
+          "label": "Korekta"
+        },
+        "waiver": {
+          "label": "Opłata umorzona"
+        },
+        "charge": {
+          "label": "Obciążenie"
+        }
+      },
+      "pay": {
+        "cta": "Zapłać teraz",
+        "amount": {
+          "cta": "Zapłać {{amount}}"
+        },
+        "title": "Opłata należności wobec platformy",
+        "paying": {
+          "cta": "Trwa płatność…"
+        },
+        "cancel": {
+          "cta": "Anuluj"
+        },
+        "success": "Płatność otrzymana. Saldo zostało zaktualizowane.",
+        "unavailable": "Płatność kartą jest teraz niedostępna. Proszę skontaktować się z pomocą, aby zapłacić w inny sposób.",
+        "secure": {
+          "helper": "Płatności kartą są bezpiecznie obsługiwane przez Stripe."
+        }
+      },
+      "banner": {
+        "due": {
+          "title": "Opłaty platformy do zapłaty",
+          "body": "Do zapłaty jest {{amount}} opłat platformy za przeprowadzki gotówkowe, termin: {{date}}."
+        },
+        "overdue": {
+          "title": "Zaległe opłaty platformy",
+          "body": "Do zapłaty jest {{amount}} opłat platformy, zaległych od {{date}}. Proszę zapłacić teraz, aby nadal otrzymywać przeprowadzki."
+        },
+        "restricted": {
+          "title": "Zlecenia przeprowadzek wstrzymane",
+          "body": "Do zapłaty jest {{amount}} opłat platformy. Do czasu zapłaty nie można przejść do trybu online ani przyjmować przeprowadzek."
+        },
+        "summary": {
+          "label": "Do zapłaty: {{amount}}"
+        }
+      },
+      "offline": {
+        "reason": "Offline: niezapłacone opłaty platformy. Proszę zapłacić, aby znów otrzymywać przeprowadzki."
+      },
+      "cashMove": {
+        "label": "Opłata platformy za tę przeprowadzkę: {{amount}} — doliczona do salda"
+      }
     }
   },
   "moverCard": {

@@ -165,5 +165,23 @@
       "body": "¡Enhorabuena! Tu perfil de transportista ha sido verificado. Ya puedes aceptar mudanzas.",
       "title": "Perfil verificado"
     }
+  },
+  "fees": {
+    "due": {
+      "title": "Comisión de la plataforma pendiente",
+      "body": "Debes {{amount}} {{currency}} en comisiones de la plataforma, con vencimiento el {{dueDate}}."
+    },
+    "overdue": {
+      "title": "Comisión de la plataforma vencida",
+      "body": "Tu comisión de la plataforma de {{amount}} {{currency}} vencía el {{dueDate}}. Paga ahora para seguir recibiendo mudanzas."
+    },
+    "restricted": {
+      "title": "Mudanzas en pausa",
+      "body": "Debes {{amount}} {{currency}} en comisiones de la plataforma. No puedes conectarte ni aceptar mudanzas hasta pagarlas."
+    },
+    "paid": {
+      "title": "Comisiones de la plataforma pagadas",
+      "body": "Hemos recibido {{amount}} {{currency}}. Tu saldo con la plataforma está liquidado y puedes volver a recibir mudanzas."
+    }
   }
 }

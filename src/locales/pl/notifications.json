@@ -169,5 +169,23 @@
       "body": "Gratulacje! Twój profil przewoźnika został zweryfikowany. Możesz już przyjmować przeprowadzki.",
       "title": "Profil zweryfikowany"
     }
+  },
+  "fees": {
+    "due": {
+      "title": "Opłata platformy do zapłaty",
+      "body": "Masz {{amount}} {{currency}} opłat platformy do zapłaty do {{dueDate}}."
+    },
+    "overdue": {
+      "title": "Zaległa opłata platformy",
+      "body": "Opłata platformy w wysokości {{amount}} {{currency}} była płatna do {{dueDate}}. Zapłać teraz, aby nadal otrzymywać zlecenia."
+    },
+    "restricted": {
+      "title": "Przeprowadzki wstrzymane",
+      "body": "Masz {{amount}} {{currency}} zaległych opłat platformy. Do czasu zapłaty nie możesz przejść w tryb online ani przyjmować przeprowadzek."
+    },
+    "paid": {
+      "title": "Opłaty platformy uregulowane",
+      "body": "Otrzymaliśmy {{amount}} {{currency}}. Twoje saldo wobec platformy jest rozliczone i możesz znowu otrzymywać przeprowadzki."
+    }
   }
 }

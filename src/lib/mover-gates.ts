@@ -1,4 +1,5 @@
 import { countryToIso2 } from './countryCode'
+import { feeStandingAllowsWork } from './feeLedger'
 import { vehicleServiceReady, type VehicleOwnership, type VehicleProfileFields } from './vehicle-service'
 
 /**
@@ -24,13 +25,31 @@ export function isLocationFresh(mover: AnyDoc | null | undefined, nowMs: number)
   return Number.isFinite(at) && nowMs - at <= LOCATION_FRESHNESS_MS
 }
 
-export type DirectAssignmentBlock = 'mover.notVerified' | 'mover.offline' | 'mover.vehicleNotReady'
+// --- fee-standing (mirror) ---
+/**
+ * The fee-balance work gate (plan `fees/0.master.md` §5, D2): a driver whose
+ * `feeStanding` is `restricted` cannot go online, is not matched or listed to
+ * clients, cannot see the scheduled feed and cannot accept. Refusals carry
+ * this `fnCode` (`errors:fees.restricted`). Legacy rows without the field work.
+ */
+export const FEES_RESTRICTED = 'fees.restricted'
+
+export function feeRestricted(profile: AnyDoc | null | undefined): boolean {
+  return !feeStandingAllowsWork(profile)
+}
+// --- fee-standing (mirror) ---
+
+export type DirectAssignmentBlock =
+  | 'mover.notVerified'
+  | 'mover.offline'
+  | 'mover.vehicleNotReady'
+  | typeof FEES_RESTRICTED
 
 /**
  * `POST /api/moves/create-instant` pins a move to a mover the client picked
  * from a list that is a snapshot. Same checks, same order and same `fnCode`s
  * as the `createpriorityrequest` function: KYC, online, location freshness,
- * vehicle readiness. `null` means the mover may be assigned.
+ * vehicle readiness, fee standing. `null` means the mover may be assigned.
  */
 export function directAssignmentBlock(
   mover: AnyDoc | null | undefined,
@@ -41,6 +60,7 @@ export function directAssignmentBlock(
   if (mover.isOnline === false) return 'mover.offline'
   if (!isLocationFresh(mover, nowMs)) return 'mover.offline'
   if (!vehicleServiceReady(mover as VehicleProfileFields, nowMs, tz)) return 'mover.vehicleNotReady'
+  if (feeRestricted(mover)) return FEES_RESTRICTED
   return null
 }
 
@@ -56,9 +76,12 @@ export function startGate(
   profile: AnyDoc | null | undefined,
   nowMs: number,
   tz: string,
-): { blocked: boolean; vehicleId: string | null } {
+): { blocked: boolean; vehicleId: string | null; fnCode?: 'mover.vehicleNotReady' | typeof FEES_RESTRICTED } {
   if (move.status !== 'mover_assigned') return { blocked: false, vehicleId: null }
-  if (!vehicleServiceReady(profile as VehicleProfileFields, nowMs, tz)) return { blocked: true, vehicleId: null }
+  if (!vehicleServiceReady(profile as VehicleProfileFields, nowMs, tz)) {
+    return { blocked: true, vehicleId: null, fnCode: 'mover.vehicleNotReady' }
+  }
+  if (feeRestricted(profile)) return { blocked: true, vehicleId: null, fnCode: FEES_RESTRICTED }
   const current = typeof profile?.currentVehicleId === 'string' ? profile.currentVehicleId : null
   return { blocked: false, vehicleId: move.vehicleId ? null : current }
 }
@@ -67,10 +90,11 @@ export function startGate(
  * `POST /api/mover/update-location`. The heartbeat always records the fix, but
  * may only *mark* the driver online when `setmoveronline` would have let them
  * go online. `false` means "leave `isOnline` as it is" — never force it off,
- * the driver may be finishing a move (D4).
+ * the driver may be finishing a move (D4). A fee-restricted driver is never
+ * marked online (`settlefees` enforce takes them offline on entering it).
  */
 export function mayMarkOnline(profile: AnyDoc | null | undefined, nowMs: number, tz: string): boolean {
-  return vehicleServiceReady(profile as VehicleProfileFields, nowMs, tz)
+  return vehicleServiceReady(profile as VehicleProfileFields, nowMs, tz) && !feeRestricted(profile)
 }
 
 /**

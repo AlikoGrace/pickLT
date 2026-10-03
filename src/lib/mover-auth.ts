@@ -1,6 +1,7 @@
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE, PLATFORM_TZ } from '@/lib/constants'
 import { vehicleServiceReady } from '@/lib/vehicle-service'
+import { FEES_RESTRICTED, feeRestricted } from '@/lib/mover-gates'
 import { getSessionUserId } from '@/lib/auth-session'
 import { Query } from 'node-appwrite'
 import { NextResponse } from 'next/server'
@@ -10,6 +11,30 @@ import type { Models } from 'node-appwrite'
 interface VerifiedMoverResult {
   userId: string
   moverProfile: Models.Document
+}
+
+/**
+ * The session's own mover profile, whatever its verification status — for the
+ * driver's fee balance, which a suspended or unverified driver must still be
+ * able to read and pay (plan `fees/0.master.md` §6).
+ */
+export async function requireMoverProfile(): Promise<VerifiedMoverResult | NextResponse> {
+  const { t } = await getTranslations()
+  const userId = await getSessionUserId()
+  if (!userId) {
+    return NextResponse.json({ error: t('errors:auth.unauthorized') }, { status: 401 })
+  }
+  const { databases } = createAdminClient()
+  const profiles = await databases.listDocuments(
+    APPWRITE.DATABASE_ID,
+    APPWRITE.COLLECTIONS.MOVER_PROFILES,
+    [Query.equal('userId', [userId]), Query.limit(1)]
+  )
+  const moverProfile = profiles.documents[0]
+  if (!moverProfile) {
+    return NextResponse.json({ error: t('errors:mover.profileNotFound') }, { status: 404 })
+  }
+  return { userId, moverProfile }
 }
 
 /**
@@ -55,6 +80,9 @@ export async function requireVerifiedMover(): Promise<
  * out *new* work (accept-move, accept-scheduled-move); a mover mid-move keeps
  * the routes that finish it. The response carries `fnCode` so the driver app
  * can map it to `errors:mover.vehicleNotReady` in its own locale.
+ *
+ * Also the fee-balance gate (plan `fees/0.master.md` §5): a `restricted`
+ * driver cannot accept → 403 `fees.restricted`.
  */
 export async function requireServiceReadyMover(): Promise<
   VerifiedMoverResult | NextResponse
@@ -68,7 +96,16 @@ export async function requireServiceReadyMover(): Promise<
       { status: 403 }
     )
   }
+  if (feeRestricted(result.moverProfile)) {
+    return feeRestrictedResponse()
+  }
   return result
+}
+
+/** The fee-balance refusal every work-handing route returns (`errors:fees.restricted`). */
+export async function feeRestrictedResponse(): Promise<NextResponse> {
+  const { t } = await getTranslations()
+  return NextResponse.json({ error: t('errors:fees.restricted'), fnCode: FEES_RESTRICTED }, { status: 403 })
 }
 
 /** Type guard to check if the result is an error response */

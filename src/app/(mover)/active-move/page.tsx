@@ -21,6 +21,8 @@ import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { getMapboxDirections } from '@/utils/mapbox-directions'
 import { formatMoney } from '@/lib/format'
+import { platformFeeCents } from '@/lib/feeLedger'
+import type { QuoteBreakdown } from '@/lib/pricingEngine'
 import { useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
 import { formatDistanceM } from '@/lib/format'
@@ -464,6 +466,17 @@ export default function ActiveMovePage() {
   // with a generic "Update status", and this is that copy.
   const hasNextPhase = Boolean(PHASE_ORDER[PHASE_ORDER.indexOf(phase) + 1])
 
+  // Cash in hand: the platform fee on this move goes onto the driver's balance
+  // (plan fees/0.master.md D1) — the same figure `postmoverledger` posts.
+  const cashFeeCents =
+    move && move.paymentMethod !== 'card'
+      ? platformFeeCents({
+          estimatedPrice: move.estimatedPrice as number | null,
+          finalPrice: move.finalPrice as number | null,
+          priceBreakdown: move.priceBreakdown as string | QuoteBreakdown | null,
+        })
+      : 0
+
   const pickupCoords = useMemo(
     () => move?.pickupLatitude && move?.pickupLongitude
       ? { latitude: move.pickupLatitude as number, longitude: move.pickupLongitude as number }
@@ -698,6 +711,11 @@ export default function ActiveMovePage() {
                 <p className="text-xs text-neutral-500 dark:text-neutral-400">
                   {t('booking:payment.moverConfirm.helper')}
                 </p>
+                {cashFeeCents > 0 && (
+                  <p className="text-xs font-medium text-neutral-700 dark:text-neutral-200">
+                    {t('web:mover.fees.cashMove.label', { amount: formatMoney(cashFeeCents / 100) })}
+                  </p>
+                )}
               </div>
 
               {/* Status indicators */}

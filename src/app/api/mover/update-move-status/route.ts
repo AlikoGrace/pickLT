@@ -92,8 +92,10 @@ export async function POST(request: NextRequest) {
     // Every later transition is a move already under way and stays ungated.
     const start = startGate(move, moverProfile, Date.now(), PLATFORM_TZ)
     if (start.blocked) {
+      const fnCode = start.fnCode ?? 'mover.vehicleNotReady'
       return NextResponse.json(
-        { error: t('errors:mover.vehicleNotReady'), fnCode: 'mover.vehicleNotReady' },
+        // i18n-keys: errors:mover.vehicleNotReady, errors:fees.restricted
+        { error: t(`errors:${fnCode}`), fnCode },
         { status: 403 }
       )
     }

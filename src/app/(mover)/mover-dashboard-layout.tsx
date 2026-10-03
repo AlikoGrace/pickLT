@@ -9,6 +9,8 @@ import LanguageDropdown from '@/components/Header/LanguageDropdown'
 import NotifyDropdown from '@/components/Header/NotifyDropdown'
 import VehicleConfirmModal from '@/components/mover/VehicleConfirmModal'
 import VehicleStatusBanner from '@/components/mover/VehicleStatusBanner'
+import FeeStatusBanner from '@/components/mover/FeeStatusBanner'
+import { feeStandingAllowsWork } from '@/lib/feeLedger'
 import type { VehicleDoc } from '@/lib/types'
 import { fetchVehicleOverview } from '@/lib/vehicle-client'
 import { withExpiredRental } from '@/lib/vehicle-labels'
@@ -249,7 +251,9 @@ const MoverDashboardLayout = ({ children }: Props) => {
   const vehicleState = withExpiredRental(vehicleServiceState(moverDetails, currentVehicle, nowMs), moverDetails, expiredRental)
   // After an expiry nothing is current; the expired rental names the prompt and the banner.
   const shownVehicle = currentVehicle ?? (vehicleState === 'RENTAL_EXPIRED' ? expiredRental : null)
-  const isServiceReady = vehicleServiceReady(moverDetails, nowMs)
+  // New work also needs the fee balance not to be restricted (plan fees §5) —
+  // the same nav locks and redirect as the vehicle term.
+  const isServiceReady = vehicleServiceReady(moverDetails, nowMs) && feeStandingAllowsWork(moverDetails)
   const vehicleRemainingMs = rentalRemainingMs(moverDetails, nowMs)
 
   // Hide the mobile header and its offset on full-screen map pages
@@ -541,6 +545,14 @@ const MoverDashboardLayout = ({ children }: Props) => {
             vehicle={shownVehicle}
             showCurrentWhenReady={pathname === '/dashboard'}
             ownedVehicleId={moverDetails?.ownedVehicleId ?? null}
+          />
+        )}
+        {/* Platform fees owed on cash moves — due / overdue / restricted (plan fees §6) */}
+        {hasCompletedProfile && !isOnCompleteProfilePage && pathname !== '/earnings' && (
+          <FeeStatusBanner
+            standing={moverDetails?.feeStanding}
+            owedCents={moverDetails?.feeOwedCents}
+            oldestDueAt={moverDetails?.feeOldestDueAt}
           />
         )}
         <div className="min-h-screen">{children}</div>

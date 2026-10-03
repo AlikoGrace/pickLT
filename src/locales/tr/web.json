@@ -988,6 +988,111 @@
           "label": "Kiralamanızın bitmesine {{time}} kaldı"
         }
       }
+    },
+    "fees": {
+      "balance": {
+        "title": "Platform bakiyesi",
+        "owe": {
+          "label": "Borcunuz"
+        },
+        "owed": {
+          "label": "PickLT’nin sizin için tuttuğu tutar"
+        },
+        "settled": {
+          "label": "Her şey ödendi",
+          "body": "Platform ücreti borcunuz yok."
+        },
+        "due": {
+          "body": "Son ödeme tarihi: {{date}}."
+        },
+        "dueNow": {
+          "body": "Hemen ödenmeli."
+        },
+        "overdue": {
+          "body": "{{date}} tarihinden beri gecikmede. Taşıma almaya devam etmek için şimdi ödeyin."
+        },
+        "restricted": {
+          "body": "Platform ücretleriniz ödenene kadar çevrimiçi olamaz ve taşıma kabul edemezsiniz."
+        },
+        "credit": {
+          "body": "Kartlı ödemelerden sizin için tutulan kazançlar. Sonraki nakit taşımaların platform ücretleri önce buradan düşülür."
+        },
+        "helper": "Nakit bir taşıma, platform ücretini bakiyenize ekler; kartlı bir taşıma kazancınızı ekler."
+      },
+      "history": {
+        "title": "Bakiye geçmişi",
+        "empty": "Henüz kayıt yok.",
+        "move": {
+          "label": "Taşıma {{handle}}"
+        },
+        "loadMore": {
+          "cta": "Daha fazla göster"
+        }
+      },
+      "kind": {
+        "cashFeeDue": {
+          "label": "Platform ücreti (nakit)"
+        },
+        "cardEarning": {
+          "label": "Kartlı taşıma kazancı"
+        },
+        "driverPayment": {
+          "label": "Ödemeniz"
+        },
+        "payout": {
+          "label": "Hakediş ödemesi"
+        },
+        "adjustment": {
+          "label": "Düzeltme"
+        },
+        "waiver": {
+          "label": "Ücret silindi"
+        },
+        "charge": {
+          "label": "Borçlandırma"
+        }
+      },
+      "pay": {
+        "cta": "Şimdi öde",
+        "amount": {
+          "cta": "{{amount}} öde"
+        },
+        "title": "Platform ücretlerinizi ödeyin",
+        "paying": {
+          "cta": "Ödeniyor…"
+        },
+        "cancel": {
+          "cta": "İptal"
+        },
+        "success": "Ödeme alındı. Bakiyeniz güncellendi.",
+        "unavailable": "Kartla ödeme şu anda kullanılamıyor. Başka bir yolla ödemek için destekle iletişime geçin.",
+        "secure": {
+          "helper": "Kartlı ödemeler Stripe tarafından güvenle işlenir."
+        }
+      },
+      "banner": {
+        "due": {
+          "title": "Platform ücretleri ödenecek",
+          "body": "Nakit taşımalardan {{amount}} platform ücreti borcunuz var; son ödeme tarihi {{date}}."
+        },
+        "overdue": {
+          "title": "Platform ücretlerinin vadesi geçti",
+          "body": "{{amount}} platform ücreti borcunuz {{date}} tarihinden beri gecikmede. Taşıma almaya devam etmek için şimdi ödeyin."
+        },
+        "restricted": {
+          "title": "Taşıma talepleri durduruldu",
+          "body": "{{amount}} platform ücreti borcunuz var. Ödenene kadar çevrimiçi olamaz ve taşıma kabul edemezsiniz."
+        },
+        "summary": {
+          "label": "{{amount}} borç"
+        }
+      },
+      "offline": {
+        "reason": "Çevrimdışı: ödenmemiş platform ücretleri. Yeniden taşıma almak için ödeyin."
+      },
+      "cashMove": {
+        "label": "Bu taşımadaki platform ücreti: {{amount}} — bakiyenize eklendi"
+      }
     }
   },
   "moverCard": {
