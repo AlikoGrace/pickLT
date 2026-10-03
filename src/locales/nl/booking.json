@@ -1426,7 +1426,8 @@
         "oneDay": "1 dag",
         "days": "{{count}} dagen",
         "week": "1 week",
-        "custom": "Kies een einddatum en -tijd"
+        "custom": "Kies een einddatum en -tijd",
+        "duration": "Duur invoeren"
       },
       "startNow": {
         "label": "Begint nu"
@@ -1477,6 +1478,18 @@
       },
       "broadcastsUntil": {
         "label": "Je ontvangt verhuizingen tot {{time}}"
+      },
+      "customDuration": {
+        "label": "Duur",
+        "placeholder": "bijv. 5"
+      },
+      "unit": {
+        "hours": {
+          "label": "Uren"
+        },
+        "days": {
+          "label": "Dagen"
+        }
       }
     }
   }

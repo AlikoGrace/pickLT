@@ -1427,7 +1427,8 @@
         "oneDay": "1 Tag",
         "days": "{{count}} Tage",
         "week": "1 Woche",
-        "custom": "Enddatum und Uhrzeit wählen"
+        "custom": "Enddatum und Uhrzeit wählen",
+        "duration": "Dauer eingeben"
       },
       "startNow": {
         "label": "Beginnt jetzt"
@@ -1478,6 +1479,18 @@
       },
       "broadcastsUntil": {
         "label": "Sie erhalten Aufträge bis {{time}}"
+      },
+      "customDuration": {
+        "label": "Dauer",
+        "placeholder": "z. B. 5"
+      },
+      "unit": {
+        "hours": {
+          "label": "Stunden"
+        },
+        "days": {
+          "label": "Tage"
+        }
       }
     }
   }

@@ -1426,7 +1426,8 @@
         "oneDay": "1 giorno",
         "days": "{{count}} giorni",
         "week": "1 settimana",
-        "custom": "Scegli data e ora di fine"
+        "custom": "Scegli data e ora di fine",
+        "duration": "Inserisci una durata"
       },
       "startNow": {
         "label": "Inizia adesso"
@@ -1477,6 +1478,18 @@
       },
       "broadcastsUntil": {
         "label": "Ricevi traslochi fino alle {{time}}"
+      },
+      "customDuration": {
+        "label": "Durata",
+        "placeholder": "es. 5"
+      },
+      "unit": {
+        "hours": {
+          "label": "Ore"
+        },
+        "days": {
+          "label": "Giorni"
+        }
       }
     }
   }

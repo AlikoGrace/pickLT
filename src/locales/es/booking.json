@@ -1426,7 +1426,8 @@
         "oneDay": "1 día",
         "days": "{{count}} días",
         "week": "1 semana",
-        "custom": "Elegir fecha y hora de fin"
+        "custom": "Elegir fecha y hora de fin",
+        "duration": "Introducir una duración"
       },
       "startNow": {
         "label": "Empieza ahora"
@@ -1477,6 +1478,18 @@
       },
       "broadcastsUntil": {
         "label": "Recibes mudanzas hasta las {{time}}"
+      },
+      "customDuration": {
+        "label": "Duración",
+        "placeholder": "p. ej. 5"
+      },
+      "unit": {
+        "hours": {
+          "label": "Horas"
+        },
+        "days": {
+          "label": "Días"
+        }
       }
     }
   }

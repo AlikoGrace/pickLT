@@ -1459,7 +1459,8 @@
         "oneDay": "1 dzień",
         "days": "{{count}} dni",
         "week": "1 tydzień",
-        "custom": "Wybierz datę i godzinę zakończenia"
+        "custom": "Wybierz datę i godzinę zakończenia",
+        "duration": "Wpisz czas trwania"
       },
       "startNow": {
         "label": "Zaczyna się teraz"
@@ -1510,6 +1511,18 @@
       },
       "broadcastsUntil": {
         "label": "Otrzymujesz przeprowadzki do {{time}}"
+      },
+      "customDuration": {
+        "label": "Czas trwania",
+        "placeholder": "np. 5"
+      },
+      "unit": {
+        "hours": {
+          "label": "Godziny"
+        },
+        "days": {
+          "label": "Dni"
+        }
       }
     }
   }

@@ -39,3 +39,19 @@ export function isoToLocalDateTime(iso: string | null | undefined): string {
   const pad = (n: number) => String(n).padStart(2, '0')
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
 }
+
+export type DurationUnit = 'hours' | 'days'
+
+/** "Enter a duration": typed amount + unit → hours (days × 24). `null` for an empty or non-positive entry; decimal comma accepted. */
+export function durationToHours(amount: string, unit: DurationUnit): number | null {
+  const n = Number(String(amount).trim().replace(',', '.'))
+  if (!Number.isFinite(n) || n <= 0) return null
+  return Math.round((unit === 'days' ? n * 24 : n) * 100) / 100
+}
+
+/** Hours → the friendliest amount + unit to show back in the field (whole days read as days). */
+export function hoursToDuration(hours: number | null | undefined): { amount: string; unit: DurationUnit } {
+  if (hours == null || !Number.isFinite(Number(hours)) || Number(hours) <= 0) return { amount: '', unit: 'hours' }
+  const h = Number(hours)
+  return h % 24 === 0 ? { amount: String(h / 24), unit: 'days' } : { amount: String(h), unit: 'hours' }
+}

@@ -1429,7 +1429,8 @@
         "oneDay": "1 day",
         "days": "{{count}} days",
         "week": "1 week",
-        "custom": "Pick an end date & time"
+        "custom": "Pick an end date & time",
+        "duration": "Enter a duration"
       },
       "startNow": {
         "label": "Starts now"
@@ -1480,6 +1481,18 @@
       },
       "broadcastsUntil": {
         "label": "You receive moves until {{time}}"
+      },
+      "customDuration": {
+        "label": "Duration",
+        "placeholder": "e.g. 5"
+      },
+      "unit": {
+        "hours": {
+          "label": "Hours"
+        },
+        "days": {
+          "label": "Days"
+        }
       }
     }
   }

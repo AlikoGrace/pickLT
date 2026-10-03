@@ -1,10 +1,10 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { formatDateTime } from '@/lib/format'
-import { isoToLocalDateTime, localDateTimeToIso } from '@/lib/rental-time'
+import { durationToHours, hoursToDuration, isoToLocalDateTime, localDateTimeToIso, type DurationUnit } from '@/lib/rental-time'
 import {
   MAX_RENTAL_HOURS,
   RENTAL_DURATION_PRESETS_HOURS,
@@ -48,6 +48,21 @@ export default function RentalWindowPicker({ value, onChange, nowMs, disabled }:
   const now = nowMs ?? Date.now()
   const customSelected = value.endAt != null
   const selectedHours = customSelected ? null : Number(value.hours)
+  const hasHours = !customSelected && value.hours != null && String(value.hours).trim() !== '' && selectedHours! > 0
+  const typedHours = hasHours && !RENTAL_DURATION_PRESETS_HOURS.includes(selectedHours!)
+  // "Enter a duration": a typed amount in hours or days for rentals the chips don't cover.
+  const [durationOpen, setDurationOpen] = useState(typedHours)
+  const initialDuration = hoursToDuration(typedHours ? selectedHours : null)
+  const [amount, setAmount] = useState(initialDuration.amount)
+  const [unit, setUnit] = useState<DurationUnit>(initialDuration.unit)
+  const durationActive = !customSelected && (durationOpen || typedHours)
+
+  function applyDuration(nextAmount: string, nextUnit: DurationUnit) {
+    setAmount(nextAmount)
+    setUnit(nextUnit)
+    // An empty or zero entry clears the window so validation says "required", not a stale chip's end.
+    onChange({ ...value, hours: durationToHours(nextAmount, nextUnit), endAt: null })
+  }
 
   const resolved = useMemo(() => resolveRentalWindow(value, now), [value, now])
 
@@ -63,7 +78,8 @@ export default function RentalWindowPicker({ value, onChange, nowMs, disabled }:
 
       <div className="flex flex-wrap gap-2" role="radiogroup" aria-label={t('booking:vehicle.rental.duration.label')}>
         {RENTAL_DURATION_PRESETS_HOURS.map((hours) => {
-          const active = selectedHours === hours
+          // A typed 24 h is still "Enter a duration" while that field is open — one lit chip only.
+          const active = !durationActive && selectedHours === hours
           return (
             <button
               key={hours}
@@ -71,7 +87,10 @@ export default function RentalWindowPicker({ value, onChange, nowMs, disabled }:
               role="radio"
               aria-checked={active}
               disabled={disabled}
-              onClick={() => onChange({ ...value, hours, endAt: null })}
+              onClick={() => {
+                setDurationOpen(false)
+                onChange({ ...value, hours, endAt: null })
+              }}
               className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors max-sm:min-h-10 ${
                 active
                   ? 'bg-primary-600 text-white'
@@ -85,9 +104,29 @@ export default function RentalWindowPicker({ value, onChange, nowMs, disabled }:
         <button
           type="button"
           role="radio"
+          aria-checked={durationActive}
+          disabled={disabled}
+          onClick={() => {
+            setDurationOpen(true)
+            applyDuration(amount, unit)
+          }}
+          className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors max-sm:min-h-10 ${
+            durationActive
+              ? 'bg-primary-600 text-white'
+              : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-600'
+          } disabled:opacity-50`}
+        >
+          {typedHours ? presetLabel(t, selectedHours!) : t('booking:vehicle.rental.preset.duration')}
+        </button>
+        <button
+          type="button"
+          role="radio"
           aria-checked={customSelected}
           disabled={disabled}
-          onClick={() => onChange({ ...value, hours: null, endAt: value.endAt ?? new Date(now + 24 * 60 * 60 * 1000).toISOString() })}
+          onClick={() => {
+            setDurationOpen(false)
+            onChange({ ...value, hours: null, endAt: value.endAt ?? new Date(now + 24 * 60 * 60 * 1000).toISOString() })
+          }}
           className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors max-sm:min-h-10 ${
             customSelected
               ? 'bg-primary-600 text-white'
@@ -97,6 +136,44 @@ export default function RentalWindowPicker({ value, onChange, nowMs, disabled }:
           {t('booking:vehicle.rental.preset.custom')}
         </button>
       </div>
+
+      {durationActive && (
+        <div className="flex items-end gap-2">
+          <div className="min-w-0 flex-1">
+            <label htmlFor="rental-duration" className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+              {t('booking:vehicle.rental.customDuration.label')}
+            </label>
+            <input
+              id="rental-duration"
+              type="text"
+              inputMode="decimal"
+              value={amount}
+              disabled={disabled}
+              placeholder={t('booking:vehicle.rental.customDuration.placeholder')}
+              onChange={(e) => applyDuration(e.target.value.replace(/[^0-9.,]/g, ''), unit)}
+              className={inputClass}
+            />
+          </div>
+          <div className="flex shrink-0 rounded-full border border-neutral-200 p-0.5 dark:border-neutral-700" role="radiogroup">
+            {(['hours', 'days'] as const).map((u) => (
+              // i18n-keys: booking:vehicle.rental.unit.hours.label, booking:vehicle.rental.unit.days.label
+              <button
+                key={u}
+                type="button"
+                role="radio"
+                aria-checked={unit === u}
+                disabled={disabled}
+                onClick={() => applyDuration(amount, u)}
+                className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors max-sm:min-h-10 ${
+                  unit === u ? 'bg-primary-600 text-white' : 'text-neutral-700 dark:text-neutral-200'
+                } disabled:opacity-50`}
+              >
+                {t(`booking:vehicle.rental.unit.${u}.label`)}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {customSelected && (
         <div>

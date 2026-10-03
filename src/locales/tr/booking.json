@@ -1426,7 +1426,8 @@
         "oneDay": "1 gün",
         "days": "{{count}} gün",
         "week": "1 hafta",
-        "custom": "Bitiş tarihi ve saati seçin"
+        "custom": "Bitiş tarihi ve saati seçin",
+        "duration": "Süre girin"
       },
       "startNow": {
         "label": "Şimdi başlıyor"
@@ -1477,6 +1478,18 @@
       },
       "broadcastsUntil": {
         "label": "{{time}} saatine kadar taşıma alırsınız"
+      },
+      "customDuration": {
+        "label": "Süre",
+        "placeholder": "örn. 5"
+      },
+      "unit": {
+        "hours": {
+          "label": "Saat"
+        },
+        "days": {
+          "label": "Gün"
+        }
       }
     }
   }
