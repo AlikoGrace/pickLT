@@ -19,7 +19,10 @@ const INVENTORY_CATALOG_COLLECTION = process.env.APPWRITE_COLLECTION_INVENTORY_C
 const PRICING_CONFIG_COLLECTION = process.env.APPWRITE_COLLECTION_PRICING_CONFIG || 'pricing_config';
 
 const MAX_MOVERS = 10;
+// Rebroadcast offers last 5 min, after the chosen mover's 10 min priority
+// window (createpriorityrequest) — time to read the job before deciding.
 const REQUEST_TIMEOUT_SECONDS = 300;
+const OFFER_EXPIRY_GRACE_MS = 5000;
 // Service day for the vehicle-readiness gate (master plan §5). Optional:
 // defaults to the platform's home zone.
 const PLATFORM_TZ = process.env.PLATFORM_TZ || 'Europe/Berlin';
@@ -246,6 +249,27 @@ export default async ({ req, res, log, error }) => {
     if (openAccepted.total > 0) {
       log(`[broadcast] skipped ${moveId}: an accepted request already exists`);
       return res.json({ ok: true, skipped: 'already_accepted', broadcast: 0 });
+    }
+
+    // Two callers race to rebroadcast once an offer runs out: the client's
+    // track screen (at expiry) and the expirepriorityrequests sweeper (a
+    // minute later at most). An offer still running means one of them already
+    // did it — or the priority window is still open — so skip. Offers that have
+    // run out are closed here so the sweeper doesn't broadcast them again.
+    // OFFER_EXPIRY_GRACE_MS absorbs a client clock running a little fast.
+    const pendingOffers = await databases.listDocuments(
+      DATABASE_ID,
+      MOVE_REQUESTS_COLLECTION,
+      [Query.equal('moveId', moveId), Query.equal('status', 'pending'), Query.limit(100)]
+    );
+    const openUntil = Date.now() + OFFER_EXPIRY_GRACE_MS;
+    const offers = pendingOffers.documents || [];
+    if (offers.some((r) => Date.parse(r.expiresAt) > openUntil)) {
+      log(`[broadcast] skipped ${moveId}: an offer is still open`);
+      return res.json({ ok: true, skipped: 'offer_open', broadcast: 0 });
+    }
+    for (const r of offers) {
+      await databases.updateDocument(DATABASE_ID, MOVE_REQUESTS_COLLECTION, r.$id, { status: 'expired' });
     }
 
     // Fetch online, verified movers
