@@ -55,6 +55,70 @@
     },
     "title": "Ödemeler ve hakedişler"
   },
+  "call": {
+    "answer": {
+      "cta": "Yanıtla"
+    },
+    "bar": {
+      "label": "Devam eden arama"
+    },
+    "decline": {
+      "cta": "Reddet"
+    },
+    "error": {
+      "busy": "İkinizden biri zaten bir aramada. Birazdan tekrar deneyin.",
+      "connectFailed": "Arama bağlanamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+      "ended": "Bu arama zaten sona erdi.",
+      "generic": "Arama başlatılamadı. Lütfen tekrar deneyin.",
+      "micDenied": "Mikrofon erişimi engellendi. Tarayıcı ayarlarınızdan bu site için mikrofona izin verin ve tekrar deneyin.",
+      "micUnavailable": "Mikrofon bulunamadı. Bir mikrofon bağlayıp tekrar deneyin.",
+      "moveClosed": "Bu taşınma kapandı, bu yüzden uygulama içi arama artık kullanılamıyor.",
+      "noMover": "Bu taşınmaya henüz bir nakliyeci atanmadı.",
+      "notAuthorized": "Bu taşınma hakkında arama yapamazsınız.",
+      "notFound": "Bu arama veya taşınma bulunamadı.",
+      "signedOut": "Oturumunuzun süresi doldu. Lütfen tekrar giriş yapın.",
+      "unavailable": "Uygulama içi arama şu anda kullanılamıyor. Lütfen daha sonra tekrar deneyin."
+    },
+    "hangUp": {
+      "cta": "Kapat"
+    },
+    "inApp": {
+      "cta": "Uygulamadan ara"
+    },
+    "incoming": {
+      "subtitle": "Taşınmanızla ilgili uygulama içi arama",
+      "title": "Gelen arama"
+    },
+    "mute": {
+      "cta": "Sesi kapat"
+    },
+    "notify": {
+      "incoming": {
+        "body": "{{name}} sizi PickLT üzerinden arıyor",
+        "title": "Gelen arama"
+      }
+    },
+    "outcome": {
+      "declined": "Arama reddedildi",
+      "ended": "Arama sona erdi",
+      "failed": "Arama başarısız oldu",
+      "missed": "Cevapsız arama",
+      "noAnswer": "Yanıt yok"
+    },
+    "party": {
+      "client": "Müşteriniz",
+      "mover": "Nakliyeciniz"
+    },
+    "status": {
+      "calling": "Aranıyor…",
+      "connecting": "Bağlanıyor…",
+      "reconnecting": "Yeniden bağlanıyor…",
+      "ringing": "Çalıyor…"
+    },
+    "unmute": {
+      "cta": "Sesi aç"
+    }
+  },
   "camera": {
     "capture": {
       "cta": "Çek"

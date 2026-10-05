@@ -55,6 +55,70 @@
     },
     "title": "Payments & payouts"
   },
+  "call": {
+    "answer": {
+      "cta": "Answer"
+    },
+    "bar": {
+      "label": "Active call"
+    },
+    "decline": {
+      "cta": "Decline"
+    },
+    "error": {
+      "busy": "One of you is already on a call. Try again in a moment.",
+      "connectFailed": "Couldn't connect the call. Check your connection and try again.",
+      "ended": "This call has already ended.",
+      "generic": "Couldn't place the call. Please try again.",
+      "micDenied": "Microphone access was blocked. Allow the microphone for this site in your browser settings and try again.",
+      "micUnavailable": "No microphone was found. Connect one and try again.",
+      "moveClosed": "This move is closed, so in-app calls are no longer available.",
+      "noMover": "A mover hasn't been assigned to this move yet.",
+      "notAuthorized": "You can't call about this move.",
+      "notFound": "This call or move could not be found.",
+      "signedOut": "Your session has expired. Please sign in again.",
+      "unavailable": "In-app calling is not available right now. Please try again later."
+    },
+    "hangUp": {
+      "cta": "Hang up"
+    },
+    "inApp": {
+      "cta": "Call in app"
+    },
+    "incoming": {
+      "subtitle": "In-app call about your move",
+      "title": "Incoming call"
+    },
+    "mute": {
+      "cta": "Mute"
+    },
+    "notify": {
+      "incoming": {
+        "body": "{{name}} is calling you on PickLT",
+        "title": "Incoming call"
+      }
+    },
+    "outcome": {
+      "declined": "Call declined",
+      "ended": "Call ended",
+      "failed": "Call failed",
+      "missed": "Missed call",
+      "noAnswer": "No answer"
+    },
+    "party": {
+      "client": "Your client",
+      "mover": "Your mover"
+    },
+    "status": {
+      "calling": "Calling…",
+      "connecting": "Connecting…",
+      "reconnecting": "Reconnecting…",
+      "ringing": "Ringing…"
+    },
+    "unmute": {
+      "cta": "Unmute"
+    }
+  },
   "camera": {
     "capture": {
       "cta": "Capture photo"

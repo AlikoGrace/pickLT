@@ -40,6 +40,7 @@ import { homeTypeLabel, moveSubtitle, moveTypeLabel } from '@/lib/move-subtitle'
 import { useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
 import { ARRIVAL_WINDOW_SLUGS } from '@/lib/service-limits'
+import CallInAppButton from '@/components/calls/CallInAppButton'
 import { additionalServiceLabel, arrivalWindowLabel, arrivalWindowOptionLabel, dropoffParkingLabel, flexibilityLabel, floorLevelLabel, joinLabels, packingLevelLabel, packingMaterialLabel, parkingLabel, paymentMethodLabel, vehicleTypeLabel } from '@/lib/enum-labels'
 
 const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || ''
@@ -991,6 +992,15 @@ export default function MoveDetailsPage() {
                   </div>
                 </div>
               </div>
+
+              {/* In-app call (hidden once the move is closed) */}
+              <CallInAppButton
+                moveId={moveDocId}
+                moveStatus={rawStatus}
+                hasCounterpart={hasMoverAssigned}
+                counterpartName={moverInfo.name}
+                className="mb-4 w-full"
+              />
 
               {/* Vehicle info */}
               {moverInfo.vehicleName && (

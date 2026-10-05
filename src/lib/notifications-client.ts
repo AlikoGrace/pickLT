@@ -6,6 +6,8 @@
  * (lib/notifications.ts there). `'all'` = every notification read.
  */
 
+import { parseNotificationData } from '@/lib/notification-i18n'
+
 export type ReadChange = { ids: readonly string[] } | 'all'
 
 const readListeners = new Set<(change: ReadChange) => void>()
@@ -48,4 +50,22 @@ export async function markNotificationRead(id: string): Promise<void> {
 export async function markAllNotificationsRead(): Promise<void> {
   await patchRead({ all: true })
   emitNotificationsRead('all')
+}
+
+/**
+ * Where tapping a notification row leads. A missed call (`call_missed`, written
+ * by the `calls` function with `data.handle`) opens that move — the client's
+ * move details or the mover's job details; everything else keeps `fallback`.
+ */
+export function notificationHref(
+  item: { type?: string | null; data?: string | null },
+  side: 'client' | 'mover',
+  fallback: string,
+): string {
+  if (item.type !== 'call_missed') return fallback
+  const data = parseNotificationData(item.data)
+  const handle = typeof data.handle === 'string' && data.handle ? data.handle : null
+  if (!handle) return fallback
+  const base = side === 'mover' ? '/job-details/' : '/move-details/'
+  return base + encodeURIComponent(handle)
 }

@@ -30,6 +30,8 @@ import {
 } from '@/lib/inventory-labels'
 import { formatDateWith, formatMoney, formatPercent } from '@/lib/format'
 import PriceBreakdown from '@/components/PriceBreakdown'
+import CallInAppButton from '@/components/calls/CallInAppButton'
+import { canCallOnMove } from '@/lib/call-state'
 import MoveRouteMap from '@/components/MoveRouteMap'
 import { toCoordinate } from '@/lib/route-caption'
 import { parseBreakdown } from '@/lib/pricingEngine'
@@ -517,6 +519,8 @@ export default function MoverMoveDetailsPage() {
     isBusinessMove, companyName, vatId,
   } = move
 
+  const canCallClient = isAssignedMover && !!moveDocId && canCallOnMove(rawStatus, true)
+
   // The itemised v3 estimate stored with the row (pricing master D13); null on
   // moves booked before the engine — those show the plain total only.
   const moveBreakdown = parseBreakdown(move.priceBreakdown)
@@ -944,21 +948,29 @@ export default function MoverMoveDetailsPage() {
           </div>
 
           {/* Client Contact Info */}
-          {contactInfo && (contactInfo.fullName || contactInfo.email || contactInfo.phoneNumber) && (
+          {((contactInfo && (contactInfo.fullName || contactInfo.email || contactInfo.phoneNumber)) || canCallClient) && (
             <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm">
               <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
                 {t('web:mover.clientContact.title')}
               </h3>
-              {contactInfo.fullName && (
+              {/* In-app call to the client — assigned mover, open move only */}
+              <CallInAppButton
+                moveId={moveDocId}
+                moveStatus={rawStatus}
+                hasCounterpart={isAssignedMover}
+                counterpartName={contactInfo?.fullName || t('web:call.party.client')}
+                className="mb-4 w-full"
+              />
+              {contactInfo?.fullName && (
                 <InfoRow label={t('common:field.name.label')} value={contactInfo.fullName} />
               )}
-              {contactInfo.email && (
+              {contactInfo?.email && (
                 <InfoRow label={t('common:field.email.label')} value={contactInfo.email} />
               )}
-              {contactInfo.phoneNumber && (
+              {contactInfo?.phoneNumber && (
                 <InfoRow label={t('common:field.phone.label')} value={contactInfo.phoneNumber} />
               )}
-              {contactInfo.notesForMovers && (
+              {contactInfo?.notesForMovers && (
                 <InfoRow label={t('booking:field.notesForMovers.label')} value={contactInfo.notesForMovers} />
               )}
             </div>

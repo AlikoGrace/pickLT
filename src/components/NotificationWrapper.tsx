@@ -5,6 +5,7 @@ import { useAuth } from '@/context/auth'
 import { client } from '@/lib/appwrite'
 import { useTranslation } from 'react-i18next'
 import CancellationAlerts from '@/components/CancellationAlerts'
+import CallProvider from '@/components/calls/CallProvider'
 import { requestCancellationCheck } from '@/lib/cancellation-alerts'
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || ''
@@ -329,10 +330,12 @@ export default function NotificationWrapper({ children, role }: NotificationWrap
     }
   }, [role, handleClientNotification, handleMoverRequestNotification, handleMoverMoveNotification])
 
+  // In-app calls (incoming modal + active-call bar) for both sides; pages
+  // place a call through `useCall()`.
   return (
-    <>
+    <CallProvider>
       {children}
       <CancellationAlerts />
-    </>
+    </CallProvider>
   )
 }

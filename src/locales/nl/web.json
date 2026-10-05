@@ -55,6 +55,70 @@
     },
     "title": "Betalingen en uitbetalingen"
   },
+  "call": {
+    "answer": {
+      "cta": "Opnemen"
+    },
+    "bar": {
+      "label": "Lopend gesprek"
+    },
+    "decline": {
+      "cta": "Weigeren"
+    },
+    "error": {
+      "busy": "Een van jullie is al in gesprek. Probeer het zo opnieuw.",
+      "connectFailed": "Het gesprek kon niet worden verbonden. Controleer je verbinding en probeer het opnieuw.",
+      "ended": "Dit gesprek is al beëindigd.",
+      "generic": "De oproep kon niet worden gestart. Probeer het opnieuw.",
+      "micDenied": "Toegang tot de microfoon is geblokkeerd. Sta de microfoon voor deze site toe in je browserinstellingen en probeer het opnieuw.",
+      "micUnavailable": "Geen microfoon gevonden. Sluit er een aan en probeer het opnieuw.",
+      "moveClosed": "Deze verhuizing is afgesloten, dus bellen in de app is niet meer mogelijk.",
+      "noMover": "Er is nog geen verhuizer aan deze verhuizing toegewezen.",
+      "notAuthorized": "Je kunt niet bellen over deze verhuizing.",
+      "notFound": "Deze oproep of verhuizing is niet gevonden.",
+      "signedOut": "Je sessie is verlopen. Log opnieuw in.",
+      "unavailable": "Bellen in de app is nu niet beschikbaar. Probeer het later opnieuw."
+    },
+    "hangUp": {
+      "cta": "Ophangen"
+    },
+    "inApp": {
+      "cta": "Bellen in de app"
+    },
+    "incoming": {
+      "subtitle": "App-gesprek over je verhuizing",
+      "title": "Inkomende oproep"
+    },
+    "mute": {
+      "cta": "Dempen"
+    },
+    "notify": {
+      "incoming": {
+        "body": "{{name}} belt je via PickLT",
+        "title": "Inkomende oproep"
+      }
+    },
+    "outcome": {
+      "declined": "Oproep geweigerd",
+      "ended": "Gesprek beëindigd",
+      "failed": "Oproep mislukt",
+      "missed": "Gemiste oproep",
+      "noAnswer": "Geen antwoord"
+    },
+    "party": {
+      "client": "Je klant",
+      "mover": "Je verhuizer"
+    },
+    "status": {
+      "calling": "Bellen…",
+      "connecting": "Verbinden…",
+      "reconnecting": "Opnieuw verbinden…",
+      "ringing": "Gaat over…"
+    },
+    "unmute": {
+      "cta": "Dempen opheffen"
+    }
+  },
   "camera": {
     "capture": {
       "cta": "Vastleggen"

@@ -55,6 +55,70 @@
     },
     "title": "Zahlungen & Auszahlungen"
   },
+  "call": {
+    "answer": {
+      "cta": "Annehmen"
+    },
+    "bar": {
+      "label": "Laufender Anruf"
+    },
+    "decline": {
+      "cta": "Ablehnen"
+    },
+    "error": {
+      "busy": "Einer von Ihnen telefoniert bereits. Bitte versuchen Sie es gleich noch einmal.",
+      "connectFailed": "Der Anruf konnte nicht verbunden werden. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+      "ended": "Dieser Anruf ist bereits beendet.",
+      "generic": "Der Anruf konnte nicht gestartet werden. Bitte versuchen Sie es erneut.",
+      "micDenied": "Der Mikrofonzugriff wurde blockiert. Erlauben Sie das Mikrofon für diese Website in Ihren Browsereinstellungen und versuchen Sie es erneut.",
+      "micUnavailable": "Kein Mikrofon gefunden. Schließen Sie eines an und versuchen Sie es erneut.",
+      "moveClosed": "Dieser Umzug ist abgeschlossen, daher sind App-Anrufe nicht mehr möglich.",
+      "noMover": "Diesem Umzug wurde noch kein Umzugsprofi zugewiesen.",
+      "notAuthorized": "Sie können zu diesem Umzug nicht anrufen.",
+      "notFound": "Dieser Anruf oder Umzug wurde nicht gefunden.",
+      "signedOut": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
+      "unavailable": "App-Anrufe sind gerade nicht verfügbar. Bitte versuchen Sie es später erneut."
+    },
+    "hangUp": {
+      "cta": "Auflegen"
+    },
+    "inApp": {
+      "cta": "In der App anrufen"
+    },
+    "incoming": {
+      "subtitle": "App-Anruf zu Ihrem Umzug",
+      "title": "Eingehender Anruf"
+    },
+    "mute": {
+      "cta": "Stummschalten"
+    },
+    "notify": {
+      "incoming": {
+        "body": "{{name}} ruft Sie über PickLT an",
+        "title": "Eingehender Anruf"
+      }
+    },
+    "outcome": {
+      "declined": "Anruf abgelehnt",
+      "ended": "Anruf beendet",
+      "failed": "Anruf fehlgeschlagen",
+      "missed": "Verpasster Anruf",
+      "noAnswer": "Keine Antwort"
+    },
+    "party": {
+      "client": "Ihr Kunde",
+      "mover": "Ihr Umzugsprofi"
+    },
+    "status": {
+      "calling": "Anruf wird aufgebaut…",
+      "connecting": "Verbinden…",
+      "reconnecting": "Verbindung wird wiederhergestellt…",
+      "ringing": "Es klingelt…"
+    },
+    "unmute": {
+      "cta": "Stummschaltung aufheben"
+    }
+  },
   "camera": {
     "capture": {
       "cta": "Aufnehmen"

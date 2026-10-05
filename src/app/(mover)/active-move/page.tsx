@@ -11,6 +11,7 @@ import { claimMoveCancellation, markMoveCancellationExplained } from '@/lib/canc
 import type { RealtimeResponseEvent, Models } from 'appwrite'
 import { Query } from 'appwrite'
 import ButtonPrimary from '@/shared/ButtonPrimary'
+import CallInAppButton from '@/components/calls/CallInAppButton'
 import {
   TruckIcon,
   CheckCircleIcon,
@@ -663,6 +664,14 @@ export default function ActiveMovePage() {
                   {(move.dropoffLocation as string)?.split(',')[0] || t('booking:field.dropoff.label')}
                 </p>
               </div>
+              {/* In-app call to the client (hidden once the move is closed) */}
+              <CallInAppButton
+                moveId={move.$id as string}
+                moveStatus={phase === 'completed' ? 'completed' : (move.status as string)}
+                hasCounterpart={true}
+                counterpartName={(move.contactFullName as string) || t('web:call.party.client')}
+                className="shrink-0 !px-3 !py-1.5 !text-xs"
+              />
             </div>
           </div>
         </div>

@@ -55,6 +55,70 @@
     },
     "title": "Płatności i wypłaty"
   },
+  "call": {
+    "answer": {
+      "cta": "Odbierz"
+    },
+    "bar": {
+      "label": "Trwająca rozmowa"
+    },
+    "decline": {
+      "cta": "Odrzuć"
+    },
+    "error": {
+      "busy": "Jedno z Was już prowadzi rozmowę. Spróbuj ponownie za chwilę.",
+      "connectFailed": "Nie udało się połączyć rozmowy. Sprawdź połączenie i spróbuj ponownie.",
+      "ended": "To połączenie już się zakończyło.",
+      "generic": "Nie udało się nawiązać połączenia. Spróbuj ponownie.",
+      "micDenied": "Dostęp do mikrofonu został zablokowany. Zezwól na mikrofon dla tej strony w ustawieniach przeglądarki i spróbuj ponownie.",
+      "micUnavailable": "Nie znaleziono mikrofonu. Podłącz go i spróbuj ponownie.",
+      "moveClosed": "Ta przeprowadzka jest zamknięta, więc rozmowy w aplikacji nie są już dostępne.",
+      "noMover": "Do tej przeprowadzki nie przypisano jeszcze przewoźnika.",
+      "notAuthorized": "Nie możesz dzwonić w sprawie tej przeprowadzki.",
+      "notFound": "Nie znaleziono tego połączenia ani przeprowadzki.",
+      "signedOut": "Twoja sesja wygasła. Zaloguj się ponownie.",
+      "unavailable": "Rozmowy w aplikacji są teraz niedostępne. Spróbuj ponownie później."
+    },
+    "hangUp": {
+      "cta": "Rozłącz"
+    },
+    "inApp": {
+      "cta": "Zadzwoń w aplikacji"
+    },
+    "incoming": {
+      "subtitle": "Rozmowa w aplikacji w sprawie Twojej przeprowadzki",
+      "title": "Połączenie przychodzące"
+    },
+    "mute": {
+      "cta": "Wycisz"
+    },
+    "notify": {
+      "incoming": {
+        "body": "{{name}} dzwoni do Ciebie przez PickLT",
+        "title": "Połączenie przychodzące"
+      }
+    },
+    "outcome": {
+      "declined": "Połączenie odrzucone",
+      "ended": "Rozmowa zakończona",
+      "failed": "Połączenie nie powiodło się",
+      "missed": "Nieodebrane połączenie",
+      "noAnswer": "Brak odpowiedzi"
+    },
+    "party": {
+      "client": "Twój klient",
+      "mover": "Twój przewoźnik"
+    },
+    "status": {
+      "calling": "Łączenie…",
+      "connecting": "Łączenie…",
+      "reconnecting": "Ponowne łączenie…",
+      "ringing": "Dzwoni…"
+    },
+    "unmute": {
+      "cta": "Wyłącz wyciszenie"
+    }
+  },
   "camera": {
     "capture": {
       "cta": "Zrób zdjęcie"

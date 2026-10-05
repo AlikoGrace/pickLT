@@ -55,6 +55,70 @@
     },
     "title": "Paiements et versements"
   },
+  "call": {
+    "answer": {
+      "cta": "Répondre"
+    },
+    "bar": {
+      "label": "Appel en cours"
+    },
+    "decline": {
+      "cta": "Refuser"
+    },
+    "error": {
+      "busy": "L’un de vous est déjà en ligne. Réessayez dans un instant.",
+      "connectFailed": "Impossible de connecter l’appel. Vérifiez votre connexion et réessayez.",
+      "ended": "Cet appel est déjà terminé.",
+      "generic": "Impossible de passer l’appel. Veuillez réessayer.",
+      "micDenied": "L’accès au micro a été bloqué. Autorisez le micro pour ce site dans les réglages de votre navigateur, puis réessayez.",
+      "micUnavailable": "Aucun micro détecté. Branchez-en un et réessayez.",
+      "moveClosed": "Ce déménagement est clôturé : les appels dans l’app ne sont plus disponibles.",
+      "noMover": "Aucun déménageur n’a encore été attribué à ce déménagement.",
+      "notAuthorized": "Vous ne pouvez pas appeler au sujet de ce déménagement.",
+      "notFound": "Cet appel ou ce déménagement est introuvable.",
+      "signedOut": "Votre session a expiré. Veuillez vous reconnecter.",
+      "unavailable": "Les appels dans l’app sont indisponibles pour le moment. Veuillez réessayer plus tard."
+    },
+    "hangUp": {
+      "cta": "Raccrocher"
+    },
+    "inApp": {
+      "cta": "Appeler dans l’app"
+    },
+    "incoming": {
+      "subtitle": "Appel dans l’app au sujet de votre déménagement",
+      "title": "Appel entrant"
+    },
+    "mute": {
+      "cta": "Couper le micro"
+    },
+    "notify": {
+      "incoming": {
+        "body": "{{name}} vous appelle sur PickLT",
+        "title": "Appel entrant"
+      }
+    },
+    "outcome": {
+      "declined": "Appel refusé",
+      "ended": "Appel terminé",
+      "failed": "Échec de l’appel",
+      "missed": "Appel manqué",
+      "noAnswer": "Pas de réponse"
+    },
+    "party": {
+      "client": "Votre client",
+      "mover": "Votre déménageur"
+    },
+    "status": {
+      "calling": "Appel en cours…",
+      "connecting": "Connexion…",
+      "reconnecting": "Reconnexion…",
+      "ringing": "Ça sonne…"
+    },
+    "unmute": {
+      "cta": "Réactiver le micro"
+    }
+  },
   "camera": {
     "capture": {
       "cta": "Capturer"

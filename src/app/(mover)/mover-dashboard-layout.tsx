@@ -457,6 +457,7 @@ const MoverDashboardLayout = ({ children }: Props) => {
           <NotifyDropdown
             className="flex"
             itemHref="/dashboard"
+            side="mover"
             buttonClassName="!m-0 !p-2 text-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-700"
           />
           <div className="h-8 w-8 overflow-hidden rounded-full bg-neutral-200 dark:bg-neutral-700">

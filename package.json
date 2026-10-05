@@ -33,6 +33,7 @@
     "eslint-config-next": "15.3.2",
     "framer-motion": "^12.10.4",
     "i18next": "^26.3.6",
+    "livekit-client": "2.22.3",
     "lodash": "^4.17.21",
     "mapbox-gl": "^3.18.1",
     "next": "15.3.6",

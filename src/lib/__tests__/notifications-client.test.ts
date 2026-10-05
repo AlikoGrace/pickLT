@@ -4,6 +4,7 @@ import {
   applyReadChange,
   markAllNotificationsRead,
   markNotificationRead,
+  notificationHref,
   onNotificationsRead,
 } from '../notifications-client'
 
@@ -51,5 +52,23 @@ describe('read broadcast — the bell dot drops without waiting on a refetch', (
     await expect(markNotificationRead('a')).rejects.toThrow('nope')
     off()
     expect(heard).toEqual([])
+  })
+})
+
+describe('notificationHref — a missed call opens its move', () => {
+  const missed = {
+    type: 'call_missed',
+    data: JSON.stringify({ kind: 'call_missed', moveId: 'm1', handle: 'PL-42 A', callId: 'c1', i18nKey: 'call.missed' }),
+  }
+
+  it('routes the client to move details and the mover to job details', () => {
+    expect(notificationHref(missed, 'client', '/account')).toBe('/move-details/PL-42%20A')
+    expect(notificationHref(missed, 'mover', '/dashboard')).toBe('/job-details/PL-42%20A')
+  })
+
+  it('falls back without a handle and for every other type', () => {
+    expect(notificationHref({ type: 'call_missed', data: '{}' }, 'client', '/account')).toBe('/account')
+    expect(notificationHref({ type: 'call_missed', data: 'garbage' }, 'mover', '/dashboard')).toBe('/dashboard')
+    expect(notificationHref({ ...missed, type: 'payment' }, 'client', '/account')).toBe('/account')
   })
 })

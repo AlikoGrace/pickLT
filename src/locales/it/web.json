@@ -55,6 +55,70 @@
     },
     "title": "Pagamenti e accrediti"
   },
+  "call": {
+    "answer": {
+      "cta": "Rispondi"
+    },
+    "bar": {
+      "label": "Chiamata in corso"
+    },
+    "decline": {
+      "cta": "Rifiuta"
+    },
+    "error": {
+      "busy": "Uno di voi è già in chiamata. Riprova tra un momento.",
+      "connectFailed": "Impossibile collegare la chiamata. Controlla la connessione e riprova.",
+      "ended": "Questa chiamata è già terminata.",
+      "generic": "Impossibile effettuare la chiamata. Riprova.",
+      "micDenied": "L’accesso al microfono è stato bloccato. Consenti il microfono per questo sito nelle impostazioni del browser e riprova.",
+      "micUnavailable": "Nessun microfono trovato. Collegane uno e riprova.",
+      "moveClosed": "Questo trasloco è chiuso, quindi le chiamate nell’app non sono più disponibili.",
+      "noMover": "A questo trasloco non è ancora stato assegnato un traslocatore.",
+      "notAuthorized": "Non puoi chiamare per questo trasloco.",
+      "notFound": "Chiamata o trasloco non trovati.",
+      "signedOut": "La sessione è scaduta. Accedi di nuovo.",
+      "unavailable": "Le chiamate nell’app non sono disponibili al momento. Riprova più tardi."
+    },
+    "hangUp": {
+      "cta": "Riaggancia"
+    },
+    "inApp": {
+      "cta": "Chiama nell’app"
+    },
+    "incoming": {
+      "subtitle": "Chiamata nell’app sul tuo trasloco",
+      "title": "Chiamata in arrivo"
+    },
+    "mute": {
+      "cta": "Disattiva microfono"
+    },
+    "notify": {
+      "incoming": {
+        "body": "{{name}} ti sta chiamando su PickLT",
+        "title": "Chiamata in arrivo"
+      }
+    },
+    "outcome": {
+      "declined": "Chiamata rifiutata",
+      "ended": "Chiamata terminata",
+      "failed": "Chiamata non riuscita",
+      "missed": "Chiamata persa",
+      "noAnswer": "Nessuna risposta"
+    },
+    "party": {
+      "client": "Il tuo cliente",
+      "mover": "Il tuo traslocatore"
+    },
+    "status": {
+      "calling": "Chiamata in corso…",
+      "connecting": "Connessione…",
+      "reconnecting": "Riconnessione…",
+      "ringing": "Squilla…"
+    },
+    "unmute": {
+      "cta": "Attiva microfono"
+    }
+  },
   "camera": {
     "capture": {
       "cta": "Scatta"

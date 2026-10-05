@@ -55,6 +55,70 @@
     },
     "title": "Pagos y abonos"
   },
+  "call": {
+    "answer": {
+      "cta": "Contestar"
+    },
+    "bar": {
+      "label": "Llamada en curso"
+    },
+    "decline": {
+      "cta": "Rechazar"
+    },
+    "error": {
+      "busy": "Uno de los dos ya está en una llamada. Inténtalo de nuevo en un momento.",
+      "connectFailed": "No se pudo conectar la llamada. Comprueba tu conexión e inténtalo de nuevo.",
+      "ended": "Esta llamada ya ha finalizado.",
+      "generic": "No se pudo realizar la llamada. Inténtalo de nuevo.",
+      "micDenied": "Se bloqueó el acceso al micrófono. Permite el micrófono para este sitio en los ajustes del navegador e inténtalo de nuevo.",
+      "micUnavailable": "No se encontró ningún micrófono. Conecta uno e inténtalo de nuevo.",
+      "moveClosed": "Esta mudanza está cerrada, así que ya no se pueden hacer llamadas en la app.",
+      "noMover": "Todavía no se ha asignado un transportista a esta mudanza.",
+      "notAuthorized": "No puedes llamar sobre esta mudanza.",
+      "notFound": "No se encontró esta llamada o mudanza.",
+      "signedOut": "Tu sesión ha caducado. Vuelve a iniciar sesión.",
+      "unavailable": "Las llamadas en la app no están disponibles ahora mismo. Inténtalo más tarde."
+    },
+    "hangUp": {
+      "cta": "Colgar"
+    },
+    "inApp": {
+      "cta": "Llamar en la app"
+    },
+    "incoming": {
+      "subtitle": "Llamada en la app sobre tu mudanza",
+      "title": "Llamada entrante"
+    },
+    "mute": {
+      "cta": "Silenciar"
+    },
+    "notify": {
+      "incoming": {
+        "body": "{{name}} te está llamando en PickLT",
+        "title": "Llamada entrante"
+      }
+    },
+    "outcome": {
+      "declined": "Llamada rechazada",
+      "ended": "Llamada finalizada",
+      "failed": "La llamada falló",
+      "missed": "Llamada perdida",
+      "noAnswer": "Sin respuesta"
+    },
+    "party": {
+      "client": "Tu cliente",
+      "mover": "Tu transportista"
+    },
+    "status": {
+      "calling": "Llamando…",
+      "connecting": "Conectando…",
+      "reconnecting": "Reconectando…",
+      "ringing": "Sonando…"
+    },
+    "unmute": {
+      "cta": "Activar sonido"
+    }
+  },
   "camera": {
     "capture": {
       "cta": "Capturar"

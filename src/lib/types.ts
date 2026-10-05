@@ -283,6 +283,8 @@ export type NotificationType =
   | 'fee_overdue'
   | 'fee_restricted'
   | 'fee_paid'
+  // In-app calls: a ring nobody answered (`calls` function, plan calls/0.master.md D6).
+  | 'call_missed'
   | 'system'
 
 export interface NotificationDoc extends AppwriteDoc {

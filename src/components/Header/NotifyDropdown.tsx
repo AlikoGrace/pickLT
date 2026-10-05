@@ -5,6 +5,7 @@ import {
   applyReadChange,
   markAllNotificationsRead,
   markNotificationRead,
+  notificationHref,
   onNotificationsRead,
 } from '@/lib/notifications-client'
 import type { NotificationDoc } from '@/lib/types'
@@ -47,6 +48,8 @@ interface Props {
   itemHref?: string
   /** Extra classes for the bell button (the mover header sizes it differently). */
   buttonClassName?: string
+  /** Which side's move page a missed call opens (client move details / mover job details). */
+  side?: 'client' | 'mover'
 }
 
 function relativeTime(iso: string, t: TFunction): string {
@@ -60,7 +63,7 @@ function relativeTime(iso: string, t: TFunction): string {
   return t('common:timeAgo.days.label', { count: days })
 }
 
-const NotifyDropdown: FC<Props> = ({ className = '', itemHref = '/account', buttonClassName = '' }) => {
+const NotifyDropdown: FC<Props> = ({ className = '', itemHref = '/account', buttonClassName = '', side = 'client' }) => {
   const { t } = useTranslation()
   const pathname = usePathname()
   const [notifications, setNotifications] = useState<NotificationDoc[]>([])
@@ -171,7 +174,7 @@ const NotifyDropdown: FC<Props> = ({ className = '', itemHref = '/account', butt
                 <CloseButton
                   as={Link}
                   key={item.$id}
-                  href={itemHref}
+                  href={notificationHref(item, side, itemHref)}
                   onClick={() => {
                     // Fire and forget: navigation must not wait on the write.
                     if (!item.isRead) markNotificationRead(item.$id).catch(() => {})

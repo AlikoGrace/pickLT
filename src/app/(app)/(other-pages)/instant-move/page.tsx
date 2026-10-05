@@ -27,6 +27,7 @@ import { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { getMapboxDirections } from '@/utils/mapbox-directions'
 import { formatDistanceKm, formatMoney } from '@/lib/format'
 import PriceBreakdown from '@/components/PriceBreakdown'
+import CallInAppButton from '@/components/calls/CallInAppButton'
 import { parseBreakdown } from '@/lib/pricingEngine'
 import { useTranslation } from 'react-i18next'
 import { claimMoveCancellation, markMoveCancellationExplained } from '@/lib/cancellation-alerts'
@@ -798,7 +799,14 @@ const InstantMovePage = () => {
         )} */}
 
         {phase !== 'in_transit' && (
-          <div className="px-4 pb-4 flex gap-2">
+          <div className="px-4 pb-4 flex flex-wrap gap-2">
+            <CallInAppButton
+              moveId={moveData?.$id}
+              moveStatus={moveData?.status}
+              hasCounterpart={!!mover}
+              counterpartName={mover.name}
+              className="w-full"
+            />
             <ButtonSecondary onClick={handleCallMover} className="flex-1 !py-2">
               <HugeiconsIcon icon={Call02Icon} size={16} strokeWidth={1.5} className="mr-1.5" />
               {t('common:action.call.cta')}
