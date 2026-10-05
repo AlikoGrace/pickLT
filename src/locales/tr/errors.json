@@ -370,5 +370,8 @@
     "loadFailed": "Platform bakiyeniz yüklenemedi.",
     "payFailed": "Ücret ödemesi tamamlanamadı. Lütfen tekrar deneyin.",
     "payUnavailable": "Kartla ödeme şu anda kullanılamıyor. Lütfen daha sonra tekrar deneyin veya destekle iletişime geçin."
+  },
+  "inventory": {
+    "quantityTooHigh": "Ürünlerinizden birinin adedi sınırın üzerinde. Lütfen azaltıp tekrar deneyin."
   }
 }

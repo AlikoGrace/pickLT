@@ -4,6 +4,7 @@ import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
 import { getSessionUserId } from '@/lib/auth-session'
 import { crewPermissions } from '@/lib/doc-permissions'
+import { syncCrewSize } from './crew-size'
 import { ID, Query } from 'node-appwrite'
 
 // GET - list crew members for the current mover
@@ -89,6 +90,8 @@ export async function POST(req: NextRequest) {
       // Mirrors pickltmover/lib/crew.ts:addCrew.
       crewPermissions(userId)
     )
+    // A new helper raises the profile's crewSize (crew master §4).
+    await syncCrewSize(databases, moverProfileId)
 
     return NextResponse.json({ crewMember: doc })
   } catch (err: unknown) {

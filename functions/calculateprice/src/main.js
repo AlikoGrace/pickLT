@@ -1,5 +1,6 @@
 import { Client, Databases, Query } from 'node-appwrite';
 
+import { basketCapViolation, basketFromWire, classifyBasket, quantityTooHighBody } from './basket.js';
 import { resolveMoveCountry, warnIfNoMapboxToken } from './move-country.js';
 import {
   GLOBAL_PRICING_SCOPE,
@@ -32,6 +33,12 @@ const PRICING_CONFIG_COLLECTION = process.env.APPWRITE_COLLECTION_PRICING_CONFIG
  *     `currency`, plus the charged `vehicleType` / `crewSize`). Owner-only: this
  *     runs with a full API key, so without the ownership check any caller could
  *     iterate move ids and rewrite other people's quotes.
+ *
+ * TIER (crew master D5): both shapes classify the basket server-side and price
+ * at max(requested tier, classified tier); the response names both
+ * (`moveType` = the tier priced, `systemMoveType` = the classified one) plus the
+ * server totals. A persist also writes them to the row. A preview body over
+ * the quantity caps is a 400 `inventory.quantityTooHigh`.
  *
  * The maths lives in `./pricing-engine.js`, a byte-identical mirror of the apps'
  * `lib/pricing-engine.ts`; this file only reads inputs and writes the result.
@@ -104,6 +111,8 @@ function rowFromBody(body) {
     packingServiceLevel: body.packingServiceLevel,
     additionalServices: body.additionalServices,
     storageWeeks: body.storageWeeks,
+    // Client-added helpers (crew master D2); the engine clamps to crew.maxExtraHelpers.
+    extraHelpers: body.extraHelpers,
     // Pickup coordinates feed the country resolution (reverse geocode), not the price.
     pickupLatitude: body.pickupLatitude,
     pickupLongitude: body.pickupLongitude,
@@ -191,6 +200,17 @@ export default async ({ req, res, log, error }) => {
       loadCatalog(databases),
     ]);
 
+    // The basket as the engine will read it; a preview body is capped (a
+    // stored row was capped when it was written).
+    const basket = basketFromWire(row.inventoryItems, row.customItems);
+    if (!move) {
+      const overCap = basketCapViolation(basket, catalog);
+      if (overCap) return res.json(quantityTooHighBody(overCap), 400);
+    }
+    // Server totals + tier (crew master D5): price at max(requested, classified).
+    const classified = classifyBasket(basket, catalog, overrides, row.moveType, 'light');
+    row.moveType = classified.moveType;
+
     const vehicleOverride = typeof body.vehicleType === 'string' && body.vehicleType ? body.vehicleType : null;
     const input = quoteInputFromRow(row, catalog, move ? vehicleOverride : null);
 
@@ -210,17 +230,28 @@ export default async ({ req, res, log, error }) => {
         DATABASE_ID,
         MOVES_COLLECTION,
         moveId,
-        quoteColumns(breakdown, new Date().toISOString()),
+        { ...quoteColumns(breakdown, new Date().toISOString()), ...classified },
       );
     }
 
     log(
       `calculateprice[v3] ${breakdown.tier}/${breakdown.mode} ${breakdown.profile.loadedVolumeM3} m³ ` +
-        `${breakdown.profile.distanceKm} km crew ${breakdown.profile.crew} ${breakdown.profile.vehicleType} ` +
+        `${breakdown.profile.distanceKm} km crew ${breakdown.profile.totalCrew} ${breakdown.profile.vehicleType} ` +
         `→ €${breakdown.total} [${country.countryCode} via ${country.source}]${moveId ? ` (persisted on ${moveId})` : ' (preview)'}`,
     );
 
-    return res.json({ success: true, estimatedPrice: breakdown.total, breakdown });
+    return res.json({
+      success: true,
+      estimatedPrice: breakdown.total,
+      breakdown,
+      moveType: classified.moveType,
+      systemMoveType: classified.systemMoveType,
+      totals: {
+        totalItemCount: classified.totalItemCount,
+        totalWeightKg: classified.totalWeightKg,
+        totalVolumeCm3: classified.totalVolumeCm3,
+      },
+    });
   } catch (err) {
     error(`Calculate price failed: ${err.message}`);
     return res.json({ error: 'Something went wrong. Please try again.', fnCode: 'generic.unexpected' }, 500);

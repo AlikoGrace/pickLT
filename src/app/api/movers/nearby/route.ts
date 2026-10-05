@@ -7,6 +7,7 @@ import { getSessionUserId } from '@/lib/auth-session'
 import { feeRestricted, isLocationFresh, moverMatchesCountry } from '@/lib/mover-gates'
 import { countryToIso2 } from '@/lib/countryCode'
 import { vehicleServiceReady } from '@/lib/vehicle-service'
+import { profileCrewSize } from '@/app/api/crew/crew-size'
 
 /** Appwrite rows are schemaless at the SDK boundary. */
 type AnyDoc = Record<string, any>
@@ -133,8 +134,10 @@ export async function GET(req: NextRequest) {
     const enrichedMovers = await Promise.all(
       nearbyMovers.map(async ({ doc, distanceKm }) => {
         const base = publicMover(doc, distanceKm)
-        const crewSize =
-          (Array.isArray(doc.crew_members) ? doc.crew_members.length : 0) + 1
+        // The synced `mover_profiles.crewSize` (crew master §4) — the same
+        // number the mover app and matching read. `crew_members` only fills in
+        // for rows that predate the sync.
+        const crewSize = profileCrewSize(doc) ?? 1
         try {
           const moverUserId = typeof doc.userId === 'string' ? doc.userId : doc.userId?.$id
           if (!moverUserId) return { ...base, crewSize }

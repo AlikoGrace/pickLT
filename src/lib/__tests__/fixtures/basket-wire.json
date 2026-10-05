@@ -1,0 +1,319 @@
+{
+  "_comment": "Shared basket wire fixture (inventory parity plan). Identical copies: pickltmobile/__tests__/fixtures/basket-wire.json (functions/*/src/basket.js + pricing-engine.js row readers) and pickLT/src/lib/__tests__/fixtures/basket-wire.json (src/lib/basket-server.ts). Edit one, copy to the other.",
+  "defaultCustomItemWeightKg": 20,
+  "maxItemQty": 99,
+  "maxSpecialItemQty": 10,
+  "catalog": [
+    {
+      "itemId": "sofa_3seater",
+      "category": "living_room"
+    },
+    {
+      "itemId": "piano",
+      "category": "special"
+    },
+    {
+      "itemId": "cardboard_boxes",
+      "category": "boxes"
+    }
+  ],
+  "normalise": [
+    {
+      "name": "contract-shaped basket passes through",
+      "inventoryItems": "{\"sofa_3seater\":2}",
+      "customItems": [
+        "{\"id\":\"c1\",\"name\":\"Lamp\",\"quantity\":2,\"approxSize\":\"small\",\"approxWeight\":4}"
+      ],
+      "expected": {
+        "counts": {
+          "sofa_3seater": 2
+        },
+        "customItems": [
+          {
+            "id": "c1",
+            "name": "Lamp",
+            "quantity": 2,
+            "approxSize": "small",
+            "approxWeight": 4
+          }
+        ]
+      }
+    },
+    {
+      "name": "object encodings are read like strings",
+      "inventoryItems": {
+        "piano": 1
+      },
+      "customItems": [
+        {
+          "id": "c1",
+          "name": "Desk",
+          "quantity": 1,
+          "approxSize": "large",
+          "approxWeight": 30
+        }
+      ],
+      "expected": {
+        "counts": {
+          "piano": 1
+        },
+        "customItems": [
+          {
+            "id": "c1",
+            "name": "Desk",
+            "quantity": 1,
+            "approxSize": "large",
+            "approxWeight": 30
+          }
+        ]
+      }
+    },
+    {
+      "name": "zero, negative, junk and fractional counts; numeric strings read",
+      "inventoryItems": "{\"sofa_3seater\":0,\"piano\":-1,\"cardboard_boxes\":\"3\",\"x\":\"abc\",\"y\":2.7,\"z\":0.4}",
+      "customItems": [],
+      "expected": {
+        "counts": {
+          "cardboard_boxes": 3,
+          "y": 2
+        },
+        "customItems": []
+      }
+    },
+    {
+      "name": "legacy web custom items: free-text size, '45 kg' weight, comma decimals",
+      "inventoryItems": "{}",
+      "customItems": [
+        "{\"id\":\"w1\",\"name\":\"Aquarium\",\"quantity\":1,\"approxSize\":\"Extra Large\",\"approxWeight\":\"45 kg\"}",
+        "{\"id\":\"w2\",\"name\":\"Vase\",\"quantity\":3,\"approxSize\":\"XS\",\"approxWeight\":\"2,5\"}",
+        "{\"id\":\"w3\",\"name\":\"Bike\",\"quantity\":\"2\",\"approxSize\":\"big\",\"approxWeight\":\"\"}",
+        "{\"id\":\"w4\",\"name\":\"Thing\",\"quantity\":1,\"approxSize\":\"riesig\",\"estimatedWeightKg\":12}"
+      ],
+      "expected": {
+        "counts": {},
+        "customItems": [
+          {
+            "id": "w1",
+            "name": "Aquarium",
+            "quantity": 1,
+            "approxSize": "extra_large",
+            "approxWeight": 45
+          },
+          {
+            "id": "w2",
+            "name": "Vase",
+            "quantity": 3,
+            "approxSize": "small",
+            "approxWeight": 2.5
+          },
+          {
+            "id": "w3",
+            "name": "Bike",
+            "quantity": 2,
+            "approxSize": "large",
+            "approxWeight": 20
+          },
+          {
+            "id": "w4",
+            "name": "Thing",
+            "quantity": 1,
+            "approxSize": "medium",
+            "approxWeight": 12
+          }
+        ]
+      }
+    },
+    {
+      "name": "missing size -> medium, missing/zero weight -> default, missing quantity -> 1, missing id/name filled",
+      "inventoryItems": null,
+      "customItems": [
+        "{\"name\":\"Box of books\"}",
+        "{\"id\":\"c2\",\"quantity\":1,\"approxSize\":\"medium\",\"approxWeight\":0}"
+      ],
+      "expected": {
+        "counts": {},
+        "customItems": [
+          {
+            "id": "custom_1",
+            "name": "Box of books",
+            "quantity": 1,
+            "approxSize": "medium",
+            "approxWeight": 20
+          },
+          {
+            "id": "c2",
+            "name": "",
+            "quantity": 1,
+            "approxSize": "medium",
+            "approxWeight": 20
+          }
+        ]
+      }
+    },
+    {
+      "name": "zero-quantity and unparseable custom entries are dropped",
+      "inventoryItems": "not json",
+      "customItems": [
+        "{\"id\":\"z\",\"name\":\"Gone\",\"quantity\":0}",
+        "not json",
+        "[1,2]",
+        "{\"id\":\"h\",\"name\":\"Half\",\"quantity\":0.5}",
+        "{\"id\":\"k\",\"name\":\"Kept\",\"quantity\":1,\"approxSize\":\"small\",\"approxWeight\":1}"
+      ],
+      "expected": {
+        "counts": {},
+        "customItems": [
+          {
+            "id": "k",
+            "name": "Kept",
+            "quantity": 1,
+            "approxSize": "small",
+            "approxWeight": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "customItems as one JSON array string",
+      "inventoryItems": "{\"piano\":1}",
+      "customItems": "[{\"id\":\"c1\",\"name\":\"Rug\",\"quantity\":1,\"approxSize\":\"L\",\"approxWeight\":8}]",
+      "expected": {
+        "counts": {
+          "piano": 1
+        },
+        "customItems": [
+          {
+            "id": "c1",
+            "name": "Rug",
+            "quantity": 1,
+            "approxSize": "large",
+            "approxWeight": 8
+          }
+        ]
+      }
+    },
+    {
+      "name": "nothing at all",
+      "inventoryItems": null,
+      "customItems": null,
+      "expected": {
+        "counts": {},
+        "customItems": []
+      }
+    }
+  ],
+  "serialize": [
+    {
+      "name": "zeros stripped, contract field order",
+      "basket": {
+        "counts": {
+          "sofa_3seater": 2,
+          "piano": 0
+        },
+        "customItems": [
+          {
+            "id": "c1",
+            "name": "Lamp",
+            "quantity": 1,
+            "approxSize": "small",
+            "approxWeight": 4
+          },
+          {
+            "id": "c2",
+            "name": "Gone",
+            "quantity": 0,
+            "approxSize": "small",
+            "approxWeight": 4
+          }
+        ]
+      },
+      "expected": {
+        "inventoryItems": "{\"sofa_3seater\":2}",
+        "customItems": [
+          "{\"id\":\"c1\",\"name\":\"Lamp\",\"quantity\":1,\"approxSize\":\"small\",\"approxWeight\":4}"
+        ]
+      }
+    }
+  ],
+  "caps": [
+    {
+      "name": "99 of an ordinary item is fine",
+      "basket": {
+        "counts": {
+          "cardboard_boxes": 99
+        },
+        "customItems": []
+      },
+      "expected": null
+    },
+    {
+      "name": "100 of an ordinary item is over",
+      "basket": {
+        "counts": {
+          "cardboard_boxes": 100
+        },
+        "customItems": []
+      },
+      "expected": {
+        "itemId": "cardboard_boxes",
+        "quantity": 100,
+        "max": 99
+      }
+    },
+    {
+      "name": "10 of a special item is fine",
+      "basket": {
+        "counts": {
+          "piano": 10
+        },
+        "customItems": []
+      },
+      "expected": null
+    },
+    {
+      "name": "11 of a special item is over",
+      "basket": {
+        "counts": {
+          "sofa_3seater": 3,
+          "piano": 11
+        },
+        "customItems": []
+      },
+      "expected": {
+        "itemId": "piano",
+        "quantity": 11,
+        "max": 10
+      }
+    },
+    {
+      "name": "an item missing from the catalog gets the ordinary cap",
+      "basket": {
+        "counts": {
+          "mystery": 50
+        },
+        "customItems": []
+      },
+      "expected": null
+    },
+    {
+      "name": "custom item over 99",
+      "basket": {
+        "counts": {},
+        "customItems": [
+          {
+            "id": "c9",
+            "name": "Chairs",
+            "quantity": 120,
+            "approxSize": "small",
+            "approxWeight": 5
+          }
+        ]
+      },
+      "expected": {
+        "itemId": "c9",
+        "quantity": 120,
+        "max": 99
+      }
+    }
+  ]
+}

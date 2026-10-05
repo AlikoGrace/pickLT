@@ -113,6 +113,7 @@ export async function GET() {
               additionalServices: move.additionalServices || [],
               contactNotes: move.contactNotes,
               crewSize: move.crewSize,
+              extraHelpers: move.extraHelpers ?? 0,
               moveDate: move.moveDate,
               arrivalWindow: move.arrivalWindow,
               routeDistanceMeters: move.routeDistanceMeters,

@@ -370,5 +370,8 @@
     "loadFailed": "Could not load your platform balance.",
     "payFailed": "Could not complete the fee payment. Please try again.",
     "payUnavailable": "Card payment isn’t available right now. Please try again later or contact support."
+  },
+  "inventory": {
+    "quantityTooHigh": "One of your items has a quantity above the limit. Lower it and try again."
   }
 }

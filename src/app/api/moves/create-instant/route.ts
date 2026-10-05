@@ -7,8 +7,9 @@ import { asText, asTextArray } from '@/lib/move-normalizers'
 import { movePermissions, moveRequestPermissions } from '@/lib/doc-permissions'
 import { directAssignmentBlock } from '@/lib/mover-gates'
 import { relId } from '@/lib/notify'
-import { PricingReconcileError, type QuoteBreakdown } from '@/lib/pricingEngine'
-import { quoteColumns, quoteMoveFields } from '@/lib/pricing-server'
+import { PricingReconcileError } from '@/lib/pricingEngine'
+import { BasketCapError, priceMoveFields, type PricedMove } from '@/lib/pricing-server'
+import { profileCrewSize } from '@/app/api/crew/crew-size'
 import { resolveMoveCountry } from '@/lib/moveCountry'
 import { writeDroppingUnknownAttributes } from '@/lib/appwrite-write'
 import { ID } from 'node-appwrite'
@@ -22,7 +23,7 @@ import { ID } from 'node-appwrite'
  * Body:
  *   moverProfileId — the chosen mover's profile ID
  *   pickup / dropoff location strings + coordinates
- *   moveType, inventoryItems, customItems, totalItemCount
+ *   moveType, inventoryItems, customItems, extraHelpers?
  *   coverPhotoId?, galleryPhotoIds?, routeDistanceMeters?, routeDurationSeconds?
  *
  * The server is the price authority (pricing master D5): a client-sent
@@ -30,6 +31,13 @@ import { ID } from 'node-appwrite'
  * with the chosen mover's vehicle class, and the row carries `estimatedPrice`,
  * `priceBreakdown`, `pricingVersion`, `pricedAt`, `currency`, plus the charged
  * `vehicleType` / `crewSize`. The breakdown is returned for the tracking page.
+ *
+ * Basket + tier (inventory parity plan; crew master D5): the basket is
+ * normalised and capped (400 `inventory.quantityTooHigh`), the server computes
+ * the totals (a client `totalItemCount` is ignored) and prices + stores
+ * `moveType` = max(client tier, classified tier) with `systemMoveType` the
+ * classified one. `extraHelpers` (crew master D2) is clamped and billed;
+ * `crewSize` is the whole crew (charged crew + extra helpers).
  *
  * The move's country is the PICKUP country (plan wave-2026-10/4 C2): reverse
  * geocoded server-side, with the client's `pickupCountryCode` hint and the
@@ -56,7 +64,7 @@ export async function POST(req: NextRequest) {
       moveType,
       inventoryItems,
       customItems,
-      totalItemCount,
+      extraHelpers,
       paymentMethod,
       coverPhotoId,
       galleryPhotoIds,
@@ -119,9 +127,9 @@ export async function POST(req: NextRequest) {
     // The mover is known, so the vehicle line is their class (master D8). The
     // mover's crew size never changes the price; the crew gate on the list
     // already kept out anyone too small for the load.
-    let breakdown: QuoteBreakdown
+    let priced: PricedMove
     try {
-      breakdown = await quoteMoveFields(
+      priced = await priceMoveFields(
         databases,
         {
           moveType,
@@ -129,12 +137,20 @@ export async function POST(req: NextRequest) {
           routeDurationSeconds,
           inventoryItems,
           customItems,
+          extraHelpers,
           vehicleType: mover.vehicleType,
         },
         'instant',
         countryCode,
+        'regular',
       )
     } catch (err) {
+      if (err instanceof BasketCapError) {
+        return NextResponse.json(
+          { error: err.message, fnCode: err.fnCode, fnParams: { itemId: err.violation.itemId, max: err.violation.max } },
+          { status: 400 }
+        )
+      }
       if (err instanceof PricingReconcileError) {
         console.error('[create-instant] quote did not reconcile:', err)
         return NextResponse.json(
@@ -144,20 +160,19 @@ export async function POST(req: NextRequest) {
       }
       throw err
     }
-    const priced = quoteColumns(breakdown)
+    const { breakdown, classification } = priced
 
     // Crew gate (master D7), server side: the list hid movers whose crew is
-    // smaller than the load requires, but the list is a snapshot. Only applied
-    // when the crew relationship is on the document — an unloaded relation
-    // must not read as "works alone" and refuse every two-person job.
-    if (Array.isArray(mover.crew_members)) {
-      const crewSize = mover.crew_members.length + 1
-      if (crewSize < breakdown.profile.requiredCrew) {
-        return NextResponse.json(
-          { error: t('errors:instant.moverUnavailable.error'), fnCode: 'mover.crewTooSmall' },
-          { status: 400 }
-        )
-      }
+    // smaller than the load requires, but the list is a snapshot. The mover's
+    // crew is the stored `crewSize` (driver + active helpers, crew master §4);
+    // unknown → no gate, so an unsynced row never refuses every two-person job.
+    // Extra helpers are advisory (crew master D3) and do not gate.
+    const moverCrew = profileCrewSize(mover)
+    if (moverCrew !== null && moverCrew < breakdown.profile.requiredCrew) {
+      return NextResponse.json(
+        { error: t('errors:instant.moverUnavailable.error'), fnCode: 'mover.crewTooSmall' },
+        { status: 400 }
+      )
     }
 
     // Generate a human-readable handle
@@ -182,8 +197,8 @@ export async function POST(req: NextRequest) {
         // assigns the mover without an accept route in between.
         vehicleId: mover.currentVehicleId ?? null,
         moveCategory: 'instant',
-        moveType: moveType || 'regular',
-        systemMoveType: moveType || 'regular',
+        // Enforced tier + server totals (crew master D5).
+        ...classification,
         moveDate: new Date().toISOString(),
 
         pickupLocation: pickupLocation || null,
@@ -193,13 +208,14 @@ export async function POST(req: NextRequest) {
         dropoffLatitude: dropoffLatitude ?? null,
         dropoffLongitude: dropoffLongitude ?? null,
 
-        inventoryItems: asText(inventoryItems),
-        customItems: asTextArray(customItems),
-        totalItemCount: totalItemCount ?? 0,
+        // The normalised basket (contract shapes, zeros stripped).
+        inventoryItems: priced.basket.inventoryItems,
+        customItems: priced.basket.customItems,
 
         // Server-computed quote columns (master D13): estimatedPrice,
-        // priceBreakdown, pricingVersion, pricedAt, currency, vehicleType, crewSize.
-        ...priced,
+        // priceBreakdown, pricingVersion, pricedAt, currency, vehicleType,
+        // crewSize (whole crew), extraHelpers (billed count).
+        ...priced.columns,
         // Settled at completion; card charges run through the app's Stripe flow.
         paymentMethod: paymentMethod === 'card' ? 'card' : 'cash',
         routeDistanceMeters: routeDistanceMeters ?? null,
@@ -250,6 +266,8 @@ export async function POST(req: NextRequest) {
       handle,
       estimatedPrice: breakdown.total,
       breakdown,
+      moveType: classification.moveType,
+      systemMoveType: classification.systemMoveType,
       countryCode,
     })
   } catch (err) {

@@ -37,6 +37,7 @@ import { moverPayoutEur, payoutRatesFrom } from '@/lib/moverPayout'
 import { homeTypeLabel, moveSubtitle, moveTypeLabel } from '@/lib/move-subtitle'
 import { Trans, useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
+import { crewLabel } from '@/components/mover/crewLabel'
 import { additionalServiceLabel, arrivalWindowLabel, dropoffParkingLabel, flexibilityLabel, floorLevelLabel, joinLabels, packingLevelLabel, packingMaterialLabel, parkingLabel, paymentMethodLabel, vehicleTypeLabel } from '@/lib/enum-labels'
 
 const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || ''
@@ -103,7 +104,9 @@ interface MoveData {
   additionalServices: string[]
   storageWeeks: number
   disposalItems: string
-  crewSize: string | null
+  crewSize: string | number | null
+  /** Helpers the client added on top of the tier (crew master D2). */
+  extraHelpers: number
   vehicleType: string | null
   arrivalWindow: string | null
   flexibility: string | null
@@ -227,6 +230,7 @@ function docToMoveData(doc: any): MoveData {
     storageWeeks: doc.storageWeeks ?? 0,
     disposalItems: doc.disposalItems ?? '',
     crewSize: doc.crewSize ?? null,
+    extraHelpers: doc.extraHelpers ?? 0,
     vehicleType: doc.vehicleType ?? null,
     arrivalWindow: doc.arrivalWindow ?? null,
     flexibility: doc.flexibility ?? null,
@@ -504,7 +508,7 @@ export default function MoverMoveDetailsPage() {
     parkingSituation, dropoffParkingSituation,
     packingServiceLevel, packingMaterials, packingNotes,
     additionalServices, storageWeeks, disposalItems,
-    crewSize, vehicleType, arrivalWindow, flexibility, inventoryCount,
+    vehicleType, arrivalWindow, flexibility, inventoryCount,
     inventoryItems, customItems,
     contactInfo, totalPrice, finalPrice, bookingCode,
     coverPhotoId, galleryPhotoIds, createdAt,
@@ -516,6 +520,8 @@ export default function MoverMoveDetailsPage() {
   // The itemised v3 estimate stored with the row (pricing master D13); null on
   // moves booked before the engine — those show the plain total only.
   const moveBreakdown = parseBreakdown(move.priceBreakdown)
+  // "Crew: driver + N helpers" from the total `crewSize` (crew master §5).
+  const crewText = crewLabel(t, move)
 
   // Drivers see what they EARN — net after the platform fee (plan 7, owner
   // decision 2026-10-02). `totalPrice` stays the customer's gross for the
@@ -728,8 +734,10 @@ export default function MoverMoveDetailsPage() {
             {!isInstant && (
               <InfoRow icon={TruckIcon} label={t('booking:field.vehicle.label')} value={vehicleTypeLabel(t, vehicleType)} />
             )}
-            {!isInstant && (
-              <InfoRow icon={UsersIcon} label={t('booking:field.crew.label')} value={crewSize ? t('web:mover.crewSize.label', { crew: crewSize }) : t('common:value.standard.label')} />
+            {/* `crewSize` is the total charged crew on instant and scheduled
+                moves alike — "driver + N helpers", no +1 (crew master §5). */}
+            {(crewText || !isInstant) && (
+              <InfoRow icon={UsersIcon} label={t('booking:field.crew.label')} value={crewText ?? t('common:value.standard.label')} />
             )}
             {arrivalWindow && (
               <InfoRow icon={CalendarIcon} label={t('booking:field.arrivalWindow.label')} value={arrivalWindowLabel(t, arrivalWindow)} />

@@ -9,6 +9,11 @@ import { useInventoryCatalog } from '@/hooks/useInventoryCatalog'
 import { usePricingConfig } from '@/hooks/usePricingConfig'
 import { useInventoryNames } from '@/lib/inventory-labels'
 import PriceBreakdown from '@/components/PriceBreakdown'
+import { crewLabel } from '@/components/mover/crewLabel'
+import ExtraHelpersStepper from '@/components/booking/ExtraHelpersStepper'
+import { basketItemCount, serializeBasket } from '@/components/inventory/basket'
+import { toClassifyCustom } from '@/components/inventory/selector-logic'
+import { classifyMove, enforcedTier, thresholdsFromConfig } from '@/lib/classifyMove'
 import ButtonPrimary from '@/shared/ButtonPrimary'
 import ButtonSecondary from '@/shared/ButtonSecondary'
 import {
@@ -130,6 +135,8 @@ const SelectMoverPage = () => {
     // The tier the user picked drives the route-base multiplier. The page used
     // to ignore it entirely and quote every move at the light-tier rate.
     moveType,
+    extraHelpers,
+    setExtraHelpers,
   } = useMoveSearch()
 
   const [isLoading, setIsLoading] = useState(true)
@@ -142,10 +149,21 @@ const SelectMoverPage = () => {
   // the two inputs the engine needs besides the basket and the route.
   // Per pickup country (plan wave-2026-10/4 C5): the market's VAT and tariff.
   const pricingConfig = usePricingConfig(pickupCountryCode)
-  const { catalog, ready: catalogReady } = useInventoryCatalog()
+  // Quotes wait for a ready, non-empty catalog (crew plan 1 #8).
+  const { catalog, status: catalogStatus, ready: catalogReady, retry: retryCatalog } = useInventoryCatalog()
   const inventoryNames = useInventoryNames()
 
-  const inventoryCount = Object.values(inventory).reduce((sum, qty) => sum + qty, 0) + customItems.length
+  // Catalog + custom quantities (not the number of custom rows).
+  const inventoryCount = basketItemCount(inventory, customItems)
+
+  // The tier the server will price: the higher of the client's tier and the
+  // basket's classification (crew master D5).
+  const pricedTier = useMemo(() => {
+    const chosen = moveType || 'regular'
+    if (!catalogReady) return chosen
+    const c = classifyMove(inventory, toClassifyCustom(customItems), chosen, catalog, thresholdsFromConfig(pricingConfig))
+    return enforcedTier(chosen, c.recommendedType)
+  }, [moveType, catalogReady, catalog, inventory, customItems, pricingConfig])
   const photoCount = (coverPhotoId ? 1 : 0) + galleryPhotoIds.length
 
   // Calculate route distance using Mapbox Directions API
@@ -223,15 +241,16 @@ const SelectMoverPage = () => {
   const quoteInput = useMemo<Omit<QuoteInput, 'vehicleType'> | null>(() => {
     if (!routeDistance || !catalogReady) return null
     return {
-      tier: moveType || 'regular',
+      tier: pricedTier,
       mode: 'instant',
+      extraHelpers,
       distanceKm: kmFromMeters(routeDistance),
       durationSeconds: routeDuration ?? 0,
       basket: basketFromWire(inventory, customItems),
       catalog,
       countryCode: pickupCountryCode,
     }
-  }, [routeDistance, routeDuration, catalogReady, catalog, moveType, inventory, customItems, pickupCountryCode])
+  }, [routeDistance, routeDuration, catalogReady, catalog, pricedTier, extraHelpers, inventory, customItems, pickupCountryCode])
 
   // Price every mover with the shared v3 engine and gate out anyone the job
   // exceeds: a vehicle that cannot hold the load, or a crew smaller than the
@@ -357,6 +376,7 @@ const SelectMoverPage = () => {
 
     // ── Create the move + move_request via API ──────────────
     try {
+      const basket = serializeBasket(inventory, customItems)
       const createBody = {
         moverProfileId: mover.id,
         pickupLocation: pickupLocation || null,
@@ -367,9 +387,11 @@ const SelectMoverPage = () => {
         dropoffLongitude: dropoffCoordinates?.longitude ?? null,
         // The tier the user picked — this used to post a hardcoded 'regular'.
         moveType: moveType || 'regular',
-        inventoryItems: JSON.stringify(inventory),
-        customItems: customItems.map((c) => JSON.stringify(c)),
+        inventoryItems: basket.inventoryItems,
+        customItems: basket.customItems,
         totalItemCount: inventoryCount,
+        // Helpers on top of the tier crew (crew master D2); the server clamps.
+        extraHelpers,
         // No price is sent: the server recomputes it from these inputs and the
         // chosen mover's vehicle class (pricing master D5).
         coverPhotoId: uploadedCoverPhotoId,
@@ -416,6 +438,25 @@ const SelectMoverPage = () => {
     setIsConfirming(false)
     // Navigate to the instant-move page with the map
     router.push('/instant-move')
+  }
+
+  // The catalog failed or is empty: no quote is possible, so say so and offer a retry.
+  if (catalogStatus === 'error' || catalogStatus === 'empty') {
+    return (
+      <div className="min-h-screen bg-white dark:bg-neutral-900 flex flex-col items-center justify-center p-6">
+        <HugeiconsIcon icon={Alert02Icon} size={48} strokeWidth={1.5} className="text-amber-500 mb-4" />
+        <h2 className="text-xl font-semibold text-neutral-900 dark:text-white mb-2">
+          {catalogStatus === 'empty' ? t('inventory:unavailable.empty.title') : t('inventory:unavailable.error.title')}
+        </h2>
+        <p className="text-neutral-500 dark:text-neutral-400 text-center max-w-sm mb-6">
+          {catalogStatus === 'empty' ? t('inventory:unavailable.empty.body') : t('inventory:unavailable.error.body')}
+        </p>
+        <div className="flex gap-3">
+          <ButtonSecondary href="/instant-move/photos">{t('common:action.goBack.cta')}</ButtonSecondary>
+          <ButtonPrimary onClick={retryCatalog}>{t('common:action.tryAgain.cta')}</ButtonPrimary>
+        </div>
+      </div>
+    )
   }
 
   if (isLoading || !catalogReady) {
@@ -553,6 +594,15 @@ const SelectMoverPage = () => {
           </div>
         </div>
 
+        {/* Extra helpers — every mover's quote below includes them (crew master D2) */}
+        <ExtraHelpersStepper
+          value={extraHelpers}
+          onChange={setExtraHelpers}
+          tier={pricedTier}
+          config={pricingConfig}
+          className="mb-6 bg-white dark:bg-neutral-800"
+        />
+
         {/* Movers List */}
         <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-4">
           {t('web:selectMover.available.title', { count: moversWithPrices.length })}
@@ -660,7 +710,8 @@ const SelectMoverPage = () => {
                     </span>
                     <span className="flex items-center gap-1">
                       <HugeiconsIcon icon={UserMultiple02Icon} size={14} strokeWidth={1.5} />
-                      {t('moves:moverCount', { count: mover.crewSize + 1 })}
+                      {/* `crewSize` already counts the driver (nearby API: crew members + 1). */}
+                      {crewLabel(t, { crewSize: mover.crewSize })}
                     </span>
                     <span className="text-neutral-400">
                       {vehicleCapacity(t, mover.vehicleType)}

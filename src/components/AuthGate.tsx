@@ -53,7 +53,7 @@ export function AuthGate({ children, redirectBack, fallback }: AuthGateProps) {
       packingServiceLevel: moveSearch.packingServiceLevel,
       packingMaterials: moveSearch.packingMaterials,
       arrivalWindow: moveSearch.arrivalWindow,
-      crewSize: moveSearch.crewSize,
+      extraHelpers: moveSearch.extraHelpers,
       vehicleType: moveSearch.vehicleType,
       additionalServices: moveSearch.additionalServices,
       storageWeeks: moveSearch.storageWeeks,

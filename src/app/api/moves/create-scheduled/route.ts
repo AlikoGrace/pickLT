@@ -5,8 +5,8 @@ import { APPWRITE } from '@/lib/constants'
 import { getSessionUserId } from '@/lib/auth-session'
 import { asText, asTextArray } from '@/lib/move-normalizers'
 import { movePermissions } from '@/lib/doc-permissions'
-import { PricingReconcileError, type QuoteBreakdown } from '@/lib/pricingEngine'
-import { quoteColumns, quoteMoveFields } from '@/lib/pricing-server'
+import { PricingReconcileError } from '@/lib/pricingEngine'
+import { BasketCapError, priceMoveFields, type PricedMove } from '@/lib/pricing-server'
 import { resolveMoveCountry } from '@/lib/moveCountry'
 import { writeDroppingUnknownAttributes } from '@/lib/appwrite-write'
 import { ID } from 'node-appwrite'
@@ -30,6 +30,13 @@ export const maxDuration = 60
  * below the tier's minimum (master D8) — and the row carries `estimatedPrice`,
  * `priceBreakdown`, `pricingVersion`, `pricedAt`, `currency`, plus the charged
  * `vehicleType` / `crewSize` (which replace the wizard's guesses).
+ *
+ * Basket + tier (inventory parity plan; crew master D5): the basket is
+ * normalised and capped (400 `inventory.quantityTooHigh`), the server computes
+ * the totals (a client `totalItemCount` is ignored) and prices + stores
+ * `moveType` = max(client tier, classified tier) with `systemMoveType` the
+ * classified one. `extraHelpers` (crew master D2) is clamped and billed;
+ * `crewSize` is the whole crew (charged crew + extra helpers).
  *
  * The move's country is the PICKUP country (plan wave-2026-10/4 C2): reverse
  * geocoded server-side, with the client's `pickupCountryCode` hint and the
@@ -73,7 +80,6 @@ export async function POST(req: NextRequest) {
       // Inventory
       inventoryItems,
       customItems,
-      totalItemCount,
       // Packing
       packingServiceLevel,
       packingMaterials,
@@ -84,6 +90,7 @@ export async function POST(req: NextRequest) {
       // Crew & Vehicle
       crewSize,
       vehicleType,
+      extraHelpers,
       // Services
       additionalServices,
       storageWeeks,
@@ -130,9 +137,9 @@ export async function POST(req: NextRequest) {
     // stored row read exactly the same inputs. The wizard's `vehicleType` is a
     // preference, not a mover's class — `'multiple'` and the like are not
     // classes, so the engine resolves the class from the load instead.
-    let breakdown: QuoteBreakdown
+    let priced: PricedMove
     try {
-      breakdown = await quoteMoveFields(
+      priced = await priceMoveFields(
         databases,
         {
           moveType,
@@ -150,11 +157,19 @@ export async function POST(req: NextRequest) {
           packingServiceLevel,
           additionalServices,
           storageWeeks,
+          extraHelpers,
         },
         'scheduled',
         countryCode,
+        'regular',
       )
     } catch (err) {
+      if (err instanceof BasketCapError) {
+        return NextResponse.json(
+          { error: err.message, fnCode: err.fnCode, fnParams: { itemId: err.violation.itemId, max: err.violation.max } },
+          { status: 400 }
+        )
+      }
       if (err instanceof PricingReconcileError) {
         console.error('[create-scheduled] quote did not reconcile:', err)
         return NextResponse.json(
@@ -164,7 +179,7 @@ export async function POST(req: NextRequest) {
       }
       throw err
     }
-    const priced = quoteColumns(breakdown)
+    const { breakdown, classification, columns } = priced
 
     const handle = `SM-${Date.now().toString(36).toUpperCase()}`
 
@@ -177,8 +192,8 @@ export async function POST(req: NextRequest) {
         countryCode,
         status: 'booked',
         moveCategory: 'scheduled',
-        moveType: moveType || 'regular',
-        systemMoveType: moveType || 'regular',
+        // Enforced tier + server totals (crew master D5).
+        ...classification,
         moveDate: moveDate || null,
 
         // Pickup
@@ -207,9 +222,9 @@ export async function POST(req: NextRequest) {
         homeType: homeType || null,
 
         // Inventory
-        inventoryItems: asText(inventoryItems),
-        customItems: asTextArray(customItems),
-        totalItemCount: totalItemCount ?? 0,
+        // The normalised basket (contract shapes, zeros stripped).
+        inventoryItems: priced.basket.inventoryItems,
+        customItems: priced.basket.customItems,
 
         // Packing
         packingServiceLevel: packingServiceLevel || null,
@@ -224,8 +239,10 @@ export async function POST(req: NextRequest) {
         // (master D13), written below with the other quote columns. The
         // wizard's `crewSize` / `vehicleType` are kept only when the engine
         // produced nothing, which it never does.
-        crewSize: priced.crewSize || crewSize || null,
-        vehicleType: priced.vehicleType || vehicleType || null,
+        crewSize: columns.crewSize || crewSize || null,
+        vehicleType: columns.vehicleType || vehicleType || null,
+        // Client-added helpers actually billed (crew master D2).
+        extraHelpers: columns.extraHelpers,
 
         // Services
         additionalServices: asTextArray(additionalServices),
@@ -251,11 +268,11 @@ export async function POST(req: NextRequest) {
         // Pricing — server-computed (master D5/D13): estimatedPrice,
         // priceBreakdown, pricingVersion, pricedAt, currency (+ the
         // vehicleType / crewSize above). `finalPrice` is set at completion.
-        estimatedPrice: priced.estimatedPrice,
-        priceBreakdown: priced.priceBreakdown,
-        pricingVersion: priced.pricingVersion,
-        pricedAt: priced.pricedAt,
-        currency: priced.currency,
+        estimatedPrice: columns.estimatedPrice,
+        priceBreakdown: columns.priceBreakdown,
+        pricingVersion: columns.pricingVersion,
+        pricedAt: columns.pricedAt,
+        currency: columns.currency,
         finalPrice: null,
 
         // Payment
@@ -286,6 +303,8 @@ export async function POST(req: NextRequest) {
       handle,
       estimatedPrice: breakdown.total,
       breakdown,
+      moveType: classification.moveType,
+      systemMoveType: classification.systemMoveType,
       countryCode,
     })
   } catch (err) {

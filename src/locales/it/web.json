@@ -367,6 +367,10 @@
         "subtitle": "Aggiungi il primo membro per iniziare a gestire la tua squadra.",
         "title": "Nessun membro della squadra"
       },
+      "requestedByClient": {
+        "label_one": "(di cui {{count}} richiesto dal cliente)",
+        "label_other": "(di cui {{count}} richiesti dal cliente)"
+      },
       "role": {
         "label": "Ruolo"
       },

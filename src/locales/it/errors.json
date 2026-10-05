@@ -370,5 +370,8 @@
     "loadFailed": "Impossibile caricare il Suo saldo con la piattaforma.",
     "payFailed": "Impossibile completare il pagamento delle commissioni. Riprovi.",
     "payUnavailable": "Il pagamento con carta non è disponibile al momento. Riprovi più tardi o contatti l’assistenza."
+  },
+  "inventory": {
+    "quantityTooHigh": "La quantità di uno dei tuoi articoli supera il limite. Riducila e riprova."
   }
 }

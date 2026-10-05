@@ -109,5 +109,8 @@
     "translationsHelper": "İngilizce adı kullanmak için boş bırakın. Ürün kimlikleri ve kategoriler asla çevrilmez.",
     "unknownCategoryTitle": "Çevrilmemiş kategori",
     "unknownCategoryWarning": "“{{slug}}” çevrilmiş yedi kategoriden biri değil. Her dilde “{{label}}” olarak görünecek; İngilizce okumayan kullanıcılar için de."
+  },
+  "quantity": {
+    "max": "Ürün başına en fazla {{count}}"
   }
 }

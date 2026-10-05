@@ -2,6 +2,7 @@ import { getTranslations } from '@/lib/i18n-server'
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
+import { profileCrewSize } from '@/app/api/crew/crew-size'
 import { getSessionUserId } from '@/lib/auth-session'
 
 /**
@@ -97,7 +98,8 @@ export async function GET(
         vehicleModel: moverProfile.vehicleModel || '',
         vehicleName: [moverProfile.vehicleBrand, moverProfile.vehicleModel].filter(Boolean).join(' ') || 'Vehicle',
         vehiclePlate: moverProfile.vehicleRegistration || '',
-        crewSize: (moverProfile.crew_members as unknown[])?.length + 1 || 1,
+        // Stored `crewSize` (driver + active helpers, crew master §4); list + 1 only on unsynced rows.
+        crewSize: profileCrewSize(moverProfile) ?? 1,
         maxWeight: moverProfile.vehicleCapacity ? Number(moverProfile.vehicleCapacity) * 50 : 500,
         yearsExperience: moverProfile.yearsExperience || 0,
         languages: moverProfile.languages || [],

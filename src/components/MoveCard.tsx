@@ -1,5 +1,6 @@
 'use client'
 
+import { crewLabel } from '@/components/mover/crewLabel'
 import GallerySlider from '@/components/GallerySlider'
 import { StoredMove } from '@/context/moveSearch'
 import { Badge } from '@/shared/Badge'
@@ -163,7 +164,7 @@ const MoveCard: FC<MoveCardProps> = ({ size = 'default', className = '', data })
           </div>
           <span className="text-sm text-neutral-500 dark:text-neutral-400">
             {t('moves:itemCount', { count: inventoryCount })} ·{' '}
-            {crewSize ? t('moves:moverCount', { count: Number(crewSize) }) : vehicleLabel(t, vehicleType)}
+            {crewLabel(t, { crewSize }) ?? vehicleLabel(t, vehicleType)}
           </span>
         </div>
       </div>

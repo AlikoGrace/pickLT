@@ -1,43 +1,61 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { InventoryItemDef } from '@/lib/classifyMove'
+import type { CatalogItem } from '@/components/inventory/selector-logic'
+
+export type CatalogStatus = 'loading' | 'ready' | 'empty' | 'error'
 
 /**
- * The admin catalog as engine item definitions, for pages that quote.
+ * The admin catalog as engine item definitions, for the selector and for
+ * pages that quote.
  *
- * `useInventoryNames` (lib/inventory-labels.ts) is the id → name map for
- * labelling; this is the full row — dimensions, weight, `unitPriceEur`,
- * `requiredCrew` — which `quoteMove` needs to price a basket. Empty until the
- * fetch lands; a quote over an empty catalog prices every item as unknown, so
- * callers should treat `ready === false` as "not priced yet", not as "free".
+ * `status` is `ready` only for a non-empty catalog: a quote over an empty or
+ * failed catalog would price every item as unknown, so callers block quoting
+ * until `ready` (crew plan 1 #8) and offer `retry` on `error` / `empty`.
+ * Inactive rows are included — they still label and price existing moves;
+ * the selector filters them out itself.
  *
  * Re-fetched on a language change because `/api/inventory/catalog` localises
  * `name` server-side; the numbers do not change, the labels do.
  */
-export function useInventoryCatalog(): { catalog: InventoryItemDef[]; ready: boolean } {
+export function useInventoryCatalog(): {
+  catalog: CatalogItem[]
+  status: CatalogStatus
+  ready: boolean
+  retry: () => void
+} {
   const { i18n } = useTranslation()
   const locale = i18n.language
-  const [catalog, setCatalog] = useState<InventoryItemDef[]>([])
-  const [ready, setReady] = useState(false)
+  const [catalog, setCatalog] = useState<CatalogItem[]>([])
+  const [status, setStatus] = useState<CatalogStatus>('loading')
+  const [attempt, setAttempt] = useState(0)
 
   useEffect(() => {
     let cancelled = false
+    setStatus((s) => (s === 'ready' ? s : 'loading'))
     fetch('/api/inventory/catalog')
-      .then((r) => r.json())
-      .then((data: { items?: InventoryItemDef[] }) => {
-        if (cancelled) return
-        setCatalog(Array.isArray(data.items) ? data.items : [])
-        setReady(true)
+      .then(async (r) => {
+        if (!r.ok) throw new Error(`catalog ${r.status}`)
+        return (await r.json()) as { items?: CatalogItem[] }
       })
-      .catch(() => {
-        if (!cancelled) setReady(true)
+      .then((data) => {
+        if (cancelled) return
+        const items = Array.isArray(data.items) ? data.items : []
+        setCatalog(items)
+        setStatus(items.length > 0 ? 'ready' : 'empty')
+      })
+      .catch((err) => {
+        if (cancelled) return
+        console.warn('[inventory] catalog fetch failed', err)
+        setStatus('error')
       })
     return () => {
       cancelled = true
     }
-  }, [locale])
+  }, [locale, attempt])
 
-  return { catalog, ready }
+  const retry = useCallback(() => setAttempt((n) => n + 1), [])
+
+  return { catalog, status, ready: status === 'ready', retry }
 }

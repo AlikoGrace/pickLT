@@ -26,6 +26,7 @@ import { Fragment, useCallback, useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { SectionHeading, SectionSubheading } from '@/components/listings/SectionHeading'
 import PriceBreakdown from '@/components/PriceBreakdown'
+import { crewLabel } from '@/components/mover/crewLabel'
 import { useInventoryCatalog } from '@/hooks/useInventoryCatalog'
 import { usePricingConfig } from '@/hooks/usePricingConfig'
 import { formatInventoryLabel, useInventoryNames } from '@/lib/inventory-labels'
@@ -33,6 +34,9 @@ import { formatDateWith, formatMoney } from '@/lib/format'
 import { homeTypeLabel, moveTypeLabel } from '@/lib/move-subtitle'
 import { PricingReconcileError, quoteMove, type QuoteBreakdown } from '@/lib/pricingEngine'
 import { basketFromWire, floorsNoLiftFor, haltverbotCountFor, kmFromMeters } from '@/lib/pricingInputs'
+import { classifyMove, enforcedTier, thresholdsFromConfig } from '@/lib/classifyMove'
+import { basketItemCount, serializeBasket } from '@/components/inventory/basket'
+import { toClassifyCustom } from '@/components/inventory/selector-logic'
 import { additionalServiceLabel, arrivalWindowLabel, dropoffParkingLabel, flexibilityLabel, floorLevelLabel, packingLevelLabel, parkingLabel, paymentMethodLabel, vehicleTypeLabel } from '@/lib/enum-labels'
 
 const SummaryRow = ({ label, value }: { label: string; value: React.ReactNode }) => (
@@ -107,7 +111,7 @@ const Page = () => {
     avoidLunchBreak,
     avoidEveningDelivery,
     // Step 7
-    crewSize,
+    extraHelpers,
     vehicleType,
     truckAccess,
     heavyItems,
@@ -133,10 +137,8 @@ const Page = () => {
     reset,
   } = useMoveSearch()
 
-  const inventoryCount = Object.values(inventory).reduce((sum, qty) => sum + qty, 0) + customItems.length
-  // `crewSize` is a slug ('1'…'4plus'), so parse rather than cast — Number('4plus') is NaN.
-  const crewCount = Number.parseInt(crewSize || '', 10)
-  const hasCrewCount = Number.isFinite(crewCount)
+  // Catalog + custom quantities (not the number of custom rows).
+  const inventoryCount = basketItemCount(inventory, customItems)
   const selectedHeavyItems = heavyItems.filter(item => item.selected)
 
   // ─── Submission state ─────────────────────────────────────
@@ -152,7 +154,8 @@ const Page = () => {
   // catalog the engine needs for the item line.
   // Per pickup country (plan wave-2026-10/4 C5): the market's VAT and tariff.
   const pricingConfig = usePricingConfig(pickupCountryCode)
-  const { catalog, ready: catalogReady } = useInventoryCatalog()
+  // Quotes wait for a ready, non-empty catalog (crew plan 1 #8).
+  const { catalog, status: catalogStatus, ready: catalogReady, retry: retryCatalog } = useInventoryCatalog()
   const [locationPickerOpen, setLocationPickerOpen] = useState(false)
   const [editingLocationType, setEditingLocationType] = useState<'pickup' | 'dropoff'>('pickup')
 
@@ -181,12 +184,22 @@ const Page = () => {
   // master D5): this is a *display* of what the server will charge, never the
   // number that gets persisted. No mover yet, so the vehicle class is the
   // smallest that holds the load, floored by the tier (master D8).
+  // The tier the server will price: the higher of the client's tier and the
+  // basket's classification (crew master D5).
+  const pricedTier = useMemo(() => {
+    const chosen = moveType || 'regular'
+    if (!catalogReady) return chosen
+    const c = classifyMove(inventory, toClassifyCustom(customItems), chosen, catalog, thresholdsFromConfig(pricingConfig))
+    return enforcedTier(chosen, c.recommendedType)
+  }, [moveType, catalogReady, catalog, inventory, customItems, pricingConfig])
+
   const quote = useMemo<QuoteBreakdown | null>(() => {
     if (!catalogReady) return null
     try {
       return quoteMove(
         {
-          tier: moveType || 'regular',
+          tier: pricedTier,
+          extraHelpers,
           mode: 'scheduled',
           distanceKm: kmFromMeters(routeInfo?.distance ?? routeDistanceMeters),
           durationSeconds: routeInfo?.duration ?? routeDurationSeconds ?? 0,
@@ -214,11 +227,14 @@ const Page = () => {
       return null
     }
   }, [
-    catalogReady, catalog, pricingConfig, moveType, routeInfo, routeDistanceMeters, routeDurationSeconds,
+    catalogReady, catalog, pricingConfig, pricedTier, extraHelpers, routeInfo, routeDistanceMeters, routeDurationSeconds,
     inventory, customItems, floorLevel, elevatorAvailable, dropoffFloorLevel, dropoffElevatorAvailable,
     pickupArrangeHaltverbot, dropoffArrangeHaltverbot, packingServiceLevel, additionalServices, storageWeeks,
   , pickupCountryCode])
   const totalPrice = quote?.total ?? null
+  // The crew that turns up: the charged crew plus the extra helpers.
+  const crewText = quote ? crewLabel(t, { crewSize: quote.profile.totalCrew }) : null
+  const hasCrewCount = crewText !== null
 
   // ─── Create scheduled move handler ────────────────────────
   const handleCreateMove = useCallback(async () => {
@@ -251,10 +267,9 @@ const Page = () => {
         }
       }
 
-      // 2. Build inventory count
-      const totalItemCount =
-        Object.values(inventory).reduce((sum, qty) => sum + qty, 0) +
-        customItems.reduce((sum, item) => sum + item.quantity, 0)
+      // 2. Basket on the wire (zeros stripped); the server recomputes the totals.
+      const basket = serializeBasket(inventory, customItems)
+      const totalItemCount = basketItemCount(inventory, customItems)
 
       // 3. Create the scheduled move
       const res = await fetch('/api/moves/create-scheduled', {
@@ -283,15 +298,15 @@ const Page = () => {
           dropoffElevatorAvailable,
           dropoffParkingSituation,
           dropoffHaltverbot: dropoffArrangeHaltverbot,
-          inventoryItems: JSON.stringify(inventory),
-          customItems: customItems.map((c) => JSON.stringify(c)),
+          inventoryItems: basket.inventoryItems,
+          customItems: basket.customItems,
           totalItemCount,
+          extraHelpers,
           packingServiceLevel,
           packingMaterials: Array.isArray(packingMaterials) ? packingMaterials : [],
           packingNotes,
           arrivalWindow,
           flexibility,
-          crewSize,
           vehicleType,
           additionalServices: Array.isArray(additionalServices) ? additionalServices : [],
           storageWeeks,
@@ -338,7 +353,7 @@ const Page = () => {
     dropoffApartmentUnit, moveDate, moveType, homeType, floorLevel, elevatorAvailable,
     parkingSituation, pickupArrangeHaltverbot, dropoffFloorLevel, dropoffElevatorAvailable,
     dropoffParkingSituation, dropoffArrangeHaltverbot, packingServiceLevel, packingMaterials,
-    packingNotes, arrivalWindow, flexibility, crewSize, vehicleType, additionalServices,
+    packingNotes, arrivalWindow, flexibility, extraHelpers, vehicleType, additionalServices,
     storageWeeks, disposalItems, contactInfo, routeInfo, routeDistanceMeters,
     routeDurationSeconds, paymentMethod, pickupCountryCode, reset, router, t,
   ])
@@ -455,7 +470,7 @@ const Page = () => {
             <UsersIcon className="h-6 w-6 text-neutral-600 dark:text-neutral-400" />
             <span>
               {hasCrewCount
-                ? t('moves:moverCount', { count: crewCount })
+                ? crewText
                 : t('booking:crew.tbd.label')}
             </span>
           </div>
@@ -568,8 +583,15 @@ const Page = () => {
             <DescriptionTerm>{t('booking:field.crewSize.label')}</DescriptionTerm>
             <DescriptionDetails>
               {hasCrewCount
-                ? t('moves:moverCount', { count: crewCount })
+                ? crewText
                 : t('common:value.notSpecified.empty')}
+            </DescriptionDetails>
+          </Fragment>
+          <Fragment>
+            <DescriptionTerm>{t('booking:extraHelpers.title')}</DescriptionTerm>
+            <DescriptionDetails>
+              {extraHelpers > 0 ? t('booking:extraHelpers.count', { count: extraHelpers }) : t('booking:extraHelpers.none')}{' '}
+              <Link href="/add-listing/6" className="text-sm text-primary-600 hover:underline">{t('common:action.edit.cta')}</Link>
             </DescriptionDetails>
           </Fragment>
           <Fragment>
@@ -728,9 +750,20 @@ const Page = () => {
         {quote ? (
           <PriceBreakdown breakdown={quote} itemNames={inventoryNames} />
         ) : (
-          <p className="text-center text-sm text-neutral-500 dark:text-neutral-400">
-            {catalogReady ? t('errors:pricing.reconcile', { defaultValue: 'We could not compute a reliable price. Please try again.' }) : t('common:state.loading.label')}
-          </p>
+          <div className="text-center text-sm text-neutral-500 dark:text-neutral-400">
+            {catalogReady
+              ? t('errors:pricing.reconcile', { defaultValue: 'We could not compute a reliable price. Please try again.' })
+              : catalogStatus === 'loading'
+                ? t('common:state.loading.label')
+                : (
+                  <>
+                    <p>{catalogStatus === 'empty' ? t('inventory:unavailable.empty.title') : t('inventory:unavailable.error.title')}</p>
+                    <button type="button" onClick={retryCatalog} className="mt-2 text-primary-600 hover:underline">
+                      {t('common:action.tryAgain.cta')}
+                    </button>
+                  </>
+                )}
+          </div>
         )}
 
         {paymentMethod && (

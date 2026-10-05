@@ -367,6 +367,10 @@
         "subtitle": "Voeg je eerste teamlid toe om je team te beheren.",
         "title": "Nog geen teamleden"
       },
+      "requestedByClient": {
+        "label_one": "(waarvan {{count}} op verzoek van de klant)",
+        "label_other": "(waarvan {{count}} op verzoek van de klant)"
+      },
       "role": {
         "label": "Rol"
       },

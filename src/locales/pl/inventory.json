@@ -111,5 +111,8 @@
     "translationsHelper": "Pozostaw puste, aby użyć nazwy angielskiej. Identyfikatory pozycji i kategorie nigdy nie są tłumaczone.",
     "unknownCategoryTitle": "Nieprzetłumaczona kategoria",
     "unknownCategoryWarning": "„{{slug}}” nie jest jedną z siedmiu przetłumaczonych kategorii. We wszystkich językach wyświetli się jako „{{label}}”, także użytkownikom nieznającym angielskiego."
+  },
+  "quantity": {
+    "max": "Maksymalnie {{count}} na przedmiot"
   }
 }

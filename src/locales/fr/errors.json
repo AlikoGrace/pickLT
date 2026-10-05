@@ -370,5 +370,8 @@
     "loadFailed": "Impossible de charger votre solde de plateforme.",
     "payFailed": "Le paiement des frais n’a pas pu aboutir. Veuillez réessayer.",
     "payUnavailable": "Le paiement par carte n’est pas disponible pour le moment. Réessayez plus tard ou contactez le support."
+  },
+  "inventory": {
+    "quantityTooHigh": "La quantité de l’un de vos articles dépasse la limite. Veuillez la réduire et réessayer."
   }
 }

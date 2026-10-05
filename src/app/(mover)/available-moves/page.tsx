@@ -22,6 +22,7 @@ import { homeTypeAndMoveTypeBadge, moveTypeLabel } from '@/lib/move-subtitle'
 import { useTranslation } from 'react-i18next'
 import { arrivalWindowLabel, vehicleTypeLabel } from '@/lib/enum-labels'
 import { moverPayoutEur } from '@/lib/moverPayout'
+import { crewLabel } from '@/components/mover/crewLabel'
 
 const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || ''
 const PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || ''
@@ -61,7 +62,9 @@ interface NearbyMove {
   /** Server-computed driver payout (net after the platform fee). */
   payout?: number | null
   additionalServices: string[]
-  crewSize: string | null
+  /** Total charged crew (driver + helpers). */
+  crewSize: string | number | null
+  extraHelpers?: number | null
   vehicleType: string | null
   moveDate: string | null
   arrivalWindow: string | null
@@ -386,7 +389,7 @@ const AvailableMovesPage = () => {
                           {t('moves:itemCount', { count: selectedMove.totalItemCount })}
                         </span>
                         <span className="text-xs px-2 py-0.5 bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 rounded-full">
-                          {t('web:mover.crewSize.label', { crew: selectedMove.crewSize || '—' })}
+                          {crewLabel(t, selectedMove) ?? '—'}
                         </span>
                         {selectedMove.vehicleType && (
                           <span className="text-xs px-2 py-0.5 bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 rounded-full">
@@ -498,7 +501,7 @@ const AvailableMovesPage = () => {
                       </span>
                       <span className="text-xs px-2.5 py-1 bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 rounded-full flex items-center gap-1">
                         <UsersIcon className="w-3 h-3" />
-                        {t('web:mover.crewSize.label', { crew: move.crewSize || '—' })}
+                        {crewLabel(t, move) ?? '—'}
                       </span>
                       {move.vehicleType && (
                         <span className="text-xs px-2.5 py-1 bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 rounded-full flex items-center gap-1">

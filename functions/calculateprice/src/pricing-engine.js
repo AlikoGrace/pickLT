@@ -385,34 +385,96 @@ export function fitsVehicle(loadedVolumeM3, vehicleType, pricing) {
 
 // ── Row readers (function-side only; the TS engine takes parsed shapes) ────
 
-/** `moves.inventoryItems` is a JSON object string of itemId → quantity (or already an object). */
-export function parseInventory(raw) {
-  if (!raw) return {};
-  if (typeof raw === 'object') return raw;
+// The basket wire contract (inventory parity plan, "Basket wire format"):
+//   inventoryItems = JSON `{ itemId: int > 0 }`
+//   customItems    = string[] of JSON `{ id, name, quantity: int ≥ 1,
+//                    approxSize: small|medium|large|extra_large, approxWeight: kg > 0 }`
+// Rows written before that contract (web moves with free-text sizes, "45 kg"
+// weights, string counts, zero counts, missing quantities) are normalised here,
+// so every function that reads a basket — through these readers or `basket.js`
+// — prices, classifies and gates it the same way. The web's
+// `src/lib/basket-server.ts` is the identical port (shared fixture
+// `basket-wire.json`).
+
+/** Weight assumed for a custom item whose weight is missing or unreadable (kg per unit). */
+export const DEFAULT_CUSTOM_ITEM_WEIGHT_KG = 20;
+
+const CUSTOM_SIZE_BANDS = ['small', 'medium', 'large', 'extra_large'];
+
+/** Free text → a size band; anything unrecognised reads as `medium` (web `normalizeCustomSize`). */
+export function normalizeCustomSize(raw) {
+  if (typeof raw !== 'string') return 'medium';
+  const s = raw.trim().toLowerCase().replace(/[\s-]+/g, '_');
+  if (CUSTOM_SIZE_BANDS.includes(s)) return s;
+  if (s === 'xl' || s === 'xxl' || s === 'extralarge' || s === 'huge') return 'extra_large';
+  if (s === 's' || s === 'xs' || s === 'tiny') return 'small';
+  if (s === 'l' || s === 'big') return 'large';
+  return 'medium';
+}
+
+/** `45`, `"45"`, `"45 kg"`, `"4,5"` → kg; missing, unreadable or ≤ 0 → `DEFAULT_CUSTOM_ITEM_WEIGHT_KG`. */
+export function normalizeCustomWeightKg(raw) {
+  const n = typeof raw === 'number' ? raw : parseFloat(String(raw ?? '').replace(',', '.'));
+  return Number.isFinite(n) && n > 0 ? n : DEFAULT_CUSTOM_ITEM_WEIGHT_KG;
+}
+
+/**
+ * One custom item in the contract shape, or null when it does not count: not
+ * an object, or a quantity below 1 after flooring. A MISSING quantity is 1 (a
+ * legacy row that listed the item meant one of it).
+ */
+export function normalizeCustomItem(raw, index) {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
+  const q = raw.quantity === undefined || raw.quantity === null || raw.quantity === '' ? 1 : Number(raw.quantity);
+  const quantity = Number.isFinite(q) ? Math.floor(q) : 0;
+  if (quantity < 1) return null;
+  return {
+    id: typeof raw.id === 'string' && raw.id ? raw.id : `custom_${(index ?? 0) + 1}`,
+    name: typeof raw.name === 'string' ? raw.name : '',
+    quantity,
+    approxSize: normalizeCustomSize(raw.approxSize),
+    approxWeight: normalizeCustomWeightKg(raw.approxWeight ?? raw.estimatedWeightKg),
+  };
+}
+
+function parseJsonMaybe(value) {
+  if (typeof value !== 'string') return value;
+  const trimmed = value.trim();
+  if (!trimmed) return null;
   try {
-    const parsed = JSON.parse(raw);
-    return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
+    return JSON.parse(trimmed);
   } catch {
-    return {};
+    return null;
   }
 }
 
-/** `moves.customItems` is an array of JSON strings (or of objects). */
-export function parseCustomItems(raw) {
-  if (!Array.isArray(raw)) return [];
-  const out = [];
-  for (const entry of raw) {
-    if (entry && typeof entry === 'object') {
-      out.push(entry);
-      continue;
-    }
-    try {
-      const parsed = JSON.parse(entry);
-      if (parsed && typeof parsed === 'object') out.push(parsed);
-    } catch {
-      // Unparseable row — skip it rather than fail the whole quote.
-    }
+/**
+ * `moves.inventoryItems` (a JSON object string, or already an object) →
+ * `{ itemId: int ≥ 1 }`: numeric strings are read, counts are floored, and
+ * zero / negative / unreadable counts are dropped.
+ */
+export function parseInventory(raw) {
+  const parsed = parseJsonMaybe(raw);
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return {};
+  const out = {};
+  for (const [itemId, value] of Object.entries(parsed)) {
+    const n = typeof value === 'number' ? value : Number(value);
+    const qty = Number.isFinite(n) ? Math.floor(n) : 0;
+    if (qty >= 1) out[itemId] = qty;
   }
+  return out;
+}
+
+/** `moves.customItems` (an array of JSON strings or objects, or a JSON array string) → normalised items. */
+export function parseCustomItems(raw) {
+  const list = Array.isArray(raw) ? raw : parseJsonMaybe(raw);
+  if (!Array.isArray(list)) return [];
+  const out = [];
+  list.forEach((entry, index) => {
+    // An unparseable entry is skipped rather than failing the whole quote.
+    const item = normalizeCustomItem(parseJsonMaybe(entry), index);
+    if (item) out.push(item);
+  });
   return out;
 }
 

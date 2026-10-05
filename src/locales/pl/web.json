@@ -371,6 +371,12 @@
         "subtitle": "Dodaj pierwszego członka ekipy, aby zacząć zarządzać zespołem.",
         "title": "Brak członków ekipy"
       },
+      "requestedByClient": {
+        "label_few": "(w tym {{count}} na prośbę klienta)",
+        "label_many": "(w tym {{count}} na prośbę klienta)",
+        "label_one": "(w tym {{count}} na prośbę klienta)",
+        "label_other": "(w tym {{count}} na prośbę klienta)"
+      },
       "role": {
         "label": "Rola"
       },

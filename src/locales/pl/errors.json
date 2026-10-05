@@ -374,5 +374,8 @@
     "loadFailed": "Nie udało się wczytać salda wobec platformy.",
     "payFailed": "Nie udało się dokończyć płatności opłat. Proszę spróbować ponownie.",
     "payUnavailable": "Płatność kartą jest teraz niedostępna. Proszę spróbować później lub skontaktować się z pomocą."
+  },
+  "inventory": {
+    "quantityTooHigh": "Liczba jednego z przedmiotów przekracza limit. Zmniejsz ją i spróbuj ponownie."
   }
 }

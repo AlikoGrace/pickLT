@@ -29,6 +29,7 @@ import { moveSubtitle, moveTypeAndCategoryValue, requestCategoryAndType } from '
 import { Trans, useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
 import { formatSeconds, formatWeightKg } from '@/lib/format'
+import { crewLabel } from '@/components/mover/crewLabel'
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || ''
 const MOVE_REQUESTS_COLLECTION = process.env.NEXT_PUBLIC_COLLECTION_MOVE_REQUESTS || ''
@@ -51,7 +52,11 @@ interface MoveDetails {
   totalItemCount: number | null
   totalWeightKg: number | null
   estimatedPrice: number | null
-  crewSize: string | null
+  /** Total charged crew (driver + helpers); a number on the raw row. */
+  crewSize: string | number | null
+  /** Helpers the client added on top of the tier (crew master D2). */
+  extraHelpers?: number | null
+  priceBreakdown?: string | null
   vehicleType: string | null
   coverPhotoId: string | null
   galleryPhotoIds: string[]
@@ -499,6 +504,8 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
     if (!incoming || feeBlocked) return null
 
     const move = incoming.move
+    // `crewSize` is the total charged crew — shown as "driver + N helpers", no +1.
+    const crewText = move ? crewLabel(t, move) : null
 
     // Build gallery images from the move
     const galleryImages: string[] = []
@@ -625,10 +632,10 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                   {t('moves:itemCount', { count: move.totalItemCount })}
                 </span>
               )}
-              {move?.crewSize && (
+              {crewText && (
                 <span className="text-xs px-2 py-1 bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 rounded-full flex items-center gap-1">
                   <UserGroupIcon className="w-3 h-3" />
-                  {t('moves:moverCount', { count: Number(move.crewSize) + 1 })}
+                  {crewText}
                 </span>
               )}
               {move?.vehicleType && (
@@ -856,7 +863,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                       <InfoRow icon={CubeIcon} label={t('booking:field.weight.label')} value={formatWeightKg(move.totalWeightKg)} />
                     )}
                     {move.vehicleType && <InfoRow icon={TruckIcon} label={t('booking:field.vehicle.label')} value={vehicleLabel(t, move.vehicleType)} />}
-                    {move.crewSize && <InfoRow icon={UserGroupIcon} label={t('booking:field.crew.label')} value={t('moves:moverCount', { count: Number(move.crewSize) + 1 })} />}
+                    {crewText && <InfoRow icon={UserGroupIcon} label={t('booking:field.crew.label')} value={crewText} />}
                   </div>
 
                   {/* Services */}

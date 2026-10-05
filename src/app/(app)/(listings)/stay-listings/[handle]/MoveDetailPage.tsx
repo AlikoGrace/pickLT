@@ -26,13 +26,15 @@ import { formatDateWith, formatMoney } from '@/lib/format'
 import { additionalServiceLabel, arrivalWindowLabel, dropoffParkingLabel, floorLevelLabel, packingLevelLabel, parkingLabel, vehicleTypeLabel } from '@/lib/enum-labels'
 import { homeTypeLabel, moveTypeLabel } from '@/lib/move-subtitle'
 import { useTranslation } from 'react-i18next'
+import { crewLabel } from '@/components/mover/crewLabel'
+import type { TFunction } from 'i18next'
 
 interface MoveDetailPageProps {
   handle: string
 }
 
-const formatDate = (dateStr: string | null) => {
-  if (!dateStr) return 'Not selected'
+const formatDate = (t: TFunction, dateStr: string | null) => {
+  if (!dateStr) return t('common:value.notSelected.empty')
   try {
     const date = new Date(dateStr)
     return formatDateWith(date, {
@@ -61,26 +63,22 @@ const getStatusBadgeColor = (status: StoredMove['status']): 'green' | 'yellow' |
   }
 }
 
-const getStatusLabel = (status: StoredMove['status']): string => {
+const getStatusLabel = (t: TFunction, status: StoredMove['status']): string => {
   switch (status) {
     case 'completed':
-      return 'Completed'
+      return t('moves:status.completed.label')
     case 'in_progress':
-      return 'In Progress'
+      return t('moves:status.inProgress.label')
     case 'pending':
-      return 'Pending'
+      return t('moves:status.pending.label')
     case 'cancelled':
-      return 'Cancelled'
+      return t('moves:status.cancelled.label')
     default:
-      return 'Unknown'
+      return t('moves:status.unknown.label')
   }
 }
 
 const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
-  // This screen is otherwise still un-translated — its row labels ("Home
-  // type:", "Floor:") are hard-coded English and are a separate piece of work.
-  // `t` is pulled in here for the enum *values*, which were rendering a
-  // title-cased database slug in every language.
   const { t } = useTranslation()
   const { getMoveByHandle, updateMoveStatus } = useMoveSearch()
   const [move, setMove] = useState<StoredMove | undefined>(undefined)
@@ -137,17 +135,25 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
       ? galleryPhotoIds 
       : []
 
-  const pickupDisplay = pickupStreetAddress || pickupLocation || 'Pickup location'
-  const dropoffDisplay = dropoffStreetAddress || 'Drop-off location'
+  const pickupDisplay = pickupStreetAddress || pickupLocation || t('booking:pickup.fallback.label')
+  const dropoffDisplay = dropoffStreetAddress || t('booking:dropoff.fallback.label')
+
+  // Real totals: catalog + custom quantities, not the number of item types.
+  const inventoryLines = parseInventoryLines(inventoryItems, customItems, inventoryNames)
+  const itemTotal = inventoryLines.length > 0
+    ? inventoryLines.reduce((sum, line) => sum + line.quantity, 0)
+    : inventoryCount
+  // `crewSize` counts the driver: "driver only" / "driver + N helpers".
+  const crewText = crewLabel(t, { crewSize })
 
   const renderSectionHeader = () => {
     return (
       <div className="listingSection__wrap">
         <div className="flex items-center gap-x-3 mb-4">
           <Badge color={getStatusBadgeColor(status)} className="text-sm">
-            {getStatusLabel(status)}
+            {getStatusLabel(t, status)}
           </Badge>
-          <span className="text-sm text-neutral-500">Booking: {bookingCode}</span>
+          <span className="text-sm text-neutral-500">{t('moves:booking.code.label')}: {bookingCode}</span>
         </div>
         <h1 className="text-2xl font-semibold sm:text-3xl lg:text-4xl">
           {pickupDisplay.split(',')[0]} → {dropoffDisplay.split(',')[0]}
@@ -155,24 +161,19 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
         <div className="mt-4 flex flex-wrap items-center gap-4 text-neutral-500 dark:text-neutral-400">
           <div className="flex items-center gap-x-2">
             <TruckIcon className="size-5" />
-            <span>{moveTypeLabel(t, moveType)} Move</span>
+            <span>{moveTypeLabel(t, moveType)}</span>
           </div>
           <div className="flex items-center gap-x-2">
             <CalendarIcon className="size-5" />
-            <span>{formatDate(moveDate)}</span>
+            <span>{formatDate(t, moveDate)}</span>
           </div>
           <div className="flex items-center gap-x-2">
             <CubeIcon className="size-5" />
-            <span>{(() => {
-              let parsedInventory: Record<string, number> = {}
-              try { if (inventoryItems) parsedInventory = JSON.parse(inventoryItems) } catch {}
-              const entries = Object.entries(parsedInventory).filter(([, qty]) => qty > 0)
-              return entries.length > 0 ? `${entries.length} item types` : `${inventoryCount} items`
-            })()}</span>
+            <span>{t('moves:itemCount', { count: itemTotal })}</span>
           </div>
           <div className="flex items-center gap-x-2">
             <UsersIcon className="size-5" />
-            <span>{crewSize ? `${crewSize} movers` : 'Crew TBD'}</span>
+            <span>{crewText ?? t('booking:crew.tbd.label')}</span>
           </div>
         </div>
       </div>
@@ -182,7 +183,7 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
   const renderSectionAddresses = () => {
     return (
       <div className="listingSection__wrap">
-        <SectionHeading>Move Addresses</SectionHeading>
+        <SectionHeading>{t('booking:details.title')}</SectionHeading>
         <div className="grid gap-6 md:grid-cols-2">
           {/* Pickup Address */}
           <div className="rounded-2xl border border-neutral-200 p-5 dark:border-neutral-700">
@@ -190,17 +191,17 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-900/30">
                 <HomeIcon className="h-5 w-5 text-primary-600" />
               </div>
-              <span className="font-semibold">Pickup Location</span>
+              <span className="font-semibold">{t('booking:pickup.location.label')}</span>
             </div>
             <p className="text-neutral-700 dark:text-neutral-300">{pickupDisplay}</p>
             {pickupApartmentUnit && (
-              <p className="text-sm text-neutral-500 mt-1">Unit: {pickupApartmentUnit}</p>
+              <p className="text-sm text-neutral-500 mt-1">{t('moves:detail.unit.label')}: {pickupApartmentUnit}</p>
             )}
             <div className="mt-3 space-y-1 text-sm text-neutral-500">
-              <p>Home type: {homeTypeLabel(t, homeType)}</p>
-              <p>Floor: {floorLevelLabel(t, floorLevel)}</p>
-              <p>Elevator: {elevatorAvailable ? 'Yes' : 'No'}</p>
-              <p>Parking: {parkingLabel(t, parkingSituation)}</p>
+              <p>{t('booking:homeType.label')}: {homeTypeLabel(t, homeType)}</p>
+              <p>{t('moves:detail.floor.label')}: {floorLevelLabel(t, floorLevel)}</p>
+              <p>{t('moves:detail.elevator.label')}: {elevatorAvailable ? t('common:answer.yes.label') : t('common:answer.no.label')}</p>
+              <p>{t('moves:detail.parking.label')}: {parkingLabel(t, parkingSituation)}</p>
             </div>
           </div>
 
@@ -210,16 +211,16 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
                 <MapPinIcon className="h-5 w-5 text-green-600" />
               </div>
-              <span className="font-semibold">Drop-off Location</span>
+              <span className="font-semibold">{t('booking:dropoff.location.label')}</span>
             </div>
             <p className="text-neutral-700 dark:text-neutral-300">{dropoffDisplay}</p>
             {dropoffApartmentUnit && (
-              <p className="text-sm text-neutral-500 mt-1">Unit: {dropoffApartmentUnit}</p>
+              <p className="text-sm text-neutral-500 mt-1">{t('moves:detail.unit.label')}: {dropoffApartmentUnit}</p>
             )}
             <div className="mt-3 space-y-1 text-sm text-neutral-500">
-              <p>Floor: {floorLevelLabel(t, dropoffFloorLevel)}</p>
-              <p>Elevator: {dropoffElevatorAvailable ? 'Yes' : 'No'}</p>
-              <p>Parking: {dropoffParkingLabel(t, dropoffParkingSituation)}</p>
+              <p>{t('moves:detail.floor.label')}: {floorLevelLabel(t, dropoffFloorLevel)}</p>
+              <p>{t('moves:detail.elevator.label')}: {dropoffElevatorAvailable ? t('common:answer.yes.label') : t('common:answer.no.label')}</p>
+              <p>{t('moves:detail.parking.label')}: {dropoffParkingLabel(t, dropoffParkingSituation)}</p>
             </div>
           </div>
         </div>
@@ -230,7 +231,7 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
   const renderSectionInventory = () => {
     // Labels come from the admin catalog, not from humanising the id — the
     // client picked "Sofa (2-seater)", not "Sofa 2seater".
-    const lines = parseInventoryLines(inventoryItems, customItems, inventoryNames)
+    const lines = inventoryLines
     const entries = lines.filter((l) => !l.custom)
     const parsedCustom = lines.filter((l) => l.custom)
 
@@ -238,8 +239,8 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
 
     return (
       <div className="listingSection__wrap">
-        <SectionHeading>Inventory</SectionHeading>
-        <SectionSubheading>{inventoryCount} items total</SectionSubheading>
+        <SectionHeading>{t('booking:inventory.title')}</SectionHeading>
+        <SectionSubheading>{t('moves:itemCount', { count: itemTotal })}</SectionSubheading>
         <Divider className="w-14!" />
         <div className="grid gap-2 sm:grid-cols-2 text-sm">
           {entries.map((line, i) => (
@@ -250,7 +251,7 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
           ))}
           {parsedCustom.map((item, i) => (
             <div key={`custom-${i}`} className="flex items-center justify-between rounded-lg border border-amber-100 px-3 py-2 dark:border-amber-900/30">
-              <span className="text-neutral-700 dark:text-neutral-300">{item.label} <span className="text-xs text-neutral-400">(custom)</span></span>
+              <span className="text-neutral-700 dark:text-neutral-300">{item.label} <span className="text-xs text-neutral-400">({t('inventory:item.customTag.label')})</span></span>
               <span className="font-medium text-neutral-900 dark:text-neutral-100">&times; {item.quantity}</span>
             </div>
           ))}
@@ -262,36 +263,36 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
   const renderSectionServices = () => {
     return (
       <div className="listingSection__wrap">
-        <SectionHeading>Services & Details</SectionHeading>
-        <SectionSubheading>What&apos;s included in your move</SectionSubheading>
+        <SectionHeading>{t('booking:services.detailsTitle')}</SectionHeading>
+        <SectionSubheading>{t('booking:services.detailsSubtitle')}</SectionSubheading>
         <Divider className="w-14!" />
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <div className="flex items-start gap-x-3">
             <TruckIcon className="h-6 w-6 text-neutral-500 shrink-0" />
             <div>
-              <span className="font-medium">Vehicle</span>
+              <span className="font-medium">{t('booking:field.vehicle.label')}</span>
               <p className="text-sm text-neutral-500">{vehicleTypeLabel(t, vehicleType)}</p>
             </div>
           </div>
           <div className="flex items-start gap-x-3">
             <UsersIcon className="h-6 w-6 text-neutral-500 shrink-0" />
             <div>
-              <span className="font-medium">Crew Size</span>
-              <p className="text-sm text-neutral-500">{crewSize ? `${crewSize} movers` : 'Not specified'}</p>
+              <span className="font-medium">{t('booking:field.crewSize.label')}</span>
+              <p className="text-sm text-neutral-500">{crewText ?? t('common:value.notSpecified.empty')}</p>
             </div>
           </div>
           <div className="flex items-start gap-x-3">
             <ClockIcon className="h-6 w-6 text-neutral-500 shrink-0" />
             <div>
-              <span className="font-medium">Arrival Window</span>
+              <span className="font-medium">{t('moves:detail.arrivalWindow.label')}</span>
               <p className="text-sm text-neutral-500">{arrivalWindowLabel(t, arrivalWindow)}</p>
             </div>
           </div>
           <div className="flex items-start gap-x-3">
             <CubeIcon className="h-6 w-6 text-neutral-500 shrink-0" />
             <div>
-              <span className="font-medium">Packing Service</span>
+              <span className="font-medium">{t('moves:detail.packingService.label')}</span>
               <p className="text-sm text-neutral-500">{packingLevelLabel(t, packingServiceLevel)}</p>
             </div>
           </div>
@@ -299,8 +300,8 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
             <div className="flex items-start gap-x-3">
               <HomeIcon className="h-6 w-6 text-neutral-500 shrink-0" />
               <div>
-                <span className="font-medium">Storage</span>
-                <p className="text-sm text-neutral-500">{storageWeeks} weeks</p>
+                <span className="font-medium">{t('booking:pricing.storage.label')}</span>
+                <p className="text-sm text-neutral-500">{t('booking:storageWeekCount', { count: storageWeeks })}</p>
               </div>
             </div>
           )}
@@ -310,7 +311,7 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
           <>
             <Divider className="w-14!" />
             <div>
-              <span className="font-medium">Additional Services</span>
+              <span className="font-medium">{t('moves:detail.additionalServices.title')}</span>
               <div className="mt-3 flex flex-wrap gap-2">
                 {additionalServices.map((service) => (
                   <span
@@ -332,23 +333,23 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
   const renderSectionContact = () => {
     return (
       <div className="listingSection__wrap">
-        <SectionHeading>Contact Information</SectionHeading>
+        <SectionHeading>{t('booking:contact.title')}</SectionHeading>
         <div className="space-y-4">
           <div className="flex items-center gap-x-3">
             <UsersIcon className="h-5 w-5 text-neutral-500" />
-            <span>{contactInfo.fullName || 'Not provided'}</span>
+            <span>{contactInfo.fullName || t('common:value.notProvided.empty')}</span>
           </div>
           <div className="flex items-center gap-x-3">
             <PhoneIcon className="h-5 w-5 text-neutral-500" />
-            <span>{contactInfo.phoneNumber || 'Not provided'}</span>
+            <span>{contactInfo.phoneNumber || t('common:value.notProvided.empty')}</span>
           </div>
           <div className="flex items-center gap-x-3">
             <EnvelopeIcon className="h-5 w-5 text-neutral-500" />
-            <span>{contactInfo.email || 'Not provided'}</span>
+            <span>{contactInfo.email || t('common:value.notProvided.empty')}</span>
           </div>
           {contactInfo.notesForMovers && (
             <div className="mt-4 rounded-xl bg-neutral-50 p-4 dark:bg-neutral-800">
-              <span className="font-medium">Notes for Movers:</span>
+              <span className="font-medium">{t('booking:field.notesForMovers.label')}</span>
               <p className="mt-2 text-neutral-600 dark:text-neutral-400">{contactInfo.notesForMovers}</p>
             </div>
           )}
@@ -362,24 +363,24 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
       <div className="listingSection__wrap sm:shadow-xl">
         {/* PRICE */}
         <div className="flex flex-col gap-y-2">
-          <span className="text-sm text-neutral-500">Total Paid</span>
+          <span className="text-sm text-neutral-500">{t('common:label.total')}</span>
           <span className="text-3xl font-semibold text-primary-600">{formatMoney(totalPrice)}</span>
         </div>
 
         <Divider />
 
         <DescriptionList>
-          <DescriptionTerm>Booking Code</DescriptionTerm>
+          <DescriptionTerm>{t('moves:booking.code.label')}</DescriptionTerm>
           <DescriptionDetails className="sm:text-right font-mono">{bookingCode}</DescriptionDetails>
-          <DescriptionTerm>Paid On</DescriptionTerm>
+          <DescriptionTerm>{t('booking:payment.paidOn.label')}</DescriptionTerm>
           <DescriptionDetails className="sm:text-right">
-            {formatDate(paidAt)}
+            {formatDate(t, paidAt)}
           </DescriptionDetails>
-          <DescriptionTerm>Move Date</DescriptionTerm>
-          <DescriptionDetails className="sm:text-right">{formatDate(moveDate)}</DescriptionDetails>
-          <DescriptionTerm>Status</DescriptionTerm>
+          <DescriptionTerm>{t('booking:field.moveDate.label')}</DescriptionTerm>
+          <DescriptionDetails className="sm:text-right">{formatDate(t, moveDate)}</DescriptionDetails>
+          <DescriptionTerm>{t('moves:detail.status.label')}</DescriptionTerm>
           <DescriptionDetails className="sm:text-right">
-            <Badge color={getStatusBadgeColor(status)}>{getStatusLabel(status)}</Badge>
+            <Badge color={getStatusBadgeColor(status)}>{getStatusLabel(t, status)}</Badge>
           </DescriptionDetails>
         </DescriptionList>
 
@@ -387,7 +388,7 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
           <>
             <Divider />
             <ButtonPrimary className="w-full" onClick={() => updateMoveStatus(move.id, 'cancelled')}>
-              Cancel Move
+              {t('moves:action.cancel.cta')}
             </ButtonPrimary>
           </>
         )}

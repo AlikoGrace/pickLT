@@ -1,5 +1,6 @@
 'use client'
 
+import { crewLabel } from '@/components/mover/crewLabel'
 import MapboxMap, { RouteInfo } from '@/components/MapboxMap'
 import MapLocationPicker, { PickedLocation } from '@/components/MapLocationPicker'
 import { useMoveSearch, Coordinates } from '@/context/moveSearch'
@@ -778,7 +779,7 @@ const InstantMovePage = () => {
           </div>
           <div className="flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400">
             <HugeiconsIcon icon={UserMultiple02Icon} size={14} strokeWidth={1.5} />
-            <span>{t('moves:moverCount', { count: mover.crewSize + 1 })}</span>
+            <span>{crewLabel(t, { crewSize: mover.crewSize })}</span>
           </div>
         </div>
 

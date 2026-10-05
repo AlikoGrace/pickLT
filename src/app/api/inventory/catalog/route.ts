@@ -9,8 +9,12 @@ import { Query, type Models } from 'node-appwrite'
 /**
  * GET /api/inventory/catalog
  *
- * Returns all inventory catalog items from the database.
- * Falls back to an empty array if the collection doesn't exist yet.
+ * Returns all inventory catalog items from the database. A failure is a 503,
+ * never `200 { items: [] }`: an empty list would read as "nothing to move" and
+ * let a page quote a basket against no catalog (crew plan 1 #8).
+ *
+ * Inactive rows (`isActive === false`) are returned with the flag: the
+ * selector hides them, but they still label and price existing moves.
  *
  * DB schema (per BACKEND_ARCHITECTURE.md):
  *   itemId, name, category, widthCm, heightCm, depthCm, weightKg,
@@ -48,6 +52,7 @@ export async function GET() {
       ),
       englishName: doc.name,
       nameTranslations: doc.nameTranslations ?? null,
+      isActive: doc.isActive !== false,
     }))
 
     // Collate by the localized name so the wizard's lists read alphabetically
@@ -61,7 +66,6 @@ export async function GET() {
     return NextResponse.json({ items, locale })
   } catch (err) {
     console.error('GET /api/inventory/catalog error:', err)
-    // Return empty so frontend can fall back to hardcoded items
-    return NextResponse.json({ items: [] })
+    return NextResponse.json({ error: 'catalog_unavailable', items: [] }, { status: 503 })
   }
 }

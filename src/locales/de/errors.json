@@ -370,5 +370,8 @@
     "loadFailed": "Ihr Plattformsaldo konnte nicht geladen werden.",
     "payFailed": "Die Gebührenzahlung konnte nicht abgeschlossen werden. Bitte versuchen Sie es erneut.",
     "payUnavailable": "Kartenzahlung ist gerade nicht verfügbar. Bitte versuchen Sie es später erneut oder wenden Sie sich an den Support."
+  },
+  "inventory": {
+    "quantityTooHigh": "Bei einem Ihrer Gegenstände liegt die Anzahl über dem Limit. Bitte verringern Sie sie und versuchen Sie es erneut."
   }
 }

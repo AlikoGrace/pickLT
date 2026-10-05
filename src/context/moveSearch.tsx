@@ -1,6 +1,8 @@
 "use client"
 
 import React, { createContext, useContext, useState, useEffect, useRef, useCallback } from 'react'
+import { normalizeCustomItems, stripZeroCounts } from '@/components/inventory/basket'
+import type { CustomItem } from '@/components/inventory/selector-logic'
 
 // ─── localStorage keys ───
 const DRAFT_KEY = 'picklt_move_draft'
@@ -27,6 +29,7 @@ export type ArrivalWindow = string // Time format like "08:00", "09:00", etc.
 export type FlexibilityOption = 'flexible_1hr' | 'not_flexible'
 
 // Step 7 types
+/** Legacy slug on locally stored moves only; the booking flow sends `extraHelpers` instead. */
 export type CrewSize = '1' | '2' | '3' | '4plus'
 export type VehicleType = 'small_van' | 'medium_truck' | 'large_truck' | 'multiple'
 export type TruckAccess = 'easy' | 'moderate' | 'difficult'
@@ -170,14 +173,9 @@ export type InventoryItem = {
   }
 }
 
-// Custom item added by user
-export type CustomItem = {
-  id: string
-  name: string
-  quantity: number
-  approxSize: string
-  approxWeight: string
-}
+// Custom item added by user — the wire contract shape (crew plan 1): a size
+// band and a required numeric weight (kg per unit).
+export type { CustomItem }
 
 // Coordinates type for location
 export type Coordinates = {
@@ -236,7 +234,8 @@ type MoveSearchState = {
   avoidEveningDelivery: boolean
 
   // Step 7 - Crew & Vehicle
-  crewSize: CrewSize | null
+  /** Helpers added on top of the tier crew, 0…`crew.maxExtraHelpers` (crew master D2). */
+  extraHelpers: number
   vehicleType: VehicleType | null
   truckAccess: TruckAccess | null
   heavyItems: HeavyItem[]
@@ -298,6 +297,9 @@ type MoveSearchActions = {
 
   // Step 4 actions
   setInventoryItem: (itemId: string, quantity: number) => void
+  /** Replace the whole `{ itemId: qty }` map (zeros stripped). */
+  setInventoryCounts: (counts: Record<string, number>) => void
+  setCustomItems: (items: CustomItem[]) => void
   addCustomItem: (item: CustomItem) => void
   removeCustomItem: (itemId: string) => void
   updateCustomItem: (itemId: string, item: Partial<CustomItem>) => void
@@ -318,7 +320,7 @@ type MoveSearchActions = {
   setAvoidEveningDelivery: (avoid: boolean) => void
 
   // Step 7 actions
-  setCrewSize: (size: CrewSize | null) => void
+  setExtraHelpers: (count: number) => void
   setVehicleType: (type: VehicleType | null) => void
   setTruckAccess: (access: TruckAccess | null) => void
   toggleHeavyItem: (itemId: string) => void
@@ -405,7 +407,7 @@ const defaultState: MoveSearchState = {
   avoidEveningDelivery: false,
 
   // Step 7
-  crewSize: null,
+  extraHelpers: 0,
   vehicleType: null,
   truckAccess: null,
   heavyItems: [],
@@ -475,6 +477,8 @@ const MoveSearchContext = createContext<MoveSearchState & MoveSearchActions>({
   setDropoffArrangeHaltverbot: () => {},
 
   setInventoryItem: () => {},
+  setInventoryCounts: () => {},
+  setCustomItems: () => {},
   addCustomItem: () => {},
   removeCustomItem: () => {},
   updateCustomItem: () => {},
@@ -495,7 +499,7 @@ const MoveSearchContext = createContext<MoveSearchState & MoveSearchActions>({
   setAvoidEveningDelivery: () => {},
 
   // Step 7
-  setCrewSize: () => {},
+  setExtraHelpers: () => {},
   setVehicleType: () => {},
   setTruckAccess: () => {},
   toggleHeavyItem: () => {},
@@ -583,7 +587,7 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
   const [avoidEveningDelivery, setAvoidEveningDelivery] = useState<boolean>(defaultState.avoidEveningDelivery)
 
   // Step 7 state
-  const [crewSize, setCrewSize] = useState<CrewSize | null>(defaultState.crewSize)
+  const [extraHelpers, setExtraHelpersState] = useState<number>(defaultState.extraHelpers)
   const [vehicleType, setVehicleType] = useState<VehicleType | null>(defaultState.vehicleType)
   const [truckAccess, setTruckAccess] = useState<TruckAccess | null>(defaultState.truckAccess)
   const [heavyItems, setHeavyItems] = useState<HeavyItem[]>(defaultState.heavyItems)
@@ -641,8 +645,9 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
     if (saved.dropoffElevatorAvailable != null) setDropoffElevatorAvailable(saved.dropoffElevatorAvailable as boolean)
     if (saved.dropoffParkingSituation) setDropoffParkingSituation(saved.dropoffParkingSituation as DropoffParkingKey)
     if (saved.dropoffArrangeHaltverbot != null) setDropoffArrangeHaltverbot(saved.dropoffArrangeHaltverbot as boolean)
-    if (saved.inventory) setInventory(saved.inventory as Record<string, number>)
-    if (saved.customItems) setCustomItems(saved.customItems as CustomItem[])
+    if (saved.inventory && typeof saved.inventory === 'object') setInventory(stripZeroCounts(saved.inventory as Record<string, number>))
+    // Older drafts carry a free-text size and a "45 kg" string weight.
+    if (saved.customItems) setCustomItems(normalizeCustomItems(saved.customItems))
     if (saved.packingServiceLevel) setPackingServiceLevel(saved.packingServiceLevel as PackingServiceLevel)
     if (saved.packingMaterials) setPackingMaterials(saved.packingMaterials as PackingMaterial[])
     if (saved.customMaterials) setCustomMaterials(saved.customMaterials as CustomMaterial[])
@@ -653,7 +658,7 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
     if (saved.preferEarliestArrival != null) setPreferEarliestArrival(saved.preferEarliestArrival as boolean)
     if (saved.avoidLunchBreak != null) setAvoidLunchBreak(saved.avoidLunchBreak as boolean)
     if (saved.avoidEveningDelivery != null) setAvoidEveningDelivery(saved.avoidEveningDelivery as boolean)
-    if (saved.crewSize) setCrewSize(saved.crewSize as CrewSize)
+    if (typeof saved.extraHelpers === 'number') setExtraHelpersState(Math.max(0, Math.floor(saved.extraHelpers)))
     if (saved.vehicleType) setVehicleType(saved.vehicleType as VehicleType)
     if (saved.truckAccess) setTruckAccess(saved.truckAccess as TruckAccess)
     if (saved.heavyItems) setHeavyItems(saved.heavyItems as HeavyItem[])
@@ -744,7 +749,7 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
         preferEarliestArrival,
         avoidLunchBreak,
         avoidEveningDelivery,
-        crewSize,
+        extraHelpers,
         vehicleType,
         truckAccess,
         heavyItems,
@@ -790,7 +795,7 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
     inventory, customItems,
     packingServiceLevel, packingMaterials, customMaterials, packingBoxQuantities, packingNotes,
     arrivalWindow, flexibility, preferEarliestArrival, avoidLunchBreak, avoidEveningDelivery,
-    crewSize, vehicleType, truckAccess, heavyItems, customHeavyItems,
+    extraHelpers, vehicleType, truckAccess, heavyItems, customHeavyItems,
     additionalServices, storageWeeks, disposalItems,
     coverPhotoId, galleryPhotoIds,
     contactInfo, legalConsent,
@@ -808,7 +813,15 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
   }, [storedMoves])
 
   const setInventoryItem = (itemId: string, quantity: number) => {
-    setInventory((prev) => ({ ...prev, [itemId]: quantity }))
+    setInventory((prev) => stripZeroCounts({ ...prev, [itemId]: quantity }))
+  }
+
+  const setInventoryCounts = (counts: Record<string, number>) => {
+    setInventory(stripZeroCounts(counts))
+  }
+
+  const setExtraHelpers = (count: number) => {
+    setExtraHelpersState(Number.isFinite(count) ? Math.max(0, Math.floor(count)) : 0)
   }
 
   const addCustomItem = (item: CustomItem) => {
@@ -956,7 +969,7 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
     setAvoidLunchBreak(defaultState.avoidLunchBreak)
     setAvoidEveningDelivery(defaultState.avoidEveningDelivery)
     // Step 7
-    setCrewSize(defaultState.crewSize)
+    setExtraHelpersState(defaultState.extraHelpers)
     setVehicleType(defaultState.vehicleType)
     setTruckAccess(defaultState.truckAccess)
     setHeavyItems(defaultState.heavyItems)
@@ -1025,7 +1038,7 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
         avoidEveningDelivery,
 
         // Step 7 state
-        crewSize,
+        extraHelpers,
         vehicleType,
         truckAccess,
         heavyItems,
@@ -1081,6 +1094,8 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
         setDropoffArrangeHaltverbot,
 
         setInventoryItem,
+        setInventoryCounts,
+        setCustomItems,
         addCustomItem,
         removeCustomItem,
         updateCustomItem,
@@ -1100,7 +1115,7 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
         setAvoidEveningDelivery,
 
         // Step 7 actions
-        setCrewSize,
+        setExtraHelpers,
         setVehicleType,
         setTruckAccess,
         toggleHeavyItem,

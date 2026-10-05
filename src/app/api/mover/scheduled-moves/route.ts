@@ -84,6 +84,7 @@ export async function GET() {
       ),
       additionalServices: doc.additionalServices || [],
       crewSize: doc.crewSize,
+      extraHelpers: doc.extraHelpers ?? 0,
       vehicleType: doc.vehicleType,
       moveDate: doc.moveDate,
       arrivalWindow: doc.arrivalWindow,

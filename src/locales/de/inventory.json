@@ -109,5 +109,8 @@
     "translationsHelper": "Feld leer lassen, um den englischen Namen zu verwenden. Artikel-IDs und Kategorien werden nie übersetzt.",
     "unknownCategoryTitle": "Nicht übersetzte Kategorie",
     "unknownCategoryWarning": "„{{slug}}“ ist keine der sieben übersetzten Kategorien. Sie wird in allen Sprachen als „{{label}}“ angezeigt – auch Nutzern, die kein Englisch lesen."
+  },
+  "quantity": {
+    "max": "Höchstens {{count}} pro Gegenstand"
   }
 }

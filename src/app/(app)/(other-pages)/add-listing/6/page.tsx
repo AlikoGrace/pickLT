@@ -1,6 +1,8 @@
 'use client'
 
 import NcInputNumber from '@/components/NcInputNumber'
+import ExtraHelpersStepper from '@/components/booking/ExtraHelpersStepper'
+import { usePricingConfig } from '@/hooks/usePricingConfig'
 import { useMoveSearch, type AdditionalService } from '@/context/moveSearch'
 import { compressImage } from '@/utils/compressImage'
 import { Checkbox, CheckboxField, CheckboxGroup } from '@/shared/Checkbox'
@@ -52,7 +54,13 @@ const Page = () => {
     setCoverPhotoId,
     addGalleryPhotoId,
     removeGalleryPhotoId,
+    extraHelpers,
+    setExtraHelpers,
+    moveType,
+    pickupCountryCode,
   } = useMoveSearch()
+  // Live config: the extra-helper cap and the tier's hourly rate (crew master D2).
+  const pricingConfig = usePricingConfig(pickupCountryCode)
 
   // Prefetch the next step to improve performance
   useEffect(() => {
@@ -271,6 +279,16 @@ const Page = () => {
           </Fieldset>
         </div>
 
+        <Divider />
+
+        {/* Extra helpers on top of the tier crew, billed per hour (crew master D2) */}
+        <ExtraHelpersStepper
+          value={extraHelpers}
+          onChange={setExtraHelpers}
+          tier={moveType || 'regular'}
+          config={pricingConfig}
+        />
+
         {/* Conditional: Storage Duration */}
         {showStorageOptions && (
           <>
@@ -319,6 +337,7 @@ const Page = () => {
         <input type="hidden" name="additionalServices" value={JSON.stringify(additionalServices)} />
         <input type="hidden" name="storageWeeksValue" value={storageWeeks} />
         <input type="hidden" name="disposalItemsValue" value={disposalItems} />
+        <input type="hidden" name="extraHelpers" value={extraHelpers} />
         <input type="hidden" name="coverPhotoId" value={coverPhotoId || ''} />
         <input type="hidden" name="galleryPhotoIds" value={JSON.stringify(galleryPhotoIds)} />
       </Form>

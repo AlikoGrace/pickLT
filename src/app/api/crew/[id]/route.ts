@@ -6,6 +6,7 @@ import { getSessionUserId } from '@/lib/auth-session'
 import { relId } from '@/lib/notify'
 import { Query } from 'node-appwrite'
 import type { TFunction } from 'i18next'
+import { syncCrewSize } from '../crew-size'
 
 /**
  * Confirm the crew row belongs to the caller's own mover profile.
@@ -19,7 +20,7 @@ async function assertOwnsCrew(
   id: string,
   userId: string,
   t: TFunction
-): Promise<string | null> {
+): Promise<{ denied: string } | { moverProfileId: string }> {
   const { databases } = createAdminClient()
 
   const profiles = await databases.listDocuments(
@@ -28,7 +29,7 @@ async function assertOwnsCrew(
     [Query.equal('userId', [userId])]
   )
   const moverProfile = profiles.documents[0]
-  if (!moverProfile) return t('errors:mover.profileNotFound')
+  if (!moverProfile) return { denied: t('errors:mover.profileNotFound') }
 
   let crew
   try {
@@ -38,14 +39,14 @@ async function assertOwnsCrew(
       id
     )
   } catch {
-    return t('errors:crew.memberNotFound')
+    return { denied: t('errors:crew.memberNotFound') }
   }
 
   if (relId(crew.moverProfileId) !== moverProfile.$id) {
-    return t('errors:crew.memberNotFound')
+    return { denied: t('errors:crew.memberNotFound') }
   }
 
-  return null
+  return { moverProfileId: moverProfile.$id }
 }
 
 // PATCH - update a crew member
@@ -63,8 +64,8 @@ export async function PATCH(
     const { databases } = createAdminClient()
     const { id } = await params
 
-    const denied = await assertOwnsCrew(id, userId, t)
-    if (denied) return NextResponse.json({ error: denied }, { status: 404 })
+    const owned = await assertOwnsCrew(id, userId, t)
+    if ('denied' in owned) return NextResponse.json({ error: owned.denied }, { status: 404 })
 
     const body = await req.json()
     const { name, phone, role, isActive } = body
@@ -81,6 +82,10 @@ export async function PATCH(
       id,
       updates
     )
+    // A role or active-flag change moves the helper count (crew master §4).
+    if (role !== undefined || isActive !== undefined) {
+      await syncCrewSize(databases, owned.moverProfileId)
+    }
 
     return NextResponse.json({ crewMember: doc })
   } catch (err: unknown) {
@@ -104,14 +109,15 @@ export async function DELETE(
     const { databases } = createAdminClient()
     const { id } = await params
 
-    const denied = await assertOwnsCrew(id, userId, t)
-    if (denied) return NextResponse.json({ error: denied }, { status: 404 })
+    const owned = await assertOwnsCrew(id, userId, t)
+    if ('denied' in owned) return NextResponse.json({ error: owned.denied }, { status: 404 })
 
     await databases.deleteDocument(
       APPWRITE.DATABASE_ID,
       APPWRITE.COLLECTIONS.CREW_MEMBERS,
       id
     )
+    await syncCrewSize(databases, owned.moverProfileId)
 
     return NextResponse.json({ success: true })
   } catch (err: unknown) {

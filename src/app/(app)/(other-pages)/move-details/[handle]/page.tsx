@@ -1,5 +1,6 @@
 'use client'
 
+import { crewLabel } from '@/components/mover/crewLabel'
 import { useMoveSearch, StoredMove, MoveStatus } from '@/context/moveSearch'
 import { Badge } from '@/shared/Badge'
 import {
@@ -736,7 +737,7 @@ export default function MoveDetailsPage() {
               <InfoRow icon={TruckIcon} label={t('booking:field.vehicle.label')} value={vehicleTypeLabel(t, vehicleType)} />
             )}
             {!isInstant && (
-              <InfoRow icon={UsersIcon} label={t('booking:crew.label')} value={crewSize ? t('moves:moverCount', { count: crewSize }) : t('common:value.standard.label')} />
+              <InfoRow icon={UsersIcon} label={t('booking:crew.label')} value={crewLabel(t, { crewSize }) ?? t('common:value.standard.label')} />
             )}
             {arrivalWindow && (
               <InfoRow icon={CalendarIcon} label={t('booking:arrivalWindow.label')} value={arrivalWindowLabel(t, arrivalWindow)} />

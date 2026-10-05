@@ -367,6 +367,10 @@
         "subtitle": "Añade tu primer miembro del equipo para empezar a gestionarlo.",
         "title": "Aún no hay miembros en el equipo"
       },
+      "requestedByClient": {
+        "label_one": "(incl. {{count}} solicitado por el cliente)",
+        "label_other": "(incl. {{count}} solicitados por el cliente)"
+      },
       "role": {
         "label": "Rol"
       },

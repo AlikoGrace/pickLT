@@ -1,5 +1,13 @@
 import { Client, Databases, ID, Permission, Query, Role } from 'node-appwrite';
 
+import {
+  basketCapViolation,
+  basketFromWire,
+  classifyBasket,
+  extraHelpersFromWire,
+  quantityTooHighBody,
+  serializeBasket,
+} from './basket.js';
 import { resolveMoveCountry, warnIfNoMapboxToken } from './move-country.js';
 import {
   GLOBAL_PRICING_SCOPE,
@@ -18,39 +26,6 @@ const USERS_COLLECTION = process.env.APPWRITE_COLLECTION_USERS;
 const MOVE_STATUS_HISTORY_COLLECTION = process.env.APPWRITE_COLLECTION_MOVE_STATUS_HISTORY;
 const INVENTORY_CATALOG_COLLECTION = process.env.APPWRITE_COLLECTION_INVENTORY_CATALOG;
 const PRICING_CONFIG_COLLECTION = process.env.APPWRITE_COLLECTION_PRICING_CONFIG || 'pricing_config';
-
-// Move type thresholds
-const THRESHOLDS = {
-  light: { maxPoints: 25, maxWeightKg: 200, maxItems: 15 },
-  regular: { maxPoints: 80, maxWeightKg: 800, maxItems: 40 },
-};
-const TYPE_ORDER = { light: 0, regular: 1, premium: 2 };
-
-function classifyMoveServer(inventory, catalogItems, currentMoveType) {
-  let totalPoints = 0;
-  let totalWeightKg = 0;
-  let totalVolumeCm3 = 0;
-  let totalItems = 0;
-
-  for (const [itemId, quantity] of Object.entries(inventory)) {
-    if (quantity <= 0) continue;
-    const item = catalogItems.find(i => i.itemId === itemId);
-    if (!item) continue;
-    totalPoints += (item.moveClassificationWeight || 0) * quantity;
-    totalWeightKg += (item.weightKg || 0) * quantity;
-    totalVolumeCm3 += ((item.widthCm || 0) * (item.heightCm || 0) * (item.depthCm || 0)) * quantity;
-    totalItems += quantity;
-  }
-
-  let recommendedType = 'light';
-  if (totalPoints > THRESHOLDS.regular.maxPoints || totalWeightKg > THRESHOLDS.regular.maxWeightKg || totalItems > THRESHOLDS.regular.maxItems) {
-    recommendedType = 'premium';
-  } else if (totalPoints > THRESHOLDS.light.maxPoints || totalWeightKg > THRESHOLDS.light.maxWeightKg || totalItems > THRESHOLDS.light.maxItems) {
-    recommendedType = 'regular';
-  }
-
-  return { recommendedType, totalPoints, totalWeightKg, totalVolumeCm3, totalItems };
-}
 
 // Generate a human-readable move handle
 function generateHandle() {
@@ -168,23 +143,12 @@ export default async ({ req, res, log, error }) => {
     const catalogRes = await databases.listDocuments(DATABASE_ID, INVENTORY_CATALOG_COLLECTION, [Query.limit(500)]);
     const catalog = catalogRes.documents;
 
-    // Server-side classification
-    let systemMoveType = moveType || 'light';
-    let totalItemCount = 0;
-    let totalWeightKg = 0;
-    let totalVolumeCm3 = 0;
-
-    if (moveData.inventoryItems) {
-      const inventoryObj = typeof moveData.inventoryItems === 'string'
-        ? JSON.parse(moveData.inventoryItems)
-        : moveData.inventoryItems;
-
-      const classification = classifyMoveServer(inventoryObj, catalog, moveType || 'light');
-      systemMoveType = classification.recommendedType;
-      totalItemCount = classification.totalItems;
-      totalWeightKg = classification.totalWeightKg;
-      totalVolumeCm3 = classification.totalVolumeCm3;
-    }
+    // The basket, normalised (legacy custom items, zero counts) and capped.
+    // It is re-serialised onto the row so what is stored is what was priced.
+    const basket = basketFromWire(moveData.inventoryItems, moveData.customItems);
+    const overCap = basketCapViolation(basket, catalog);
+    if (overCap) return res.json(quantityTooHighBody(overCap), 400);
+    const wire = serializeBasket(basket);
 
     const handle = generateHandle();
 
@@ -194,13 +158,10 @@ export default async ({ req, res, log, error }) => {
       clientId,
       status: 'draft',
       moveCategory: moveCategory || 'scheduled',
+      // Client tier for now; replaced below by the enforced tier (crew master D5).
       moveType: moveType || 'light',
-      systemMoveType,
       moveDate: moveDate || null,
-      totalItemCount,
-      totalWeightKg,
-      totalVolumeCm3,
-      inventoryItems: asText(moveData.inventoryItems),
+      inventoryItems: wire.inventoryItems,
       // Pickup
       pickupLocation: asText(moveData.pickupLocation),
       pickupLatitude: moveData.pickupLatitude || null,
@@ -223,13 +184,16 @@ export default async ({ req, res, log, error }) => {
       dropoffHaltverbot: moveData.dropoffHaltverbot ?? null,
       // Other
       homeType: moveData.homeType || null,
-      customItems: asTextArray(moveData.customItems),
+      customItems: wire.customItems,
       packingServiceLevel: moveData.packingServiceLevel || null,
       packingMaterials: asTextArray(moveData.packingMaterials),
       packingNotes: asText(moveData.packingNotes),
       arrivalWindow: asText(moveData.arrivalWindow),
       flexibility: moveData.flexibility || null,
       crewSize: asText(moveData.crewSize),
+      // Client-added helpers (crew master D2), clamped to the schema here and to
+      // `crew.maxExtraHelpers` by the engine; `quoteColumns` writes the billed count.
+      extraHelpers: extraHelpersFromWire(moveData.extraHelpers),
       vehicleType: asText(moveData.vehicleType),
       additionalServices: asTextArray(moveData.additionalServices),
       storageWeeks: moveData.storageWeeks || 0,
@@ -270,6 +234,14 @@ export default async ({ req, res, log, error }) => {
     // Quote the row. The selected mover's class on the row (instant) sets the
     // vehicle line; otherwise the engine picks the smallest class that fits.
     const overrides = await loadOverrides(databases, error, country.countryCode);
+
+    // Server totals + tier (crew master D5): classify the basket with the
+    // admin thresholds and price at max(client tier, classified tier). Client
+    // totals are never read.
+    const classified = classifyBasket(basket, catalog, overrides, moveType, 'light');
+    Object.assign(data, classified);
+    const systemMoveType = classified.systemMoveType;
+
     let breakdown;
     try {
       breakdown = quoteMove(quoteInputFromRow(data, catalog, null), overrides);
@@ -325,6 +297,7 @@ export default async ({ req, res, log, error }) => {
     return res.json({
       success: true,
       move,
+      moveType: data.moveType,
       systemMoveType,
     });
   } catch (err) {

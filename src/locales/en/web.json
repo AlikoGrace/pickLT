@@ -367,6 +367,10 @@
         "subtitle": "Add your first crew member to start managing your team.",
         "title": "No Crew Members Yet"
       },
+      "requestedByClient": {
+        "label_one": "(incl. {{count}} requested by the client)",
+        "label_other": "(incl. {{count}} requested by the client)"
+      },
       "role": {
         "label": "Role"
       },

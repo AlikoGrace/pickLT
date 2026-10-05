@@ -1,7 +1,16 @@
 import type { Databases, Models } from 'node-appwrite'
 import { Query } from 'node-appwrite'
 import { APPWRITE } from '@/lib/constants'
-import type { InventoryItemDef } from '@/lib/classifyMove'
+import {
+  basketCapViolation,
+  basketFromWire as normalizedBasketFromWire,
+  extraHelpersFromWire,
+  serializeBasket,
+  type CapViolation,
+  type NormalizedBasket,
+  type WireBasket,
+} from '@/lib/basket-server'
+import { classifyMove, enforcedTier, thresholdsFromConfig, type InventoryItemDef } from '@/lib/classifyMove'
 import { countryToIso2 } from '@/lib/countryCode'
 import { GLOBAL_PRICING_SCOPE, toPricingConfig, type PricingConfig, type PricingConfigRow } from '@/lib/pricing'
 import {
@@ -19,6 +28,7 @@ import {
   type BookingMode,
   type QuoteBreakdown,
   type QuoteInput,
+  type ServiceTier,
 } from '@/lib/pricingEngine'
 
 /**
@@ -136,6 +146,8 @@ export interface MovePricingFields {
   packingServiceLevel?: unknown
   additionalServices?: unknown
   storageWeeks?: unknown
+  /** Client-added helpers (crew master D2); the engine clamps to `crew.maxExtraHelpers`. */
+  extraHelpers?: unknown
 }
 
 /**
@@ -165,6 +177,7 @@ export function quoteInputFromMove(
     packingLevel: typeof fields.packingServiceLevel === 'string' ? fields.packingServiceLevel : 'none',
     services: servicesFromWire(fields.additionalServices),
     storageWeeks: Number.isFinite(storage) && storage > 0 ? storage : 0,
+    extraHelpers: extraHelpersFromWire(fields.extraHelpers),
   }
 }
 
@@ -177,6 +190,8 @@ export interface QuoteColumns {
   currency: 'EUR'
   vehicleType: string
   crewSize: string
+  /** The clamped extra-helper count actually billed (crew master D2). */
+  extraHelpers: number
 }
 
 export function quoteColumns(breakdown: QuoteBreakdown, pricedAt = new Date()): QuoteColumns {
@@ -188,8 +203,10 @@ export function quoteColumns(breakdown: QuoteBreakdown, pricedAt = new Date()): 
     currency: 'EUR',
     // `moves.vehicleType` / `crewSize` are text columns holding the *charged*
     // class and crew — what the job needs, not what the customer guessed.
+    // `crewSize` is the whole crew that turns up: charged crew + extra helpers.
     vehicleType: breakdown.profile.vehicleType,
-    crewSize: String(breakdown.profile.crew),
+    crewSize: String(breakdown.profile.totalCrew ?? breakdown.profile.crew),
+    extraHelpers: breakdown.profile.extraHelpers ?? 0,
   }
 }
 
@@ -202,4 +219,95 @@ export async function quoteMoveFields(
 ): Promise<QuoteBreakdown> {
   const [catalog, config] = await Promise.all([loadCatalog(databases), loadPricingConfig(databases, countryCode)])
   return quoteMove(quoteInputFromMove(fields, catalog, mode, countryCode), config)
+}
+
+/** A basket with a count over the caps (`inventory.quantityTooHigh`, HTTP 400). */
+export class BasketCapError extends Error {
+  readonly fnCode = 'inventory.quantityTooHigh'
+  constructor(readonly violation: CapViolation) {
+    super(`Too many of one item (at most ${violation.max})`)
+    this.name = 'BasketCapError'
+  }
+}
+
+/** Server totals + tier for a basket (crew master D5; inventory parity plan). */
+export interface BasketClassification {
+  /** The tier priced and stored: max(client tier, classified tier). */
+  moveType: ServiceTier
+  /** The classified tier. */
+  systemMoveType: ServiceTier
+  totalItemCount: number
+  totalWeightKg: number
+  totalVolumeCm3: number
+}
+
+/**
+ * Totals and the enforced tier, with the admin thresholds (`classify.*`). Same
+ * decision and the same three totals as the functions' `classifyBasket`:
+ * catalog + custom QUANTITIES, custom weight and size-band volume included.
+ */
+export function classifyBasketServer(
+  basket: NormalizedBasket,
+  catalog: InventoryItemDef[],
+  config: PricingConfig,
+  clientTier: unknown,
+  fallbackTier: ServiceTier,
+): BasketClassification {
+  const c = classifyMove(
+    basket.counts,
+    basket.customItems.map((ci) => ({
+      id: ci.id,
+      name: ci.name,
+      quantity: ci.quantity,
+      approxSize: ci.approxSize,
+      estimatedWeightKg: ci.approxWeight,
+    })),
+    'light',
+    catalog,
+    thresholdsFromConfig(config as Partial<Record<string, number>>),
+  )
+  const client = isServiceTier(clientTier) ? clientTier : fallbackTier
+  return {
+    moveType: enforcedTier(client, c.recommendedType),
+    systemMoveType: c.recommendedType,
+    totalItemCount: c.totalItems,
+    totalWeightKg: Math.round(c.totalWeightKg * 1000) / 1000,
+    totalVolumeCm3: Math.round(c.totalVolumeM3 * 1_000_000),
+  }
+}
+
+export interface PricedMove {
+  breakdown: QuoteBreakdown
+  /** Quote columns (estimatedPrice … crewSize, extraHelpers). */
+  columns: QuoteColumns
+  /** Tier + totals columns (moveType, systemMoveType, totalItemCount, totalWeightKg, totalVolumeCm3). */
+  classification: BasketClassification
+  /** The normalised basket in the `moves` column shapes — write these, not the body's. */
+  basket: WireBasket
+}
+
+/**
+ * The create routes' price authority (master D5 + crew master D5): normalise
+ * and cap the basket (throws `BasketCapError`), classify it with the admin
+ * thresholds, price at the enforced tier and hand back every column to write.
+ * Client totals and the client's tier as a ceiling are ignored. Throws
+ * `PricingReconcileError` on a bad quote.
+ */
+export async function priceMoveFields(
+  databases: Databases,
+  fields: MovePricingFields,
+  mode: BookingMode,
+  countryCode: string | null | undefined,
+  fallbackTier: ServiceTier,
+): Promise<PricedMove> {
+  const [catalog, config] = await Promise.all([loadCatalog(databases), loadPricingConfig(databases, countryCode)])
+  const basket = normalizedBasketFromWire(fields.inventoryItems, fields.customItems)
+  const violation = basketCapViolation(basket, catalog)
+  if (violation) throw new BasketCapError(violation)
+  const classification = classifyBasketServer(basket, catalog, config, fields.moveType, fallbackTier)
+  const breakdown = quoteMove(
+    quoteInputFromMove({ ...fields, moveType: classification.moveType }, catalog, mode, countryCode),
+    config,
+  )
+  return { breakdown, columns: quoteColumns(breakdown), classification, basket: serializeBasket(basket) }
 }

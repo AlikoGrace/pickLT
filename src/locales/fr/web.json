@@ -367,6 +367,10 @@
         "subtitle": "Ajoutez votre premier membre d'équipe pour commencer à gérer votre équipe.",
         "title": "Aucun membre d'équipe"
       },
+      "requestedByClient": {
+        "label_one": "(dont {{count}} demandé par le client)",
+        "label_other": "(dont {{count}} demandés par le client)"
+      },
       "role": {
         "label": "Rôle"
       },

@@ -109,5 +109,8 @@
     "translationsHelper": "Lascia vuoto per usare il nome inglese. Gli ID articolo e le categorie non vengono mai tradotti.",
     "unknownCategoryTitle": "Categoria non tradotta",
     "unknownCategoryWarning": "«{{slug}}» non è una delle sette categorie tradotte. Verrà mostrata come «{{label}}» in tutte le lingue, anche agli utenti che non leggono l’inglese."
+  },
+  "quantity": {
+    "max": "Massimo {{count}} per articolo"
   }
 }

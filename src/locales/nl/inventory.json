@@ -109,5 +109,8 @@
     "translationsHelper": "Laat leeg om de Engelse naam te gebruiken. Item-ID’s en categorieën worden nooit vertaald.",
     "unknownCategoryTitle": "Niet-vertaalde categorie",
     "unknownCategoryWarning": "“{{slug}}” is geen van de zeven vertaalde categorieën. Deze wordt in elke taal getoond als “{{label}}”, ook aan gebruikers die geen Engels lezen."
+  },
+  "quantity": {
+    "max": "Maximaal {{count}} per item"
   }
 }

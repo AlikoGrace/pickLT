@@ -1,5 +1,6 @@
 'use client'
 
+import { crewLabel } from '@/components/mover/crewLabel'
 import { AuthGate } from '@/components/AuthGate'
 import { useMoveSearch, StoredMove } from '@/context/moveSearch'
 import { Badge } from '@/shared/Badge'
@@ -195,7 +196,7 @@ const PayDoneContent = () => {
               </div>
               <span className="block text-sm text-neutral-500 dark:text-neutral-400">
                 {t('moves:itemCount', { count: move?.inventoryCount || 0 })}
-                {!isInstantMove && move?.crewSize && ` · ${t('moves:moverCount', { count: Number(move.crewSize) })}`}
+                {!isInstantMove && move?.crewSize && ` · ${crewLabel(t, { crewSize: move.crewSize }) ?? ''}`}
                 {!isInstantMove && move?.vehicleType && ` · ${vehicleTypeLabel(t, move.vehicleType)}`}
               </span>
               <Divider className="w-10!" />

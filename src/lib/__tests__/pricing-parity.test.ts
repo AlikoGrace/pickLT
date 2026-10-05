@@ -403,10 +403,11 @@ describe('pricingInputs — the shapes this app stores', () => {
       'not json',
     ])
     expect(fromRow.counts).toEqual({ sofa_3seater: 2, cardboard_boxes: 3 })
-    expect(fromRow.customItems).toEqual([{ quantity: 1, approxSize: 'large', approxWeight: 4 }])
+    expect(fromRow.customItems).toEqual([{ id: 'c1', name: 'Lamp', quantity: 1, approxSize: 'large', approxWeight: 4 }])
 
     const fromContext = basketFromWire({ piano: 1 }, [{ id: 'c', name: 'x', quantity: 2, approxSize: '', approxWeight: '' }])
-    expect(fromContext).toEqual({ counts: { piano: 1 }, customItems: [{ quantity: 2, approxSize: 'medium', approxWeight: 0 }] })
+    // A missing weight is the shared 20 kg custom-item default (basket-server.ts).
+    expect(fromContext).toEqual({ counts: { piano: 1 }, customItems: [{ id: 'c', name: 'x', quantity: 2, approxSize: 'medium', approxWeight: 20 }] })
     expect(basketFromWire(null, undefined)).toEqual({ counts: {}, customItems: [] })
   })
 

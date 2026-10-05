@@ -367,6 +367,10 @@
         "subtitle": "Fügen Sie Ihr erstes Teammitglied hinzu, um Ihr Team zu verwalten.",
         "title": "Noch keine Teammitglieder"
       },
+      "requestedByClient": {
+        "label_one": "(davon {{count}} vom Kunden angefragt)",
+        "label_other": "(davon {{count}} vom Kunden angefragt)"
+      },
       "role": {
         "label": "Rolle"
       },

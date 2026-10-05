@@ -370,5 +370,8 @@
     "loadFailed": "No se pudo cargar su saldo con la plataforma.",
     "payFailed": "No se pudo completar el pago de las comisiones. Inténtelo de nuevo.",
     "payUnavailable": "El pago con tarjeta no está disponible en este momento. Inténtelo más tarde o contacte con soporte."
+  },
+  "inventory": {
+    "quantityTooHigh": "Uno de tus artículos supera la cantidad máxima. Redúcela e inténtalo de nuevo."
   }
 }

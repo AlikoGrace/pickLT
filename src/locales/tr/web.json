@@ -367,6 +367,10 @@
         "subtitle": "Ekibinizi yönetmeye başlamak için ilk ekip üyenizi ekleyin.",
         "title": "Henüz ekip üyesi yok"
       },
+      "requestedByClient": {
+        "label_one": "(müşterinin istediği {{count}} kişi dahil)",
+        "label_other": "(müşterinin istediği {{count}} kişi dahil)"
+      },
       "role": {
         "label": "Rol"
       },
