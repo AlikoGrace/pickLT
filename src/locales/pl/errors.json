@@ -124,7 +124,14 @@
     "unauthorized": "Brak uprawnień"
   },
   "call": {
-    "noPhoneNumber": "Brak zapisanego numeru telefonu tego przewoźnika."
+    "noPhoneNumber": "Brak zapisanego numeru telefonu tego przewoźnika.",
+    "busy": "Rozmówca prowadzi już inne połączenie. Spróbuj ponownie za chwilę.",
+    "moveClosed": "Połączenia w aplikacji są dostępne tylko, gdy przeprowadzka jest otwarta.",
+    "notRinging": "To połączenie już się zakończyło.",
+    "expired": "Połączenie wygasło, zanim zostało odebrane.",
+    "notFound": "To połączenie już nie istnieje.",
+    "notParty": "Nie jesteś uczestnikiem tego połączenia.",
+    "notCallee": "Odebrać może tylko osoba, do której dzwonisz."
   },
   "card": {
     "add": {
@@ -213,7 +220,8 @@
   "message": {
     "empty": "Wiadomość jest pusta",
     "sendFailed": "Nie udało się wysłać wiadomości. Spróbuj ponownie.",
-    "tooLong": "Wiadomość jest za długa. Limit to {{max}} znaków."
+    "tooLong": "Wiadomość jest za długa. Limit to {{max}} znaków.",
+    "noMoverYet": "Do tej przeprowadzki nie przydzielono jeszcze przewoźnika."
   },
   "move": {
     "alreadyAssigned": "Do tej przeprowadzki przydzielono już przewoźnika",

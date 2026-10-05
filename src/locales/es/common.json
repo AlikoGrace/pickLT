@@ -151,7 +151,97 @@
       "title": "No se pudo abrir el marcador"
     },
     "inApp": {
-      "title": "Llamar desde la app"
+      "title": "Llamar desde la app",
+      "subtitle": "Llamada de audio gratuita en la app, sin compartir números de teléfono",
+      "noMover": {
+        "subtitle": "Disponible cuando se asigne un transportista"
+      },
+      "incoming": {
+        "title": "Llamada entrante",
+        "body": "Llamada de PickLT en la app",
+        "unknownCaller": {
+          "label": "Llamada desconocida"
+        }
+      },
+      "answer": {
+        "cta": "Contestar"
+      },
+      "decline": {
+        "cta": "Rechazar"
+      },
+      "hangUp": {
+        "cta": "Colgar"
+      },
+      "mute": {
+        "cta": "Silenciar"
+      },
+      "unmute": {
+        "cta": "Activar micrófono"
+      },
+      "speaker": {
+        "on": {
+          "label": "Altavoz: ACTIVADO"
+        },
+        "off": {
+          "label": "Altavoz: DESACTIVADO"
+        }
+      },
+      "output": {
+        "speaker": {
+          "hint": "El sonido sale por el altavoz"
+        },
+        "earpiece": {
+          "hint": "El sonido sale por el auricular: acerca el teléfono a la oreja o activa el altavoz"
+        }
+      },
+      "status": {
+        "calling": {
+          "label": "Llamando…"
+        },
+        "ringing": {
+          "label": "Sonando…"
+        },
+        "connecting": {
+          "label": "Conectando…"
+        },
+        "reconnecting": {
+          "label": "Reconectando…"
+        },
+        "ended": {
+          "label": "Llamada finalizada"
+        },
+        "declined": {
+          "label": "Llamada rechazada"
+        },
+        "noAnswer": {
+          "label": "Sin respuesta"
+        },
+        "busy": {
+          "label": "Ocupado: en otra llamada"
+        },
+        "failed": {
+          "label": "La llamada ha fallado"
+        }
+      },
+      "micDenied": {
+        "title": "Se necesita acceso al micrófono",
+        "body": "Permite el acceso al micrófono para PickLT en los ajustes del teléfono para hacer y contestar llamadas en la app."
+      },
+      "channel": {
+        "incoming": {
+          "label": "Llamadas entrantes"
+        },
+        "ongoing": {
+          "label": "Llamada en curso"
+        }
+      },
+      "ongoing": {
+        "title": "Llamada en curso",
+        "body": "Llamada en la app con {{name}}: toca para volver",
+        "fallback": {
+          "body": "Llamada en la app: toca para volver"
+        }
+      }
     },
     "moveComplete": {
       "subtitle": "La mudanza ha finalizado"

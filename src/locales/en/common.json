@@ -151,7 +151,97 @@
       "title": "Couldn't open the dialer"
     },
     "inApp": {
-      "title": "Call in-app"
+      "title": "Call in-app",
+      "subtitle": "Free audio call in the app — no phone numbers shared",
+      "noMover": {
+        "subtitle": "Available once a mover is assigned"
+      },
+      "incoming": {
+        "title": "Incoming call",
+        "body": "PickLT in-app call",
+        "unknownCaller": {
+          "label": "Unknown caller"
+        }
+      },
+      "answer": {
+        "cta": "Answer"
+      },
+      "decline": {
+        "cta": "Decline"
+      },
+      "hangUp": {
+        "cta": "Hang up"
+      },
+      "mute": {
+        "cta": "Mute"
+      },
+      "unmute": {
+        "cta": "Unmute"
+      },
+      "speaker": {
+        "on": {
+          "label": "Speaker: ON"
+        },
+        "off": {
+          "label": "Speaker: OFF"
+        }
+      },
+      "output": {
+        "speaker": {
+          "hint": "Sound is playing through the loudspeaker"
+        },
+        "earpiece": {
+          "hint": "Sound is on the earpiece — hold the phone to your ear or turn on Speaker"
+        }
+      },
+      "status": {
+        "calling": {
+          "label": "Calling…"
+        },
+        "ringing": {
+          "label": "Ringing…"
+        },
+        "connecting": {
+          "label": "Connecting…"
+        },
+        "reconnecting": {
+          "label": "Reconnecting…"
+        },
+        "ended": {
+          "label": "Call ended"
+        },
+        "declined": {
+          "label": "Call declined"
+        },
+        "noAnswer": {
+          "label": "No answer"
+        },
+        "busy": {
+          "label": "Busy — on another call"
+        },
+        "failed": {
+          "label": "Call failed"
+        }
+      },
+      "micDenied": {
+        "title": "Microphone access needed",
+        "body": "Allow microphone access for PickLT in your phone’s settings to make and answer in-app calls."
+      },
+      "channel": {
+        "incoming": {
+          "label": "Incoming calls"
+        },
+        "ongoing": {
+          "label": "Ongoing call"
+        }
+      },
+      "ongoing": {
+        "title": "Call in progress",
+        "body": "In-app call with {{name}} — tap to return",
+        "fallback": {
+          "body": "In-app call — tap to return"
+        }
+      }
     },
     "moveComplete": {
       "subtitle": "Move is complete"

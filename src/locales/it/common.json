@@ -151,7 +151,97 @@
       "title": "Impossibile aprire il telefono"
     },
     "inApp": {
-      "title": "Chiama nell’app"
+      "title": "Chiama nell’app",
+      "subtitle": "Chiamata audio gratuita nell’app, senza condividere numeri di telefono",
+      "noMover": {
+        "subtitle": "Disponibile appena viene assegnato un traslocatore"
+      },
+      "incoming": {
+        "title": "Chiamata in arrivo",
+        "body": "Chiamata PickLT nell’app",
+        "unknownCaller": {
+          "label": "Chiamante sconosciuto"
+        }
+      },
+      "answer": {
+        "cta": "Rispondi"
+      },
+      "decline": {
+        "cta": "Rifiuta"
+      },
+      "hangUp": {
+        "cta": "Riattacca"
+      },
+      "mute": {
+        "cta": "Disattiva microfono"
+      },
+      "unmute": {
+        "cta": "Attiva microfono"
+      },
+      "speaker": {
+        "on": {
+          "label": "Vivavoce: ATTIVO"
+        },
+        "off": {
+          "label": "Vivavoce: SPENTO"
+        }
+      },
+      "output": {
+        "speaker": {
+          "hint": "L’audio esce dal vivavoce"
+        },
+        "earpiece": {
+          "hint": "L’audio esce dall’auricolare: avvicina il telefono all’orecchio o attiva il vivavoce"
+        }
+      },
+      "status": {
+        "calling": {
+          "label": "Chiamata in corso…"
+        },
+        "ringing": {
+          "label": "Squilla…"
+        },
+        "connecting": {
+          "label": "Connessione…"
+        },
+        "reconnecting": {
+          "label": "Riconnessione…"
+        },
+        "ended": {
+          "label": "Chiamata terminata"
+        },
+        "declined": {
+          "label": "Chiamata rifiutata"
+        },
+        "noAnswer": {
+          "label": "Nessuna risposta"
+        },
+        "busy": {
+          "label": "Occupato: già in un’altra chiamata"
+        },
+        "failed": {
+          "label": "Chiamata non riuscita"
+        }
+      },
+      "micDenied": {
+        "title": "Serve l’accesso al microfono",
+        "body": "Consenti a PickLT l’accesso al microfono nelle impostazioni del telefono per fare e ricevere chiamate nell’app."
+      },
+      "channel": {
+        "incoming": {
+          "label": "Chiamate in arrivo"
+        },
+        "ongoing": {
+          "label": "Chiamata in corso"
+        }
+      },
+      "ongoing": {
+        "title": "Chiamata in corso",
+        "body": "Chiamata nell’app con {{name}}: tocca per tornare",
+        "fallback": {
+          "body": "Chiamata nell’app: tocca per tornare"
+        }
+      }
     },
     "moveComplete": {
       "subtitle": "Il trasloco è concluso"

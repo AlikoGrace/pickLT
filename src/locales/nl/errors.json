@@ -120,7 +120,14 @@
     "unauthorized": "Niet geautoriseerd"
   },
   "call": {
-    "noPhoneNumber": "Geen telefoonnummer bekend voor deze verhuizer."
+    "noPhoneNumber": "Geen telefoonnummer bekend voor deze verhuizer.",
+    "busy": "Diegene is al in gesprek. Probeer het zo opnieuw.",
+    "moveClosed": "Bellen in de app kan alleen zolang de verhuizing open is.",
+    "notRinging": "Dit gesprek is al beëindigd.",
+    "expired": "Het gesprek is gestopt met overgaan voordat het werd opgenomen.",
+    "notFound": "Dit gesprek bestaat niet meer.",
+    "notParty": "Je neemt niet deel aan dit gesprek.",
+    "notCallee": "Alleen degene die gebeld wordt kan opnemen."
   },
   "card": {
     "add": {
@@ -209,7 +216,8 @@
   "message": {
     "empty": "Het bericht is leeg",
     "sendFailed": "Het bericht kon niet worden verzonden. Probeer het opnieuw.",
-    "tooLong": "Het bericht is te lang. De limiet is {{max}} tekens."
+    "tooLong": "Het bericht is te lang. De limiet is {{max}} tekens.",
+    "noMoverYet": "Er is nog geen verhuizer aan deze verhuizing toegewezen."
   },
   "move": {
     "alreadyAssigned": "Aan deze verhuizing is al een verhuizer toegewezen",

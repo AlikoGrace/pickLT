@@ -120,7 +120,14 @@
     "unauthorized": "No autorizado"
   },
   "call": {
-    "noPhoneNumber": "No hay ningún número de teléfono registrado para este transportista."
+    "noPhoneNumber": "No hay ningún número de teléfono registrado para este transportista.",
+    "busy": "Esa persona ya está en otra llamada. Inténtalo de nuevo en un momento.",
+    "moveClosed": "Las llamadas en la app solo están disponibles mientras la mudanza está abierta.",
+    "notRinging": "Esta llamada ya ha finalizado.",
+    "expired": "La llamada dejó de sonar antes de contestarla.",
+    "notFound": "Esta llamada ya no existe.",
+    "notParty": "No formas parte de esta llamada.",
+    "notCallee": "Solo puede contestar la persona a la que se llama."
   },
   "card": {
     "add": {
@@ -209,7 +216,8 @@
   "message": {
     "empty": "El mensaje está vacío",
     "sendFailed": "No se pudo enviar el mensaje. Inténtalo de nuevo.",
-    "tooLong": "El mensaje es demasiado largo. El límite es de {{max}} caracteres."
+    "tooLong": "El mensaje es demasiado largo. El límite es de {{max}} caracteres.",
+    "noMoverYet": "Todavía no se ha asignado ningún transportista a esta mudanza."
   },
   "move": {
     "alreadyAssigned": "Esta mudanza ya tiene un transportista asignado",

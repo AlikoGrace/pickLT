@@ -120,7 +120,14 @@
     "unauthorized": "Non autorizzato"
   },
   "call": {
-    "noPhoneNumber": "Nessun numero di telefono registrato per questo trasportatore."
+    "noPhoneNumber": "Nessun numero di telefono registrato per questo trasportatore.",
+    "busy": "È già impegnato in un’altra chiamata. Riprova tra poco.",
+    "moveClosed": "Le chiamate nell’app sono disponibili solo finché il trasloco è aperto.",
+    "notRinging": "Questa chiamata è già terminata.",
+    "expired": "La chiamata ha smesso di squillare prima della risposta.",
+    "notFound": "Questa chiamata non esiste più.",
+    "notParty": "Non fai parte di questa chiamata.",
+    "notCallee": "Solo la persona chiamata può rispondere."
   },
   "card": {
     "add": {
@@ -209,7 +216,8 @@
   "message": {
     "empty": "Il messaggio è vuoto",
     "sendFailed": "Impossibile inviare il messaggio. Riprova.",
-    "tooLong": "Il messaggio è troppo lungo. Il limite è di {{max}} caratteri."
+    "tooLong": "Il messaggio è troppo lungo. Il limite è di {{max}} caratteri.",
+    "noMoverYet": "Nessun traslocatore è ancora stato assegnato a questo trasloco."
   },
   "move": {
     "alreadyAssigned": "Questo trasloco ha già un traslocatore assegnato",

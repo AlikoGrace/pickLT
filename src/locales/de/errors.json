@@ -120,7 +120,14 @@
     "unauthorized": "Nicht autorisiert"
   },
   "call": {
-    "noPhoneNumber": "Für diesen Umzugsprofi ist keine Telefonnummer hinterlegt."
+    "noPhoneNumber": "Für diesen Umzugsprofi ist keine Telefonnummer hinterlegt.",
+    "busy": "Die Person telefoniert gerade. Bitte versuchen Sie es gleich noch einmal.",
+    "moveClosed": "Anrufe in der App sind nur möglich, solange der Umzug offen ist.",
+    "notRinging": "Dieser Anruf ist bereits beendet.",
+    "expired": "Der Anruf wurde nicht rechtzeitig angenommen.",
+    "notFound": "Diesen Anruf gibt es nicht mehr.",
+    "notParty": "Sie sind an diesem Anruf nicht beteiligt.",
+    "notCallee": "Nur die angerufene Person kann den Anruf annehmen."
   },
   "card": {
     "add": {
@@ -209,7 +216,8 @@
   "message": {
     "empty": "Die Nachricht ist leer",
     "sendFailed": "Die Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
-    "tooLong": "Die Nachricht ist zu lang. Das Limit beträgt {{max}} Zeichen."
+    "tooLong": "Die Nachricht ist zu lang. Das Limit beträgt {{max}} Zeichen.",
+    "noMoverYet": "Diesem Umzug wurde noch kein Umzugshelfer zugewiesen."
   },
   "move": {
     "alreadyAssigned": "Diesem Umzug ist bereits ein Umzugsprofi zugewiesen",

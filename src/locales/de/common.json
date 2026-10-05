@@ -151,7 +151,97 @@
       "title": "Telefon-App konnte nicht geöffnet werden"
     },
     "inApp": {
-      "title": "In der App anrufen"
+      "title": "In der App anrufen",
+      "subtitle": "Kostenloser Audioanruf in der App – ohne Weitergabe von Telefonnummern",
+      "noMover": {
+        "subtitle": "Verfügbar, sobald ein Umzugshelfer zugewiesen ist"
+      },
+      "incoming": {
+        "title": "Eingehender Anruf",
+        "body": "PickLT-Anruf in der App",
+        "unknownCaller": {
+          "label": "Unbekannter Anrufer"
+        }
+      },
+      "answer": {
+        "cta": "Annehmen"
+      },
+      "decline": {
+        "cta": "Ablehnen"
+      },
+      "hangUp": {
+        "cta": "Auflegen"
+      },
+      "mute": {
+        "cta": "Stumm"
+      },
+      "unmute": {
+        "cta": "Stumm aus"
+      },
+      "speaker": {
+        "on": {
+          "label": "Lautsprecher: AN"
+        },
+        "off": {
+          "label": "Lautsprecher: AUS"
+        }
+      },
+      "output": {
+        "speaker": {
+          "hint": "Der Ton kommt aus dem Lautsprecher"
+        },
+        "earpiece": {
+          "hint": "Der Ton kommt aus der Hörmuschel – Telefon ans Ohr halten oder Lautsprecher einschalten"
+        }
+      },
+      "status": {
+        "calling": {
+          "label": "Wird angerufen …"
+        },
+        "ringing": {
+          "label": "Es klingelt …"
+        },
+        "connecting": {
+          "label": "Verbindung wird hergestellt …"
+        },
+        "reconnecting": {
+          "label": "Verbindung wird wiederhergestellt …"
+        },
+        "ended": {
+          "label": "Anruf beendet"
+        },
+        "declined": {
+          "label": "Anruf abgelehnt"
+        },
+        "noAnswer": {
+          "label": "Keine Antwort"
+        },
+        "busy": {
+          "label": "Besetzt – in einem anderen Gespräch"
+        },
+        "failed": {
+          "label": "Anruf fehlgeschlagen"
+        }
+      },
+      "micDenied": {
+        "title": "Mikrofonzugriff erforderlich",
+        "body": "Erlauben Sie PickLT in den Einstellungen Ihres Telefons den Zugriff auf das Mikrofon, um Anrufe in der App zu führen."
+      },
+      "channel": {
+        "incoming": {
+          "label": "Eingehende Anrufe"
+        },
+        "ongoing": {
+          "label": "Laufender Anruf"
+        }
+      },
+      "ongoing": {
+        "title": "Anruf läuft",
+        "body": "Anruf mit {{name}} in der App – zum Zurückkehren tippen",
+        "fallback": {
+          "body": "Anruf in der App – zum Zurückkehren tippen"
+        }
+      }
     },
     "moveComplete": {
       "subtitle": "Umzug ist abgeschlossen"

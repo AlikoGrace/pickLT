@@ -151,7 +151,97 @@
       "title": "Impossible d’ouvrir le téléphone"
     },
     "inApp": {
-      "title": "Appeler dans l’application"
+      "title": "Appeler dans l’application",
+      "subtitle": "Appel audio gratuit dans l’application – aucun numéro partagé",
+      "noMover": {
+        "subtitle": "Disponible dès qu’un déménageur est assigné"
+      },
+      "incoming": {
+        "title": "Appel entrant",
+        "body": "Appel PickLT dans l’application",
+        "unknownCaller": {
+          "label": "Appelant inconnu"
+        }
+      },
+      "answer": {
+        "cta": "Répondre"
+      },
+      "decline": {
+        "cta": "Refuser"
+      },
+      "hangUp": {
+        "cta": "Raccrocher"
+      },
+      "mute": {
+        "cta": "Couper le micro"
+      },
+      "unmute": {
+        "cta": "Réactiver le micro"
+      },
+      "speaker": {
+        "on": {
+          "label": "Haut-parleur : ACTIVÉ"
+        },
+        "off": {
+          "label": "Haut-parleur : DÉSACTIVÉ"
+        }
+      },
+      "output": {
+        "speaker": {
+          "hint": "Le son passe par le haut-parleur"
+        },
+        "earpiece": {
+          "hint": "Le son passe par l’écouteur – portez le téléphone à l’oreille ou activez le haut-parleur"
+        }
+      },
+      "status": {
+        "calling": {
+          "label": "Appel en cours…"
+        },
+        "ringing": {
+          "label": "Ça sonne…"
+        },
+        "connecting": {
+          "label": "Connexion…"
+        },
+        "reconnecting": {
+          "label": "Reconnexion…"
+        },
+        "ended": {
+          "label": "Appel terminé"
+        },
+        "declined": {
+          "label": "Appel refusé"
+        },
+        "noAnswer": {
+          "label": "Pas de réponse"
+        },
+        "busy": {
+          "label": "Occupé – déjà en ligne"
+        },
+        "failed": {
+          "label": "Échec de l’appel"
+        }
+      },
+      "micDenied": {
+        "title": "Accès au micro requis",
+        "body": "Autorisez l’accès au micro pour PickLT dans les réglages du téléphone pour passer et recevoir des appels dans l’application."
+      },
+      "channel": {
+        "incoming": {
+          "label": "Appels entrants"
+        },
+        "ongoing": {
+          "label": "Appel en cours"
+        }
+      },
+      "ongoing": {
+        "title": "Appel en cours",
+        "body": "Appel avec {{name}} dans l’application – touchez pour revenir",
+        "fallback": {
+          "body": "Appel dans l’application – touchez pour revenir"
+        }
+      }
     },
     "moveComplete": {
       "subtitle": "Le déménagement est terminé"

@@ -120,7 +120,14 @@
     "unauthorized": "Unauthorized"
   },
   "call": {
-    "noPhoneNumber": "No phone number on file for this mover."
+    "noPhoneNumber": "No phone number on file for this mover.",
+    "busy": "They’re already on another call. Try again in a moment.",
+    "moveClosed": "In-app calls are only available while the move is open.",
+    "notRinging": "This call has already ended.",
+    "expired": "The call rang out before it was answered.",
+    "notFound": "This call no longer exists.",
+    "notParty": "You’re not part of this call.",
+    "notCallee": "Only the person being called can answer."
   },
   "card": {
     "add": {
@@ -209,7 +216,8 @@
   "message": {
     "empty": "Message is empty",
     "sendFailed": "Couldn’t send the message. Please try again.",
-    "tooLong": "Message is too long. The limit is {{max}} characters."
+    "tooLong": "Message is too long. The limit is {{max}} characters.",
+    "noMoverYet": "No mover has been assigned to this move yet."
   },
   "move": {
     "alreadyAssigned": "This move already has a mover assigned",

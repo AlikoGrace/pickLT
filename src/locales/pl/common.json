@@ -151,7 +151,97 @@
       "title": "Nie udało się otworzyć telefonu"
     },
     "inApp": {
-      "title": "Połączenie w aplikacji"
+      "title": "Połączenie w aplikacji",
+      "subtitle": "Bezpłatne połączenie głosowe w aplikacji – bez udostępniania numerów",
+      "noMover": {
+        "subtitle": "Dostępne po przydzieleniu przewoźnika"
+      },
+      "incoming": {
+        "title": "Połączenie przychodzące",
+        "body": "Połączenie w aplikacji PickLT",
+        "unknownCaller": {
+          "label": "Nieznany rozmówca"
+        }
+      },
+      "answer": {
+        "cta": "Odbierz"
+      },
+      "decline": {
+        "cta": "Odrzuć"
+      },
+      "hangUp": {
+        "cta": "Rozłącz"
+      },
+      "mute": {
+        "cta": "Wycisz"
+      },
+      "unmute": {
+        "cta": "Wyłącz wyciszenie"
+      },
+      "speaker": {
+        "on": {
+          "label": "Głośnik: WŁ."
+        },
+        "off": {
+          "label": "Głośnik: WYŁ."
+        }
+      },
+      "output": {
+        "speaker": {
+          "hint": "Dźwięk z głośnika telefonu"
+        },
+        "earpiece": {
+          "hint": "Dźwięk ze słuchawki – przyłóż telefon do ucha lub włącz głośnik"
+        }
+      },
+      "status": {
+        "calling": {
+          "label": "Łączenie…"
+        },
+        "ringing": {
+          "label": "Dzwoni…"
+        },
+        "connecting": {
+          "label": "Nawiązywanie połączenia…"
+        },
+        "reconnecting": {
+          "label": "Ponowne łączenie…"
+        },
+        "ended": {
+          "label": "Połączenie zakończone"
+        },
+        "declined": {
+          "label": "Połączenie odrzucone"
+        },
+        "noAnswer": {
+          "label": "Brak odpowiedzi"
+        },
+        "busy": {
+          "label": "Zajęte – trwa inne połączenie"
+        },
+        "failed": {
+          "label": "Połączenie nieudane"
+        }
+      },
+      "micDenied": {
+        "title": "Wymagany dostęp do mikrofonu",
+        "body": "Zezwól PickLT na dostęp do mikrofonu w ustawieniach telefonu, aby dzwonić i odbierać połączenia w aplikacji."
+      },
+      "channel": {
+        "incoming": {
+          "label": "Połączenia przychodzące"
+        },
+        "ongoing": {
+          "label": "Trwające połączenie"
+        }
+      },
+      "ongoing": {
+        "title": "Trwa połączenie",
+        "body": "Połączenie w aplikacji z: {{name}} – dotknij, aby wrócić",
+        "fallback": {
+          "body": "Połączenie w aplikacji – dotknij, aby wrócić"
+        }
+      }
     },
     "moveComplete": {
       "subtitle": "Przeprowadzka jest zakończona"

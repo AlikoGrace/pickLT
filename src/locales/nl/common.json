@@ -151,7 +151,97 @@
       "title": "Kan de telefoon-app niet openen"
     },
     "inApp": {
-      "title": "Bellen in de app"
+      "title": "Bellen in de app",
+      "subtitle": "Gratis audiogesprek in de app – zonder telefoonnummers te delen",
+      "noMover": {
+        "subtitle": "Beschikbaar zodra er een verhuizer is toegewezen"
+      },
+      "incoming": {
+        "title": "Inkomend gesprek",
+        "body": "PickLT-gesprek in de app",
+        "unknownCaller": {
+          "label": "Onbekende beller"
+        }
+      },
+      "answer": {
+        "cta": "Opnemen"
+      },
+      "decline": {
+        "cta": "Weigeren"
+      },
+      "hangUp": {
+        "cta": "Ophangen"
+      },
+      "mute": {
+        "cta": "Dempen"
+      },
+      "unmute": {
+        "cta": "Dempen uit"
+      },
+      "speaker": {
+        "on": {
+          "label": "Luidspreker: AAN"
+        },
+        "off": {
+          "label": "Luidspreker: UIT"
+        }
+      },
+      "output": {
+        "speaker": {
+          "hint": "Het geluid komt uit de luidspreker"
+        },
+        "earpiece": {
+          "hint": "Het geluid komt uit het oorstuk – houd de telefoon tegen je oor of zet de luidspreker aan"
+        }
+      },
+      "status": {
+        "calling": {
+          "label": "Bellen…"
+        },
+        "ringing": {
+          "label": "Gaat over…"
+        },
+        "connecting": {
+          "label": "Verbinden…"
+        },
+        "reconnecting": {
+          "label": "Opnieuw verbinden…"
+        },
+        "ended": {
+          "label": "Gesprek beëindigd"
+        },
+        "declined": {
+          "label": "Gesprek geweigerd"
+        },
+        "noAnswer": {
+          "label": "Geen antwoord"
+        },
+        "busy": {
+          "label": "In gesprek – al aan het bellen"
+        },
+        "failed": {
+          "label": "Gesprek mislukt"
+        }
+      },
+      "micDenied": {
+        "title": "Toegang tot microfoon nodig",
+        "body": "Geef PickLT toegang tot de microfoon in de instellingen van je telefoon om in de app te bellen en gebeld te worden."
+      },
+      "channel": {
+        "incoming": {
+          "label": "Inkomende gesprekken"
+        },
+        "ongoing": {
+          "label": "Lopend gesprek"
+        }
+      },
+      "ongoing": {
+        "title": "Gesprek bezig",
+        "body": "Gesprek in de app met {{name}} – tik om terug te gaan",
+        "fallback": {
+          "body": "Gesprek in de app – tik om terug te gaan"
+        }
+      }
     },
     "moveComplete": {
       "subtitle": "De verhuizing is afgerond"
