@@ -1505,5 +1505,18 @@
         }
       }
     }
+  },
+  "extraHelpers": {
+    "title": "Aides supplémentaires",
+    "helper": "Ajoutez des aides si vous pensez qu’il faut plus de bras. Chacun est facturé {{rate}} de l’heure.",
+    "included_one": "Votre déménagement comprend le chauffeur et {{count}} aide.",
+    "included_other": "Votre déménagement comprend le chauffeur et {{count}} aides.",
+    "max": "Jusqu’à {{count}} aides supplémentaires.",
+    "increase": "Ajouter une aide",
+    "decrease": "Retirer une aide",
+    "count_one": "{{count}} aide supplémentaire",
+    "count_other": "{{count}} aides supplémentaires",
+    "includedDriverOnly": "Votre déménagement comprend uniquement le chauffeur.",
+    "none": "Aucune aide supplémentaire"
   }
 }

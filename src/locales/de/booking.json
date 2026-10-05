@@ -1504,5 +1504,18 @@
         }
       }
     }
+  },
+  "extraHelpers": {
+    "title": "Zusätzliche Helfer",
+    "helper": "Fügen Sie Helfer hinzu, wenn Sie meinen, dass mehr Hände nötig sind. Jeder wird mit {{rate}} pro Stunde berechnet.",
+    "included_one": "Ihr Umzug umfasst den Fahrer und {{count}} Helfer.",
+    "included_other": "Ihr Umzug umfasst den Fahrer und {{count}} Helfer.",
+    "max": "Bis zu {{count}} zusätzliche Helfer.",
+    "increase": "Helfer hinzufügen",
+    "decrease": "Helfer entfernen",
+    "count_one": "{{count}} zusätzlicher Helfer",
+    "count_other": "{{count}} zusätzliche Helfer",
+    "includedDriverOnly": "Ihr Umzug umfasst nur den Fahrer.",
+    "none": "Keine zusätzlichen Helfer"
   }
 }

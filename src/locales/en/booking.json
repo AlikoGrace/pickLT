@@ -1506,5 +1506,18 @@
         }
       }
     }
+  },
+  "extraHelpers": {
+    "title": "Extra helpers",
+    "helper": "Add helpers if you think the job needs more hands. Each is billed at {{rate}} per hour.",
+    "included_one": "Your move includes the driver and {{count}} helper.",
+    "included_other": "Your move includes the driver and {{count}} helpers.",
+    "max": "Up to {{count}} extra helpers.",
+    "increase": "Add a helper",
+    "decrease": "Remove a helper",
+    "count_one": "{{count}} extra helper",
+    "count_other": "{{count}} extra helpers",
+    "includedDriverOnly": "Your move includes the driver only.",
+    "none": "No extra helpers"
   }
 }

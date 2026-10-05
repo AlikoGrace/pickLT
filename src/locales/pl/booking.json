@@ -1540,5 +1540,22 @@
         }
       }
     }
+  },
+  "extraHelpers": {
+    "title": "Dodatkowi pomocnicy",
+    "helper": "Dodaj pomocników, jeśli uważasz, że potrzeba więcej rąk do pracy. Każdy kosztuje {{rate}} za godzinę.",
+    "included_one": "Twoja przeprowadzka obejmuje kierowcę i {{count}} pomocnika.",
+    "included_few": "Twoja przeprowadzka obejmuje kierowcę i {{count}} pomocników.",
+    "included_many": "Twoja przeprowadzka obejmuje kierowcę i {{count}} pomocników.",
+    "included_other": "Twoja przeprowadzka obejmuje kierowcę i {{count}} pomocników.",
+    "max": "Maksymalnie {{count}} dodatkowych pomocników.",
+    "increase": "Dodaj pomocnika",
+    "decrease": "Usuń pomocnika",
+    "count_one": "{{count}} dodatkowy pomocnik",
+    "count_few": "{{count}} dodatkowych pomocników",
+    "count_many": "{{count}} dodatkowych pomocników",
+    "count_other": "{{count}} dodatkowych pomocników",
+    "includedDriverOnly": "Twoja przeprowadzka obejmuje tylko kierowcę.",
+    "none": "Bez dodatkowych pomocników"
   }
 }

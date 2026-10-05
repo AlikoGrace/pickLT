@@ -1503,5 +1503,18 @@
         }
       }
     }
+  },
+  "extraHelpers": {
+    "title": "Aiutanti extra",
+    "helper": "Aggiungi aiutanti se pensi che servano più braccia. Ognuno è addebitato {{rate}} all’ora.",
+    "included_one": "Il tuo trasloco include l’autista e {{count}} aiutante.",
+    "included_other": "Il tuo trasloco include l’autista e {{count}} aiutanti.",
+    "max": "Fino a {{count}} aiutanti extra.",
+    "increase": "Aggiungi un aiutante",
+    "decrease": "Rimuovi un aiutante",
+    "count_one": "{{count}} aiutante extra",
+    "count_other": "{{count}} aiutanti extra",
+    "includedDriverOnly": "Il tuo trasloco include solo l’autista.",
+    "none": "Nessun aiutante extra"
   }
 }

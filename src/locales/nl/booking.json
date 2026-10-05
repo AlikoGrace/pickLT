@@ -1503,5 +1503,18 @@
         }
       }
     }
+  },
+  "extraHelpers": {
+    "title": "Extra helpers",
+    "helper": "Voeg helpers toe als u denkt dat er meer handen nodig zijn. Elke helper kost {{rate}} per uur.",
+    "included_one": "Uw verhuizing omvat de chauffeur en {{count}} helper.",
+    "included_other": "Uw verhuizing omvat de chauffeur en {{count}} helpers.",
+    "max": "Maximaal {{count}} extra helpers.",
+    "increase": "Helper toevoegen",
+    "decrease": "Helper verwijderen",
+    "count_one": "{{count}} extra helper",
+    "count_other": "{{count}} extra helpers",
+    "includedDriverOnly": "Uw verhuizing omvat alleen de chauffeur.",
+    "none": "Geen extra helpers"
   }
 }

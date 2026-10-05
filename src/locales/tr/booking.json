@@ -1503,5 +1503,18 @@
         }
       }
     }
+  },
+  "extraHelpers": {
+    "title": "Ek yardımcılar",
+    "helper": "İş için daha fazla ele ihtiyaç olduğunu düşünüyorsanız yardımcı ekleyin. Her biri saatlik {{rate}} olarak ücretlendirilir.",
+    "included_one": "Taşımanız şoförü ve {{count}} yardımcıyı içerir.",
+    "included_other": "Taşımanız şoförü ve {{count}} yardımcıyı içerir.",
+    "max": "En fazla {{count}} ek yardımcı.",
+    "increase": "Yardımcı ekle",
+    "decrease": "Yardımcı çıkar",
+    "count_one": "{{count}} ek yardımcı",
+    "count_other": "{{count}} ek yardımcı",
+    "includedDriverOnly": "Taşımanız yalnızca şoförü içerir.",
+    "none": "Ek yardımcı yok"
   }
 }

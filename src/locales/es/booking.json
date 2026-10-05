@@ -1503,5 +1503,18 @@
         }
       }
     }
+  },
+  "extraHelpers": {
+    "title": "Ayudantes extra",
+    "helper": "Añade ayudantes si crees que el trabajo necesita más manos. Cada uno se cobra a {{rate}} por hora.",
+    "included_one": "Tu mudanza incluye al conductor y {{count}} ayudante.",
+    "included_other": "Tu mudanza incluye al conductor y {{count}} ayudantes.",
+    "max": "Hasta {{count}} ayudantes extra.",
+    "increase": "Añadir un ayudante",
+    "decrease": "Quitar un ayudante",
+    "count_one": "{{count}} ayudante extra",
+    "count_other": "{{count}} ayudantes extra",
+    "includedDriverOnly": "Tu mudanza incluye solo al conductor.",
+    "none": "Sin ayudantes extra"
   }
 }
