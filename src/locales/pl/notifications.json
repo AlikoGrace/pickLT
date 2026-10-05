@@ -187,5 +187,11 @@
       "title": "Opłaty platformy uregulowane",
       "body": "Otrzymaliśmy {{amount}} {{currency}}. Twoje saldo wobec platformy jest rozliczone i możesz znowu otrzymywać przeprowadzki."
     }
+  },
+  "call": {
+    "missed": {
+      "title": "Nieodebrane połączenie",
+      "body": "Nieodebrane połączenie od {{name}}"
+    }
   }
 }

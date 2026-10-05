@@ -183,5 +183,11 @@
       "title": "Platform fees paid",
       "body": "We received {{amount}} {{currency}}. Your platform balance is settled and you can receive moves again."
     }
+  },
+  "call": {
+    "missed": {
+      "title": "Missed call",
+      "body": "Missed call from {{name}}"
+    }
   }
 }

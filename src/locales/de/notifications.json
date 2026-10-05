@@ -183,5 +183,11 @@
       "title": "Plattformgebühren bezahlt",
       "body": "Wir haben {{amount}} {{currency}} erhalten. Ihr Plattformsaldo ist ausgeglichen und Sie können wieder Aufträge erhalten."
     }
+  },
+  "call": {
+    "missed": {
+      "title": "Verpasster Anruf",
+      "body": "Verpasster Anruf von {{name}}"
+    }
   }
 }

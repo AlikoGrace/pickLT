@@ -183,5 +183,11 @@
       "title": "Comisiones de la plataforma pagadas",
       "body": "Hemos recibido {{amount}} {{currency}}. Tu saldo con la plataforma está liquidado y puedes volver a recibir mudanzas."
     }
+  },
+  "call": {
+    "missed": {
+      "title": "Llamada perdida",
+      "body": "Llamada perdida de {{name}}"
+    }
   }
 }

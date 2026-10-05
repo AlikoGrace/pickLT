@@ -183,5 +183,11 @@
       "title": "Platform ücretleri ödendi",
       "body": "{{amount}} {{currency}} tutarındaki ödemenizi aldık. Platform bakiyeniz kapatıldı ve yeniden taşıma alabilirsiniz."
     }
+  },
+  "call": {
+    "missed": {
+      "title": "Cevapsız arama",
+      "body": "{{name}} adlı kişiden cevapsız arama"
+    }
   }
 }

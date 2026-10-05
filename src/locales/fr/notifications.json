@@ -183,5 +183,11 @@
       "title": "Frais de plateforme réglés",
       "body": "Nous avons reçu {{amount}} {{currency}}. Votre solde plateforme est réglé et vous pouvez de nouveau recevoir des déménagements."
     }
+  },
+  "call": {
+    "missed": {
+      "title": "Appel manqué",
+      "body": "Appel manqué de {{name}}"
+    }
   }
 }

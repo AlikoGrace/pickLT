@@ -183,5 +183,11 @@
       "title": "Platformkosten betaald",
       "body": "We hebben {{amount}} {{currency}} ontvangen. Uw platformsaldo is vereffend en u kunt weer verhuizingen ontvangen."
     }
+  },
+  "call": {
+    "missed": {
+      "title": "Gemiste oproep",
+      "body": "Gemiste oproep van {{name}}"
+    }
   }
 }

@@ -183,5 +183,11 @@
       "title": "Commissioni della piattaforma pagate",
       "body": "Abbiamo ricevuto {{amount}} {{currency}}. Il tuo saldo con la piattaforma è saldato e puoi di nuovo ricevere traslochi."
     }
+  },
+  "call": {
+    "missed": {
+      "title": "Chiamata persa",
+      "body": "Chiamata persa da {{name}}"
+    }
   }
 }
