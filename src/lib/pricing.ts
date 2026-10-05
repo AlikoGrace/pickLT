@@ -23,7 +23,8 @@
  *   capacityM3.<class>              usable capacity per class (feasibility)
  *   volume.*                        bounding-box → loaded volume calibration
  *   items.*                         custom-item unit prices + suggestion rates
- *   crew.*  handling.*  access.*    crew requirement, handling hours, access fees
+ *   crew.*  handling.*  access.*    crew requirement, extra helpers, handling hours, access fees
+ *   classify.<light|regular>.*      tier cut-offs (points, weight, items, m³)
  *   packing.*  service.*  storage.* selectable services
  *   platformFee.*  tax.*            customer-facing fee and VAT
  *   pricing.minimumCharge           floor on the net price
@@ -103,6 +104,24 @@ export const PRICING_DEFAULTS = {
   // ── Crew requirement (MoveDNA §6.3) ──────────────────────────────────────
   'crew.m3PerMover': 15,
   'crew.max': 4,
+  // Helpers the client may add on top of the charged crew (crew master D2),
+  // each billed at the tier labour rate for the billable hours.
+  'crew.maxExtraHelpers': 3,
+
+  // ── Tier classification (crew master D4, lib/classifyMove.ts) ────────────
+  // A basket stays Normal (light) while it is at or under every light limit,
+  // Medium (regular) while at or under every regular limit, else Premium.
+  // maxM3 is LOADED volume: Σ bounding-box m³ (custom items by size band) ×
+  // volume.packingFactor — matched to the vehicle each tier is sold with
+  // (small van 10 m³, medium truck 25 m³; above → large truck).
+  'classify.light.maxPoints': 25,
+  'classify.light.maxWeightKg': 200,
+  'classify.light.maxItems': 15,
+  'classify.light.maxM3': 10,
+  'classify.regular.maxPoints': 80,
+  'classify.regular.maxWeightKg': 800,
+  'classify.regular.maxItems': 40,
+  'classify.regular.maxM3': 25,
 
   // ── Handling time + access surcharges ─────────────────────────────────────
   // CALIBRATION PARAMETER: hours of physical handling per loaded m³ for one

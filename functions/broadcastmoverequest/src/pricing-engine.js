@@ -4,7 +4,8 @@
  *
  * One file, no imports: it folds in `lib/pricing-config.ts` (the registry
  * defaults + `rate`/`toPricingConfig`), the volume maths of
- * `lib/move-volume.ts`, and the v3 engine of `lib/pricing-engine.ts`. Cloud
+ * `lib/move-volume.ts`, the tier classifier of `lib/classify-move.ts`, and the
+ * v3 engine of `lib/pricing-engine.ts`. Cloud
  * functions are deployed as isolated bundles and cannot import `lib/`, so every
  * function that prices (`calculateprice`, `savedraftmove`, `createmove`) and the
  * crew gate in `broadcastmoverequest` carries a byte-identical copy of this
@@ -71,6 +72,16 @@ export const PRICING_DEFAULTS = {
 
   'crew.m3PerMover': 15,
   'crew.max': 4,
+  'crew.maxExtraHelpers': 3,
+
+  'classify.light.maxPoints': 25,
+  'classify.light.maxWeightKg': 200,
+  'classify.light.maxItems': 15,
+  'classify.light.maxM3': 10,
+  'classify.regular.maxPoints': 80,
+  'classify.regular.maxWeightKg': 800,
+  'classify.regular.maxItems': 40,
+  'classify.regular.maxM3': 25,
 
   'handling.hoursPerM3': 0.2,
   'access.floorSurchargeNoElevator': 15,
@@ -208,6 +219,127 @@ export function computeMoveVolume(counts, customItems, catalog, pricing) {
     customVolumeM3: round3Volume(customVolumeM3),
     rawVolumeM3: round3Volume(rawVolumeM3),
     loadedVolumeM3: round3Volume(rawVolumeM3 * packingFactor),
+  };
+}
+
+// ── Tier classifier (mirror of lib/classify-move.ts) ───────────────────────
+
+export const MOVE_TYPE_ORDER = { light: 0, regular: 1, premium: 2 };
+
+const CUSTOM_SIZE_POINTS = { small: 2, medium: 5, large: 10, extra_large: 18 };
+export const CUSTOM_SIZE_M3 = { small: 0.1, medium: 0.5, large: 1.5, extra_large: 3 };
+
+// `maxM3` is LOADED volume (raw bounding-box m³ × packingFactor), on the scale
+// of the vehicle each tier is sold with: small van 10, medium truck 25.
+export const DEFAULT_CLASSIFY_THRESHOLDS = {
+  light: { maxPoints: 25, maxWeightKg: 200, maxItems: 15, maxM3: 10 },
+  regular: { maxPoints: 80, maxWeightKg: 800, maxItems: 40, maxM3: 25 },
+  packingFactor: 1.35,
+};
+
+/** The higher of two tiers — the tier a server prices at (crew master D5). */
+export function enforcedTier(a, b) {
+  return MOVE_TYPE_ORDER[b] > MOVE_TYPE_ORDER[a] ? b : a;
+}
+
+/**
+ * Thresholds from a `pricing_config` override map (`classify.*` and
+ * `volume.packingFactor`); a missing key keeps its default.
+ */
+export function thresholdsFromConfig(config) {
+  const read = (tier, field) => {
+    const v = config?.[`classify.${tier}.${field}`];
+    return typeof v === 'number' && Number.isFinite(v) ? v : DEFAULT_CLASSIFY_THRESHOLDS[tier][field];
+  };
+  const limits = (tier) => ({
+    maxPoints: read(tier, 'maxPoints'),
+    maxWeightKg: read(tier, 'maxWeightKg'),
+    maxItems: read(tier, 'maxItems'),
+    maxM3: read(tier, 'maxM3'),
+  });
+  const pf = config?.['volume.packingFactor'];
+  return {
+    light: limits('light'),
+    regular: limits('regular'),
+    packingFactor: typeof pf === 'number' && Number.isFinite(pf) ? pf : DEFAULT_CLASSIFY_THRESHOLDS.packingFactor,
+  };
+}
+
+function exceedsLimits(limits, points, weightKg, items, m3) {
+  return (
+    points > limits.maxPoints ||
+    weightKg > limits.maxWeightKg ||
+    items > limits.maxItems ||
+    m3 > limits.maxM3
+  );
+}
+
+/**
+ * Same decision as the app's `classifyMove` (points, weight, item count and
+ * loaded m³ = bounding-box m³ × packingFactor against the thresholds, then the
+ * per-item `moveTypeMinimum` floor). Quantities are coerced with `Number` and anything non-finite or ≤ 0
+ * is skipped, so a row read off the wire cannot concatenate strings.
+ */
+export function classifyMove(counts, customItems, catalog, currentType, thresholds = DEFAULT_CLASSIFY_THRESHOLDS) {
+  const byId = new Map((catalog ?? []).map((i) => [i.itemId, i]));
+  const current = MOVE_TYPE_ORDER[currentType] === undefined ? 'light' : currentType;
+
+  let totalPoints = 0;
+  let totalWeightKg = 0;
+  let totalItems = 0;
+  let totalVolumeM3 = 0;
+  let highestMinType = 'light';
+  const warnings = [];
+
+  for (const [itemId, raw] of Object.entries(counts ?? {})) {
+    const qty = Number(raw);
+    if (!Number.isFinite(qty) || qty <= 0) continue;
+    const def = byId.get(itemId);
+    if (!def) continue;
+    totalPoints += def.moveClassificationWeight * qty;
+    totalWeightKg += def.weightKg * qty;
+    totalItems += qty;
+    const unitM3 = (def.widthCm * def.heightCm * def.depthCm) / 1_000_000;
+    if (Number.isFinite(unitM3) && unitM3 > 0) totalVolumeM3 += unitM3 * qty;
+    const min = MOVE_TYPE_ORDER[def.moveTypeMinimum] === undefined ? 'light' : def.moveTypeMinimum;
+    if (MOVE_TYPE_ORDER[min] > MOVE_TYPE_ORDER[highestMinType]) highestMinType = min;
+    if (MOVE_TYPE_ORDER[min] > MOVE_TYPE_ORDER[current]) {
+      warnings.push({ itemId: def.itemId, itemName: def.name, minType: min });
+    }
+  }
+
+  for (const ci of customItems ?? []) {
+    const qty = Number(ci?.quantity);
+    if (!Number.isFinite(qty) || qty <= 0) continue;
+    totalPoints += (CUSTOM_SIZE_POINTS[ci.approxSize] ?? CUSTOM_SIZE_POINTS.medium) * qty;
+    totalWeightKg += ci.approxWeight * qty;
+    totalItems += qty;
+    totalVolumeM3 += (CUSTOM_SIZE_M3[ci.approxSize] ?? CUSTOM_SIZE_M3.medium) * qty;
+  }
+
+  totalVolumeM3 = Math.round(totalVolumeM3 * 1e6) / 1e6;
+  // Three decimals, like the engine's loaded volume (lib/move-volume.ts).
+  const loadedVolumeM3 = Math.round(totalVolumeM3 * thresholds.packingFactor * 1000) / 1000;
+
+  let recommendedType = 'light';
+  if (exceedsLimits(thresholds.regular, totalPoints, totalWeightKg, totalItems, loadedVolumeM3)) {
+    recommendedType = 'premium';
+  } else if (exceedsLimits(thresholds.light, totalPoints, totalWeightKg, totalItems, loadedVolumeM3)) {
+    recommendedType = 'regular';
+  }
+  if (MOVE_TYPE_ORDER[highestMinType] > MOVE_TYPE_ORDER[recommendedType]) recommendedType = highestMinType;
+
+  const requiresUpgrade = MOVE_TYPE_ORDER[recommendedType] > MOVE_TYPE_ORDER[current];
+  return {
+    recommendedType,
+    totalPoints,
+    totalWeightKg,
+    totalItems,
+    totalVolumeM3,
+    loadedVolumeM3,
+    warnings,
+    requiresUpgrade,
+    upgradeTo: requiresUpgrade ? recommendedType : undefined,
   };
 }
 
@@ -479,6 +611,13 @@ function billableHoursWith(tier, loadedVolumeM3Value, crew, durationSeconds, tra
   return Math.max(minimum, quarters / 4);
 }
 
+function extraHelpersFor(requested, trace) {
+  const wanted = Math.floor(nonNegative(requested));
+  if (wanted <= 0) return 0;
+  const max = Math.max(0, Math.floor(trace.get('crew.maxExtraHelpers')));
+  return Math.min(wanted, max);
+}
+
 export function suggestedUnitPriceEur(item, config) {
   const w = nonNegative(item.widthCm);
   const h = nonNegative(item.heightCm);
@@ -532,7 +671,10 @@ export function quoteMove(input, config) {
   const vehicle = cents(
     trace.maybe(`vehicle.charge.${vehicleType}`) ?? trace.get('vehicle.charge.small_van'),
   );
-  const labor = roundHalfUp(crew * trace.get(tierKey(tier, 'laborRatePerHour')) * hours * 100);
+  const laborRate = trace.get(tierKey(tier, 'laborRatePerHour'));
+  const labor = roundHalfUp(crew * laborRate * hours * 100);
+  const extraHelpersCount = extraHelpersFor(input.extraHelpers, trace);
+  const extraHelpers = roundHalfUp(extraHelpersCount * laborRate * hours * 100);
   const items = profile.itemsCents;
 
   const packingLevel = input.packingLevel ?? 'none';
@@ -561,7 +703,7 @@ export function quoteMove(input, config) {
 
   // 5. Totals.
   const operationalSubtotal =
-    base + distance + vehicle + labor + items + packing + handling + services + storage;
+    base + distance + vehicle + labor + extraHelpers + items + packing + handling + services + storage;
   const modeMultiplier = mode === 'instant' ? trace.get(tierKey(tier, 'instantMultiplier')) : 1;
   const adjustedSubtotal = roundHalfUp(operationalSubtotal * modeMultiplier);
   const modeAdjustment = adjustedSubtotal - operationalSubtotal;
@@ -578,12 +720,12 @@ export function quoteMove(input, config) {
   const total = net + vat;
 
   // 6. Reconcile (master D4).
-  const lineSum = base + distance + vehicle + labor + items + packing + handling + services + storage;
+  const lineSum = base + distance + vehicle + labor + extraHelpers + items + packing + handling + services + storage;
   if (lineSum !== operationalSubtotal) throw new PricingReconcileError('lines ≠ operational subtotal');
   if (operationalSubtotal + modeAdjustment !== adjustedSubtotal) throw new PricingReconcileError('mode adjustment');
   if (Math.max(minimum, adjustedSubtotal + platformFee - discount) !== net) throw new PricingReconcileError('net');
   if (net + vat !== total) throw new PricingReconcileError('vat');
-  if (![base, distance, vehicle, labor, items, packing, handling, services, storage, total].every(Number.isInteger)) {
+  if (![base, distance, vehicle, labor, extraHelpers, items, packing, handling, services, storage, total].every(Number.isInteger)) {
     throw new PricingReconcileError('non-integer cents');
   }
 
@@ -605,6 +747,8 @@ export function quoteMove(input, config) {
       weightKg: round3(profile.weightKg),
       requiredCrew: req.crew,
       crew,
+      extraHelpers: extraHelpersCount,
+      totalCrew: crew + extraHelpersCount,
       vehicleType,
       billableHours: hours,
       distanceKm: round3(distanceKm),
@@ -615,6 +759,7 @@ export function quoteMove(input, config) {
       distance: eur(distance),
       vehicle: eur(vehicle),
       labor: eur(labor),
+      extraHelpers: eur(extraHelpers),
       items: eur(items),
       packing: eur(packing),
       handling: eur(handling),
@@ -677,8 +822,18 @@ export function parseBreakdown(raw) {
   if (!isServiceTier(b.tier) || (b.mode !== 'instant' && b.mode !== 'scheduled')) return null;
   if (!b.lines || typeof b.lines !== 'object' || !b.profile || typeof b.profile !== 'object') return null;
   if (typeof b.total !== 'number' || !Number.isFinite(b.total)) return null;
+  const extraHelpers = typeof b.profile.extraHelpers === 'number' ? b.profile.extraHelpers : 0;
   return {
     ...b,
+    lines: { ...b.lines, extraHelpers: typeof b.lines.extraHelpers === 'number' ? b.lines.extraHelpers : 0 },
+    profile: {
+      ...b.profile,
+      extraHelpers,
+      totalCrew:
+        typeof b.profile.totalCrew === 'number'
+          ? b.profile.totalCrew
+          : (typeof b.profile.crew === 'number' ? b.profile.crew : 0) + extraHelpers,
+    },
     serviceLines: Array.isArray(b.serviceLines) ? b.serviceLines : [],
     itemLines: Array.isArray(b.itemLines) ? b.itemLines : [],
     rates: b.rates && typeof b.rates === 'object' ? b.rates : {},
@@ -745,6 +900,8 @@ export function quoteInputFromRow(row, catalog, vehicleTypeOverride) {
     services,
     storageWeeks: nonNegative(row.storageWeeks),
     discountEur: 0,
+    // Client-added helpers (crew master D2); the engine clamps to crew.maxExtraHelpers.
+    extraHelpers: nonNegative(row.extraHelpers),
     // Pickup country (plan wave-2026-10/4 C2) — resolved by the function before
     // quoting and stored on the row; the engine only echoes it on the breakdown.
     countryCode: typeof row.countryCode === 'string' ? row.countryCode : null,
@@ -754,6 +911,8 @@ export function quoteInputFromRow(row, catalog, vehicleTypeOverride) {
 /**
  * The five quote columns + the charged class/crew, as written to `moves`; plus
  * the pickup `countryCode` the quote was priced for when the breakdown names one.
+ * `crewSize` is the whole crew that turns up (charged crew + extra helpers) and
+ * `extraHelpers` the clamped count actually billed (crew master §4).
  */
 export function quoteColumns(breakdown, pricedAtIso) {
   return {
@@ -763,7 +922,8 @@ export function quoteColumns(breakdown, pricedAtIso) {
     pricedAt: pricedAtIso,
     currency: 'EUR',
     vehicleType: breakdown.profile.vehicleType,
-    crewSize: String(breakdown.profile.crew),
+    crewSize: String(breakdown.profile.totalCrew ?? breakdown.profile.crew),
+    extraHelpers: breakdown.profile.extraHelpers ?? 0,
     ...(typeof breakdown.countryCode === 'string' && breakdown.countryCode
       ? { countryCode: breakdown.countryCode }
       : {}),

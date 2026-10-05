@@ -690,7 +690,7 @@
     "a11y": "Seleziona il tipo di trasloco",
     "label": "Tipo di trasloco",
     "light": {
-      "body": "I traslochi normali usano un furgone piccolo e un traslocatore.",
+      "body": "I traslochi normali usano un furgone piccolo e solo l'autista.",
       "helper": "Carico ridotto, pochi oggetti",
       "label": "Trasloco normale",
       "short": "Normale",
@@ -699,7 +699,7 @@
     },
     "placeholder": "Scegli un tipo di trasloco",
     "premium": {
-      "body": "I traslochi premium usano un camion grande e una squadra di 3 persone.",
+      "body": "I traslochi premium usano un camion grande, l'autista e 2 aiutanti.",
       "helper": "Trasloco con servizio completo",
       "label": "Trasloco premium",
       "short": "Premium",
@@ -707,7 +707,7 @@
       "title": "Trasloco premium"
     },
     "regular": {
-      "body": "I traslochi medi usano un camion medio e una squadra di 2 persone.",
+      "body": "I traslochi medi usano un camion medio, l'autista e 1 aiutante.",
       "helper": "Trasloco domestico standard",
       "label": "Trasloco medio",
       "short": "Medio",
@@ -1047,6 +1047,13 @@
       "crew": {
         "label": "Dimensione della squadra {{value}}"
       },
+      "crewDriverOnly": {
+        "label": "Squadra: solo l'autista"
+      },
+      "crewHelpers": {
+        "label_one": "Squadra: autista + {{count}} aiutante",
+        "label_other": "Squadra: autista + {{count}} aiutanti"
+      },
       "hours": {
         "label": "Tempo fatturabile {{value}}"
       },
@@ -1104,6 +1111,10 @@
       },
       "labor": {
         "label": "Manodopera ({{crew}} × {{rate}} × {{hours}})"
+      },
+      "extraHelpers": {
+        "label_one": "Aiutante extra ({{count}} × {{rate}} × {{hours}})",
+        "label_other": "Aiutanti extra ({{count}} × {{rate}} × {{hours}})"
       },
       "packing": {
         "label": "Imballaggio"

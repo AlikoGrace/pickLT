@@ -698,7 +698,7 @@
     "a11y": "Wybierz rodzaj przeprowadzki",
     "label": "Rodzaj przeprowadzki",
     "light": {
-      "body": "Normalne przeprowadzki realizujemy małym busem i jednym przewoźnikiem.",
+      "body": "Normalne przeprowadzki realizujemy małym busem, tylko z kierowcą.",
       "helper": "Mały ładunek — kilka rzeczy",
       "label": "Normalna przeprowadzka",
       "short": "Normalna",
@@ -707,7 +707,7 @@
     },
     "placeholder": "Wybierz rodzaj przeprowadzki",
     "premium": {
-      "body": "Przeprowadzki premium realizujemy dużą ciężarówką i 3-osobową ekipą.",
+      "body": "Przeprowadzki premium realizujemy dużą ciężarówką, z kierowcą i 2 pomocnikami.",
       "helper": "Przeprowadzka z pełną obsługą",
       "label": "Przeprowadzka premium",
       "short": "Premium",
@@ -715,7 +715,7 @@
       "title": "Przeprowadzka premium"
     },
     "regular": {
-      "body": "Średnie przeprowadzki realizujemy średnią ciężarówką i 2-osobową ekipą.",
+      "body": "Średnie przeprowadzki realizujemy średnią ciężarówką, z kierowcą i 1 pomocnikiem.",
       "helper": "Standardowa przeprowadzka domowa",
       "label": "Średnia przeprowadzka",
       "short": "Średnia",
@@ -1066,6 +1066,15 @@
       "crew": {
         "label": "Liczebność ekipy {{value}}"
       },
+      "crewDriverOnly": {
+        "label": "Ekipa: tylko kierowca"
+      },
+      "crewHelpers": {
+        "label_few": "Ekipa: kierowca + {{count}} pomocników",
+        "label_many": "Ekipa: kierowca + {{count}} pomocników",
+        "label_one": "Ekipa: kierowca + {{count}} pomocnik",
+        "label_other": "Ekipa: kierowca + {{count}} pomocnika"
+      },
       "hours": {
         "label": "Czas rozliczany {{value}}"
       },
@@ -1129,6 +1138,12 @@
       },
       "labor": {
         "label": "Praca ekipy ({{crew}} × {{rate}} × {{hours}})"
+      },
+      "extraHelpers": {
+        "label_few": "Dodatkowi pomocnicy ({{count}} × {{rate}} × {{hours}})",
+        "label_many": "Dodatkowi pomocnicy ({{count}} × {{rate}} × {{hours}})",
+        "label_one": "Dodatkowy pomocnik ({{count}} × {{rate}} × {{hours}})",
+        "label_other": "Dodatkowi pomocnicy ({{count}} × {{rate}} × {{hours}})"
       },
       "packing": {
         "label": "Pakowanie"

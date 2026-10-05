@@ -690,7 +690,7 @@
     "a11y": "Seleccionar el tipo de mudanza",
     "label": "Tipo de mudanza",
     "light": {
-      "body": "Las mudanzas normales usan una furgoneta pequeña y un transportista.",
+      "body": "Las mudanzas normales usan una furgoneta pequeña y solo el conductor.",
       "helper": "Carga pequeña, pocos objetos",
       "label": "Mudanza normal",
       "short": "Normal",
@@ -699,7 +699,7 @@
     },
     "placeholder": "Elige un tipo de mudanza",
     "premium": {
-      "body": "Las mudanzas premium usan un camión grande y un equipo de 3 personas.",
+      "body": "Las mudanzas premium usan un camión grande, el conductor y 2 ayudantes.",
       "helper": "Mudanza con servicio completo",
       "label": "Mudanza premium",
       "short": "Premium",
@@ -707,7 +707,7 @@
       "title": "Mudanza premium"
     },
     "regular": {
-      "body": "Las mudanzas medias usan un camión mediano y un equipo de 2 personas.",
+      "body": "Las mudanzas medias usan un camión mediano, el conductor y 1 ayudante.",
       "helper": "Mudanza doméstica estándar",
       "label": "Mudanza media",
       "short": "Media",
@@ -1047,6 +1047,13 @@
       "crew": {
         "label": "Tamaño del equipo {{value}}"
       },
+      "crewDriverOnly": {
+        "label": "Equipo: solo el conductor"
+      },
+      "crewHelpers": {
+        "label_one": "Equipo: conductor + {{count}} ayudante",
+        "label_other": "Equipo: conductor + {{count}} ayudantes"
+      },
       "hours": {
         "label": "Tiempo facturable {{value}}"
       },
@@ -1104,6 +1111,10 @@
       },
       "labor": {
         "label": "Mano de obra ({{crew}} × {{rate}} × {{hours}})"
+      },
+      "extraHelpers": {
+        "label_one": "Ayudante adicional ({{count}} × {{rate}} × {{hours}})",
+        "label_other": "Ayudantes adicionales ({{count}} × {{rate}} × {{hours}})"
       },
       "packing": {
         "label": "Embalaje"

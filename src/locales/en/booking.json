@@ -693,7 +693,7 @@
     "a11y": "Select move type",
     "label": "Type of move",
     "light": {
-      "body": "Normal moves use a small van and one mover.",
+      "body": "Normal moves use a small van with the driver only.",
       "helper": "Small load — few items",
       "label": "Normal Move",
       "short": "Normal",
@@ -702,7 +702,7 @@
     },
     "placeholder": "Choose a move type",
     "premium": {
-      "body": "Premium moves use a large truck and a 3-person crew.",
+      "body": "Premium moves use a large truck with the driver + 2 helpers.",
       "helper": "Full-service move",
       "label": "Premium Move",
       "short": "Premium",
@@ -710,7 +710,7 @@
       "title": "Premium Move"
     },
     "regular": {
-      "body": "Medium moves use a medium truck and a 2-person crew.",
+      "body": "Medium moves use a medium truck with the driver + 1 helper.",
       "helper": "Standard household move",
       "label": "Medium Move",
       "short": "Medium",
@@ -1050,6 +1050,13 @@
       "crew": {
         "label": "Crew size {{value}}"
       },
+      "crewDriverOnly": {
+        "label": "Crew: driver only"
+      },
+      "crewHelpers": {
+        "label_one": "Crew: driver + {{count}} helper",
+        "label_other": "Crew: driver + {{count}} helpers"
+      },
       "hours": {
         "label": "Billable time {{value}}"
       },
@@ -1107,6 +1114,10 @@
       },
       "labor": {
         "label": "Crew labour ({{crew}} × {{rate}} × {{hours}})"
+      },
+      "extraHelpers": {
+        "label_one": "Extra helper ({{count}} × {{rate}} × {{hours}})",
+        "label_other": "Extra helpers ({{count}} × {{rate}} × {{hours}})"
       },
       "packing": {
         "label": "Packing"

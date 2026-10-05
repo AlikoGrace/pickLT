@@ -3,6 +3,7 @@
 import NcInputNumber from '@/components/NcInputNumber'
 import { useMoveSearch, type CustomItem, type MoveTypeKey } from '@/context/moveSearch'
 import { classifyMove, DEFAULT_CLASSIFICATION_POINTS, type InventoryItemDef as ClassifyItemDef, type CustomItemInput } from '@/lib/classifyMove'
+import { normalizeCustomSize } from '@/lib/pricingInputs'
 import ButtonSecondary from '@/shared/ButtonSecondary'
 import { Divider } from '@/shared/divider'
 import Input from '@/shared/Input'
@@ -139,6 +140,7 @@ const Page = () => {
       name: ci.name,
       quantity: ci.quantity,
       estimatedWeightKg: ci.approxWeight ? parseFloat(ci.approxWeight) || 20 : 20,
+      approxSize: normalizeCustomSize(ci.approxSize),
     }))
     return classifyMove(
       inventory,

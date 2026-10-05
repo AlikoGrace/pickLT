@@ -691,7 +691,7 @@
     "a11y": "Sélectionner le type de déménagement",
     "label": "Type de déménagement",
     "light": {
-      "body": "Les déménagements normaux utilisent une petite camionnette et un déménageur.",
+      "body": "Les déménagements normaux utilisent une petite camionnette, avec le chauffeur seul.",
       "helper": "Petit volume — quelques objets",
       "label": "Déménagement normal",
       "short": "Normal",
@@ -700,7 +700,7 @@
     },
     "placeholder": "Choisissez un type de déménagement",
     "premium": {
-      "body": "Les déménagements premium utilisent un grand camion et une équipe de 3 personnes.",
+      "body": "Les déménagements premium utilisent un grand camion, avec le chauffeur et 2 aides.",
       "helper": "Déménagement clé en main",
       "label": "Déménagement premium",
       "short": "Premium",
@@ -708,7 +708,7 @@
       "title": "Déménagement premium"
     },
     "regular": {
-      "body": "Les déménagements medium utilisent un camion moyen et une équipe de 2 personnes.",
+      "body": "Les déménagements medium utilisent un camion moyen, avec le chauffeur et 1 aide.",
       "helper": "Déménagement standard d'un logement",
       "label": "Déménagement medium",
       "short": "Medium",
@@ -1049,6 +1049,13 @@
       "crew": {
         "label": "Taille de l'équipe {{value}}"
       },
+      "crewDriverOnly": {
+        "label": "Équipe : chauffeur seul"
+      },
+      "crewHelpers": {
+        "label_one": "Équipe : chauffeur + {{count}} aide",
+        "label_other": "Équipe : chauffeur + {{count}} aides"
+      },
       "hours": {
         "label": "Temps facturable {{value}}"
       },
@@ -1106,6 +1113,10 @@
       },
       "labor": {
         "label": "Main-d'œuvre ({{crew}} × {{rate}} × {{hours}})"
+      },
+      "extraHelpers": {
+        "label_one": "Aide supplémentaire ({{count}} × {{rate}} × {{hours}})",
+        "label_other": "Aides supplémentaires ({{count}} × {{rate}} × {{hours}})"
       },
       "packing": {
         "label": "Emballage"

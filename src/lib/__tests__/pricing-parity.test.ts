@@ -100,7 +100,7 @@ describe('MoveDNA §5 worked examples (master §6.4)', () => {
     expect(movedna('regular', 'scheduled').profile).toMatchObject({ crew: 2, billableHours: 2, vehicleType: 'medium_truck' })
     expect(movedna('premium', 'scheduled').profile).toMatchObject({ crew: 3, billableHours: 2, vehicleType: 'large_truck' })
     expect(movedna('light', 'scheduled').lines).toEqual({
-      base: 35, distance: 22, vehicle: 15, labor: 44, items: 0, packing: 0, handling: 0, services: 0, storage: 0,
+      base: 35, distance: 22, vehicle: 15, labor: 44, extraHelpers: 0, items: 0, packing: 0, handling: 0, services: 0, storage: 0,
     })
     expect(movedna('premium', 'scheduled').lines).toMatchObject({ base: 85, distance: 34, vehicle: 45, labor: 168, packing: 65, handling: 40 })
   })
@@ -174,8 +174,8 @@ describe('golden fixture — quoteMove (shared with pickltmobile)', () => {
 // ── 3. Registry parity ───────────────────────────────────────────────────────
 
 describe('registry — PRICING_DEFAULTS', () => {
-  it('is exactly the 66-key v3 registry of master §5', () => {
-    expect(Object.keys(PRICING_DEFAULTS)).toHaveLength(66)
+  it('is exactly the 75-key v3 registry of master §5', () => {
+    expect(Object.keys(PRICING_DEFAULTS)).toHaveLength(75)
     for (const legacy of ['instant.', 'scheduled.', 'mover.', 'pricing.model', 'pricing.local', 'pricing.volume', 'pricing.access', 'pricing.leadTime']) {
       expect(Object.keys(PRICING_DEFAULTS).filter((k) => k.startsWith(legacy))).toEqual([])
     }
@@ -455,5 +455,37 @@ describe('volume — parity with the mobile client', () => {
   it('never yields NaN on missing dimensions', () => {
     const broken = { ...SOFA_3, meta: { ...SOFA_3.meta, widthCm: null as unknown as number } }
     expect(computeMoveVolume({ sofa_3seater: 2 }, [], [broken]).loadedVolumeM3).toBe(0)
+  })
+})
+
+// ── 4. Extra helpers (crew master D2) ────────────────────────────────────────
+
+describe('extra helpers', () => {
+  const input: QuoteInput = { tier: 'regular', mode: 'instant', distanceKm: 20, durationSeconds: 0, basket: EMPTY, catalog: CATALOG }
+
+  it('bills extraHelpers × labour rate × billable hours, through the instant multiplier', () => {
+    const b = quoteMove({ ...input, extraHelpers: 2 })
+    const none = quoteMove(input)
+    expect(b.lines.extraHelpers).toBe(2 * 24 * 2)
+    expect(b.profile).toMatchObject({ crew: 2, extraHelpers: 2, totalCrew: 4, billableHours: none.profile.billableHours })
+    expect(b.operationalSubtotal).toBe(none.operationalSubtotal + 96)
+    expect(b.adjustedSubtotal).toBeCloseTo((none.operationalSubtotal + 96) * 1.15, 2)
+    const sum = Object.values(b.lines).reduce((acc, v) => acc + Math.round(v * 100), 0)
+    expect(sum).toBe(Math.round(b.operationalSubtotal * 100))
+  })
+
+  it('clamps to 0…crew.maxExtraHelpers and records the cap only when asked', () => {
+    expect(quoteMove({ ...input, extraHelpers: 8 }).profile.extraHelpers).toBe(3)
+    expect(quoteMove({ ...input, extraHelpers: -1 }).profile.extraHelpers).toBe(0)
+    expect(quoteMove({ ...input, extraHelpers: 2 }, toPricingConfig([{ key: 'crew.maxExtraHelpers', value: 1 }])).profile.extraHelpers).toBe(1)
+    expect('crew.maxExtraHelpers' in quoteMove(input).rates).toBe(false)
+  })
+
+  it('reads a stored quote without the fields as "no extras"', () => {
+    const legacy = JSON.parse(serializeBreakdown(quoteMove(input)))
+    delete legacy.lines.extraHelpers
+    delete legacy.profile.extraHelpers
+    delete legacy.profile.totalCrew
+    expect(parseBreakdown(legacy)).toMatchObject({ lines: { extraHelpers: 0 }, profile: { extraHelpers: 0, totalCrew: 2 } })
   })
 })

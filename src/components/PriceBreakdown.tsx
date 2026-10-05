@@ -72,6 +72,21 @@ export interface BreakdownRow {
 }
 
 /**
+ * "Crew: driver only" / "Crew: driver + 2 helpers" — the whole crew that turns
+ * up (charged crew + extra helpers), told as the driver plus helpers (crew
+ * master §1).
+ */
+export function crewAssumption(t: TFunction, totalCrew: number): string {
+  const helpers = Math.max(0, Math.floor(totalCrew) - 1)
+  return helpers === 0
+    ? t('booking:pricing.assumptions.crewDriverOnly.label', { defaultValue: 'Crew: driver only' })
+    : t('booking:pricing.assumptions.crewHelpers.label', {
+        defaultValue: 'Crew: driver + {{count}} helpers',
+        count: helpers,
+      })
+}
+
+/**
  * The ordered rows of the card, as plain data. The page sections and a test
  * share this so the card and any summary line can never disagree about what
  * is in the price.
@@ -112,6 +127,17 @@ export function breakdownRows(t: TFunction, b: QuoteBreakdown): BreakdownRow[] {
         hours: formatNumber(profile.billableHours, { maximumFractionDigits: 2 }) + ' h',
       }),
       amount: lines.labor,
+    },
+    {
+      // Client-added helpers (crew master D2), at the labour rate and hours above.
+      key: 'extraHelpers',
+      label: t('booking:pricing.line.extraHelpers.label', {
+        defaultValue: 'Extra helpers ({{count}} × {{rate}} × {{hours}})',
+        count: profile.extraHelpers ?? 0,
+        rate: money(b.rates[`tier.${b.tier}.laborRatePerHour`] ?? 0),
+        hours: formatNumber(profile.billableHours, { maximumFractionDigits: 2 }) + ' h',
+      }),
+      amount: lines.extraHelpers ?? 0,
     },
     {
       key: 'items',
@@ -356,10 +382,7 @@ export default function PriceBreakdown({
               })}
             </li>
             <li>
-              {t('booking:pricing.assumptions.crew.label', {
-                defaultValue: 'Crew {{value}}',
-                value: formatNumber(b.profile.crew),
-              })}
+              {crewAssumption(t, b.profile.totalCrew ?? b.profile.crew)}
             </li>
             <li>
               {t('booking:pricing.assumptions.hours.label', {

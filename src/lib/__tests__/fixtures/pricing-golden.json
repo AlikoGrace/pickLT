@@ -1,6 +1,6 @@
 {
-  "_note": "Shared pricing v3 fixtures (master plan §6.4). Committed to pickltmobile and pickLT; the TS engine, the JS function mirror and the web port must all reproduce every field of every case exactly. A diff here is a deliberate pricing change — never re-baseline to make a test pass. The six movedna-* cases are MoveDNA §5 with an empty basket, 20 km, 1 h drive (2 billable hours). Regenerated 2026-10-01 (rates trace now includes the volume.custom.* bands read for custom items; no monetary value changed).",
-  "_generated": "2026-10-01",
+  "_note": "Shared pricing v3 fixtures (master plan §6.4). Committed to pickltmobile and pickLT; the TS engine, the JS function mirror and the web port must all reproduce every field of every case exactly. A diff here is a deliberate pricing change — never re-baseline to make a test pass. The six movedna-* cases are MoveDNA §5 with an empty basket, 20 km, 1 h drive (2 billable hours). Regenerated 2026-10-01 (rates trace now includes the volume.custom.* bands read for custom items; no monetary value changed). Regenerated 2026-10-05 (crew master §4: every breakdown gains lines.extraHelpers, profile.extraHelpers and profile.totalCrew — 0 / 0 / crew on the existing cases, no monetary value changed; five extra-helpers / tier cases added; the tier-* cases carry a `classification` block every classifier port must reproduce).",
+  "_generated": "2026-10-05",
   "_engine": "v3",
   "catalog": [
     {
@@ -159,6 +159,8 @@
           "weightKg": 0,
           "requiredCrew": 1,
           "crew": 1,
+          "extraHelpers": 0,
+          "totalCrew": 1,
           "vehicleType": "small_van",
           "billableHours": 2,
           "distanceKm": 20,
@@ -169,6 +171,7 @@
           "distance": 22,
           "vehicle": 15,
           "labor": 44,
+          "extraHelpers": 0,
           "items": 0,
           "packing": 0,
           "handling": 0,
@@ -313,6 +316,8 @@
           "weightKg": 0,
           "requiredCrew": 1,
           "crew": 1,
+          "extraHelpers": 0,
+          "totalCrew": 1,
           "vehicleType": "small_van",
           "billableHours": 2,
           "distanceKm": 20,
@@ -323,6 +328,7 @@
           "distance": 22,
           "vehicle": 15,
           "labor": 44,
+          "extraHelpers": 0,
           "items": 0,
           "packing": 0,
           "handling": 0,
@@ -468,6 +474,8 @@
           "weightKg": 0,
           "requiredCrew": 1,
           "crew": 2,
+          "extraHelpers": 0,
+          "totalCrew": 2,
           "vehicleType": "medium_truck",
           "billableHours": 2,
           "distanceKm": 20,
@@ -478,6 +486,7 @@
           "distance": 27,
           "vehicle": 25,
           "labor": 96,
+          "extraHelpers": 0,
           "items": 0,
           "packing": 30,
           "handling": 20,
@@ -622,6 +631,8 @@
           "weightKg": 0,
           "requiredCrew": 1,
           "crew": 2,
+          "extraHelpers": 0,
+          "totalCrew": 2,
           "vehicleType": "medium_truck",
           "billableHours": 2,
           "distanceKm": 20,
@@ -632,6 +643,7 @@
           "distance": 27,
           "vehicle": 25,
           "labor": 96,
+          "extraHelpers": 0,
           "items": 0,
           "packing": 30,
           "handling": 20,
@@ -777,6 +789,8 @@
           "weightKg": 0,
           "requiredCrew": 1,
           "crew": 3,
+          "extraHelpers": 0,
+          "totalCrew": 3,
           "vehicleType": "large_truck",
           "billableHours": 2,
           "distanceKm": 20,
@@ -787,6 +801,7 @@
           "distance": 34,
           "vehicle": 45,
           "labor": 168,
+          "extraHelpers": 0,
           "items": 0,
           "packing": 65,
           "handling": 40,
@@ -931,6 +946,8 @@
           "weightKg": 0,
           "requiredCrew": 1,
           "crew": 3,
+          "extraHelpers": 0,
+          "totalCrew": 3,
           "vehicleType": "large_truck",
           "billableHours": 2,
           "distanceKm": 20,
@@ -941,6 +958,7 @@
           "distance": 34,
           "vehicle": 45,
           "labor": 168,
+          "extraHelpers": 0,
           "items": 0,
           "packing": 65,
           "handling": 40,
@@ -1095,6 +1113,8 @@
           "weightKg": 240,
           "requiredCrew": 1,
           "crew": 2,
+          "extraHelpers": 0,
+          "totalCrew": 2,
           "vehicleType": "medium_truck",
           "billableHours": 2,
           "distanceKm": 12.5,
@@ -1105,6 +1125,7 @@
           "distance": 16.88,
           "vehicle": 25,
           "labor": 96,
+          "extraHelpers": 0,
           "items": 78,
           "packing": 80,
           "handling": 50,
@@ -1275,6 +1296,8 @@
           "weightKg": 1400,
           "requiredCrew": 3,
           "crew": 3,
+          "extraHelpers": 0,
+          "totalCrew": 3,
           "vehicleType": "large_truck",
           "billableHours": 3.25,
           "distanceKm": 8,
@@ -1285,6 +1308,7 @@
           "distance": 8.8,
           "vehicle": 45,
           "labor": 214.5,
+          "extraHelpers": 0,
           "items": 534,
           "packing": 0,
           "handling": 0,
@@ -1443,6 +1467,8 @@
           "weightKg": 200,
           "requiredCrew": 2,
           "crew": 2,
+          "extraHelpers": 0,
+          "totalCrew": 2,
           "vehicleType": "small_van",
           "billableHours": 2,
           "distanceKm": 5,
@@ -1453,6 +1479,7 @@
           "distance": 5.5,
           "vehicle": 15,
           "labor": 88,
+          "extraHelpers": 0,
           "items": 41.7,
           "packing": 0,
           "handling": 15,
@@ -1606,6 +1633,8 @@
           "weightKg": 3000,
           "requiredCrew": 4,
           "crew": 4,
+          "extraHelpers": 0,
+          "totalCrew": 4,
           "vehicleType": "large_truck",
           "billableHours": 6.25,
           "distanceKm": 40,
@@ -1616,6 +1645,7 @@
           "distance": 68,
           "vehicle": 45,
           "labor": 700,
+          "extraHelpers": 0,
           "items": 1242,
           "packing": 65,
           "handling": 40,
@@ -1768,6 +1798,8 @@
           "weightKg": 0,
           "requiredCrew": 1,
           "crew": 1,
+          "extraHelpers": 0,
+          "totalCrew": 1,
           "vehicleType": "small_van",
           "billableHours": 2,
           "distanceKm": 0,
@@ -1778,6 +1810,7 @@
           "distance": 0,
           "vehicle": 15,
           "labor": 44,
+          "extraHelpers": 0,
           "items": 0,
           "packing": 0,
           "handling": 0,
@@ -1923,6 +1956,8 @@
           "weightKg": 0,
           "requiredCrew": 1,
           "crew": 2,
+          "extraHelpers": 0,
+          "totalCrew": 2,
           "vehicleType": "medium_truck",
           "billableHours": 2,
           "distanceKm": 20,
@@ -1933,6 +1968,7 @@
           "distance": 27,
           "vehicle": 25,
           "labor": 96,
+          "extraHelpers": 0,
           "items": 0,
           "packing": 30,
           "handling": 20,
@@ -2105,6 +2141,8 @@
           "weightKg": 72,
           "requiredCrew": 1,
           "crew": 2,
+          "extraHelpers": 0,
+          "totalCrew": 2,
           "vehicleType": "medium_truck",
           "billableHours": 2,
           "distanceKm": 33.333,
@@ -2115,6 +2153,7 @@
           "distance": 45,
           "vehicle": 25,
           "labor": 96,
+          "extraHelpers": 0,
           "items": 34,
           "packing": 150,
           "handling": 20,
@@ -2304,6 +2343,8 @@
           "weightKg": 50,
           "requiredCrew": 1,
           "crew": 1,
+          "extraHelpers": 0,
+          "totalCrew": 1,
           "vehicleType": "large_truck",
           "billableHours": 2,
           "distanceKm": 3.2,
@@ -2314,6 +2355,7 @@
           "distance": 3.52,
           "vehicle": 45,
           "labor": 44,
+          "extraHelpers": 0,
           "items": 12.3,
           "packing": 0,
           "handling": 0,
@@ -2360,6 +2402,902 @@
           "tier.light.laborRatePerHour": 22,
           "tier.light.minimumHours": 2,
           "tier.light.packingAllowance": 0,
+          "vehicle.charge.large_truck": 45,
+          "volume.packingFactor": 1.35
+        },
+        "assumptions": {
+          "unpricedItemIds": [],
+          "unknownItemIds": [],
+          "estimated": true
+        },
+        "flags": {
+          "exceedsLargestVehicle": false,
+          "crewCapped": false
+        }
+      }
+    },
+    {
+      "name": "extra-helpers-1-regular",
+      "input": {
+        "tier": "regular",
+        "mode": "scheduled",
+        "distanceKm": 20,
+        "durationSeconds": 3600,
+        "basket": {
+          "counts": {
+            "sofa_3seater": 2,
+            "cardboard_boxes": 10
+          },
+          "customItems": []
+        },
+        "catalog": [
+          {
+            "itemId": "sofa_3seater",
+            "name": "Sofa (3-seater)",
+            "category": "living_room",
+            "widthCm": 200,
+            "heightCm": 90,
+            "depthCm": 90,
+            "weightKg": 70,
+            "moveClassificationWeight": 12,
+            "moveTypeMinimum": "regular",
+            "unitPriceEur": 26.7,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "cardboard_boxes",
+            "name": "Cardboard boxes",
+            "category": "boxes",
+            "widthCm": 60,
+            "heightCm": 40,
+            "depthCm": 40,
+            "weightKg": 10,
+            "moveClassificationWeight": 2,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": 2.46,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "piano",
+            "name": "Piano",
+            "category": "special",
+            "widthCm": 150,
+            "heightCm": 130,
+            "depthCm": 60,
+            "weightKg": 200,
+            "moveClassificationWeight": 25,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.7,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "wardrobe_large",
+            "name": "Wardrobe (large)",
+            "category": "bedroom",
+            "widthCm": 200,
+            "heightCm": 220,
+            "depthCm": 60,
+            "weightKg": 100,
+            "moveClassificationWeight": 18,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.4,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "unpriced_lamp",
+            "name": "Lamp (no price yet)",
+            "category": "miscellaneous",
+            "widthCm": 40,
+            "heightCm": 160,
+            "depthCm": 40,
+            "weightKg": 3,
+            "moveClassificationWeight": 1,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": null
+          }
+        ],
+        "extraHelpers": 1
+      },
+      "expected": {
+        "version": "v3",
+        "currency": "EUR",
+        "tier": "regular",
+        "mode": "scheduled",
+        "profile": {
+          "itemCount": 12,
+          "loadedVolumeM3": 5.67,
+          "rawVolumeM3": 4.2,
+          "weightKg": 240,
+          "requiredCrew": 1,
+          "crew": 2,
+          "extraHelpers": 1,
+          "totalCrew": 3,
+          "vehicleType": "medium_truck",
+          "billableHours": 2,
+          "distanceKm": 20,
+          "durationHours": 1
+        },
+        "lines": {
+          "base": 55,
+          "distance": 27,
+          "vehicle": 25,
+          "labor": 96,
+          "extraHelpers": 48,
+          "items": 78,
+          "packing": 30,
+          "handling": 20,
+          "services": 0,
+          "storage": 0
+        },
+        "operationalSubtotal": 379,
+        "modeMultiplier": 1,
+        "modeAdjustment": 0,
+        "adjustedSubtotal": 379,
+        "platformFee": 30.32,
+        "discount": 0,
+        "minimumApplied": false,
+        "net": 409.32,
+        "vatRate": 0.19,
+        "vat": 77.77,
+        "total": 487.09,
+        "serviceLines": [],
+        "itemLines": [
+          {
+            "key": "cardboard_boxes",
+            "qty": 10,
+            "unitEur": 2.46,
+            "amountEur": 24.6
+          },
+          {
+            "key": "sofa_3seater",
+            "qty": 2,
+            "unitEur": 26.7,
+            "amountEur": 53.4
+          }
+        ],
+        "rates": {
+          "access.floorSurchargeNoElevator": 15,
+          "access.haltverbotFee": 0,
+          "capacityM3.medium_truck": 25,
+          "crew.m3PerMover": 15,
+          "crew.max": 4,
+          "crew.maxExtraHelpers": 3,
+          "handling.hoursPerM3": 0.2,
+          "packing.none": 0,
+          "platformFee.fixed": 0,
+          "platformFee.rate": 0.08,
+          "pricing.minimumCharge": 49,
+          "storage.perWeek": 30,
+          "tax.vatRate": 0.19,
+          "tier.regular.basePrice": 55,
+          "tier.regular.crew": 2,
+          "tier.regular.distanceRatePerKm": 1.35,
+          "tier.regular.handlingAllowance": 20,
+          "tier.regular.laborRatePerHour": 24,
+          "tier.regular.minVehicleRank": 1,
+          "tier.regular.minimumHours": 2,
+          "tier.regular.packingAllowance": 30,
+          "vehicle.charge.medium_truck": 25,
+          "volume.packingFactor": 1.35
+        },
+        "assumptions": {
+          "unpricedItemIds": [],
+          "unknownItemIds": [],
+          "estimated": true
+        },
+        "flags": {
+          "exceedsLargestVehicle": false,
+          "crewCapped": false
+        }
+      }
+    },
+    {
+      "name": "extra-helpers-3-premium-instant",
+      "input": {
+        "tier": "premium",
+        "mode": "instant",
+        "distanceKm": 35,
+        "durationSeconds": 2700,
+        "basket": {
+          "counts": {
+            "piano": 1,
+            "wardrobe_large": 1,
+            "cardboard_boxes": 20
+          },
+          "customItems": []
+        },
+        "catalog": [
+          {
+            "itemId": "sofa_3seater",
+            "name": "Sofa (3-seater)",
+            "category": "living_room",
+            "widthCm": 200,
+            "heightCm": 90,
+            "depthCm": 90,
+            "weightKg": 70,
+            "moveClassificationWeight": 12,
+            "moveTypeMinimum": "regular",
+            "unitPriceEur": 26.7,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "cardboard_boxes",
+            "name": "Cardboard boxes",
+            "category": "boxes",
+            "widthCm": 60,
+            "heightCm": 40,
+            "depthCm": 40,
+            "weightKg": 10,
+            "moveClassificationWeight": 2,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": 2.46,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "piano",
+            "name": "Piano",
+            "category": "special",
+            "widthCm": 150,
+            "heightCm": 130,
+            "depthCm": 60,
+            "weightKg": 200,
+            "moveClassificationWeight": 25,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.7,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "wardrobe_large",
+            "name": "Wardrobe (large)",
+            "category": "bedroom",
+            "widthCm": 200,
+            "heightCm": 220,
+            "depthCm": 60,
+            "weightKg": 100,
+            "moveClassificationWeight": 18,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.4,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "unpriced_lamp",
+            "name": "Lamp (no price yet)",
+            "category": "miscellaneous",
+            "widthCm": 40,
+            "heightCm": 160,
+            "depthCm": 40,
+            "weightKg": 3,
+            "moveClassificationWeight": 1,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": null
+          }
+        ],
+        "floorsNoLift": 2,
+        "extraHelpers": 3
+      },
+      "expected": {
+        "version": "v3",
+        "currency": "EUR",
+        "tier": "premium",
+        "mode": "instant",
+        "profile": {
+          "itemCount": 22,
+          "loadedVolumeM3": 7.736,
+          "rawVolumeM3": 5.73,
+          "weightKg": 500,
+          "requiredCrew": 2,
+          "crew": 3,
+          "extraHelpers": 3,
+          "totalCrew": 6,
+          "vehicleType": "large_truck",
+          "billableHours": 2,
+          "distanceKm": 35,
+          "durationHours": 0.75
+        },
+        "lines": {
+          "base": 85,
+          "distance": 59.5,
+          "vehicle": 45,
+          "labor": 168,
+          "extraHelpers": 168,
+          "items": 132.3,
+          "packing": 65,
+          "handling": 70,
+          "services": 0,
+          "storage": 0
+        },
+        "operationalSubtotal": 792.8,
+        "modeMultiplier": 1.1,
+        "modeAdjustment": 79.28,
+        "adjustedSubtotal": 872.08,
+        "platformFee": 69.77,
+        "discount": 0,
+        "minimumApplied": false,
+        "net": 941.85,
+        "vatRate": 0.19,
+        "vat": 178.95,
+        "total": 1120.8,
+        "serviceLines": [],
+        "itemLines": [
+          {
+            "key": "cardboard_boxes",
+            "qty": 20,
+            "unitEur": 2.46,
+            "amountEur": 49.2
+          },
+          {
+            "key": "piano",
+            "qty": 1,
+            "unitEur": 41.7,
+            "amountEur": 41.7
+          },
+          {
+            "key": "wardrobe_large",
+            "qty": 1,
+            "unitEur": 41.4,
+            "amountEur": 41.4
+          }
+        ],
+        "rates": {
+          "access.floorSurchargeNoElevator": 15,
+          "access.haltverbotFee": 0,
+          "capacityM3.large_truck": 45,
+          "crew.m3PerMover": 15,
+          "crew.max": 4,
+          "crew.maxExtraHelpers": 3,
+          "handling.hoursPerM3": 0.2,
+          "packing.none": 0,
+          "platformFee.fixed": 0,
+          "platformFee.rate": 0.08,
+          "pricing.minimumCharge": 49,
+          "storage.perWeek": 30,
+          "tax.vatRate": 0.19,
+          "tier.premium.basePrice": 85,
+          "tier.premium.crew": 3,
+          "tier.premium.distanceRatePerKm": 1.7,
+          "tier.premium.handlingAllowance": 40,
+          "tier.premium.instantMultiplier": 1.1,
+          "tier.premium.laborRatePerHour": 28,
+          "tier.premium.minVehicleRank": 2,
+          "tier.premium.minimumHours": 2,
+          "tier.premium.packingAllowance": 65,
+          "vehicle.charge.large_truck": 45,
+          "volume.packingFactor": 1.35
+        },
+        "assumptions": {
+          "unpricedItemIds": [],
+          "unknownItemIds": [],
+          "estimated": true
+        },
+        "flags": {
+          "exceedsLargestVehicle": false,
+          "crewCapped": false
+        }
+      }
+    },
+    {
+      "name": "extra-helpers-clamped",
+      "input": {
+        "tier": "light",
+        "mode": "scheduled",
+        "distanceKm": 10,
+        "durationSeconds": 1200,
+        "basket": {
+          "counts": {
+            "cardboard_boxes": 5
+          },
+          "customItems": []
+        },
+        "catalog": [
+          {
+            "itemId": "sofa_3seater",
+            "name": "Sofa (3-seater)",
+            "category": "living_room",
+            "widthCm": 200,
+            "heightCm": 90,
+            "depthCm": 90,
+            "weightKg": 70,
+            "moveClassificationWeight": 12,
+            "moveTypeMinimum": "regular",
+            "unitPriceEur": 26.7,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "cardboard_boxes",
+            "name": "Cardboard boxes",
+            "category": "boxes",
+            "widthCm": 60,
+            "heightCm": 40,
+            "depthCm": 40,
+            "weightKg": 10,
+            "moveClassificationWeight": 2,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": 2.46,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "piano",
+            "name": "Piano",
+            "category": "special",
+            "widthCm": 150,
+            "heightCm": 130,
+            "depthCm": 60,
+            "weightKg": 200,
+            "moveClassificationWeight": 25,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.7,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "wardrobe_large",
+            "name": "Wardrobe (large)",
+            "category": "bedroom",
+            "widthCm": 200,
+            "heightCm": 220,
+            "depthCm": 60,
+            "weightKg": 100,
+            "moveClassificationWeight": 18,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.4,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "unpriced_lamp",
+            "name": "Lamp (no price yet)",
+            "category": "miscellaneous",
+            "widthCm": 40,
+            "heightCm": 160,
+            "depthCm": 40,
+            "weightKg": 3,
+            "moveClassificationWeight": 1,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": null
+          }
+        ],
+        "extraHelpers": 7.9
+      },
+      "expected": {
+        "version": "v3",
+        "currency": "EUR",
+        "tier": "light",
+        "mode": "scheduled",
+        "profile": {
+          "itemCount": 5,
+          "loadedVolumeM3": 0.648,
+          "rawVolumeM3": 0.48,
+          "weightKg": 50,
+          "requiredCrew": 1,
+          "crew": 1,
+          "extraHelpers": 3,
+          "totalCrew": 4,
+          "vehicleType": "small_van",
+          "billableHours": 2,
+          "distanceKm": 10,
+          "durationHours": 0.333
+        },
+        "lines": {
+          "base": 35,
+          "distance": 11,
+          "vehicle": 15,
+          "labor": 44,
+          "extraHelpers": 132,
+          "items": 12.3,
+          "packing": 0,
+          "handling": 0,
+          "services": 0,
+          "storage": 0
+        },
+        "operationalSubtotal": 249.3,
+        "modeMultiplier": 1,
+        "modeAdjustment": 0,
+        "adjustedSubtotal": 249.3,
+        "platformFee": 19.94,
+        "discount": 0,
+        "minimumApplied": false,
+        "net": 269.24,
+        "vatRate": 0.19,
+        "vat": 51.16,
+        "total": 320.4,
+        "serviceLines": [],
+        "itemLines": [
+          {
+            "key": "cardboard_boxes",
+            "qty": 5,
+            "unitEur": 2.46,
+            "amountEur": 12.3
+          }
+        ],
+        "rates": {
+          "access.floorSurchargeNoElevator": 15,
+          "access.haltverbotFee": 0,
+          "capacityM3.small_van": 10,
+          "crew.m3PerMover": 15,
+          "crew.max": 4,
+          "crew.maxExtraHelpers": 3,
+          "handling.hoursPerM3": 0.2,
+          "packing.none": 0,
+          "platformFee.fixed": 0,
+          "platformFee.rate": 0.08,
+          "pricing.minimumCharge": 49,
+          "storage.perWeek": 30,
+          "tax.vatRate": 0.19,
+          "tier.light.basePrice": 35,
+          "tier.light.crew": 1,
+          "tier.light.distanceRatePerKm": 1.1,
+          "tier.light.handlingAllowance": 0,
+          "tier.light.laborRatePerHour": 22,
+          "tier.light.minVehicleRank": 0,
+          "tier.light.minimumHours": 2,
+          "tier.light.packingAllowance": 0,
+          "vehicle.charge.small_van": 15,
+          "volume.packingFactor": 1.35
+        },
+        "assumptions": {
+          "unpricedItemIds": [],
+          "unknownItemIds": [],
+          "estimated": true
+        },
+        "flags": {
+          "exceedsLargestVehicle": false,
+          "crewCapped": false
+        }
+      }
+    },
+    {
+      "name": "tier-by-volume-sofa-heavy",
+      "input": {
+        "tier": "premium",
+        "mode": "scheduled",
+        "distanceKm": 15,
+        "durationSeconds": 1800,
+        "basket": {
+          "counts": {
+            "sofa_corner_xl": 6
+          },
+          "customItems": []
+        },
+        "catalog": [
+          {
+            "itemId": "sofa_3seater",
+            "name": "Sofa (3-seater)",
+            "category": "living_room",
+            "widthCm": 200,
+            "heightCm": 90,
+            "depthCm": 90,
+            "weightKg": 70,
+            "moveClassificationWeight": 12,
+            "moveTypeMinimum": "regular",
+            "unitPriceEur": 26.7,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "cardboard_boxes",
+            "name": "Cardboard boxes",
+            "category": "boxes",
+            "widthCm": 60,
+            "heightCm": 40,
+            "depthCm": 40,
+            "weightKg": 10,
+            "moveClassificationWeight": 2,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": 2.46,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "piano",
+            "name": "Piano",
+            "category": "special",
+            "widthCm": 150,
+            "heightCm": 130,
+            "depthCm": 60,
+            "weightKg": 200,
+            "moveClassificationWeight": 25,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.7,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "wardrobe_large",
+            "name": "Wardrobe (large)",
+            "category": "bedroom",
+            "widthCm": 200,
+            "heightCm": 220,
+            "depthCm": 60,
+            "weightKg": 100,
+            "moveClassificationWeight": 18,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.4,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "unpriced_lamp",
+            "name": "Lamp (no price yet)",
+            "category": "miscellaneous",
+            "widthCm": 40,
+            "heightCm": 160,
+            "depthCm": 40,
+            "weightKg": 3,
+            "moveClassificationWeight": 1,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": null
+          },
+          {
+            "itemId": "sofa_corner_xl",
+            "name": "Corner sofa (XL, modular)",
+            "category": "living_room",
+            "widthCm": 300,
+            "heightCm": 90,
+            "depthCm": 200,
+            "weightKg": 60,
+            "moveClassificationWeight": 4,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": 30,
+            "requiredCrew": 2
+          }
+        ]
+      },
+      "classification": {
+        "currentType": "light",
+        "expected": {
+          "recommendedType": "premium",
+          "totalPoints": 24,
+          "totalWeightKg": 360,
+          "totalItems": 6,
+          "totalVolumeM3": 32.4,
+          "loadedVolumeM3": 43.74,
+          "requiresUpgrade": true
+        }
+      },
+      "expected": {
+        "version": "v3",
+        "currency": "EUR",
+        "tier": "premium",
+        "mode": "scheduled",
+        "profile": {
+          "itemCount": 6,
+          "loadedVolumeM3": 43.74,
+          "rawVolumeM3": 32.4,
+          "weightKg": 360,
+          "requiredCrew": 3,
+          "crew": 3,
+          "extraHelpers": 0,
+          "totalCrew": 3,
+          "vehicleType": "large_truck",
+          "billableHours": 3.5,
+          "distanceKm": 15,
+          "durationHours": 0.5
+        },
+        "lines": {
+          "base": 85,
+          "distance": 25.5,
+          "vehicle": 45,
+          "labor": 294,
+          "extraHelpers": 0,
+          "items": 180,
+          "packing": 65,
+          "handling": 40,
+          "services": 0,
+          "storage": 0
+        },
+        "operationalSubtotal": 734.5,
+        "modeMultiplier": 1,
+        "modeAdjustment": 0,
+        "adjustedSubtotal": 734.5,
+        "platformFee": 58.76,
+        "discount": 0,
+        "minimumApplied": false,
+        "net": 793.26,
+        "vatRate": 0.19,
+        "vat": 150.72,
+        "total": 943.98,
+        "serviceLines": [],
+        "itemLines": [
+          {
+            "key": "sofa_corner_xl",
+            "qty": 6,
+            "unitEur": 30,
+            "amountEur": 180
+          }
+        ],
+        "rates": {
+          "access.floorSurchargeNoElevator": 15,
+          "access.haltverbotFee": 0,
+          "capacityM3.large_truck": 45,
+          "crew.m3PerMover": 15,
+          "crew.max": 4,
+          "handling.hoursPerM3": 0.2,
+          "packing.none": 0,
+          "platformFee.fixed": 0,
+          "platformFee.rate": 0.08,
+          "pricing.minimumCharge": 49,
+          "storage.perWeek": 30,
+          "tax.vatRate": 0.19,
+          "tier.premium.basePrice": 85,
+          "tier.premium.crew": 3,
+          "tier.premium.distanceRatePerKm": 1.7,
+          "tier.premium.handlingAllowance": 40,
+          "tier.premium.laborRatePerHour": 28,
+          "tier.premium.minVehicleRank": 2,
+          "tier.premium.minimumHours": 2,
+          "tier.premium.packingAllowance": 65,
+          "vehicle.charge.large_truck": 45,
+          "volume.packingFactor": 1.35
+        },
+        "assumptions": {
+          "unpricedItemIds": [],
+          "unknownItemIds": [],
+          "estimated": true
+        },
+        "flags": {
+          "exceedsLargestVehicle": false,
+          "crewCapped": false
+        }
+      }
+    },
+    {
+      "name": "tier-floor-piano",
+      "input": {
+        "tier": "premium",
+        "mode": "scheduled",
+        "distanceKm": 10,
+        "durationSeconds": 1200,
+        "basket": {
+          "counts": {
+            "piano": 1
+          },
+          "customItems": []
+        },
+        "catalog": [
+          {
+            "itemId": "sofa_3seater",
+            "name": "Sofa (3-seater)",
+            "category": "living_room",
+            "widthCm": 200,
+            "heightCm": 90,
+            "depthCm": 90,
+            "weightKg": 70,
+            "moveClassificationWeight": 12,
+            "moveTypeMinimum": "regular",
+            "unitPriceEur": 26.7,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "cardboard_boxes",
+            "name": "Cardboard boxes",
+            "category": "boxes",
+            "widthCm": 60,
+            "heightCm": 40,
+            "depthCm": 40,
+            "weightKg": 10,
+            "moveClassificationWeight": 2,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": 2.46,
+            "requiredCrew": 1
+          },
+          {
+            "itemId": "piano",
+            "name": "Piano",
+            "category": "special",
+            "widthCm": 150,
+            "heightCm": 130,
+            "depthCm": 60,
+            "weightKg": 200,
+            "moveClassificationWeight": 25,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.7,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "wardrobe_large",
+            "name": "Wardrobe (large)",
+            "category": "bedroom",
+            "widthCm": 200,
+            "heightCm": 220,
+            "depthCm": 60,
+            "weightKg": 100,
+            "moveClassificationWeight": 18,
+            "moveTypeMinimum": "premium",
+            "unitPriceEur": 41.4,
+            "requiredCrew": 2
+          },
+          {
+            "itemId": "unpriced_lamp",
+            "name": "Lamp (no price yet)",
+            "category": "miscellaneous",
+            "widthCm": 40,
+            "heightCm": 160,
+            "depthCm": 40,
+            "weightKg": 3,
+            "moveClassificationWeight": 1,
+            "moveTypeMinimum": "light",
+            "unitPriceEur": null
+          }
+        ]
+      },
+      "classification": {
+        "currentType": "light",
+        "expected": {
+          "recommendedType": "premium",
+          "totalPoints": 25,
+          "totalWeightKg": 200,
+          "totalItems": 1,
+          "totalVolumeM3": 1.17,
+          "loadedVolumeM3": 1.58,
+          "requiresUpgrade": true
+        }
+      },
+      "expected": {
+        "version": "v3",
+        "currency": "EUR",
+        "tier": "premium",
+        "mode": "scheduled",
+        "profile": {
+          "itemCount": 1,
+          "loadedVolumeM3": 1.58,
+          "rawVolumeM3": 1.17,
+          "weightKg": 200,
+          "requiredCrew": 2,
+          "crew": 3,
+          "extraHelpers": 0,
+          "totalCrew": 3,
+          "vehicleType": "large_truck",
+          "billableHours": 2,
+          "distanceKm": 10,
+          "durationHours": 0.333
+        },
+        "lines": {
+          "base": 85,
+          "distance": 17,
+          "vehicle": 45,
+          "labor": 168,
+          "extraHelpers": 0,
+          "items": 41.7,
+          "packing": 65,
+          "handling": 40,
+          "services": 0,
+          "storage": 0
+        },
+        "operationalSubtotal": 461.7,
+        "modeMultiplier": 1,
+        "modeAdjustment": 0,
+        "adjustedSubtotal": 461.7,
+        "platformFee": 36.94,
+        "discount": 0,
+        "minimumApplied": false,
+        "net": 498.64,
+        "vatRate": 0.19,
+        "vat": 94.74,
+        "total": 593.38,
+        "serviceLines": [],
+        "itemLines": [
+          {
+            "key": "piano",
+            "qty": 1,
+            "unitEur": 41.7,
+            "amountEur": 41.7
+          }
+        ],
+        "rates": {
+          "access.floorSurchargeNoElevator": 15,
+          "access.haltverbotFee": 0,
+          "capacityM3.large_truck": 45,
+          "crew.m3PerMover": 15,
+          "crew.max": 4,
+          "handling.hoursPerM3": 0.2,
+          "packing.none": 0,
+          "platformFee.fixed": 0,
+          "platformFee.rate": 0.08,
+          "pricing.minimumCharge": 49,
+          "storage.perWeek": 30,
+          "tax.vatRate": 0.19,
+          "tier.premium.basePrice": 85,
+          "tier.premium.crew": 3,
+          "tier.premium.distanceRatePerKm": 1.7,
+          "tier.premium.handlingAllowance": 40,
+          "tier.premium.laborRatePerHour": 28,
+          "tier.premium.minVehicleRank": 2,
+          "tier.premium.minimumHours": 2,
+          "tier.premium.packingAllowance": 65,
           "vehicle.charge.large_truck": 45,
           "volume.packingFactor": 1.35
         },

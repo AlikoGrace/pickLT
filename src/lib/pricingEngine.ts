@@ -101,6 +101,13 @@ export interface QuoteInput {
   /** Euros. No UI yet; reserved for promotions (master §10). */
   discountEur?: number
   /**
+   * Helpers the client adds on top of the charged crew (crew master D2).
+   * Floored to an integer and clamped to 0…`crew.maxExtraHelpers`; each is
+   * billed at the tier labour rate for the billable hours, which they do not
+   * shorten.
+   */
+  extraHelpers?: number
+  /**
    * ISO-3166-1 alpha-2 of the PICKUP country (plan `wave-2026-10/4` C2) — the
    * market whose VAT and tariff this quote was priced with. The caller resolves
    * the matching config (`toPricingConfig(rows, countryCode)`); the engine only
@@ -122,7 +129,12 @@ export interface QuoteProfile {
   rawVolumeM3: number
   weightKg: number
   requiredCrew: number
+  /** Charged base crew incl. the driver: max(tier crew, required crew). */
   crew: number
+  /** Client-added helpers after the clamp (crew master D2). */
+  extraHelpers: number
+  /** `crew + extraHelpers` — the crew that turns up and is stored on the move. */
+  totalCrew: number
   vehicleType: VehicleClass
   billableHours: number
   distanceKm: number
@@ -134,6 +146,7 @@ export interface QuoteLines {
   distance: number
   vehicle: number
   labor: number
+  extraHelpers: number
   items: number
   packing: number
   handling: number
@@ -419,6 +432,19 @@ function billableHoursWith(
 }
 
 /**
+ * Extra helpers actually billed (crew master D2): the requested count floored
+ * to an integer and clamped to 0…`crew.maxExtraHelpers`. The cap is read (and
+ * so recorded in `rates`) only when helpers were requested, so a quote without
+ * extras carries the same trace it always did.
+ */
+function extraHelpersFor(requested: unknown, trace: RateTrace): number {
+  const wanted = Math.floor(nonNegative(requested))
+  if (wanted <= 0) return 0
+  const max = Math.max(0, Math.floor(trace.get('crew.maxExtraHelpers')))
+  return Math.min(wanted, max)
+}
+
+/**
  * The admin "Suggest price" helper (master D6): weight × €/kg + bounding-box
  * volume × €/m³, rounded to the cent. The admin's typed figure is authoritative;
  * this only proposes one.
@@ -487,7 +513,10 @@ export function quoteMove(input: QuoteInput, config?: PricingConfig | null): Quo
   const vehicle = cents(
     trace.maybe(`vehicle.charge.${vehicleType}`) ?? trace.get('vehicle.charge.small_van'),
   )
-  const labor = roundHalfUp(crew * trace.get(tierKey(tier, 'laborRatePerHour')) * hours * 100)
+  const laborRate = trace.get(tierKey(tier, 'laborRatePerHour'))
+  const labor = roundHalfUp(crew * laborRate * hours * 100)
+  const extraHelpersCount = extraHelpersFor(input.extraHelpers, trace)
+  const extraHelpers = roundHalfUp(extraHelpersCount * laborRate * hours * 100)
   const items = profile.itemsCents
 
   const packingLevel = input.packingLevel ?? 'none'
@@ -518,7 +547,7 @@ export function quoteMove(input: QuoteInput, config?: PricingConfig | null): Quo
 
   // 5. Totals.
   const operationalSubtotal =
-    base + distance + vehicle + labor + items + packing + handling + services + storage
+    base + distance + vehicle + labor + extraHelpers + items + packing + handling + services + storage
   const modeMultiplier = mode === 'instant' ? trace.get(tierKey(tier, 'instantMultiplier')) : 1
   const adjustedSubtotal = roundHalfUp(operationalSubtotal * modeMultiplier)
   const modeAdjustment = adjustedSubtotal - operationalSubtotal
@@ -536,12 +565,12 @@ export function quoteMove(input: QuoteInput, config?: PricingConfig | null): Quo
 
   // 6. Reconcile (master D4). Integer arithmetic makes these exact; the checks
   // exist so a future edit that breaks the invariant fails loudly.
-  const lineSum = base + distance + vehicle + labor + items + packing + handling + services + storage
+  const lineSum = base + distance + vehicle + labor + extraHelpers + items + packing + handling + services + storage
   if (lineSum !== operationalSubtotal) throw new PricingReconcileError('lines ≠ operational subtotal')
   if (operationalSubtotal + modeAdjustment !== adjustedSubtotal) throw new PricingReconcileError('mode adjustment')
   if (Math.max(minimum, adjustedSubtotal + platformFee - discount) !== net) throw new PricingReconcileError('net')
   if (net + vat !== total) throw new PricingReconcileError('vat')
-  if (![base, distance, vehicle, labor, items, packing, handling, services, storage, total].every(Number.isInteger)) {
+  if (![base, distance, vehicle, labor, extraHelpers, items, packing, handling, services, storage, total].every(Number.isInteger)) {
     throw new PricingReconcileError('non-integer cents')
   }
 
@@ -563,6 +592,8 @@ export function quoteMove(input: QuoteInput, config?: PricingConfig | null): Quo
       weightKg: round3(profile.weightKg),
       requiredCrew: req.crew,
       crew,
+      extraHelpers: extraHelpersCount,
+      totalCrew: crew + extraHelpersCount,
       vehicleType,
       billableHours: hours,
       distanceKm: round3(distanceKm),
@@ -573,6 +604,7 @@ export function quoteMove(input: QuoteInput, config?: PricingConfig | null): Quo
       distance: eur(distance),
       vehicle: eur(vehicle),
       labor: eur(labor),
+      extraHelpers: eur(extraHelpers),
       items: eur(items),
       packing: eur(packing),
       handling: eur(handling),
@@ -650,8 +682,22 @@ export function parseBreakdown(raw: unknown): QuoteBreakdown | null {
   if (!isServiceTier(b.tier) || (b.mode !== 'instant' && b.mode !== 'scheduled')) return null
   if (!b.lines || typeof b.lines !== 'object' || !b.profile || typeof b.profile !== 'object') return null
   if (typeof b.total !== 'number' || !Number.isFinite(b.total)) return null
+  // Quotes stored before extra helpers existed (crew master D2) carry none of
+  // the three fields; read them as "no extras".
+  const lines = b.lines as Partial<QuoteLines>
+  const profile = b.profile as Partial<QuoteProfile>
+  const extraHelpers = typeof profile.extraHelpers === 'number' ? profile.extraHelpers : 0
   return {
     ...b,
+    lines: { ...lines, extraHelpers: typeof lines.extraHelpers === 'number' ? lines.extraHelpers : 0 },
+    profile: {
+      ...profile,
+      extraHelpers,
+      totalCrew:
+        typeof profile.totalCrew === 'number'
+          ? profile.totalCrew
+          : (typeof profile.crew === 'number' ? profile.crew : 0) + extraHelpers,
+    },
     serviceLines: Array.isArray(b.serviceLines) ? b.serviceLines : [],
     itemLines: Array.isArray(b.itemLines) ? b.itemLines : [],
     rates: b.rates && typeof b.rates === 'object' ? b.rates : {},

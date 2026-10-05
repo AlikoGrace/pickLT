@@ -36,6 +36,10 @@ export interface MoveClassification {
   totalPoints: number
   totalWeightKg: number
   totalVolumeCm3: number
+  /** Σ raw bounding-box m³ (catalog dimensions × qty; custom items by size band). */
+  totalVolumeM3: number
+  /** `totalVolumeM3 × packingFactor` — the volume the `maxM3` limits are compared with. */
+  loadedVolumeM3: number
   totalItems: number
   /**
    * i18next keys plus their interpolation params, not resolved copy.
@@ -54,29 +58,103 @@ export interface CustomItemInput {
   id: string
   name: string
   quantity: number
+  /** Total weight per unit; the caller decides any default. Missing reads as 0. */
   estimatedWeightKg?: number
+  /** `small | medium | large | extra_large` (see `normalizeCustomSize`); anything else reads as medium. */
+  approxSize?: string | null
 }
 
 // ─── Thresholds ────────────────────────────────────────────
-const THRESHOLDS = {
-  light: { maxPoints: 25, maxWeightKg: 200, maxItems: 15 },
-  regular: { maxPoints: 80, maxWeightKg: 800, maxItems: 40 },
+// Port of pickltmobile/lib/classify-move.ts (crew master D4): must decide
+// exactly as the app and the server do — the shared golden fixture's
+// `classification` blocks pin it.
+
+/**
+ * The cut-offs of one tier. A basket stays in the tier while at or under EVERY
+ * limit. `maxM3` is LOADED volume (raw bounding-box m³ × `packingFactor`), on
+ * the scale of the vehicle each tier is sold with: Normal ≤ 10 m³ (small van),
+ * Medium ≤ 25 m³ (medium truck), above → Premium (large truck).
+ */
+export interface TierLimits {
+  maxPoints: number
+  maxWeightKg: number
+  maxItems: number
+  /** Loaded m³ (raw × packingFactor). */
+  maxM3: number
+}
+
+export interface ClassifyThresholds {
+  light: TierLimits
+  regular: TierLimits
+  /** Raw → loaded volume factor; `volume.packingFactor` in pricing_config. */
+  packingFactor: number
+}
+
+export const DEFAULT_CLASSIFY_THRESHOLDS: ClassifyThresholds = {
+  light: { maxPoints: 25, maxWeightKg: 200, maxItems: 15, maxM3: 10 },
+  regular: { maxPoints: 80, maxWeightKg: 800, maxItems: 40, maxM3: 25 },
   // premium: anything above regular
-} as const
+  packingFactor: 1.35,
+}
 
 const TYPE_ORDER: Record<MoveType, number> = { light: 0, regular: 1, premium: 2 }
+
+type CustomSize = 'small' | 'medium' | 'large' | 'extra_large'
+const CUSTOM_SIZE_POINTS: Record<CustomSize, number> = { small: 2, medium: 5, large: 10, extra_large: 18 }
+export const CUSTOM_SIZE_M3: Record<CustomSize, number> = { small: 0.1, medium: 0.5, large: 1.5, extra_large: 3 }
+
+function customSize(raw: unknown): CustomSize {
+  return typeof raw === 'string' && raw in CUSTOM_SIZE_POINTS ? (raw as CustomSize) : 'medium'
+}
+
+/** The higher of two tiers — the tier a server prices at (crew master D5). */
+export function enforcedTier(a: MoveType, b: MoveType): MoveType {
+  return TYPE_ORDER[b] > TYPE_ORDER[a] ? b : a
+}
+
+/**
+ * Thresholds from a `pricing_config` override map (`classify.*` and
+ * `volume.packingFactor`); a missing or non-finite key keeps its default.
+ */
+export function thresholdsFromConfig(
+  config: Partial<Record<string, number>> | null | undefined
+): ClassifyThresholds {
+  const read = (tier: 'light' | 'regular', field: keyof TierLimits): number => {
+    const v = config?.[`classify.${tier}.${field}`]
+    return typeof v === 'number' && Number.isFinite(v) ? v : DEFAULT_CLASSIFY_THRESHOLDS[tier][field]
+  }
+  const limits = (tier: 'light' | 'regular'): TierLimits => ({
+    maxPoints: read(tier, 'maxPoints'),
+    maxWeightKg: read(tier, 'maxWeightKg'),
+    maxItems: read(tier, 'maxItems'),
+    maxM3: read(tier, 'maxM3'),
+  })
+  const pf = config?.['volume.packingFactor']
+  return {
+    light: limits('light'),
+    regular: limits('regular'),
+    packingFactor: typeof pf === 'number' && Number.isFinite(pf) ? pf : DEFAULT_CLASSIFY_THRESHOLDS.packingFactor,
+  }
+}
+
+function exceeds(limits: TierLimits, points: number, weightKg: number, items: number, m3: number): boolean {
+  return points > limits.maxPoints || weightKg > limits.maxWeightKg || items > limits.maxItems || m3 > limits.maxM3
+}
 
 // ─── Main classification function ──────────────────────────
 export function classifyMove(
   inventory: Record<string, number>,
   customItems: CustomItemInput[],
   currentMoveType: MoveType,
-  itemCatalog: InventoryItemDef[]
+  itemCatalog: InventoryItemDef[],
+  thresholds: ClassifyThresholds = DEFAULT_CLASSIFY_THRESHOLDS
 ): MoveClassification {
   let totalPoints = 0
   let totalWeightKg = 0
   let totalVolumeCm3 = 0
+  let totalVolumeM3 = 0
   let totalItems = 0
+  let highestMinType: MoveType = 'light'
   const warningKeys: ClassificationWarning[] = []
 
   // Calculate from catalog items
@@ -87,9 +165,15 @@ export function classifyMove(
 
     totalPoints += item.classificationPoints * quantity
     totalWeightKg += item.meta.weightKg * quantity
-    totalVolumeCm3 +=
-      (item.meta.widthCm * item.meta.heightCm * item.meta.depthCm) * quantity
+    const unitCm3 = item.meta.widthCm * item.meta.heightCm * item.meta.depthCm
+    totalVolumeCm3 += unitCm3 * quantity
+    // A row with a missing dimension adds no size rather than NaN.
+    const unitM3 = unitCm3 / 1_000_000
+    if (Number.isFinite(unitM3) && unitM3 > 0) totalVolumeM3 += unitM3 * quantity
     totalItems += quantity
+    if (TYPE_ORDER[item.moveTypeMinimum] > TYPE_ORDER[highestMinType]) {
+      highestMinType = item.moveTypeMinimum
+    }
 
     // Single-item minimum check
     if (item.moveTypeMinimum === 'premium' && currentMoveType !== 'premium') {
@@ -105,29 +189,36 @@ export function classifyMove(
     }
   }
 
-  // Add estimated values for custom items
+  // Custom items count by their size band, exactly as on the app and server.
   for (const custom of customItems) {
     if (custom.quantity <= 0) continue
+    const size = customSize(custom.approxSize)
     totalItems += custom.quantity
-    totalPoints += 3 * custom.quantity // Default 3 points each
-    totalWeightKg += (custom.estimatedWeightKg ?? 20) * custom.quantity
-    totalVolumeCm3 += 50 * 50 * 50 * custom.quantity // ~125,000 cm³ each
+    totalPoints += CUSTOM_SIZE_POINTS[size] * custom.quantity
+    totalWeightKg += (custom.estimatedWeightKg ?? 0) * custom.quantity
+    totalVolumeM3 += CUSTOM_SIZE_M3[size] * custom.quantity
+    totalVolumeCm3 += CUSTOM_SIZE_M3[size] * 1_000_000 * custom.quantity
   }
+
+  // Float noise from summing cm³ products must not tip a basket sitting
+  // exactly on a limit (10 m³ is ≤ 10 m³).
+  totalVolumeM3 = Math.round(totalVolumeM3 * 1e6) / 1e6
+  // Three decimals, like the engine's loaded volume (lib/move-volume.ts).
+  const loadedVolumeM3 = Math.round(totalVolumeM3 * thresholds.packingFactor * 1000) / 1000
 
   // Determine recommended type
   let recommendedType: MoveType = 'light'
-  if (
-    totalPoints > THRESHOLDS.regular.maxPoints ||
-    totalWeightKg > THRESHOLDS.regular.maxWeightKg ||
-    totalItems > THRESHOLDS.regular.maxItems
-  ) {
+  if (exceeds(thresholds.regular, totalPoints, totalWeightKg, totalItems, loadedVolumeM3)) {
     recommendedType = 'premium'
-  } else if (
-    totalPoints > THRESHOLDS.light.maxPoints ||
-    totalWeightKg > THRESHOLDS.light.maxWeightKg ||
-    totalItems > THRESHOLDS.light.maxItems
-  ) {
+  } else if (exceeds(thresholds.light, totalPoints, totalWeightKg, totalItems, loadedVolumeM3)) {
     recommendedType = 'regular'
+  }
+
+  // Floor: any included item with a higher moveTypeMinimum lifts the
+  // recommendation to at least that tier — a single piano forces premium
+  // even though it doesn't exceed any threshold on its own.
+  if (TYPE_ORDER[highestMinType] > TYPE_ORDER[recommendedType]) {
+    recommendedType = highestMinType
   }
 
   // Upgrade required?
@@ -146,6 +237,8 @@ export function classifyMove(
     totalPoints,
     totalWeightKg,
     totalVolumeCm3,
+    totalVolumeM3,
+    loadedVolumeM3,
     totalItems,
     warningKeys,
     requiresUpgrade,

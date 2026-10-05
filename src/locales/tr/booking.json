@@ -690,7 +690,7 @@
     "a11y": "Taşıma türünü seçin",
     "label": "Taşıma türü",
     "light": {
-      "body": "Normal taşımalarda küçük bir panelvan ve bir nakliyeci kullanılır.",
+      "body": "Normal taşımalar küçük bir panelvanla ve yalnızca sürücüyle yapılır.",
       "helper": "Küçük yük — az sayıda eşya",
       "label": "Normal taşıma",
       "short": "Normal",
@@ -699,7 +699,7 @@
     },
     "placeholder": "Bir taşıma türü seçin",
     "premium": {
-      "body": "Premium taşımalarda büyük bir kamyon ve 3 kişilik ekip kullanılır.",
+      "body": "Premium taşımalar büyük bir kamyonla, sürücü ve 2 yardımcıyla yapılır.",
       "helper": "Tam hizmet taşıma",
       "label": "Premium taşıma",
       "short": "Premium",
@@ -707,7 +707,7 @@
       "title": "Premium taşıma"
     },
     "regular": {
-      "body": "Orta taşımalarda orta boy bir kamyon ve 2 kişilik ekip kullanılır.",
+      "body": "Orta taşımalar orta boy bir kamyonla, sürücü ve 1 yardımcıyla yapılır.",
       "helper": "Standart ev taşıması",
       "label": "Orta taşıma",
       "short": "Orta",
@@ -1047,6 +1047,13 @@
       "crew": {
         "label": "Ekip büyüklüğü {{value}}"
       },
+      "crewDriverOnly": {
+        "label": "Ekip: yalnızca sürücü"
+      },
+      "crewHelpers": {
+        "label_one": "Ekip: sürücü + {{count}} yardımcı",
+        "label_other": "Ekip: sürücü + {{count}} yardımcı"
+      },
       "hours": {
         "label": "Faturalandırılan süre {{value}}"
       },
@@ -1104,6 +1111,10 @@
       },
       "labor": {
         "label": "Ekip işçiliği ({{crew}} × {{rate}} × {{hours}})"
+      },
+      "extraHelpers": {
+        "label_one": "Ek yardımcı ({{count}} × {{rate}} × {{hours}})",
+        "label_other": "Ek yardımcı ({{count}} × {{rate}} × {{hours}})"
       },
       "packing": {
         "label": "Paketleme"

@@ -690,7 +690,7 @@
     "a11y": "Umzugsart wählen",
     "label": "Umzugsart",
     "light": {
-      "body": "Normale Umzüge werden mit einem kleinen Transporter und einem Umzugshelfer durchgeführt.",
+      "body": "Normale Umzüge werden mit einem kleinen Transporter und nur dem Fahrer durchgeführt.",
       "helper": "Geringe Menge — wenige Gegenstände",
       "label": "Normaler Umzug",
       "short": "Normal",
@@ -699,7 +699,7 @@
     },
     "placeholder": "Umzugsart wählen",
     "premium": {
-      "body": "Premium-Umzüge werden mit einem großen Lkw und einem 3-köpfigen Team durchgeführt.",
+      "body": "Premium-Umzüge werden mit einem großen Lkw, dem Fahrer und 2 Helfern durchgeführt.",
       "helper": "Umzug mit Komplettservice",
       "label": "Premium-Umzug",
       "short": "Premium",
@@ -707,7 +707,7 @@
       "title": "Premium-Umzug"
     },
     "regular": {
-      "body": "Medium-Umzüge werden mit einem mittelgroßen Lkw und einem 2-köpfigen Team durchgeführt.",
+      "body": "Medium-Umzüge werden mit einem mittelgroßen Lkw, dem Fahrer und 1 Helfer durchgeführt.",
       "helper": "Üblicher Haushaltsumzug",
       "label": "Medium-Umzug",
       "short": "Medium",
@@ -1048,6 +1048,13 @@
       "crew": {
         "label": "Teamgröße {{value}}"
       },
+      "crewDriverOnly": {
+        "label": "Team: nur Fahrer"
+      },
+      "crewHelpers": {
+        "label_one": "Team: Fahrer + {{count}} Helfer",
+        "label_other": "Team: Fahrer + {{count}} Helfer"
+      },
       "hours": {
         "label": "Abrechenbare Zeit {{value}}"
       },
@@ -1105,6 +1112,10 @@
       },
       "labor": {
         "label": "Umzugshelfer ({{crew}} × {{rate}} × {{hours}})"
+      },
+      "extraHelpers": {
+        "label_one": "Zusätzlicher Helfer ({{count}} × {{rate}} × {{hours}})",
+        "label_other": "Zusätzliche Helfer ({{count}} × {{rate}} × {{hours}})"
       },
       "packing": {
         "label": "Verpackung"

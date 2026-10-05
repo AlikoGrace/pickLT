@@ -690,7 +690,7 @@
     "a11y": "Verhuistype kiezen",
     "label": "Type verhuizing",
     "light": {
-      "body": "Normale verhuizingen gaan met een kleine bestelbus en één verhuizer.",
+      "body": "Normale verhuizingen gaan met een kleine bestelbus en alleen de chauffeur.",
       "helper": "Kleine lading — weinig spullen",
       "label": "Normale verhuizing",
       "short": "Normaal",
@@ -699,7 +699,7 @@
     },
     "placeholder": "Kies een verhuistype",
     "premium": {
-      "body": "Premium verhuizingen gaan met een grote vrachtwagen en een team van 3 personen.",
+      "body": "Premium verhuizingen gaan met een grote vrachtwagen, de chauffeur en 2 helpers.",
       "helper": "Verhuizing met volledige service",
       "label": "Premium verhuizing",
       "short": "Premium",
@@ -707,7 +707,7 @@
       "title": "Premium verhuizing"
     },
     "regular": {
-      "body": "Medium verhuizingen gaan met een middelgrote vrachtwagen en een team van 2 personen.",
+      "body": "Medium verhuizingen gaan met een middelgrote vrachtwagen, de chauffeur en 1 helper.",
       "helper": "Gewone woningverhuizing",
       "label": "Medium verhuizing",
       "short": "Medium",
@@ -1047,6 +1047,13 @@
       "crew": {
         "label": "Teamgrootte {{value}}"
       },
+      "crewDriverOnly": {
+        "label": "Team: alleen de chauffeur"
+      },
+      "crewHelpers": {
+        "label_one": "Team: chauffeur + {{count}} helper",
+        "label_other": "Team: chauffeur + {{count}} helpers"
+      },
       "hours": {
         "label": "Factureerbare tijd {{value}}"
       },
@@ -1104,6 +1111,10 @@
       },
       "labor": {
         "label": "Verhuizers ({{crew}} × {{rate}} × {{hours}})"
+      },
+      "extraHelpers": {
+        "label_one": "Extra helper ({{count}} × {{rate}} × {{hours}})",
+        "label_other": "Extra helpers ({{count}} × {{rate}} × {{hours}})"
       },
       "packing": {
         "label": "Inpakken"
