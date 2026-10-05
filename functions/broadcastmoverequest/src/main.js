@@ -19,7 +19,7 @@ const INVENTORY_CATALOG_COLLECTION = process.env.APPWRITE_COLLECTION_INVENTORY_C
 const PRICING_CONFIG_COLLECTION = process.env.APPWRITE_COLLECTION_PRICING_CONFIG || 'pricing_config';
 
 const MAX_MOVERS = 10;
-const REQUEST_TIMEOUT_SECONDS = 60;
+const REQUEST_TIMEOUT_SECONDS = 300;
 // Service day for the vehicle-readiness gate (master plan §5). Optional:
 // defaults to the platform's home zone.
 const PLATFORM_TZ = process.env.PLATFORM_TZ || 'Europe/Berlin';

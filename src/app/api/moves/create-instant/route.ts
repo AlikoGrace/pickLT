@@ -242,7 +242,7 @@ export async function POST(req: NextRequest) {
     )
 
     // ── Create a move_request targeting the mover ───────────
-    const expiresAt = new Date(Date.now() + 180_000).toISOString() // 3 min countdown
+    const expiresAt = new Date(Date.now() + 600_000).toISOString() // 10 min priority window (createpriorityrequest DEFAULT_WINDOW_SECONDS)
     const moveRequestId = ID.unique()
     await databases.createDocument(
       APPWRITE.DATABASE_ID,

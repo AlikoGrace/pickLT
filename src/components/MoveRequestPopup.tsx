@@ -72,7 +72,22 @@ interface IncomingRequest {
   requestId: string
   moveId: string
   expiresAt?: string
+  sentAt?: string
   move: MoveDetails | null
+}
+
+/** Fallback offer length (priority default, `createpriorityrequest`). */
+const FALLBACK_WINDOW_SECONDS = 600
+/**
+ * The alarm loops only for this long. Offers stay open for 5–10 minutes so
+ * movers can read the details; the popup and countdown stay until expiry.
+ */
+const ALARM_SECONDS = 60
+
+/** Full length of this offer (priority 10 min, rebroadcast 5 min), for the progress bar. */
+function offerWindowSeconds(req: Pick<IncomingRequest, 'sentAt' | 'expiresAt'>): number {
+  const span = (Date.parse(req.expiresAt ?? '') - Date.parse(req.sentAt ?? '')) / 1000
+  return Number.isFinite(span) && span > 0 ? span : FALLBACK_WINDOW_SECONDS
 }
 
 // ─── Helper functions ───────────────────────────────────
@@ -287,7 +302,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
   const [incoming, setIncoming] = useState<IncomingRequest | null>(null)
   const [isAccepting, setIsAccepting] = useState(false)
   const [isDeclining, setIsDeclining] = useState(false)
-  const [countdown, setCountdown] = useState<number>(180)
+  const [countdown, setCountdown] = useState<number>(FALLBACK_WINDOW_SECONDS)
   const [showDetails, setShowDetails] = useState(false)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
   const alertRef = useRef<{ play: () => void; stop: () => void } | null>(null)
@@ -308,14 +323,15 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
       const expiresMs = new Date(incoming.expiresAt).getTime()
       const nowMs = Date.now()
       const remainingSec = Math.max(0, Math.floor((expiresMs - nowMs) / 1000))
-      setCountdown(remainingSec > 0 ? remainingSec : 180)
+      setCountdown(remainingSec > 0 ? remainingSec : FALLBACK_WINDOW_SECONDS)
     } else {
-      setCountdown(180)
+      setCountdown(FALLBACK_WINDOW_SECONDS)
     }
 
-    // Start alarm sound
+    // Start alarm sound; it goes quiet after ALARM_SECONDS, the offer stays up.
     alertRef.current = createAlarmSound()
     alertRef.current.play()
+    const quietTimer = setTimeout(() => alertRef.current?.stop(), ALARM_SECONDS * 1000)
 
     timerRef.current = setInterval(() => {
       setCountdown((prev) => {
@@ -331,6 +347,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
 
     return () => {
       if (timerRef.current) clearInterval(timerRef.current)
+      clearTimeout(quietTimer)
       alertRef.current?.stop()
     }
   }, [incoming, feeBlocked])
@@ -401,6 +418,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                 requestId: doc.$id,
                 moveId,
                 expiresAt,
+                sentAt: doc.sentAt as string | undefined,
                 move,
               })
             }
@@ -444,6 +462,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
           requestId: doc.$id,
           moveId,
           expiresAt: doc.expiresAt as string | undefined,
+          sentAt: doc.sentAt as string | undefined,
           move,
         })
       }
@@ -566,7 +585,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
             <div className="mt-2 h-1.5 bg-white/30 rounded-full overflow-hidden">
               <div
                 className="h-full bg-white rounded-full transition-all duration-1000 ease-linear"
-                style={{ width: `${(countdown / 180) * 100}%` }}
+                style={{ width: `${Math.min(100, (countdown / (incoming ? offerWindowSeconds(incoming) : FALLBACK_WINDOW_SECONDS)) * 100)}%` }}
               />
             </div>
           </div>
