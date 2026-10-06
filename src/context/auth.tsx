@@ -1,6 +1,7 @@
 "use client"
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react'
+import * as Sentry from '@sentry/nextjs'
 import { account } from '@/lib/appwrite'
 import { OAuthProvider } from 'appwrite'
 import { exchangeGoogleIdToken } from '@/lib/googleauth-client'
@@ -142,6 +143,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [userType, setUserType] = useState<UserType>('client')
   const [crewMembers, setCrewMembers] = useState<CrewMember[]>([])
+
+  // Sentry knows who saw an error by id only, never name or email (plan sentry.md).
+  const sentryUserId = user?.authId ?? null
+  useEffect(() => {
+    Sentry.setUser(sentryUserId ? { id: sentryUserId } : null)
+  }, [sentryUserId])
 
   // Check the current Appwrite session and sync profile
   const loadSession = useCallback(async (opts?: { background?: boolean }) => {
