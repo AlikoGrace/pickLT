@@ -322,6 +322,9 @@
   "date": {
     "today": {
       "label": "Bugün"
+    },
+    "yesterday": {
+      "label": "Dün"
     }
   },
   "error": {
