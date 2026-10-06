@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { formatDateTime } from '@/lib/format'
 import { formatRemaining } from '@/lib/rental-time'
 import { STATE_KEY, USE_OWN_ADD_HREF, vehicleActionFor, vehicleSummaryLine } from '@/lib/vehicle-labels'
-import { photoBannerStyle, vehicleBannerPhoto } from '@/lib/photo-banner'
+import { BANNER_CARD, BANNER_STRIP, photoBannerStyle, vehicleBannerPhoto } from '@/lib/photo-banner'
 import { RESTRICTED_VEHICLE_STATES, type VehicleServiceState } from '@/lib/vehicle-service'
 
 interface Props {
@@ -110,8 +110,8 @@ export default function VehicleStatusBanner({
           : null
     const name = [vehicle.brand, vehicle.model].filter(Boolean).join(' ')
     return (
-      <div className={clsx('border-b-4 border-green-500 px-4 py-4', className)} style={photoStyle}>
-        <div className="mx-auto flex max-w-3xl flex-wrap items-start gap-x-3 gap-y-2 sm:flex-nowrap">
+      <div className={clsx(BANNER_STRIP, className)}>
+        <div className={clsx(BANNER_CARD, 'border-green-500')} style={photoStyle}>
           <button
             type="button"
             aria-expanded={expanded}
@@ -187,16 +187,20 @@ export default function VehicleStatusBanner({
   return (
     <div
       className={clsx(
-        'border-b-4 px-4 py-4',
-        tone === 'red' && 'border-red-500',
-        tone === 'orange' && 'border-orange-400',
-        tone === 'amber' && 'border-amber-400',
-        tone === 'blue' && 'border-primary-500',
+        BANNER_STRIP,
         className,
       )}
-      style={photoStyle}
     >
-      <div className="mx-auto flex max-w-3xl flex-wrap items-start gap-x-3 gap-y-2 sm:flex-nowrap">
+      <div
+        className={clsx(
+          BANNER_CARD,
+          tone === 'red' && 'border-red-500',
+          tone === 'orange' && 'border-orange-400',
+          tone === 'amber' && 'border-amber-400',
+          tone === 'blue' && 'border-primary-500',
+        )}
+        style={photoStyle}
+      >
         <button
           type="button"
           aria-expanded={expanded}

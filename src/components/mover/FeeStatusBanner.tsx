@@ -7,7 +7,7 @@ import { useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { formatDate, formatMoney } from '@/lib/format'
-import { photoBannerStyle } from '@/lib/photo-banner'
+import { BANNER_CARD, BANNER_STRIP, photoBannerStyle } from '@/lib/photo-banner'
 
 interface Props {
   /** `mover_profiles.feeStanding`; legacy rows read as ok. */
@@ -45,15 +45,19 @@ export default function FeeStatusBanner({ standing, owedCents, oldestDueAt, clas
   return (
     <div
       className={clsx(
-        'border-b-4 px-4 py-4',
-        tone === 'red' && 'border-red-500',
-        tone === 'amber' && 'border-amber-400',
-        tone === 'blue' && 'border-primary-500',
+        BANNER_STRIP,
         className,
       )}
-      style={photoBannerStyle('feePayment')}
     >
-      <div className="mx-auto flex max-w-3xl flex-wrap items-start gap-x-3 gap-y-2 sm:flex-nowrap">
+      <div
+        className={clsx(
+          BANNER_CARD,
+          tone === 'red' && 'border-red-500',
+          tone === 'amber' && 'border-amber-400',
+          tone === 'blue' && 'border-primary-500',
+        )}
+        style={photoBannerStyle('feePayment')}
+      >
         <button
           type="button"
           aria-expanded={expanded}
