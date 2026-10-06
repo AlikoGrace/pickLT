@@ -1,7 +1,7 @@
 {
   "about": {
     "hero": {
-      "subtitle": "PickLT ist eine Plattform für Umzugsdienstleistungen. Sie beschreiben Ihren Umzug, vergleichen Umzugsprofis und buchen den, den Sie möchten — für Wohnungen, Büros und einzelne Gegenstände in ganz Europa.",
+      "subtitle": "PickLte ist eine Plattform für Umzugsdienstleistungen. Sie beschreiben Ihren Umzug, vergleichen Umzugsprofis und buchen den, den Sie möchten — für Wohnungen, Büros und einzelne Gegenstände in ganz Europa.",
       "title": "👋 Über uns."
     }
   },
@@ -20,7 +20,7 @@
       "title": "Melden Sie sich an, um Ihr Konto zu sehen"
     },
     "version": {
-      "label": "PickLT v{{version}}"
+      "label": "PickLte v{{version}}"
     },
     "country": {
       "title": "Ihr Land",
@@ -50,7 +50,7 @@
       "cta": "Auszahlungsmethode hinzufügen"
     },
     "payoutMethods": {
-      "body": "Fügen Sie eine Auszahlungsmethode hinzu, um Zahlungen von PickLT zu erhalten. Auszahlungen gehen an die unten eingerichtete Methode.",
+      "body": "Fügen Sie eine Auszahlungsmethode hinzu, um Zahlungen von PickLte zu erhalten. Auszahlungen gehen an die unten eingerichtete Methode.",
       "title": "Auszahlungsmethoden"
     },
     "title": "Zahlungen & Auszahlungen"
@@ -94,7 +94,7 @@
     },
     "notify": {
       "incoming": {
-        "body": "{{name}} ruft Sie über PickLT an",
+        "body": "{{name}} ruft Sie über PickLte an",
         "title": "Eingehender Anruf"
       }
     },
@@ -163,7 +163,7 @@
       "locations": "Standorte",
       "title": "Unternehmen"
     },
-    "copyright": "© {{year}} PickLT. Alle Rechte vorbehalten.",
+    "copyright": "© {{year}} PickLte. Alle Rechte vorbehalten.",
     "legal": {
       "title": "Rechtliches"
     },
@@ -244,7 +244,7 @@
   },
   "instant": {
     "cardInApp": {
-      "helper": "Dieser Umzug wird per Karte bezahlt. Öffnen Sie die PickLT App, um die Zahlung abzuschließen — dort wird Ihre hinterlegte Karte belastet, bar ist nichts fällig."
+      "helper": "Dieser Umzug wird per Karte bezahlt. Öffnen Sie die PickLte App, um die Zahlung abzuschließen — dort wird Ihre hinterlegte Karte belastet, bar ist nichts fällig."
     },
     "chat": {
       "comingSoon": "Die Chat-Funktion kommt bald!"
@@ -770,7 +770,7 @@
       },
       "subtitle": "Verwalten Sie Ihr Konto und Ihre Einstellungen",
       "version": {
-        "label": "PickLT Mover App v{{version}}"
+        "label": "PickLte Mover App v{{version}}"
       }
     },
     "startRoute": {
@@ -1064,7 +1064,7 @@
           "label": "Sie schulden"
         },
         "owed": {
-          "label": "PickLT verwahrt für Sie"
+          "label": "PickLte verwahrt für Sie"
         },
         "settled": {
           "label": "Alles beglichen",
@@ -1498,7 +1498,7 @@
   },
   "seo": {
     "about": {
-      "description": "PickLT ist eine Plattform für Umzugsdienstleistungen für Wohnungen, Büros und Umzugsgut in ganz Europa.",
+      "description": "PickLte ist eine Plattform für Umzugsdienstleistungen für Wohnungen, Büros und Umzugsgut in ganz Europa.",
       "title": "Über uns"
     },
     "accountBilling": {
@@ -1510,13 +1510,13 @@
       "title": "Konto – Passwort"
     },
     "contact": {
-      "description": "Nehmen Sie Kontakt mit dem PickLT Team auf.",
+      "description": "Nehmen Sie Kontakt mit dem PickLte Team auf.",
       "title": "Kontakt"
     },
     "default": {
-      "description": "PickLT – Ihre Plattform für zuverlässige Umzugsdienstleistungen",
-      "keywords": "PickLT, Umzug, Umzugsunternehmen, Umzugsprofi, Möbeltransport, Umzugsservice",
-      "title": "PickLT – klüger umziehen mit PickLT"
+      "description": "PickLte – Ihre Plattform für zuverlässige Umzugsdienstleistungen",
+      "keywords": "PickLte, Umzug, Umzugsunternehmen, Umzugsprofi, Möbeltransport, Umzugsservice",
+      "title": "PickLte – klüger umziehen mit PickLte"
     },
     "forgotPassword": {
       "description": "Setzen Sie Ihr Passwort zurück",
@@ -1526,7 +1526,7 @@
       "description": "Buchen Sie geprüfte Umzugsprofis für Wohnungen, Büros und Umzugsgut in ganz Europa.",
       "title": "Startseite"
     },
-    "titleTemplate": "%s – PickLT"
+    "titleTemplate": "%s – PickLte"
   },
   "sidebar": {
     "blurb": "Entdecken Sie die herausragendsten Artikel zu allen Themen des Lebens. Schreiben Sie Ihre Geschichten und teilen Sie sie",

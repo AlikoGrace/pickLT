@@ -1,7 +1,7 @@
 {
   "about": {
     "hero": {
-      "subtitle": "PickLT bir taşımacılık hizmetleri platformudur. Taşınmanızı anlatırsınız, nakliyecileri karşılaştırırsınız ve istediğinizi seçersiniz — Avrupa genelinde daireler, ofisler ve tekil eşyalar için.",
+      "subtitle": "PickLte bir taşımacılık hizmetleri platformudur. Taşınmanızı anlatırsınız, nakliyecileri karşılaştırırsınız ve istediğinizi seçersiniz — Avrupa genelinde daireler, ofisler ve tekil eşyalar için.",
       "title": "👋 Hakkımızda."
     }
   },
@@ -20,7 +20,7 @@
       "title": "Hesabınızı görmek için giriş yapın"
     },
     "version": {
-      "label": "PickLT v{{version}}"
+      "label": "PickLte v{{version}}"
     },
     "country": {
       "title": "Ülkeniz",
@@ -50,7 +50,7 @@
       "cta": "Hakediş yöntemi ekle"
     },
     "payoutMethods": {
-      "body": "PickLT üzerinden ödeme almak için bir hakediş yöntemi ekleyin. Hakedişler, aşağıda belirlediğiniz yönteme gönderilir.",
+      "body": "PickLte üzerinden ödeme almak için bir hakediş yöntemi ekleyin. Hakedişler, aşağıda belirlediğiniz yönteme gönderilir.",
       "title": "Hakediş yöntemleri"
     },
     "title": "Ödemeler ve hakedişler"
@@ -94,7 +94,7 @@
     },
     "notify": {
       "incoming": {
-        "body": "{{name}} sizi PickLT üzerinden arıyor",
+        "body": "{{name}} sizi PickLte üzerinden arıyor",
         "title": "Gelen arama"
       }
     },
@@ -163,7 +163,7 @@
       "locations": "Lokasyonlar",
       "title": "Şirket"
     },
-    "copyright": "© {{year}} PickLT. Tüm hakları saklıdır.",
+    "copyright": "© {{year}} PickLte. Tüm hakları saklıdır.",
     "legal": {
       "title": "Yasal"
     },
@@ -244,7 +244,7 @@
   },
   "instant": {
     "cardInApp": {
-      "helper": "Bu taşınmanın ödemesi kartla yapılır. Ödemeyi tamamlamak için PickLT uygulamasını açın — kayıtlı kartınızdan orada tahsilat yapılır, nakit ödeme gerekmez."
+      "helper": "Bu taşınmanın ödemesi kartla yapılır. Ödemeyi tamamlamak için PickLte uygulamasını açın — kayıtlı kartınızdan orada tahsilat yapılır, nakit ödeme gerekmez."
     },
     "chat": {
       "comingSoon": "Sohbet özelliği çok yakında!"
@@ -770,7 +770,7 @@
       },
       "subtitle": "Hesabınızı ve tercihlerinizi yönetin",
       "version": {
-        "label": "PickLT Nakliyeci Uygulaması v{{version}}"
+        "label": "PickLte Nakliyeci Uygulaması v{{version}}"
       }
     },
     "startRoute": {
@@ -1064,7 +1064,7 @@
           "label": "Borcunuz"
         },
         "owed": {
-          "label": "PickLT’nin sizin için tuttuğu tutar"
+          "label": "PickLte’nin sizin için tuttuğu tutar"
         },
         "settled": {
           "label": "Her şey ödendi",
@@ -1498,7 +1498,7 @@
   },
   "seo": {
     "about": {
-      "description": "PickLT, Avrupa genelinde daireler, ofisler ve eşyalar için bir taşımacılık hizmetleri platformudur.",
+      "description": "PickLte, Avrupa genelinde daireler, ofisler ve eşyalar için bir taşımacılık hizmetleri platformudur.",
       "title": "Hakkımızda"
     },
     "accountBilling": {
@@ -1510,13 +1510,13 @@
       "title": "Hesap - parola"
     },
     "contact": {
-      "description": "PickLT ekibiyle iletişime geçin.",
+      "description": "PickLte ekibiyle iletişime geçin.",
       "title": "Bize ulaşın"
     },
     "default": {
-      "description": "PickLT - Güvenilir taşımacılık hizmeti platformunuz",
-      "keywords": "PickLT, taşınma, nakliye, nakliyeci, evden eve nakliyat, Umzug",
-      "title": "PickLT - PickLT ile daha akıllı taşının"
+      "description": "PickLte - Güvenilir taşımacılık hizmeti platformunuz",
+      "keywords": "PickLte, taşınma, nakliye, nakliyeci, evden eve nakliyat, Umzug",
+      "title": "PickLte - PickLte ile daha akıllı taşının"
     },
     "forgotPassword": {
       "description": "Parolanızı sıfırlayın",
@@ -1526,7 +1526,7 @@
       "description": "Avrupa genelinde daireler, ofisler ve eşyalar için doğrulanmış nakliyeci ayırtın.",
       "title": "Ana sayfa"
     },
-    "titleTemplate": "%s - PickLT"
+    "titleTemplate": "%s - PickLte"
   },
   "sidebar": {
     "blurb": "Hayatın her konusunda öne çıkan makaleleri keşfedin. Kendi hikâyelerinizi yazın ve paylaşın",

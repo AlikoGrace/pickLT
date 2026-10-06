@@ -172,7 +172,7 @@ export default function Footer3() {
             ))}
           </div>
           <p className="mt-8 text-sm/6 text-gray-600 md:order-1 md:mt-0 dark:text-neutral-400">
-            &copy; 2025 PickLt, All rights reserved.
+            &copy; 2025 PickLte, All rights reserved.
           </p>
         </div>
       </div>

@@ -45,7 +45,7 @@
     "invite": {
       "accountClash": "Ya existe una cuenta con este correo electrónico. Pide a un administrador que la ascienda en su lugar.",
       "alreadyAccepted": "Esa invitación ya se aceptó. Suspende la cuenta de administrador en su lugar.",
-      "emailExists": "Ese correo electrónico ya tiene una cuenta de PickLT. Asciéndela desde la página de usuarios en lugar de enviar una invitación.",
+      "emailExists": "Ese correo electrónico ya tiene una cuenta de PickLte. Asciéndela desde la página de usuarios en lugar de enviar una invitación.",
       "emailIsAdmin": "Ese correo electrónico ya pertenece a un administrador.",
       "expired": "Esta invitación ha caducado. Pide a un administrador un enlace nuevo.",
       "idRequired": "Se requiere un identificador de invitación.",
@@ -369,7 +369,7 @@
     "notOwnVehicle": "Este vehículo no pertenece a tu cuenta."
   },
   "country": {
-    "notLive": "PickLT aún no está disponible en {{country}}.",
+    "notLive": "PickLte aún no está disponible en {{country}}.",
     "required": "Elige tu país."
   },
   "fees": {

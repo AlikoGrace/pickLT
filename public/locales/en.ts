@@ -239,7 +239,7 @@ export const en = {
     sectionHero: {
       title: 'Hotel, car & experiences',
       description:
-        'Accompanying us, you have a trip full of experiences. With PickLT, booking accommodation, resort villas, hotels',
+        'Accompanying us, you have a trip full of experiences. With PickLte, booking accommodation, resort villas, hotels',
       'Start your search': 'Start your search',
       button: 'Start your search',
     },

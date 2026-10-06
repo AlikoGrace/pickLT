@@ -63,7 +63,7 @@ export async function sanctionedCountryRejection(
     const raw = (cfg.documents[0] as unknown as { value?: string } | undefined)?.value
     const list = raw ? JSON.parse(raw) : []
     if (isSanctionedCountry(primaryCountry, list)) {
-      return `PickLT does not operate in ${primaryCountry}. Mover onboarding is not available there.`
+      return `PickLte does not operate in ${primaryCountry}. Mover onboarding is not available there.`
     }
   } catch (e) {
     console.error('sanctions config check failed (continuing):', e)

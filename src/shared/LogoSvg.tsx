@@ -28,7 +28,7 @@ const LogoSvg = () => {
       <circle cx="35" cy="17" r="3" fill="#0d7377"/>
       {/* PickIt text */}
       <text x="70" y="35" fontFamily="Arial, sans-serif" fontSize="28" fontWeight="bold" fill="#1a3a5c">
-        <tspan>Picklt</tspan>
+        <tspan>Picklte</tspan>
       </text>
     </svg>
   )

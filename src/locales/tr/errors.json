@@ -45,7 +45,7 @@
     "invite": {
       "accountClash": "Bu e-posta adresiyle bir hesap zaten var. Bunun yerine bir yöneticiden bu hesabı yetkilendirmesini isteyin.",
       "alreadyAccepted": "Bu davet zaten kabul edildi. Bunun yerine yönetici hesabını askıya alın.",
-      "emailExists": "Bu e-posta adresinin zaten bir PickLT hesabı var. Davet göndermek yerine Kullanıcılar sayfasından yetkilendirin.",
+      "emailExists": "Bu e-posta adresinin zaten bir PickLte hesabı var. Davet göndermek yerine Kullanıcılar sayfasından yetkilendirin.",
       "emailIsAdmin": "Bu e-posta adresi zaten bir yöneticiye ait.",
       "expired": "Bu davetin süresi doldu. Bir yöneticiden yeni bağlantı isteyin.",
       "idRequired": "Davet kimliği gereklidir.",
@@ -369,7 +369,7 @@
     "notOwnVehicle": "Bu araç hesabınıza ait değil."
   },
   "country": {
-    "notLive": "PickLT henüz {{country}} için kullanılamıyor.",
+    "notLive": "PickLte henüz {{country}} için kullanılamıyor.",
     "required": "Lütfen ülkenizi seçin."
   },
   "fees": {

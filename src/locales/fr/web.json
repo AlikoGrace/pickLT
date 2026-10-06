@@ -1,7 +1,7 @@
 {
   "about": {
     "hero": {
-      "subtitle": "PickLT est une plateforme de services de déménagement. Vous décrivez votre déménagement, comparez les déménageurs et réservez celui de votre choix — pour des appartements, des bureaux et des objets isolés partout en Europe.",
+      "subtitle": "PickLte est une plateforme de services de déménagement. Vous décrivez votre déménagement, comparez les déménageurs et réservez celui de votre choix — pour des appartements, des bureaux et des objets isolés partout en Europe.",
       "title": "👋 À propos."
     }
   },
@@ -20,7 +20,7 @@
       "title": "Connectez-vous pour accéder à votre compte"
     },
     "version": {
-      "label": "PickLT v{{version}}"
+      "label": "PickLte v{{version}}"
     },
     "country": {
       "title": "Votre pays",
@@ -50,7 +50,7 @@
       "cta": "Ajouter un mode de versement"
     },
     "payoutMethods": {
-      "body": "Ajoutez un mode de versement pour recevoir les paiements de PickLT. Les versements sont envoyés vers le mode configuré ci-dessous.",
+      "body": "Ajoutez un mode de versement pour recevoir les paiements de PickLte. Les versements sont envoyés vers le mode configuré ci-dessous.",
       "title": "Modes de versement"
     },
     "title": "Paiements et versements"
@@ -94,7 +94,7 @@
     },
     "notify": {
       "incoming": {
-        "body": "{{name}} vous appelle sur PickLT",
+        "body": "{{name}} vous appelle sur PickLte",
         "title": "Appel entrant"
       }
     },
@@ -163,7 +163,7 @@
       "locations": "Implantations",
       "title": "Entreprise"
     },
-    "copyright": "© {{year}} PickLT. Tous droits réservés.",
+    "copyright": "© {{year}} PickLte. Tous droits réservés.",
     "legal": {
       "title": "Mentions légales"
     },
@@ -244,7 +244,7 @@
   },
   "instant": {
     "cardInApp": {
-      "helper": "Ce déménagement est payé par carte. Ouvrez l'application PickLT pour finaliser le paiement — votre carte enregistrée y est débitée, rien n'est à régler en espèces."
+      "helper": "Ce déménagement est payé par carte. Ouvrez l'application PickLte pour finaliser le paiement — votre carte enregistrée y est débitée, rien n'est à régler en espèces."
     },
     "chat": {
       "comingSoon": "Fonction de messagerie bientôt disponible !"
@@ -770,7 +770,7 @@
       },
       "subtitle": "Gérez votre compte et vos préférences",
       "version": {
-        "label": "PickLT Mover App v{{version}}"
+        "label": "PickLte Mover App v{{version}}"
       }
     },
     "startRoute": {
@@ -1064,7 +1064,7 @@
           "label": "Vous devez"
         },
         "owed": {
-          "label": "PickLT conserve pour vous"
+          "label": "PickLte conserve pour vous"
         },
         "settled": {
           "label": "Tout est réglé",
@@ -1498,7 +1498,7 @@
   },
   "seo": {
     "about": {
-      "description": "PickLT est une plateforme de services de déménagement pour appartements, bureaux et objets partout en Europe.",
+      "description": "PickLte est une plateforme de services de déménagement pour appartements, bureaux et objets partout en Europe.",
       "title": "À propos"
     },
     "accountBilling": {
@@ -1510,13 +1510,13 @@
       "title": "Compte - mot de passe"
     },
     "contact": {
-      "description": "Contactez l'équipe PickLT.",
+      "description": "Contactez l'équipe PickLte.",
       "title": "Nous contacter"
     },
     "default": {
-      "description": "PickLT - Votre plateforme de services de déménagement de confiance",
-      "keywords": "PickLT, déménagement, déménageurs, relocation, Umzug",
-      "title": "PickLT - Déménagez plus intelligemment avec PickLT"
+      "description": "PickLte - Votre plateforme de services de déménagement de confiance",
+      "keywords": "PickLte, déménagement, déménageurs, relocation, Umzug",
+      "title": "PickLte - Déménagez plus intelligemment avec PickLte"
     },
     "forgotPassword": {
       "description": "Réinitialisez votre mot de passe",
@@ -1526,7 +1526,7 @@
       "description": "Réservez des déménageurs vérifiés pour vos appartements, vos bureaux et vos affaires partout en Europe.",
       "title": "Accueil"
     },
-    "titleTemplate": "%s - PickLT"
+    "titleTemplate": "%s - PickLte"
   },
   "sidebar": {
     "blurb": "Découvrez les articles les plus remarquables sur tous les sujets de la vie. Écrivez vos histoires et partagez-les",

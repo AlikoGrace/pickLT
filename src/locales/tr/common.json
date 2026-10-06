@@ -158,7 +158,7 @@
       },
       "incoming": {
         "title": "Gelen arama",
-        "body": "PickLT uygulama içi arama",
+        "body": "PickLte uygulama içi arama",
         "unknownCaller": {
           "label": "Bilinmeyen arayan"
         }
@@ -225,7 +225,7 @@
       },
       "micDenied": {
         "title": "Mikrofon erişimi gerekli",
-        "body": "Uygulama içi arama yapmak ve yanıtlamak için telefon ayarlarından PickLT’ye mikrofon erişimi verin."
+        "body": "Uygulama içi arama yapmak ve yanıtlamak için telefon ayarlarından PickLte’ye mikrofon erişimi verin."
       },
       "channel": {
         "incoming": {
@@ -244,7 +244,7 @@
       },
       "fullScreen": {
         "title": "Aramalar telefon araması gibi çalsın",
-        "body": "Uygulama içi gelen bir arama, yanıtlayana veya reddedene kadar ekranda kalsın diye PickLT için tam ekran bildirimleri açın.",
+        "body": "Uygulama içi gelen bir arama, yanıtlayana veya reddedene kadar ekranda kalsın diye PickLte için tam ekran bildirimleri açın.",
         "open": {
           "cta": "Ayarları aç"
         },
@@ -779,7 +779,7 @@
     },
     "notAvailable": {
       "title": "Ülkenizde henüz kullanılamıyor",
-      "body": "PickLT henüz {{country}} için açılmadı. Açıldığında size haber vereceğiz."
+      "body": "PickLte henüz {{country}} için açılmadı. Açıldığında size haber vereceğiz."
     },
     "select": {
       "label": "Ülkenizi seçin"

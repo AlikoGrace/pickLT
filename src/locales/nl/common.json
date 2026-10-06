@@ -158,7 +158,7 @@
       },
       "incoming": {
         "title": "Inkomend gesprek",
-        "body": "PickLT-gesprek in de app",
+        "body": "PickLte-gesprek in de app",
         "unknownCaller": {
           "label": "Onbekende beller"
         }
@@ -225,7 +225,7 @@
       },
       "micDenied": {
         "title": "Toegang tot microfoon nodig",
-        "body": "Geef PickLT toegang tot de microfoon in de instellingen van je telefoon om in de app te bellen en gebeld te worden."
+        "body": "Geef PickLte toegang tot de microfoon in de instellingen van je telefoon om in de app te bellen en gebeld te worden."
       },
       "channel": {
         "incoming": {
@@ -244,7 +244,7 @@
       },
       "fullScreen": {
         "title": "Laat oproepen overgaan als een telefoongesprek",
-        "body": "Zet meldingen op volledig scherm aan voor PickLT, zodat een inkomende oproep in de app op je scherm blijft tot je opneemt of weigert.",
+        "body": "Zet meldingen op volledig scherm aan voor PickLte, zodat een inkomende oproep in de app op je scherm blijft tot je opneemt of weigert.",
         "open": {
           "cta": "Instellingen openen"
         },
@@ -779,7 +779,7 @@
     },
     "notAvailable": {
       "title": "Nog niet beschikbaar in jouw land",
-      "body": "PickLT is nog niet open in {{country}}. We laten het weten zodra dat zo is."
+      "body": "PickLte is nog niet open in {{country}}. We laten het weten zodra dat zo is."
     },
     "select": {
       "label": "Selecteer je land"

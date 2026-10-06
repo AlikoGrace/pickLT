@@ -158,7 +158,7 @@
       },
       "incoming": {
         "title": "Incoming call",
-        "body": "PickLT in-app call",
+        "body": "PickLte in-app call",
         "unknownCaller": {
           "label": "Unknown caller"
         }
@@ -225,7 +225,7 @@
       },
       "micDenied": {
         "title": "Microphone access needed",
-        "body": "Allow microphone access for PickLT in your phone’s settings to make and answer in-app calls."
+        "body": "Allow microphone access for PickLte in your phone’s settings to make and answer in-app calls."
       },
       "channel": {
         "incoming": {
@@ -244,7 +244,7 @@
       },
       "fullScreen": {
         "title": "Let calls ring like a phone call",
-        "body": "Turn on full-screen notifications for PickLT so an incoming in-app call stays on your screen until you answer or decline.",
+        "body": "Turn on full-screen notifications for PickLte so an incoming in-app call stays on your screen until you answer or decline.",
         "open": {
           "cta": "Open settings"
         },
@@ -779,7 +779,7 @@
     },
     "notAvailable": {
       "title": "Not available in your country yet",
-      "body": "PickLT is not open in {{country}} yet. We will let you know when it is."
+      "body": "PickLte is not open in {{country}} yet. We will let you know when it is."
     },
     "select": {
       "label": "Select your country"

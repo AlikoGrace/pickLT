@@ -23,7 +23,7 @@
       "title": "Could not change email"
     },
     "googleNotice": {
-      "body": "Your account uses Google sign-in. The email address can't be changed from inside PickLT — update it in your Google Account.",
+      "body": "Your account uses Google sign-in. The email address can't be changed from inside PickLte — update it in your Google Account.",
       "title": "Email is managed by Google"
     },
     "helper": "Update your email address",

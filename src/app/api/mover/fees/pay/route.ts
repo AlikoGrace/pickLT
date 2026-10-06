@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
         currency: 'eur',
         customer,
         automatic_payment_methods: { enabled: true },
-        description: 'PickLT platform fees',
+        description: 'PickLte platform fees',
         metadata: { kind: 'fee_settlement', moverProfileId: moverProfile.$id },
       })
       return NextResponse.json({

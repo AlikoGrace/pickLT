@@ -45,7 +45,7 @@
     "invite": {
       "accountClash": "Er bestaat al een account met dit e-mailadres. Vraag een beheerder om dat account te promoveren.",
       "alreadyAccepted": "Die uitnodiging is al geaccepteerd. Schort in plaats daarvan het beheerdersaccount op.",
-      "emailExists": "Dat e-mailadres heeft al een PickLT-account. Promoveer het via de pagina Gebruikers in plaats van een uitnodiging te sturen.",
+      "emailExists": "Dat e-mailadres heeft al een PickLte-account. Promoveer het via de pagina Gebruikers in plaats van een uitnodiging te sturen.",
       "emailIsAdmin": "Dat e-mailadres hoort al bij een beheerder.",
       "expired": "Deze uitnodiging is verlopen. Vraag een beheerder om een nieuwe link.",
       "idRequired": "Een uitnodigings-id is verplicht.",
@@ -369,7 +369,7 @@
     "notOwnVehicle": "Dit voertuig hoort niet bij jouw account."
   },
   "country": {
-    "notLive": "PickLT is nog niet beschikbaar in {{country}}.",
+    "notLive": "PickLte is nog niet beschikbaar in {{country}}.",
     "required": "Kies je land."
   },
   "fees": {

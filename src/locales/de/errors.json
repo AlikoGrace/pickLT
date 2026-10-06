@@ -45,7 +45,7 @@
     "invite": {
       "accountClash": "Für diese E-Mail-Adresse besteht bereits ein Konto. Bitten Sie einen Administrator, es stattdessen hochzustufen.",
       "alreadyAccepted": "Diese Einladung wurde bereits angenommen. Sperren Sie stattdessen das Administratorkonto.",
-      "emailExists": "Für diese E-Mail-Adresse besteht bereits ein PickLT-Konto. Stufen Sie es auf der Seite „Nutzer“ hoch, statt eine Einladung zu senden.",
+      "emailExists": "Für diese E-Mail-Adresse besteht bereits ein PickLte-Konto. Stufen Sie es auf der Seite „Nutzer“ hoch, statt eine Einladung zu senden.",
       "emailIsAdmin": "Diese E-Mail-Adresse gehört bereits zu einem Administrator.",
       "expired": "Diese Einladung ist abgelaufen. Bitten Sie einen Administrator um einen neuen Link.",
       "idRequired": "Eine Einladungs-ID ist erforderlich.",
@@ -369,7 +369,7 @@
     "notOwnVehicle": "Dieses Fahrzeug gehört nicht zu Ihrem Konto."
   },
   "country": {
-    "notLive": "PickLT ist in {{country}} noch nicht verfügbar.",
+    "notLive": "PickLte ist in {{country}} noch nicht verfügbar.",
     "required": "Bitte wählen Sie Ihr Land."
   },
   "fees": {

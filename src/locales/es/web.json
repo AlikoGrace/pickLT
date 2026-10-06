@@ -1,7 +1,7 @@
 {
   "about": {
     "hero": {
-      "subtitle": "PickLT es una plataforma de servicios de mudanza. Describes tu mudanza, comparas transportistas y reservas el que quieras, para pisos, oficinas y objetos sueltos por toda Europa.",
+      "subtitle": "PickLte es una plataforma de servicios de mudanza. Describes tu mudanza, comparas transportistas y reservas el que quieras, para pisos, oficinas y objetos sueltos por toda Europa.",
       "title": "👋 Quiénes somos."
     }
   },
@@ -20,7 +20,7 @@
       "title": "Inicia sesión para ver tu cuenta"
     },
     "version": {
-      "label": "PickLT v{{version}}"
+      "label": "PickLte v{{version}}"
     },
     "country": {
       "title": "Tu país",
@@ -50,7 +50,7 @@
       "cta": "Añadir método de abono"
     },
     "payoutMethods": {
-      "body": "Añade un método de abono para recibir los pagos de PickLT. Los abonos se envían al método que configures abajo.",
+      "body": "Añade un método de abono para recibir los pagos de PickLte. Los abonos se envían al método que configures abajo.",
       "title": "Métodos de abono"
     },
     "title": "Pagos y abonos"
@@ -94,7 +94,7 @@
     },
     "notify": {
       "incoming": {
-        "body": "{{name}} te está llamando en PickLT",
+        "body": "{{name}} te está llamando en PickLte",
         "title": "Llamada entrante"
       }
     },
@@ -163,7 +163,7 @@
       "locations": "Dónde operamos",
       "title": "Empresa"
     },
-    "copyright": "© {{year}} PickLT. Todos los derechos reservados.",
+    "copyright": "© {{year}} PickLte. Todos los derechos reservados.",
     "legal": {
       "title": "Aviso legal"
     },
@@ -244,7 +244,7 @@
   },
   "instant": {
     "cardInApp": {
-      "helper": "Esta mudanza se paga con tarjeta. Abre la app de PickLT para completar el pago: se cobrará en tu tarjeta guardada y no hay que pagar nada en efectivo."
+      "helper": "Esta mudanza se paga con tarjeta. Abre la app de PickLte para completar el pago: se cobrará en tu tarjeta guardada y no hay que pagar nada en efectivo."
     },
     "chat": {
       "comingSoon": "¡El chat estará disponible muy pronto!"
@@ -770,7 +770,7 @@
       },
       "subtitle": "Gestiona tu cuenta y tus preferencias",
       "version": {
-        "label": "PickLT Mover App v{{version}}"
+        "label": "PickLte Mover App v{{version}}"
       }
     },
     "startRoute": {
@@ -1064,7 +1064,7 @@
           "label": "Usted debe"
         },
         "owed": {
-          "label": "PickLT le guarda"
+          "label": "PickLte le guarda"
         },
         "settled": {
           "label": "Todo liquidado",
@@ -1498,7 +1498,7 @@
   },
   "seo": {
     "about": {
-      "description": "PickLT es una plataforma de servicios de mudanza para pisos, oficinas y objetos por toda Europa.",
+      "description": "PickLte es una plataforma de servicios de mudanza para pisos, oficinas y objetos por toda Europa.",
       "title": "Quiénes somos"
     },
     "accountBilling": {
@@ -1510,13 +1510,13 @@
       "title": "Cuenta - contraseña"
     },
     "contact": {
-      "description": "Ponte en contacto con el equipo de PickLT.",
+      "description": "Ponte en contacto con el equipo de PickLte.",
       "title": "Contacto"
     },
     "default": {
-      "description": "PickLT: tu plataforma de servicios de mudanza de confianza",
-      "keywords": "PickLT, mudanzas, transportistas, traslados, Umzug",
-      "title": "PickLT - Múdate mejor con PickLT"
+      "description": "PickLte: tu plataforma de servicios de mudanza de confianza",
+      "keywords": "PickLte, mudanzas, transportistas, traslados, Umzug",
+      "title": "PickLte - Múdate mejor con PickLte"
     },
     "forgotPassword": {
       "description": "Restablece tu contraseña",
@@ -1526,7 +1526,7 @@
       "description": "Reserva transportistas verificados para pisos, oficinas y objetos por toda Europa.",
       "title": "Inicio"
     },
-    "titleTemplate": "%s - PickLT"
+    "titleTemplate": "%s - PickLte"
   },
   "sidebar": {
     "blurb": "Descubre los artículos más destacados sobre todos los temas de la vida. Escribe tus historias y compártelas",

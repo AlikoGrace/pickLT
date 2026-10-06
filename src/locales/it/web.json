@@ -1,7 +1,7 @@
 {
   "about": {
     "hero": {
-      "subtitle": "PickLT è una piattaforma di servizi di trasloco. Descrivi il tuo trasloco, confronta i traslocatori e prenota quello che preferisci — per appartamenti, uffici e singoli oggetti in tutta Europa.",
+      "subtitle": "PickLte è una piattaforma di servizi di trasloco. Descrivi il tuo trasloco, confronta i traslocatori e prenota quello che preferisci — per appartamenti, uffici e singoli oggetti in tutta Europa.",
       "title": "👋 Chi siamo."
     }
   },
@@ -20,7 +20,7 @@
       "title": "Accedi per vedere il tuo account"
     },
     "version": {
-      "label": "PickLT v{{version}}"
+      "label": "PickLte v{{version}}"
     },
     "country": {
       "title": "Il tuo Paese",
@@ -50,7 +50,7 @@
       "cta": "Aggiungi metodo di accredito"
     },
     "payoutMethods": {
-      "body": "Aggiungi un metodo di accredito per ricevere i pagamenti da PickLT. Gli accrediti vengono inviati al metodo che imposti qui sotto.",
+      "body": "Aggiungi un metodo di accredito per ricevere i pagamenti da PickLte. Gli accrediti vengono inviati al metodo che imposti qui sotto.",
       "title": "Metodi di accredito"
     },
     "title": "Pagamenti e accrediti"
@@ -94,7 +94,7 @@
     },
     "notify": {
       "incoming": {
-        "body": "{{name}} ti sta chiamando su PickLT",
+        "body": "{{name}} ti sta chiamando su PickLte",
         "title": "Chiamata in arrivo"
       }
     },
@@ -163,7 +163,7 @@
       "locations": "Sedi",
       "title": "Azienda"
     },
-    "copyright": "© {{year}} PickLT. Tutti i diritti riservati.",
+    "copyright": "© {{year}} PickLte. Tutti i diritti riservati.",
     "legal": {
       "title": "Note legali"
     },
@@ -244,7 +244,7 @@
   },
   "instant": {
     "cardInApp": {
-      "helper": "Questo trasloco si paga con carta. Apri l’app PickLT per completare il pagamento: la carta salvata viene addebitata lì, non è dovuto nulla in contanti."
+      "helper": "Questo trasloco si paga con carta. Apri l’app PickLte per completare il pagamento: la carta salvata viene addebitata lì, non è dovuto nulla in contanti."
     },
     "chat": {
       "comingSoon": "La chat arriverà presto!"
@@ -770,7 +770,7 @@
       },
       "subtitle": "Gestisci il tuo account e le tue preferenze",
       "version": {
-        "label": "PickLT Mover App v{{version}}"
+        "label": "PickLte Mover App v{{version}}"
       }
     },
     "startRoute": {
@@ -1064,7 +1064,7 @@
           "label": "Lei deve"
         },
         "owed": {
-          "label": "PickLT custodisce per Lei"
+          "label": "PickLte custodisce per Lei"
         },
         "settled": {
           "label": "Tutto saldato",
@@ -1498,7 +1498,7 @@
   },
   "seo": {
     "about": {
-      "description": "PickLT è una piattaforma di servizi di trasloco per appartamenti, uffici e oggetti in tutta Europa.",
+      "description": "PickLte è una piattaforma di servizi di trasloco per appartamenti, uffici e oggetti in tutta Europa.",
       "title": "Chi siamo"
     },
     "accountBilling": {
@@ -1510,13 +1510,13 @@
       "title": "Account - password"
     },
     "contact": {
-      "description": "Mettiti in contatto con il team PickLT.",
+      "description": "Mettiti in contatto con il team PickLte.",
       "title": "Contattaci"
     },
     "default": {
-      "description": "PickLT - La tua piattaforma di servizi di trasloco di fiducia",
-      "keywords": "PickLT, Trasloco, Traslochi, Traslocatori, Trasferimento, Umzug",
-      "title": "PickLT - Trasloca meglio con PickLT"
+      "description": "PickLte - La tua piattaforma di servizi di trasloco di fiducia",
+      "keywords": "PickLte, Trasloco, Traslochi, Traslocatori, Trasferimento, Umzug",
+      "title": "PickLte - Trasloca meglio con PickLte"
     },
     "forgotPassword": {
       "description": "Reimposta la tua password",
@@ -1526,7 +1526,7 @@
       "description": "Prenota traslocatori verificati per appartamenti, uffici e oggetti in tutta Europa.",
       "title": "Home"
     },
-    "titleTemplate": "%s - PickLT"
+    "titleTemplate": "%s - PickLte"
   },
   "sidebar": {
     "blurb": "Scopri gli articoli più interessanti su tutti i temi della vita. Scrivi le tue storie e condividile",

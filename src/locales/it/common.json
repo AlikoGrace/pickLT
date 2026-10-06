@@ -158,7 +158,7 @@
       },
       "incoming": {
         "title": "Chiamata in arrivo",
-        "body": "Chiamata PickLT nell’app",
+        "body": "Chiamata PickLte nell’app",
         "unknownCaller": {
           "label": "Chiamante sconosciuto"
         }
@@ -225,7 +225,7 @@
       },
       "micDenied": {
         "title": "Serve l’accesso al microfono",
-        "body": "Consenti a PickLT l’accesso al microfono nelle impostazioni del telefono per fare e ricevere chiamate nell’app."
+        "body": "Consenti a PickLte l’accesso al microfono nelle impostazioni del telefono per fare e ricevere chiamate nell’app."
       },
       "channel": {
         "incoming": {
@@ -244,7 +244,7 @@
       },
       "fullScreen": {
         "title": "Fai squillare le chiamate come una telefonata",
-        "body": "Attiva le notifiche a schermo intero per PickLT, così una chiamata in arrivo nell’app resta sullo schermo finché non rispondi o rifiuti.",
+        "body": "Attiva le notifiche a schermo intero per PickLte, così una chiamata in arrivo nell’app resta sullo schermo finché non rispondi o rifiuti.",
         "open": {
           "cta": "Apri impostazioni"
         },
@@ -779,7 +779,7 @@
     },
     "notAvailable": {
       "title": "Non ancora disponibile nel tuo paese",
-      "body": "PickLT non è ancora attivo in {{country}}. Ti avviseremo quando lo sarà."
+      "body": "PickLte non è ancora attivo in {{country}}. Ti avviseremo quando lo sarà."
     },
     "select": {
       "label": "Seleziona il tuo paese"

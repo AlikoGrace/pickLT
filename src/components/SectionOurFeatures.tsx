@@ -34,7 +34,7 @@ const SectionOurFeatures: FC<Props> = ({
     {
       badge: 'Exposure',
       badgeColor: 'green',
-      title: 'Reach millions with PickLT',
+      title: 'Reach millions with PickLte',
       description: 'Millions of people are searching for unique places to stay around the world',
     },
     {

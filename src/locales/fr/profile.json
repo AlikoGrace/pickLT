@@ -23,7 +23,7 @@
       "title": "Impossible de modifier l'e-mail"
     },
     "googleNotice": {
-      "body": "Votre compte utilise la connexion Google. L'adresse e-mail ne peut pas être modifiée depuis PickLT : mettez-la à jour dans votre compte Google.",
+      "body": "Votre compte utilise la connexion Google. L'adresse e-mail ne peut pas être modifiée depuis PickLte : mettez-la à jour dans votre compte Google.",
       "title": "E-mail géré par Google"
     },
     "helper": "Mettez à jour votre adresse e-mail",

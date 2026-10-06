@@ -23,7 +23,7 @@
       "title": "E-posta adresi değiştirilemedi"
     },
     "googleNotice": {
-      "body": "Hesabınız Google ile giriş kullanıyor. E-posta adresi PickLT içinden değiştirilemez; Google Hesabınızdan güncelleyin.",
+      "body": "Hesabınız Google ile giriş kullanıyor. E-posta adresi PickLte içinden değiştirilemez; Google Hesabınızdan güncelleyin.",
       "title": "E-posta adresi Google tarafından yönetiliyor"
     },
     "helper": "E-posta adresinizi güncelleyin",

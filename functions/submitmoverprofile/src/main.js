@@ -101,7 +101,7 @@ export default async ({ req, res, log, error }) => {
       if (isSanctionedCountry(primaryCountry, list)) {
         return res.json(
           {
-            error: `PickLT does not operate in ${primaryCountry}. Mover onboarding is not available there.`,
+            error: `PickLte does not operate in ${primaryCountry}. Mover onboarding is not available there.`,
             fnCode: 'country.notSupported',
             fnParams: { country: primaryCountry },
           },

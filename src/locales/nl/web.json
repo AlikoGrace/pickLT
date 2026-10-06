@@ -1,7 +1,7 @@
 {
   "about": {
     "hero": {
-      "subtitle": "PickLT is een platform voor verhuisdiensten. Je beschrijft je verhuizing, vergelijkt verhuizers en boekt degene die je wilt — voor appartementen, kantoren en losse spullen in heel Europa.",
+      "subtitle": "PickLte is een platform voor verhuisdiensten. Je beschrijft je verhuizing, vergelijkt verhuizers en boekt degene die je wilt — voor appartementen, kantoren en losse spullen in heel Europa.",
       "title": "👋 Over ons."
     }
   },
@@ -20,7 +20,7 @@
       "title": "Log in om je account te bekijken"
     },
     "version": {
-      "label": "PickLT v{{version}}"
+      "label": "PickLte v{{version}}"
     },
     "country": {
       "title": "Je land",
@@ -50,7 +50,7 @@
       "cta": "Uitbetaalmethode toevoegen"
     },
     "payoutMethods": {
-      "body": "Voeg een uitbetaalmethode toe om betalingen van PickLT te ontvangen. Uitbetalingen gaan naar de methode die je hieronder instelt.",
+      "body": "Voeg een uitbetaalmethode toe om betalingen van PickLte te ontvangen. Uitbetalingen gaan naar de methode die je hieronder instelt.",
       "title": "Uitbetaalmethoden"
     },
     "title": "Betalingen en uitbetalingen"
@@ -94,7 +94,7 @@
     },
     "notify": {
       "incoming": {
-        "body": "{{name}} belt je via PickLT",
+        "body": "{{name}} belt je via PickLte",
         "title": "Inkomende oproep"
       }
     },
@@ -163,7 +163,7 @@
       "locations": "Locaties",
       "title": "Bedrijf"
     },
-    "copyright": "© {{year}} PickLT. Alle rechten voorbehouden.",
+    "copyright": "© {{year}} PickLte. Alle rechten voorbehouden.",
     "legal": {
       "title": "Juridisch"
     },
@@ -244,7 +244,7 @@
   },
   "instant": {
     "cardInApp": {
-      "helper": "Deze verhuizing wordt met kaart betaald. Open de PickLT-app om de betaling af te ronden — je opgeslagen kaart wordt daar belast, contant hoef je niets te betalen."
+      "helper": "Deze verhuizing wordt met kaart betaald. Open de PickLte-app om de betaling af te ronden — je opgeslagen kaart wordt daar belast, contant hoef je niets te betalen."
     },
     "chat": {
       "comingSoon": "Chatfunctie komt binnenkort!"
@@ -770,7 +770,7 @@
       },
       "subtitle": "Beheer je account en voorkeuren",
       "version": {
-        "label": "PickLT Mover App v{{version}}"
+        "label": "PickLte Mover App v{{version}}"
       }
     },
     "startRoute": {
@@ -1064,7 +1064,7 @@
           "label": "U bent verschuldigd"
         },
         "owed": {
-          "label": "PickLT houdt voor u vast"
+          "label": "PickLte houdt voor u vast"
         },
         "settled": {
           "label": "Alles voldaan",
@@ -1498,7 +1498,7 @@
   },
   "seo": {
     "about": {
-      "description": "PickLT is een platform voor verhuisdiensten voor appartementen, kantoren en spullen in heel Europa.",
+      "description": "PickLte is een platform voor verhuisdiensten voor appartementen, kantoren en spullen in heel Europa.",
       "title": "Over ons"
     },
     "accountBilling": {
@@ -1510,13 +1510,13 @@
       "title": "Account - wachtwoord"
     },
     "contact": {
-      "description": "Neem contact op met het team van PickLT.",
+      "description": "Neem contact op met het team van PickLte.",
       "title": "Neem contact op"
     },
     "default": {
-      "description": "PickLT - Jouw vertrouwde platform voor verhuisdiensten",
-      "keywords": "PickLT, verhuizen, verhuizers, verhuisservice, Umzug",
-      "title": "PickLT - Slimmer verhuizen met PickLT"
+      "description": "PickLte - Jouw vertrouwde platform voor verhuisdiensten",
+      "keywords": "PickLte, verhuizen, verhuizers, verhuisservice, Umzug",
+      "title": "PickLte - Slimmer verhuizen met PickLte"
     },
     "forgotPassword": {
       "description": "Stel je wachtwoord opnieuw in",
@@ -1526,7 +1526,7 @@
       "description": "Boek geverifieerde verhuizers voor appartementen, kantoren en spullen in heel Europa.",
       "title": "Start"
     },
-    "titleTemplate": "%s - PickLT"
+    "titleTemplate": "%s - PickLte"
   },
   "sidebar": {
     "blurb": "Ontdek de meest bijzondere artikelen over alle facetten van het leven. Schrijf je eigen verhalen en deel ze",

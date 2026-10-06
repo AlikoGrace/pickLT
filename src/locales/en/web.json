@@ -1,7 +1,7 @@
 {
   "about": {
     "hero": {
-      "subtitle": "PickLT is a moving-services platform. You describe your move, compare movers, and book the one you want — for apartments, offices, and individual belongings across Europe.",
+      "subtitle": "PickLte is a moving-services platform. You describe your move, compare movers, and book the one you want — for apartments, offices, and individual belongings across Europe.",
       "title": "👋 About Us."
     }
   },
@@ -20,7 +20,7 @@
       "title": "Sign in to view your account"
     },
     "version": {
-      "label": "PickLT v{{version}}"
+      "label": "PickLte v{{version}}"
     },
     "country": {
       "title": "Your country",
@@ -50,7 +50,7 @@
       "cta": "Add payout method"
     },
     "payoutMethods": {
-      "body": "Add a payout method to receive payments from PickLT. Payouts are sent to the method you set up below.",
+      "body": "Add a payout method to receive payments from PickLte. Payouts are sent to the method you set up below.",
       "title": "Payout methods"
     },
     "title": "Payments & payouts"
@@ -94,7 +94,7 @@
     },
     "notify": {
       "incoming": {
-        "body": "{{name}} is calling you on PickLT",
+        "body": "{{name}} is calling you on PickLte",
         "title": "Incoming call"
       }
     },
@@ -163,7 +163,7 @@
       "locations": "Locations",
       "title": "Company"
     },
-    "copyright": "© {{year}} PickLT. All rights reserved.",
+    "copyright": "© {{year}} PickLte. All rights reserved.",
     "legal": {
       "title": "Legal"
     },
@@ -244,7 +244,7 @@
   },
   "instant": {
     "cardInApp": {
-      "helper": "This move is paid by card. Open the PickLT app to complete the payment — your saved card is charged there, nothing is due in cash."
+      "helper": "This move is paid by card. Open the PickLte app to complete the payment — your saved card is charged there, nothing is due in cash."
     },
     "chat": {
       "comingSoon": "Chat feature coming soon!"
@@ -770,7 +770,7 @@
       },
       "subtitle": "Manage your account and preferences",
       "version": {
-        "label": "PickLT Mover App v{{version}}"
+        "label": "PickLte Mover App v{{version}}"
       }
     },
     "startRoute": {
@@ -1064,7 +1064,7 @@
           "label": "You owe"
         },
         "owed": {
-          "label": "PickLT holds for you"
+          "label": "PickLte holds for you"
         },
         "settled": {
           "label": "All settled",
@@ -1498,7 +1498,7 @@
   },
   "seo": {
     "about": {
-      "description": "PickLT is a moving-services platform for apartments, offices, and belongings across Europe.",
+      "description": "PickLte is a moving-services platform for apartments, offices, and belongings across Europe.",
       "title": "About Us"
     },
     "accountBilling": {
@@ -1510,13 +1510,13 @@
       "title": "Account - password"
     },
     "contact": {
-      "description": "Get in touch with the PickLT team.",
+      "description": "Get in touch with the PickLte team.",
       "title": "Contact Us"
     },
     "default": {
-      "description": "PickLT - Your trusted moving service platform",
-      "keywords": "PickLT, Moving, Movers, Relocation, Umzug",
-      "title": "PickLT - Move smarter with PickLT"
+      "description": "PickLte - Your trusted moving service platform",
+      "keywords": "PickLte, Moving, Movers, Relocation, Umzug",
+      "title": "PickLte - Move smarter with PickLte"
     },
     "forgotPassword": {
       "description": "Reset your password",
@@ -1526,7 +1526,7 @@
       "description": "Book verified movers for apartments, offices and belongings across Europe.",
       "title": "Home"
     },
-    "titleTemplate": "%s - PickLT"
+    "titleTemplate": "%s - PickLte"
   },
   "sidebar": {
     "blurb": "Discover the most outstanding articles on all topics of life. Write your stories and share them",
