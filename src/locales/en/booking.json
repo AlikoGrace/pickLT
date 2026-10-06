@@ -694,10 +694,10 @@
     "label": "Type of move",
     "light": {
       "body": "Normal moves use a small van with the driver only.",
-      "helper": "Small load — few items",
+      "helper": "Small load, few items",
       "label": "Normal Move",
       "short": "Normal",
-      "subtitle": "Perfect for small loads — boxes, single furniture pieces, or a studio apartment.",
+      "subtitle": "Perfect for small loads: boxes, single furniture pieces, or a studio apartment.",
       "title": "Normal Move"
     },
     "placeholder": "Choose a move type",
@@ -706,7 +706,7 @@
       "helper": "Full-service move",
       "label": "Premium Move",
       "short": "Premium",
-      "subtitle": "Full-service move for large homes — packing, loading, transport, and unloading.",
+      "subtitle": "Full-service move for large homes: packing, loading, transport, and unloading.",
       "title": "Premium Move"
     },
     "regular": {
@@ -1075,7 +1075,7 @@
       "label": "Discount"
     },
     "estimate": {
-      "helper": "Estimate — confirmed when your mover accepts"
+      "helper": "Estimate, confirmed when your mover accepts"
     },
     "estimatedTotal": {
       "label": "Estimated total"
@@ -1362,11 +1362,11 @@
       "label": "Photo of the whole vehicle"
     },
     "largeTruck": {
-      "helper": "{{capacity}} — house moves, large loads",
+      "helper": "{{capacity}}: house moves, large loads",
       "label": "Large Truck"
     },
     "mediumTruck": {
-      "helper": "{{capacity}} — apartment moves",
+      "helper": "{{capacity}}: apartment moves",
       "label": "Medium Truck"
     },
     "model": {
@@ -1408,7 +1408,7 @@
       "label": "Registration *"
     },
     "smallVan": {
-      "helper": "{{capacity}} — small moves, single items",
+      "helper": "{{capacity}}: small moves, single items",
       "label": "Small Van"
     },
     "submitForVerification": {
@@ -1482,10 +1482,10 @@
         "body": "Your rental ends at {{time}}. Extend it to keep receiving moves."
       },
       "renewAutoVerified": {
-        "helper": "Same vehicle as before — no new photos needed."
+        "helper": "Same vehicle as before, so no new photos needed."
       },
       "renewNeedsReview": {
-        "helper": "It has been a while — please add fresh plate photos for review."
+        "helper": "It has been a while. Please add fresh plate photos for review."
       },
       "maxHint": {
         "helper": "Up to 30 days per registration. Longer rentals can be extended."

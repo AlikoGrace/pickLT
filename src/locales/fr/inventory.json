@@ -86,7 +86,7 @@
       "title": "Ce déménagement nécessite désormais"
     },
     "reason": {
-      "body": "L’ajout de « {{item}} » a fait passer votre déménagement en formule {{tier}} — {{explanation}}"
+      "body": "L’ajout de « {{item}} » a fait passer votre déménagement en formule {{tier}} : {{explanation}}"
     },
     "warnings": {
       "title": "Objets nécessitant cette formule :"
@@ -95,7 +95,7 @@
   "unavailable": {
     "empty": {
       "title": "Aucun objet disponible pour l’instant",
-      "body": "Notre liste d’objets déménageables est en cours de préparation. Réessayez dans un instant — vous pouvez toujours nous contacter si votre déménagement est urgent."
+      "body": "Notre liste d’objets déménageables est en cours de préparation. Réessayez dans un instant. Vous pouvez toujours nous contacter si votre déménagement est urgent."
     },
     "error": {
       "title": "Impossible de charger la liste des objets",

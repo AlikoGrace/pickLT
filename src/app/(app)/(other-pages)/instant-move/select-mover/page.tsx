@@ -777,7 +777,7 @@ const SelectMoverPage = () => {
             <strong>{t('web:selectMover.pricing.title')}</strong>{' '}
             {t('web:selectMover.pricing.helper', {
               count: inventoryCount,
-              distance: routeDistance ? formatDistance(routeDistance) : '—',
+              distance: routeDistance ? formatDistance(routeDistance) : '-',
             })}{' '}
             {t('web:selectMover.pricing.disclaimer')}
           </p>

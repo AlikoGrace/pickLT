@@ -42,7 +42,7 @@
         "title": "Taşınmanız {{lead}} başlıyor"
       },
       "mover": {
-        "body": "{{handle}} numaralı taşınma {{lead}} başlıyor — rotayı şimdi başlatabilirsiniz.",
+        "body": "{{handle}} numaralı taşınma {{lead}} başlıyor. Rotayı şimdi başlatabilirsiniz.",
         "title": "Taşınmayı başlatma zamanı"
       }
     },
@@ -81,7 +81,7 @@
       "title": "Varış noktasında"
     },
     "awaitingPayment": {
-      "body": "Taşınmanız tamamlandı — lütfen ödemeyi onaylayın.",
+      "body": "Taşınmanız tamamlandı. Lütfen ödemeyi onaylayın.",
       "title": "Tahsilat bekleniyor"
     },
     "cancelledByMover": {

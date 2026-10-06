@@ -774,7 +774,7 @@
       }
     },
     "startRoute": {
-      "cta": "Iniciar la ruta — voy de camino"
+      "cta": "Iniciar la ruta: voy de camino"
     },
     "tapForDetails": {
       "helper": "Pulsa para ver los detalles"
@@ -1085,7 +1085,7 @@
         "credit": {
           "body": "Ganancias de pagos con tarjeta que guardamos para usted. Las comisiones de futuras mudanzas en efectivo se descuentan primero de aquí."
         },
-        "helper": "Una mudanza en efectivo suma su comisión de la plataforma a su saldo, con vencimiento en 24 horas — si sigue sin pagar, las mudanzas se pausan; una mudanza con tarjeta suma sus ganancias."
+        "helper": "Una mudanza en efectivo suma su comisión de la plataforma a su saldo, con vencimiento en 24 horas (si sigue sin pagar, las mudanzas se pausan); una mudanza con tarjeta suma sus ganancias."
       },
       "history": {
         "title": "Historial del saldo",
@@ -1159,7 +1159,7 @@
         "reason": "Desconectado: comisiones de la plataforma sin pagar. Pague para volver a recibir mudanzas."
       },
       "cashMove": {
-        "label": "Comisión de la plataforma en esta mudanza: {{amount}} — páguela en 24 horas para seguir recibiendo mudanzas"
+        "label": "Comisión de la plataforma en esta mudanza: {{amount}}. Páguela en 24 horas para seguir recibiendo mudanzas"
       }
     }
   },
@@ -1569,7 +1569,7 @@
       "route": {
         "title": "La ruta de tu mudanza"
       },
-      "title": "PASO 1 — Detalles de la mudanza"
+      "title": "PASO 1: Detalles de la mudanza"
     },
     "step2": {
       "title": "Dirección de recogida"

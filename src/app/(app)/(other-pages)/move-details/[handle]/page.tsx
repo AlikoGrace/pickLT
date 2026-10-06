@@ -702,7 +702,7 @@ export default function MoveDetailsPage() {
             {/* Instant starts immediately and carries no moveDate — show when it
                 was requested instead. */}
             {isInstant ? (
-              <InfoRow icon={CalendarIcon} label={t('moves:detail.requestedAt.label')} value={formatRequestedAt(createdAt) ?? '—'} />
+              <InfoRow icon={CalendarIcon} label={t('moves:detail.requestedAt.label')} value={formatRequestedAt(createdAt) ?? '-'} />
             ) : (
               <InfoRow icon={CalendarIcon} label={t('booking:field.moveDate.label')} value={formatDate(moveDate, t)} />
             )}

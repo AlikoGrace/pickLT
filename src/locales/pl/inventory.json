@@ -88,7 +88,7 @@
       "title": "Ta przeprowadzka wymaga teraz"
     },
     "reason": {
-      "body": "Dodanie „{{item}}” przeniosło Twoją przeprowadzkę do kategorii {{tier}} — {{explanation}}"
+      "body": "Dodanie „{{item}}” przeniosło Twoją przeprowadzkę do kategorii {{tier}}: {{explanation}}"
     },
     "warnings": {
       "title": "Przedmioty wymagające tej kategorii:"
@@ -97,7 +97,7 @@
   "unavailable": {
     "empty": {
       "title": "Brak dostępnych przedmiotów",
-      "body": "Nasza lista przedmiotów do przewiezienia jest właśnie przygotowywana. Spróbuj ponownie za chwilę — jeśli przeprowadzka jest pilna, nadal możesz się z nami skontaktować."
+      "body": "Nasza lista przedmiotów do przewiezienia jest właśnie przygotowywana. Spróbuj ponownie za chwilę. Jeśli przeprowadzka jest pilna, nadal możesz się z nami skontaktować."
     },
     "error": {
       "title": "Nie udało się wczytać listy przedmiotów",

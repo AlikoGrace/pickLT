@@ -52,7 +52,7 @@
     "unloading": "Trwa rozładunek Twoich rzeczy…"
   },
   "live": {
-    "helper": "Twój przewoźnik jest w akcji — śledź postęp na żywo"
+    "helper": "Twój przewoźnik jest w akcji. Śledź postęp na żywo"
   },
   "map": {
     "dropoffPin": {
@@ -158,8 +158,8 @@
       "title": "Rozpoczęto załadunek 📦"
     },
     "paymentDue": {
-      "body": "Twoja przeprowadzka dobiega końca — dokończ płatność.",
-      "shortBody": "Twoja przeprowadzka jest zakończona — potwierdź płatność.",
+      "body": "Twoja przeprowadzka dobiega końca. Dokończ płatność.",
+      "shortBody": "Twoja przeprowadzka jest zakończona. Potwierdź płatność.",
       "shortTitle": "Płatność do uregulowania",
       "title": "Płatność do uregulowania 💶"
     },
@@ -222,7 +222,7 @@
     },
     "awaitingPayment": {
       "subtitle": "Zapłać przewoźnikowi i potwierdź poniżej",
-      "title": "Przeprowadzka zakończona — wymagana płatność"
+      "title": "Przeprowadzka zakończona: wymagana płatność"
     },
     "broadcasting": {
       "subtitle": "Szukamy najbliższego przewoźnika"

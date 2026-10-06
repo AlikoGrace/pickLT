@@ -691,10 +691,10 @@
     "label": "Type verhuizing",
     "light": {
       "body": "Normale verhuizingen gaan met een kleine bestelbus en alleen de chauffeur.",
-      "helper": "Kleine lading — weinig spullen",
+      "helper": "Kleine lading (weinig spullen)",
       "label": "Normale verhuizing",
       "short": "Normaal",
-      "subtitle": "Perfect voor kleine ladingen — dozen, losse meubelstukken of een studio.",
+      "subtitle": "Perfect voor kleine ladingen: dozen, losse meubelstukken of een studio.",
       "title": "Normale verhuizing"
     },
     "placeholder": "Kies een verhuistype",
@@ -703,7 +703,7 @@
       "helper": "Verhuizing met volledige service",
       "label": "Premium verhuizing",
       "short": "Premium",
-      "subtitle": "Volledige service voor grote woningen — inpakken, laden, vervoer en lossen.",
+      "subtitle": "Volledige service voor grote woningen: inpakken, laden, vervoer en lossen.",
       "title": "Premium verhuizing"
     },
     "regular": {
@@ -1072,7 +1072,7 @@
       "label": "Korting"
     },
     "estimate": {
-      "helper": "Schatting — definitief zodra je verhuizer accepteert"
+      "helper": "Schatting (definitief zodra je verhuizer accepteert)"
     },
     "estimatedTotal": {
       "label": "Geschat totaal"
@@ -1359,11 +1359,11 @@
       "label": "Foto van het hele voertuig"
     },
     "largeTruck": {
-      "helper": "{{capacity}} — woningverhuizingen, grote ladingen",
+      "helper": "{{capacity}}: woningverhuizingen, grote ladingen",
       "label": "Grote vrachtwagen"
     },
     "mediumTruck": {
-      "helper": "{{capacity}} — appartementverhuizingen",
+      "helper": "{{capacity}}: appartementverhuizingen",
       "label": "Middelgrote vrachtwagen"
     },
     "model": {
@@ -1405,7 +1405,7 @@
       "label": "Kenteken *"
     },
     "smallVan": {
-      "helper": "{{capacity}} — kleine verhuizingen, losse spullen",
+      "helper": "{{capacity}}: kleine verhuizingen, losse spullen",
       "label": "Kleine bestelbus"
     },
     "submitForVerification": {
@@ -1479,10 +1479,10 @@
         "body": "Je huur eindigt om {{time}}. Verleng om verhuizingen te blijven ontvangen."
       },
       "renewAutoVerified": {
-        "helper": "Hetzelfde voertuig als eerder — geen nieuwe foto’s nodig."
+        "helper": "Hetzelfde voertuig als eerder: geen nieuwe foto’s nodig."
       },
       "renewNeedsReview": {
-        "helper": "Het is een tijd geleden — voeg nieuwe kentekenfoto’s toe ter controle."
+        "helper": "Het is een tijd geleden. Voeg nieuwe kentekenfoto’s toe ter controle."
       },
       "maxHint": {
         "helper": "Maximaal 30 dagen per registratie. Langere huur kan worden verlengd."

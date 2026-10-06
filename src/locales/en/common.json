@@ -152,7 +152,7 @@
     },
     "inApp": {
       "title": "Call in-app",
-      "subtitle": "Free audio call in the app — no phone numbers shared",
+      "subtitle": "Free audio call in the app, no phone numbers shared",
       "noMover": {
         "subtitle": "Available once a mover is assigned"
       },
@@ -191,7 +191,7 @@
           "hint": "Sound is playing through the loudspeaker"
         },
         "earpiece": {
-          "hint": "Sound is on the earpiece — hold the phone to your ear or turn on Speaker"
+          "hint": "Sound is on the earpiece. Hold the phone to your ear or turn on Speaker"
         }
       },
       "status": {
@@ -217,7 +217,7 @@
           "label": "No answer"
         },
         "busy": {
-          "label": "Busy — on another call"
+          "label": "Busy: on another call"
         },
         "failed": {
           "label": "Call failed"
@@ -237,9 +237,9 @@
       },
       "ongoing": {
         "title": "Call in progress",
-        "body": "In-app call with {{name}} — tap to return",
+        "body": "In-app call with {{name}}. Tap to return",
         "fallback": {
-          "body": "In-app call — tap to return"
+          "body": "In-app call. Tap to return"
         }
       },
       "fullScreen": {
@@ -267,7 +267,7 @@
       "toggle": {
         "label": "Can't connect? Call by phone"
       },
-      "subtitle": "Uses your phone line — for when the in-app call can't connect"
+      "subtitle": "Uses your phone line, for when the in-app call can't connect"
     }
   },
   "chat": {
@@ -311,7 +311,7 @@
     },
     "contactMasked": {
       "title": "Contact details hidden",
-      "body": "Phone numbers and email addresses are hidden in chat. Use the in-app call to talk — it keeps your move protected on PickLte."
+      "body": "Phone numbers and email addresses are hidden in chat. Use the in-app call to talk. It keeps your move protected on PickLte."
     }
   },
   "confirm": {

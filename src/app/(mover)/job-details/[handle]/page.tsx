@@ -704,7 +704,7 @@ export default function MoverMoveDetailsPage() {
             {/* Instant starts immediately and carries no moveDate — when the job
                 was requested is what a mover actually needs to judge it. */}
             {isInstant ? (
-              <InfoRow icon={CalendarIcon} label={t('moves:detail.requestedAt.label')} value={formatRequestedAt(createdAt) ?? '—'} />
+              <InfoRow icon={CalendarIcon} label={t('moves:detail.requestedAt.label')} value={formatRequestedAt(createdAt) ?? '-'} />
             ) : (
               <InfoRow icon={CalendarIcon} label={t('booking:field.moveDate.label')} value={formatDate(moveDate, t)} />
             )}

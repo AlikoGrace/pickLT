@@ -42,7 +42,7 @@
         "title": "Your move starts {{lead}}"
       },
       "mover": {
-        "body": "Move {{handle}} starts {{lead}} — Start Route is now available.",
+        "body": "Move {{handle}} starts {{lead}}. Start Route is now available.",
         "title": "Time to start your move"
       }
     },
@@ -81,7 +81,7 @@
       "title": "Arrived"
     },
     "awaitingPayment": {
-      "body": "Your move is done — please confirm payment.",
+      "body": "Your move is done. Please confirm payment.",
       "title": "Payment due"
     },
     "cancelledByMover": {

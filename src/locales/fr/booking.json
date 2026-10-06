@@ -692,10 +692,10 @@
     "label": "Type de déménagement",
     "light": {
       "body": "Les déménagements normaux utilisent une petite camionnette, avec le chauffeur seul.",
-      "helper": "Petit volume — quelques objets",
+      "helper": "Petit volume (quelques objets)",
       "label": "Déménagement normal",
       "short": "Normal",
-      "subtitle": "Parfait pour les petits volumes — cartons, meubles isolés ou un studio.",
+      "subtitle": "Parfait pour les petits volumes : cartons, meubles isolés ou un studio.",
       "title": "Déménagement normal"
     },
     "placeholder": "Choisissez un type de déménagement",
@@ -704,7 +704,7 @@
       "helper": "Déménagement clé en main",
       "label": "Déménagement premium",
       "short": "Premium",
-      "subtitle": "Service complet pour les grands logements — emballage, chargement, transport et déchargement.",
+      "subtitle": "Service complet pour les grands logements : emballage, chargement, transport et déchargement.",
       "title": "Déménagement premium"
     },
     "regular": {
@@ -1074,7 +1074,7 @@
       "label": "Remise"
     },
     "estimate": {
-      "helper": "Estimation — confirmée dès l'acceptation par votre déménageur"
+      "helper": "Estimation (confirmée dès l'acceptation par votre déménageur)"
     },
     "estimatedTotal": {
       "label": "Total estimé"
@@ -1361,11 +1361,11 @@
       "label": "Photo du véhicule entier"
     },
     "largeTruck": {
-      "helper": "{{capacity}} — déménagements de maison, gros volumes",
+      "helper": "{{capacity}} : déménagements de maison, gros volumes",
       "label": "Grand camion"
     },
     "mediumTruck": {
-      "helper": "{{capacity}} — déménagements d'appartement",
+      "helper": "{{capacity}} : déménagements d'appartement",
       "label": "Camion moyen"
     },
     "model": {
@@ -1407,7 +1407,7 @@
       "label": "Immatriculation *"
     },
     "smallVan": {
-      "helper": "{{capacity}} — petits déménagements, objets isolés",
+      "helper": "{{capacity}} : petits déménagements, objets isolés",
       "label": "Petite camionnette"
     },
     "submitForVerification": {

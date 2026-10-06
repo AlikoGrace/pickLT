@@ -691,10 +691,10 @@
     "label": "Umzugsart",
     "light": {
       "body": "Normale Umzüge werden mit einem kleinen Transporter und nur dem Fahrer durchgeführt.",
-      "helper": "Geringe Menge — wenige Gegenstände",
+      "helper": "Geringe Menge: wenige Gegenstände",
       "label": "Normaler Umzug",
       "short": "Normal",
-      "subtitle": "Ideal für kleine Mengen – Kartons, einzelne Möbelstücke oder eine Einzimmerwohnung.",
+      "subtitle": "Ideal für kleine Mengen: Kartons, einzelne Möbelstücke oder eine Einzimmerwohnung.",
       "title": "Normaler Umzug"
     },
     "placeholder": "Umzugsart wählen",
@@ -703,7 +703,7 @@
       "helper": "Umzug mit Komplettservice",
       "label": "Premium-Umzug",
       "short": "Premium",
-      "subtitle": "Komplettservice für große Haushalte – Packen, Beladen, Transport und Entladen.",
+      "subtitle": "Komplettservice für große Haushalte: Packen, Beladen, Transport und Entladen.",
       "title": "Premium-Umzug"
     },
     "regular": {
@@ -1073,7 +1073,7 @@
       "label": "Rabatt"
     },
     "estimate": {
-      "helper": "Schätzung — verbindlich, sobald Ihr Umzugshelfer annimmt"
+      "helper": "Schätzung, verbindlich, sobald Ihr Umzugshelfer annimmt"
     },
     "estimatedTotal": {
       "label": "Geschätzter Gesamtpreis"
@@ -1360,11 +1360,11 @@
       "label": "Foto des gesamten Fahrzeugs"
     },
     "largeTruck": {
-      "helper": "{{capacity}} — Hausumzüge, große Mengen",
+      "helper": "{{capacity}}: Hausumzüge, große Mengen",
       "label": "Großer Lkw"
     },
     "mediumTruck": {
-      "helper": "{{capacity}} — Wohnungsumzüge",
+      "helper": "{{capacity}}: Wohnungsumzüge",
       "label": "Mittlerer Lkw"
     },
     "model": {
@@ -1406,7 +1406,7 @@
       "label": "Kennzeichen *"
     },
     "smallVan": {
-      "helper": "{{capacity}} — kleine Umzüge, Einzelstücke",
+      "helper": "{{capacity}}: kleine Umzüge, Einzelstücke",
       "label": "Kleiner Transporter"
     },
     "submitForVerification": {
@@ -1480,10 +1480,10 @@
         "body": "Ihre Miete endet um {{time}}. Verlängern Sie sie, um weiter Aufträge zu erhalten."
       },
       "renewAutoVerified": {
-        "helper": "Dasselbe Fahrzeug wie zuvor – keine neuen Fotos nötig."
+        "helper": "Dasselbe Fahrzeug wie zuvor, keine neuen Fotos nötig."
       },
       "renewNeedsReview": {
-        "helper": "Es ist eine Weile her – bitte neue Kennzeichenfotos zur Prüfung hochladen."
+        "helper": "Es ist eine Weile her. Bitte neue Kennzeichenfotos zur Prüfung hochladen."
       },
       "maxHint": {
         "helper": "Bis zu 30 Tage pro Registrierung. Längere Mieten können verlängert werden."

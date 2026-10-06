@@ -490,7 +490,7 @@ export default async ({ req, res, log, error }) => {
           previousStatus: 'verified',
           newStatus: 'verified',
           serviceDate: serviceDate(nowMs, PLATFORM_TZ),
-          note: `rental ${vehicle.$id} (${vehicle.registrationNumber ?? '?'}) expired — owned vehicle back in service`,
+          note: `rental ${vehicle.$id} (${vehicle.registrationNumber ?? '?'}) expired, owned vehicle back in service`,
           at: nowIso,
         }, error);
         summary.fallback += 1;

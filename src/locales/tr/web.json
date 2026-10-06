@@ -1,7 +1,7 @@
 {
   "about": {
     "hero": {
-      "subtitle": "PickLte bir taşımacılık hizmetleri platformudur. Taşınmanızı anlatırsınız, nakliyecileri karşılaştırırsınız ve istediğinizi seçersiniz — Avrupa genelinde daireler, ofisler ve tekil eşyalar için.",
+      "subtitle": "PickLte bir taşımacılık hizmetleri platformudur. Taşınmanızı anlatırsınız, nakliyecileri karşılaştırırsınız ve istediğinizi seçersiniz (Avrupa genelinde daireler, ofisler ve tekil eşyalar için).",
       "title": "👋 Hakkımızda."
     }
   },
@@ -244,7 +244,7 @@
   },
   "instant": {
     "cardInApp": {
-      "helper": "Bu taşınmanın ödemesi kartla yapılır. Ödemeyi tamamlamak için PickLte uygulamasını açın — kayıtlı kartınızdan orada tahsilat yapılır, nakit ödeme gerekmez."
+      "helper": "Bu taşınmanın ödemesi kartla yapılır. Ödemeyi tamamlamak için PickLte uygulamasını açın. Kayıtlı kartınızdan orada tahsilat yapılır, nakit ödeme gerekmez."
     },
     "chat": {
       "comingSoon": "Sohbet özelliği çok yakında!"
@@ -774,7 +774,7 @@
       }
     },
     "startRoute": {
-      "cta": "Rotayı başlat — Yola çıkıyorum"
+      "cta": "Rotayı başlat, yola çıkıyorum"
     },
     "tapForDetails": {
       "helper": "Ayrıntılar için dokunun"
@@ -1085,7 +1085,7 @@
         "credit": {
           "body": "Kartlı ödemelerden sizin için tutulan kazançlar. Sonraki nakit taşımaların platform ücretleri önce buradan düşülür."
         },
-        "helper": "Nakit bir taşıma, platform ücretini bakiyenize ekler ve ücret 24 saat içinde ödenmelidir — ödenmezse taşımalar duraklatılır; kartlı bir taşıma kazancınızı ekler."
+        "helper": "Nakit bir taşıma, platform ücretini bakiyenize ekler ve ücret 24 saat içinde ödenmelidir. Ödenmezse taşımalar duraklatılır; kartlı bir taşıma kazancınızı ekler."
       },
       "history": {
         "title": "Bakiye geçmişi",
@@ -1159,7 +1159,7 @@
         "reason": "Çevrimdışı: ödenmemiş platform ücretleri. Yeniden taşıma almak için ödeyin."
       },
       "cashMove": {
-        "label": "Bu taşımadaki platform ücreti: {{amount}} — taşıma almaya devam etmek için 24 saat içinde ödeyin"
+        "label": "Bu taşımadaki platform ücreti: {{amount}}. Taşıma almaya devam etmek için 24 saat içinde ödeyin"
       }
     }
   },
@@ -1569,7 +1569,7 @@
       "route": {
         "title": "Taşınma rotanız"
       },
-      "title": "ADIM 1 — Taşınma ayrıntıları"
+      "title": "ADIM 1: Taşınma ayrıntıları"
     },
     "step2": {
       "title": "Alış adresi"

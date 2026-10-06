@@ -699,10 +699,10 @@
     "label": "Rodzaj przeprowadzki",
     "light": {
       "body": "Normalne przeprowadzki realizujemy małym busem, tylko z kierowcą.",
-      "helper": "Mały ładunek — kilka rzeczy",
+      "helper": "Mały ładunek: kilka rzeczy",
       "label": "Normalna przeprowadzka",
       "short": "Normalna",
-      "subtitle": "Idealna przy niewielkim ładunku — kartony, pojedyncze meble lub kawalerka.",
+      "subtitle": "Idealna przy niewielkim ładunku: kartony, pojedyncze meble lub kawalerka.",
       "title": "Normalna przeprowadzka"
     },
     "placeholder": "Wybierz rodzaj przeprowadzki",
@@ -711,7 +711,7 @@
       "helper": "Przeprowadzka z pełną obsługą",
       "label": "Przeprowadzka premium",
       "short": "Premium",
-      "subtitle": "Pełna obsługa dużych domów — pakowanie, załadunek, transport i rozładunek.",
+      "subtitle": "Pełna obsługa dużych domów: pakowanie, załadunek, transport i rozładunek.",
       "title": "Przeprowadzka premium"
     },
     "regular": {
@@ -1095,7 +1095,7 @@
       "label": "Rabat"
     },
     "estimate": {
-      "helper": "Szacunek — potwierdzony, gdy przewoźnik zaakceptuje zlecenie"
+      "helper": "Szacunek (potwierdzony, gdy przewoźnik zaakceptuje zlecenie)"
     },
     "estimatedTotal": {
       "label": "Szacowana suma"
@@ -1396,11 +1396,11 @@
       "label": "Zdjęcie całego pojazdu"
     },
     "largeTruck": {
-      "helper": "{{capacity}} — przeprowadzki domów, duże ładunki",
+      "helper": "{{capacity}}: przeprowadzki domów, duże ładunki",
       "label": "Duża ciężarówka"
     },
     "mediumTruck": {
-      "helper": "{{capacity}} — przeprowadzki mieszkań",
+      "helper": "{{capacity}}: przeprowadzki mieszkań",
       "label": "Średnia ciężarówka"
     },
     "model": {
@@ -1442,7 +1442,7 @@
       "label": "Rejestracja *"
     },
     "smallVan": {
-      "helper": "{{capacity}} — małe przeprowadzki, pojedyncze rzeczy",
+      "helper": "{{capacity}}: małe przeprowadzki, pojedyncze rzeczy",
       "label": "Mały bus"
     },
     "submitForVerification": {
@@ -1516,10 +1516,10 @@
         "body": "Twój wynajem kończy się o {{time}}. Przedłuż go, aby nadal otrzymywać przeprowadzki."
       },
       "renewAutoVerified": {
-        "helper": "Ten sam pojazd co wcześniej — nowe zdjęcia nie są potrzebne."
+        "helper": "Ten sam pojazd co wcześniej. Nowe zdjęcia nie są potrzebne."
       },
       "renewNeedsReview": {
-        "helper": "Minęło trochę czasu — dodaj nowe zdjęcia tablic do weryfikacji."
+        "helper": "Minęło trochę czasu. Dodaj nowe zdjęcia tablic do weryfikacji."
       },
       "maxHint": {
         "helper": "Do 30 dni na jedną rejestrację. Dłuższy wynajem można przedłużyć."

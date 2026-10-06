@@ -136,7 +136,7 @@ const DashboardPage = () => {
     amount: m.payout ?? 0,
     moveTypeLabel: moveTypeLabelFor(m.moveCategory),
     itemCount: m.totalItems || 0,
-    distance: m.routeDistanceMeters ? `${(m.routeDistanceMeters / 1000).toFixed(1)} km` : '—',
+    distance: m.routeDistanceMeters ? `${(m.routeDistanceMeters / 1000).toFixed(1)} km` : '-',
   }))
   const stats = [
     {

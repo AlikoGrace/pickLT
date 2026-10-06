@@ -42,7 +42,7 @@
         "title": "Votre déménagement commence {{lead}}"
       },
       "mover": {
-        "body": "Le déménagement {{handle}} commence {{lead}} — « Démarrer l’itinéraire » est maintenant disponible.",
+        "body": "Le déménagement {{handle}} commence {{lead}}. « Démarrer l’itinéraire » est maintenant disponible.",
         "title": "C’est l’heure de démarrer votre déménagement"
       }
     },
@@ -81,7 +81,7 @@
       "title": "Arrivé à destination"
     },
     "awaitingPayment": {
-      "body": "Votre déménagement est terminé — veuillez confirmer le paiement.",
+      "body": "Votre déménagement est terminé. Veuillez confirmer le paiement.",
       "title": "Paiement à effectuer"
     },
     "cancelledByMover": {

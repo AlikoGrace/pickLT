@@ -1,7 +1,7 @@
 {
   "about": {
     "hero": {
-      "subtitle": "PickLte is a moving-services platform. You describe your move, compare movers, and book the one you want — for apartments, offices, and individual belongings across Europe.",
+      "subtitle": "PickLte is a moving-services platform. You describe your move, compare movers, and book the one you want, for apartments, offices, and individual belongings across Europe.",
       "title": "👋 About Us."
     }
   },
@@ -244,7 +244,7 @@
   },
   "instant": {
     "cardInApp": {
-      "helper": "This move is paid by card. Open the PickLte app to complete the payment — your saved card is charged there, nothing is due in cash."
+      "helper": "This move is paid by card. Open the PickLte app to complete the payment: your saved card is charged there, nothing is due in cash."
     },
     "chat": {
       "comingSoon": "Chat feature coming soon!"
@@ -774,7 +774,7 @@
       }
     },
     "startRoute": {
-      "cta": "Start Route — I'm On My Way"
+      "cta": "Start Route: I'm On My Way"
     },
     "tapForDetails": {
       "helper": "Tap to view details"
@@ -1085,7 +1085,7 @@
         "credit": {
           "body": "Card earnings held for you. Platform fees on later cash moves are paid from this first."
         },
-        "helper": "A cash move adds its platform fee to your balance, due within 24 hours — moves pause if it’s still unpaid; a card move adds your earnings."
+        "helper": "A cash move adds its platform fee to your balance, due within 24 hours (moves pause if it’s still unpaid); a card move adds your earnings."
       },
       "history": {
         "title": "Balance history",
@@ -1159,7 +1159,7 @@
         "reason": "Offline: unpaid platform fees. Pay to receive moves again."
       },
       "cashMove": {
-        "label": "Platform fee on this move: {{amount}} — pay within 24 hours to keep receiving moves"
+        "label": "Platform fee on this move: {{amount}}. Pay within 24 hours to keep receiving moves"
       }
     }
   },
@@ -1569,7 +1569,7 @@
       "route": {
         "title": "Your move route"
       },
-      "title": "STEP 1 — Move Details"
+      "title": "STEP 1: Move Details"
     },
     "step2": {
       "title": "Pickup Address"

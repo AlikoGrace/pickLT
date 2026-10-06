@@ -66,7 +66,7 @@ const NOTIFICATION_MESSAGES = {
   in_transit: { key: 'status.inTransit', title: 'In Transit', body: 'Your items are on the way to the destination.' },
   arrived_destination: { key: 'status.arrivedDestination', title: 'Arrived', body: 'Your mover has arrived at the destination.' },
   unloading: { key: 'status.unloading', title: 'Unloading', body: 'Your items are being unloaded.' },
-  awaiting_payment: { key: 'status.awaitingPayment', title: 'Payment Due', body: 'Your move is done — please confirm payment.' },
+  awaiting_payment: { key: 'status.awaitingPayment', title: 'Payment Due', body: 'Your move is done. Please confirm payment.' },
   completed: { key: 'status.completed', title: 'Move Completed', body: 'Your move has been completed! Please leave a review.' },
   cancelled_by_mover: { key: 'status.cancelledByMover', title: 'Move Cancelled', body: 'The mover has cancelled this move.' },
 };

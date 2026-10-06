@@ -86,7 +86,7 @@
       "title": "Questo trasloco richiede ora"
     },
     "reason": {
-      "body": "L’aggiunta di «{{item}}» ha portato il tuo trasloco al livello {{tier}} — {{explanation}}"
+      "body": "L’aggiunta di «{{item}}» ha portato il tuo trasloco al livello {{tier}}: {{explanation}}"
     },
     "warnings": {
       "title": "Oggetti che richiedono questo livello:"

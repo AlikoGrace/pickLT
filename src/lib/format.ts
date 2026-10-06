@@ -64,7 +64,7 @@ export const PLATFORM_CURRENCY = 'EUR'
 export type Amount = number | null | undefined
 
 /** What a formatter renders when there is no number to render. */
-export const EMPTY_VALUE = '—'
+export const EMPTY_VALUE = '-'
 
 function isRenderable(value: Amount): value is number {
   return typeof value === 'number' && Number.isFinite(value)

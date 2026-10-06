@@ -50,7 +50,7 @@
     "unloading": "Vos affaires sont en cours de déchargement…"
   },
   "live": {
-    "helper": "Votre déménageur est en activité — suivez sa progression en temps réel"
+    "helper": "Votre déménageur est en activité, suivez sa progression en temps réel"
   },
   "map": {
     "dropoffPin": {
@@ -154,8 +154,8 @@
       "title": "Chargement commencé 📦"
     },
     "paymentDue": {
-      "body": "Votre déménagement se termine — merci de procéder au paiement.",
-      "shortBody": "Votre déménagement est terminé — merci de confirmer le paiement.",
+      "body": "Votre déménagement se termine. Merci de procéder au paiement.",
+      "shortBody": "Votre déménagement est terminé. Merci de confirmer le paiement.",
       "shortTitle": "Paiement à effectuer",
       "title": "Paiement à effectuer 💶"
     },
@@ -218,7 +218,7 @@
     },
     "awaitingPayment": {
       "subtitle": "Payez le déménageur et confirmez ci-dessous",
-      "title": "Déménagement terminé — Paiement requis"
+      "title": "Déménagement terminé : paiement requis"
     },
     "broadcasting": {
       "subtitle": "Recherche du déménageur le plus proche"

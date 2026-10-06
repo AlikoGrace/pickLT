@@ -42,7 +42,7 @@
         "title": "Je verhuizing begint {{lead}}"
       },
       "mover": {
-        "body": "Verhuizing {{handle}} begint {{lead}} — je kunt de route nu starten.",
+        "body": "Verhuizing {{handle}} begint {{lead}}. Je kunt de route nu starten.",
         "title": "Tijd om je verhuizing te starten"
       }
     },
@@ -81,7 +81,7 @@
       "title": "Aangekomen"
     },
     "awaitingPayment": {
-      "body": "Je verhuizing is klaar — bevestig de betaling.",
+      "body": "Je verhuizing is klaar. Bevestig de betaling.",
       "title": "Betaling openstaand"
     },
     "cancelledByMover": {

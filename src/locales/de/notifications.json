@@ -42,7 +42,7 @@
         "title": "Ihr Umzug beginnt {{lead}}"
       },
       "mover": {
-        "body": "Umzug {{handle}} beginnt {{lead}} — „Route starten“ ist jetzt verfügbar.",
+        "body": "Umzug {{handle}} beginnt {{lead}}. „Route starten“ ist jetzt verfügbar.",
         "title": "Zeit, Ihren Umzug zu starten"
       }
     },
@@ -81,7 +81,7 @@
       "title": "Am Zielort"
     },
     "awaitingPayment": {
-      "body": "Ihr Umzug ist abgeschlossen — bitte bestätigen Sie die Zahlung.",
+      "body": "Ihr Umzug ist abgeschlossen. Bitte bestätigen Sie die Zahlung.",
       "title": "Zahlung offen"
     },
     "cancelledByMover": {

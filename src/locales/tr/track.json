@@ -50,7 +50,7 @@
     "unloading": "Eşyalarınız boşaltılıyor…"
   },
   "live": {
-    "helper": "Nakliyeciniz görevde — ilerlemeyi anlık olarak takip edin"
+    "helper": "Nakliyeciniz görevde. İlerlemeyi anlık olarak takip edin"
   },
   "map": {
     "dropoffPin": {
@@ -154,8 +154,8 @@
       "title": "Yükleme başladı 📦"
     },
     "paymentDue": {
-      "body": "Taşınmanız tamamlanmak üzere — lütfen ödemeyi yapın.",
-      "shortBody": "Taşınmanız bitti — lütfen ödemeyi onaylayın.",
+      "body": "Taşınmanız tamamlanmak üzere. Lütfen ödemeyi yapın.",
+      "shortBody": "Taşınmanız bitti. Lütfen ödemeyi onaylayın.",
       "shortTitle": "Ödeme zamanı",
       "title": "Ödeme zamanı 💶"
     },
@@ -218,7 +218,7 @@
     },
     "awaitingPayment": {
       "subtitle": "Lütfen nakliyeciye ödeme yapın ve aşağıda onaylayın",
-      "title": "Taşınma tamamlandı — ödeme gerekiyor"
+      "title": "Taşınma tamamlandı: ödeme gerekiyor"
     },
     "broadcasting": {
       "subtitle": "En yakın nakliyeci aranıyor"

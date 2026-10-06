@@ -91,7 +91,7 @@
   },
   "unavailable": {
     "empty": {
-      "body": "Our movable-items list is being set up. Please try again shortly — you can still reach us if your move is urgent.",
+      "body": "Our movable-items list is being set up. Please try again shortly. You can still reach us if your move is urgent.",
       "title": "No items available yet"
     },
     "error": {
@@ -104,7 +104,7 @@
       "title": "This move now requires"
     },
     "reason": {
-      "body": "Adding “{{item}}” pushed your move into the {{tier}} tier — {{explanation}}"
+      "body": "Adding “{{item}}” pushed your move into the {{tier}} tier: {{explanation}}"
     },
     "warnings": {
       "title": "Items needing this tier:"

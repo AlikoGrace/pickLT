@@ -50,7 +50,7 @@
     "unloading": "Ihre Sachen werden entladen…"
   },
   "live": {
-    "helper": "Ihr Umzugsprofi ist aktiv — verfolgen Sie den Fortschritt in Echtzeit"
+    "helper": "Ihr Umzugsprofi ist aktiv. Verfolgen Sie den Fortschritt in Echtzeit"
   },
   "map": {
     "dropoffPin": {
@@ -154,8 +154,8 @@
       "title": "Beladen begonnen 📦"
     },
     "paymentDue": {
-      "body": "Ihr Umzug ist gleich abgeschlossen — bitte begleichen Sie die Zahlung.",
-      "shortBody": "Ihr Umzug ist fertig — bitte bestätigen Sie die Zahlung.",
+      "body": "Ihr Umzug ist gleich abgeschlossen. Bitte begleichen Sie die Zahlung.",
+      "shortBody": "Ihr Umzug ist fertig. Bitte bestätigen Sie die Zahlung.",
       "shortTitle": "Zahlung fällig",
       "title": "Zahlung fällig 💶"
     },
@@ -218,7 +218,7 @@
     },
     "awaitingPayment": {
       "subtitle": "Bitte zahlen Sie den Umzugsprofi und bestätigen Sie unten",
-      "title": "Umzug abgeschlossen — Zahlung erforderlich"
+      "title": "Umzug abgeschlossen: Zahlung erforderlich"
     },
     "broadcasting": {
       "subtitle": "Nächstgelegener Umzugsprofi wird gesucht"

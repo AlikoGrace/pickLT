@@ -1,7 +1,7 @@
 {
   "about": {
     "hero": {
-      "subtitle": "PickLte to platforma usług przeprowadzkowych. Opisujesz swoją przeprowadzkę, porównujesz przewoźników i rezerwujesz tego, którego chcesz — dla mieszkań, biur i pojedynczych rzeczy w całej Europie.",
+      "subtitle": "PickLte to platforma usług przeprowadzkowych. Opisujesz swoją przeprowadzkę, porównujesz przewoźników i rezerwujesz tego, którego chcesz, dla mieszkań, biur i pojedynczych rzeczy w całej Europie.",
       "title": "👋 O nas."
     }
   },
@@ -244,7 +244,7 @@
   },
   "instant": {
     "cardInApp": {
-      "helper": "Ta przeprowadzka jest opłacana kartą. Otwórz aplikację PickLte, aby dokończyć płatność — obciążamy zapisaną kartę, nic nie płacisz gotówką."
+      "helper": "Ta przeprowadzka jest opłacana kartą. Otwórz aplikację PickLte, aby dokończyć płatność. Obciążamy zapisaną kartę, nic nie płacisz gotówką."
     },
     "chat": {
       "comingSoon": "Czat będzie dostępny wkrótce!"
@@ -508,7 +508,7 @@
     "experienceYears_other": "{{count}} roku",
     "field": {
       "businessStreet": {
-        "label": "Adres firmy — ulica (opcjonalnie)",
+        "label": "Adres firmy: ulica (opcjonalnie)",
         "placeholder": "Ulica i numer"
       },
       "city": {
@@ -784,7 +784,7 @@
       }
     },
     "startRoute": {
-      "cta": "Rozpocznij trasę — jestem w drodze"
+      "cta": "Rozpocznij trasę, jestem w drodze"
     },
     "tapForDetails": {
       "helper": "Dotknij, aby zobaczyć szczegóły"
@@ -1097,7 +1097,7 @@
         "credit": {
           "body": "Zarobki z płatności kartą przechowywane przez PickLte. Opłaty platformy za kolejne przeprowadzki gotówkowe są najpierw z nich potrącane."
         },
-        "helper": "Przeprowadzka opłacona gotówką dodaje do salda opłatę platformy, płatną w ciągu 24 godzin — jeśli pozostanie nieopłacona, zlecenia zostaną wstrzymane; opłacona kartą dodaje zarobki."
+        "helper": "Przeprowadzka opłacona gotówką dodaje do salda opłatę platformy, płatną w ciągu 24 godzin (jeśli pozostanie nieopłacona, zlecenia zostaną wstrzymane); opłacona kartą dodaje zarobki."
       },
       "history": {
         "title": "Historia salda",
@@ -1171,7 +1171,7 @@
         "reason": "Offline: niezapłacone opłaty platformy. Proszę zapłacić, aby znów otrzymywać przeprowadzki."
       },
       "cashMove": {
-        "label": "Opłata platformy za tę przeprowadzkę: {{amount}} — zapłać w ciągu 24 godzin, aby nadal otrzymywać zlecenia"
+        "label": "Opłata platformy za tę przeprowadzkę: {{amount}}. Zapłać w ciągu 24 godzin, aby nadal otrzymywać zlecenia"
       }
     }
   },
@@ -1529,20 +1529,20 @@
     },
     "accountBilling": {
       "description": "Zarządzaj swoimi płatnościami i wypłatami",
-      "title": "Konto — płatności i wypłaty"
+      "title": "Konto: płatności i wypłaty"
     },
     "accountPassword": {
       "description": "Zarządzaj swoim hasłem",
-      "title": "Konto — hasło"
+      "title": "Konto: hasło"
     },
     "contact": {
       "description": "Skontaktuj się z zespołem PickLte.",
       "title": "Kontakt"
     },
     "default": {
-      "description": "PickLte — zaufana platforma usług przeprowadzkowych",
+      "description": "PickLte: zaufana platforma usług przeprowadzkowych",
       "keywords": "PickLte, przeprowadzki, przewoźnicy, relokacja, Umzug",
-      "title": "PickLte — przeprowadzaj się mądrzej z PickLte"
+      "title": "PickLte: przeprowadzaj się mądrzej z PickLte"
     },
     "forgotPassword": {
       "description": "Zresetuj swoje hasło",
@@ -1595,7 +1595,7 @@
       "route": {
         "title": "Trasa Twojej przeprowadzki"
       },
-      "title": "KROK 1 — SZCZEGÓŁY PRZEPROWADZKI"
+      "title": "KROK 1: SZCZEGÓŁY PRZEPROWADZKI"
     },
     "step2": {
       "title": "Adres odbioru"

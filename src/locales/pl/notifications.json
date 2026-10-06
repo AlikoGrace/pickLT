@@ -42,7 +42,7 @@
         "title": "Twoja przeprowadzka zaczyna się {{lead}}"
       },
       "mover": {
-        "body": "Przeprowadzka {{handle}} zaczyna się {{lead}} — opcja „Rozpocznij trasę” jest już dostępna.",
+        "body": "Przeprowadzka {{handle}} zaczyna się {{lead}}. Opcja „Rozpocznij trasę” jest już dostępna.",
         "title": "Czas rozpocząć przeprowadzkę"
       }
     },
@@ -85,7 +85,7 @@
       "title": "Na miejscu docelowym"
     },
     "awaitingPayment": {
-      "body": "Przeprowadzka zakończona — potwierdź płatność.",
+      "body": "Przeprowadzka zakończona. Potwierdź płatność.",
       "title": "Płatność do rozliczenia"
     },
     "cancelledByMover": {

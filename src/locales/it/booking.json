@@ -1359,11 +1359,11 @@
       "label": "Foto dell'intero veicolo"
     },
     "largeTruck": {
-      "helper": "{{capacity}} — traslochi di case, carichi grandi",
+      "helper": "{{capacity}}: traslochi di case, carichi grandi",
       "label": "Camion grande"
     },
     "mediumTruck": {
-      "helper": "{{capacity}} — traslochi di appartamenti",
+      "helper": "{{capacity}}: traslochi di appartamenti",
       "label": "Camion medio"
     },
     "model": {
@@ -1405,7 +1405,7 @@
       "label": "Targa *"
     },
     "smallVan": {
-      "helper": "{{capacity}} — piccoli traslochi, singoli oggetti",
+      "helper": "{{capacity}}: piccoli traslochi, singoli oggetti",
       "label": "Furgone piccolo"
     },
     "submitForVerification": {

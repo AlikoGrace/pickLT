@@ -50,7 +50,7 @@
     "unloading": "Your items are being unloaded…"
   },
   "live": {
-    "helper": "Your mover is active — track progress in real time"
+    "helper": "Your mover is active. Track progress in real time"
   },
   "map": {
     "dropoffPin": {
@@ -154,8 +154,8 @@
       "title": "Loading started 📦"
     },
     "paymentDue": {
-      "body": "Your move is finishing up — please complete the payment.",
-      "shortBody": "Your move is done — please confirm payment.",
+      "body": "Your move is finishing up. Please complete the payment.",
+      "shortBody": "Your move is done. Please confirm payment.",
       "shortTitle": "Payment Due",
       "title": "Payment due 💶"
     },
@@ -218,7 +218,7 @@
     },
     "awaitingPayment": {
       "subtitle": "Please pay the mover and confirm below",
-      "title": "Move completed — Payment required"
+      "title": "Move completed: Payment required"
     },
     "broadcasting": {
       "subtitle": "Finding the nearest mover"

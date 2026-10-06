@@ -113,7 +113,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
         </ol>
         <h3>Typography should be easy</h3>
         <p>
-          {`So that's a header for you — with any luck if we've done our job
+          {`So that's a header for you. With any luck if we've done our job
           correctly that will look pretty reasonable.`}
         </p>
         <p>Something a wise person once told me about typography is:</p>

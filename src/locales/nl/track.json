@@ -50,7 +50,7 @@
     "unloading": "Je spullen worden uitgeladen…"
   },
   "live": {
-    "helper": "Je verhuizer is bezig — volg de voortgang live"
+    "helper": "Je verhuizer is bezig, volg de voortgang live"
   },
   "map": {
     "dropoffPin": {
@@ -154,8 +154,8 @@
       "title": "Laden gestart 📦"
     },
     "paymentDue": {
-      "body": "Je verhuizing wordt afgerond — rond de betaling af.",
-      "shortBody": "Je verhuizing is klaar — bevestig de betaling.",
+      "body": "Je verhuizing wordt afgerond. Rond de betaling af.",
+      "shortBody": "Je verhuizing is klaar. Bevestig de betaling.",
       "shortTitle": "Betaling openstaand",
       "title": "Betaling openstaand 💶"
     },
@@ -218,7 +218,7 @@
     },
     "awaitingPayment": {
       "subtitle": "Betaal de verhuizer en bevestig hieronder",
-      "title": "Verhuizing afgerond — betaling vereist"
+      "title": "Verhuizing afgerond: betaling vereist"
     },
     "broadcasting": {
       "subtitle": "De dichtstbijzijnde verhuizer zoeken"

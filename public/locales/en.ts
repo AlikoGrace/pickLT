@@ -156,7 +156,7 @@ export const en = {
         'A catchy name usually includes: House name + Room name + Featured property + Tourist destination',
       'Rental form': 'Rental form',
       rentalFormDescription:
-        "Guests have the whole place to themselves—there's a private entrance and no shared spaces. A bedroom, bathroom, and kitchen are usually included.",
+        "Guests have the whole place to themselves. There's a private entrance and no shared spaces. A bedroom, bathroom, and kitchen are usually included.",
     },
     page2: {
       pageTitle: 'Your place location',
@@ -224,7 +224,7 @@ export const en = {
       pageDescription: "Shorter trips can mean more reservations, but you'll turn over your space more often.",
       availability: 'Set your availability',
       availabilityDescription:
-        'Editing your calendar is easy—just select a date to block or unblock it. You can always make changes after you publish.',
+        'Editing your calendar is easy: just select a date to block or unblock it. You can always make changes after you publish.',
     },
     page10: {
       pageTitle: 'Congratulations 🎉',

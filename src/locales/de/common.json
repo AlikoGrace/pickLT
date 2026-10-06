@@ -152,7 +152,7 @@
     },
     "inApp": {
       "title": "In der App anrufen",
-      "subtitle": "Kostenloser Audioanruf in der App – ohne Weitergabe von Telefonnummern",
+      "subtitle": "Kostenloser Audioanruf in der App, ohne Weitergabe von Telefonnummern",
       "noMover": {
         "subtitle": "Verfügbar, sobald ein Umzugshelfer zugewiesen ist"
       },
@@ -191,7 +191,7 @@
           "hint": "Der Ton kommt aus dem Lautsprecher"
         },
         "earpiece": {
-          "hint": "Der Ton kommt aus der Hörmuschel – Telefon ans Ohr halten oder Lautsprecher einschalten"
+          "hint": "Der Ton kommt aus der Hörmuschel: Telefon ans Ohr halten oder Lautsprecher einschalten"
         }
       },
       "status": {
@@ -217,7 +217,7 @@
           "label": "Keine Antwort"
         },
         "busy": {
-          "label": "Besetzt – in einem anderen Gespräch"
+          "label": "Besetzt (in einem anderen Gespräch)"
         },
         "failed": {
           "label": "Anruf fehlgeschlagen"
@@ -237,9 +237,9 @@
       },
       "ongoing": {
         "title": "Anruf läuft",
-        "body": "Anruf mit {{name}} in der App – zum Zurückkehren tippen",
+        "body": "Anruf mit {{name}} in der App: zum Zurückkehren tippen",
         "fallback": {
-          "body": "Anruf in der App – zum Zurückkehren tippen"
+          "body": "Anruf in der App: zum Zurückkehren tippen"
         }
       },
       "fullScreen": {
@@ -267,7 +267,7 @@
       "toggle": {
         "label": "Keine Verbindung? Per Telefon anrufen"
       },
-      "subtitle": "Nutzt Ihre Telefonleitung – falls der Anruf in der App nicht verbindet"
+      "subtitle": "Nutzt Ihre Telefonleitung, falls der Anruf in der App nicht verbindet"
     }
   },
   "chat": {
@@ -311,7 +311,7 @@
     },
     "contactMasked": {
       "title": "Kontaktdaten ausgeblendet",
-      "body": "Telefonnummern und E-Mail-Adressen werden im Chat ausgeblendet. Nutzen Sie den Anruf in der App – so bleibt Ihr Umzug bei PickLte geschützt."
+      "body": "Telefonnummern und E-Mail-Adressen werden im Chat ausgeblendet. Nutzen Sie den Anruf in der App, so bleibt Ihr Umzug bei PickLte geschützt."
     }
   },
   "confirm": {

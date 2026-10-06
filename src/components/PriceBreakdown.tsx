@@ -394,7 +394,7 @@ export default function PriceBreakdown({
           {!confirmed && (
             <p className="mt-2">
               {t('booking:pricing.estimate.helper', {
-                defaultValue: 'Estimate — confirmed when your mover accepts',
+                defaultValue: 'Estimate, confirmed when your mover accepts',
               })}
             </p>
           )}

@@ -152,7 +152,7 @@
     },
     "inApp": {
       "title": "Bellen in de app",
-      "subtitle": "Gratis audiogesprek in de app – zonder telefoonnummers te delen",
+      "subtitle": "Gratis audiogesprek in de app, zonder telefoonnummers te delen",
       "noMover": {
         "subtitle": "Beschikbaar zodra er een verhuizer is toegewezen"
       },
@@ -191,7 +191,7 @@
           "hint": "Het geluid komt uit de luidspreker"
         },
         "earpiece": {
-          "hint": "Het geluid komt uit het oorstuk – houd de telefoon tegen je oor of zet de luidspreker aan"
+          "hint": "Het geluid komt uit het oorstuk: houd de telefoon tegen je oor of zet de luidspreker aan"
         }
       },
       "status": {
@@ -217,7 +217,7 @@
           "label": "Geen antwoord"
         },
         "busy": {
-          "label": "In gesprek – al aan het bellen"
+          "label": "In gesprek (al aan het bellen)"
         },
         "failed": {
           "label": "Gesprek mislukt"
@@ -237,9 +237,9 @@
       },
       "ongoing": {
         "title": "Gesprek bezig",
-        "body": "Gesprek in de app met {{name}} – tik om terug te gaan",
+        "body": "Gesprek in de app met {{name}}, tik om terug te gaan",
         "fallback": {
-          "body": "Gesprek in de app – tik om terug te gaan"
+          "body": "Gesprek in de app, tik om terug te gaan"
         }
       },
       "fullScreen": {

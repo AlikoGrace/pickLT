@@ -1,7 +1,7 @@
 {
   "about": {
     "hero": {
-      "subtitle": "PickLte ist eine Plattform für Umzugsdienstleistungen. Sie beschreiben Ihren Umzug, vergleichen Umzugsprofis und buchen den, den Sie möchten — für Wohnungen, Büros und einzelne Gegenstände in ganz Europa.",
+      "subtitle": "PickLte ist eine Plattform für Umzugsdienstleistungen. Sie beschreiben Ihren Umzug, vergleichen Umzugsprofis und buchen den, den Sie möchten, für Wohnungen, Büros und einzelne Gegenstände in ganz Europa.",
       "title": "👋 Über uns."
     }
   },
@@ -181,13 +181,13 @@
       "quote": "Angebot einholen",
       "title": "Support"
     },
-    "tagline": "Umzugsprofis buchen — für Wohnungen, Büros und Umzugsgut in ganz Europa."
+    "tagline": "Umzugsprofis buchen: für Wohnungen, Büros und Umzugsgut in ganz Europa."
   },
   "home": {
     "hero": {
       "imageAlt": "Umzugsprofis tragen Kartons in ein neues Zuhause",
       "subtitle": "Geprüfte Umzugsprofis für die großen Momente im Leben.",
-      "title": "Ein stressfreier Umzug – jedes Mal."
+      "title": "Ein stressfreier Umzug. Jedes Mal."
     },
     "moverBanner": {
       "subtitle": "Melden Sie sich an, um Umzüge anzunehmen",
@@ -244,7 +244,7 @@
   },
   "instant": {
     "cardInApp": {
-      "helper": "Dieser Umzug wird per Karte bezahlt. Öffnen Sie die PickLte App, um die Zahlung abzuschließen — dort wird Ihre hinterlegte Karte belastet, bar ist nichts fällig."
+      "helper": "Dieser Umzug wird per Karte bezahlt. Öffnen Sie die PickLte App, um die Zahlung abzuschließen. Dort wird Ihre hinterlegte Karte belastet, bar ist nichts fällig."
     },
     "chat": {
       "comingSoon": "Die Chat-Funktion kommt bald!"
@@ -774,7 +774,7 @@
       }
     },
     "startRoute": {
-      "cta": "Route starten — ich bin unterwegs"
+      "cta": "Route starten: Ich bin unterwegs"
     },
     "tapForDetails": {
       "helper": "Tippen, um Details zu sehen"
@@ -1085,7 +1085,7 @@
         "credit": {
           "body": "Für Sie verwahrter Verdienst aus Kartenzahlungen. Plattformgebühren späterer Barzahlungsumzüge werden zuerst damit verrechnet."
         },
-        "helper": "Ein Barzahlungsumzug fügt Ihrem Saldo die Plattformgebühr hinzu, fällig innerhalb von 24 Stunden – bleibt sie unbezahlt, werden Umzüge pausiert; ein Kartenzahlungsumzug fügt Ihren Verdienst hinzu."
+        "helper": "Ein Barzahlungsumzug fügt Ihrem Saldo die Plattformgebühr hinzu, fällig innerhalb von 24 Stunden. Bleibt sie unbezahlt, werden Umzüge pausiert; ein Kartenzahlungsumzug fügt Ihren Verdienst hinzu."
       },
       "history": {
         "title": "Saldoverlauf",
@@ -1159,7 +1159,7 @@
         "reason": "Offline: unbezahlte Plattformgebühren. Bezahlen Sie, um wieder Umzüge zu erhalten."
       },
       "cashMove": {
-        "label": "Plattformgebühr für diesen Umzug: {{amount}} – zahlen Sie innerhalb von 24 Stunden, um weiterhin Umzüge zu erhalten"
+        "label": "Plattformgebühr für diesen Umzug: {{amount}}. Zahlen Sie innerhalb von 24 Stunden, um weiterhin Umzüge zu erhalten"
       }
     }
   },
@@ -1503,20 +1503,20 @@
     },
     "accountBilling": {
       "description": "Verwalten Sie Ihre Zahlungen und Auszahlungen",
-      "title": "Konto – Zahlungen & Auszahlungen"
+      "title": "Konto: Zahlungen & Auszahlungen"
     },
     "accountPassword": {
       "description": "Verwalten Sie Ihr Passwort",
-      "title": "Konto – Passwort"
+      "title": "Konto: Passwort"
     },
     "contact": {
       "description": "Nehmen Sie Kontakt mit dem PickLte Team auf.",
       "title": "Kontakt"
     },
     "default": {
-      "description": "PickLte – Ihre Plattform für zuverlässige Umzugsdienstleistungen",
+      "description": "PickLte: Ihre Plattform für zuverlässige Umzugsdienstleistungen",
       "keywords": "PickLte, Umzug, Umzugsunternehmen, Umzugsprofi, Möbeltransport, Umzugsservice",
-      "title": "PickLte – klüger umziehen mit PickLte"
+      "title": "PickLte: klüger umziehen mit PickLte"
     },
     "forgotPassword": {
       "description": "Setzen Sie Ihr Passwort zurück",
@@ -1526,7 +1526,7 @@
       "description": "Buchen Sie geprüfte Umzugsprofis für Wohnungen, Büros und Umzugsgut in ganz Europa.",
       "title": "Startseite"
     },
-    "titleTemplate": "%s – PickLte"
+    "titleTemplate": "%s | PickLte"
   },
   "sidebar": {
     "blurb": "Entdecken Sie die herausragendsten Artikel zu allen Themen des Lebens. Schreiben Sie Ihre Geschichten und teilen Sie sie",
@@ -1569,7 +1569,7 @@
       "route": {
         "title": "Ihre Umzugsroute"
       },
-      "title": "SCHRITT 1 — UMZUGSDETAILS"
+      "title": "SCHRITT 1: UMZUGSDETAILS"
     },
     "step2": {
       "title": "Abholadresse"

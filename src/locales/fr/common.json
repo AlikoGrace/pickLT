@@ -152,7 +152,7 @@
     },
     "inApp": {
       "title": "Appeler dans l’application",
-      "subtitle": "Appel audio gratuit dans l’application – aucun numéro partagé",
+      "subtitle": "Appel audio gratuit dans l’application, aucun numéro partagé",
       "noMover": {
         "subtitle": "Disponible dès qu’un déménageur est assigné"
       },
@@ -191,7 +191,7 @@
           "hint": "Le son passe par le haut-parleur"
         },
         "earpiece": {
-          "hint": "Le son passe par l’écouteur – portez le téléphone à l’oreille ou activez le haut-parleur"
+          "hint": "Le son passe par l’écouteur : portez le téléphone à l’oreille ou activez le haut-parleur"
         }
       },
       "status": {
@@ -217,7 +217,7 @@
           "label": "Pas de réponse"
         },
         "busy": {
-          "label": "Occupé – déjà en ligne"
+          "label": "Occupé (déjà en ligne)"
         },
         "failed": {
           "label": "Échec de l’appel"
@@ -237,9 +237,9 @@
       },
       "ongoing": {
         "title": "Appel en cours",
-        "body": "Appel avec {{name}} dans l’application – touchez pour revenir",
+        "body": "Appel avec {{name}} dans l’application, touchez pour revenir",
         "fallback": {
-          "body": "Appel dans l’application – touchez pour revenir"
+          "body": "Appel dans l’application, touchez pour revenir"
         }
       },
       "fullScreen": {

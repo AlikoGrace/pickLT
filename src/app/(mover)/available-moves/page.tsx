@@ -379,7 +379,7 @@ const AvailableMovesPage = () => {
                           {t('moves:itemCount', { count: selectedMove.totalItemCount })}
                         </span>
                         <span className="text-xs px-2 py-0.5 bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 rounded-full">
-                          {crewLabel(t, selectedMove) ?? '—'}
+                          {crewLabel(t, selectedMove) ?? '-'}
                         </span>
                         {selectedMove.vehicleType && (
                           <span className="text-xs px-2 py-0.5 bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 rounded-full">
@@ -491,7 +491,7 @@ const AvailableMovesPage = () => {
                       </span>
                       <span className="text-xs px-2.5 py-1 bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 rounded-full flex items-center gap-1">
                         <UsersIcon className="w-3 h-3" />
-                        {crewLabel(t, move) ?? '—'}
+                        {crewLabel(t, move) ?? '-'}
                       </span>
                       {move.vehicleType && (
                         <span className="text-xs px-2.5 py-1 bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 rounded-full flex items-center gap-1">

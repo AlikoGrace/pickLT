@@ -152,7 +152,7 @@
     },
     "inApp": {
       "title": "Połączenie w aplikacji",
-      "subtitle": "Bezpłatne połączenie głosowe w aplikacji – bez udostępniania numerów",
+      "subtitle": "Bezpłatne połączenie głosowe w aplikacji, bez udostępniania numerów",
       "noMover": {
         "subtitle": "Dostępne po przydzieleniu przewoźnika"
       },
@@ -191,7 +191,7 @@
           "hint": "Dźwięk z głośnika telefonu"
         },
         "earpiece": {
-          "hint": "Dźwięk ze słuchawki – przyłóż telefon do ucha lub włącz głośnik"
+          "hint": "Dźwięk ze słuchawki: przyłóż telefon do ucha lub włącz głośnik"
         }
       },
       "status": {
@@ -217,7 +217,7 @@
           "label": "Brak odpowiedzi"
         },
         "busy": {
-          "label": "Zajęte – trwa inne połączenie"
+          "label": "Zajęte: trwa inne połączenie"
         },
         "failed": {
           "label": "Połączenie nieudane"
@@ -237,9 +237,9 @@
       },
       "ongoing": {
         "title": "Trwa połączenie",
-        "body": "Połączenie w aplikacji z: {{name}} – dotknij, aby wrócić",
+        "body": "Połączenie w aplikacji z: {{name}}. Dotknij, aby wrócić",
         "fallback": {
-          "body": "Połączenie w aplikacji – dotknij, aby wrócić"
+          "body": "Połączenie w aplikacji. Dotknij, aby wrócić"
         }
       },
       "fullScreen": {
@@ -311,7 +311,7 @@
     },
     "contactMasked": {
       "title": "Dane kontaktowe ukryte",
-      "body": "Numery telefonów i adresy e-mail są ukrywane w czacie. Dzwoń przez aplikację – dzięki temu Twoja przeprowadzka pozostaje chroniona w PickLte."
+      "body": "Numery telefonów i adresy e-mail są ukrywane w czacie. Dzwoń przez aplikację, dzięki temu Twoja przeprowadzka pozostaje chroniona w PickLte."
     }
   },
   "confirm": {

@@ -1,7 +1,7 @@
 {
   "about": {
     "hero": {
-      "subtitle": "PickLte is een platform voor verhuisdiensten. Je beschrijft je verhuizing, vergelijkt verhuizers en boekt degene die je wilt — voor appartementen, kantoren en losse spullen in heel Europa.",
+      "subtitle": "PickLte is een platform voor verhuisdiensten. Je beschrijft je verhuizing, vergelijkt verhuizers en boekt degene die je wilt, voor appartementen, kantoren en losse spullen in heel Europa.",
       "title": "👋 Over ons."
     }
   },
@@ -244,7 +244,7 @@
   },
   "instant": {
     "cardInApp": {
-      "helper": "Deze verhuizing wordt met kaart betaald. Open de PickLte-app om de betaling af te ronden — je opgeslagen kaart wordt daar belast, contant hoef je niets te betalen."
+      "helper": "Deze verhuizing wordt met kaart betaald. Open de PickLte-app om de betaling af te ronden: je opgeslagen kaart wordt daar belast, contant hoef je niets te betalen."
     },
     "chat": {
       "comingSoon": "Chatfunctie komt binnenkort!"
@@ -774,7 +774,7 @@
       }
     },
     "startRoute": {
-      "cta": "Route starten — ik ben onderweg"
+      "cta": "Route starten, ik ben onderweg"
     },
     "tapForDetails": {
       "helper": "Tik om details te bekijken"
@@ -1085,7 +1085,7 @@
         "credit": {
           "body": "Verdiensten uit kaartbetalingen die we voor u vasthouden. Platformkosten van latere contante verhuizingen worden hier eerst mee verrekend."
         },
-        "helper": "Een contante verhuizing voegt de platformkosten toe aan uw saldo, te betalen binnen 24 uur — blijven ze onbetaald, dan worden verhuizingen gepauzeerd; een kaartverhuizing voegt uw verdiensten toe."
+        "helper": "Een contante verhuizing voegt de platformkosten toe aan uw saldo, te betalen binnen 24 uur. Blijven ze onbetaald, dan worden verhuizingen gepauzeerd; een kaartverhuizing voegt uw verdiensten toe."
       },
       "history": {
         "title": "Saldogeschiedenis",
@@ -1159,7 +1159,7 @@
         "reason": "Offline: onbetaalde platformkosten. Betaal om weer verhuizingen te ontvangen."
       },
       "cashMove": {
-        "label": "Platformkosten voor deze verhuizing: {{amount}} — betaal binnen 24 uur om verhuizingen te blijven ontvangen"
+        "label": "Platformkosten voor deze verhuizing: {{amount}}. Betaal binnen 24 uur om verhuizingen te blijven ontvangen"
       }
     }
   },
@@ -1569,7 +1569,7 @@
       "route": {
         "title": "Je verhuisroute"
       },
-      "title": "STAP 1 — Verhuisgegevens"
+      "title": "STAP 1: Verhuisgegevens"
     },
     "step2": {
       "title": "Ophaaladres"

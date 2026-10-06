@@ -86,7 +86,7 @@
       "title": "Deze verhuizing vereist nu"
     },
     "reason": {
-      "body": "Door “{{item}}” toe te voegen valt uw verhuizing nu onder {{tier}} — {{explanation}}"
+      "body": "Door “{{item}}” toe te voegen valt uw verhuizing nu onder {{tier}}: {{explanation}}"
     },
     "warnings": {
       "title": "Items die dit niveau vereisen:"
@@ -95,7 +95,7 @@
   "unavailable": {
     "empty": {
       "title": "Nog geen items beschikbaar",
-      "body": "Onze lijst met te verhuizen items wordt opgezet. Probeer het zo meteen opnieuw — bij een spoedverhuizing kunt u ons nog steeds bereiken."
+      "body": "Onze lijst met te verhuizen items wordt opgezet. Probeer het zo meteen opnieuw. Bij een spoedverhuizing kunt u ons nog steeds bereiken."
     },
     "error": {
       "title": "Kan de itemlijst niet laden",

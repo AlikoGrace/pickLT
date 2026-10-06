@@ -86,7 +86,7 @@
       "title": "Bu taşınma artık şunu gerektiriyor"
     },
     "reason": {
-      "body": "“{{item}}” eklenmesi taşınmanızı {{tier}} kademesine taşıdı — {{explanation}}"
+      "body": "“{{item}}” eklenmesi taşınmanızı {{tier}} kademesine taşıdı: {{explanation}}"
     },
     "warnings": {
       "title": "Bu kademeyi gerektiren eşyalar:"
@@ -95,7 +95,7 @@
   "unavailable": {
     "empty": {
       "title": "Henüz eşya bulunmuyor",
-      "body": "Taşınabilir eşya listemiz hazırlanıyor. Lütfen kısa süre sonra tekrar deneyin — taşınmanız acilse yine de bize ulaşabilirsiniz."
+      "body": "Taşınabilir eşya listemiz hazırlanıyor. Lütfen kısa süre sonra tekrar deneyin. Taşınmanız acilse yine de bize ulaşabilirsiniz."
     },
     "error": {
       "title": "Eşya listesi yüklenemedi",

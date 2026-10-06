@@ -23,7 +23,7 @@
       "title": "Nie udało się zmienić adresu e-mail"
     },
     "googleNotice": {
-      "body": "Twoje konto korzysta z logowania Google. Adresu e-mail nie można zmienić w PickLte — zaktualizuj go na swoim koncie Google.",
+      "body": "Twoje konto korzysta z logowania Google. Adresu e-mail nie można zmienić w PickLte. Zaktualizuj go na swoim koncie Google.",
       "title": "Adresem e-mail zarządza Google"
     },
     "helper": "Zaktualizuj swój adres e-mail",

@@ -691,10 +691,10 @@
     "label": "Taşıma türü",
     "light": {
       "body": "Normal taşımalar küçük bir panelvanla ve yalnızca sürücüyle yapılır.",
-      "helper": "Küçük yük — az sayıda eşya",
+      "helper": "Küçük yük: az sayıda eşya",
       "label": "Normal taşıma",
       "short": "Normal",
-      "subtitle": "Küçük yükler için ideal — kolilar, tek parça mobilyalar veya bir stüdyo daire.",
+      "subtitle": "Küçük yükler için ideal: kolilar, tek parça mobilyalar veya bir stüdyo daire.",
       "title": "Normal taşıma"
     },
     "placeholder": "Bir taşıma türü seçin",
@@ -703,7 +703,7 @@
       "helper": "Tam hizmet taşıma",
       "label": "Premium taşıma",
       "short": "Premium",
-      "subtitle": "Büyük evler için tam hizmet — paketleme, yükleme, taşıma ve boşaltma.",
+      "subtitle": "Büyük evler için tam hizmet: paketleme, yükleme, taşıma ve boşaltma.",
       "title": "Premium taşıma"
     },
     "regular": {
@@ -1072,7 +1072,7 @@
       "label": "İndirim"
     },
     "estimate": {
-      "helper": "Tahmini fiyat — nakliyeciniz kabul ettiğinde kesinleşir"
+      "helper": "Tahmini fiyat (nakliyeciniz kabul ettiğinde kesinleşir)"
     },
     "estimatedTotal": {
       "label": "Tahmini toplam"
@@ -1359,11 +1359,11 @@
       "label": "Aracın tamamının fotoğrafı"
     },
     "largeTruck": {
-      "helper": "{{capacity}} — ev taşımaları, büyük yükler",
+      "helper": "{{capacity}}: ev taşımaları, büyük yükler",
       "label": "Büyük kamyon"
     },
     "mediumTruck": {
-      "helper": "{{capacity}} — daire taşımaları",
+      "helper": "{{capacity}}: daire taşımaları",
       "label": "Orta boy kamyon"
     },
     "model": {
@@ -1405,7 +1405,7 @@
       "label": "Plaka *"
     },
     "smallVan": {
-      "helper": "{{capacity}} — küçük taşımalar, tek parça eşyalar",
+      "helper": "{{capacity}}: küçük taşımalar, tek parça eşyalar",
       "label": "Küçük panelvan"
     },
     "submitForVerification": {
@@ -1479,10 +1479,10 @@
         "body": "Kiralamanız {{time}} saatinde bitiyor. Taşıma almaya devam etmek için uzatın."
       },
       "renewAutoVerified": {
-        "helper": "Öncekiyle aynı araç — yeni fotoğraf gerekmez."
+        "helper": "Öncekiyle aynı araç. Yeni fotoğraf gerekmez."
       },
       "renewNeedsReview": {
-        "helper": "Üzerinden zaman geçti — inceleme için yeni plaka fotoğrafları ekleyin."
+        "helper": "Üzerinden zaman geçti. İnceleme için yeni plaka fotoğrafları ekleyin."
       },
       "maxHint": {
         "helper": "Kayıt başına en fazla 30 gün. Daha uzun kiralamalar uzatılabilir."

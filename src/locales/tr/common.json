@@ -152,7 +152,7 @@
     },
     "inApp": {
       "title": "Uygulama içinden ara",
-      "subtitle": "Uygulama içinden ücretsiz sesli arama – telefon numarası paylaşılmaz",
+      "subtitle": "Uygulama içinden ücretsiz sesli arama, telefon numarası paylaşılmaz",
       "noMover": {
         "subtitle": "Bir taşıyıcı atandığında kullanılabilir"
       },
@@ -191,7 +191,7 @@
           "hint": "Ses hoparlörden geliyor"
         },
         "earpiece": {
-          "hint": "Ses ahizeden geliyor – telefonu kulağınıza tutun veya hoparlörü açın"
+          "hint": "Ses ahizeden geliyor. Telefonu kulağınıza tutun veya hoparlörü açın"
         }
       },
       "status": {
@@ -217,7 +217,7 @@
           "label": "Yanıt yok"
         },
         "busy": {
-          "label": "Meşgul – başka bir aramada"
+          "label": "Meşgul: başka bir aramada"
         },
         "failed": {
           "label": "Arama başarısız"
@@ -237,9 +237,9 @@
       },
       "ongoing": {
         "title": "Arama sürüyor",
-        "body": "{{name}} ile uygulama içi arama – dönmek için dokunun",
+        "body": "{{name}} ile uygulama içi arama. Dönmek için dokunun",
         "fallback": {
-          "body": "Uygulama içi arama – dönmek için dokunun"
+          "body": "Uygulama içi arama. Dönmek için dokunun"
         }
       },
       "fullScreen": {
