@@ -109,12 +109,15 @@
     "userUnauthorized": "Non hai l’autorizzazione. Accedi di nuovo."
   },
   "auth": {
+    "adminAccount": "Questo è un account amministratore. Gli account amministratore possono accedere solo alla dashboard di amministrazione.",
     "forbidden": "Accesso negato",
     "initSessionFailed": "Impossibile inizializzare la sessione",
     "noActiveSession": "Nessuna sessione attiva",
     "noSession": {
       "error": "Nessun utente autenticato"
     },
+    "registeredAsClient": "Questa email è registrata con un account cliente e non può essere usata per accedere come traslocatore. Accedi con il tuo account traslocatore oppure usa un'altra email per diventare traslocatore.",
+    "registeredAsMover": "Questa email è registrata con un account traslocatore e non può essere usata per prenotare traslochi. Accedi con il tuo account cliente oppure usa un'altra email.",
     "setPhoneFailed": "Impossibile impostare il numero di telefono",
     "syncFailed": "Impossibile sincronizzare l’utente",
     "unauthorized": "Non autorizzato"

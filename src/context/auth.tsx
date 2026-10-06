@@ -4,7 +4,8 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import * as Sentry from '@sentry/nextjs'
 import { account } from '@/lib/appwrite'
 import { OAuthProvider } from 'appwrite'
-import { exchangeGoogleIdToken } from '@/lib/googleauth-client'
+import { exchangeGoogleIdToken, GoogleAuthError } from '@/lib/googleauth-client'
+import { isRoleRefusalCode, RoleRefusalError, type RoleRefusalCode } from '@/lib/role-gate'
 import type { UserDoc, MoverProfileDoc, CrewMemberDoc } from '@/lib/types'
 // Non-component `t` (see src/lib/i18n-runtime.ts): these throws happen inside
 // callbacks, not in render, so there is no hook to read from here.
@@ -86,6 +87,12 @@ type AuthState = {
   isLoading: boolean
   userType: UserType
   crewMembers: CrewMember[]
+  /**
+   * Set when a sign-in was refused for the wrong account type (plan auth/2),
+   * including the hosted-OAuth redirect where no page awaits the call. The
+   * login/sign-up pages show `errors:<code>`.
+   */
+  roleRefusal: RoleRefusalCode | null
 }
 
 type AuthActions = {
@@ -104,7 +111,7 @@ type AuthActions = {
    * `GoogleAuthError` (see `googleAuthErrorKey`) when the function refuses.
    */
   loginWithGoogleIdToken: (idToken: string, intendedUserType?: UserType) => Promise<void>
-  loginWithEmail: (email: string, password: string) => Promise<void>
+  loginWithEmail: (email: string, password: string, intendedUserType?: UserType) => Promise<void>
   signupWithEmail: (email: string, password: string, name: string, intendedUserType?: UserType) => Promise<void>
   // Phone verification (mandatory step after Google/Email auth)
   setPhoneForVerification: (phone: string) => Promise<void>
@@ -118,6 +125,7 @@ const defaultState: AuthState = {
   isLoading: true,
   userType: 'client',
   crewMembers: [],
+  roleRefusal: null,
 }
 
 const AuthContext = createContext<AuthState & AuthActions>({
@@ -143,6 +151,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [userType, setUserType] = useState<UserType>('client')
   const [crewMembers, setCrewMembers] = useState<CrewMember[]>([])
+  const [roleRefusal, setRoleRefusal] = useState<RoleRefusalCode | null>(null)
 
   // Sentry knows who saw an error by id only, never name or email (plan sentry.md).
   const sentryUserId = user?.authId ?? null
@@ -209,7 +218,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         localStorage.removeItem(PENDING_COUNTRY_KEY)
       }
 
+      if (res.status === 403) {
+        const detail = await res.json().catch(() => ({}))
+        if (isRoleRefusalCode(detail?.code)) {
+          // Wrong account type for this side (plan auth/2): the route wrote
+          // nothing; drop the Appwrite session and our cookie with it.
+          await account.deleteSession('current').catch(() => {})
+          await fetch('/api/auth/clear-session', { method: 'POST' }).catch(() => {})
+          setRoleRefusal(detail.code)
+          throw new RoleRefusalError(detail.code)
+        }
+      }
       if (!res.ok) throw new Error(t('errors:auth.syncFailed'))
+      setRoleRefusal(null)
 
       const data = await res.json()
       const userDoc: UserDoc = data.user
@@ -283,7 +304,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           }))
         )
       }
-    } catch {
+    } catch (err) {
+      if (err instanceof RoleRefusalError) {
+        setUser(null)
+        throw err
+      }
       // No active session or sync failed. A background refresh (the mover
       // dashboard's visibility/interval poll) keeps the user it already has:
       // a network blip must not sign a driver out in the middle of a move.
@@ -295,7 +320,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Load session on mount
   useEffect(() => {
-    loadSession()
+    // A refusal here (hosted-OAuth redirect) is surfaced through `roleRefusal`.
+    loadSession().catch(() => {})
   }, [loadSession])
 
   // ─── Auth Methods ─────────────────────────────────────
@@ -326,7 +352,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (intendedUserType && typeof window !== 'undefined') {
       localStorage.setItem('picklt_pending_user_type', intendedUserType)
     }
-    const { userId, secret } = await exchangeGoogleIdToken(idToken, intendedUserType ?? 'client')
+    let creds: { userId: string; secret: string }
+    try {
+      creds = await exchangeGoogleIdToken(idToken, intendedUserType ?? 'client')
+    } catch (err) {
+      // googleauth refused before any session existed: nothing to sync.
+      if (typeof window !== 'undefined') localStorage.removeItem('picklt_pending_user_type')
+      if (err instanceof GoogleAuthError && isRoleRefusalCode(err.fnCode)) setRoleRefusal(err.fnCode)
+      throw err
+    }
+    const { userId, secret } = creds
     // Appwrite refuses to create a session while one is active; drop a stale
     // one first (the mobile client does the same).
     try {
@@ -338,7 +373,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     await loadSession()
   }
 
-  const loginWithEmail = async (email: string, password: string) => {
+  const loginWithEmail = async (email: string, password: string, intendedUserType?: UserType) => {
+    // The side being signed in to, so sync-user can refuse the wrong account type.
+    if (intendedUserType && typeof window !== 'undefined') {
+      localStorage.setItem('picklt_pending_user_type', intendedUserType)
+    }
+    // A leftover session (e.g. from a refused sign-in) would block this one.
+    await account.deleteSession('current').catch(() => {})
     await account.createEmailPasswordSession(email, password)
     await loadSession()
   }
@@ -431,6 +472,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         isLoading,
         userType,
         crewMembers,
+        roleRefusal,
         logout,
         updateUser,
         setUserType,

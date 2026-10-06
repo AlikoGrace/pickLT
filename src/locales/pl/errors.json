@@ -113,12 +113,15 @@
     "userUnauthorized": "Brak uprawnień. Zaloguj się ponownie."
   },
   "auth": {
+    "adminAccount": "To jest konto administratora. Konta administratora mogą logować się tylko do panelu administracyjnego.",
     "forbidden": "Brak dostępu",
     "initSessionFailed": "Nie udało się zainicjować sesji",
     "noActiveSession": "Brak aktywnej sesji",
     "noSession": {
       "error": "Brak zalogowanego użytkownika"
     },
+    "registeredAsClient": "Ten adres e-mail jest przypisany do konta klienta i nie można go użyć do logowania jako przewoźnik. Zaloguj się na konto przewoźnika lub użyj innego adresu e-mail, aby zostać przewoźnikiem.",
+    "registeredAsMover": "Ten adres e-mail jest przypisany do konta przewoźnika i nie można go użyć do rezerwowania przeprowadzek. Zaloguj się na konto klienta lub użyj innego adresu e-mail.",
     "setPhoneFailed": "Nie udało się zapisać numeru telefonu",
     "syncFailed": "Nie udało się zsynchronizować użytkownika",
     "unauthorized": "Brak uprawnień"

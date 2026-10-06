@@ -109,12 +109,15 @@
     "userUnauthorized": "Je hebt geen toegang. Log opnieuw in."
   },
   "auth": {
+    "adminAccount": "Dit is een beheerdersaccount. Beheerdersaccounts kunnen alleen inloggen op het beheerdashboard.",
     "forbidden": "Geen toegang",
     "initSessionFailed": "Sessie kon niet worden gestart",
     "noActiveSession": "Geen actieve sessie",
     "noSession": {
       "error": "Geen ingelogde gebruiker"
     },
+    "registeredAsClient": "Dit e-mailadres hoort bij een klantaccount en kan niet worden gebruikt om als verhuizer in te loggen. Log in met je verhuizersaccount of gebruik een ander e-mailadres om verhuizer te worden.",
+    "registeredAsMover": "Dit e-mailadres hoort bij een verhuizersaccount en kan niet worden gebruikt om verhuizingen te boeken. Log in met je klantaccount of gebruik een ander e-mailadres.",
     "setPhoneFailed": "Telefoonnummer kon niet worden ingesteld",
     "syncFailed": "Gebruiker kon niet worden gesynchroniseerd",
     "unauthorized": "Niet geautoriseerd"

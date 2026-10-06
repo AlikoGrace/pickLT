@@ -109,12 +109,15 @@
     "userUnauthorized": "Sie sind nicht berechtigt. Bitte melden Sie sich erneut an."
   },
   "auth": {
+    "adminAccount": "Dies ist ein Admin-Konto. Admin-Konten können sich nur im Admin-Dashboard anmelden.",
     "forbidden": "Zugriff verweigert",
     "initSessionFailed": "Sitzung konnte nicht initialisiert werden",
     "noActiveSession": "Keine aktive Sitzung",
     "noSession": {
       "error": "Kein angemeldeter Benutzer"
     },
+    "registeredAsClient": "Diese E-Mail-Adresse gehört zu einem Kundenkonto und kann nicht für die Anmeldung als Umzugsprofi verwendet werden. Melden Sie sich mit Ihrem Umzugsprofi-Konto an oder verwenden Sie eine andere E-Mail-Adresse, um Umzugsprofi zu werden.",
+    "registeredAsMover": "Diese E-Mail-Adresse gehört zu einem Umzugsprofi-Konto und kann nicht zum Buchen von Umzügen verwendet werden. Melden Sie sich mit Ihrem Kundenkonto an oder verwenden Sie eine andere E-Mail-Adresse.",
     "setPhoneFailed": "Telefonnummer konnte nicht gespeichert werden",
     "syncFailed": "Nutzerdaten konnten nicht synchronisiert werden",
     "unauthorized": "Nicht autorisiert"

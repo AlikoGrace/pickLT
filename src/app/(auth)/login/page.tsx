@@ -3,6 +3,7 @@
 import GoogleSignInButton from '@/components/GoogleSignInButton'
 import { useAuth } from '@/context/auth'
 import { oauthErrorMessageKey, parseOAuthErrorParam } from '@/lib/oauth-error'
+import { roleGate, RoleRefusalError } from '@/lib/role-gate'
 import { Trans, useTranslation } from 'react-i18next'
 import Logo from '@/shared/Logo'
 import Link from 'next/link'
@@ -46,6 +47,7 @@ function LoginContent() {
     user,
     isLoading,
     logout,
+    roleRefusal,
   } = useAuth()
 
   const [step, setStep] = useState<Step>('choice')
@@ -72,12 +74,21 @@ function LoginContent() {
     if (key) setError(t(key))
   }, [oauthErrorRaw, t])
 
+  // A sign-in refused for the wrong account type (plan auth/2), including the
+  // hosted-OAuth redirect that lands here.
+  useEffect(() => {
+    if (roleRefusal) setError(t(`errors:${roleRefusal}`))
+  }, [roleRefusal, t])
+
+  // One account, one side: an account already signed in as another type
+  // (session from before) is signed out here instead of let through.
+  const sideGate = user ? roleGate(user.userType, isMover ? 'mover' : 'client') : null
+
   // Redirect if authenticated AND phone is verified (useEffect avoids render-time setState)
   useEffect(() => {
     if (!isLoading && isAuthenticated && user?.phoneVerified) {
-      // Block client accounts from accessing the mover portal
-      if (isMover && user.userType === 'client') {
-        setError(t('auth:login.clientInMoverPortal.error'))
+      if (sideGate && !sideGate.allowed) {
+        setError(t(`errors:${sideGate.code}`))
         logout()
         return
       }
@@ -93,7 +104,7 @@ function LoginContent() {
   }, [isLoading, isAuthenticated, user, step])
 
   // Show redirecting state (only if the user type matches the page type)
-  if (!isLoading && isAuthenticated && user?.phoneVerified && !(isMover && user.userType === 'client')) {
+  if (!isLoading && isAuthenticated && user?.phoneVerified && sideGate?.allowed) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center">
         <div className="text-center space-y-2">
@@ -121,10 +132,14 @@ function LoginContent() {
     setError('')
     setIsSubmitting(true)
     try {
-      await loginWithEmail(email, password)
+      await loginWithEmail(email, password, isMover ? 'mover' : 'client')
       // After login, auth context reloads. If phone not verified,
       // the useEffect above will push to phone-enter step.
     } catch (err: unknown) {
+      if (err instanceof RoleRefusalError) {
+        setError(t(`errors:${err.code}`))
+        return
+      }
       const message = err instanceof Error ? err.message : t('auth:login.failed.error')
       if (message.includes('Invalid credentials')) {
         setError(t('auth:login.invalidCredentials.error'))

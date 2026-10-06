@@ -109,12 +109,15 @@
     "userUnauthorized": "You are not authorized. Please sign in again."
   },
   "auth": {
+    "adminAccount": "This is an admin account. Admin accounts can only sign in to the admin dashboard.",
     "forbidden": "Forbidden",
     "initSessionFailed": "Failed to initialize session",
     "noActiveSession": "No active session",
     "noSession": {
       "error": "No authenticated user"
     },
+    "registeredAsClient": "This email is registered to a client account and can't be used to sign in as a mover. Sign in with your mover account, or use a different email to become a mover.",
+    "registeredAsMover": "This email is registered to a mover account and can't be used to book moves. Sign in with your client account, or use a different email.",
     "setPhoneFailed": "Failed to set phone number",
     "syncFailed": "Failed to sync user",
     "unauthorized": "Unauthorized"

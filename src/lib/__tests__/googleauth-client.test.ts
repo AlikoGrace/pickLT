@@ -79,6 +79,11 @@ describe('googleAuthErrorKey', () => {
       'web:auth.google.notConfigured.error',
     )
   })
+  it('shows the wrong-account-type message for a role refusal (plan auth/2)', () => {
+    expect(googleAuthErrorKey(new GoogleAuthError('x', 'auth.registeredAsClient', 403))).toBe('errors:auth.registeredAsClient')
+    expect(googleAuthErrorKey(new GoogleAuthError('x', 'auth.registeredAsMover', 403))).toBe('errors:auth.registeredAsMover')
+    expect(googleAuthErrorKey(new GoogleAuthError('x', 'auth.adminAccount', 403))).toBe('errors:auth.adminAccount')
+  })
   it('falls back to the generic OAuth message for everything else', () => {
     expect(googleAuthErrorKey(new GoogleAuthError('x', 'oauth.signInFailed', 401))).toBe('auth:login.oauthFailed.error')
     expect(googleAuthErrorKey(new Error('network'))).toBe('auth:login.oauthFailed.error')

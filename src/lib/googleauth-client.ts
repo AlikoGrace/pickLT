@@ -14,6 +14,7 @@
 import { ExecutionMethod } from 'appwrite'
 import { functions } from '@/lib/appwrite'
 import { APPWRITE } from '@/lib/constants'
+import { isRoleRefusalCode } from '@/lib/role-gate'
 
 export type GoogleAuthUserType = 'client' | 'mover'
 
@@ -110,6 +111,8 @@ export async function exchangeGoogleIdToken(
  */
 export function googleAuthErrorKey(err: unknown): string {
   const fnCode = err instanceof GoogleAuthError ? err.fnCode : null
+  // Wrong account type for this side (plan auth/2).
+  if (isRoleRefusalCode(fnCode)) return `errors:${fnCode}`
   if (fnCode === 'oauth.emailNotVerified') return 'web:auth.google.emailNotVerified.error'
   if (fnCode === 'oauth.clientNotAuthorized' || fnCode === 'oauth.notConfigured') {
     return 'web:auth.google.notConfigured.error'

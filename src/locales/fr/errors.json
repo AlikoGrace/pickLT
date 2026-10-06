@@ -109,12 +109,15 @@
     "userUnauthorized": "Vous n’êtes pas autorisé. Veuillez vous reconnecter."
   },
   "auth": {
+    "adminAccount": "Ceci est un compte administrateur. Les comptes administrateur peuvent uniquement se connecter au tableau de bord d'administration.",
     "forbidden": "Accès refusé",
     "initSessionFailed": "Échec de l’ouverture de session",
     "noActiveSession": "Aucune session active",
     "noSession": {
       "error": "Aucun utilisateur connecté"
     },
+    "registeredAsClient": "Cette adresse e-mail est liée à un compte client et ne peut pas servir à se connecter en tant que déménageur. Connectez-vous avec votre compte déménageur ou utilisez une autre adresse e-mail pour devenir déménageur.",
+    "registeredAsMover": "Cette adresse e-mail est liée à un compte déménageur et ne peut pas servir à réserver des déménagements. Connectez-vous avec votre compte client ou utilisez une autre adresse e-mail.",
     "setPhoneFailed": "Échec de l’enregistrement du numéro de téléphone",
     "syncFailed": "Échec de la synchronisation de l’utilisateur",
     "unauthorized": "Non autorisé"

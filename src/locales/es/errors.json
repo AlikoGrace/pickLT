@@ -109,12 +109,15 @@
     "userUnauthorized": "No tienes autorización. Vuelve a iniciar sesión."
   },
   "auth": {
+    "adminAccount": "Esta es una cuenta de administrador. Las cuentas de administrador solo pueden iniciar sesión en el panel de administración.",
     "forbidden": "Acceso denegado",
     "initSessionFailed": "No se ha podido inicializar la sesión",
     "noActiveSession": "No hay ninguna sesión activa",
     "noSession": {
       "error": "No hay ningún usuario autenticado"
     },
+    "registeredAsClient": "Este correo está registrado en una cuenta de cliente y no se puede usar para iniciar sesión como transportista. Inicia sesión con tu cuenta de transportista o usa otro correo para hacerte transportista.",
+    "registeredAsMover": "Este correo está registrado en una cuenta de transportista y no se puede usar para reservar mudanzas. Inicia sesión con tu cuenta de cliente o usa otro correo.",
     "setPhoneFailed": "No se ha podido guardar el número de teléfono",
     "syncFailed": "No se ha podido sincronizar el usuario",
     "unauthorized": "No autorizado"

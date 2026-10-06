@@ -4,6 +4,7 @@ import CountrySelect, { countryBlocked } from '@/components/CountrySelect'
 import GoogleSignInButton from '@/components/GoogleSignInButton'
 import { PENDING_COUNTRY_KEY, useAuth } from '@/context/auth'
 import { localizedCountryName } from '@/lib/countryCode'
+import { roleGate } from '@/lib/role-gate'
 import { Trans, useTranslation } from 'react-i18next'
 import Logo from '@/shared/Logo'
 import Link from 'next/link'
@@ -51,6 +52,8 @@ function SignupContent() {
     isAuthenticated,
     user,
     isLoading,
+    logout,
+    roleRefusal,
   } = useAuth()
 
   const [step, setStep] = useState<Step>('choice')
@@ -94,12 +97,22 @@ function SignupContent() {
     return isMover ? '/dashboard' : '/'
   }
 
+  // A sign-in refused for the wrong account type (plan auth/2), including the
+  // hosted-OAuth redirect that lands here.
+  useEffect(() => {
+    if (roleRefusal) setError(t(`errors:${roleRefusal}`))
+  }, [roleRefusal, t])
+
+  // One account, one side: an account already signed in as another type is
+  // signed out here instead of let through.
+  const sideGate = user ? roleGate(user.userType, isMover ? 'mover' : 'client') : null
+
   // Redirect if authenticated AND phone is verified
   useEffect(() => {
     if (!isLoading && isAuthenticated && user?.phoneVerified) {
-      // Block client accounts from accessing the mover signup flow
-      if (isMover && user.userType === 'client') {
-        setError(t('auth:login.clientInMoverPortal.error'))
+      if (sideGate && !sideGate.allowed) {
+        setError(t(`errors:${sideGate.code}`))
+        logout()
         return
       }
       router.replace(getRedirectUrl())
@@ -114,7 +127,7 @@ function SignupContent() {
   }, [isLoading, isAuthenticated, user, step])
 
   // Show redirecting state (only if the user type matches the page type)
-  if (!isLoading && isAuthenticated && user?.phoneVerified && !(isMover && user.userType === 'client')) {
+  if (!isLoading && isAuthenticated && user?.phoneVerified && sideGate?.allowed) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center">
         <div className="text-center space-y-2">

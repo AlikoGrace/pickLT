@@ -109,12 +109,15 @@
     "userUnauthorized": "Yetkiniz yok. Lütfen tekrar giriş yapın."
   },
   "auth": {
+    "adminAccount": "Bu bir yönetici hesabı. Yönetici hesapları yalnızca yönetim paneline giriş yapabilir.",
     "forbidden": "Erişim reddedildi",
     "initSessionFailed": "Oturum başlatılamadı",
     "noActiveSession": "Aktif oturum yok",
     "noSession": {
       "error": "Kimliği doğrulanmış kullanıcı yok"
     },
+    "registeredAsClient": "Bu e-posta bir müşteri hesabına kayıtlı ve nakliyeci olarak giriş yapmak için kullanılamaz. Nakliyeci hesabınızla giriş yapın veya nakliyeci olmak için farklı bir e-posta kullanın.",
+    "registeredAsMover": "Bu e-posta bir nakliyeci hesabına kayıtlı ve taşınma rezervasyonu yapmak için kullanılamaz. Müşteri hesabınızla giriş yapın veya farklı bir e-posta kullanın.",
     "setPhoneFailed": "Telefon numarası kaydedilemedi",
     "syncFailed": "Kullanıcı eşitlenemedi",
     "unauthorized": "Yetkisiz erişim"

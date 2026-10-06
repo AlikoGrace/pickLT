@@ -7,6 +7,7 @@ import { userDocPermissions } from '@/lib/doc-permissions'
 import { isCountryCode } from '@/lib/countryCode'
 import { writeDroppingUnknownAttributes } from '@/lib/appwrite-write'
 import { Query } from 'node-appwrite'
+import { roleGate } from '@/lib/role-gate'
 
 /**
  * POST /api/auth/sync-user
@@ -18,8 +19,10 @@ import { Query } from 'node-appwrite'
  *
  * Identity and the verification flags come from the session and the Appwrite
  * Auth record, never from the request body: the body is attacker-controlled and
- * this route writes with the admin key. `userType` is honoured only when
- * creating the document; `countryCode` (ISO2, plan wave-2026-10/4 C7 — the
+ * this route writes with the admin key. `userType` is the side the caller
+ * signs in to: it sets the role when creating the document, and an existing
+ * account of another role is refused (403 `{ code }`, plan auth/2) before
+ * anything is written; `countryCode` (ISO2, plan wave-2026-10/4 C7 — the
  * country the client chose at sign-up or in the account page) is accepted on
  * create and, when the caller sets it, on update.
  */
@@ -95,9 +98,14 @@ export async function POST(req: NextRequest) {
         'sync-user',
       )
     } else {
+      const gate = roleGate(userDoc.userType, requestedUserType)
+      if (!gate.allowed) {
+        return NextResponse.json({ error: t(`errors:${gate.code}`), code: gate.code }, { status: 403 })
+      }
       // Update existing user with latest auth data
       userDoc = await writeDroppingUnknownAttributes(
         {
+          ...(gate.backfill ? { userType: gate.backfill } : {}),
           email,
           fullName: fullName || userDoc.fullName,
           phone: phone || userDoc.phone,

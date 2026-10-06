@@ -136,6 +136,14 @@ export default async ({ req, res, log, error }) => {
         403,
       );
     }
+    // A client account stays a client (plan auth/2: one account, one app), as
+    // the web's submit-profile route already enforces.
+    if (existingUser?.userType === 'client') {
+      return res.json(
+        { error: 'Client accounts cannot register as movers. Use a separate account.', fnCode: 'mover.clientCannotConvert' },
+        403,
+      );
+    }
     const displayName =
       (typeof fullName === 'string' && fullName.trim()) || existingUser?.fullName || null;
     const photoUrl = selfiePhoto || existingUser?.profilePhoto || null;
