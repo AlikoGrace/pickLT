@@ -13,6 +13,7 @@ import Link from 'next/link'
 import { FC } from 'react'
 import { formatDayMonth, formatMoney } from '@/lib/format'
 import { moveSubtitle } from '@/lib/move-subtitle'
+import { movePhotoUrl } from '@/lib/move-photo-url'
 import { useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
 
@@ -97,13 +98,13 @@ const MoveCard: FC<MoveCardProps> = ({ size = 'default', className = '', data })
 
   const listingHref = `/move-details/${handle}`
 
-  // Create gallery images array for slider — strip mode=admin from Appwrite URLs
+  // Create gallery images array for slider. Rows hold bare Appwrite file ids
+  // (next/image throws on those), so resolve to URLs and strip mode=admin.
   const cleanUrl = (url: string) => url.replace(/[&?]mode=admin/g, '')
-  const galleryImgs = coverPhotoId
-    ? [cleanUrl(coverPhotoId), ...galleryPhotoIds.map(cleanUrl)]
-    : galleryPhotoIds.length > 0
-      ? galleryPhotoIds.map(cleanUrl)
-      : []
+  const galleryImgs = [coverPhotoId, ...galleryPhotoIds]
+    .map(movePhotoUrl)
+    .filter((url): url is string => !!url)
+    .map(cleanUrl)
 
   const renderSliderGallery = () => {
     return (

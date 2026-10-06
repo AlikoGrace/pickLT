@@ -241,6 +241,16 @@
         "fallback": {
           "body": "Llamada en la app: toca para volver"
         }
+      },
+      "fullScreen": {
+        "title": "Que las llamadas suenen como una llamada de teléfono",
+        "body": "Activa las notificaciones a pantalla completa para PickLT para que una llamada entrante en la app se quede en la pantalla hasta que contestes o la rechaces.",
+        "open": {
+          "cta": "Abrir ajustes"
+        },
+        "later": {
+          "cta": "Ahora no"
+        }
       }
     },
     "moveComplete": {
@@ -405,6 +415,11 @@
     "markAllError": {
       "body": "Puede que algunos elementos sigan sin leer.",
       "title": "No se pudo marcar todo como leído"
+    },
+    "channel": {
+      "default": {
+        "label": "Notificaciones"
+      }
     }
   },
   "payment": {

@@ -241,6 +241,16 @@
         "fallback": {
           "body": "Połączenie w aplikacji – dotknij, aby wrócić"
         }
+      },
+      "fullScreen": {
+        "title": "Niech połączenia dzwonią jak zwykły telefon",
+        "body": "Włącz powiadomienia pełnoekranowe dla PickLT, aby przychodzące połączenie w aplikacji zostało na ekranie, dopóki go nie odbierzesz lub nie odrzucisz.",
+        "open": {
+          "cta": "Otwórz ustawienia"
+        },
+        "later": {
+          "cta": "Nie teraz"
+        }
       }
     },
     "moveComplete": {
@@ -405,6 +415,11 @@
     "markAllError": {
       "body": "Niektóre pozycje mogą pozostać nieprzeczytane.",
       "title": "Nie udało się oznaczyć wszystkich jako przeczytane"
+    },
+    "channel": {
+      "default": {
+        "label": "Powiadomienia"
+      }
     }
   },
   "payment": {

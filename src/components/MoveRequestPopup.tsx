@@ -30,13 +30,11 @@ import { Trans, useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
 import { formatSeconds, formatWeightKg } from '@/lib/format'
 import { crewLabel } from '@/components/mover/crewLabel'
+import { movePhotoUrl } from '@/lib/move-photo-url'
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || ''
 const MOVE_REQUESTS_COLLECTION = process.env.NEXT_PUBLIC_COLLECTION_MOVE_REQUESTS || ''
 const MOVES_COLLECTION = process.env.NEXT_PUBLIC_COLLECTION_MOVES || ''
-const BUCKET_MOVE_PHOTOS = process.env.NEXT_PUBLIC_BUCKET_MOVE_PHOTOS || ''
-const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || ''
-const PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || ''
 
 interface MoveDetails {
   $id: string
@@ -162,15 +160,6 @@ const formatDuration = (seconds: number | null): string => {
   const minutes = Math.ceil((seconds % 3600) / 60)
   if (hours > 0) return `${hours}h ${minutes}min`
   return `${minutes} min`
-}
-
-const getPhotoUrl = (fileIdOrUrl: string): string => {
-  if (!fileIdOrUrl) return ''
-  // If already a full URL, return as-is
-  if (fileIdOrUrl.startsWith('http://') || fileIdOrUrl.startsWith('https://')) return fileIdOrUrl
-  // Otherwise construct from file ID
-  if (!APPWRITE_ENDPOINT || !PROJECT_ID || !BUCKET_MOVE_PHOTOS) return ''
-  return `${APPWRITE_ENDPOINT}/storage/buckets/${BUCKET_MOVE_PHOTOS}/files/${fileIdOrUrl}/view?project=${PROJECT_ID}`
 }
 
 const InfoRow = ({ label, value, icon: Icon }: { label: string; value: React.ReactNode; icon?: React.ComponentType<{ className?: string }> }) => (
@@ -528,10 +517,11 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
 
     // Build gallery images from the move
     const galleryImages: string[] = []
-    if (move?.coverPhotoId) galleryImages.push(getPhotoUrl(move.coverPhotoId))
+    const coverUrl = movePhotoUrl(move?.coverPhotoId)
+    if (coverUrl) galleryImages.push(coverUrl)
     if (move?.galleryPhotoIds) {
       move.galleryPhotoIds.forEach((id) => {
-        const url = getPhotoUrl(id)
+        const url = movePhotoUrl(id)
         if (url) galleryImages.push(url)
       })
     }

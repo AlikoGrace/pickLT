@@ -241,6 +241,16 @@
         "fallback": {
           "body": "Appel dans l’application – touchez pour revenir"
         }
+      },
+      "fullScreen": {
+        "title": "Faire sonner les appels comme un vrai appel",
+        "body": "Activez les notifications en plein écran pour PickLT afin qu’un appel entrant dans l’application reste à l’écran jusqu’à ce que vous répondiez ou refusiez.",
+        "open": {
+          "cta": "Ouvrir les réglages"
+        },
+        "later": {
+          "cta": "Plus tard"
+        }
       }
     },
     "moveComplete": {
@@ -405,6 +415,11 @@
     "markAllError": {
       "body": "Certains éléments peuvent rester non lus.",
       "title": "Impossible de tout marquer comme lu"
+    },
+    "channel": {
+      "default": {
+        "label": "Notifications"
+      }
     }
   },
   "payment": {

@@ -269,6 +269,44 @@ const MoverDashboardLayout = ({ children }: Props) => {
     router.push('/')
   }
 
+  // Profile gate: a mover-side user with no mover profile yet belongs on
+  // /complete-profile (unless they are already there).
+  const hasCompletedProfile = !!user?.moverDetails?.profileId
+  const isOnCompleteProfilePage = pathname === '/complete-profile'
+
+  // Unverified movers are kept off these pages, and off job-details.
+  const restrictedPaths = ['/active-move', '/available-moves', '/scheduled-moves', '/my-crew', '/earnings']
+  const isOnRestrictedPage = restrictedPaths.some(
+    (p) => pathname === p || pathname.startsWith(p + '/')
+  )
+  const isOnJobDetailsPage = pathname.startsWith('/job-details/')
+
+  // New work needs a service-ready vehicle too (master D4). A mover mid-move
+  // keeps `/active-move`; the browse page is what hands out new moves.
+  const isOnVehiclePages = pathname === '/vehicle' || pathname.startsWith('/vehicle/')
+  const serviceReadyPaths = ['/available-moves']
+  const isOnServiceReadyPage = serviceReadyPaths.some((p) => pathname === p || pathname.startsWith(p + '/'))
+
+  // Where this page must send the user instead (null: stay). Decided while
+  // rendering, performed in the effect below: navigating during render updates
+  // the Router mid-render (React's "Cannot update a component while rendering").
+  let redirectTo: string | null = null
+  if (!isLoading) {
+    if (!user || user.userType === 'client') {
+      // Signed out, or a client account: mover login.
+      redirectTo = `/login?type=mover&redirect=${encodeURIComponent(pathname)}`
+    } else if (!hasCompletedProfile && !isOnCompleteProfilePage) {
+      redirectTo = '/complete-profile'
+    } else if (hasCompletedProfile && !isVerified && !isOnCompleteProfilePage && (isOnRestrictedPage || isOnJobDetailsPage)) {
+      redirectTo = '/dashboard'
+    } else if (hasCompletedProfile && isVerified && !isServiceReady && isOnServiceReadyPage) {
+      redirectTo = '/dashboard'
+    }
+  }
+  useEffect(() => {
+    if (redirectTo) router.replace(redirectTo)
+  }, [redirectTo, router])
+
   // While auth is still loading, show a full-screen spinner
   if (isLoading) {
     return (
@@ -278,50 +316,7 @@ const MoverDashboardLayout = ({ children }: Props) => {
     )
   }
 
-  // Redirect unauthenticated users to mover login
-  if (!user) {
-    router.replace(`/login?type=mover&redirect=${encodeURIComponent(pathname)}`)
-    return null
-  }
-
-  // Block client accounts from accessing the mover dashboard
-  if (user.userType === 'client') {
-    router.replace(`/login?type=mover&redirect=${encodeURIComponent(pathname)}`)
-    return null
-  }
-
-  // Profile gate: if the user is on the mover side but has no mover profile yet,
-  // redirect them to /complete-profile (unless they are already there).
-  const hasCompletedProfile = !!user?.moverDetails?.profileId
-  const isOnCompleteProfilePage = pathname === '/complete-profile'
-
-  if (!hasCompletedProfile && !isOnCompleteProfilePage) {
-    router.replace('/complete-profile')
-    return null
-  }
-
-  // Redirect unverified movers away from restricted pages
-  const restrictedPaths = ['/active-move', '/available-moves', '/scheduled-moves', '/my-crew', '/earnings']
-  const isOnRestrictedPage = restrictedPaths.some(
-    (p) => pathname === p || pathname.startsWith(p + '/')
-  )
-  // Also block job-details for unverified movers
-  const isOnJobDetailsPage = pathname.startsWith('/job-details/')
-
-  if (hasCompletedProfile && !isVerified && !isOnCompleteProfilePage && (isOnRestrictedPage || isOnJobDetailsPage)) {
-    router.replace('/dashboard')
-    return null
-  }
-
-  // New work needs a service-ready vehicle too (master D4). A mover mid-move
-  // keeps `/active-move`; the browse page is what hands out new moves.
-  const isOnVehiclePages = pathname === '/vehicle' || pathname.startsWith('/vehicle/')
-  const serviceReadyPaths = ['/available-moves']
-  const isOnServiceReadyPage = serviceReadyPaths.some((p) => pathname === p || pathname.startsWith(p + '/'))
-  if (hasCompletedProfile && isVerified && !isServiceReady && isOnServiceReadyPage) {
-    router.replace('/dashboard')
-    return null
-  }
+  if (!user || redirectTo) return null
 
   // The rental driver's daily / post-move SAME-CHANGE prompt. From server
   // state, so it survives a reload; hidden on the vehicle pages (where the

@@ -40,18 +40,8 @@ import { homeTypeLabel, moveSubtitle, moveTypeLabel } from '@/lib/move-subtitle'
 import { Trans, useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
 import { crewLabel } from '@/components/mover/crewLabel'
+import { movePhotoUrl } from '@/lib/move-photo-url'
 import { additionalServiceLabel, arrivalWindowLabel, dropoffParkingLabel, flexibilityLabel, floorLevelLabel, joinLabels, packingLevelLabel, packingMaterialLabel, parkingLabel, paymentMethodLabel, vehicleTypeLabel } from '@/lib/enum-labels'
-
-const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || ''
-const PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || ''
-const BUCKET_MOVE_PHOTOS = process.env.NEXT_PUBLIC_BUCKET_MOVE_PHOTOS || ''
-
-const getPhotoUrl = (fileIdOrUrl: string): string => {
-  if (!fileIdOrUrl) return ''
-  if (fileIdOrUrl.startsWith('http://') || fileIdOrUrl.startsWith('https://')) return fileIdOrUrl
-  if (!APPWRITE_ENDPOINT || !PROJECT_ID || !BUCKET_MOVE_PHOTOS) return ''
-  return `${APPWRITE_ENDPOINT}/storage/buckets/${BUCKET_MOVE_PHOTOS}/files/${fileIdOrUrl}/view?project=${PROJECT_ID}`
-}
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || ''
 const MOVES_COLLECTION = process.env.NEXT_PUBLIC_COLLECTION_MOVES || ''
@@ -181,7 +171,7 @@ const InfoRow = ({ label, value, icon: Icon }: { label: string; value: React.Rea
     )}
     <div className="flex-1">
       <p className="text-sm text-neutral-500 dark:text-neutral-400">{label}</p>
-      <p className="font-medium text-neutral-900 dark:text-neutral-100">{value}</p>
+      <div className="font-medium text-neutral-900 dark:text-neutral-100">{value}</div>
     </div>
   </div>
 )
@@ -548,12 +538,12 @@ export default function MoverMoveDetailsPage() {
 
   const galleryImgs: string[] = []
   if (coverPhotoId) {
-    const url = getPhotoUrl(coverPhotoId)
+    const url = movePhotoUrl(coverPhotoId)
     if (url) galleryImgs.push(url)
   }
   if (galleryPhotoIds.length > 0) {
     galleryPhotoIds.forEach((id) => {
-      const url = getPhotoUrl(id)
+      const url = movePhotoUrl(id)
       if (url) galleryImgs.push(url)
     })
   }
@@ -791,7 +781,7 @@ export default function MoverMoveDetailsPage() {
         {/* Right sidebar - Summary & Contact */}
         <div className="space-y-6">
           {/* Earnings Summary */}
-          <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm sticky top-24">
+          <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm">
             <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
               {t('moves:summary.title')}
             </h3>

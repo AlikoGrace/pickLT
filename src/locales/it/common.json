@@ -241,6 +241,16 @@
         "fallback": {
           "body": "Chiamata nell’app: tocca per tornare"
         }
+      },
+      "fullScreen": {
+        "title": "Fai squillare le chiamate come una telefonata",
+        "body": "Attiva le notifiche a schermo intero per PickLT, così una chiamata in arrivo nell’app resta sullo schermo finché non rispondi o rifiuti.",
+        "open": {
+          "cta": "Apri impostazioni"
+        },
+        "later": {
+          "cta": "Non ora"
+        }
       }
     },
     "moveComplete": {
@@ -405,6 +415,11 @@
     "markAllError": {
       "body": "Alcuni elementi potrebbero risultare ancora non letti.",
       "title": "Impossibile segnare tutte come lette"
+    },
+    "channel": {
+      "default": {
+        "label": "Notifiche"
+      }
     }
   },
   "payment": {

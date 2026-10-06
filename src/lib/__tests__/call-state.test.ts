@@ -30,11 +30,22 @@ function row(over: Partial<CallRow> = {}): CallRow {
     answeredAt: null,
     endedAt: null,
     durationSec: null,
+    callerName: null,
+    callerPhoto: null,
     ...over,
   }
 }
 
 describe('toCallRow', () => {
+  it('carries the caller name and photo, null when absent or empty', () => {
+    expect(toCallRow({ ...row(), callerName: 'Mensah Sabbah', callerPhoto: 'https://p/m.jpg' })).toMatchObject({
+      callerName: 'Mensah Sabbah',
+      callerPhoto: 'https://p/m.jpg',
+    })
+    const { callerName: _n, callerPhoto: _p, ...older } = row()
+    expect(toCallRow(older)).toMatchObject({ callerName: null, callerPhoto: null })
+    expect(toCallRow({ ...row(), callerName: '' })?.callerName).toBeNull()
+  })
   it('accepts a function / realtime payload', () => {
     const c = toCallRow({ ...row(), $collectionId: 'calls', endedBy: null })
     expect(c).toEqual(row())

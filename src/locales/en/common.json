@@ -241,6 +241,16 @@
         "fallback": {
           "body": "In-app call — tap to return"
         }
+      },
+      "fullScreen": {
+        "title": "Let calls ring like a phone call",
+        "body": "Turn on full-screen notifications for PickLT so an incoming in-app call stays on your screen until you answer or decline.",
+        "open": {
+          "cta": "Open settings"
+        },
+        "later": {
+          "cta": "Not now"
+        }
       }
     },
     "moveComplete": {
@@ -405,6 +415,11 @@
     "markAllError": {
       "body": "Some items may still be unread.",
       "title": "Couldn’t mark all as read"
+    },
+    "channel": {
+      "default": {
+        "label": "Notifications"
+      }
     }
   },
   "payment": {

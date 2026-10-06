@@ -241,6 +241,16 @@
         "fallback": {
           "body": "Anruf in der App – zum Zurückkehren tippen"
         }
+      },
+      "fullScreen": {
+        "title": "Anrufe wie ein Telefonanruf klingeln lassen",
+        "body": "Aktivieren Sie Vollbild-Benachrichtigungen für PickLT, damit ein eingehender Anruf in der App auf dem Bildschirm bleibt, bis Sie annehmen oder ablehnen.",
+        "open": {
+          "cta": "Einstellungen öffnen"
+        },
+        "later": {
+          "cta": "Nicht jetzt"
+        }
       }
     },
     "moveComplete": {
@@ -405,6 +415,11 @@
     "markAllError": {
       "body": "Einige Einträge sind möglicherweise noch ungelesen.",
       "title": "Nicht alle konnten als gelesen markiert werden"
+    },
+    "channel": {
+      "default": {
+        "label": "Benachrichtigungen"
+      }
     }
   },
   "payment": {

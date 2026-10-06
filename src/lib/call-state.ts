@@ -25,6 +25,9 @@ export interface CallRow {
   answeredAt: string | null
   endedAt: string | null
   durationSec: number | null
+  /** Who rang, written by `start` (null on rows from before it was). */
+  callerName: string | null
+  callerPhoto: string | null
 }
 
 export const LIVE_CALL_STATUSES: readonly CallStatus[] = ['ringing', 'accepted']
@@ -70,6 +73,8 @@ export function toCallRow(raw: unknown): CallRow | null {
     ringExpiresAt: str(r.ringExpiresAt),
     answeredAt: str(r.answeredAt),
     endedAt: str(r.endedAt),
+    callerName: str(r.callerName),
+    callerPhoto: str(r.callerPhoto),
     durationSec: typeof r.durationSec === 'number' && Number.isFinite(r.durationSec) ? r.durationSec : null,
   }
 }

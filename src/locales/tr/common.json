@@ -241,6 +241,16 @@
         "fallback": {
           "body": "Uygulama içi arama – dönmek için dokunun"
         }
+      },
+      "fullScreen": {
+        "title": "Aramalar telefon araması gibi çalsın",
+        "body": "Uygulama içi gelen bir arama, yanıtlayana veya reddedene kadar ekranda kalsın diye PickLT için tam ekran bildirimleri açın.",
+        "open": {
+          "cta": "Ayarları aç"
+        },
+        "later": {
+          "cta": "Şimdi değil"
+        }
       }
     },
     "moveComplete": {
@@ -405,6 +415,11 @@
     "markAllError": {
       "body": "Bazı öğeler hâlâ okunmamış olabilir.",
       "title": "Tümü okundu olarak işaretlenemedi"
+    },
+    "channel": {
+      "default": {
+        "label": "Bildirimler"
+      }
     }
   },
   "payment": {

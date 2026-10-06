@@ -241,6 +241,16 @@
         "fallback": {
           "body": "Gesprek in de app – tik om terug te gaan"
         }
+      },
+      "fullScreen": {
+        "title": "Laat oproepen overgaan als een telefoongesprek",
+        "body": "Zet meldingen op volledig scherm aan voor PickLT, zodat een inkomende oproep in de app op je scherm blijft tot je opneemt of weigert.",
+        "open": {
+          "cta": "Instellingen openen"
+        },
+        "later": {
+          "cta": "Niet nu"
+        }
       }
     },
     "moveComplete": {
@@ -405,6 +415,11 @@
     "markAllError": {
       "body": "Sommige meldingen zijn mogelijk nog ongelezen.",
       "title": "Kon niet alles als gelezen markeren"
+    },
+    "channel": {
+      "default": {
+        "label": "Meldingen"
+      }
     }
   },
   "payment": {

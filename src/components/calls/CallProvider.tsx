@@ -343,6 +343,12 @@ export default function CallProvider({ children }: { children: ReactNode }) {
 
       // A new ring. One call at a time: the server refuses `busy`, this is belt and braces.
       if (isIncomingRing(call, me) && !(a && !a.endedKey) && !inc) {
+        // The row names the caller; the lookup only covers rows from before it did.
+        const named = call.callerName?.trim()
+        if (named) {
+          setIncoming({ call, name: named })
+          return
+        }
         const fallback = t(call.callerRole === 'mover' ? 'web:call.party.mover' : 'web:call.party.client')
         setIncoming({ call, name: fallback })
         resolveName(call).then((name) => {

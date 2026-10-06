@@ -23,17 +23,7 @@ import { useTranslation } from 'react-i18next'
 import { arrivalWindowLabel, vehicleTypeLabel } from '@/lib/enum-labels'
 import { moverPayoutEur } from '@/lib/moverPayout'
 import { crewLabel } from '@/components/mover/crewLabel'
-
-const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || ''
-const PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || ''
-const BUCKET_MOVE_PHOTOS = process.env.NEXT_PUBLIC_BUCKET_MOVE_PHOTOS || ''
-
-const getPhotoUrl = (fileIdOrUrl: string): string => {
-  if (!fileIdOrUrl) return ''
-  if (fileIdOrUrl.startsWith('http://') || fileIdOrUrl.startsWith('https://')) return fileIdOrUrl
-  if (!APPWRITE_ENDPOINT || !PROJECT_ID || !BUCKET_MOVE_PHOTOS) return ''
-  return `${APPWRITE_ENDPOINT}/storage/buckets/${BUCKET_MOVE_PHOTOS}/files/${fileIdOrUrl}/view?project=${PROJECT_ID}`
-}
+import { movePhotoUrl } from '@/lib/move-photo-url'
 
 interface NearbyMove {
   id: string
@@ -349,9 +339,9 @@ const AvailableMovesPage = () => {
                   >
                     {/* Photo strip */}
                     <div className="relative h-32 bg-neutral-100 dark:bg-neutral-700 flex items-center justify-center">
-                      {selectedMove.coverPhotoId ? (
+                      {movePhotoUrl(selectedMove.coverPhotoId) ? (
                         <Image
-                          src={getPhotoUrl(selectedMove.coverPhotoId)}
+                          src={movePhotoUrl(selectedMove.coverPhotoId) ?? ''}
                           alt={t('booking:photos.item.a11y')}
                           fill
                           className="object-cover"
@@ -421,9 +411,9 @@ const AvailableMovesPage = () => {
                 >
                   {/* Card Header */}
                   <div className="relative h-32 bg-neutral-100 dark:bg-neutral-700 flex items-center justify-center overflow-hidden">
-                    {move.coverPhotoId ? (
+                    {movePhotoUrl(move.coverPhotoId) ? (
                       <Image
-                        src={getPhotoUrl(move.coverPhotoId)}
+                        src={movePhotoUrl(move.coverPhotoId) ?? ''}
                         alt={t('booking:photos.item.a11y')}
                         fill
                         className="object-cover"
