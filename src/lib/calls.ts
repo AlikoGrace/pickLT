@@ -43,6 +43,18 @@ export async function startCall(moveId: string): Promise<{ call: CallRow; caller
   return { call: callFrom(res), callerName: typeof res.callerName === 'string' ? res.callerName : '' }
 }
 
+/**
+ * The other party on this move as the call bar names them — for when the page
+ * has no name (older moves carry no contact name). Empty strings when unknown.
+ */
+export async function fetchCallPeer(moveId: string): Promise<{ name: string; photo: string }> {
+  const res = await execute(CALLS_FUNCTION, { action: 'peer', moveId })
+  return {
+    name: typeof res.name === 'string' ? res.name : '',
+    photo: typeof res.photo === 'string' ? res.photo : '',
+  }
+}
+
 export type CallAction = 'accept' | 'decline' | 'cancel' | 'end'
 
 export async function callAction(action: CallAction, callId: string): Promise<CallRow> {

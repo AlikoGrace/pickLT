@@ -805,6 +805,7 @@ const InstantMovePage = () => {
               moveStatus={moveData?.status}
               hasCounterpart={!!mover}
               counterpartName={mover.name}
+              fallbackName={t('web:call.party.mover')}
               className="w-full"
             />
             <ButtonSecondary onClick={handleCallMover} className="flex-1 !py-2">

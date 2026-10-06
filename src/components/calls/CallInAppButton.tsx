@@ -1,7 +1,9 @@
 'use client'
 
 import { canCallOnMove } from '@/lib/call-state'
+import { fetchCallPeer } from '@/lib/calls'
 import { PhoneIcon } from '@heroicons/react/24/outline'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useCall } from './CallProvider'
 
@@ -11,8 +13,13 @@ interface Props {
   moveStatus: string | null | undefined
   /** Client side: a mover is assigned. Mover side: this mover is the assigned one. */
   hasCounterpart: boolean
-  /** Shown on the call bar while it rings. */
-  counterpartName: string
+  /**
+   * Shown on the call bar while it rings. Empty: the `calls` function names the
+   * other party (older moves carry no contact name), else `fallbackName`.
+   */
+  counterpartName: string | null | undefined
+  /** The role word used when nobody can be named ("Client", "Your mover"). */
+  fallbackName: string
   className?: string
   /** `solid` for a lone primary action, `light` beside other secondary buttons. */
   variant?: 'solid' | 'light'
@@ -28,12 +35,28 @@ export default function CallInAppButton({
   moveStatus,
   hasCounterpart,
   counterpartName,
+  fallbackName,
   className = '',
   variant = 'solid',
 }: Props) {
   const { t } = useTranslation()
   const { available, busy, startCall } = useCall()
+  const [peerName, setPeerName] = useState('')
+  const needsPeer = available && !!moveId && !counterpartName
+
+  useEffect(() => {
+    if (!needsPeer || !moveId) return
+    let cancelled = false
+    fetchCallPeer(moveId)
+      .then((p) => !cancelled && setPeerName(p.name))
+      .catch(() => undefined)
+    return () => {
+      cancelled = true
+    }
+  }, [needsPeer, moveId])
+
   if (!available || !moveId || !canCallOnMove(moveStatus, hasCounterpart)) return null
+  const name = counterpartName || peerName || fallbackName
 
   const look =
     variant === 'solid'
@@ -43,7 +66,7 @@ export default function CallInAppButton({
   return (
     <button
       type="button"
-      onClick={() => startCall(moveId, counterpartName)}
+      onClick={() => startCall(moveId, name)}
       disabled={busy}
       className={`inline-flex items-center justify-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50 ${look} ${className}`}
     >

@@ -669,7 +669,8 @@ export default function ActiveMovePage() {
                 moveId={move.$id as string}
                 moveStatus={phase === 'completed' ? 'completed' : (move.status as string)}
                 hasCounterpart={true}
-                counterpartName={(move.contactFullName as string) || t('web:call.party.client')}
+                counterpartName={move.contactFullName as string | null}
+                fallbackName={t('web:call.party.client')}
                 className="shrink-0 !px-3 !py-1.5 !text-xs"
               />
             </div>

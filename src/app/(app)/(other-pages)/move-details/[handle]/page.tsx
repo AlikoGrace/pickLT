@@ -989,6 +989,7 @@ export default function MoveDetailsPage() {
                 moveStatus={rawStatus}
                 hasCounterpart={hasMoverAssigned}
                 counterpartName={moverInfo.name}
+                fallbackName={t('web:call.party.mover')}
                 className="mb-4 w-full"
               />
 

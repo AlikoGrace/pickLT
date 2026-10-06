@@ -948,7 +948,8 @@ export default function MoverMoveDetailsPage() {
                 moveId={moveDocId}
                 moveStatus={rawStatus}
                 hasCounterpart={isAssignedMover}
-                counterpartName={contactInfo?.fullName || t('web:call.party.client')}
+                counterpartName={contactInfo?.fullName}
+                fallbackName={t('web:call.party.client')}
                 className="mb-4 w-full"
               />
               {contactInfo?.fullName && (
