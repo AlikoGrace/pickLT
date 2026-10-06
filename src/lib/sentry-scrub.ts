@@ -33,6 +33,8 @@ export function scrubValue(value: unknown, depth = 0): unknown {
 /** The parts of a Sentry event this touches (kept structural so it needs no Sentry types). */
 export interface ScrubbableEvent {
   message?: string;
+  transaction?: string;
+  spans?: { description?: string; data?: unknown }[];
   user?: { id?: string | number; [k: string]: unknown } | null;
   request?: { data?: unknown; cookies?: unknown; headers?: Record<string, string> };
   exception?: { values?: { value?: string }[] };
@@ -43,6 +45,11 @@ export interface ScrubbableEvent {
 
 export function scrubEvent<E extends ScrubbableEvent>(event: E): E {
   if (event.message) event.message = scrubText(event.message);
+  if (event.transaction) event.transaction = scrubText(event.transaction);
+  for (const span of event.spans ?? []) {
+    if (span.description) span.description = scrubText(span.description);
+    if (span.data !== undefined) span.data = scrubValue(span.data) as typeof span.data;
+  }
   if (event.user) event.user = event.user.id != null ? { id: event.user.id } : null;
   if (event.request) {
     delete event.request.data;

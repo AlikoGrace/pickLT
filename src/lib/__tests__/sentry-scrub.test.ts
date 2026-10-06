@@ -45,6 +45,15 @@ describe('scrubEvent', () => {
   test('an anonymous user stays anonymous', () => {
     expect(scrubEvent({ user: { email: 'a@b.co' } }).user).toBeNull();
   });
+
+  test('transaction names and span descriptions/data are scrubbed', () => {
+    const event = scrubEvent({
+      transaction: 'GET /api/users/jo@x.de',
+      spans: [{ description: 'POST /otp to +49 151 2345 6789', data: { 'url.query': 'email=a@b.co', 'http.status_code': 200 } }],
+    });
+    expect(event.transaction).toBe(`GET /api/users/${REDACTED}`);
+    expect(event.spans?.[0]).toEqual({ description: `POST /otp to ${REDACTED}`, data: { 'url.query': `email=${REDACTED}`, 'http.status_code': 200 } });
+  });
 });
 
 describe('scrubBreadcrumb', () => {
