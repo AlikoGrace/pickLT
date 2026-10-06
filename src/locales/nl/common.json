@@ -279,6 +279,29 @@
     },
     "sendFailed": {
       "title": "Versturen mislukt"
+    },
+    "callLog": {
+      "voiceCall": {
+        "label": "Spraakoproep"
+      },
+      "missed": {
+        "label": "Gemiste spraakoproep"
+      },
+      "noAnswer": {
+        "label": "Geen antwoord"
+      },
+      "cancelled": {
+        "label": "Geannuleerde oproep"
+      },
+      "callDeclined": {
+        "label": "Oproep geweigerd"
+      },
+      "youDeclined": {
+        "label": "Je hebt geweigerd"
+      },
+      "callBack": {
+        "label": "Terugbellen"
+      }
     }
   },
   "confirm": {

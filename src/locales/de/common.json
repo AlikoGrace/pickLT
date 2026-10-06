@@ -279,6 +279,29 @@
     },
     "sendFailed": {
       "title": "Senden fehlgeschlagen"
+    },
+    "callLog": {
+      "voiceCall": {
+        "label": "Sprachanruf"
+      },
+      "missed": {
+        "label": "Verpasster Sprachanruf"
+      },
+      "noAnswer": {
+        "label": "Keine Antwort"
+      },
+      "cancelled": {
+        "label": "Abgebrochener Anruf"
+      },
+      "callDeclined": {
+        "label": "Anruf abgelehnt"
+      },
+      "youDeclined": {
+        "label": "Von Ihnen abgelehnt"
+      },
+      "callBack": {
+        "label": "Zurückrufen"
+      }
     }
   },
   "confirm": {

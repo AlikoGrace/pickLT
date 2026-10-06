@@ -279,6 +279,29 @@
     },
     "sendFailed": {
       "title": "Gönderilemedi"
+    },
+    "callLog": {
+      "voiceCall": {
+        "label": "Sesli arama"
+      },
+      "missed": {
+        "label": "Cevapsız sesli arama"
+      },
+      "noAnswer": {
+        "label": "Yanıt yok"
+      },
+      "cancelled": {
+        "label": "İptal edilen arama"
+      },
+      "callDeclined": {
+        "label": "Arama reddedildi"
+      },
+      "youDeclined": {
+        "label": "Reddettiniz"
+      },
+      "callBack": {
+        "label": "Geri ara"
+      }
     }
   },
   "confirm": {

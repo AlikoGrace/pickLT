@@ -279,6 +279,29 @@
     },
     "sendFailed": {
       "title": "No se pudo enviar"
+    },
+    "callLog": {
+      "voiceCall": {
+        "label": "Llamada de voz"
+      },
+      "missed": {
+        "label": "Llamada de voz perdida"
+      },
+      "noAnswer": {
+        "label": "Sin respuesta"
+      },
+      "cancelled": {
+        "label": "Llamada cancelada"
+      },
+      "callDeclined": {
+        "label": "Llamada rechazada"
+      },
+      "youDeclined": {
+        "label": "La rechazaste"
+      },
+      "callBack": {
+        "label": "Devolver la llamada"
+      }
     }
   },
   "confirm": {
