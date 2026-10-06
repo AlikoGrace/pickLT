@@ -262,6 +262,12 @@
     "title": "Bellen",
     "viaPhone": {
       "title": "Bellen via de telefoon"
+    },
+    "phoneFallback": {
+      "toggle": {
+        "label": "Geen verbinding? Bel via telefoon"
+      },
+      "subtitle": "Gebruikt je telefoonlijn, als bellen in de app niet lukt"
     }
   },
   "chat": {
@@ -302,6 +308,10 @@
       "callBack": {
         "label": "Terugbellen"
       }
+    },
+    "contactMasked": {
+      "title": "Contactgegevens verborgen",
+      "body": "Telefoonnummers en e-mailadressen worden in de chat verborgen. Bel via de app: zo blijft je verhuizing beschermd bij PickLte."
     }
   },
   "confirm": {

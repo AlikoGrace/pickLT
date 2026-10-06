@@ -262,6 +262,12 @@
     "title": "Anrufen",
     "viaPhone": {
       "title": "Über das Telefon anrufen"
+    },
+    "phoneFallback": {
+      "toggle": {
+        "label": "Keine Verbindung? Per Telefon anrufen"
+      },
+      "subtitle": "Nutzt Ihre Telefonleitung – falls der Anruf in der App nicht verbindet"
     }
   },
   "chat": {
@@ -302,6 +308,10 @@
       "callBack": {
         "label": "Zurückrufen"
       }
+    },
+    "contactMasked": {
+      "title": "Kontaktdaten ausgeblendet",
+      "body": "Telefonnummern und E-Mail-Adressen werden im Chat ausgeblendet. Nutzen Sie den Anruf in der App – so bleibt Ihr Umzug bei PickLte geschützt."
     }
   },
   "confirm": {

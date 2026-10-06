@@ -262,6 +262,12 @@
     "title": "Zadzwoń",
     "viaPhone": {
       "title": "Zadzwoń przez telefon"
+    },
+    "phoneFallback": {
+      "toggle": {
+        "label": "Brak połączenia? Zadzwoń przez telefon"
+      },
+      "subtitle": "Używa Twojej linii telefonicznej, gdy połączenie w aplikacji nie działa"
     }
   },
   "chat": {
@@ -302,6 +308,10 @@
       "callBack": {
         "label": "Oddzwoń"
       }
+    },
+    "contactMasked": {
+      "title": "Dane kontaktowe ukryte",
+      "body": "Numery telefonów i adresy e-mail są ukrywane w czacie. Dzwoń przez aplikację – dzięki temu Twoja przeprowadzka pozostaje chroniona w PickLte."
     }
   },
   "confirm": {

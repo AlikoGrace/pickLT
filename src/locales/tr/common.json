@@ -262,6 +262,12 @@
     "title": "Ara",
     "viaPhone": {
       "title": "Telefonla ara"
+    },
+    "phoneFallback": {
+      "toggle": {
+        "label": "Bağlanamıyor musunuz? Telefonla arayın"
+      },
+      "subtitle": "Telefon hattınızı kullanır; uygulama içi arama bağlanamadığında"
     }
   },
   "chat": {
@@ -302,6 +308,10 @@
       "callBack": {
         "label": "Geri ara"
       }
+    },
+    "contactMasked": {
+      "title": "İletişim bilgileri gizlendi",
+      "body": "Telefon numaraları ve e-posta adresleri sohbette gizlenir. Uygulama içi aramayı kullanın; taşınmanız PickLte’de korunur."
     }
   },
   "confirm": {

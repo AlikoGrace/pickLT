@@ -955,12 +955,8 @@ export default function MoverMoveDetailsPage() {
               {contactInfo?.fullName && (
                 <InfoRow label={t('common:field.name.label')} value={contactInfo.fullName} />
               )}
-              {contactInfo?.email && (
-                <InfoRow label={t('common:field.email.label')} value={contactInfo.email} />
-              )}
-              {contactInfo?.phoneNumber && (
-                <InfoRow label={t('common:field.phone.label')} value={contactInfo.phoneNumber} />
-              )}
+              {/* No phone number or email (calls plan 4 in pickltmobile): the client is
+                  reached through the in-app call, which keeps the job on PickLte. */}
               {contactInfo?.notesForMovers && (
                 <InfoRow label={t('booking:field.notesForMovers.label')} value={contactInfo.notesForMovers} />
               )}

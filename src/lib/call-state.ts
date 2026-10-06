@@ -148,6 +148,26 @@ export function callOutcomeKey(call: Pick<CallRow, 'status' | 'callerId'>, me: s
 }
 
 /** Whether the "Call in app" entry point should be offered for a move. */
+/**
+ * Moves on which the phone line is offered as a fallback (calls plan 4 in
+ * pickltmobile): only while the move is live — the mover has accepted and the
+ * client has not paid yet. Before and after, calls go through PickLte.
+ */
+const PHONE_FALLBACK_STATUSES: ReadonlySet<string> = new Set([
+  'mover_accepted',
+  'mover_en_route',
+  'mover_arrived',
+  'loading',
+  'in_transit',
+  'arrived_destination',
+  'unloading',
+  'awaiting_payment',
+])
+
+export function isPhoneFallbackOpen(status: string | null | undefined): boolean {
+  return !!status && PHONE_FALLBACK_STATUSES.has(status)
+}
+
 export function canCallOnMove(moveStatus: string | null | undefined, hasCounterpart: boolean): boolean {
   if (!hasCounterpart) return false
   if (!moveStatus) return false

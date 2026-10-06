@@ -262,6 +262,12 @@
     "title": "Appeler",
     "viaPhone": {
       "title": "Appeler par téléphone"
+    },
+    "phoneFallback": {
+      "toggle": {
+        "label": "Pas de connexion ? Appeler par téléphone"
+      },
+      "subtitle": "Utilise votre ligne téléphonique, si l’appel dans l’application ne passe pas"
     }
   },
   "chat": {
@@ -302,6 +308,10 @@
       "callBack": {
         "label": "Rappeler"
       }
+    },
+    "contactMasked": {
+      "title": "Coordonnées masquées",
+      "body": "Les numéros de téléphone et adresses e-mail sont masqués dans le chat. Utilisez l’appel dans l’application : votre déménagement reste protégé sur PickLte."
     }
   },
   "confirm": {

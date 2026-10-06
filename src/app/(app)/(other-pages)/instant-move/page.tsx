@@ -20,6 +20,7 @@ import {
   StarIcon,
   UserMultiple02Icon,
 } from '@hugeicons/core-free-icons'
+import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import { HugeiconsIcon } from '@hugeicons/react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -28,6 +29,7 @@ import { getMapboxDirections } from '@/utils/mapbox-directions'
 import { formatDistanceKm, formatMoney } from '@/lib/format'
 import PriceBreakdown from '@/components/PriceBreakdown'
 import CallInAppButton from '@/components/calls/CallInAppButton'
+import { isPhoneFallbackOpen } from '@/lib/call-state'
 import { parseBreakdown } from '@/lib/pricingEngine'
 import { useTranslation } from 'react-i18next'
 import { claimMoveCancellation, markMoveCancellationExplained } from '@/lib/cancellation-alerts'
@@ -499,6 +501,7 @@ const InstantMovePage = () => {
     }
   }
 
+  const [showPhoneFallback, setShowPhoneFallback] = useState(false)
   const handleCallMover = () => {
     if (mover?.phone) {
       window.open(`tel:${mover.phone}`)
@@ -808,14 +811,30 @@ const InstantMovePage = () => {
               fallbackName={t('web:call.party.mover')}
               className="w-full"
             />
-            <ButtonSecondary onClick={handleCallMover} className="flex-1 !py-2">
-              <HugeiconsIcon icon={Call02Icon} size={16} strokeWidth={1.5} className="mr-1.5" />
-              {t('common:action.call.cta')}
-            </ButtonSecondary>
             <ButtonSecondary onClick={handleMessageMover} className="flex-1 !py-2">
               <HugeiconsIcon icon={Message01Icon} size={16} strokeWidth={1.5} className="mr-1.5" />
               {t('common:action.message.cta')}
             </ButtonSecondary>
+            {/* Phone line: a live move only, folded away under the in-app call (calls plan 4). */}
+            {mover?.phone && isPhoneFallbackOpen(moveData?.status) && (
+              <div className="w-full">
+                <button
+                  type="button"
+                  aria-expanded={showPhoneFallback}
+                  onClick={() => setShowPhoneFallback((v) => !v)}
+                  className="mx-auto flex items-center gap-1 py-1 text-sm text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200"
+                >
+                  {t('common:call.phoneFallback.toggle.label')}
+                  <ChevronDownIcon className={`h-4 w-4 transition-transform ${showPhoneFallback ? 'rotate-180' : ''}`} />
+                </button>
+                {showPhoneFallback && (
+                  <ButtonSecondary onClick={handleCallMover} className="mt-2 w-full !py-2">
+                    <HugeiconsIcon icon={Call02Icon} size={16} strokeWidth={1.5} className="mr-1.5" />
+                    {t('common:call.viaPhone.title')}
+                  </ButtonSecondary>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>

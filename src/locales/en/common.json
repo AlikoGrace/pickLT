@@ -262,6 +262,12 @@
     "title": "Call",
     "viaPhone": {
       "title": "Call via phone"
+    },
+    "phoneFallback": {
+      "toggle": {
+        "label": "Can't connect? Call by phone"
+      },
+      "subtitle": "Uses your phone line — for when the in-app call can't connect"
     }
   },
   "chat": {
@@ -302,6 +308,10 @@
       "callBack": {
         "label": "Call back"
       }
+    },
+    "contactMasked": {
+      "title": "Contact details hidden",
+      "body": "Phone numbers and email addresses are hidden in chat. Use the in-app call to talk — it keeps your move protected on PickLte."
     }
   },
   "confirm": {

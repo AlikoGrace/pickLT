@@ -8,6 +8,7 @@ import {
   formatDuration,
   isIncomingRing,
   isLiveCall,
+  isPhoneFallbackOpen,
   isRingExpired,
   micErrorCode,
   parseFunctionResponse,
@@ -186,5 +187,18 @@ describe('micErrorCode', () => {
     expect(micErrorCode({ name: 'NotAllowedError' })).toBe('call.micDenied')
     expect(micErrorCode({ name: 'NotFoundError' })).toBe('call.micUnavailable')
     expect(micErrorCode(new Error('x'))).toBe('call.micUnavailable')
+  })
+})
+
+describe('isPhoneFallbackOpen (calls plan 4: phone line only while the move is live)', () => {
+  it('open from the mover accepting until the client pays', () => {
+    for (const s of ['mover_accepted', 'mover_en_route', 'mover_arrived', 'loading', 'in_transit', 'arrived_destination', 'unloading', 'awaiting_payment']) {
+      expect(isPhoneFallbackOpen(s)).toBe(true)
+    }
+  })
+  it('closed before acceptance and from payment on', () => {
+    for (const s of ['draft', 'booked', 'pending_payment', 'mover_assigned', 'paid', 'completed', 'cancelled_by_client', 'cancelled_by_mover', null, undefined, '']) {
+      expect(isPhoneFallbackOpen(s)).toBe(false)
+    }
   })
 })
