@@ -7,6 +7,7 @@ import { useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { formatDate, formatMoney } from '@/lib/format'
+import { photoBannerStyle } from '@/lib/photo-banner'
 
 interface Props {
   /** `mover_profiles.feeStanding`; legacy rows read as ok. */
@@ -21,6 +22,7 @@ interface Props {
  * and `restricted`, in the `VehicleStatusBanner` shape: collapsed by default
  * (icon, title, one summary line, chevron), the header toggles the body, and
  * Pay now stays visible either way. Renders nothing when nothing is owed.
+ * A photo banner (card payment) since 2026-10-06.
  */
 export default function FeeStatusBanner({ standing, owedCents, oldestDueAt, className }: Props) {
   const { t } = useTranslation()
@@ -43,12 +45,13 @@ export default function FeeStatusBanner({ standing, owedCents, oldestDueAt, clas
   return (
     <div
       className={clsx(
-        'border-b px-4 py-3',
-        tone === 'red' && 'border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950',
-        tone === 'amber' && 'border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950',
-        tone === 'blue' && 'border-primary-200 bg-primary-50 dark:border-primary-800 dark:bg-primary-950',
+        'border-b-4 px-4 py-4',
+        tone === 'red' && 'border-red-500',
+        tone === 'amber' && 'border-amber-400',
+        tone === 'blue' && 'border-primary-500',
         className,
       )}
+      style={photoBannerStyle('feePayment')}
     >
       <div className="mx-auto flex max-w-3xl flex-wrap items-start gap-x-3 gap-y-2 sm:flex-nowrap">
         <button
@@ -61,29 +64,22 @@ export default function FeeStatusBanner({ standing, owedCents, oldestDueAt, clas
           <Icon
             className={clsx(
               'mt-0.5 h-5 w-5 flex-shrink-0',
-              tone === 'red' && 'text-red-500',
-              tone === 'amber' && 'text-amber-500',
-              tone === 'blue' && 'text-primary-600',
+              tone === 'red' && 'text-red-300',
+              tone === 'amber' && 'text-amber-300',
+              tone === 'blue' && 'text-primary-300',
             )}
           />
           <span id={bodyId} className="min-w-0 flex-1">
-            <span
-              className={clsx(
-                'block text-sm font-semibold',
-                tone === 'red' && 'text-red-800 dark:text-red-200',
-                tone === 'amber' && 'text-amber-800 dark:text-amber-200',
-                tone === 'blue' && 'text-primary-800 dark:text-primary-200',
-              )}
-            >
+            <span className="block text-sm font-semibold text-white">
               {title}
             </span>
             <span
               className={clsx(
                 'block text-sm',
                 !expanded && 'truncate',
-                tone === 'red' && 'text-red-700 dark:text-red-300',
-                tone === 'amber' && 'text-amber-700 dark:text-amber-300',
-                tone === 'blue' && 'text-primary-700 dark:text-primary-300',
+                tone === 'red' && 'text-red-200',
+                tone === 'amber' && 'text-amber-200',
+                tone === 'blue' && 'text-primary-200',
               )}
             >
               {expanded ? body : summary}
@@ -91,7 +87,7 @@ export default function FeeStatusBanner({ standing, owedCents, oldestDueAt, clas
           </span>
           <ChevronDownIcon
             aria-hidden="true"
-            className={clsx('mt-0.5 h-5 w-5 flex-shrink-0 text-neutral-500 transition-transform dark:text-neutral-400', expanded && 'rotate-180')}
+            className={clsx('mt-0.5 h-5 w-5 flex-shrink-0 text-white/70 transition-transform', expanded && 'rotate-180')}
           />
         </button>
         {/* The button stays visible collapsed or not; only the text folds away. */}

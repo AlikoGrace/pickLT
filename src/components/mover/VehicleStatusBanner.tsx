@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { formatDateTime } from '@/lib/format'
 import { formatRemaining } from '@/lib/rental-time'
 import { STATE_KEY, USE_OWN_ADD_HREF, vehicleActionFor, vehicleSummaryLine } from '@/lib/vehicle-labels'
+import { photoBannerStyle, vehicleBannerPhoto } from '@/lib/photo-banner'
 import { RESTRICTED_VEHICLE_STATES, type VehicleServiceState } from '@/lib/vehicle-service'
 
 interface Props {
@@ -26,7 +27,7 @@ interface Props {
   /** End of that window, for the ready card's "You receive moves until …". */
   rentalEndAt?: string | null
   /** The current row — or, after an expiry (R4), the expired rental — for "Brand Model · PLATE". */
-  vehicle?: { brand?: string | null; model?: string | null; registrationNumber?: string | null } | null
+  vehicle?: { brand?: string | null; model?: string | null; registrationNumber?: string | null; ownership?: string | null } | null
   /** Dashboard only: a ready driver sees the vehicle in service as a green card (mover app parity). */
   showCurrentWhenReady?: boolean
   /**
@@ -88,9 +89,11 @@ export default function VehicleStatusBanner({
   const chevron = (
     <ChevronDownIcon
       aria-hidden="true"
-      className={clsx('mt-0.5 h-5 w-5 flex-shrink-0 text-neutral-500 transition-transform dark:text-neutral-400', expanded && 'rotate-180')}
+      className={clsx('mt-0.5 h-5 w-5 flex-shrink-0 text-white/70 transition-transform', expanded && 'rotate-180')}
     />
   )
+  // A photo banner since 2026-10-06: a loaded van for an owned vehicle, a key handover for a rental.
+  const photoStyle = photoBannerStyle(vehicleBannerPhoto(state, vehicle?.ownership))
   const headerClass =
     'flex min-w-0 flex-1 items-start gap-3 rounded-lg text-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 max-sm:basis-full'
   const ctaClass =
@@ -107,7 +110,7 @@ export default function VehicleStatusBanner({
           : null
     const name = [vehicle.brand, vehicle.model].filter(Boolean).join(' ')
     return (
-      <div className={clsx('border-b border-green-200 bg-green-50 px-4 py-3 dark:border-green-800 dark:bg-green-950', className)}>
+      <div className={clsx('border-b-4 border-green-500 px-4 py-4', className)} style={photoStyle}>
         <div className="mx-auto flex max-w-3xl flex-wrap items-start gap-x-3 gap-y-2 sm:flex-nowrap">
           <button
             type="button"
@@ -116,23 +119,23 @@ export default function VehicleStatusBanner({
             onClick={() => setExpanded((v) => !v)}
             className={headerClass}
           >
-            <TruckIcon className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-600 dark:text-green-400" />
+            <TruckIcon className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-300" />
             <span id={bodyId} className="min-w-0 flex-1">
               {expanded ? (
                 <>
-                  <span className="block text-xs text-green-700 dark:text-green-300">{t('booking:vehicle.rental.inService.label')}</span>
-                  {name && <span className="block text-sm font-semibold text-green-900 dark:text-green-100">{name}</span>}
+                  <span className="block text-xs text-green-200">{t('booking:vehicle.rental.inService.label')}</span>
+                  {name && <span className="block text-sm font-semibold text-white">{name}</span>}
                   {vehicle.registrationNumber && (
-                    <span className="block font-mono text-sm tracking-wider break-all text-green-900 dark:text-green-100">
+                    <span className="block font-mono text-sm tracking-wider break-all text-white">
                       {vehicle.registrationNumber}
                     </span>
                   )}
                 </>
               ) : (
-                <span className="block truncate text-sm font-semibold text-green-900 dark:text-green-100">{vehicleLine}</span>
+                <span className="block truncate text-sm font-semibold text-white">{vehicleLine}</span>
               )}
               {readyLine && (
-                <span className={clsx('block text-sm text-green-700 dark:text-green-300', !expanded && 'truncate')}>{readyLine}</span>
+                <span className={clsx('block text-sm text-green-200', !expanded && 'truncate')}>{readyLine}</span>
               )}
             </span>
             {chevron}
@@ -184,13 +187,14 @@ export default function VehicleStatusBanner({
   return (
     <div
       className={clsx(
-        'border-b px-4 py-3',
-        tone === 'red' && 'border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950',
-        tone === 'orange' && 'border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-950',
-        tone === 'amber' && 'border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950',
-        tone === 'blue' && 'border-primary-200 bg-primary-50 dark:border-primary-800 dark:bg-primary-950',
+        'border-b-4 px-4 py-4',
+        tone === 'red' && 'border-red-500',
+        tone === 'orange' && 'border-orange-400',
+        tone === 'amber' && 'border-amber-400',
+        tone === 'blue' && 'border-primary-500',
         className,
       )}
+      style={photoStyle}
     >
       <div className="mx-auto flex max-w-3xl flex-wrap items-start gap-x-3 gap-y-2 sm:flex-nowrap">
         <button
@@ -203,32 +207,24 @@ export default function VehicleStatusBanner({
           <Icon
             className={clsx(
               'mt-0.5 h-5 w-5 flex-shrink-0',
-              tone === 'red' && 'text-red-500',
-              tone === 'orange' && 'text-orange-500',
-              tone === 'amber' && 'text-amber-500',
-              tone === 'blue' && 'text-primary-600',
+              tone === 'red' && 'text-red-300',
+              tone === 'orange' && 'text-orange-300',
+              tone === 'amber' && 'text-amber-300',
+              tone === 'blue' && 'text-primary-300',
             )}
           />
           <span id={bodyId} className="min-w-0 flex-1">
-            <span
-              className={clsx(
-                'block text-sm font-semibold',
-                tone === 'red' && 'text-red-800 dark:text-red-200',
-                tone === 'orange' && 'text-orange-800 dark:text-orange-200',
-                tone === 'amber' && 'text-amber-800 dark:text-amber-200',
-                tone === 'blue' && 'text-primary-800 dark:text-primary-200',
-              )}
-            >
+            <span className="block text-sm font-semibold text-white">
               {title}
             </span>
             <span
               className={clsx(
                 'block text-sm',
                 !expanded && 'truncate',
-                tone === 'red' && 'text-red-700 dark:text-red-300',
-                tone === 'orange' && 'text-orange-700 dark:text-orange-300',
-                tone === 'amber' && 'text-amber-700 dark:text-amber-300',
-                tone === 'blue' && 'text-primary-700 dark:text-primary-300',
+                tone === 'red' && 'text-red-200',
+                tone === 'orange' && 'text-orange-200',
+                tone === 'amber' && 'text-amber-200',
+                tone === 'blue' && 'text-primary-200',
               )}
             >
               {expanded ? (
