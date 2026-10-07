@@ -1,0 +1,1 @@
+truck-3d.glb: Kenney "Car Kit" delivery truck (CC0 1.0, www.kenney.nl), cargo box recoloured to PickLte blue.
