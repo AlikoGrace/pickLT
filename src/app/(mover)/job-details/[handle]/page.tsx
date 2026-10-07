@@ -28,7 +28,7 @@ import {
   parseInventoryLines,
   useInventoryNames,
 } from '@/lib/inventory-labels'
-import { formatDateWith, formatMoney, formatPercent } from '@/lib/format'
+import { formatDateWith, formatDistanceKm, formatDurationHm, formatMoney, formatPercent } from '@/lib/format'
 import PriceBreakdown from '@/components/PriceBreakdown'
 import CallInAppButton from '@/components/calls/CallInAppButton'
 import { canCallOnMove } from '@/lib/call-state'
@@ -740,10 +740,10 @@ export default function MoverMoveDetailsPage() {
               <InfoRow icon={ClockIcon} label={t('booking:field.flexibility.label')} value={flexibilityLabel(t, flexibility)} />
             )}
             {routeDistanceMeters != null && routeDistanceMeters > 0 && (
-              <InfoRow icon={MapPinIcon} label={t('booking:field.distance.label')} value={`${(routeDistanceMeters / 1000).toFixed(1)} km`} />
+              <InfoRow icon={MapPinIcon} label={t('booking:field.distance.label')} value={formatDistanceKm(routeDistanceMeters / 1000)} />
             )}
             {routeDurationSeconds != null && routeDurationSeconds > 0 && (
-              <InfoRow icon={ClockIcon} label={t('booking:field.estimatedDuration.label')} value={`${Math.round(routeDurationSeconds / 60)} min`} />
+              <InfoRow icon={ClockIcon} label={t('booking:field.estimatedDuration.label')} value={formatDurationHm(routeDurationSeconds)} />
             )}
           </div>
 
@@ -868,7 +868,7 @@ export default function MoverMoveDetailsPage() {
                             day: 'numeric',
                             month: 'short',
                             year: 'numeric',
-                          }) + (move?.arrivalWindow ? ` · ${move.arrivalWindow}` : ''),
+                          }) + (move?.arrivalWindow ? ` · ${arrivalWindowLabel(t, move.arrivalWindow)}` : ''),
                       }}
                       components={[
                         <span className="font-semibold" key="0" />,

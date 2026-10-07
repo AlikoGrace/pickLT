@@ -3,6 +3,7 @@
 import type { TFunction } from 'i18next'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { formatDateTime, formatDistanceKm as formatKm, formatDurationHm } from '@/lib/format'
 
 /**
  * Human labels for persisted inventory, and the field-scoping rules that decide
@@ -188,18 +189,16 @@ export function yesNo(t: TFunction, v: boolean | null | undefined): string | nul
   return null
 }
 
+/** Route distance from metres, with the locale's decimal mark (`12,5 km` in de). */
 export function formatDistanceKm(meters: number | null | undefined): string | null {
   if (meters === null || meters === undefined || meters <= 0) return null
-  return `${(meters / 1000).toFixed(1)} km`
+  return formatKm(meters / 1000)
 }
 
+/** Approximate route duration with the locale's own units (`~25 Min.` in de). */
 export function formatDuration(seconds: number | null | undefined): string | null {
   if (seconds === null || seconds === undefined || seconds <= 0) return null
-  const mins = Math.round(seconds / 60)
-  if (mins < 60) return `~${mins} min`
-  const hrs = Math.floor(mins / 60)
-  const rem = mins % 60
-  return rem ? `~${hrs} hr ${rem} min` : `~${hrs} hr`
+  return `~${formatDurationHm(seconds)}`
 }
 
 /** Instant moves start immediately and carry no `moveDate`. */
@@ -207,11 +206,6 @@ export function formatRequestedAt(iso: string | null | undefined): string | null
   if (!iso) return null
   const d = new Date(iso)
   if (Number.isNaN(d.getTime())) return null
-  return d.toLocaleString(undefined, {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  })
+  // The app's chosen language, not the browser's.
+  return formatDateTime(d)
 }

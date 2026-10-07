@@ -26,7 +26,7 @@ import { platformFeeCents } from '@/lib/feeLedger'
 import type { QuoteBreakdown } from '@/lib/pricingEngine'
 import { useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
-import { formatDistanceM } from '@/lib/format'
+import { formatDistanceKm, formatDistanceM } from '@/lib/format'
 import { ARRIVAL_GEOFENCE_M } from '@/lib/service-limits'
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || ''
@@ -627,8 +627,8 @@ export default function ActiveMovePage() {
                 <div className="text-right shrink-0">
                   <p className="text-sm font-semibold text-neutral-900 dark:text-white">
                     {moverDistanceKm >= 1
-                      ? `${moverDistanceKm.toFixed(1)} km`
-                      : `${Math.round(moverDistanceKm * 1000)} m`}
+                      ? formatDistanceKm(moverDistanceKm)
+                      : formatDistanceM(moverDistanceKm * 1000)}
                   </p>
                   <p className="text-[10px] text-neutral-500">
                     {t('web:mover.activeMove.etaToPickup.label', { minutes: moverEtaMinutes })}
@@ -639,8 +639,8 @@ export default function ActiveMovePage() {
                 <div className="text-right shrink-0">
                   <p className="text-sm font-semibold text-neutral-900 dark:text-white">
                     {routeInfo.distance >= 1000
-                      ? `${(routeInfo.distance / 1000).toFixed(1)} km`
-                      : `${Math.round(routeInfo.distance)} m`}
+                      ? formatDistanceKm(routeInfo.distance / 1000)
+                      : formatDistanceM(routeInfo.distance)}
                   </p>
                   <p className="text-[10px] text-neutral-500">
                     {t('common:unit.approxMinutes.label', { minutes: Math.ceil(routeInfo.duration / 60) })}

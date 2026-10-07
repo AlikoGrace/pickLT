@@ -16,11 +16,11 @@ import MoverMapboxMap from '@/components/MoverMapboxMap'
 import { Badge } from '@/shared/Badge'
 import Image from 'next/image'
 import Link from 'next/link'
-import { formatDayMonth, formatDistanceKm, formatMoneyRounded, formatSeconds } from '@/lib/format'
+import { formatDayMonth, formatDistanceKm, formatDistanceM, formatDurationHm, formatMoneyRounded, formatSeconds } from '@/lib/format'
 import { AVAILABLE_MOVES_POLL_SECONDS, NEARBY_MOVES_RADIUS_KM } from '@/lib/service-limits'
 import { homeTypeAndMoveTypeBadge, moveTypeLabel } from '@/lib/move-subtitle'
 import { useTranslation } from 'react-i18next'
-import { arrivalWindowLabel, vehicleTypeLabel } from '@/lib/enum-labels'
+import { arrivalWindowLabel, floorLevelLabel, vehicleTypeLabel } from '@/lib/enum-labels'
 import { moverPayoutEur } from '@/lib/moverPayout'
 import { crewLabel } from '@/components/mover/crewLabel'
 import { movePhotoUrl } from '@/lib/move-photo-url'
@@ -459,8 +459,8 @@ const AvailableMovesPage = () => {
                           {move.pickupFloorLevel && (
                             <p className="text-xs text-neutral-500 dark:text-neutral-400">
                               {move.pickupElevator
-                                ? t('track:address.floorWithElevator.label', { floor: move.pickupFloorLevel })
-                                : t('track:address.floor.label', { floor: move.pickupFloorLevel })}
+                                ? t('track:address.floorWithElevator.label', { floor: floorLevelLabel(t, move.pickupFloorLevel) })
+                                : t('track:address.floor.label', { floor: floorLevelLabel(t, move.pickupFloorLevel) })}
                             </p>
                           )}
                         </div>
@@ -475,8 +475,8 @@ const AvailableMovesPage = () => {
                           {move.dropoffFloorLevel && (
                             <p className="text-xs text-neutral-500 dark:text-neutral-400">
                               {move.dropoffElevator
-                                ? t('track:address.floorWithElevator.label', { floor: move.dropoffFloorLevel })
-                                : t('track:address.floor.label', { floor: move.dropoffFloorLevel })}
+                                ? t('track:address.floorWithElevator.label', { floor: floorLevelLabel(t, move.dropoffFloorLevel) })
+                                : t('track:address.floor.label', { floor: floorLevelLabel(t, move.dropoffFloorLevel) })}
                             </p>
                           )}
                         </div>
@@ -518,16 +518,14 @@ const AvailableMovesPage = () => {
                           <span className="flex items-center gap-1">
                             <MapPinIcon className="w-4 h-4" />
                             {move.routeDistanceMeters >= 1000
-                              ? `${(move.routeDistanceMeters / 1000).toFixed(1)} km`
-                              : `${Math.round(move.routeDistanceMeters)} m`}
+                              ? formatDistanceKm(move.routeDistanceMeters / 1000)
+                              : formatDistanceM(move.routeDistanceMeters)}
                           </span>
                         )}
                         {move.routeDurationSeconds != null && (
                           <span className="flex items-center gap-1">
                             <ClockIcon className="w-4 h-4" />
-                            {move.routeDurationSeconds >= 3600
-                              ? `${Math.floor(move.routeDurationSeconds / 3600)}h ${Math.ceil((move.routeDurationSeconds % 3600) / 60)}min`
-                              : `${Math.ceil(move.routeDurationSeconds / 60)} min`}
+                            {formatDurationHm(move.routeDurationSeconds)}
                           </span>
                         )}
                       </div>
