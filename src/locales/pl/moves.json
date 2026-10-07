@@ -173,6 +173,9 @@
     "floor": {
       "label": "Piętro"
     },
+    "gallery": {
+      "title": "Galeria"
+    },
     "itemLine": {
       "label": "{{qty}} x {{label}}"
     },
@@ -206,6 +209,9 @@
     "moveStatus": {
       "label": "Status przeprowadzki"
     },
+    "notes": {
+      "label": "Uwagi"
+    },
     "packingService": {
       "label": "Usługa pakowania"
     },
@@ -220,6 +226,9 @@
     },
     "requestedAt": {
       "label": "Zamówiono"
+    },
+    "reviewed": {
+      "label": "Oceniono"
     },
     "route": {
       "title": "Trasa"

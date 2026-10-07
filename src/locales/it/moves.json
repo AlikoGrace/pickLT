@@ -171,6 +171,9 @@
     "floor": {
       "label": "Piano"
     },
+    "gallery": {
+      "title": "Galleria"
+    },
     "itemLine": {
       "label": "{{qty}} x {{label}}"
     },
@@ -204,6 +207,9 @@
     "moveStatus": {
       "label": "Stato del trasloco"
     },
+    "notes": {
+      "label": "Note"
+    },
     "packingService": {
       "label": "Servizio di imballaggio"
     },
@@ -218,6 +224,9 @@
     },
     "requestedAt": {
       "label": "Richiesto il"
+    },
+    "reviewed": {
+      "label": "Recensito"
     },
     "route": {
       "title": "Percorso"

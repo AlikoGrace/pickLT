@@ -171,6 +171,9 @@
     "floor": {
       "label": "Kat"
     },
+    "gallery": {
+      "title": "Galeri"
+    },
     "itemLine": {
       "label": "{{qty}} x {{label}}"
     },
@@ -204,6 +207,9 @@
     "moveStatus": {
       "label": "Taşınma durumu"
     },
+    "notes": {
+      "label": "Notlar"
+    },
     "packingService": {
       "label": "Paketleme hizmeti"
     },
@@ -218,6 +224,9 @@
     },
     "requestedAt": {
       "label": "Talep edildi"
+    },
+    "reviewed": {
+      "label": "Değerlendirildi"
     },
     "route": {
       "title": "Rota"

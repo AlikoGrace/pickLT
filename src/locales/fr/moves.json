@@ -171,6 +171,9 @@
     "floor": {
       "label": "Étage"
     },
+    "gallery": {
+      "title": "Galerie"
+    },
     "itemLine": {
       "label": "{{qty}} x {{label}}"
     },
@@ -204,6 +207,9 @@
     "moveStatus": {
       "label": "Statut du déménagement"
     },
+    "notes": {
+      "label": "Remarques"
+    },
     "packingService": {
       "label": "Service d’emballage"
     },
@@ -218,6 +224,9 @@
     },
     "requestedAt": {
       "label": "Demandé le"
+    },
+    "reviewed": {
+      "label": "Évalué"
     },
     "route": {
       "title": "Itinéraire"

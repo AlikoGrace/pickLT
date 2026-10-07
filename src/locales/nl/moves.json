@@ -171,6 +171,9 @@
     "floor": {
       "label": "Verdieping"
     },
+    "gallery": {
+      "title": "Galerij"
+    },
     "itemLine": {
       "label": "{{qty}} x {{label}}"
     },
@@ -204,6 +207,9 @@
     "moveStatus": {
       "label": "Status van de verhuizing"
     },
+    "notes": {
+      "label": "Notities"
+    },
     "packingService": {
       "label": "Inpakservice"
     },
@@ -218,6 +224,9 @@
     },
     "requestedAt": {
       "label": "Aangevraagd"
+    },
+    "reviewed": {
+      "label": "Beoordeeld"
     },
     "route": {
       "title": "Route"
