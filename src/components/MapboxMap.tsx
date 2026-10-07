@@ -7,6 +7,7 @@ import { Navigation03Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { ThemeContext } from '@/app/theme-provider'
 import { useTranslation } from 'react-i18next'
+import { MotionTrack } from '@/lib/motion-track'
 
 // Set the access token
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || ''
@@ -60,6 +61,10 @@ export const MapboxMap = ({
   const pickupMarkerRef = useRef<mapboxgl.Marker | null>(null)
   const dropoffMarkerRef = useRef<mapboxgl.Marker | null>(null)
   const moverMarkerRef = useRef<mapboxgl.Marker | null>(null)
+  // The truck glides between fixes instead of jumping (plan pickltmobile
+  // maps/smooth-mover-marker): fixes feed the track, a rAF loop draws it.
+  const moverTrackRef = useRef(new MotionTrack())
+  const moverFrameRef = useRef<number | null>(null)
 
   // Track whether we've done the initial bounds fit
   const initialFitDoneRef = useRef(false)
@@ -264,32 +269,63 @@ export const MapboxMap = ({
     if (!map.current || !mapLoaded) return
 
     if (moverCoordinates) {
-      // Face the truck along its travel heading. GPS omits heading when the
-      // vehicle is stationary, so treat a missing/invalid value as "keep the
-      // last rotation" rather than snapping back to north.
+      // GPS omits heading when the vehicle is stationary; MotionTrack keeps
+      // the last heading (or derives one from the movement) instead.
       const heading =
         typeof moverCoordinates.heading === 'number' && Number.isFinite(moverCoordinates.heading)
           ? moverCoordinates.heading
           : null
-      if (moverMarkerRef.current) {
-        // Just update position, no destroy/recreate
-        moverMarkerRef.current.setLngLat([moverCoordinates.longitude, moverCoordinates.latitude])
-        if (heading !== null) moverMarkerRef.current.setRotation(heading)
-      } else {
-        // Create mover marker for the first time. rotationAlignment 'map' keeps
-        // the truck oriented to real streets as the map rotates/tilts.
-        const el = createMoverMarkerElement()
-        moverMarkerRef.current = new mapboxgl.Marker({ element: el, anchor: 'center', rotationAlignment: 'map' })
-          .setLngLat([moverCoordinates.longitude, moverCoordinates.latitude])
-          .addTo(map.current)
-        if (heading !== null) moverMarkerRef.current.setRotation(heading)
+      const now = performance.now()
+      moverTrackRef.current.push({
+        latitude: moverCoordinates.latitude,
+        longitude: moverCoordinates.longitude,
+        heading,
+        receivedAt: now,
+      })
+      const draw = (t: number) => {
+        const pose = moverTrackRef.current.sample(t)
+        if (!pose || !map.current) return
+        if (!moverMarkerRef.current) {
+          // rotationAlignment 'map' keeps the truck oriented to real streets
+          // as the map rotates/tilts.
+          moverMarkerRef.current = new mapboxgl.Marker({
+            element: createMoverMarkerElement(),
+            anchor: 'center',
+            rotationAlignment: 'map',
+          })
+            .setLngLat([pose.longitude, pose.latitude])
+            .addTo(map.current)
+        } else {
+          moverMarkerRef.current.setLngLat([pose.longitude, pose.latitude])
+        }
+        if (pose.heading !== null) moverMarkerRef.current.setRotation(pose.heading)
       }
-    } else if (moverMarkerRef.current) {
-      moverMarkerRef.current.remove()
-      moverMarkerRef.current = null
+      draw(now)
+      if (moverFrameRef.current === null) {
+        const tick = (t: number) => {
+          draw(t)
+          moverFrameRef.current = moverTrackRef.current.isAnimating(t) ? requestAnimationFrame(tick) : null
+        }
+        moverFrameRef.current = requestAnimationFrame(tick)
+      }
+    } else {
+      if (moverFrameRef.current !== null) cancelAnimationFrame(moverFrameRef.current)
+      moverFrameRef.current = null
+      moverTrackRef.current.reset()
+      if (moverMarkerRef.current) {
+        moverMarkerRef.current.remove()
+        moverMarkerRef.current = null
+      }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [moverCoordinates?.latitude, moverCoordinates?.longitude, moverCoordinates?.heading, mapLoaded])
+
+  useEffect(
+    () => () => {
+      if (moverFrameRef.current !== null) cancelAnimationFrame(moverFrameRef.current)
+    },
+    []
+  )
 
   // ─── Draw route between pickup and dropoff ────────────
   // Only fetches from Directions API when coordinates actually change by value.

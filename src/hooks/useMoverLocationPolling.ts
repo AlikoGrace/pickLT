@@ -58,7 +58,8 @@ export function useMoverLocationPolling({
         MOVER_LOCATIONS_COLLECTION,
         [
           Query.equal('moverProfileId', moverProfileId),
-          Query.orderDesc('$createdAt'),
+          // The row is updated in place on every ping; `$createdAt` never moves.
+          Query.orderDesc('$updatedAt'),
           Query.limit(1),
         ]
       )
@@ -71,7 +72,7 @@ export function useMoverLocationPolling({
         longitude: doc.longitude as number,
         heading: doc.heading as number | undefined,
         speed: doc.speed as number | undefined,
-        timestamp: doc.$createdAt || (doc.timestamp as string) || new Date().toISOString(),
+        timestamp: (doc.timestamp as string) || doc.$updatedAt || new Date().toISOString(),
       }
 
       setLastLocation(location)

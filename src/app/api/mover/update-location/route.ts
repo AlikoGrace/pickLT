@@ -65,26 +65,57 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Create location record (Appwrite Realtime will broadcast this)
-    await withRetry(() =>
-      databases.createDocument(
-        APPWRITE.DATABASE_ID,
-        APPWRITE.COLLECTIONS.MOVER_LOCATIONS,
-        ID.unique(),
-        {
-          moverProfileId,
-          moveId: moveId || null,
-          latitude,
-          longitude,
-          heading: heading ?? null,
-          speed: speed ?? null,
-          timestamp: new Date().toISOString(),
-        },
-        // `userId` is the mover's auth account id (the session subject);
-        // `moverProfileId` is a profile row id and is not a usable role.
-        moverLocationPermissions(userId, moveClientAuthId)
+    // Upsert this mover's single location row, like `updatemoverlocation`
+    // (Appwrite Realtime broadcasts the update). Creating a row per ping left
+    // readers that order by creation time showing a stale position (plan
+    // pickltmobile maps/smooth-mover-marker).
+    const payload = {
+      moverProfileId,
+      moveId: moveId || null,
+      latitude,
+      longitude,
+      heading: heading ?? null,
+      speed: speed ?? null,
+      timestamp: new Date().toISOString(),
+    }
+    // `userId` is the mover's auth account id (the session subject);
+    // `moverProfileId` is a profile row id and is not a usable role.
+    const permissions = moverLocationPermissions(userId, moveClientAuthId)
+    const findRow = async () =>
+      (
+        await withRetry(() =>
+          databases.listDocuments(APPWRITE.DATABASE_ID, APPWRITE.COLLECTIONS.MOVER_LOCATIONS, [
+            Query.equal('moverProfileId', moverProfileId),
+            Query.orderDesc('$updatedAt'),
+            Query.limit(1),
+          ])
+        )
+      ).documents[0]?.$id ?? null
+    const update = (rowId: string) =>
+      withRetry(() =>
+        databases.updateDocument(APPWRITE.DATABASE_ID, APPWRITE.COLLECTIONS.MOVER_LOCATIONS, rowId, payload, permissions)
       )
-    )
+    const existing = await findRow()
+    if (existing) {
+      await update(existing)
+    } else {
+      try {
+        await databases.createDocument(
+          APPWRITE.DATABASE_ID,
+          APPWRITE.COLLECTIONS.MOVER_LOCATIONS,
+          ID.unique(),
+          payload,
+          permissions
+        )
+      } catch (err) {
+        // Two first pings can race (the oneToOne moveId constraint answers 409):
+        // update whichever row landed first.
+        if ((err as { code?: number })?.code !== 409) throw err
+        const raced = await findRow()
+        if (!raced) throw err
+        await update(raced)
+      }
+    }
 
     // Update current position on the mover profile. The heartbeat marks the
     // driver online only when `setmoveronline` would have allowed it (KYC +
