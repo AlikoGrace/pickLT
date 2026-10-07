@@ -8,6 +8,7 @@ import { HugeiconsIcon } from '@hugeicons/react'
 import { ThemeContext } from '@/app/theme-provider'
 import { useTranslation } from 'react-i18next'
 import { MotionTrack } from '@/lib/motion-track'
+import { truckSizePx } from '@/lib/truck-size'
 
 // Set the access token
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || ''
@@ -197,12 +198,16 @@ export const MapboxMap = ({
         @keyframes mover-ping{0%{transform:scale(1);opacity:.55}100%{transform:scale(2.4);opacity:0}}
         @keyframes mover-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
       </style>
+      <!-- scale wrapper: sized by the map zoom (truckSizePx / 88), see the
+           zoom listener below; mapbox-gl owns the outer element's transform -->
+      <div class="mover-scale" style="display:flex;align-items:center;justify-content:center;position:relative;transform-origin:center;transition:transform 120ms linear">
       <!-- pulse ring -->
       <div style="position:absolute;width:112px;height:112px;border-radius:50%;background:rgba(79,70,229,.25);animation:mover-ping 1.8s cubic-bezier(0,.2,.6,1) infinite;top:50%;left:50%;transform:translate(-50%,-50%)"></div>
       <!-- truck body: top-down 3D render, nose up; the marker's rotation
            (setRotation(heading) below) turns it to face travel -->
       <div style="position:relative;animation:mover-bob 2s ease-in-out infinite;filter:drop-shadow(0 4px 10px rgba(0,0,0,.35))">
         <img src="/images/truck-marker-3d.png" alt="" width="88" height="88" draggable="false" style="display:block;width:88px;height:88px;object-fit:contain;pointer-events:none;user-select:none" />
+      </div>
       </div>
     `
     return el
@@ -282,6 +287,12 @@ export const MapboxMap = ({
         heading,
         receivedAt: now,
       })
+      // The truck's size follows the zoom (plan pickltmobile
+      // maps/smooth-mover-marker W6); the scale is set on the inner wrapper.
+      const applyScale = () => {
+        const inner = moverMarkerRef.current?.getElement().querySelector<HTMLElement>('.mover-scale')
+        if (inner && map.current) inner.style.transform = `scale(${truckSizePx(map.current.getZoom()) / 88})`
+      }
       const draw = (t: number) => {
         const pose = moverTrackRef.current.sample(t)
         if (!pose || !map.current) return
@@ -295,6 +306,8 @@ export const MapboxMap = ({
           })
             .setLngLat([pose.longitude, pose.latitude])
             .addTo(map.current)
+          applyScale()
+          map.current.on('zoom', applyScale)
         } else {
           moverMarkerRef.current.setLngLat([pose.longitude, pose.latitude])
         }
