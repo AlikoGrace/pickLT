@@ -1161,6 +1161,29 @@
       "cashMove": {
         "label": "Bu taşımadaki platform ücreti: {{amount}}. Taşıma almaya devam etmek için 24 saat içinde ödeyin"
       }
+    },
+    "navigation": {
+      "arrived": {
+        "title": "Vardınız"
+      },
+      "loading": {
+        "label": "Yol tarifi alınıyor…"
+      },
+      "navigate": {
+        "cta": "Navigasyon"
+      },
+      "overview": {
+        "cta": "Genel bakış"
+      },
+      "remaining": {
+        "label": "{{distance}} · varış {{time}}"
+      },
+      "rerouting": {
+        "label": "Yeni rota aranıyor…"
+      },
+      "then": {
+        "label": "Sonra"
+      }
     }
   },
   "moverCard": {

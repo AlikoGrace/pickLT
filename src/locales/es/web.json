@@ -1161,6 +1161,29 @@
       "cashMove": {
         "label": "Comisión de la plataforma en esta mudanza: {{amount}}. Páguela en 24 horas para seguir recibiendo mudanzas"
       }
+    },
+    "navigation": {
+      "arrived": {
+        "title": "Has llegado"
+      },
+      "loading": {
+        "label": "Obteniendo indicaciones…"
+      },
+      "navigate": {
+        "cta": "Navegar"
+      },
+      "overview": {
+        "cta": "Vista general"
+      },
+      "remaining": {
+        "label": "{{distance}} · llegada {{time}}"
+      },
+      "rerouting": {
+        "label": "Buscando una nueva ruta…"
+      },
+      "then": {
+        "label": "Después"
+      }
     }
   },
   "moverCard": {

@@ -37,6 +37,13 @@ interface MapboxMapProps {
   onRouteCalculated?: (routeInfo: RouteInfo) => void
   onPickupMarkerClick?: () => void
   onDropoffMarkerClick?: () => void
+  /**
+   * The mover's navigation mode (plan pickltmobile maps/mover-navigation-mode):
+   * the camera follows `moverCoordinates` course-up, tilted, at street level,
+   * the truck sits on the live position (no glide lag), and `line` is drawn as
+   * the turn-by-turn route instead of the pickup→drop-off route.
+   */
+  navigation?: { line: [number, number][] | null } | null
 }
 
 export const MapboxMap = ({
@@ -50,6 +57,7 @@ export const MapboxMap = ({
   onRouteCalculated,
   onPickupMarkerClick,
   onDropoffMarkerClick,
+  navigation = null,
 }: MapboxMapProps) => {
   const { t } = useTranslation()
   const isDarkMode = useContext(ThemeContext)?.isDarkMode ?? false
@@ -66,6 +74,8 @@ export const MapboxMap = ({
   // maps/smooth-mover-marker): fixes feed the track, a rAF loop draws it.
   const moverTrackRef = useRef(new MotionTrack())
   const moverFrameRef = useRef<number | null>(null)
+  const navigationRef = useRef(navigation)
+  navigationRef.current = navigation
 
   // Track whether we've done the initial bounds fit
   const initialFitDoneRef = useRef(false)
@@ -313,6 +323,11 @@ export const MapboxMap = ({
         }
         if (pose.heading !== null) moverMarkerRef.current.setRotation(pose.heading)
       }
+      // Navigation follows the live position: no glide lag for the driver.
+      if (navigationRef.current) {
+        const pose = moverTrackRef.current.sample(now)
+        if (pose) moverTrackRef.current.jumpTo({ ...pose, latitude: moverCoordinates.latitude, longitude: moverCoordinates.longitude })
+      }
       draw(now)
       if (moverFrameRef.current === null) {
         const tick = (t: number) => {
@@ -339,6 +354,52 @@ export const MapboxMap = ({
     },
     []
   )
+
+  // ─── Navigation mode: follow camera + turn-by-turn route line ──
+  const navOn = !!navigation
+  useEffect(() => {
+    const m = map.current
+    if (!m || !mapLoaded) return
+    if (m.getLayer('route')) m.setLayoutProperty('route', 'visibility', navOn ? 'none' : 'visible')
+    if (!navOn) {
+      if (m.getLayer('nav-route')) m.removeLayer('nav-route')
+      if (m.getSource('nav-route')) m.removeSource('nav-route')
+      m.easeTo({ pitch: 0, bearing: 0, padding: { top: 0, bottom: 0, left: 0, right: 0 }, duration: 600 })
+    }
+  }, [navOn, mapLoaded])
+
+  const navLine = navigation?.line ?? null
+  useEffect(() => {
+    const m = map.current
+    if (!m || !mapLoaded || !navLine || navLine.length < 2) return
+    const data = { type: 'Feature' as const, properties: {}, geometry: { type: 'LineString' as const, coordinates: navLine } }
+    const src = m.getSource('nav-route') as mapboxgl.GeoJSONSource | undefined
+    if (src) src.setData(data)
+    else {
+      m.addSource('nav-route', { type: 'geojson', data })
+      m.addLayer({
+        id: 'nav-route',
+        type: 'line',
+        source: 'nav-route',
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: { 'line-color': '#1D64EC', 'line-width': 7, 'line-opacity': 0.9 },
+      })
+    }
+  }, [navLine, mapLoaded])
+
+  useEffect(() => {
+    const m = map.current
+    if (!m || !mapLoaded || !navOn || !moverCoordinates) return
+    const heading = typeof moverCoordinates.heading === 'number' && Number.isFinite(moverCoordinates.heading) ? moverCoordinates.heading : m.getBearing()
+    m.easeTo({
+      center: [moverCoordinates.longitude, moverCoordinates.latitude],
+      bearing: heading,
+      pitch: 50,
+      zoom: 17,
+      padding: { top: 220, bottom: 260, left: 0, right: 0 },
+      duration: 900,
+    })
+  }, [navOn, mapLoaded, moverCoordinates?.latitude, moverCoordinates?.longitude, moverCoordinates?.heading]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // ─── Draw route between pickup and dropoff ────────────
   // Only fetches from Directions API when coordinates actually change by value.

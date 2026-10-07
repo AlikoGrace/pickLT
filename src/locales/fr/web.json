@@ -1161,6 +1161,29 @@
       "cashMove": {
         "label": "Frais de plateforme sur ce déménagement : {{amount}}. Payez-les sous 24 heures pour continuer à recevoir des déménagements"
       }
+    },
+    "navigation": {
+      "arrived": {
+        "title": "Vous êtes arrivé"
+      },
+      "loading": {
+        "label": "Chargement de l'itinéraire…"
+      },
+      "navigate": {
+        "cta": "Naviguer"
+      },
+      "overview": {
+        "cta": "Vue d'ensemble"
+      },
+      "remaining": {
+        "label": "{{distance}} · arrivée {{time}}"
+      },
+      "rerouting": {
+        "label": "Recherche d'un nouvel itinéraire…"
+      },
+      "then": {
+        "label": "Puis"
+      }
     }
   },
   "moverCard": {

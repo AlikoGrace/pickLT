@@ -1161,6 +1161,29 @@
       "cashMove": {
         "label": "Commissione della piattaforma su questo trasloco: {{amount}}. La paghi entro 24 ore per continuare a ricevere traslochi"
       }
+    },
+    "navigation": {
+      "arrived": {
+        "title": "Sei arrivato"
+      },
+      "loading": {
+        "label": "Caricamento indicazioni…"
+      },
+      "navigate": {
+        "cta": "Naviga"
+      },
+      "overview": {
+        "cta": "Panoramica"
+      },
+      "remaining": {
+        "label": "{{distance}} · arrivo {{time}}"
+      },
+      "rerouting": {
+        "label": "Ricerca di un nuovo percorso…"
+      },
+      "then": {
+        "label": "Poi"
+      }
     }
   },
   "moverCard": {

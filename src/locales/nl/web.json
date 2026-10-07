@@ -1161,6 +1161,29 @@
       "cashMove": {
         "label": "Platformkosten voor deze verhuizing: {{amount}}. Betaal binnen 24 uur om verhuizingen te blijven ontvangen"
       }
+    },
+    "navigation": {
+      "arrived": {
+        "title": "Je bent aangekomen"
+      },
+      "loading": {
+        "label": "Route ophalen…"
+      },
+      "navigate": {
+        "cta": "Navigeren"
+      },
+      "overview": {
+        "cta": "Overzicht"
+      },
+      "remaining": {
+        "label": "{{distance}} · aankomst {{time}}"
+      },
+      "rerouting": {
+        "label": "Nieuwe route zoeken…"
+      },
+      "then": {
+        "label": "Daarna"
+      }
     }
   },
   "moverCard": {

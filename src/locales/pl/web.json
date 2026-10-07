@@ -1173,6 +1173,29 @@
       "cashMove": {
         "label": "Opłata platformy za tę przeprowadzkę: {{amount}}. Zapłać w ciągu 24 godzin, aby nadal otrzymywać zlecenia"
       }
+    },
+    "navigation": {
+      "arrived": {
+        "title": "Jesteś na miejscu"
+      },
+      "loading": {
+        "label": "Pobieranie wskazówek…"
+      },
+      "navigate": {
+        "cta": "Nawiguj"
+      },
+      "overview": {
+        "cta": "Przegląd"
+      },
+      "remaining": {
+        "label": "{{distance}} · przyjazd {{time}}"
+      },
+      "rerouting": {
+        "label": "Wyszukiwanie nowej trasy…"
+      },
+      "then": {
+        "label": "Następnie"
+      }
     }
   },
   "moverCard": {

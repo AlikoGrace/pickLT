@@ -1161,6 +1161,29 @@
       "cashMove": {
         "label": "Plattformgebühr für diesen Umzug: {{amount}}. Zahlen Sie innerhalb von 24 Stunden, um weiterhin Umzüge zu erhalten"
       }
+    },
+    "navigation": {
+      "arrived": {
+        "title": "Sie sind angekommen"
+      },
+      "loading": {
+        "label": "Route wird geladen…"
+      },
+      "navigate": {
+        "cta": "Navigation"
+      },
+      "overview": {
+        "cta": "Übersicht"
+      },
+      "remaining": {
+        "label": "{{distance}} · Ankunft {{time}}"
+      },
+      "rerouting": {
+        "label": "Neue Route wird gesucht…"
+      },
+      "then": {
+        "label": "Dann"
+      }
     }
   },
   "moverCard": {

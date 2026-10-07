@@ -27,6 +27,8 @@ import type { QuoteBreakdown } from '@/lib/pricingEngine'
 import { useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
 import { formatDistanceKm, formatDistanceM } from '@/lib/format'
+import { NavBanner, NavFooter } from '@/components/mover/NavPanels'
+import { useNavRoute } from '@/hooks/useNavRoute'
 import { ARRIVAL_GEOFENCE_M } from '@/lib/service-limits'
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || ''
@@ -499,6 +501,18 @@ export default function ActiveMovePage() {
     return Math.sqrt(dLat * dLat + dLng * dLng) * 111_000 // approx meters
   }, [moverCoords, pickupCoords])
 
+  // ── Navigation mode (plan pickltmobile maps/mover-navigation-mode) ──
+  // Opens by itself while a leg is driven; Overview returns to this screen,
+  // Navigate re-enters. Same rules as the mover app.
+  const driving = phase === 'en_route' || phase === 'in_transit'
+  const [navOn, setNavOn] = useState(true)
+  useEffect(() => {
+    if (driving) setNavOn(true)
+  }, [driving, phase])
+  const navActive = driving && navOn
+  const navTarget = (phase === 'en_route' ? pickupCoords : dropoffCoords) ?? null
+  const { route: navRoute, progress: navProgress, rerouting } = useNavRoute(moverCoords, navTarget, navActive)
+
   const isNearPickup = distanceToPickup !== null && distanceToPickup <= ARRIVAL_GEOFENCE_M
 
   // ── Real ETA via Mapbox Directions ─────────────────────
@@ -596,11 +610,28 @@ export default function ActiveMovePage() {
           showUserLocation={false}
           onRouteCalculated={handleRouteCalculated}
           className="w-full h-full !rounded-none"
+          navigation={navActive ? { line: navRoute?.line ?? null } : null}
         />
       </div>
 
-      {/* Top bar — Phase indicator */}
-      <div className="absolute top-0 left-0 right-0 z-40 p-4 pointer-events-none">
+      {/* Top bar: the turn banner in navigation mode, else the phase indicator */}
+      {navActive && (
+        <div className="absolute top-0 left-0 right-0 z-40 p-4 pointer-events-none">
+          <div className="mx-auto max-w-lg pointer-events-auto">
+            <NavBanner route={navRoute} progress={navProgress} rerouting={rerouting} />
+          </div>
+        </div>
+      )}
+      {driving && !navOn && (
+        <button
+          type="button"
+          onClick={() => setNavOn(true)}
+          className="absolute right-4 top-48 z-40 rounded-full bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg"
+        >
+          {t('web:mover.navigation.navigate.cta')}
+        </button>
+      )}
+      <div className={`absolute top-0 left-0 right-0 z-40 p-4 pointer-events-none ${navActive ? 'hidden' : ''}`}>
         <div className="mx-auto max-w-lg pointer-events-auto">
           <div className="rounded-2xl bg-white/95 backdrop-blur-sm border border-neutral-200 dark:border-neutral-700 dark:bg-neutral-800/95 shadow-lg p-4">
             <div className="flex items-center gap-3">
@@ -678,9 +709,29 @@ export default function ActiveMovePage() {
         </div>
       </div>
 
-      {/* Bottom panel — Action button */}
+      {/* Bottom panel: the trip footer in navigation mode, else the action panel */}
       <div className="absolute bottom-28 lg:bottom-0 left-0 right-0 z-40 p-4 pb-6 pointer-events-none">
-        <div className="mx-auto max-w-lg pointer-events-auto space-y-3">
+        {navActive && (
+          <div className="mx-auto max-w-lg pointer-events-auto">
+            <NavFooter
+              progress={navProgress}
+              target={navTarget}
+              onOverview={() => setNavOn(false)}
+              action={
+                hasNextPhase ? (
+                  <ButtonPrimary
+                    onClick={advancePhase}
+                    disabled={isUpdating || (phase === 'en_route' && !isNearPickup)}
+                    className="w-full"
+                  >
+                    {isUpdating ? t('common:state.updating.label') : t('web:mover.activeMove.advance.cta')}
+                  </ButtonPrimary>
+                ) : null
+              }
+            />
+          </div>
+        )}
+        <div className={`mx-auto max-w-lg pointer-events-auto space-y-3 ${navActive ? 'hidden' : ''}`}>
           {/* Proximity hint when en_route and not yet near pickup */}
           {phase === 'en_route' && !isNearPickup && distanceToPickup !== null && (
             <div className="rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 p-3 flex items-center gap-2">

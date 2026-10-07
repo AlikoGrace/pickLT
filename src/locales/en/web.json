@@ -1161,6 +1161,29 @@
       "cashMove": {
         "label": "Platform fee on this move: {{amount}}. Pay within 24 hours to keep receiving moves"
       }
+    },
+    "navigation": {
+      "arrived": {
+        "title": "You have arrived"
+      },
+      "loading": {
+        "label": "Getting directions…"
+      },
+      "navigate": {
+        "cta": "Navigate"
+      },
+      "overview": {
+        "cta": "Overview"
+      },
+      "remaining": {
+        "label": "{{distance}} · arrive {{time}}"
+      },
+      "rerouting": {
+        "label": "Finding a new route…"
+      },
+      "then": {
+        "label": "Then"
+      }
     }
   },
   "moverCard": {
