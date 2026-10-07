@@ -13,9 +13,11 @@ describe('vehicleBannerPhoto (plan mover/dashboard-photo-banners)', () => {
     expect(vehicleBannerPhoto('VEHICLE_REJECTED', null)).toBe('vehicleOwned')
     expect(vehicleBannerPhoto(null, undefined)).toBe('vehicleOwned')
   })
-  it('the overlay sits over the photo, anchored right', () => {
+  it('the overlay sits over the photo, 55 % of the strip wide and anchored right', () => {
     const s = photoBannerStyle('feePayment')
     expect(s.backgroundImage).toMatch(/^linear-gradient\(.+\), url\(\/images\/banners\/fee-payment\.jpg\)$/)
-    expect(s.backgroundPosition).toBe('right 70%')
+    expect(s.backgroundSize).toBe('100% 100%, 55% auto')
+    expect(s.backgroundPosition).toBe('center, right center')
+    expect(s.backgroundColor).toBe('#0A0F19')
   })
 })
