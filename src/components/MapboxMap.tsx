@@ -13,6 +13,45 @@ import { truckSizePx } from '@/lib/truck-size'
 // Set the access token
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || ''
 
+/**
+ * The mover's truck as a real 3D model (plan pickltmobile maps/3d-truck-model):
+ * the same Kenney "Car Kit" delivery truck (CC0, box in PickLte blue) the apps
+ * draw, a Mapbox model layer on the glide pose. Same zoom scale and +180 deg
+ * heading offset as the apps (the model faces backwards).
+ */
+const TRUCK_MODEL_ID = 'picklte-truck-3d'
+const TRUCK_MODEL_URL = '/models/truck-3d.glb'
+const TRUCK_SOURCE = 'mover-truck'
+const TRUCK_LAYER = 'mover-truck-3d'
+const TRUCK_HEADING_OFFSET = 180
+
+function ensureTruckLayer(m: mapboxgl.Map) {
+  if (!m.hasModel(TRUCK_MODEL_ID)) m.addModel(TRUCK_MODEL_ID, new URL(TRUCK_MODEL_URL, window.location.origin).href)
+  if (!m.getSource(TRUCK_SOURCE)) {
+    m.addSource(TRUCK_SOURCE, { type: 'geojson', data: { type: 'FeatureCollection', features: [] } })
+  }
+  if (!m.getLayer(TRUCK_LAYER)) {
+    m.addLayer({
+      id: TRUCK_LAYER,
+      type: 'model',
+      source: TRUCK_SOURCE,
+      layout: { 'model-id': TRUCK_MODEL_ID },
+      paint: {
+        'model-type': 'common-3d',
+        'model-rotation': ['get', 'rotation'],
+        'model-scale': [
+          'interpolate', ['exponential', 2], ['zoom'],
+          10, ['literal', [320, 320, 320]],
+          14, ['literal', [42, 42, 42]],
+          17, ['literal', [11, 11, 11]],
+          19, ['literal', [6, 6, 6]],
+        ],
+        'model-cast-shadows': true,
+      },
+    } as mapboxgl.LayerSpecification)
+  }
+}
+
 export interface MapCoordinates {
   latitude: number
   longitude: number
@@ -213,10 +252,10 @@ export const MapboxMap = ({
       <div class="mover-scale" style="display:flex;align-items:center;justify-content:center;position:relative;transform-origin:center;transition:transform 120ms linear">
       <!-- pulse ring -->
       <div style="position:absolute;width:112px;height:112px;border-radius:50%;background:rgba(79,70,229,.25);animation:mover-ping 1.8s cubic-bezier(0,.2,.6,1) infinite;top:50%;left:50%;transform:translate(-50%,-50%)"></div>
-      <!-- truck body: top-down 3D render, nose up; the marker's rotation
-           (setRotation(heading) below) turns it to face travel -->
-      <div style="position:relative;animation:mover-bob 2s ease-in-out infinite;filter:drop-shadow(0 4px 10px rgba(0,0,0,.35))">
-        <img src="/images/truck-marker-3d.png" alt="" width="88" height="88" draggable="false" style="display:block;width:88px;height:88px;object-fit:contain;pointer-events:none;user-select:none" />
+      <!-- the truck itself is the 3D model layer (TRUCK_LAYER); this marker
+           keeps the pulse ring, so the position still shows if the model
+           cannot load -->
+      <div style="position:relative;width:88px;height:88px"></div>
       </div>
       </div>
     `
@@ -322,6 +361,12 @@ export const MapboxMap = ({
           moverMarkerRef.current.setLngLat([pose.longitude, pose.latitude])
         }
         if (pose.heading !== null) moverMarkerRef.current.setRotation(pose.heading)
+        ensureTruckLayer(map.current)
+        ;(map.current.getSource(TRUCK_SOURCE) as mapboxgl.GeoJSONSource | undefined)?.setData({
+          type: 'Feature',
+          properties: { rotation: [0, 0, (pose.heading ?? 0) + TRUCK_HEADING_OFFSET] },
+          geometry: { type: 'Point', coordinates: [pose.longitude, pose.latitude] },
+        })
       }
       // Navigation follows the live position: no glide lag for the driver.
       if (navigationRef.current) {
@@ -340,6 +385,7 @@ export const MapboxMap = ({
       if (moverFrameRef.current !== null) cancelAnimationFrame(moverFrameRef.current)
       moverFrameRef.current = null
       moverTrackRef.current.reset()
+      ;(map.current.getSource(TRUCK_SOURCE) as mapboxgl.GeoJSONSource | undefined)?.setData({ type: 'FeatureCollection', features: [] })
       if (moverMarkerRef.current) {
         moverMarkerRef.current.remove()
         moverMarkerRef.current = null
