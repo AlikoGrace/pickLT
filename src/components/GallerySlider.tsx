@@ -1,5 +1,6 @@
 'use client'
 
+import { isMovePhotoProxyUrl } from '@/lib/move-photo-url'
 import { ThemeContext } from '@/app/theme-provider'
 import { ButtonCircle } from '@/shared/Button'
 import { variants } from '@/utils/animationVariants'
@@ -113,7 +114,9 @@ export default function GallerySlider({
                   className={clsx(`rounded-xl object-cover`, imageClass)}
                   onLoad={() => setLoaded(true)}
                   sizes="(max-width: 1025px) 100vw, 25vw"
-                  unoptimized={isExternal}
+                  // Move photos come from the site's own photo route and must not
+                  // pass through the image optimiser's shared cache.
+                  unoptimized={isExternal || isMovePhotoProxyUrl(cleanSrc)}
                 />
               </motion.div>
             </AnimatePresence>

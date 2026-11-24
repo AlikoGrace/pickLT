@@ -136,10 +136,11 @@ describe('validateVehicleInput — fnCode branches', () => {
 })
 
 describe('upload permissions (master D11)', () => {
-  it('vehicle photos are owner-read-only like the licence; the selfie keeps the bucket default', () => {
+  it('vehicle photos are owner-read-only like the licence; the selfie is readable by link', () => {
     expect(uploadedPhotoPermissions('vehicle', 'user_1')).toEqual(['read("user:user_1")'])
     expect(uploadedPhotoPermissions('license', 'user_1')).toEqual(['read("user:user_1")'])
-    expect(uploadedPhotoPermissions('selfie', 'user_1')).toBeUndefined()
+    // The bucket no longer grants read, so "no permissions" meant unreadable (plan legal/4).
+    expect(uploadedPhotoPermissions('selfie', 'user_1')).toEqual(['read("any")'])
     expect(vehiclePermissions('user_1')).toEqual(['read("user:user_1")'])
   })
 })

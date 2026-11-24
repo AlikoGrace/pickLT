@@ -535,12 +535,12 @@ export default function MoveDetailsPage() {
 
   const galleryImgs: string[] = []
   if (coverPhotoId) {
-    const url = movePhotoUrl(coverPhotoId)
+    const url = movePhotoUrl(coverPhotoId, handle)
     if (url) galleryImgs.push(url)
   }
   if (galleryPhotoIds.length > 0) {
     galleryPhotoIds.forEach((id) => {
-      const url = movePhotoUrl(id)
+      const url = movePhotoUrl(id, handle)
       if (url) galleryImgs.push(url)
     })
   }

@@ -517,11 +517,11 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
 
     // Build gallery images from the move
     const galleryImages: string[] = []
-    const coverUrl = movePhotoUrl(move?.coverPhotoId)
+    const coverUrl = movePhotoUrl(move?.coverPhotoId, incoming.moveId)
     if (coverUrl) galleryImages.push(coverUrl)
     if (move?.galleryPhotoIds) {
       move.galleryPhotoIds.forEach((id) => {
-        const url = movePhotoUrl(id)
+        const url = movePhotoUrl(id, incoming.moveId)
         if (url) galleryImages.push(url)
       })
     }

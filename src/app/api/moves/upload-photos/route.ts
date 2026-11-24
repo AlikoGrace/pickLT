@@ -1,3 +1,5 @@
+import { movePhotoPermissions } from '@/lib/doc-permissions'
+import { toFileId } from '@/lib/move-photo-url'
 import { getTranslations } from '@/lib/i18n-server'
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/appwrite-server'
@@ -20,8 +22,12 @@ export const maxDuration = 60
  *   galleryPhotoIds — array of base64 data-URL strings (optional)
  *
  * Returns:
- *   coverPhotoId   — full public URL for the cover photo (or null)
- *   galleryPhotoIds — array of full public URLs for gallery photos
+ *   coverPhotoId   — the cover photo's file id (or null)
+ *   galleryPhotoIds — array of file ids for the gallery photos
+ *
+ * The bucket is private (plan legal/4.private-photos): a new file is readable
+ * by its uploader only, and what is stored on the move is the file id. The
+ * pages load a photo through `/api/photos/move/...`, never from a public URL.
  */
 export async function POST(req: NextRequest) {
   const { t } = await getTranslations()
@@ -39,8 +45,6 @@ export async function POST(req: NextRequest) {
 
     const { storage } = createAdminClient()
     const bucketId = APPWRITE.BUCKETS.MOVE_PHOTOS
-    const endpoint = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!
-    const projectId = APPWRITE.PROJECT_ID
 
     let uploadedCoverUrl: string | null = null
     const uploadedGalleryUrls: string[] = []
@@ -50,7 +54,12 @@ export async function POST(req: NextRequest) {
       // Support standard data URLs: data:image/jpeg;base64,/9j/4AAQ...
       // Also handle URLs that might already be uploaded (start with http)
       if (dataUrl.startsWith('http://') || dataUrl.startsWith('https://')) {
-        return dataUrl // Already a URL, no upload needed
+        // Already uploaded (a legacy full URL): keep it, reduced to its id.
+        return toFileId(dataUrl) ?? dataUrl
+      }
+      // Already uploaded, coming back as the route URL a page rendered it from.
+      if (dataUrl.startsWith('/api/photos/move/')) {
+        return decodeURIComponent(dataUrl.slice('/api/photos/move/'.length).split('?')[0])
       }
 
       const match = dataUrl.match(/^data:(image\/[\w+.-]+);base64,(.+)$/)
@@ -67,10 +76,10 @@ export async function POST(req: NextRequest) {
         bucketId,
         ID.unique(),
         InputFile.fromBuffer(uint8, fileName),
+        movePhotoPermissions(userId),
       )
 
-      // Return the full public URL for this file
-      return `${endpoint}/storage/buckets/${bucketId}/files/${file.$id}/view?project=${projectId}`
+      return file.$id
     }
 
     // ── Upload cover photo ──────────────────────────────────

@@ -155,8 +155,23 @@ export function moverLedgerPermissions(driverAuthId: string): string[] {
  * owner-only grant and must never become world-readable. Pulled out of the
  * route so the branch is pinned by a test rather than by a comment.
  */
-export function uploadedPhotoPermissions(purpose: string, ownerAuthId: string): string[] | undefined {
-  return purpose === 'selfie' ? undefined : [Permission.read(Role.user(ownerAuthId))]
+export function uploadedPhotoPermissions(purpose: string, ownerAuthId: string): string[] {
+  // A selfie is the profile picture: readable by link, like the apps' avatars
+  // (plan legal/4.private-photos, decision 5). It used to get no permissions
+  // at all, which worked only while the bucket itself granted read; since
+  // 2026-08-19 it does not, and web selfies were readable by nobody.
+  return purpose === 'selfie'
+    ? [Permission.read(Role.any())]
+    : [Permission.read(Role.user(ownerAuthId))]
+}
+
+/**
+ * A move photo: the inside of a customer's home. Readable by its uploader
+ * only. Everyone else who may see the move gets it through the photo route
+ * (web) or a short-lived link from `getphotourls` (apps).
+ */
+export function movePhotoPermissions(ownerAuthId: string): string[] {
+  return [Permission.read(Role.user(ownerAuthId))]
 }
 
 /**

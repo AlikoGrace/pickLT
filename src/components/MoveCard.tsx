@@ -102,7 +102,7 @@ const MoveCard: FC<MoveCardProps> = ({ size = 'default', className = '', data })
   // (next/image throws on those), so resolve to URLs and strip mode=admin.
   const cleanUrl = (url: string) => url.replace(/[&?]mode=admin/g, '')
   const galleryImgs = [coverPhotoId, ...galleryPhotoIds]
-    .map(movePhotoUrl)
+    .map((ref) => movePhotoUrl(ref, handle))
     .filter((url): url is string => !!url)
     .map(cleanUrl)
 

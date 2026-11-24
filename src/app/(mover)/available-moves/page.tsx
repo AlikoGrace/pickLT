@@ -339,9 +339,9 @@ const AvailableMovesPage = () => {
                   >
                     {/* Photo strip */}
                     <div className="relative h-32 bg-neutral-100 dark:bg-neutral-700 flex items-center justify-center">
-                      {movePhotoUrl(selectedMove.coverPhotoId) ? (
+                      {movePhotoUrl(selectedMove.coverPhotoId, selectedMove.handle) ? (
                         <Image
-                          src={movePhotoUrl(selectedMove.coverPhotoId) ?? ''}
+                          src={movePhotoUrl(selectedMove.coverPhotoId, selectedMove.handle) ?? ''}
                           alt={t('booking:photos.item.a11y')}
                           fill
                           className="object-cover"
@@ -411,9 +411,9 @@ const AvailableMovesPage = () => {
                 >
                   {/* Card Header */}
                   <div className="relative h-32 bg-neutral-100 dark:bg-neutral-700 flex items-center justify-center overflow-hidden">
-                    {movePhotoUrl(move.coverPhotoId) ? (
+                    {movePhotoUrl(move.coverPhotoId, move.handle) ? (
                       <Image
-                        src={movePhotoUrl(move.coverPhotoId) ?? ''}
+                        src={movePhotoUrl(move.coverPhotoId, move.handle) ?? ''}
                         alt={t('booking:photos.item.a11y')}
                         fill
                         className="object-cover"
