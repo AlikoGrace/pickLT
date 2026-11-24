@@ -542,8 +542,9 @@ export function quoteMove(input: QuoteInput, config?: PricingConfig | null): Quo
     serviceLines.push({ key: id, amountEur: eur(c) })
   }
 
-  const storageWeeks = Math.floor(nonNegative(input.storageWeeks))
-  const storage = storageWeeks * cents(trace.get('storage.perWeek'))
+  // Storage is retired with the other additional services (plan
+  // `legal/6.web-cleanup` W1): it is never priced, whatever the input carries.
+  const storage = 0
 
   // 5. Totals.
   const operationalSubtotal =
@@ -716,11 +717,22 @@ export function parseBreakdown(raw: unknown): QuoteBreakdown | null {
 // ── Retired services ───────────────────────────────────────────────────────
 
 /**
- * Services that are no longer offered (plan `legal/1.scope-lock` S1). A retired
- * id is dropped from every new quote and every new write; a move booked before
- * the change keeps the line and the price it was booked with.
+ * Services that are no longer offered: waste disposal (plan `legal/1.scope-lock`
+ * S1) and every other additional service (plan `legal/6.web-cleanup` W1). The
+ * platform arranges transport only. A retired id is dropped from every new quote
+ * and every new write; a move booked before the change keeps the line and the
+ * price it was booked with.
  */
-export const RETIRED_SERVICES: readonly string[] = ['disposal_entsorgung']
+export const RETIRED_SERVICES: readonly string[] = [
+  'disposal_entsorgung',
+  'furniture_disassembly',
+  'furniture_assembly',
+  'tv_mount_remove',
+  'appliance_disconnect',
+  'appliance_connect',
+  'moveout_cleaning',
+  'temporary_storage',
+]
 
 export function stripRetiredServices(ids: readonly string[] | null | undefined): string[] {
   return (ids ?? []).filter((id) => typeof id === 'string' && !RETIRED_SERVICES.includes(id.trim()))

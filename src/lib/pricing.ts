@@ -25,7 +25,7 @@
  *   items.*                         custom-item unit prices + suggestion rates
  *   crew.*  handling.*  access.*    crew requirement, extra helpers, handling hours, access fees
  *   classify.<light|regular>.*      tier cut-offs (points, weight, items, m³)
- *   packing.*  service.*  storage.* selectable services
+ *   packing.*  selectable packing levels
  *   platformFee.*  tax.*            customer-facing fee and VAT
  *   pricing.minimumCharge           floor on the net price
  *
@@ -135,15 +135,6 @@ export const PRICING_DEFAULTS = {
   'packing.partial': 50,
   'packing.full': 120,
   'packing.unpacking': 180,
-  'service.furniture_disassembly': 50,
-  'service.furniture_assembly': 50,
-  'service.tv_mount_remove': 50,
-  'service.appliance_disconnect': 50,
-  'service.appliance_connect': 50,
-  'service.moveout_cleaning': 50,
-  // Storage is billed per week below; the service tick itself is free.
-  'service.temporary_storage': 0,
-  'storage.perWeek': 30,
 
   // ── Platform fee, tax, floor (MoveDNA §2, §5) ─────────────────────────────
   'platformFee.rate': 0.08,

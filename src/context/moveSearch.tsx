@@ -668,7 +668,6 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
     if (saved.additionalServices) {
       setAdditionalServices(stripRetiredServices(saved.additionalServices as string[]) as AdditionalService[])
     }
-    if (saved.storageWeeks != null) setStorageWeeks(saved.storageWeeks as number)
     if (saved.coverPhotoId) setCoverPhotoId(saved.coverPhotoId as string)
     if (saved.galleryPhotoIds) setGalleryPhotoIds(saved.galleryPhotoIds as string[])
     if (saved.contactInfo) setContactInfo(saved.contactInfo as ContactInfo)

@@ -157,28 +157,11 @@
     "title": "İletişim"
   },
   "footer": {
-    "company": {
-      "about": "Hakkımızda",
-      "careers": "Kariyer",
-      "locations": "Lokasyonlar",
-      "title": "Şirket"
-    },
     "copyright": "© {{year}} PickLte. Tüm hakları saklıdır.",
     "legal": {
       "title": "Yasal"
     },
-    "solutions": {
-      "commercial": "Kurumsal taşımacılık",
-      "localMoving": "Şehir içi taşımacılık",
-      "longDistance": "Şehirler arası taşımacılık",
-      "packing": "Paketleme hizmetleri",
-      "storage": "Depolama çözümleri",
-      "title": "Çözümler"
-    },
     "support": {
-      "contact": "Bize ulaşın",
-      "faq": "SSS",
-      "quote": "Teklif alın",
       "title": "Destek"
     },
     "tagline": "Avrupa genelinde daireler, ofisler ve eşyalar için nakliyeci ayırtın."
@@ -1629,11 +1612,8 @@
       "subtitle": "Nakliyecilerin ne zaman geleceğini seçin."
     },
     "step6": {
-      "services": {
-        "helper": "Bunlar Alman nakliyecilerinin standart hizmetleridir."
-      },
-      "subtitle": "Ek hizmetleri seçin ve taşınacak eşyaların fotoğraflarını yükleyin.",
-      "title": "Ek hizmetler ve fotoğraflar"
+      "subtitle": "Taşınacak eşyaların fotoğraflarını yükleyin ve gerekirse yardımcı ekleyin.",
+      "title": "Fotoğraflar ve yardımcılar"
     },
     "stepOf": {
       "label": "Adım {{current}}/{{total}}"

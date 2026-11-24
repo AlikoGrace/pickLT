@@ -214,7 +214,9 @@ export default async ({ req, res, log, error }) => {
       vehicleType: asText(moveData.vehicleType),
       // Retired services (plan legal/1.scope-lock S1) never reach a new row.
       additionalServices: stripRetiredServices(asTextArray(moveData.additionalServices)),
-      storageWeeks: moveData.storageWeeks || 0,
+      // Storage is retired with the other additional services (plan
+      // legal/6.web-cleanup W1); nothing a client sends can set it.
+      storageWeeks: 0,
       coverPhotoId: asText(moveData.coverPhotoId),
       galleryPhotoIds: asTextArray(moveData.galleryPhotoIds),
       contactFullName: asText(moveData.contactFullName),

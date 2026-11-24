@@ -174,8 +174,9 @@ describe('golden fixture — quoteMove (shared with pickltmobile)', () => {
 // ── 3. Registry parity ───────────────────────────────────────────────────────
 
 describe('registry — PRICING_DEFAULTS', () => {
-  it('is exactly the 74-key v3 registry of master §5', () => {
-    expect(Object.keys(PRICING_DEFAULTS)).toHaveLength(74)
+  it('is exactly the 66-key v3 registry (master §5 less the retired services)', () => {
+    expect(Object.keys(PRICING_DEFAULTS)).toHaveLength(66)
+    expect(Object.keys(PRICING_DEFAULTS).filter((k) => k.startsWith('service.') || k.startsWith('storage.'))).toEqual([])
     for (const legacy of ['instant.', 'scheduled.', 'mover.', 'pricing.model', 'pricing.local', 'pricing.volume', 'pricing.access', 'pricing.leadTime']) {
       expect(Object.keys(PRICING_DEFAULTS).filter((k) => k.startsWith(legacy))).toEqual([])
     }
@@ -207,7 +208,7 @@ describe('registry — PRICING_DEFAULTS', () => {
       { key: 'pricing.minimumCharge', value: '60' },
     ])
     expect(cfg).toEqual({ 'tax.vatRate': 0.07, 'pricing.minimumCharge': 60 })
-    expect(toPricingConfig({ 'storage.perWeek': 25, bogus: 1 })).toEqual({ 'storage.perWeek': 25 })
+    expect(toPricingConfig({ 'packing.full': 25, 'storage.perWeek': 25, bogus: 1 })).toEqual({ 'packing.full': 25 })
   })
 })
 
@@ -291,21 +292,17 @@ describe('quoteMove — items, crew, vehicle, floor, discount', () => {
     expect(b.lines.labor).toBe(49.5)
   })
 
-  it('adds floors without a lift, Halteverbot, packing, services and storage', () => {
+  it('adds floors without a lift, Halteverbot and packing; retired services and storage price nothing', () => {
     const b = quoteMove(base({
       floorsNoLift: 3, haltverbotCount: 2, packingLevel: 'full',
       services: ['furniture_assembly', 'furniture_assembly', 'unknown_service', 'temporary_storage'], storageWeeks: 2,
     }))
     expect(b.lines.handling).toBe(45)
     expect(b.lines.packing).toBe(120)
-    expect(b.lines.services).toBe(50)
-    expect(b.serviceLines).toEqual([
-      { key: 'furniture_assembly', amountEur: 50 },
-      { key: 'temporary_storage', amountEur: 0 },
-      { key: 'unknown_service', amountEur: 0 },
-    ])
-    expect(b.lines.storage).toBe(60)
-    expect(b.operationalSubtotal).toBe(116 + 45 + 120 + 50 + 60)
+    expect(b.lines.services).toBe(0)
+    expect(b.serviceLines).toEqual([{ key: 'unknown_service', amountEur: 0 }])
+    expect(b.lines.storage).toBe(0)
+    expect(b.operationalSubtotal).toBe(116 + 45 + 120)
   })
 
   it('applies the discount, then the minimum charge, then VAT', () => {
@@ -338,7 +335,7 @@ describe('quoteMove — items, crew, vehicle, floor, discount', () => {
     expect(b.mode).toBe('scheduled')
     expect(b.lines.distance).toBe(0)
     expect(b.lines.items).toBe(0)
-    expect(b.lines.storage).toBe(30)
+    expect(b.lines.storage).toBe(0)
   })
 
   it('suggests a unit price from weight and bounding-box volume', () => {

@@ -157,28 +157,11 @@
     "title": "Contact"
   },
   "footer": {
-    "company": {
-      "about": "About Us",
-      "careers": "Careers",
-      "locations": "Locations",
-      "title": "Company"
-    },
     "copyright": "© {{year}} PickLte. All rights reserved.",
     "legal": {
       "title": "Legal"
     },
-    "solutions": {
-      "commercial": "Commercial Moving",
-      "localMoving": "Local Moving",
-      "longDistance": "Long Distance Moving",
-      "packing": "Packing Services",
-      "storage": "Storage Solutions",
-      "title": "Solutions"
-    },
     "support": {
-      "contact": "Contact Us",
-      "faq": "FAQs",
-      "quote": "Get a Quote",
       "title": "Support"
     },
     "tagline": "Book movers for apartments, offices, and belongings across Europe."
@@ -1629,11 +1612,8 @@
       "subtitle": "Choose when the movers should arrive."
     },
     "step6": {
-      "services": {
-        "helper": "These are standard offerings from German movers."
-      },
-      "subtitle": "Select extra services and upload photos of items to be moved.",
-      "title": "Additional services & photos"
+      "subtitle": "Upload photos of the items to be moved and add helpers if you need them.",
+      "title": "Photos & helpers"
     },
     "stepOf": {
       "label": "Step {{current}} of {{total}}"

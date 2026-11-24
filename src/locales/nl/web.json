@@ -157,28 +157,11 @@
     "title": "Contact"
   },
   "footer": {
-    "company": {
-      "about": "Over ons",
-      "careers": "Werken bij",
-      "locations": "Locaties",
-      "title": "Bedrijf"
-    },
     "copyright": "© {{year}} PickLte. Alle rechten voorbehouden.",
     "legal": {
       "title": "Juridisch"
     },
-    "solutions": {
-      "commercial": "Zakelijke verhuizingen",
-      "localMoving": "Lokaal verhuizen",
-      "longDistance": "Verhuizen over lange afstand",
-      "packing": "Inpakservice",
-      "storage": "Opslagoplossingen",
-      "title": "Oplossingen"
-    },
     "support": {
-      "contact": "Neem contact op",
-      "faq": "Veelgestelde vragen",
-      "quote": "Offerte aanvragen",
       "title": "Support"
     },
     "tagline": "Boek verhuizers voor appartementen, kantoren en spullen in heel Europa."
@@ -1629,11 +1612,8 @@
       "subtitle": "Kies wanneer de verhuizers moeten aankomen."
     },
     "step6": {
-      "services": {
-        "helper": "Dit zijn standaarddiensten van Duitse verhuisbedrijven."
-      },
-      "subtitle": "Kies extra diensten en upload foto's van de spullen die mee moeten.",
-      "title": "Extra diensten en foto's"
+      "subtitle": "Upload foto's van de spullen die verhuisd worden en voeg zo nodig helpers toe.",
+      "title": "Foto's & helpers"
     },
     "stepOf": {
       "label": "Stap {{current}} van {{total}}"

@@ -1,14 +1,10 @@
 'use client'
 
-import NcInputNumber from '@/components/NcInputNumber'
 import ExtraHelpersStepper from '@/components/booking/ExtraHelpersStepper'
 import { usePricingConfig } from '@/hooks/usePricingConfig'
-import { useMoveSearch, type AdditionalService } from '@/context/moveSearch'
+import { useMoveSearch } from '@/context/moveSearch'
 import { compressImage } from '@/utils/compressImage'
-import { Checkbox, CheckboxField, CheckboxGroup } from '@/shared/Checkbox'
 import { Divider } from '@/shared/divider'
-import { Fieldset, Label } from '@/shared/fieldset'
-import Textarea from '@/shared/Textarea'
 import { ImageAdd02Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { XMarkIcon } from '@heroicons/react/24/solid'
@@ -20,21 +16,6 @@ import { useTranslation } from 'react-i18next'
 import { formatFileSizeMb } from '@/lib/format'
 import { UPLOAD_MAX_MB } from '@/lib/service-limits'
 
-/**
- * `id` is the persisted value and never changes. `key` is the catalog segment —
- * the ids carry `_`, which i18next reserves for plural suffixes (§ 2), so the
- * two cannot be the same string.
- */
-const ADDITIONAL_SERVICES: { id: AdditionalService; key: string }[] = [
-  { id: 'furniture_disassembly', key: 'disassembly' },
-  { id: 'furniture_assembly', key: 'assembly' },
-  { id: 'tv_mount_remove', key: 'tvMount' },
-  { id: 'appliance_disconnect', key: 'applianceDisconnect' },
-  { id: 'appliance_connect', key: 'applianceConnect' },
-  { id: 'moveout_cleaning', key: 'cleaning' },
-  { id: 'temporary_storage', key: 'storage' },
-]
-
 const Page = () => {
   const { t } = useTranslation()
   const router = useRouter()
@@ -42,12 +23,8 @@ const Page = () => {
   const galleryInputRef = useRef<HTMLInputElement>(null)
 
   const {
-    additionalServices,
-    storageWeeks,
     coverPhotoId,
     galleryPhotoIds,
-    toggleAdditionalService,
-    setStorageWeeks,
     setCoverPhotoId,
     addGalleryPhotoId,
     removeGalleryPhotoId,
@@ -97,8 +74,6 @@ const Page = () => {
       }
     }
   }
-
-  const showStorageOptions = additionalServices.includes('temporary_storage')
 
   return (
     <>
@@ -244,39 +219,6 @@ const Page = () => {
 
         <Divider />
 
-        {/* Additional Services Checkboxes */}
-        <div>
-          <span className="text-lg font-semibold">{t('booking:services.title')}</span>
-          <span className="mt-1 block text-sm text-neutral-500 dark:text-neutral-400">
-            {t('web:wizard.step6.services.helper')}
-          </span>
-          <Fieldset className="mt-4">
-            <CheckboxGroup className="space-y-4">
-              {ADDITIONAL_SERVICES.map((service) => (
-                <CheckboxField key={service.id}>
-                  <Checkbox
-                    name={`service_${service.id}`}
-                    checked={additionalServices.includes(service.id)}
-                    onChange={() => toggleAdditionalService(service.id)}
-                  />
-                  {/* i18n-keys: booking.service.disassembly.label, booking.service.assembly.label,
-                      booking.service.tvMount.label, booking.service.applianceDisconnect.label,
-                      booking.service.applianceConnect.label,
-                      booking.service.cleaning.label, booking.service.storage.label (+ .helper each) */}
-                  <Label className="flex flex-col">
-                    <span className="font-medium">{t(`booking:service.${service.key}.label`)}</span>
-                    <span className="text-sm text-neutral-500 dark:text-neutral-400">
-                      {t(`booking:service.${service.key}.helper`)}
-                    </span>
-                  </Label>
-                </CheckboxField>
-              ))}
-            </CheckboxGroup>
-          </Fieldset>
-        </div>
-
-        <Divider />
-
         {/* Extra helpers on top of the tier crew, billed per hour (crew master D2) */}
         <ExtraHelpersStepper
           value={extraHelpers}
@@ -285,31 +227,7 @@ const Page = () => {
           config={pricingConfig}
         />
 
-        {/* Conditional: Storage Duration */}
-        {showStorageOptions && (
-          <>
-            <Divider />
-            <div className="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-2xl border border-neutral-200 dark:border-neutral-700">
-              <p className="text-lg font-semibold mb-4">{t('booking:storage.title')}</p>
-              <NcInputNumber
-                inputName="storageWeeks"
-                inputId="storageWeeks"
-                label={t('booking:storage.weeks.label')}
-                defaultValue={storageWeeks}
-                min={1}
-                max={52}
-                onChange={(value) => setStorageWeeks(value)}
-              />
-              <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
-                {t('booking:storage.helper')}
-              </p>
-            </div>
-          </>
-        )}
-
         {/* Hidden fields for form data */}
-        <input type="hidden" name="additionalServices" value={JSON.stringify(additionalServices)} />
-        <input type="hidden" name="storageWeeksValue" value={storageWeeks} />
         <input type="hidden" name="extraHelpers" value={extraHelpers} />
         <input type="hidden" name="coverPhotoId" value={coverPhotoId || ''} />
         <input type="hidden" name="galleryPhotoIds" value={JSON.stringify(galleryPhotoIds)} />

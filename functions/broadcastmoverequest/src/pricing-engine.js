@@ -91,14 +91,6 @@ export const PRICING_DEFAULTS = {
   'packing.partial': 50,
   'packing.full': 120,
   'packing.unpacking': 180,
-  'service.furniture_disassembly': 50,
-  'service.furniture_assembly': 50,
-  'service.tv_mount_remove': 50,
-  'service.appliance_disconnect': 50,
-  'service.appliance_connect': 50,
-  'service.moveout_cleaning': 50,
-  'service.temporary_storage': 0,
-  'storage.perWeek': 30,
 
   'platformFee.rate': 0.08,
   'platformFee.fixed': 0,
@@ -759,8 +751,9 @@ export function quoteMove(input, config) {
     serviceLines.push({ key: id, amountEur: eur(c) });
   }
 
-  const storageWeeks = Math.floor(nonNegative(input.storageWeeks));
-  const storage = storageWeeks * cents(trace.get('storage.perWeek'));
+  // Storage is retired with the other additional services (plan
+  // `legal/6.web-cleanup` W1): it is never priced, whatever the input carries.
+  const storage = 0;
 
   // 5. Totals.
   const operationalSubtotal =
@@ -994,11 +987,22 @@ export function quoteColumns(breakdown, pricedAtIso) {
 // ── Retired services ───────────────────────────────────────────────────────
 
 /**
- * Services that are no longer offered (plan `legal/1.scope-lock` S1). A retired
- * id is dropped from every new quote and every new write; a move booked before
- * the change keeps the line and the price it was booked with.
+ * Services that are no longer offered: waste disposal (plan `legal/1.scope-lock`
+ * S1) and every other additional service (plan `legal/6.web-cleanup` W1). The
+ * platform arranges transport only. A retired id is dropped from every new quote
+ * and every new write; a move booked before the change keeps the line and the
+ * price it was booked with.
  */
-export const RETIRED_SERVICES = ['disposal_entsorgung'];
+export const RETIRED_SERVICES = [
+  'disposal_entsorgung',
+  'furniture_disassembly',
+  'furniture_assembly',
+  'tv_mount_remove',
+  'appliance_disconnect',
+  'appliance_connect',
+  'moveout_cleaning',
+  'temporary_storage',
+];
 
 export function stripRetiredServices(ids) {
   return (ids ?? []).filter((id) => typeof id === 'string' && !RETIRED_SERVICES.includes(id.trim()));

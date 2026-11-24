@@ -157,28 +157,11 @@
     "title": "Contacto"
   },
   "footer": {
-    "company": {
-      "about": "Quiénes somos",
-      "careers": "Empleo",
-      "locations": "Dónde operamos",
-      "title": "Empresa"
-    },
     "copyright": "© {{year}} PickLte. Todos los derechos reservados.",
     "legal": {
       "title": "Aviso legal"
     },
-    "solutions": {
-      "commercial": "Mudanzas para empresas",
-      "localMoving": "Mudanzas locales",
-      "longDistance": "Mudanzas de larga distancia",
-      "packing": "Servicios de embalaje",
-      "storage": "Soluciones de almacenamiento",
-      "title": "Soluciones"
-    },
     "support": {
-      "contact": "Contacto",
-      "faq": "Preguntas frecuentes",
-      "quote": "Pedir presupuesto",
       "title": "Soporte"
     },
     "tagline": "Reserva transportistas para pisos, oficinas y objetos por toda Europa."
@@ -1629,11 +1612,8 @@
       "subtitle": "Elige cuándo deben llegar los transportistas."
     },
     "step6": {
-      "services": {
-        "helper": "Estos son los servicios habituales de las empresas de mudanzas alemanas."
-      },
-      "subtitle": "Selecciona servicios adicionales y sube fotos de los objetos que vas a mudar.",
-      "title": "Servicios adicionales y fotos"
+      "subtitle": "Suba fotos de los objetos que se van a trasladar y añada ayudantes si los necesita.",
+      "title": "Fotos y ayudantes"
     },
     "stepOf": {
       "label": "Paso {{current}} de {{total}}"

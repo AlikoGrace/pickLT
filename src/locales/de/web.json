@@ -157,28 +157,11 @@
     "title": "Kontakt"
   },
   "footer": {
-    "company": {
-      "about": "Über uns",
-      "careers": "Karriere",
-      "locations": "Standorte",
-      "title": "Unternehmen"
-    },
     "copyright": "© {{year}} PickLte. Alle Rechte vorbehalten.",
     "legal": {
       "title": "Rechtliches"
     },
-    "solutions": {
-      "commercial": "Firmenumzüge",
-      "localMoving": "Nahumzüge",
-      "longDistance": "Fernumzüge",
-      "packing": "Packservice",
-      "storage": "Einlagerung",
-      "title": "Leistungen"
-    },
     "support": {
-      "contact": "Kontakt",
-      "faq": "Häufige Fragen",
-      "quote": "Angebot einholen",
       "title": "Support"
     },
     "tagline": "Umzugsprofis buchen: für Wohnungen, Büros und Umzugsgut in ganz Europa."
@@ -1629,11 +1612,8 @@
       "subtitle": "Wählen Sie, wann die Umzugsprofis eintreffen sollen."
     },
     "step6": {
-      "services": {
-        "helper": "Das sind Standardleistungen deutscher Umzugsunternehmen."
-      },
-      "subtitle": "Wählen Sie zusätzliche Leistungen und laden Sie Fotos der Gegenstände hoch.",
-      "title": "Zusätzliche Leistungen & Fotos"
+      "subtitle": "Laden Sie Fotos der Gegenstände hoch und fügen Sie bei Bedarf Helfer hinzu.",
+      "title": "Fotos & Helfer"
     },
     "stepOf": {
       "label": "Schritt {{current}} von {{total}}"

@@ -157,28 +157,11 @@
     "title": "Contatti"
   },
   "footer": {
-    "company": {
-      "about": "Chi siamo",
-      "careers": "Lavora con noi",
-      "locations": "Sedi",
-      "title": "Azienda"
-    },
     "copyright": "© {{year}} PickLte. Tutti i diritti riservati.",
     "legal": {
       "title": "Note legali"
     },
-    "solutions": {
-      "commercial": "Traslochi commerciali",
-      "localMoving": "Traslochi locali",
-      "longDistance": "Traslochi a lunga distanza",
-      "packing": "Servizi di imballaggio",
-      "storage": "Soluzioni di deposito",
-      "title": "Soluzioni"
-    },
     "support": {
-      "contact": "Contattaci",
-      "faq": "FAQ",
-      "quote": "Richiedi un preventivo",
       "title": "Assistenza"
     },
     "tagline": "Prenota traslocatori per appartamenti, uffici e oggetti in tutta Europa."
@@ -1629,11 +1612,8 @@
       "subtitle": "Scegli quando devono arrivare i traslocatori."
     },
     "step6": {
-      "services": {
-        "helper": "Sono i servizi standard offerti dai traslocatori tedeschi."
-      },
-      "subtitle": "Seleziona i servizi extra e carica le foto degli oggetti da traslocare.",
-      "title": "Servizi aggiuntivi e foto"
+      "subtitle": "Carichi le foto degli oggetti da traslocare e aggiunga aiutanti se necessario.",
+      "title": "Foto e aiutanti"
     },
     "stepOf": {
       "label": "Passo {{current}} di {{total}}"

@@ -157,28 +157,11 @@
     "title": "Kontakt"
   },
   "footer": {
-    "company": {
-      "about": "O nas",
-      "careers": "Kariera",
-      "locations": "Lokalizacje",
-      "title": "Firma"
-    },
     "copyright": "© {{year}} PickLte. Wszelkie prawa zastrzeżone.",
     "legal": {
       "title": "Informacje prawne"
     },
-    "solutions": {
-      "commercial": "Przeprowadzki firmowe",
-      "localMoving": "Przeprowadzki lokalne",
-      "longDistance": "Przeprowadzki na duże odległości",
-      "packing": "Usługi pakowania",
-      "storage": "Przechowywanie",
-      "title": "Rozwiązania"
-    },
     "support": {
-      "contact": "Kontakt",
-      "faq": "Najczęstsze pytania",
-      "quote": "Poproś o wycenę",
       "title": "Wsparcie"
     },
     "tagline": "Rezerwuj przewoźników do mieszkań, biur i rzeczy w całej Europie."
@@ -1655,11 +1638,8 @@
       "subtitle": "Wybierz, kiedy przewoźnicy mają przyjechać."
     },
     "step6": {
-      "services": {
-        "helper": "To standardowa oferta niemieckich przewoźników."
-      },
-      "subtitle": "Wybierz usługi dodatkowe i wgraj zdjęcia przedmiotów do przewiezienia.",
-      "title": "Usługi dodatkowe i zdjęcia"
+      "subtitle": "Dodaj zdjęcia przewożonych rzeczy i w razie potrzeby pomocników.",
+      "title": "Zdjęcia i pomocnicy"
     },
     "stepOf": {
       "label": "Krok {{current}} z {{total}}"

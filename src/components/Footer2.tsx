@@ -1,14 +1,14 @@
 import Logo from '@/shared/Logo'
-import { getTranslations } from '@/lib/i18n-server'
+import { getTranslations, resolveLocale } from '@/lib/i18n-server'
+import { getLegalContent, type LegalContent } from '@/lib/legal'
 import type { TFunction } from 'i18next'
+import Link from 'next/link'
 
 import type { JSX } from 'react'
 
 // § 7.6 — a module-scope label map freezes at import. Built from `t` instead.
-const getNavigation = (t: TFunction): {
-  solutions: { name: string; href: string }[]
+const getNavigation = (t: TFunction, legal: LegalContent['nav']): {
   support: { name: string; href: string }[]
-  company: { name: string; href: string }[]
   legal: { name: string; href: string }[]
   social: {
     name: string
@@ -16,27 +16,14 @@ const getNavigation = (t: TFunction): {
     icon: (props: React.SVGProps<SVGSVGElement>) => JSX.Element
   }[]
 } => ({
-  solutions: [
-    { name: t('web:footer.solutions.localMoving'), href: '#' },
-    { name: t('web:footer.solutions.longDistance'), href: '#' },
-    { name: t('web:footer.solutions.packing'), href: '#' },
-    { name: t('web:footer.solutions.storage'), href: '#' },
-    { name: t('web:footer.solutions.commercial'), href: '#' },
-  ],
-  support: [
-    { name: t('web:footer.support.quote'), href: '#' },
-    { name: t('web:footer.support.contact'), href: '#' },
-    { name: t('web:footer.support.faq'), href: '#' },
-  ],
-  company: [
-    { name: t('web:footer.company.about'), href: '#' },
-    { name: t('web:footer.company.careers'), href: '#' },
-    { name: t('web:footer.company.locations'), href: '#' },
-  ],
+  // The platform arranges moves between clients and independent movers and
+  // offers no services of its own, so the footer lists no "solutions" or
+  // company pages (plan legal/6.web-cleanup).
+  support: [{ name: legal.help, href: '/help' }],
   legal: [
-    { name: t('legal:termsOfService.title'), href: '#' },
-    { name: t('legal:privacyPolicy.title'), href: '#' },
-    { name: t('legal:insuranceClaims.title'), href: '#' },
+    { name: legal.terms, href: '/terms' },
+    { name: legal.privacy, href: '/privacy' },
+    { name: legal.imprint, href: '/imprint' },
   ],
   social: [
     {
@@ -105,7 +92,7 @@ const getNavigation = (t: TFunction): {
 
 export default async function Footer2() {
   const { t } = await getTranslations()
-  const navigation = getNavigation(t)
+  const navigation = getNavigation(t, getLegalContent(await resolveLocale()).nav)
 
   return (
     <footer className="border-t border-neutral-200 dark:border-neutral-700">
@@ -126,65 +113,29 @@ export default async function Footer2() {
             </div>
           </div>
           <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
-            <div className="md:grid md:grid-cols-2 md:gap-8">
-              <div>
-                <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-neutral-300">
-                  {t('web:footer.solutions.title')}
-                </h3>
-                <ul role="list" className="mt-6 space-y-4">
-                  {navigation.solutions.map((item) => (
-                    <li key={item.name}>
-                      <a href={item.href} className="text-sm/6 text-gray-600 hover:text-gray-900 dark:text-neutral-400">
-                        {item.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="mt-10 md:mt-0">
-                <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-neutral-300">
-                  {t('web:footer.support.title')}
-                </h3>
-                <ul role="list" className="mt-6 space-y-4">
-                  {navigation.support.map((item) => (
-                    <li key={item.name}>
-                      <a href={item.href} className="text-sm/6 text-gray-600 hover:text-gray-900 dark:text-neutral-400">
-                        {item.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            <div>
+              <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-neutral-300">{t('web:footer.support.title')}</h3>
+              <ul role="list" className="mt-6 space-y-4">
+                {navigation.support.map((item) => (
+                  <li key={item.href}>
+                    <Link href={item.href} className="text-sm/6 text-gray-600 hover:text-gray-900 dark:text-neutral-400">
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <div className="md:grid md:grid-cols-2 md:gap-8">
-              <div>
-                <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-neutral-300">
-                  {t('web:footer.company.title')}
-                </h3>
-                <ul role="list" className="mt-6 space-y-4">
-                  {navigation.company.map((item) => (
-                    <li key={item.name}>
-                      <a href={item.href} className="text-sm/6 text-gray-600 hover:text-gray-900 dark:text-neutral-400">
-                        {item.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="mt-10 md:mt-0">
-                <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-neutral-300">
-                  {t('web:footer.legal.title')}
-                </h3>
-                <ul role="list" className="mt-6 space-y-4">
-                  {navigation.legal.map((item) => (
-                    <li key={item.name}>
-                      <a href={item.href} className="text-sm/6 text-gray-600 hover:text-gray-900 dark:text-neutral-400">
-                        {item.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            <div>
+              <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-neutral-300">{t('web:footer.legal.title')}</h3>
+              <ul role="list" className="mt-6 space-y-4">
+                {navigation.legal.map((item) => (
+                  <li key={item.href}>
+                    <Link href={item.href} className="text-sm/6 text-gray-600 hover:text-gray-900 dark:text-neutral-400">
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>

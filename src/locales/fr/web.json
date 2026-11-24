@@ -157,28 +157,11 @@
     "title": "Contact"
   },
   "footer": {
-    "company": {
-      "about": "À propos",
-      "careers": "Carrières",
-      "locations": "Implantations",
-      "title": "Entreprise"
-    },
     "copyright": "© {{year}} PickLte. Tous droits réservés.",
     "legal": {
       "title": "Mentions légales"
     },
-    "solutions": {
-      "commercial": "Déménagement d'entreprise",
-      "localMoving": "Déménagement local",
-      "longDistance": "Déménagement longue distance",
-      "packing": "Services d'emballage",
-      "storage": "Solutions de garde-meuble",
-      "title": "Solutions"
-    },
     "support": {
-      "contact": "Nous contacter",
-      "faq": "FAQ",
-      "quote": "Obtenir un devis",
       "title": "Assistance"
     },
     "tagline": "Réservez des déménageurs pour vos appartements, vos bureaux et vos affaires partout en Europe."
@@ -1629,11 +1612,8 @@
       "subtitle": "Choisissez l'heure d'arrivée des déménageurs."
     },
     "step6": {
-      "services": {
-        "helper": "Il s'agit des prestations standard des déménageurs allemands."
-      },
-      "subtitle": "Sélectionnez des services supplémentaires et importez des photos des objets à déménager.",
-      "title": "Services supplémentaires et photos"
+      "subtitle": "Ajoutez des photos des objets à déménager et des aides si nécessaire.",
+      "title": "Photos et aides"
     },
     "stepOf": {
       "label": "Étape {{current}} sur {{total}}"

@@ -94,7 +94,6 @@ export async function POST(req: NextRequest) {
       extraHelpers,
       // Services
       additionalServices: rawAdditionalServices,
-      storageWeeks,
       // Photos (already uploaded URLs)
       coverPhotoId,
       galleryPhotoIds,
@@ -173,7 +172,7 @@ export async function POST(req: NextRequest) {
           dropoffHaltverbot,
           packingServiceLevel,
           additionalServices,
-          storageWeeks,
+          storageWeeks: 0,
           extraHelpers,
         },
         'scheduled',
@@ -263,7 +262,8 @@ export async function POST(req: NextRequest) {
 
         // Services
         additionalServices: asTextArray(additionalServices),
-        storageWeeks: storageWeeks ?? 0,
+        // Storage is retired with the other additional services (plan legal/6.web-cleanup W1).
+        storageWeeks: 0,
 
         // Photos
         coverPhotoId: asText(coverPhotoId),

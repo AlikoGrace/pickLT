@@ -162,14 +162,17 @@ describe.each([
   })
 })
 
-// Plan legal/1.scope-lock S1: waste disposal is retired and never stored.
+// Plans legal/1.scope-lock S1 and legal/6.web-cleanup W1: every additional
+// service and storage is retired and never stored.
 describe('create-scheduled retired services', () => {
-  it('strips disposal_entsorgung from the row and the quote', async () => {
+  it('strips every additional service and storage from the row and the quote', async () => {
     const res = await createScheduled(
-      req({ moveType: 'light', inventoryItems: { cardboard_boxes: 2 }, additionalServices: ['disposal_entsorgung', 'furniture_assembly'] }),
+      req({ moveType: 'light', inventoryItems: { cardboard_boxes: 2 }, additionalServices: ['disposal_entsorgung', 'furniture_assembly', 'temporary_storage'], storageWeeks: 4 }),
     )
     expect(res.status).toBe(200)
-    expect(moveWrite().additionalServices).toEqual(['furniture_assembly'])
+    expect(moveWrite().additionalServices).toEqual([])
+    expect(moveWrite().storageWeeks).toBe(0)
+    expect(String(moveWrite().priceBreakdown)).not.toContain('furniture_assembly')
     expect(String(moveWrite().priceBreakdown)).not.toContain('disposal')
   })
 })
