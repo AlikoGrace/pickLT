@@ -4,6 +4,7 @@ import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
 import { profileCrewSize } from '@/app/api/crew/crew-size'
 import { getSessionUserId } from '@/lib/auth-session'
+import { displayNameOf } from '@/lib/account-delete'
 import { isOnJob, type JobMove } from '@/lib/mover-position'
 import { PLATFORM_TZ } from '@/lib/constants'
 
@@ -92,7 +93,8 @@ export async function GET(
       },
       mover: moverProfile ? {
         id: moverProfile.$id,
-        name: moverUserDoc?.fullName || 'Mover',
+        // A mover who deleted their account reads "Deleted user", not the marker.
+        name: displayNameOf(moverUserDoc?.fullName, t('common:user.deleted.label'), 'Mover'),
         phone: moverUserDoc?.phone || null,
         profilePhoto: moverUserDoc?.profilePhoto || null,
         rating: moverProfile.rating || 0,

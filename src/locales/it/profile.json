@@ -70,8 +70,24 @@
   },
   "deleteAccount": {
     "confirm": {
-      "body": "L’operazione è definitiva e non è reversibile. Perderai tutti i tuoi dati, i traslochi e le preferenze.",
-      "title": "Vuoi davvero eliminare il tuo account?"
+      "body": "Il tuo account, il profilo, le carte salvate, le foto, i messaggi e le notifiche verranno eliminati. I traslochi conclusi vengono conservati senza il tuo nome, indirizzo o recapiti, perché servono all'altra parte e ai registri fiscali. L'operazione non può essere annullata.",
+      "title": "Vuoi davvero eliminare il tuo account?",
+      "moverNote": {
+        "body": "I tuoi estratti dei guadagni e i documenti fiscali vengono conservati per il periodo previsto dalla legge."
+      }
+    },
+    "reauth": {
+      "title": "Accedi di nuovo",
+      "body": "Per la tua sicurezza, accedi di nuovo e poi elimina il tuo account."
+    },
+    "blocked": {
+      "title": "Il tuo account non può ancora essere eliminato"
+    },
+    "failed": {
+      "title": "Account non eliminato"
+    },
+    "done": {
+      "body": "Il tuo account è stato eliminato."
     }
   },
   "dobSheet": {

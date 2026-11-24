@@ -1,6 +1,7 @@
 'use client'
 
 import { useAuth } from '@/context/auth'
+import DeleteAccountSection from '@/components/DeleteAccountSection'
 import { account } from '@/lib/appwrite'
 import { compressImage } from '@/utils/compressImage'
 import Avatar from '@/shared/Avatar'
@@ -474,6 +475,9 @@ const SettingsPage = () => {
         <ArrowRightOnRectangleIcon className="w-5 h-5" />
         {t('common:action.logout.cta')}
       </button>
+
+      {/* Delete account (plan legal/3): deletes, with the mover's retention note */}
+      <DeleteAccountSection mover className="mt-4" />
 
       {/* App Version */}
       <p className="text-center text-xs text-neutral-400 dark:text-neutral-500 mt-6">

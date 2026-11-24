@@ -70,8 +70,24 @@
   },
   "deleteAccount": {
     "confirm": {
-      "body": "Bu işlem kalıcıdır ve geri alınamaz. Tüm verileriniz, taşınmalarınız ve tercihleriniz silinecek.",
-      "title": "Hesabınızı silmek istediğinizden emin misiniz?"
+      "body": "Hesabınız, profiliniz, kayıtlı kartlarınız, fotoğraflarınız, mesajlarınız ve bildirimleriniz silinecek. Tamamlanan taşınmalar adınız, adresiniz ve iletişim bilgileriniz olmadan saklanır, çünkü diğer tarafın ve vergi kayıtlarının bunlara ihtiyacı vardır. Bu işlem geri alınamaz.",
+      "title": "Hesabınızı silmek istediğinizden emin misiniz?",
+      "moverNote": {
+        "body": "Kazanç dökümleriniz ve vergi kayıtlarınız yasanın gerektirdiği süre boyunca saklanır."
+      }
+    },
+    "reauth": {
+      "title": "Yeniden oturum açın",
+      "body": "Güvenliğiniz için yeniden oturum açın ve ardından hesabınızı silin."
+    },
+    "blocked": {
+      "title": "Hesabınız henüz silinemiyor"
+    },
+    "failed": {
+      "title": "Hesap silinmedi"
+    },
+    "done": {
+      "body": "Hesabınız silindi."
     }
   },
   "dobSheet": {

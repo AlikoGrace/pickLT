@@ -820,5 +820,10 @@
     "select": {
       "label": "Sélectionnez votre pays"
     }
+  },
+  "user": {
+    "deleted": {
+      "label": "Utilisateur supprimé"
+    }
   }
 }

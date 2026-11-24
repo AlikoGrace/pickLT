@@ -391,5 +391,14 @@
   },
   "inventory": {
     "quantityTooHigh": "Ürünlerinizden birinin adedi sınırın üzerinde. Lütfen azaltıp tekrar deneyin."
+  },
+  "account": {
+    "activeMove": "Devam eden bir taşınmanız var. Tamamlandığında veya iptal edildiğinde hesabınızı silebilirsiniz.",
+    "scheduledMove": "Planlanmış bir taşınmayı kabul ettiniz. Hesabınızı silmeden önce bu işten çekilin.",
+    "feesOwed": "Ödenmemiş platform ücretleriniz var. Hesabınızı silmeden önce bakiyenizi ödeyin.",
+    "payoutPending": "PickLte'de hâlâ bir bakiyeniz var. Hesabınızı silmeden önce kapatmak için destekle iletişime geçin.",
+    "reauthRequired": "Hesabınızı silmek için yeniden oturum açın.",
+    "adminNotDeletable": "Yönetici hesabı buradan silinemez.",
+    "deletionIncomplete": "Hesabınız tamamen silinemedi. Lütfen tekrar deneyin."
   }
 }

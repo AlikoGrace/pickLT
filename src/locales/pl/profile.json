@@ -70,8 +70,24 @@
   },
   "deleteAccount": {
     "confirm": {
-      "body": "Ta operacja jest nieodwracalna. Utracisz wszystkie swoje dane, przeprowadzki i ustawienia.",
-      "title": "Na pewno chcesz usunąć swoje konto?"
+      "body": "Twoje konto, profil, zapisane karty, zdjęcia, wiadomości i powiadomienia zostaną usunięte. Zakończone przeprowadzki pozostają bez Twojego imienia i nazwiska, adresu oraz danych kontaktowych, ponieważ potrzebuje ich druga strona i dokumentacja podatkowa. Tej operacji nie można cofnąć.",
+      "title": "Na pewno chcesz usunąć swoje konto?",
+      "moverNote": {
+        "body": "Twoje zestawienia zarobków i dokumenty podatkowe są przechowywane przez okres wymagany prawem."
+      }
+    },
+    "reauth": {
+      "title": "Zaloguj się ponownie",
+      "body": "Dla bezpieczeństwa zaloguj się ponownie, a następnie usuń konto."
+    },
+    "blocked": {
+      "title": "Twojego konta nie można jeszcze usunąć"
+    },
+    "failed": {
+      "title": "Konto nie zostało usunięte"
+    },
+    "done": {
+      "body": "Twoje konto zostało usunięte."
     }
   },
   "dobSheet": {

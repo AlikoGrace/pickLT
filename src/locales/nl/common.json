@@ -820,5 +820,10 @@
     "select": {
       "label": "Selecteer je land"
     }
+  },
+  "user": {
+    "deleted": {
+      "label": "Verwijderde gebruiker"
+    }
   }
 }

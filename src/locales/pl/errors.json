@@ -395,5 +395,14 @@
   },
   "inventory": {
     "quantityTooHigh": "Liczba jednego z przedmiotów przekracza limit. Zmniejsz ją i spróbuj ponownie."
+  },
+  "account": {
+    "activeMove": "Masz przeprowadzkę w toku. Konto będzie można usunąć po jej zakończeniu lub anulowaniu.",
+    "scheduledMove": "Przyjąłeś zaplanowaną przeprowadzkę. Wycofaj się z niej przed usunięciem konta.",
+    "feesOwed": "Masz nieopłacone opłaty platformy. Ureguluj saldo przed usunięciem konta.",
+    "payoutPending": "Masz jeszcze saldo w PickLte. Skontaktuj się z pomocą techniczną, aby je rozliczyć przed usunięciem konta.",
+    "reauthRequired": "Zaloguj się ponownie, aby usunąć konto.",
+    "adminNotDeletable": "Konta administratora nie można tutaj usunąć.",
+    "deletionIncomplete": "Nie udało się całkowicie usunąć konta. Spróbuj ponownie."
   }
 }

@@ -70,8 +70,24 @@
   },
   "deleteAccount": {
     "confirm": {
-      "body": "Cette action est définitive et irréversible. Toutes vos données, vos déménagements et vos préférences seront perdus.",
-      "title": "Voulez-vous vraiment supprimer votre compte ?"
+      "body": "Votre compte, votre profil, vos cartes enregistrées, vos photos, vos messages et vos notifications seront supprimés. Les déménagements terminés sont conservés sans votre nom, votre adresse ni vos coordonnées, car l'autre partie et les registres fiscaux en ont besoin. Cette action est irréversible.",
+      "title": "Voulez-vous vraiment supprimer votre compte ?",
+      "moverNote": {
+        "body": "Vos relevés de revenus et vos documents fiscaux sont conservés pendant la durée exigée par la loi."
+      }
+    },
+    "reauth": {
+      "title": "Reconnectez-vous",
+      "body": "Pour votre sécurité, reconnectez-vous, puis supprimez votre compte."
+    },
+    "blocked": {
+      "title": "Votre compte ne peut pas encore être supprimé"
+    },
+    "failed": {
+      "title": "Compte non supprimé"
+    },
+    "done": {
+      "body": "Votre compte a été supprimé."
     }
   },
   "dobSheet": {

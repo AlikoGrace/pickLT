@@ -70,8 +70,24 @@
   },
   "deleteAccount": {
     "confirm": {
-      "body": "Dieser Schritt ist endgültig und lässt sich nicht rückgängig machen. Alle Ihre Daten, Umzüge und Einstellungen gehen verloren.",
-      "title": "Möchten Sie Ihr Konto wirklich löschen?"
+      "body": "Ihr Konto, Ihr Profil, gespeicherte Karten, Fotos, Nachrichten und Benachrichtigungen werden gelöscht. Abgeschlossene Umzüge bleiben ohne Ihren Namen, Ihre Adresse und Ihre Kontaktdaten erhalten, weil die andere Partei und die Steuerunterlagen sie benötigen. Dies kann nicht rückgängig gemacht werden.",
+      "title": "Möchten Sie Ihr Konto wirklich löschen?",
+      "moverNote": {
+        "body": "Ihre Verdienstabrechnungen und Steuerunterlagen werden für die gesetzlich vorgeschriebene Dauer aufbewahrt."
+      }
+    },
+    "reauth": {
+      "title": "Erneut anmelden",
+      "body": "Melden Sie sich zu Ihrer Sicherheit erneut an und löschen Sie dann Ihr Konto."
+    },
+    "blocked": {
+      "title": "Ihr Konto kann noch nicht gelöscht werden"
+    },
+    "failed": {
+      "title": "Konto nicht gelöscht"
+    },
+    "done": {
+      "body": "Ihr Konto wurde gelöscht."
     }
   },
   "dobSheet": {

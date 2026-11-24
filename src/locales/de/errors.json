@@ -391,5 +391,14 @@
   },
   "inventory": {
     "quantityTooHigh": "Bei einem Ihrer Gegenstände liegt die Anzahl über dem Limit. Bitte verringern Sie sie und versuchen Sie es erneut."
+  },
+  "account": {
+    "activeMove": "Sie haben einen laufenden Umzug. Sie können Ihr Konto löschen, sobald er abgeschlossen oder storniert ist.",
+    "scheduledMove": "Sie haben einen geplanten Umzug angenommen. Treten Sie davon zurück, bevor Sie Ihr Konto löschen.",
+    "feesOwed": "Sie haben offene Plattformgebühren. Begleichen Sie Ihren Saldo, bevor Sie Ihr Konto löschen.",
+    "payoutPending": "Sie haben noch ein Guthaben bei PickLte. Wenden Sie sich an den Support, um es auszugleichen, bevor Sie Ihr Konto löschen.",
+    "reauthRequired": "Melden Sie sich erneut an, um Ihr Konto zu löschen.",
+    "adminNotDeletable": "Ein Administratorkonto kann hier nicht gelöscht werden.",
+    "deletionIncomplete": "Ihr Konto konnte nicht vollständig gelöscht werden. Bitte versuchen Sie es erneut."
   }
 }

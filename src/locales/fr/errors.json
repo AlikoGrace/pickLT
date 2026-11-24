@@ -391,5 +391,14 @@
   },
   "inventory": {
     "quantityTooHigh": "La quantité de l’un de vos articles dépasse la limite. Veuillez la réduire et réessayer."
+  },
+  "account": {
+    "activeMove": "Vous avez un déménagement en cours. Vous pourrez supprimer votre compte une fois qu'il sera terminé ou annulé.",
+    "scheduledMove": "Vous avez accepté un déménagement planifié. Retirez-vous avant de supprimer votre compte.",
+    "feesOwed": "Vous avez des frais de plateforme impayés. Réglez votre solde avant de supprimer votre compte.",
+    "payoutPending": "Vous avez encore un solde chez PickLte. Contactez le support pour le régler avant de supprimer votre compte.",
+    "reauthRequired": "Reconnectez-vous pour supprimer votre compte.",
+    "adminNotDeletable": "Un compte administrateur ne peut pas être supprimé ici.",
+    "deletionIncomplete": "Votre compte n'a pas pu être entièrement supprimé. Veuillez réessayer."
   }
 }

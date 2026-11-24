@@ -1,6 +1,7 @@
 'use client'
 
 import { useAuth } from '@/context/auth'
+import DeleteAccountSection from '@/components/DeleteAccountSection'
 import { account } from '@/lib/appwrite'
 import { compressImage } from '@/utils/compressImage'
 import Avatar from '@/shared/Avatar'
@@ -726,6 +727,9 @@ export default function AccountPage() {
           </div>
         </div>
       )}
+
+      {/* Delete account (plan legal/3). The web had no way to do this. */}
+      <DeleteAccountSection mover={user?.userType === 'mover'} className="mt-10 max-w-md" />
     </div>
   )
 }

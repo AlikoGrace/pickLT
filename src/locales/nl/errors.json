@@ -391,5 +391,14 @@
   },
   "inventory": {
     "quantityTooHigh": "Het aantal van een van je items ligt boven de limiet. Verlaag het en probeer het opnieuw."
+  },
+  "account": {
+    "activeMove": "Je hebt een lopende verhuizing. Je kunt je account verwijderen zodra die is afgerond of geannuleerd.",
+    "scheduledMove": "Je hebt een geplande verhuizing geaccepteerd. Trek je terug voordat je je account verwijdert.",
+    "feesOwed": "Je hebt openstaande platformkosten. Betaal je saldo voordat je je account verwijdert.",
+    "payoutPending": "Je hebt nog een saldo bij PickLte. Neem contact op met support om het te vereffenen voordat je je account verwijdert.",
+    "reauthRequired": "Meld je opnieuw aan om je account te verwijderen.",
+    "adminNotDeletable": "Een beheerdersaccount kan hier niet worden verwijderd.",
+    "deletionIncomplete": "Je account kon niet volledig worden verwijderd. Probeer het opnieuw."
   }
 }

@@ -820,5 +820,10 @@
     "select": {
       "label": "Ülkenizi seçin"
     }
+  },
+  "user": {
+    "deleted": {
+      "label": "Silinmiş kullanıcı"
+    }
   }
 }

@@ -391,5 +391,14 @@
   },
   "inventory": {
     "quantityTooHigh": "One of your items has a quantity above the limit. Lower it and try again."
+  },
+  "account": {
+    "activeMove": "You have a move in progress. You can delete your account once it is finished or cancelled.",
+    "scheduledMove": "You have accepted a scheduled move. Withdraw from it before deleting your account.",
+    "feesOwed": "You have unpaid platform fees. Pay your balance before deleting your account.",
+    "payoutPending": "You still have a balance with PickLte. Contact support to settle it before deleting your account.",
+    "reauthRequired": "Sign in again to delete your account.",
+    "adminNotDeletable": "An administrator account cannot be deleted here.",
+    "deletionIncomplete": "Your account could not be deleted completely. Please try again."
   }
 }

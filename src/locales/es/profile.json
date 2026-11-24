@@ -70,8 +70,24 @@
   },
   "deleteAccount": {
     "confirm": {
-      "body": "Esta acción es permanente y no se puede deshacer. Perderás todos tus datos, mudanzas y preferencias.",
-      "title": "¿Seguro que quieres eliminar tu cuenta?"
+      "body": "Se eliminarán tu cuenta, tu perfil, las tarjetas guardadas, las fotos, los mensajes y las notificaciones. Las mudanzas finalizadas se conservan sin tu nombre, dirección ni datos de contacto, porque la otra parte y los registros fiscales las necesitan. Esto no se puede deshacer.",
+      "title": "¿Seguro que quieres eliminar tu cuenta?",
+      "moverNote": {
+        "body": "Tus extractos de ingresos y registros fiscales se conservan durante el plazo que exige la ley."
+      }
+    },
+    "reauth": {
+      "title": "Vuelve a iniciar sesión",
+      "body": "Por tu seguridad, vuelve a iniciar sesión y después elimina tu cuenta."
+    },
+    "blocked": {
+      "title": "Tu cuenta aún no se puede eliminar"
+    },
+    "failed": {
+      "title": "Cuenta no eliminada"
+    },
+    "done": {
+      "body": "Tu cuenta ha sido eliminada."
     }
   },
   "dobSheet": {

@@ -70,8 +70,24 @@
   },
   "deleteAccount": {
     "confirm": {
-      "body": "Deze actie is definitief en kan niet ongedaan worden gemaakt. Al je gegevens, verhuizingen en voorkeuren gaan verloren.",
-      "title": "Weet je zeker dat je je account wilt verwijderen?"
+      "body": "Je account, profiel, opgeslagen kaarten, foto's, berichten en meldingen worden verwijderd. Afgeronde verhuizingen blijven bewaard zonder je naam, adres of contactgegevens, omdat de andere partij en de belastingadministratie ze nodig hebben. Dit kan niet ongedaan worden gemaakt.",
+      "title": "Weet je zeker dat je je account wilt verwijderen?",
+      "moverNote": {
+        "body": "Je inkomstenoverzichten en belastinggegevens worden bewaard zolang de wet dat vereist."
+      }
+    },
+    "reauth": {
+      "title": "Meld je opnieuw aan",
+      "body": "Meld je voor je veiligheid opnieuw aan en verwijder daarna je account."
+    },
+    "blocked": {
+      "title": "Je account kan nog niet worden verwijderd"
+    },
+    "failed": {
+      "title": "Account niet verwijderd"
+    },
+    "done": {
+      "body": "Je account is verwijderd."
     }
   },
   "dobSheet": {

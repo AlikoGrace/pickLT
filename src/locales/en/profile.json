@@ -70,8 +70,24 @@
   },
   "deleteAccount": {
     "confirm": {
-      "body": "This action is permanent and cannot be undone. All your data, moves, and preferences will be lost.",
-      "title": "Are you sure you want to delete your account?"
+      "body": "Your account, profile, saved cards, photos, messages and notifications will be deleted. Finished moves are kept without your name, address or contact details, because the other party and the tax records need them. This cannot be undone.",
+      "title": "Are you sure you want to delete your account?",
+      "moverNote": {
+        "body": "Your earnings statements and tax records are kept for the period the law requires."
+      }
+    },
+    "reauth": {
+      "title": "Sign in again",
+      "body": "For your security, sign in again and then delete your account."
+    },
+    "blocked": {
+      "title": "Your account cannot be deleted yet"
+    },
+    "failed": {
+      "title": "Account not deleted"
+    },
+    "done": {
+      "body": "Your account has been deleted."
     }
   },
   "dobSheet": {

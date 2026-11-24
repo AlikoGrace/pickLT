@@ -391,5 +391,14 @@
   },
   "inventory": {
     "quantityTooHigh": "La quantità di uno dei tuoi articoli supera il limite. Riducila e riprova."
+  },
+  "account": {
+    "activeMove": "Hai un trasloco in corso. Potrai eliminare il tuo account quando sarà concluso o annullato.",
+    "scheduledMove": "Hai accettato un trasloco programmato. Ritirati prima di eliminare il tuo account.",
+    "feesOwed": "Hai commissioni della piattaforma non pagate. Salda il tuo debito prima di eliminare il tuo account.",
+    "payoutPending": "Hai ancora un saldo presso PickLte. Contatta l'assistenza per regolarlo prima di eliminare il tuo account.",
+    "reauthRequired": "Accedi di nuovo per eliminare il tuo account.",
+    "adminNotDeletable": "Un account amministratore non può essere eliminato qui.",
+    "deletionIncomplete": "Non è stato possibile eliminare completamente il tuo account. Riprova."
   }
 }

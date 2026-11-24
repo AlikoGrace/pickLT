@@ -391,5 +391,14 @@
   },
   "inventory": {
     "quantityTooHigh": "Uno de tus artículos supera la cantidad máxima. Redúcela e inténtalo de nuevo."
+  },
+  "account": {
+    "activeMove": "Tienes una mudanza en curso. Podrás eliminar tu cuenta cuando termine o se cancele.",
+    "scheduledMove": "Has aceptado una mudanza programada. Retírate de ella antes de eliminar tu cuenta.",
+    "feesOwed": "Tienes comisiones de plataforma pendientes. Paga tu saldo antes de eliminar tu cuenta.",
+    "payoutPending": "Aún tienes un saldo con PickLte. Contacta con soporte para liquidarlo antes de eliminar tu cuenta.",
+    "reauthRequired": "Vuelve a iniciar sesión para eliminar tu cuenta.",
+    "adminNotDeletable": "Una cuenta de administrador no se puede eliminar aquí.",
+    "deletionIncomplete": "No se pudo eliminar tu cuenta por completo. Inténtalo de nuevo."
   }
 }
