@@ -10,6 +10,7 @@ import NotifyDropdown from '@/components/Header/NotifyDropdown'
 import VehicleConfirmModal from '@/components/mover/VehicleConfirmModal'
 import VehicleStatusBanner from '@/components/mover/VehicleStatusBanner'
 import FeeStatusBanner from '@/components/mover/FeeStatusBanner'
+import OnlineSwitch from '@/components/mover/OnlineSwitch'
 import { feeStandingAllowsWork } from '@/lib/feeLedger'
 import type { VehicleDoc } from '@/lib/types'
 import { fetchVehicleOverview } from '@/lib/vehicle-client'
@@ -259,9 +260,13 @@ const MoverDashboardLayout = ({ children }: Props) => {
   // Hide the mobile header and its offset on full-screen map pages
   const isMapPage = MAP_PAGES.some((p) => pathname === p || pathname.startsWith(p + '/'))
 
-  // Broadcast mover's GPS location only when verified
+  // Location leaves this browser only while the mover chose to be online
+  // (plan legal/2, P3). An open dashboard used to be enough, and each ping
+  // also marked the mover online. A mover who is offline but on a job shares
+  // from the active-move page; the server drops any ping that fits neither.
+  const isOnline = moverDetails?.isOnline === true
   useLocationBroadcast({
-    enabled: !!user && user.userType === 'mover' && isVerified,
+    enabled: !!user && user.userType === 'mover' && isVerified && isOnline,
   })
 
   const handleLogout = () => {
@@ -530,6 +535,14 @@ const MoverDashboardLayout = ({ children }: Props) => {
               </div>
             </div>
           </div>
+        )}
+        {/* Online switch: the mover's choice, and what turns location sharing on */}
+        {hasCompletedProfile && isVerified && !isOnCompleteProfilePage && !isMapPage && (
+          <OnlineSwitch
+            isOnline={isOnline}
+            canGoOnline={isServiceReady}
+            onChanged={() => void refreshProfile({ background: true })}
+          />
         )}
         {/* Vehicle state banner — every non-ready state names the restoring action */}
         {hasCompletedProfile && !isOnCompleteProfilePage && !isOnVehiclePages && !showConfirmModal && (

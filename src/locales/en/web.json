@@ -707,6 +707,25 @@
         }
       }
     },
+    "online": {
+      "failed": {
+        "body": "Could not update your status. Please try again."
+      },
+      "location": {
+        "helper": "Your location is shared only while you are online or on a job."
+      },
+      "off": {
+        "helper": "Go online to receive move requests.",
+        "label": "You are offline"
+      },
+      "on": {
+        "helper": "Clients can find you and send you move requests.",
+        "label": "You are online"
+      },
+      "switch": {
+        "label": "Online"
+      }
+    },
     "request": {
       "categoryAndType": {
         "instant": {

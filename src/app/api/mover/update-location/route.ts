@@ -1,18 +1,21 @@
 import { getTranslations } from '@/lib/i18n-server'
 import { NextRequest, NextResponse } from 'next/server'
-import { createAdminClient, withRetry } from '@/lib/appwrite-server'
-import { APPWRITE, PLATFORM_TZ } from '@/lib/constants'
+import { createAdminClient } from '@/lib/appwrite-server'
+import { PLATFORM_TZ } from '@/lib/constants'
 import { getSessionUserId } from '@/lib/auth-session'
-import { moverLocationPermissions } from '@/lib/doc-permissions'
-import { mayMarkOnline } from '@/lib/mover-gates'
-import { relId } from '@/lib/notify'
-import { ID, Query } from 'node-appwrite'
+import { recordMoverPosition, type PositionDb } from '@/lib/mover-position-server'
 
 /**
  * POST /api/mover/update-location
- * Receives the mover's current GPS position and updates:
- *  1. mover_locations collection (creates a new record for Realtime)
- *  2. mover_profiles currentLatitude/currentLongitude
+ *
+ * The web port of `updatemoverlocation`. Receives the mover's GPS position and,
+ * when the mover is online or on a job, upserts their one `mover_locations` row
+ * and mirrors the position onto the profile. A ping from a mover who is
+ * neither is dropped with `{ success: true, shared: false }` and nothing is
+ * stored (plan legal/2, P2).
+ *
+ * It never sets `isOnline`. That used to happen on every ping, so an open
+ * dashboard tab meant "online"; the switch is `POST /api/mover/online` now.
  */
 export async function POST(req: NextRequest) {
   const { t } = await getTranslations()
@@ -24,7 +27,14 @@ export async function POST(req: NextRequest) {
 
     const { latitude, longitude, heading, speed, moveId } = await req.json()
 
-    if (typeof latitude !== 'number' || typeof longitude !== 'number') {
+    if (
+      typeof latitude !== 'number' ||
+      typeof longitude !== 'number' ||
+      !Number.isFinite(latitude) ||
+      !Number.isFinite(longitude) ||
+      Math.abs(latitude) > 90 ||
+      Math.abs(longitude) > 180
+    ) {
       return NextResponse.json(
         { error: 'latitude and longitude are required numbers' },
         { status: 400 }
@@ -32,114 +42,24 @@ export async function POST(req: NextRequest) {
     }
 
     const { databases } = createAdminClient()
-
-    // Look up the mover's profile by userId
-    const profiles = await withRetry(() =>
-      databases.listDocuments(
-        APPWRITE.DATABASE_ID,
-        APPWRITE.COLLECTIONS.MOVER_PROFILES,
-        [Query.equal('userId', userId), Query.limit(1)]
-      )
-    )
-
-    if (profiles.total === 0) {
-      return NextResponse.json({ error: t('errors:mover.profileNotFound') }, { status: 404 })
-    }
-
-    const moverProfileId = profiles.documents[0].$id
-
-    // Live GPS is readable by the mover always, and by the client of the move
-    // only while a move is attached (heartbeat rows carry no `moveId` and stay
-    // mover-only). Best-effort: a failed lookup must not cost the fix.
-    let moveClientAuthId: string | null = null
-    if (moveId) {
-      try {
-        const move = await databases.getDocument(
-          APPWRITE.DATABASE_ID,
-          APPWRITE.COLLECTIONS.MOVES,
-          moveId
-        )
-        moveClientAuthId = relId(move.clientId)
-      } catch {
-        // Unknown/unreadable move — fall back to mover-only grants.
-      }
-    }
-
-    // Upsert this mover's single location row, like `updatemoverlocation`
-    // (Appwrite Realtime broadcasts the update). Creating a row per ping left
-    // readers that order by creation time showing a stale position (plan
-    // pickltmobile maps/smooth-mover-marker).
-    const payload = {
-      moverProfileId,
-      moveId: moveId || null,
+    const result = await recordMoverPosition(databases as unknown as PositionDb, {
+      userId,
       latitude,
       longitude,
-      heading: heading ?? null,
-      speed: speed ?? null,
-      timestamp: new Date().toISOString(),
-    }
-    // `userId` is the mover's auth account id (the session subject);
-    // `moverProfileId` is a profile row id and is not a usable role.
-    const permissions = moverLocationPermissions(userId, moveClientAuthId)
-    const findRow = async () =>
-      (
-        await withRetry(() =>
-          databases.listDocuments(APPWRITE.DATABASE_ID, APPWRITE.COLLECTIONS.MOVER_LOCATIONS, [
-            Query.equal('moverProfileId', moverProfileId),
-            Query.orderDesc('$updatedAt'),
-            Query.limit(1),
-          ])
-        )
-      ).documents[0]?.$id ?? null
-    const update = (rowId: string) =>
-      withRetry(() =>
-        databases.updateDocument(APPWRITE.DATABASE_ID, APPWRITE.COLLECTIONS.MOVER_LOCATIONS, rowId, payload, permissions)
-      )
-    const existing = await findRow()
-    if (existing) {
-      await update(existing)
-    } else {
-      try {
-        await databases.createDocument(
-          APPWRITE.DATABASE_ID,
-          APPWRITE.COLLECTIONS.MOVER_LOCATIONS,
-          ID.unique(),
-          payload,
-          permissions
-        )
-      } catch (err) {
-        // Two first pings can race (the oneToOne moveId constraint answers 409):
-        // update whichever row landed first.
-        if ((err as { code?: number })?.code !== 409) throw err
-        const raced = await findRow()
-        if (!raced) throw err
-        await update(raced)
-      }
-    }
+      heading: typeof heading === 'number' ? heading : null,
+      speed: typeof speed === 'number' ? speed : null,
+      moveId: typeof moveId === 'string' ? moveId : null,
+      nowMs: Date.now(),
+      tz: PLATFORM_TZ,
+    })
 
-    // Update current position on the mover profile. The heartbeat marks the
-    // driver online only when `setmoveronline` would have allowed it (KYC +
-    // service-ready vehicle, master D4); otherwise `isOnline` is left as it
-    // is — never forced off, the driver may be finishing a move.
-    const markOnline = mayMarkOnline(profiles.documents[0], Date.now(), PLATFORM_TZ)
-    await withRetry(() =>
-      databases.updateDocument(
-        APPWRITE.DATABASE_ID,
-        APPWRITE.COLLECTIONS.MOVER_PROFILES,
-        moverProfileId,
-        {
-          currentLatitude: latitude,
-          currentLongitude: longitude,
-          // The freshness term every visibility gate reads (3 min). The
-          // function port wrote it; this route did not, which left web-only
-          // drivers permanently stale for `listnearbymovers`.
-          locationUpdatedAt: new Date().toISOString(),
-          ...(markOnline ? { isOnline: true } : {}),
-        }
-      )
-    )
-
-    return NextResponse.json({ success: true })
+    if (!result.ok) {
+      return NextResponse.json({ error: t('errors:mover.profileNotFound') }, { status: 404 })
+    }
+    if (!result.shared) {
+      return NextResponse.json({ success: true, shared: false, reason: result.reason })
+    }
+    return NextResponse.json({ success: true, shared: true })
   } catch (err) {
     console.error('POST /api/mover/update-location error:', err)
     return NextResponse.json(

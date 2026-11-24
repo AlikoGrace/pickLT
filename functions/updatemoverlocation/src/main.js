@@ -1,5 +1,7 @@
 import { Client, Databases, ID, Permission, Query, Role } from 'node-appwrite';
 
+import { TRACKED_STATUSES, movesOnJob, moverMaySharePosition } from './mover-position.js';
+
 const DATABASE_ID = process.env.APPWRITE_DATABASE_ID;
 const MOVER_PROFILES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVER_PROFILES;
 const MOVER_LOCATIONS_COLLECTION = process.env.APPWRITE_COLLECTION_MOVER_LOCATIONS;
@@ -8,23 +10,10 @@ const MOVES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVES;
 // Relationship attributes deserialize as a bare id OR a hydrated object.
 const relId = (v) => (!v ? null : typeof v === 'string' ? v : v.$id ?? null);
 
-/**
- * Statuses in which a client is tracking this mover, in progression order.
- * Mirrors the mover app's ACTIVE_STATUSES (hooks/use-active-move.ts). The
- * row's `moveId` tag goes to the most advanced live move; every live move's
- * client gets read access.
- */
-const TRACKED_STATUSES = [
-  'mover_accepted',
-  'mover_en_route',
-  'mover_arrived',
-  'loading',
-  'in_transit',
-  'arrived_destination',
-  'unloading',
-  'awaiting_payment',
-  'paid',
-];
+// Service-day timezone for scheduled start times (the 60-minute lead in
+// mover-position.js). Optional: defaults to the platform's home zone.
+const PLATFORM_TZ = process.env.PLATFORM_TZ || 'Europe/Berlin';
+
 const isFiniteNumber = (v) => typeof v === 'number' && Number.isFinite(v);
 
 /**
@@ -98,7 +87,8 @@ export default async ({ req, res, log, error }) => {
       Query.limit(1),
     ]);
     if (profiles.documents.length === 0) return res.json({ error: 'Not a mover', fnCode: 'mover.notAMover' }, 403);
-    const moverProfileId = profiles.documents[0].$id;
+    const profile = profiles.documents[0];
+    const moverProfileId = profile.$id;
 
     // Which move does this ping belong to, and who may read it? Decided here,
     // from the moves this mover is actually assigned to — never from the
@@ -120,17 +110,33 @@ export default async ({ req, res, log, error }) => {
       ]);
       liveMoves = r.documents;
     } catch (lookupErr) {
-      // Never fail a position ping over the lookup — the mover keeps their
-      // own read and the profile mirror below still feeds discovery.
+      // Never fail a position ping over the lookup — an online mover keeps
+      // their own read and the profile mirror below still feeds discovery.
+      // An OFFLINE mover's ping is dropped below: with no moves in hand there
+      // is no proof of a job.
       error(`updatemoverlocation: live-move lookup failed: ${lookupErr.message}`);
     }
+
+    // Location is shared only while the mover is online or on a job (plan
+    // legal/2, P2). Anything else is dropped HERE, so a build that still pings
+    // while offline stores nothing. HTTP 200 on purpose: an old build must not
+    // surface an error for a ping the server chose not to keep.
+    const nowMs = Date.now();
+    if (!moverMaySharePosition({ isOnline: profile.isOnline === true, liveMoves, nowMs, tz: PLATFORM_TZ })) {
+      return res.json({ success: true, shared: false, reason: 'offline' });
+    }
+
+    // The moves whose client may follow this mover right now. A scheduled move
+    // accepted for next week is assigned, but its client has no business
+    // reading the mover's position until an hour before the start.
+    const jobMoves = movesOnJob(liveMoves, nowMs, PLATFORM_TZ);
 
     // Tag: the caller's stated move if it is one of theirs (screen intent),
     // else the most advanced live move, else none.
     const rank = (m) => TRACKED_STATUSES.indexOf(m.status);
-    const stated = moveId ? liveMoves.find((m) => m.$id === moveId) : null;
+    const stated = moveId ? jobMoves.find((m) => m.$id === moveId) : null;
     const tagged =
-      stated ?? [...liveMoves].sort((a, b) => rank(b) - rank(a))[0] ?? null;
+      stated ?? [...jobMoves].sort((a, b) => rank(b) - rank(a))[0] ?? null;
 
     const payload = {
       moverProfileId,
@@ -143,7 +149,7 @@ export default async ({ req, res, log, error }) => {
     };
 
     const readers = new Set([authId]);
-    for (const m of liveMoves) {
+    for (const m of jobMoves) {
       const clientAuthId = relId(m.clientId);
       if (clientAuthId) readers.add(clientAuthId);
     }
@@ -204,7 +210,7 @@ export default async ({ req, res, log, error }) => {
       locationUpdatedAt: payload.timestamp,
     });
 
-    return res.json({ success: true, locationId: rowId });
+    return res.json({ success: true, shared: true, locationId: rowId });
   } catch (err) {
     error(`Update mover location failed: ${err.message}`);
     return res.json({ error: 'Something went wrong. Please try again.', fnCode: 'generic.unexpected' }, 500);

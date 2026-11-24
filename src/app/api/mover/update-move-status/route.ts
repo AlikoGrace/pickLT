@@ -5,6 +5,7 @@ import { APPWRITE, PLATFORM_TZ } from '@/lib/constants'
 import { startGate } from '@/lib/mover-gates'
 import { relId, writeNotification, statusNotification } from '@/lib/notify'
 import { paymentPermissions } from '@/lib/doc-permissions'
+import { wipeAfterMoveEnded, type PositionDb } from '@/lib/mover-position-server'
 import { Query, ID } from 'node-appwrite'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -156,6 +157,10 @@ export async function POST(request: NextRequest) {
       moveId,
       updateData
     )
+
+    // The job is over: an offline mover with no other job may no longer be
+    // located (plan legal/2, P2.2). Never throws.
+    await wipeAfterMoveEnded(databases as unknown as PositionDb, move as { $id: string; moverProfileId?: unknown }, String(updateData.status ?? ''), Date.now())
 
     // No D12 hook here: `completed` is not reachable through this route. It is hooked in both confirm-payment routes.
 

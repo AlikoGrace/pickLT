@@ -5,6 +5,7 @@ import { APPWRITE } from '@/lib/constants'
 import { relId, writeNotification } from '@/lib/notify'
 import { paymentPermissions } from '@/lib/doc-permissions'
 import { markReconfirmRequired } from '@/lib/vehicle-repo'
+import { wipeAfterMoveEnded, type PositionDb } from '@/lib/mover-position-server'
 import { Query, ID } from 'node-appwrite'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -140,6 +141,10 @@ export async function POST(request: NextRequest) {
           finalPrice: payment.amount,
         }
       )
+
+      // The job is over: an offline mover with no other job may no longer be
+      // located (plan legal/2, P2.2). Never throws.
+      await wipeAfterMoveEnded(databases as unknown as PositionDb, move as { $id: string; moverProfileId?: unknown }, 'completed', Date.now())
 
       // Increment mover's totalMoves
       try {

@@ -707,6 +707,25 @@
         }
       }
     },
+    "online": {
+      "failed": {
+        "body": "Ihr Status konnte nicht geändert werden. Bitte versuchen Sie es erneut."
+      },
+      "location": {
+        "helper": "Ihr Standort wird nur geteilt, solange Sie online sind oder einen Auftrag ausführen."
+      },
+      "off": {
+        "helper": "Gehen Sie online, um Umzugsanfragen zu erhalten.",
+        "label": "Sie sind offline"
+      },
+      "on": {
+        "helper": "Kunden können Sie finden und Ihnen Umzugsanfragen senden.",
+        "label": "Sie sind online"
+      },
+      "switch": {
+        "label": "Online"
+      }
+    },
     "request": {
       "categoryAndType": {
         "instant": {

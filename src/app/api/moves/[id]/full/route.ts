@@ -4,6 +4,8 @@ import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
 import { profileCrewSize } from '@/app/api/crew/crew-size'
 import { getSessionUserId } from '@/lib/auth-session'
+import { isOnJob, type JobMove } from '@/lib/mover-position'
+import { PLATFORM_TZ } from '@/lib/constants'
 
 /**
  * GET /api/moves/[id]/full
@@ -60,6 +62,8 @@ export async function GET(
       return NextResponse.json({ error: t('errors:auth.forbidden') }, { status: 403 })
     }
 
+    const showMoverPosition = isMover || isOnJob(move as JobMove, Date.now(), PLATFORM_TZ)
+
     // Get the mover's user doc for their name / phone
     let moverUserDoc = null
     if (moverProfile) {
@@ -104,8 +108,11 @@ export async function GET(
         yearsExperience: moverProfile.yearsExperience || 0,
         languages: moverProfile.languages || [],
         isVerified: moverProfile.verificationStatus === 'verified',
-        currentLatitude: moverProfile.currentLatitude,
-        currentLongitude: moverProfile.currentLongitude,
+        // The mover's position goes to the mover themselves, and to the client
+        // only while the mover is on a job with this move (plan legal/2, P1):
+        // not for a booking days away, and not after the move has ended.
+        currentLatitude: showMoverPosition ? moverProfile.currentLatitude ?? null : null,
+        currentLongitude: showMoverPosition ? moverProfile.currentLongitude ?? null : null,
       } : null,
     }
 

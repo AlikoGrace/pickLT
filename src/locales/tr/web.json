@@ -707,6 +707,25 @@
         }
       }
     },
+    "online": {
+      "failed": {
+        "body": "Durumunuz güncellenemedi. Lütfen tekrar deneyin."
+      },
+      "location": {
+        "helper": "Konumunuz yalnızca çevrimiçi olduğunuzda veya bir işteyken paylaşılır."
+      },
+      "off": {
+        "helper": "Taşınma talepleri almak için çevrimiçi olun.",
+        "label": "Çevrimdışısınız"
+      },
+      "on": {
+        "helper": "Müşteriler sizi bulabilir ve size taşınma talepleri gönderebilir.",
+        "label": "Çevrimiçisiniz"
+      },
+      "switch": {
+        "label": "Çevrimiçi"
+      }
+    },
     "request": {
       "categoryAndType": {
         "instant": {

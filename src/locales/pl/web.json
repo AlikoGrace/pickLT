@@ -717,6 +717,25 @@
         }
       }
     },
+    "online": {
+      "failed": {
+        "body": "Nie udało się zaktualizować statusu. Spróbuj ponownie."
+      },
+      "location": {
+        "helper": "Twoja lokalizacja jest udostępniana tylko wtedy, gdy jesteś online lub wykonujesz zlecenie."
+      },
+      "off": {
+        "helper": "Przejdź do trybu online, aby otrzymywać zapytania o przeprowadzkę.",
+        "label": "Jesteś offline"
+      },
+      "on": {
+        "helper": "Klienci mogą Cię znaleźć i wysyłać Ci zapytania o przeprowadzkę.",
+        "label": "Jesteś online"
+      },
+      "switch": {
+        "label": "Online"
+      }
+    },
     "request": {
       "categoryAndType": {
         "instant": {

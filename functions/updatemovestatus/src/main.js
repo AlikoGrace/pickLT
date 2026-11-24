@@ -1,10 +1,15 @@
 import { Client, Databases, ID, Permission, Query, Role } from 'node-appwrite';
 
+import { TRACKED_STATUSES, wipeMoverPositionIfIdle } from './mover-position.js';
+
 const DATABASE_ID = process.env.APPWRITE_DATABASE_ID;
 const MOVES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVES;
 const MOVER_PROFILES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVER_PROFILES;
 const MOVE_STATUS_HISTORY_COLLECTION = process.env.APPWRITE_COLLECTION_MOVE_STATUS_HISTORY;
 const NOTIFICATIONS_COLLECTION = process.env.APPWRITE_COLLECTION_NOTIFICATIONS;
+// Only for the end-of-job position wipe (plan legal/2, P2.2). Optional by
+// design: without it the wipe clears the profile and leaves the location row.
+const MOVER_LOCATIONS_COLLECTION = process.env.APPWRITE_COLLECTION_MOVER_LOCATIONS;
 // Append-only vehicle audit trail (vehicles master plan §4.2). Optional:
 // defaults to the slug id the schema script creates.
 const VEHICLE_EVENTS_COLLECTION = process.env.APPWRITE_COLLECTION_VEHICLE_EVENTS || 'vehicle_events';
@@ -337,6 +342,26 @@ export default async ({ req, res, log, error }) => {
     // ...and restate the flag on the mover's OTHER waiting jobs, which this
     // transition may have just freed (or just blocked). Fail-open by contract.
     await syncQueuedBehind(databases, profile.$id, { moveId, newStatus }, log, error);
+
+    // The job is over (completed or cancelled). A mover who is offline and has
+    // no other job may no longer be located, so their last position goes
+    // (plan legal/2, P2.2). Never throws; an online mover keeps sharing.
+    if (!TRACKED_STATUSES.includes(newStatus)) {
+      await wipeMoverPositionIfIdle(
+        {
+          databases,
+          Query,
+          databaseId: DATABASE_ID,
+          profilesCollection: MOVER_PROFILES_COLLECTION,
+          movesCollection: MOVES_COLLECTION,
+          locationsCollection: MOVER_LOCATIONS_COLLECTION,
+          tz: process.env.PLATFORM_TZ || 'Europe/Berlin',
+          error,
+        },
+        profile.$id,
+        { isOnline: profile.isOnline === true, excludeMoveId: moveId },
+      );
+    }
 
     // Rental drivers must re-confirm SAME/CHANGE after every completed move
     // (vehicles master plan D12). Fail-open by contract.

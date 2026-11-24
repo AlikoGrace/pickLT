@@ -5,6 +5,7 @@ import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
 import { moverUserIdFromProfile, relId, writeNotification } from '@/lib/notify'
 import { MOVE_STATUS_HISTORY_PERMISSIONS } from '@/lib/doc-permissions'
+import { wipeAfterMoveEnded, type PositionDb } from '@/lib/mover-position-server'
 import { ID, Query } from 'node-appwrite'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -88,6 +89,10 @@ export async function POST(request: NextRequest) {
       moveId,
       { status: 'cancelled_by_client' }
     )
+
+    // The job is over: an offline mover with no other job may no longer be
+    // located (plan legal/2, P2.2). Never throws.
+    await wipeAfterMoveEnded(databases as unknown as PositionDb, move as { $id: string; moverProfileId?: unknown }, 'cancelled_by_client', Date.now())
 
     // Status-history breadcrumb (mirrors the Appwrite `cancelmove` function).
     try {

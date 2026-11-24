@@ -88,9 +88,12 @@ export default function ActiveMovePage() {
 
   const moverProfileId = user?.moverDetails?.profileId || null
 
-  // Broadcast GPS at higher frequency during an active move (every 3 seconds)
+  // Broadcast GPS at higher frequency during an active move (every 3 seconds).
+  // Only once there IS a move: on a job is one of the two reasons a mover's
+  // location may be shared (plan legal/2, P2), and the server drops a ping
+  // that fits neither.
   useLocationBroadcast({
-    enabled: !!moverProfileId && phase !== 'completed',
+    enabled: !!moverProfileId && !!move && phase !== 'completed',
     intervalMs: 3_000,
     moveId: (move?.$id as string) || undefined,
   })
