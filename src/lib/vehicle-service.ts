@@ -357,6 +357,14 @@ export function normalizePlate(input: string | null | undefined): string {
 
 export const MIN_CAPACITY_M3 = 1;
 export const MAX_CAPACITY_M3 = 120;
+/**
+ * Gross vehicle weight limit (plan `legal/1.scope-lock` S4). Domestic road
+ * haulage needs no licence up to and INCLUDING 3,500 kg permissible gross
+ * weight, trailer included (GüKG; lawyer report 2026-11-02 section 3). Heavier
+ * combinations cannot be registered.
+ */
+export const MIN_GVW_KG = 500;
+export const MAX_COMBINED_GVW_KG = 3500;
 export const VEHICLE_TYPES = ['small_van', 'medium_truck', 'large_truck'] as const;
 export type VehicleType = (typeof VEHICLE_TYPES)[number];
 
@@ -368,6 +376,11 @@ export interface VehicleFormInput {
   year?: string | null;
   vehicleType: string;
   capacityM3?: number | string | null;
+  /** Permissible gross weight in kg (field F.2 of the registration certificate). */
+  grossWeightKg?: number | string | null;
+  hasTrailer?: boolean | null;
+  /** Permissible gross weight of the trailer in kg; required when `hasTrailer`. */
+  trailerGrossWeightKg?: number | string | null;
   frontPlatePhoto: string;
   rearPlatePhoto: string;
   fullVehiclePhoto: string;
@@ -387,6 +400,9 @@ export type VehicleValidationCode =
   | 'vehicle.typeInvalid'
   | 'vehicle.capacityOutOfRange'
   | 'vehicle.yearInvalid'
+  | 'vehicle.weightRequired'
+  | 'vehicle.trailerWeightRequired'
+  | 'vehicle.weightOverLimit'
   | RentalWindowValidationCode;
 
 export interface ValidateVehicleOptions {
@@ -426,5 +442,41 @@ export function validateVehicleInput(
   if (input.year !== undefined && input.year !== null && String(input.year).trim() !== '') {
     if (!/^\d{4}$/.test(String(input.year).trim())) codes.push('vehicle.yearInvalid');
   }
+  codes.push(...validateVehicleWeight(input));
   return codes;
+}
+
+/** A whole number of kilograms out of a form or wire value, or `null`. */
+export function parseWeightKg(value: unknown): number | null {
+  if (value === undefined || value === null) return null;
+  const raw = String(value).trim();
+  if (!/^\d{1,6}$/.test(raw)) return null;
+  return Number(raw);
+}
+
+/** Vehicle plus trailer gross weight in kg, or `null` when the vehicle's is not known. */
+export function combinedGrossWeightKg(
+  v: { grossWeightKg?: unknown; hasTrailer?: unknown; trailerGrossWeightKg?: unknown } | null | undefined,
+): number | null {
+  const own = parseWeightKg(v?.grossWeightKg);
+  if (own == null) return null;
+  return own + (v?.hasTrailer === true ? parseWeightKg(v?.trailerGrossWeightKg) ?? 0 : 0);
+}
+
+/**
+ * The 3.5 t rule (plan `legal/1.scope-lock` S4): the weight is required, a
+ * declared trailer needs its own weight, and the combination may not exceed
+ * `MAX_COMBINED_GVW_KG` (the limit itself is allowed).
+ */
+export function validateVehicleWeight(
+  input: { grossWeightKg?: unknown; hasTrailer?: unknown; trailerGrossWeightKg?: unknown } | null | undefined,
+): VehicleValidationCode[] {
+  const own = parseWeightKg(input?.grossWeightKg);
+  if (own == null || own < MIN_GVW_KG) return ['vehicle.weightRequired'];
+  if (input?.hasTrailer === true) {
+    const trailer = parseWeightKg(input?.trailerGrossWeightKg);
+    if (trailer == null || trailer <= 0) return ['vehicle.trailerWeightRequired'];
+  }
+  const combined = combinedGrossWeightKg(input) ?? own;
+  return combined > MAX_COMBINED_GVW_KG ? ['vehicle.weightOverLimit'] : [];
 }

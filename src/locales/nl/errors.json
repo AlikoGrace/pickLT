@@ -90,7 +90,9 @@
       "notFound": "Voertuig niet gevonden.",
       "notPending": "Dit voertuig wacht niet op beoordeling.",
       "reasonRequired": "Bij het afwijzen van een voertuig is een reden vereist.",
-      "verifyFailed": "Voertuigverificatie mislukt (status {{status}}). Probeer het opnieuw."
+      "verifyFailed": "Voertuigverificatie mislukt (status {{status}}). Probeer het opnieuw.",
+      "weightMissing": "Voor dit voertuig is geen maximummassa bekend. Wijs het af en vraag de chauffeur om die toe te voegen.",
+      "weightOverLimit": "Dit voertuig is inclusief aanhanger zwaarder dan 3.500 kg en kan niet worden geverifieerd."
     }
   },
   "appwrite": {
@@ -369,11 +371,16 @@
     "rentalWindowTooLong": "Een huur kan maximaal 30 dagen tegelijk beslaan. Je kunt later verlengen.",
     "rentalExpired": "Je huurperiode is afgelopen. Registreer opnieuw een huurvoertuig om door te gaan.",
     "notInWindow": "Dit voertuig is op dit moment niet beschikbaar voor dienst.",
-    "notOwnVehicle": "Dit voertuig hoort niet bij jouw account."
+    "notOwnVehicle": "Dit voertuig hoort niet bij jouw account.",
+    "weightRequired": "Vul de toegestane maximummassa in kilogram in.",
+    "trailerWeightRequired": "Vul de toegestane maximummassa van de aanhanger in kilogram in.",
+    "weightOverLimit": "Voertuigen boven 3.500 kg inclusief aanhanger kunnen niet worden geregistreerd."
   },
   "country": {
     "notLive": "PickLte is nog niet beschikbaar in {{country}}.",
-    "required": "Kies je land."
+    "required": "Kies je land.",
+    "crossBorder": "Je verhuizing moet in hetzelfde land beginnen en eindigen.",
+    "pickupNotLive": "PickLte is nog niet beschikbaar op dit ophaaladres."
   },
   "fees": {
     "restricted": "Je hebt onbetaalde platformkosten. Betaal je saldo om online te gaan en verhuizingen te accepteren.",

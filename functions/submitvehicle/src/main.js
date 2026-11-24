@@ -105,6 +105,9 @@ export { serviceDate, vehicleServiceReady };
 export const VEHICLE_TYPES = ['small_van', 'medium_truck', 'large_truck'];
 export const OWNERSHIPS = ['owned', 'rented'];
 export const SOURCES = ['registration', 'settings', 'login', 'post_move'];
+// 3.5 t rule (plan legal/1.scope-lock S4): mirrors lib/vehicle-service.ts.
+export const MIN_GVW_KG = 500;
+export const MAX_COMBINED_GVW_KG = 3500;
 export const MIN_CAPACITY_M3 = 1;
 export const MAX_CAPACITY_M3 = 120;
 
@@ -218,7 +221,39 @@ export function validateVehicleInput(input) {
   if (src.year !== undefined && src.year !== null && String(src.year).trim() !== '') {
     if (!/^\d{4}$/.test(String(src.year).trim())) codes.push('vehicle.yearInvalid');
   }
+  codes.push(...validateVehicleWeight(src));
   return codes;
+}
+
+/** A whole number of kilograms out of a wire value, or `null`. */
+export function parseWeightKg(value) {
+  if (value === undefined || value === null) return null;
+  const raw = String(value).trim();
+  if (!/^\d{1,6}$/.test(raw)) return null;
+  return Number(raw);
+}
+
+/** Vehicle plus trailer gross weight in kg, or `null` when the vehicle's is not known. */
+export function combinedGrossWeightKg(v) {
+  const own = parseWeightKg(v && v.grossWeightKg);
+  if (own == null) return null;
+  return own + (v && v.hasTrailer === true ? parseWeightKg(v.trailerGrossWeightKg) ?? 0 : 0);
+}
+
+/**
+ * The 3.5 t rule (plan legal/1.scope-lock S4): the weight is required, a
+ * declared trailer needs its own weight, and the combination may not exceed
+ * MAX_COMBINED_GVW_KG (the limit itself is allowed).
+ */
+export function validateVehicleWeight(input) {
+  const own = parseWeightKg(input && input.grossWeightKg);
+  if (own == null || own < MIN_GVW_KG) return ['vehicle.weightRequired'];
+  if (input && input.hasTrailer === true) {
+    const trailer = parseWeightKg(input.trailerGrossWeightKg);
+    if (trailer == null || trailer <= 0) return ['vehicle.trailerWeightRequired'];
+  }
+  const combined = combinedGrossWeightKg(input) ?? own;
+  return combined > MAX_COMBINED_GVW_KG ? ['vehicle.weightOverLimit'] : [];
 }
 
 /**
@@ -456,6 +491,12 @@ async function handleRenew({ databases, res, log, error, body, profile, authId, 
   }
   if (existing.ownership !== 'rented') {
     return res.json({ ok: false, error: 'Only rented vehicles have a rental window to renew', fnCode: 'vehicle.notRental' }, 400);
+  }
+  // 3.5 t rule (plan legal/1.scope-lock S4): a row registered before the weight
+  // was collected cannot be renewed; the driver registers the vehicle again.
+  const weightCodes = validateVehicleWeight(existing);
+  if (weightCodes.length > 0) {
+    return res.json({ ok: false, error: 'This vehicle has no valid gross weight on file', fnCode: weightCodes[0], fnCodes: weightCodes }, 400);
   }
   const resolved = resolveRentalWindow(body.rental, nowMs);
   if (!resolved.ok) {
@@ -701,6 +742,10 @@ export default async ({ req, res, log, error }) => {
       year: optionalString(body.year, 8),
       vehicleType: String(body.vehicleType),
       capacityM3: optionalNumber(body.capacityM3),
+      // 3.5 t rule (plan legal/1.scope-lock S4); validated above.
+      grossWeightKg: parseWeightKg(body.grossWeightKg),
+      hasTrailer: body.hasTrailer === true,
+      trailerGrossWeightKg: body.hasTrailer === true ? parseWeightKg(body.trailerGrossWeightKg) : null,
       frontPlatePhoto: String(body.frontPlatePhoto).trim(),
       rearPlatePhoto: String(body.rearPlatePhoto).trim(),
       fullVehiclePhoto: String(body.fullVehiclePhoto).trim(),

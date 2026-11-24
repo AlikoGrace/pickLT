@@ -310,6 +310,10 @@ export interface VehicleDoc extends AppwriteDoc {
   year: string | null
   vehicleType: VehicleType
   capacityM3: number | null
+  /** Absent on rows from before the 3.5 t rule (plan legal/1.scope-lock S4). */
+  grossWeightKg?: number | null
+  hasTrailer?: boolean | null
+  trailerGrossWeightKg?: number | null
   frontPlatePhoto: string
   rearPlatePhoto: string
   fullVehiclePhoto: string

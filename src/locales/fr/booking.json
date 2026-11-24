@@ -223,14 +223,6 @@
   "details": {
     "title": "Détails du déménagement"
   },
-  "disposal": {
-    "helper": "Indiquez les meubles ou objets dont vous souhaitez que nous nous débarrassions.",
-    "items": {
-      "label": "Objets à débarrasser"
-    },
-    "placeholder": "ex. vieux canapé, bibliothèque cassée, matelas…",
-    "title": "Objets à débarrasser"
-  },
   "dropoff": {
     "edit": {
       "a11y": "Modifier le lieu de livraison"
@@ -327,9 +319,6 @@
     },
     "crewSize": {
       "label": "Taille de l'équipe"
-    },
-    "disposalItems": {
-      "label": "Objets à débarrasser"
     },
     "distance": {
       "label": "Distance"
@@ -1203,10 +1192,6 @@
       "helper": "Nous démontons lits, armoires et tables avant le chargement",
       "label": "Démontage des meubles"
     },
-    "disposal": {
-      "helper": "Débarras des meubles et objets dont vous ne voulez plus",
-      "label": "Débarras (Entsorgung)"
-    },
     "storage": {
       "helper": "Stockez vos affaires en toute sécurité entre deux déménagements",
       "label": "Garde-meuble temporaire"
@@ -1233,12 +1218,8 @@
     "detailsSubtitle": "Les services et préférences que vous avez sélectionnés",
     "detailsTitle": "Détail des services",
     "disposal": {
-      "helper": "Évacuer les objets non désirés vers la déchetterie municipale",
       "label": "Débarras",
       "option": "Débarras"
-    },
-    "disposalItems": {
-      "label": "Objets à débarrasser : {{items}}"
     },
     "furnitureAssembly": {
       "helper": "Nous montons les meubles au nouveau logement",
@@ -1504,6 +1485,19 @@
           "label": "Jours"
         }
       }
+    },
+    "grossWeight": {
+      "label": "Poids total autorisé en charge (kg)",
+      "placeholder": "3500",
+      "helper": "Champ F.2 du certificat d’immatriculation. Les véhicules de plus de 3 500 kg, remorque comprise, ne peuvent pas être enregistrés.",
+      "review": "Poids total"
+    },
+    "trailer": {
+      "label": "Je tracte une remorque"
+    },
+    "trailerWeight": {
+      "label": "Poids total autorisé de la remorque (kg)",
+      "placeholder": "750"
     }
   },
   "extraHelpers": {

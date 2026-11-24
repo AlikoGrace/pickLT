@@ -127,6 +127,7 @@ const SelectMoverPage = () => {
     dropoffLocation,
     pickupCoordinates,
     pickupCountryCode,
+    dropoffCountryCode,
     dropoffCoordinates,
     inventory,
     customItems,
@@ -401,6 +402,8 @@ const SelectMoverPage = () => {
         paymentMethod,
         // Geocoder hint for the pickup country (C2); the server re-derives it.
         pickupCountryCode,
+        // Hint for the server's cross-border check (plan legal/1.scope-lock S2).
+        dropoffCountryCode,
       }
       console.log(
         `[select-mover] Creating move — cover: ${createBody.coverPhotoId ? 'URL' : 'null'}, gallery: ${createBody.galleryPhotoIds.length}`
@@ -422,10 +425,25 @@ const SelectMoverPage = () => {
         // client can pick someone else instead of tracking a move that was
         // never created.
         const data = await res.json().catch(() => ({}))
+        // Scope lock (plan legal/1.scope-lock S2): the move crosses a border.
+        // Nothing was created, so stay here and say why.
+        if (typeof data.fnCode === 'string' && data.fnCode.startsWith('country.')) {
+          setConfirmError(data.error || t('errors:country.crossBorder'))
+          setIsConfirming(false)
+          return
+        }
         if (typeof data.fnCode === 'string' && (data.fnCode.startsWith('mover.') || data.fnCode === 'fees.restricted')) {
           setApiMovers((prev) => prev.filter((m) => m.$id !== selectedMover))
           setSelectedMover(null)
           setConfirmError(data.error || t('errors:instant.moverUnavailable.error'))
+          setIsConfirming(false)
+          return
+        }
+      } else if (res.status === 403) {
+        // Scope lock (plan legal/1.scope-lock S3): the pickup's market is closed.
+        const data = await res.json().catch(() => ({}))
+        if (typeof data.fnCode === 'string' && data.fnCode.startsWith('country.')) {
+          setConfirmError(data.error || t('errors:country.pickupNotLive'))
           setIsConfirming(false)
           return
         }

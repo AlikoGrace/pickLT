@@ -223,14 +223,6 @@
   "details": {
     "title": "Dettagli del trasloco"
   },
-  "disposal": {
-    "helper": "Elenca i mobili o gli oggetti che vuoi farci smaltire.",
-    "items": {
-      "label": "Oggetti da smaltire"
-    },
-    "placeholder": "es. divano vecchio, libreria rotta, materasso…",
-    "title": "Oggetti da smaltire"
-  },
   "dropoff": {
     "edit": {
       "a11y": "Modifica il luogo di consegna"
@@ -327,9 +319,6 @@
     },
     "crewSize": {
       "label": "Dimensione della squadra"
-    },
-    "disposalItems": {
-      "label": "Oggetti da smaltire"
     },
     "distance": {
       "label": "Distanza"
@@ -1201,10 +1190,6 @@
       "helper": "Smontiamo letti, armadi e tavoli prima del carico",
       "label": "Smontaggio mobili"
     },
-    "disposal": {
-      "helper": "Smaltiamo i mobili e gli oggetti che non ti servono più",
-      "label": "Smaltimento (Entsorgung)"
-    },
     "storage": {
       "helper": "Custodiamo gli oggetti in sicurezza tra un trasloco e l’altro",
       "label": "Deposito temporaneo"
@@ -1231,12 +1216,8 @@
     "detailsSubtitle": "I servizi e le preferenze che hai scelto",
     "detailsTitle": "Dettagli dei servizi",
     "disposal": {
-      "helper": "Portiamo gli oggetti indesiderati all'isola ecologica comunale",
       "label": "Smaltimento",
       "option": "Smaltimento"
-    },
-    "disposalItems": {
-      "label": "Oggetti da smaltire: {{items}}"
     },
     "furnitureAssembly": {
       "helper": "Montiamo i mobili nella nuova casa",
@@ -1502,6 +1483,19 @@
           "label": "Giorni"
         }
       }
+    },
+    "grossWeight": {
+      "label": "Massa complessiva (kg)",
+      "placeholder": "3500",
+      "helper": "Campo F.2 della carta di circolazione. Non è possibile registrare veicoli oltre 3.500 kg, rimorchio compreso.",
+      "review": "Massa complessiva"
+    },
+    "trailer": {
+      "label": "Traino un rimorchio"
+    },
+    "trailerWeight": {
+      "label": "Massa complessiva del rimorchio (kg)",
+      "placeholder": "750"
     }
   },
   "extraHelpers": {

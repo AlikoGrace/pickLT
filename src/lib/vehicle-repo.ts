@@ -12,7 +12,9 @@ import {
   rentalWindowEnded,
   resolveRentalWindow,
   serviceDate,
+  parseWeightKg,
   validateVehicleInput,
+  validateVehicleWeight,
   type RentalWindow,
   type RentalWindowInput,
   type VehicleEventAction,
@@ -112,6 +114,9 @@ export interface SubmitVehicleBody {
   year?: string | null
   vehicleType?: string | null
   capacityM3?: number | string | null
+  grossWeightKg?: number | string | null
+  hasTrailer?: boolean | null
+  trailerGrossWeightKg?: number | string | null
   frontPlatePhoto?: string | null
   rearPlatePhoto?: string | null
   fullVehiclePhoto?: string | null
@@ -427,6 +432,10 @@ export async function submitVehicle(
     year: str(body.year) || null,
     vehicleType: str(body.vehicleType),
     capacityM3: body.capacityM3 ?? null,
+    // 3.5 t rule (plan legal/1.scope-lock S4), checked by validateVehicleInput.
+    grossWeightKg: body.grossWeightKg ?? null,
+    hasTrailer: body.hasTrailer === true,
+    trailerGrossWeightKg: body.trailerGrossWeightKg ?? null,
     frontPlatePhoto: str(body.frontPlatePhoto),
     rearPlatePhoto: str(body.rearPlatePhoto),
     fullVehiclePhoto: str(body.fullVehiclePhoto),
@@ -481,6 +490,9 @@ export async function submitVehicle(
     year: input.year,
     vehicleType: input.vehicleType,
     capacityM3,
+    grossWeightKg: parseWeightKg(input.grossWeightKg),
+    hasTrailer: input.hasTrailer,
+    trailerGrossWeightKg: input.hasTrailer ? parseWeightKg(input.trailerGrossWeightKg) : null,
     frontPlatePhoto: input.frontPlatePhoto,
     rearPlatePhoto: input.rearPlatePhoto,
     fullVehiclePhoto: input.fullVehiclePhoto,
@@ -670,6 +682,10 @@ export async function renewRental(
   }
   if (vehicle.moverProfileId !== profile.$id) throw new VehicleRepoError('vehicle.notOwnVehicle', 403)
   if (vehicle.ownership !== 'rented') throw new VehicleRepoError('vehicle.notRental', 400)
+  // 3.5 t rule (plan legal/1.scope-lock S4): a row registered before the weight
+  // was collected cannot be renewed; the driver registers the vehicle again.
+  const weightCodes = validateVehicleWeight(vehicle as Record<string, unknown>)
+  if (weightCodes.length) throw new VehicleRepoError(weightCodes[0], 400, weightCodes)
 
   const window = requireRentalWindow(params.rental, nowMs)
   const previous = { startAt: vehicle.rentalStartAt ?? null, endAt: vehicle.rentalEndAt ?? null }

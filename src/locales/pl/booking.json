@@ -225,14 +225,6 @@
   "details": {
     "title": "Szczegóły przeprowadzki"
   },
-  "disposal": {
-    "helper": "Wypisz meble lub rzeczy, które mamy zutylizować.",
-    "items": {
-      "label": "Rzeczy do utylizacji"
-    },
-    "placeholder": "np. stara kanapa, zniszczony regał, materac…",
-    "title": "Rzeczy do utylizacji"
-  },
   "dropoff": {
     "edit": {
       "a11y": "Edytuj miejsce dostawy"
@@ -329,9 +321,6 @@
     },
     "crewSize": {
       "label": "Liczebność ekipy"
-    },
-    "disposalItems": {
-      "label": "Rzeczy do utylizacji"
     },
     "distance": {
       "label": "Odległość"
@@ -1234,10 +1223,6 @@
       "helper": "Demontujemy łóżka, szafy i stoły przed załadunkiem",
       "label": "Demontaż mebli"
     },
-    "disposal": {
-      "helper": "Utylizujemy niepotrzebne meble i rzeczy",
-      "label": "Utylizacja (Entsorgung)"
-    },
     "storage": {
       "helper": "Bezpiecznie przechowujemy rzeczy między przeprowadzkami",
       "label": "Przechowywanie tymczasowe"
@@ -1264,12 +1249,8 @@
     "detailsSubtitle": "Wybrane przez Ciebie usługi i preferencje",
     "detailsTitle": "Szczegóły usług",
     "disposal": {
-      "helper": "Wywozimy niepotrzebne rzeczy do miejskiego punktu zbiórki odpadów",
       "label": "Utylizacja",
       "option": "Utylizacja"
-    },
-    "disposalItems": {
-      "label": "Rzeczy do utylizacji: {{items}}"
     },
     "furnitureAssembly": {
       "helper": "Montujemy meble w nowym miejscu",
@@ -1539,6 +1520,19 @@
           "label": "Dni"
         }
       }
+    },
+    "grossWeight": {
+      "label": "Dopuszczalna masa całkowita (kg)",
+      "placeholder": "3500",
+      "helper": "Pole F.2 dowodu rejestracyjnego. Pojazdów powyżej 3500 kg łącznie z przyczepą nie można zarejestrować.",
+      "review": "Masa całkowita"
+    },
+    "trailer": {
+      "label": "Jeżdżę z przyczepą"
+    },
+    "trailerWeight": {
+      "label": "Dopuszczalna masa całkowita przyczepy (kg)",
+      "placeholder": "750"
     }
   },
   "extraHelpers": {

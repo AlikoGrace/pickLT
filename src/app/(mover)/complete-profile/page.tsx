@@ -174,6 +174,9 @@ export default function CompleteProfilePage() {
     vehicleModel: '',
     vehicleYear: '',
     vehicleCapacity: '',
+    vehicleGrossWeightKg: '',
+    vehicleHasTrailer: false,
+    vehicleTrailerGrossWeightKg: '',
     vehicleRegistration: '',
     vehicleType: '' as string,
     // Rental window for a rented driver's vehicle (plan wave-2026-10/1 R1).
@@ -255,6 +258,9 @@ export default function CompleteProfilePage() {
       vehicleModel: form.vehicleModel,
       vehicleYear: form.vehicleYear,
       vehicleCapacity: form.vehicleCapacity,
+      vehicleGrossWeightKg: form.vehicleGrossWeightKg,
+      vehicleHasTrailer: form.vehicleHasTrailer,
+      vehicleTrailerGrossWeightKg: form.vehicleTrailerGrossWeightKg,
       vehicleRegistration: form.vehicleRegistration,
       vehicleType: form.vehicleType,
       hasFrontPlatePhoto: form.frontPlatePhoto !== null,
@@ -387,6 +393,9 @@ export default function CompleteProfilePage() {
             year: form.vehicleYear.trim() || undefined,
             vehicleType: form.vehicleType,
             capacityM3: form.vehicleCapacity.trim() || null,
+            grossWeightKg: form.vehicleGrossWeightKg.trim() || null,
+            hasTrailer: form.vehicleHasTrailer,
+            trailerGrossWeightKg: form.vehicleHasTrailer ? form.vehicleTrailerGrossWeightKg.trim() || null : null,
             frontPlatePhoto,
             rearPlatePhoto,
             fullVehiclePhoto,
@@ -953,6 +962,47 @@ export default function CompleteProfilePage() {
                 />
               </div>
             </div>
+            {/* 3.5 t rule (plan legal/1.scope-lock S4): vehicle plus trailer may
+                not exceed 3,500 kg permissible gross weight. */}
+            <div>
+              <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                {t('booking:vehicle.grossWeight.label')}
+              </label>
+              <input
+                type="text"
+                value={form.vehicleGrossWeightKg}
+                onChange={(e) => updateForm({ vehicleGrossWeightKg: e.target.value.replace(/\D/g, '') })}
+                placeholder={t('booking:vehicle.grossWeight.placeholder')}
+                inputMode="numeric"
+                maxLength={6}
+                className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
+              />
+              <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">{t('booking:vehicle.grossWeight.helper')}</p>
+            </div>
+            <label className="flex items-center gap-2 text-sm font-medium text-neutral-700 dark:text-neutral-300">
+              <input
+                type="checkbox"
+                checked={form.vehicleHasTrailer}
+                onChange={(e) => updateForm({ vehicleHasTrailer: e.target.checked })}
+              />
+              {t('booking:vehicle.trailer.label')}
+            </label>
+            {form.vehicleHasTrailer && (
+              <div>
+                <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                  {t('booking:vehicle.trailerWeight.label')}
+                </label>
+                <input
+                  type="text"
+                  value={form.vehicleTrailerGrossWeightKg}
+                  onChange={(e) => updateForm({ vehicleTrailerGrossWeightKg: e.target.value.replace(/\D/g, '') })}
+                  placeholder={t('booking:vehicle.trailerWeight.placeholder')}
+                  inputMode="numeric"
+                  maxLength={6}
+                  className="w-full rounded-xl border border-neutral-200 bg-transparent px-4 py-2.5 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-neutral-700"
+                />
+              </div>
+            )}
             <div>
               <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
                 {t('booking:vehicle.registration.label')}

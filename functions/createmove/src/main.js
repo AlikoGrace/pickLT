@@ -8,13 +8,14 @@ import {
   quantityTooHighBody,
   serializeBasket,
 } from './basket.js';
-import { resolveMoveCountry, warnIfNoMapboxToken } from './move-country.js';
+import { resolveMoveCountry, scopeLockViolation, warnIfNoMapboxToken } from './move-country.js';
 import {
   GLOBAL_PRICING_SCOPE,
   PricingReconcileError,
   quoteColumns,
   quoteInputFromRow,
   quoteMove,
+  stripRetiredServices,
   toPricingConfig,
 } from './pricing-engine.js';
 
@@ -60,6 +61,22 @@ function asTextArray(value) {
   return arr
     .filter((v) => v !== null && v !== undefined)
     .map((v) => (typeof v === 'string' ? v : JSON.stringify(v)));
+}
+
+// Optional: `supported_countries` decides which markets are open (plan
+// legal/1.scope-lock S3). Unreadable or unset means the home market only.
+const PLATFORM_CONFIG_COLLECTION =
+  process.env.APPWRITE_COLLECTION_PLATFORM_CONFIG || 'platform_config';
+
+/** `platform_config` rows for one key, for `scopeLockViolation`. */
+function platformConfigReader(databases) {
+  return async (key) => {
+    const res = await databases.listDocuments(DATABASE_ID, PLATFORM_CONFIG_COLLECTION, [
+      Query.equal('key', key),
+      Query.limit(1),
+    ]);
+    return res.documents;
+  };
 }
 
 /**
@@ -195,7 +212,8 @@ export default async ({ req, res, log, error }) => {
       // `crew.maxExtraHelpers` by the engine; `quoteColumns` writes the billed count.
       extraHelpers: extraHelpersFromWire(moveData.extraHelpers),
       vehicleType: asText(moveData.vehicleType),
-      additionalServices: asTextArray(moveData.additionalServices),
+      // Retired services (plan legal/1.scope-lock S1) never reach a new row.
+      additionalServices: stripRetiredServices(asTextArray(moveData.additionalServices)),
       storageWeeks: moveData.storageWeeks || 0,
       coverPhotoId: asText(moveData.coverPhotoId),
       galleryPhotoIds: asTextArray(moveData.galleryPhotoIds),
@@ -230,6 +248,20 @@ export default async ({ req, res, log, error }) => {
       error,
     });
     data.countryCode = country.countryCode;
+
+    // Scope lock (plan legal/1.scope-lock S2/S3): the pickup's market must be
+    // open and the drop-off must be in the same country. Nothing is written.
+    const blocked = await scopeLockViolation({
+      resolved: country,
+      row: data,
+      body: moveData,
+      listRows: platformConfigReader(databases),
+      error,
+    });
+    if (blocked) {
+      log(`createmove: refused (${blocked.body.fnCode}) for client ${clientId}`);
+      return res.json(blocked.body, blocked.status);
+    }
 
     // Quote the row. The selected mover's class on the row (instant) sets the
     // vehicle line; otherwise the engine picks the smallest class that fits.

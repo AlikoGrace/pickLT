@@ -172,7 +172,6 @@ function docToStoredMove(doc: any): StoredMove {
     packingNotes: doc.packingNotes ?? '',
     additionalServices: doc.additionalServices ?? [],
     storageWeeks: doc.storageWeeks ?? 0,
-    disposalItems: doc.disposalItems ?? '',
     crewSize: doc.crewSize ?? null,
     vehicleType: doc.vehicleType ?? null,
     arrivalWindow: doc.arrivalWindow ?? null,
@@ -494,7 +493,6 @@ export default function MoveDetailsPage() {
     packingNotes,
     additionalServices,
     storageWeeks,
-    disposalItems,
     crewSize,
     vehicleType,
     arrivalWindow,
@@ -745,7 +743,7 @@ export default function MoveDetailsPage() {
           </div>
 
           {/* Services */}
-          {(packingServiceLevel || additionalServices.length > 0 || storageWeeks > 0 || disposalItems) && (
+          {(packingServiceLevel || additionalServices.length > 0 || storageWeeks > 0) && (
             <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm">
               <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
                 {t('booking:services.title')}
@@ -767,9 +765,6 @@ export default function MoveDetailsPage() {
               )}
               {storageWeeks > 0 && (
                 <InfoRow label={t('booking:pricing.storage.label')} value={t('booking:storageWeekCount', { count: storageWeeks })} />
-              )}
-              {disposalItems && (
-                <InfoRow label={t('booking:disposal.items.label')} value={disposalItems} />
               )}
             </div>
           )}

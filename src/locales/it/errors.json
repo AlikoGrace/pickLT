@@ -90,7 +90,9 @@
       "notFound": "Veicolo non trovato.",
       "notPending": "Questo veicolo non è in attesa di verifica.",
       "reasonRequired": "Per rifiutare un veicolo è richiesta una motivazione.",
-      "verifyFailed": "Verifica del veicolo non riuscita (stato {{status}}). Riprovi."
+      "verifyFailed": "Verifica del veicolo non riuscita (stato {{status}}). Riprovi.",
+      "weightMissing": "Per questo veicolo non è registrata la massa complessiva. Rifiutalo e chiedi all’autista di aggiungerla.",
+      "weightOverLimit": "Questo veicolo supera i 3.500 kg, rimorchio compreso, e non può essere verificato."
     }
   },
   "appwrite": {
@@ -369,11 +371,16 @@
     "rentalWindowTooLong": "Un noleggio può coprire al massimo 30 giorni alla volta. Potrai prolungarlo in seguito.",
     "rentalExpired": "Il tuo periodo di noleggio è terminato. Registra di nuovo un noleggio per continuare.",
     "notInWindow": "Questo veicolo non è disponibile per il servizio in questo momento.",
-    "notOwnVehicle": "Questo veicolo non appartiene al tuo account."
+    "notOwnVehicle": "Questo veicolo non appartiene al tuo account.",
+    "weightRequired": "Inserisci la massa complessiva in chilogrammi.",
+    "trailerWeightRequired": "Inserisci la massa complessiva del rimorchio in chilogrammi.",
+    "weightOverLimit": "Non è possibile registrare veicoli oltre 3.500 kg, rimorchio compreso."
   },
   "country": {
     "notLive": "PickLte non è ancora disponibile in {{country}}.",
-    "required": "Scegli il tuo paese."
+    "required": "Scegli il tuo paese.",
+    "crossBorder": "Il tuo trasloco deve iniziare e terminare nello stesso paese.",
+    "pickupNotLive": "PickLte non è ancora disponibile a questo indirizzo di ritiro."
   },
   "fees": {
     "restricted": "Hai commissioni della piattaforma non pagate. Salda il tuo saldo per andare online e accettare traslochi.",

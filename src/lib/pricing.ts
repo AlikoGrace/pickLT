@@ -140,7 +140,6 @@ export const PRICING_DEFAULTS = {
   'service.tv_mount_remove': 50,
   'service.appliance_disconnect': 50,
   'service.appliance_connect': 50,
-  'service.disposal_entsorgung': 50,
   'service.moveout_cleaning': 50,
   // Storage is billed per week below; the service tick itself is free.
   'service.temporary_storage': 0,

@@ -24,6 +24,7 @@ export const StaySearchForm = ({ className, formStyle = 'default' }: Props) => {
     setDropoffLocation,
     setPickupCoordinates,
     setPickupCountryCode,
+    setDropoffCountryCode,
     setDropoffCoordinates,
     setMoveType: setContextMoveType,
   } = useMoveSearch()
@@ -62,6 +63,7 @@ export const StaySearchForm = ({ className, formStyle = 'default' }: Props) => {
     setDropoffData(location)
     if (location) {
       setDropoffLocation(location.fullAddress)
+      setDropoffCountryCode(location.countryCode ?? null)
       if (location.coordinates) {
         console.log('StaySearchForm - Setting dropoff coordinates:', location.coordinates)
         setDropoffCoordinates({
@@ -71,6 +73,7 @@ export const StaySearchForm = ({ className, formStyle = 'default' }: Props) => {
       }
     } else {
       setDropoffLocation('')
+      setDropoffCountryCode(null)
       setDropoffCoordinates(null)
     }
   }
@@ -126,6 +129,7 @@ export const StaySearchForm = ({ className, formStyle = 'default' }: Props) => {
         inputName="dropoffLocation"
         onChange={handleDropoffChange}
         defaultValue={contextDropoff}
+        lockCountry={pickupData?.countryCode ?? null}
       />
       <VerticalDividerLine />
       <GuestNumberField

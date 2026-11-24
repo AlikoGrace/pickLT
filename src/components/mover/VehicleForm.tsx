@@ -82,6 +82,9 @@ export default function VehicleForm({ mode, source, initialOwnership, prefill, l
     model: prefill?.model ?? '',
     year: prefill?.year ?? '',
     capacityM3: prefill?.capacityM3 != null ? String(prefill.capacityM3) : '',
+    grossWeightKg: prefill?.grossWeightKg != null ? String(prefill.grossWeightKg) : '',
+    hasTrailer: prefill?.hasTrailer === true,
+    trailerGrossWeightKg: prefill?.trailerGrossWeightKg != null ? String(prefill.trailerGrossWeightKg) : '',
     vehicleType: prefill?.vehicleType ?? '',
   })
   const [photos, setPhotos] = useState<Record<PhotoKind, PhotoSlot>>(() => ({
@@ -136,7 +139,8 @@ export default function VehicleForm({ mode, source, initialOwnership, prefill, l
     if (!valid) {
       // i18n-keys: errors:vehicle.photosRequired, errors:vehicle.plateInvalid, errors:vehicle.fieldsRequired,
       // errors:vehicle.typeInvalid, errors:vehicle.capacityOutOfRange, errors:vehicle.yearInvalid,
-      // errors:vehicle.rentalWindowRequired, errors:vehicle.rentalWindowInvalid, errors:vehicle.rentalWindowTooLong
+      // errors:vehicle.rentalWindowRequired, errors:vehicle.rentalWindowInvalid, errors:vehicle.rentalWindowTooLong,
+      // errors:vehicle.weightRequired, errors:vehicle.trailerWeightRequired, errors:vehicle.weightOverLimit
       setError(t(`errors:${codes[0]}`))
       return
     }
@@ -161,6 +165,9 @@ export default function VehicleForm({ mode, source, initialOwnership, prefill, l
         year: fields.year.trim() || undefined,
         vehicleType: fields.vehicleType,
         capacityM3: fields.capacityM3.trim() || null,
+        grossWeightKg: fields.grossWeightKg.trim() || null,
+        hasTrailer: fields.hasTrailer,
+        trailerGrossWeightKg: fields.hasTrailer ? fields.trailerGrossWeightKg.trim() || null : null,
         frontPlatePhoto,
         rearPlatePhoto,
         fullVehiclePhoto,
@@ -291,6 +298,48 @@ export default function VehicleForm({ mode, source, initialOwnership, prefill, l
           />
         </div>
       </div>
+
+      {/* 3.5 t rule (plan legal/1.scope-lock S4): vehicle plus trailer may not
+          exceed 3,500 kg permissible gross weight. */}
+      <div>
+        <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+          {t('booking:vehicle.grossWeight.label')}
+        </label>
+        <input
+          type="text"
+          value={fields.grossWeightKg}
+          onChange={(e) => update({ grossWeightKg: e.target.value.replace(/\D/g, '') })}
+          placeholder={t('booking:vehicle.grossWeight.placeholder')}
+          inputMode="numeric"
+          maxLength={6}
+          className={inputClass}
+        />
+        <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">{t('booking:vehicle.grossWeight.helper')}</p>
+      </div>
+      <label className="flex items-center gap-2 text-sm font-medium text-neutral-700 dark:text-neutral-300">
+        <input
+          type="checkbox"
+          checked={fields.hasTrailer}
+          onChange={(e) => update({ hasTrailer: e.target.checked })}
+        />
+        {t('booking:vehicle.trailer.label')}
+      </label>
+      {fields.hasTrailer && (
+        <div>
+          <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+            {t('booking:vehicle.trailerWeight.label')}
+          </label>
+          <input
+            type="text"
+            value={fields.trailerGrossWeightKg}
+            onChange={(e) => update({ trailerGrossWeightKg: e.target.value.replace(/\D/g, '') })}
+            placeholder={t('booking:vehicle.trailerWeight.placeholder')}
+            inputMode="numeric"
+            maxLength={6}
+            className={inputClass}
+          />
+        </div>
+      )}
 
       <div>
         <label className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300">

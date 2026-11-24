@@ -114,3 +114,79 @@ export async function resolveMoveCountry(params: {
   )
   return pickMoveCountry({ geocoded, hint: params.pickupCountryCode, userCountryCode: params.userCountryCode })
 }
+
+// ── Scope lock (plan `legal/1.scope-lock` S2/S3) ────────────────────────────
+//
+// A move must start and end in the same country, and that country must be an
+// open market. Enforced in the create routes, so the browser cannot book
+// around it. The web port of `functions/createmove/src/move-country.js`.
+
+export type ScopeLockCode = 'country.pickupNotLive' | 'country.crossBorder'
+
+/** Both countries are known and they differ. An unknown side never blocks. */
+export function isCrossBorder(pickupCountryCode: unknown, dropoffCountryCode: unknown): boolean {
+  const a = countryToIso2(pickupCountryCode)
+  const b = countryToIso2(dropoffCountryCode)
+  return !!a && !!b && a !== b
+}
+
+/**
+ * Why this move may not be created, or `null`.
+ *
+ * `pickupCountryCode` is the pickup's OWN country (geocoded or hinted), or
+ * null when it is not known. Only a known pickup can be refused: the client's
+ * home country and the default market are fallbacks for pricing, not evidence
+ * of where the move starts.
+ */
+export function scopeLockViolation(params: {
+  pickupCountryCode: unknown
+  dropoffCountryCode: unknown
+  liveCountries: readonly string[]
+}): ScopeLockCode | null {
+  const pickup = countryToIso2(params.pickupCountryCode)
+  if (!pickup) return null
+  if (!params.liveCountries.includes(pickup)) return 'country.pickupNotLive'
+  if (isCrossBorder(pickup, params.dropoffCountryCode)) return 'country.crossBorder'
+  return null
+}
+
+/**
+ * The create routes' country step: the move's (pricing) country plus the scope
+ * lock verdict. Geocodes the pickup once and the drop-off once; any geocoder
+ * failure leaves that side unknown and the booking goes ahead.
+ */
+export async function resolveMoveCountryWithLock(params: {
+  pickupLatitude?: unknown
+  pickupLongitude?: unknown
+  pickupCountryCode?: unknown
+  dropoffLatitude?: unknown
+  dropoffLongitude?: unknown
+  dropoffCountryCode?: unknown
+  userCountryCode?: unknown
+  liveCountries: readonly string[]
+  token?: string
+  fetchImpl?: FetchLike
+}): Promise<{ countryCode: string; violation: ScopeLockCode | null }> {
+  const token = params.token ?? process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
+  const fetchImpl = params.fetchImpl ?? fetch
+  const [pickupGeocoded, dropoffGeocoded] = await Promise.all([
+    reverseGeocodeCountry(params.pickupLatitude, params.pickupLongitude, token, fetchImpl),
+    reverseGeocodeCountry(params.dropoffLatitude, params.dropoffLongitude, token, fetchImpl),
+  ])
+  const countryCode = pickMoveCountry({
+    geocoded: pickupGeocoded,
+    hint: params.pickupCountryCode,
+    userCountryCode: params.userCountryCode,
+  })
+  const violation = scopeLockViolation({
+    pickupCountryCode: countryToIso2(pickupGeocoded) ?? countryToIso2(params.pickupCountryCode),
+    dropoffCountryCode: countryToIso2(dropoffGeocoded) ?? countryToIso2(params.dropoffCountryCode),
+    liveCountries: params.liveCountries,
+  })
+  return { countryCode, violation }
+}
+
+/** HTTP status for a scope-lock refusal, matching the cloud functions. */
+export function scopeLockStatus(code: ScopeLockCode): number {
+  return code === 'country.pickupNotLive' ? 403 : 400
+}

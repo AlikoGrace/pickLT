@@ -31,7 +31,6 @@ const ADDITIONAL_SERVICES: { id: AdditionalService; key: string }[] = [
   { id: 'tv_mount_remove', key: 'tvMount' },
   { id: 'appliance_disconnect', key: 'applianceDisconnect' },
   { id: 'appliance_connect', key: 'applianceConnect' },
-  { id: 'disposal_entsorgung', key: 'disposal' },
   { id: 'moveout_cleaning', key: 'cleaning' },
   { id: 'temporary_storage', key: 'storage' },
 ]
@@ -45,12 +44,10 @@ const Page = () => {
   const {
     additionalServices,
     storageWeeks,
-    disposalItems,
     coverPhotoId,
     galleryPhotoIds,
     toggleAdditionalService,
     setStorageWeeks,
-    setDisposalItems,
     setCoverPhotoId,
     addGalleryPhotoId,
     removeGalleryPhotoId,
@@ -102,7 +99,6 @@ const Page = () => {
   }
 
   const showStorageOptions = additionalServices.includes('temporary_storage')
-  const showDisposalOptions = additionalServices.includes('disposal_entsorgung')
 
   return (
     <>
@@ -265,7 +261,7 @@ const Page = () => {
                   />
                   {/* i18n-keys: booking.service.disassembly.label, booking.service.assembly.label,
                       booking.service.tvMount.label, booking.service.applianceDisconnect.label,
-                      booking.service.applianceConnect.label, booking.service.disposal.label,
+                      booking.service.applianceConnect.label,
                       booking.service.cleaning.label, booking.service.storage.label (+ .helper each) */}
                   <Label className="flex flex-col">
                     <span className="font-medium">{t(`booking:service.${service.key}.label`)}</span>
@@ -311,32 +307,9 @@ const Page = () => {
           </>
         )}
 
-        {/* Conditional: Disposal Items */}
-        {showDisposalOptions && (
-          <>
-            <Divider />
-            <div className="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-2xl border border-neutral-200 dark:border-neutral-700">
-              <p className="text-lg font-semibold">{t('booking:disposal.title')}</p>
-              <span className="mt-1 block text-sm text-neutral-500 dark:text-neutral-400">
-                {t('booking:disposal.helper')}
-              </span>
-              <div className="mt-4">
-                <Textarea
-                  name="disposalItems"
-                  placeholder={t('booking:disposal.placeholder')}
-                  value={disposalItems}
-                  onChange={(e) => setDisposalItems(e.target.value)}
-                  rows={3}
-                />
-              </div>
-            </div>
-          </>
-        )}
-
         {/* Hidden fields for form data */}
         <input type="hidden" name="additionalServices" value={JSON.stringify(additionalServices)} />
         <input type="hidden" name="storageWeeksValue" value={storageWeeks} />
-        <input type="hidden" name="disposalItemsValue" value={disposalItems} />
         <input type="hidden" name="extraHelpers" value={extraHelpers} />
         <input type="hidden" name="coverPhotoId" value={coverPhotoId || ''} />
         <input type="hidden" name="galleryPhotoIds" value={JSON.stringify(galleryPhotoIds)} />

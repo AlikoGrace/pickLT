@@ -75,7 +75,9 @@ const Page = () => {
     setDropoffLocation,
     setPickupCoordinates,
     setPickupCountryCode,
+    setDropoffCountryCode,
     pickupCountryCode,
+    dropoffCountryCode,
     setDropoffCoordinates,
     moveDate,
     moveType,
@@ -119,7 +121,6 @@ const Page = () => {
     // Step 8
     additionalServices,
     storageWeeks,
-    disposalItems,
     coverPhotoId,
     galleryPhotoIds,
     // Step 9
@@ -172,9 +173,10 @@ const Page = () => {
     } else {
       setDropoffLocation(location.fullAddress)
       setDropoffCoordinates(location.coordinates)
+      setDropoffCountryCode(location.countryCode ?? null)
     }
     setLocationPickerOpen(false)
-  }, [editingLocationType, setPickupLocation, setDropoffLocation, setPickupCoordinates, setDropoffCoordinates, setPickupCountryCode])
+  }, [editingLocationType, setPickupLocation, setDropoffLocation, setPickupCoordinates, setDropoffCoordinates, setPickupCountryCode, setDropoffCountryCode])
 
   const handleRouteCalculated = useCallback((info: RouteInfo) => {
     setRouteInfo(info)
@@ -310,7 +312,6 @@ const Page = () => {
           vehicleType,
           additionalServices: Array.isArray(additionalServices) ? additionalServices : [],
           storageWeeks,
-          disposalItems,
           coverPhotoId: uploadedCoverPhotoId,
           galleryPhotoIds: uploadedGalleryPhotoIds,
           contactName: contactInfo.fullName,
@@ -327,6 +328,8 @@ const Page = () => {
           paymentMethod,
           // Geocoder hint for the pickup country (C2); the server re-derives it.
           pickupCountryCode,
+          // Hint for the server's cross-border check (plan legal/1.scope-lock S2).
+          dropoffCountryCode,
         }),
       })
 
@@ -354,8 +357,8 @@ const Page = () => {
     parkingSituation, pickupArrangeHaltverbot, dropoffFloorLevel, dropoffElevatorAvailable,
     dropoffParkingSituation, dropoffArrangeHaltverbot, packingServiceLevel, packingMaterials,
     packingNotes, arrivalWindow, flexibility, extraHelpers, vehicleType, additionalServices,
-    storageWeeks, disposalItems, contactInfo, routeInfo, routeDistanceMeters,
-    routeDurationSeconds, paymentMethod, pickupCountryCode, reset, router, t,
+    storageWeeks, contactInfo, routeInfo, routeDistanceMeters,
+    routeDurationSeconds, paymentMethod, pickupCountryCode, dropoffCountryCode, reset, router, t,
   ])
 
   // Build gallery images array for header
@@ -604,7 +607,7 @@ const Page = () => {
   }
 
   const renderSectionServices = () => {
-    if (additionalServices.length === 0 && !storageWeeks && !disposalItems) {
+    if (additionalServices.length === 0 && !storageWeeks) {
       return null
     }
 
@@ -633,12 +636,6 @@ const Page = () => {
             <div className="flex items-center gap-x-3">
               <CheckCircleIcon className="h-5 w-5 text-green-500" />
               <span>{t('booking:services.temporaryStorageWeeks.label', { count: storageWeeks })}</span>
-            </div>
-          )}
-          {disposalItems && (
-            <div className="flex items-center gap-x-3">
-              <CheckCircleIcon className="h-5 w-5 text-green-500" />
-              <span>{t('booking:services.disposalItems.label', { items: disposalItems })}</span>
             </div>
           )}
         </div>

@@ -248,7 +248,6 @@ The entire move-booking process is held in a single context (`useMoveSearch`) th
   customHeavyItems: HeavyItem[]
   additionalServices: AdditionalService[]
   storageWeeks: number               // 0 means no storage
-  disposalItems: string
   coverPhotoId: string | null        // base64 or Appwrite URL
   galleryPhotoIds: string[]
   contactInfo: ContactInfo
@@ -559,12 +558,11 @@ This is actually 3 combined sub-sections:
 - `tv_mount_remove` — Mount or remove wall-mounted TVs
 - `appliance_disconnect` — Disconnect washing machine, dishwasher, dryer
 - `appliance_connect` — Reconnect appliances at new address
-- `disposal_entsorgung` — Dispose of unwanted furniture (German: Entsorgung)
 - `moveout_cleaning` — Professional cleaning of old apartment
 - `temporary_storage` — Store items securely between moves
 
 **If `temporary_storage` selected**: Show number input for storage weeks  
-**If `disposal_entsorgung` selected**: Show text area for disposal item list
+> Waste disposal (`disposal_entsorgung`) was retired on 2026-11-24 (plan `legal/1.scope-lock` S1, lawyer report section 3). It is not offered, the server strips it from new writes, and old moves keep the line they were booked with.
 
 #### Sub-section B: Photos
 Same as instant move photos (cover photo + gallery). Photos compressed before upload.
@@ -584,7 +582,7 @@ Auto-populated from the authenticated user's profile. Editable:
 - `card` — Card payment
 - `paypal` — PayPal
 
-**Context actions**: `toggleAdditionalService`, `setStorageWeeks`, `setDisposalItems`, `setCoverPhotoId`, `addGalleryPhotoId`, `removeGalleryPhotoId`, `updateContactInfo`, `setPaymentMethod`
+**Context actions**: `toggleAdditionalService`, `setStorageWeeks`, `setCoverPhotoId`, `addGalleryPhotoId`, `removeGalleryPhotoId`, `updateContactInfo`, `setPaymentMethod`
 
 **On Submit**: Navigate to `/move-preview`
 
@@ -637,7 +635,7 @@ Body: {
   // Crew
   crewSize, vehicleType,
   // Services
-  additionalServices (array), storageWeeks, disposalItems,
+  additionalServices (array), storageWeeks,
   // Photos (already uploaded Appwrite file IDs or base64)
   coverPhotoId, galleryPhotoIds (array),
   // Contact

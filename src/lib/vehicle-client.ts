@@ -81,6 +81,10 @@ export interface SubmitVehiclePayload {
   year?: string
   vehicleType: string
   capacityM3?: string | number | null
+  /** Permissible gross weight in kg; required (plan legal/1.scope-lock S4). */
+  grossWeightKg?: string | number | null
+  hasTrailer?: boolean
+  trailerGrossWeightKg?: string | number | null
   frontPlatePhoto: string
   rearPlatePhoto: string
   fullVehiclePhoto: string

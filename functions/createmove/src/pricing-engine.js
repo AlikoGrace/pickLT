@@ -96,7 +96,6 @@ export const PRICING_DEFAULTS = {
   'service.tv_mount_remove': 50,
   'service.appliance_disconnect': 50,
   'service.appliance_connect': 50,
-  'service.disposal_entsorgung': 50,
   'service.moveout_cleaning': 50,
   'service.temporary_storage': 0,
   'storage.perWeek': 30,
@@ -753,7 +752,7 @@ export function quoteMove(input, config) {
 
   const serviceLines = [];
   let services = 0;
-  for (const id of uniqueSorted(input.services)) {
+  for (const id of stripRetiredServices(uniqueSorted(input.services))) {
     const unitEur = trace.maybe(`service.${id}`) ?? 0;
     const c = cents(unitEur);
     services += c;
@@ -945,7 +944,7 @@ export function quoteInputFromRow(row, catalog, vehicleTypeOverride) {
     floorsWithoutLift(row.dropoffFloorLevel, row.dropoffElevator);
   const haltverbotCount = (row.pickupHaltverbot ? 1 : 0) + (row.dropoffHaltverbot ? 1 : 0);
   const services = Array.isArray(row.additionalServices)
-    ? row.additionalServices.filter((s) => typeof s === 'string')
+    ? stripRetiredServices(row.additionalServices)
     : [];
   const vehicleCandidate = vehicleTypeOverride ?? row.vehicleType ?? null;
   return {
@@ -990,6 +989,19 @@ export function quoteColumns(breakdown, pricedAtIso) {
       ? { countryCode: breakdown.countryCode }
       : {}),
   };
+}
+
+// ── Retired services ───────────────────────────────────────────────────────
+
+/**
+ * Services that are no longer offered (plan `legal/1.scope-lock` S1). A retired
+ * id is dropped from every new quote and every new write; a move booked before
+ * the change keeps the line and the price it was booked with.
+ */
+export const RETIRED_SERVICES = ['disposal_entsorgung'];
+
+export function stripRetiredServices(ids) {
+  return (ids ?? []).filter((id) => typeof id === 'string' && !RETIRED_SERVICES.includes(id.trim()));
 }
 
 // ── Small utilities ────────────────────────────────────────────────────────

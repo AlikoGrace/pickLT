@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useEffect, useRef, useCallback } from 'react'
 import { normalizeCustomItems, stripZeroCounts } from '@/components/inventory/basket'
 import type { CustomItem } from '@/components/inventory/selector-logic'
+import { stripRetiredServices } from '@/lib/pricingEngine'
 
 // ─── localStorage keys ───
 const DRAFT_KEY = 'picklt_move_draft'
@@ -51,7 +52,6 @@ export type AdditionalService =
   | 'tv_mount_remove'
   | 'appliance_disconnect'
   | 'appliance_connect'
-  | 'disposal_entsorgung'
   | 'moveout_cleaning'
   | 'temporary_storage'
 
@@ -121,7 +121,6 @@ export type StoredMove = {
   packingNotes?: string
   additionalServices: AdditionalService[]
   storageWeeks: number
-  disposalItems?: string
   // Crew & vehicle
   crewSize: CrewSize | null
   vehicleType: VehicleType | null
@@ -190,6 +189,8 @@ type MoveSearchState = {
   dropoffCoordinates: Coordinates | null
   /** ISO2 of the pickup address from the geocoder (plan wave-2026-10/4 C2); the server re-derives it. */
   pickupCountryCode: string | null
+  /** ISO2 of the drop-off address; a hint for the server's cross-border check (plan legal/1.scope-lock S2). */
+  dropoffCountryCode: string | null
   moveDate: string | null // ISO date YYYY-MM-DD
   moveType: MoveTypeKey | null
   isInstantMove: boolean // true for instant move, false for scheduled
@@ -244,7 +245,6 @@ type MoveSearchState = {
   // Step 8 - Additional Services
   additionalServices: AdditionalService[]
   storageWeeks: number
-  disposalItems: string
   coverPhotoId: string | null // base64 or URL
   galleryPhotoIds: string[] // array of base64 or URLs
 
@@ -271,6 +271,7 @@ type MoveSearchActions = {
   setPickupCoordinates: (c: Coordinates | null) => void
   setDropoffCoordinates: (c: Coordinates | null) => void
   setPickupCountryCode: (code: string | null) => void
+  setDropoffCountryCode: (code: string | null) => void
   setMoveDate: (d: string | null) => void
   setMoveType: (t: MoveTypeKey | null) => void
   setIsInstantMove: (b: boolean) => void
@@ -331,7 +332,6 @@ type MoveSearchActions = {
   // Step 8 actions
   toggleAdditionalService: (service: AdditionalService) => void
   setStorageWeeks: (weeks: number) => void
-  setDisposalItems: (items: string) => void
   setCoverPhotoId: (photo: string | null) => void
   addGalleryPhotoId: (photo: string) => void
   removeGalleryPhotoId: (index: number) => void
@@ -365,6 +365,7 @@ const defaultState: MoveSearchState = {
   pickupCoordinates: null,
   dropoffCoordinates: null,
   pickupCountryCode: null,
+  dropoffCountryCode: null,
   moveDate: null,
   moveType: null,
   isInstantMove: false,
@@ -416,7 +417,6 @@ const defaultState: MoveSearchState = {
   // Step 8
   additionalServices: [],
   storageWeeks: 0,
-  disposalItems: '',
   coverPhotoId: null,
   galleryPhotoIds: [],
 
@@ -455,6 +455,7 @@ const MoveSearchContext = createContext<MoveSearchState & MoveSearchActions>({
   setPickupCoordinates: () => {},
   setDropoffCoordinates: () => {},
   setPickupCountryCode: () => {},
+  setDropoffCountryCode: () => {},
   setMoveDate: () => {},
   setMoveType: () => {},
   setIsInstantMove: () => {},
@@ -510,7 +511,6 @@ const MoveSearchContext = createContext<MoveSearchState & MoveSearchActions>({
   // Step 8
   toggleAdditionalService: () => {},
   setStorageWeeks: () => {},
-  setDisposalItems: () => {},
   setCoverPhotoId: () => {},
   addGalleryPhotoId: () => {},
   removeGalleryPhotoId: () => {},
@@ -544,6 +544,7 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
   const [pickupCoordinates, setPickupCoordinates] = useState<Coordinates | null>(defaultState.pickupCoordinates)
   const [dropoffCoordinates, setDropoffCoordinates] = useState<Coordinates | null>(defaultState.dropoffCoordinates)
   const [pickupCountryCode, setPickupCountryCode] = useState<string | null>(defaultState.pickupCountryCode)
+  const [dropoffCountryCode, setDropoffCountryCode] = useState<string | null>(defaultState.dropoffCountryCode)
   const [moveDate, setMoveDate] = useState<string | null>(defaultState.moveDate)
   const [moveType, setMoveType] = useState<MoveTypeKey | null>(defaultState.moveType)
   const [isInstantMove, setIsInstantMove] = useState<boolean>(defaultState.isInstantMove)
@@ -596,7 +597,6 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
   // Step 8 state
   const [additionalServices, setAdditionalServices] = useState<AdditionalService[]>(defaultState.additionalServices)
   const [storageWeeks, setStorageWeeks] = useState<number>(defaultState.storageWeeks)
-  const [disposalItems, setDisposalItems] = useState<string>(defaultState.disposalItems)
   const [coverPhotoId, setCoverPhotoId] = useState<string | null>(defaultState.coverPhotoId)
   const [galleryPhotoIds, setGalleryPhotoIds] = useState<string[]>(defaultState.galleryPhotoIds)
 
@@ -627,6 +627,7 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
     if (saved.pickupCoordinates) setPickupCoordinates(saved.pickupCoordinates as Coordinates)
     if (saved.dropoffCoordinates) setDropoffCoordinates(saved.dropoffCoordinates as Coordinates)
     if (typeof saved.pickupCountryCode === 'string') setPickupCountryCode(saved.pickupCountryCode)
+    if (typeof saved.dropoffCountryCode === 'string') setDropoffCountryCode(saved.dropoffCountryCode)
     if (saved.moveDate) setMoveDate(saved.moveDate as string)
     if (saved.moveType) setMoveType(saved.moveType as MoveTypeKey)
     if (saved.isInstantMove != null) setIsInstantMove(saved.isInstantMove as boolean)
@@ -663,9 +664,11 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
     if (saved.truckAccess) setTruckAccess(saved.truckAccess as TruckAccess)
     if (saved.heavyItems) setHeavyItems(saved.heavyItems as HeavyItem[])
     if (saved.customHeavyItems) setCustomHeavyItems(saved.customHeavyItems as HeavyItem[])
-    if (saved.additionalServices) setAdditionalServices(saved.additionalServices as AdditionalService[])
+    // A saved search from before a service was retired (plan legal/1.scope-lock S1) must not restore it.
+    if (saved.additionalServices) {
+      setAdditionalServices(stripRetiredServices(saved.additionalServices as string[]) as AdditionalService[])
+    }
     if (saved.storageWeeks != null) setStorageWeeks(saved.storageWeeks as number)
-    if (saved.disposalItems) setDisposalItems(saved.disposalItems as string)
     if (saved.coverPhotoId) setCoverPhotoId(saved.coverPhotoId as string)
     if (saved.galleryPhotoIds) setGalleryPhotoIds(saved.galleryPhotoIds as string[])
     if (saved.contactInfo) setContactInfo(saved.contactInfo as ContactInfo)
@@ -719,6 +722,7 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
         pickupCoordinates,
         dropoffCoordinates,
         pickupCountryCode,
+        dropoffCountryCode,
         moveDate,
         moveType,
         isInstantMove,
@@ -756,7 +760,6 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
         customHeavyItems,
         additionalServices,
         storageWeeks,
-        disposalItems,
         coverPhotoId,
         galleryPhotoIds,
         contactInfo,
@@ -785,7 +788,7 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
       if (saveTimeout.current) clearTimeout(saveTimeout.current)
     }
   }, [
-    pickupLocation, dropoffLocation, pickupCoordinates, dropoffCoordinates, pickupCountryCode,
+    pickupLocation, dropoffLocation, pickupCoordinates, dropoffCoordinates, pickupCountryCode, dropoffCountryCode,
     moveDate, moveType, isInstantMove,
     homeType, floorLevel, elevatorAvailable, parkingSituation,
     pickupStreetAddress, pickupApartmentUnit, pickupAccessNotes,
@@ -796,7 +799,7 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
     packingServiceLevel, packingMaterials, customMaterials, packingBoxQuantities, packingNotes,
     arrivalWindow, flexibility, preferEarliestArrival, avoidLunchBreak, avoidEveningDelivery,
     extraHelpers, vehicleType, truckAccess, heavyItems, customHeavyItems,
-    additionalServices, storageWeeks, disposalItems,
+    additionalServices, storageWeeks,
     coverPhotoId, galleryPhotoIds,
     contactInfo, legalConsent,
     routeDistanceMeters, routeDurationSeconds, paymentMethod,
@@ -937,6 +940,7 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
     setPickupCoordinates(defaultState.pickupCoordinates)
     setDropoffCoordinates(defaultState.dropoffCoordinates)
     setPickupCountryCode(defaultState.pickupCountryCode)
+    setDropoffCountryCode(defaultState.dropoffCountryCode)
     setMoveDate(defaultState.moveDate)
     setMoveType(defaultState.moveType)
     setIsInstantMove(defaultState.isInstantMove)
@@ -977,7 +981,6 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
     // Step 8
     setAdditionalServices(defaultState.additionalServices)
     setStorageWeeks(defaultState.storageWeeks)
-    setDisposalItems(defaultState.disposalItems)
     setCoverPhotoId(defaultState.coverPhotoId)
     setGalleryPhotoIds(defaultState.galleryPhotoIds)
     // Step 9
@@ -1000,6 +1003,7 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
         pickupCoordinates,
         dropoffCoordinates,
         pickupCountryCode,
+        dropoffCountryCode,
         moveDate,
         moveType,
         isInstantMove,
@@ -1047,7 +1051,6 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
         // Step 8 state
         additionalServices,
         storageWeeks,
-        disposalItems,
         coverPhotoId,
         galleryPhotoIds,
 
@@ -1072,6 +1075,7 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
         setPickupCoordinates,
         setDropoffCoordinates,
         setPickupCountryCode,
+        setDropoffCountryCode,
         setMoveDate,
         setMoveType,
         setIsInstantMove,
@@ -1126,7 +1130,6 @@ export const MoveSearchProvider = ({ children }: { children: React.ReactNode }) 
         // Step 8 actions
         toggleAdditionalService,
         setStorageWeeks,
-        setDisposalItems,
         setCoverPhotoId,
         addGalleryPhotoId,
         removeGalleryPhotoId,

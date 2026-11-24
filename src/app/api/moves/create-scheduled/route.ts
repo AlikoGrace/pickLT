@@ -5,9 +5,10 @@ import { APPWRITE } from '@/lib/constants'
 import { getSessionUserId } from '@/lib/auth-session'
 import { asText, asTextArray } from '@/lib/move-normalizers'
 import { movePermissions } from '@/lib/doc-permissions'
-import { PricingReconcileError } from '@/lib/pricingEngine'
+import { PricingReconcileError, stripRetiredServices } from '@/lib/pricingEngine'
 import { BasketCapError, priceMoveFields, type PricedMove } from '@/lib/pricing-server'
-import { resolveMoveCountry } from '@/lib/moveCountry'
+import { resolveMoveCountryWithLock, scopeLockStatus } from '@/lib/moveCountry'
+import { loadLiveCountries } from '@/lib/live-countries-server'
 import { writeDroppingUnknownAttributes } from '@/lib/appwrite-write'
 import { ID } from 'node-appwrite'
 
@@ -92,9 +93,8 @@ export async function POST(req: NextRequest) {
       vehicleType,
       extraHelpers,
       // Services
-      additionalServices,
+      additionalServices: rawAdditionalServices,
       storageWeeks,
-      disposalItems,
       // Photos (already uploaded URLs)
       coverPhotoId,
       galleryPhotoIds,
@@ -113,7 +113,11 @@ export async function POST(req: NextRequest) {
       paymentMethod,
       // Country hint from the geocoder (C2)
       pickupCountryCode,
+      dropoffCountryCode,
     } = body
+
+    // Retired services (plan legal/1.scope-lock S1) never reach a new row or its quote.
+    const additionalServices = stripRetiredServices(asTextArray(rawAdditionalServices))
 
     const { databases } = createAdminClient()
 
@@ -125,12 +129,25 @@ export async function POST(req: NextRequest) {
     } catch {
       /* no user row → the default market */
     }
-    const countryCode = await resolveMoveCountry({
+    const { countryCode, violation } = await resolveMoveCountryWithLock({
       pickupLatitude,
       pickupLongitude,
       pickupCountryCode,
+      dropoffLatitude,
+      dropoffLongitude,
+      dropoffCountryCode,
       userCountryCode,
+      liveCountries: await loadLiveCountries(databases),
     })
+    // Scope lock (plan legal/1.scope-lock S2/S3): the pickup's market must be
+    // open and the drop-off must be in the same country. Nothing is written.
+    // i18n-keys: errors:country.pickupNotLive, errors:country.crossBorder
+    if (violation) {
+      return NextResponse.json(
+        { error: t(`errors:${violation}`), fnCode: violation },
+        { status: scopeLockStatus(violation) }
+      )
+    }
 
     // ── Price it (master D5) ────────────────────────────────
     // Row-shaped field names, so this quote and a later re-quote from the

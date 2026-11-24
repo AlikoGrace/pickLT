@@ -223,14 +223,6 @@
   "details": {
     "title": "Move details"
   },
-  "disposal": {
-    "helper": "List the furniture or items you want us to dispose of.",
-    "items": {
-      "label": "Disposal Items"
-    },
-    "placeholder": "e.g., Old sofa, broken bookshelf, mattress...",
-    "title": "Items for disposal"
-  },
   "dropoff": {
     "edit": {
       "a11y": "Edit drop-off location"
@@ -327,9 +319,6 @@
     },
     "crewSize": {
       "label": "Crew size"
-    },
-    "disposalItems": {
-      "label": "Disposal Items"
     },
     "distance": {
       "label": "Distance"
@@ -1204,10 +1193,6 @@
       "helper": "We disassemble beds, wardrobes, tables before loading",
       "label": "Furniture disassembly"
     },
-    "disposal": {
-      "helper": "Dispose of unwanted furniture and items",
-      "label": "Disposal (Entsorgung)"
-    },
     "storage": {
       "helper": "Store items securely between moves",
       "label": "Temporary storage"
@@ -1234,12 +1219,8 @@
     "detailsSubtitle": "Your selected services and preferences",
     "detailsTitle": "Service details",
     "disposal": {
-      "helper": "Dispose of unwanted items at the city Wertstoffhof",
       "label": "Disposal (Entsorgung)",
       "option": "Disposal (Entsorgung)"
-    },
-    "disposalItems": {
-      "label": "Disposal items: {{items}}"
     },
     "furnitureAssembly": {
       "helper": "We assemble furniture at new location",
@@ -1505,6 +1486,19 @@
           "label": "Days"
         }
       }
+    },
+    "grossWeight": {
+      "label": "Gross vehicle weight (kg)",
+      "placeholder": "3500",
+      "helper": "Field F.2 of the registration certificate. Vehicles above 3,500 kg including trailer cannot be registered.",
+      "review": "Gross weight"
+    },
+    "trailer": {
+      "label": "I tow a trailer"
+    },
+    "trailerWeight": {
+      "label": "Trailer gross weight (kg)",
+      "placeholder": "750"
     }
   },
   "extraHelpers": {

@@ -84,6 +84,7 @@ const goodBody = {
   year: '2022',
   vehicleType: 'medium_truck',
   capacityM3: '15',
+  grossWeightKg: '3500',
   frontPlatePhoto: 'https://x/front',
   rearPlatePhoto: 'https://x/rear',
   fullVehiclePhoto: 'https://x/full',
@@ -117,6 +118,7 @@ describe('validateVehicleInput — fnCode branches', () => {
       'vehicle.plateInvalid',
       'vehicle.fieldsRequired',
       'vehicle.typeInvalid',
+      'vehicle.weightRequired',
     ])
   })
   it('plate needs two alphanumerics after normalisation and ≤32 chars', () => {
@@ -500,6 +502,7 @@ const ownedVerified = (over: AnyDoc = {}): AnyDoc => ({
   registrationNormalized: 'BOWN1',
   vehicleType: 'large_truck',
   capacityM3: 30,
+  grossWeightKg: 3500,
   submittedAt: '2026-09-01T00:00:00.000Z',
   ...over,
 })
@@ -518,6 +521,7 @@ const rentalVerified = (over: AnyDoc = {}): AnyDoc => ({
   registrationNormalized: 'RNT1',
   vehicleType: 'medium_truck',
   capacityM3: 15,
+  grossWeightKg: 3500,
   rentalStartAt: '2026-09-17T08:00:00.000Z',
   rentalEndAt: '2026-09-17T16:00:00.000Z',
   rentalHours: 8,

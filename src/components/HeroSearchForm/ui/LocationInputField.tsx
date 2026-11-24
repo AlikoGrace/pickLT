@@ -55,6 +55,12 @@ interface Props {
   fieldStyle: 'default' | 'small'
   onChange?: (location: LocationSuggestion | null) => void
   defaultValue?: string
+  /**
+   * ISO2 the search is confined to. The drop-off field passes the pickup's
+   * country: a move must start and end in the same country (plan
+   * legal/1.scope-lock S2).
+   */
+  lockCountry?: string | null
 }
 
 // ─── Mapbox Geocoding helpers ────────────────────────────────
@@ -62,7 +68,8 @@ const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
 
 async function searchLocations(
   query: string,
-  proximity?: { latitude: number; longitude: number } | null
+  proximity?: { latitude: number; longitude: number } | null,
+  lockCountry?: string | null
 ): Promise<LocationSuggestion[]> {
   if (!query || query.length < 2) return []
   if (!MAPBOX_TOKEN) return []
@@ -76,6 +83,8 @@ async function searchLocations(
       limit: '10',
       language: mapboxLanguage(),
     }
+
+    if (lockCountry) params.country = lockCountry.toLowerCase()
 
     // Proximity bias improves relevance for nearby results
     if (proximity) {
@@ -132,6 +141,7 @@ export const LocationInputField: FC<Props> = ({
   fieldStyle = 'default',
   onChange,
   defaultValue,
+  lockCountry,
 }) => {
   const { t } = useTranslation()
   // Defaults are resolved in render, not as default parameters — a default
@@ -253,14 +263,14 @@ export const LocationInputField: FC<Props> = ({
     debounceRef.current = setTimeout(async () => {
       if (value.length >= 2) {
         setIsLoading(true)
-        const results = await searchLocations(value, userCoords)
+        const results = await searchLocations(value, userCoords, lockCountry)
         setSuggestions(results)
         setIsLoading(false)
       } else {
         setSuggestions([])
       }
     }, 300)
-  }, [userCoords])
+  }, [userCoords, lockCountry])
 
   const handleSelectLocation = useCallback(
     (location: LocationSuggestion | null) => {

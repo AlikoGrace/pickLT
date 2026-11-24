@@ -90,7 +90,9 @@
       "notFound": "Véhicule introuvable.",
       "notPending": "Ce véhicule n'est pas en attente de vérification.",
       "reasonRequired": "Un motif est requis pour refuser un véhicule.",
-      "verifyFailed": "La vérification du véhicule a échoué (statut {{status}}). Veuillez réessayer."
+      "verifyFailed": "La vérification du véhicule a échoué (statut {{status}}). Veuillez réessayer.",
+      "weightMissing": "Aucun poids total n’est enregistré pour ce véhicule. Refusez-le et demandez au chauffeur de l’ajouter.",
+      "weightOverLimit": "Ce véhicule dépasse 3 500 kg, remorque comprise, et ne peut pas être vérifié."
     }
   },
   "appwrite": {
@@ -369,11 +371,16 @@
     "rentalWindowTooLong": "Une location couvre au maximum 30 jours à la fois. Vous pourrez la prolonger.",
     "rentalExpired": "Votre période de location est terminée. Enregistrez à nouveau une location pour continuer.",
     "notInWindow": "Ce véhicule n’est pas disponible pour le service en ce moment.",
-    "notOwnVehicle": "Ce véhicule n’appartient pas à votre compte."
+    "notOwnVehicle": "Ce véhicule n’appartient pas à votre compte.",
+    "weightRequired": "Veuillez indiquer le poids total autorisé en charge en kilogrammes.",
+    "trailerWeightRequired": "Veuillez indiquer le poids total autorisé de la remorque en kilogrammes.",
+    "weightOverLimit": "Les véhicules de plus de 3 500 kg, remorque comprise, ne peuvent pas être enregistrés."
   },
   "country": {
     "notLive": "PickLte n’est pas encore disponible en {{country}}.",
-    "required": "Veuillez choisir votre pays."
+    "required": "Veuillez choisir votre pays.",
+    "crossBorder": "Votre déménagement doit commencer et se terminer dans le même pays.",
+    "pickupNotLive": "PickLte n’est pas encore disponible à cette adresse d’enlèvement."
   },
   "fees": {
     "restricted": "Vous avez des frais de plateforme impayés. Réglez votre solde pour passer en ligne et accepter des déménagements.",

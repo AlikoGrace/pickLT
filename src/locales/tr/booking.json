@@ -223,14 +223,6 @@
   "details": {
     "title": "Taşınma detayları"
   },
-  "disposal": {
-    "helper": "Bertaraf etmemizi istediğiniz mobilya veya eşyaları yazın.",
-    "items": {
-      "label": "Bertaraf edilecek eşyalar"
-    },
-    "placeholder": "örn. Eski koltuk, kırık kitaplık, yatak…",
-    "title": "Bertaraf edilecek eşyalar"
-  },
   "dropoff": {
     "edit": {
       "a11y": "Teslim konumunu düzenle"
@@ -327,9 +319,6 @@
     },
     "crewSize": {
       "label": "Ekip büyüklüğü"
-    },
-    "disposalItems": {
-      "label": "Bertaraf edilecek eşyalar"
     },
     "distance": {
       "label": "Mesafe"
@@ -1201,10 +1190,6 @@
       "helper": "Yüklemeden önce yatak, gardırop ve masaları sökeriz",
       "label": "Mobilya sökümü"
     },
-    "disposal": {
-      "helper": "İstenmeyen mobilya ve eşyaları bertaraf ederiz",
-      "label": "Atık bertarafı (Entsorgung)"
-    },
     "storage": {
       "helper": "Eşyaları taşınmalar arasında güvenle depolarız",
       "label": "Geçici depolama"
@@ -1231,12 +1216,8 @@
     "detailsSubtitle": "Seçtiğiniz hizmetler ve tercihleriniz",
     "detailsTitle": "Hizmet detayları",
     "disposal": {
-      "helper": "İstenmeyen eşyaları belediyenin atık toplama merkezine götürürüz",
       "label": "Atık bertarafı",
       "option": "Atık bertarafı"
-    },
-    "disposalItems": {
-      "label": "Bertaraf edilecek eşyalar: {{items}}"
     },
     "furnitureAssembly": {
       "helper": "Mobilyaları yeni adreste kurarız",
@@ -1502,6 +1483,19 @@
           "label": "Gün"
         }
       }
+    },
+    "grossWeight": {
+      "label": "Azami yüklü ağırlık (kg)",
+      "placeholder": "3500",
+      "helper": "Ruhsattaki F.2 alanı. Römork dahil 3.500 kg üzerindeki araçlar kaydedilemez.",
+      "review": "Azami ağırlık"
+    },
+    "trailer": {
+      "label": "Römork çekiyorum"
+    },
+    "trailerWeight": {
+      "label": "Römorkun azami yüklü ağırlığı (kg)",
+      "placeholder": "750"
     }
   },
   "extraHelpers": {

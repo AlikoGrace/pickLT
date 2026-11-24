@@ -95,7 +95,6 @@ interface MoveData {
   packingNotes: string
   additionalServices: string[]
   storageWeeks: number
-  disposalItems: string
   crewSize: string | number | null
   /** Helpers the client added on top of the tier (crew master D2). */
   extraHelpers: number
@@ -220,7 +219,6 @@ function docToMoveData(doc: any): MoveData {
     packingNotes: doc.packingNotes ?? '',
     additionalServices: doc.additionalServices ?? [],
     storageWeeks: doc.storageWeeks ?? 0,
-    disposalItems: doc.disposalItems ?? '',
     crewSize: doc.crewSize ?? null,
     extraHelpers: doc.extraHelpers ?? 0,
     vehicleType: doc.vehicleType ?? null,
@@ -499,7 +497,7 @@ export default function MoverMoveDetailsPage() {
     homeType, floorLevel, elevatorAvailable, dropoffElevatorAvailable,
     parkingSituation, dropoffParkingSituation,
     packingServiceLevel, packingMaterials, packingNotes,
-    additionalServices, storageWeeks, disposalItems,
+    additionalServices, storageWeeks,
     vehicleType, arrivalWindow, flexibility, inventoryCount,
     inventoryItems, customItems,
     contactInfo, totalPrice, finalPrice, bookingCode,
@@ -748,7 +746,7 @@ export default function MoverMoveDetailsPage() {
           </div>
 
           {/* Services */}
-          {(packingServiceLevel || additionalServices.length > 0 || storageWeeks > 0 || disposalItems) && (
+          {(packingServiceLevel || additionalServices.length > 0 || storageWeeks > 0) && (
             <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm">
               <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
                 {t('booking:services.title')}
@@ -770,9 +768,6 @@ export default function MoverMoveDetailsPage() {
               )}
               {storageWeeks > 0 && (
                 <InfoRow label={t('booking:pricing.storage.label')} value={t('booking:storageWeekCount', { count: storageWeeks })} />
-              )}
-              {disposalItems && (
-                <InfoRow label={t('booking:field.disposalItems.label')} value={disposalItems} />
               )}
             </div>
           )}

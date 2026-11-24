@@ -223,14 +223,6 @@
   "details": {
     "title": "Umzugsdetails"
   },
-  "disposal": {
-    "helper": "Listen Sie die Möbel oder Gegenstände auf, die wir entsorgen sollen.",
-    "items": {
-      "label": "Zu entsorgende Gegenstände"
-    },
-    "placeholder": "z. B. altes Sofa, defektes Bücherregal, Matratze…",
-    "title": "Gegenstände zur Entsorgung"
-  },
   "dropoff": {
     "edit": {
       "a11y": "Zielort bearbeiten"
@@ -327,9 +319,6 @@
     },
     "crewSize": {
       "label": "Teamgröße"
-    },
-    "disposalItems": {
-      "label": "Zu entsorgende Gegenstände"
     },
     "distance": {
       "label": "Entfernung"
@@ -1202,10 +1191,6 @@
       "helper": "Wir demontieren Betten, Schränke und Tische vor dem Verladen",
       "label": "Möbeldemontage"
     },
-    "disposal": {
-      "helper": "Nicht mehr benötigte Möbel und Gegenstände entsorgen",
-      "label": "Entsorgung"
-    },
     "storage": {
       "helper": "Gegenstände zwischen den Umzügen sicher einlagern",
       "label": "Zwischenlagerung"
@@ -1232,12 +1217,8 @@
     "detailsSubtitle": "Ihre gewählten Leistungen und Wünsche",
     "detailsTitle": "Details zu den Leistungen",
     "disposal": {
-      "helper": "Unerwünschte Gegenstände beim städtischen Wertstoffhof entsorgen",
       "label": "Entsorgung",
       "option": "Entsorgung"
-    },
-    "disposalItems": {
-      "label": "Zu entsorgen: {{items}}"
     },
     "furnitureAssembly": {
       "helper": "Wir montieren Möbel am neuen Ort",
@@ -1503,6 +1484,19 @@
           "label": "Tage"
         }
       }
+    },
+    "grossWeight": {
+      "label": "Zulässiges Gesamtgewicht (kg)",
+      "placeholder": "3500",
+      "helper": "Feld F.2 der Zulassungsbescheinigung. Fahrzeuge über 3.500 kg einschließlich Anhänger können nicht registriert werden.",
+      "review": "Gesamtgewicht"
+    },
+    "trailer": {
+      "label": "Ich fahre mit Anhänger"
+    },
+    "trailerWeight": {
+      "label": "Zulässiges Gesamtgewicht des Anhängers (kg)",
+      "placeholder": "750"
     }
   },
   "extraHelpers": {

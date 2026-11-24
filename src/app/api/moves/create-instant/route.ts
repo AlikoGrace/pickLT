@@ -10,7 +10,8 @@ import { relId } from '@/lib/notify'
 import { PricingReconcileError } from '@/lib/pricingEngine'
 import { BasketCapError, priceMoveFields, type PricedMove } from '@/lib/pricing-server'
 import { profileCrewSize } from '@/app/api/crew/crew-size'
-import { resolveMoveCountry } from '@/lib/moveCountry'
+import { resolveMoveCountryWithLock, scopeLockStatus } from '@/lib/moveCountry'
+import { loadLiveCountries } from '@/lib/live-countries-server'
 import { writeDroppingUnknownAttributes } from '@/lib/appwrite-write'
 import { ID } from 'node-appwrite'
 
@@ -71,6 +72,7 @@ export async function POST(req: NextRequest) {
       routeDistanceMeters,
       routeDurationSeconds,
       pickupCountryCode,
+      dropoffCountryCode,
     } = body
 
     if (!moverProfileId) {
@@ -116,12 +118,25 @@ export async function POST(req: NextRequest) {
     } catch {
       /* no user row → the default market */
     }
-    const countryCode = await resolveMoveCountry({
+    const { countryCode, violation } = await resolveMoveCountryWithLock({
       pickupLatitude,
       pickupLongitude,
       pickupCountryCode,
+      dropoffLatitude,
+      dropoffLongitude,
+      dropoffCountryCode,
       userCountryCode,
+      liveCountries: await loadLiveCountries(databases),
     })
+    // Scope lock (plan legal/1.scope-lock S2/S3): the pickup's market must be
+    // open and the drop-off must be in the same country. Nothing is written.
+    // i18n-keys: errors:country.pickupNotLive, errors:country.crossBorder
+    if (violation) {
+      return NextResponse.json(
+        { error: t(`errors:${violation}`), fnCode: violation },
+        { status: scopeLockStatus(violation) }
+      )
+    }
 
     // ── Price it (master D5) ────────────────────────────────
     // The mover is known, so the vehicle line is their class (master D8). The

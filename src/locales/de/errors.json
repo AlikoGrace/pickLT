@@ -90,7 +90,9 @@
       "notFound": "Fahrzeug nicht gefunden.",
       "notPending": "Dieses Fahrzeug wartet nicht auf eine Prüfung.",
       "reasonRequired": "Beim Ablehnen eines Fahrzeugs ist eine Begründung erforderlich.",
-      "verifyFailed": "Fahrzeugprüfung fehlgeschlagen (Status {{status}}). Bitte versuchen Sie es erneut."
+      "verifyFailed": "Fahrzeugprüfung fehlgeschlagen (Status {{status}}). Bitte versuchen Sie es erneut.",
+      "weightMissing": "Für dieses Fahrzeug ist kein Gesamtgewicht hinterlegt. Lehnen Sie es ab und bitten Sie den Fahrer, es nachzutragen.",
+      "weightOverLimit": "Dieses Fahrzeug liegt einschließlich Anhänger über 3.500 kg und kann nicht verifiziert werden."
     }
   },
   "appwrite": {
@@ -369,11 +371,16 @@
     "rentalWindowTooLong": "Eine Miete kann höchstens 30 Tage am Stück abdecken. Sie können sie später verlängern.",
     "rentalExpired": "Ihr Mietzeitraum ist abgelaufen. Registrieren Sie erneut ein Mietfahrzeug.",
     "notInWindow": "Dieses Fahrzeug ist derzeit nicht für Einsätze verfügbar.",
-    "notOwnVehicle": "Dieses Fahrzeug gehört nicht zu Ihrem Konto."
+    "notOwnVehicle": "Dieses Fahrzeug gehört nicht zu Ihrem Konto.",
+    "weightRequired": "Bitte geben Sie das zulässige Gesamtgewicht in Kilogramm an.",
+    "trailerWeightRequired": "Bitte geben Sie das zulässige Gesamtgewicht des Anhängers in Kilogramm an.",
+    "weightOverLimit": "Fahrzeuge über 3.500 kg einschließlich Anhänger können nicht registriert werden."
   },
   "country": {
     "notLive": "PickLte ist in {{country}} noch nicht verfügbar.",
-    "required": "Bitte wählen Sie Ihr Land."
+    "required": "Bitte wählen Sie Ihr Land.",
+    "crossBorder": "Ihr Umzug muss im selben Land beginnen und enden.",
+    "pickupNotLive": "PickLte ist an dieser Abholadresse noch nicht verfügbar."
   },
   "fees": {
     "restricted": "Sie haben unbezahlte Plattformgebühren. Begleichen Sie Ihren Saldo, um online zu gehen und Aufträge anzunehmen.",

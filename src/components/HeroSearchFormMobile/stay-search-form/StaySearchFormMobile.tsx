@@ -23,6 +23,7 @@ const StaySearchFormMobile = () => {
     setDropoffLocation,
     setPickupCoordinates,
     setPickupCountryCode,
+    setDropoffCountryCode,
     setDropoffCoordinates,
     setMoveType: setContextMoveType,
   } = useMoveSearch()
@@ -75,6 +76,7 @@ const StaySearchFormMobile = () => {
     if (location) {
       setDropoffLocationInput(location.fullAddress)
       setDropoffLocation(location.fullAddress)
+      setDropoffCountryCode(location.countryCode ?? null)
       if (location.coordinates) {
         setDropoffCoordinates({
           latitude: location.coordinates.latitude,
@@ -86,6 +88,7 @@ const StaySearchFormMobile = () => {
     } else {
       setDropoffLocationInput('')
       setDropoffLocation('')
+      setDropoffCountryCode(null)
       setDropoffCoordinates(null)
     }
   }

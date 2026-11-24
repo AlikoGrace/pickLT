@@ -223,14 +223,6 @@
   "details": {
     "title": "Details van de verhuizing"
   },
-  "disposal": {
-    "helper": "Noem de meubels of spullen die we voor je moeten afvoeren.",
-    "items": {
-      "label": "Af te voeren spullen"
-    },
-    "placeholder": "bijv. oude bank, kapotte boekenkast, matras...",
-    "title": "Spullen om af te voeren"
-  },
   "dropoff": {
     "edit": {
       "a11y": "Afleverlocatie bewerken"
@@ -327,9 +319,6 @@
     },
     "crewSize": {
       "label": "Teamgrootte"
-    },
-    "disposalItems": {
-      "label": "Af te voeren spullen"
     },
     "distance": {
       "label": "Afstand"
@@ -1201,10 +1190,6 @@
       "helper": "Wij demonteren bedden, kasten en tafels voor het laden",
       "label": "Meubels demonteren"
     },
-    "disposal": {
-      "helper": "Ongewenste meubels en spullen afvoeren",
-      "label": "Afvoeren (Entsorgung)"
-    },
     "storage": {
       "helper": "Sla spullen veilig op tussen twee verhuizingen",
       "label": "Tijdelijke opslag"
@@ -1231,12 +1216,8 @@
     "detailsSubtitle": "Je gekozen diensten en voorkeuren",
     "detailsTitle": "Details van de diensten",
     "disposal": {
-      "helper": "Ongewenste spullen naar de gemeentelijke milieustraat brengen",
       "label": "Afvoeren",
       "option": "Afvoeren"
-    },
-    "disposalItems": {
-      "label": "Af te voeren spullen: {{items}}"
     },
     "furnitureAssembly": {
       "helper": "We monteren meubels op de nieuwe locatie",
@@ -1502,6 +1483,19 @@
           "label": "Dagen"
         }
       }
+    },
+    "grossWeight": {
+      "label": "Toegestane maximummassa (kg)",
+      "placeholder": "3500",
+      "helper": "Veld F.2 van het kentekenbewijs. Voertuigen boven 3.500 kg inclusief aanhanger kunnen niet worden geregistreerd.",
+      "review": "Maximummassa"
+    },
+    "trailer": {
+      "label": "Ik rijd met een aanhanger"
+    },
+    "trailerWeight": {
+      "label": "Toegestane maximummassa van de aanhanger (kg)",
+      "placeholder": "750"
     }
   },
   "extraHelpers": {

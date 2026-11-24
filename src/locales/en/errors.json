@@ -90,7 +90,9 @@
       "notFound": "Vehicle not found.",
       "notPending": "This vehicle is not awaiting review.",
       "reasonRequired": "A reason is required when rejecting a vehicle.",
-      "verifyFailed": "Vehicle verification failed (status {{status}}). Please try again."
+      "verifyFailed": "Vehicle verification failed (status {{status}}). Please try again.",
+      "weightMissing": "This vehicle has no gross weight on file. Reject it and ask the driver to add it.",
+      "weightOverLimit": "This vehicle is above 3,500 kg including trailer and cannot be verified."
     }
   },
   "appwrite": {
@@ -369,11 +371,16 @@
     "rentalWindowTooLong": "A rental can cover at most 30 days at a time. You can extend it later.",
     "rentalExpired": "Your rental period has ended. Register a rental again to continue.",
     "notInWindow": "This vehicle is not available for service right now.",
-    "notOwnVehicle": "This vehicle does not belong to your account."
+    "notOwnVehicle": "This vehicle does not belong to your account.",
+    "weightRequired": "Enter the gross vehicle weight in kilograms.",
+    "trailerWeightRequired": "Enter the trailer's gross weight in kilograms.",
+    "weightOverLimit": "Vehicles above 3,500 kg including trailer cannot be registered."
   },
   "country": {
     "notLive": "PickLte is not available in {{country}} yet.",
-    "required": "Please choose your country."
+    "required": "Please choose your country.",
+    "crossBorder": "Your move must start and end in the same country.",
+    "pickupNotLive": "PickLte is not available at this pickup address yet."
   },
   "fees": {
     "restricted": "You have unpaid platform fees. Pay your balance to go online and accept moves.",

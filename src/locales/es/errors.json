@@ -90,7 +90,9 @@
       "notFound": "Vehículo no encontrado.",
       "notPending": "Este vehículo no está pendiente de revisión.",
       "reasonRequired": "Se requiere un motivo para rechazar un vehículo.",
-      "verifyFailed": "La verificación del vehículo falló (estado {{status}}). Inténtelo de nuevo."
+      "verifyFailed": "La verificación del vehículo falló (estado {{status}}). Inténtelo de nuevo.",
+      "weightMissing": "Este vehículo no tiene masa máxima registrada. Recházalo y pide al conductor que la añada.",
+      "weightOverLimit": "Este vehículo supera los 3.500 kg, remolque incluido, y no se puede verificar."
     }
   },
   "appwrite": {
@@ -369,11 +371,16 @@
     "rentalWindowTooLong": "Un alquiler puede cubrir como máximo 30 días seguidos. Podrás ampliarlo después.",
     "rentalExpired": "Tu periodo de alquiler ha terminado. Registra de nuevo un alquiler para continuar.",
     "notInWindow": "Este vehículo no está disponible para el servicio ahora mismo.",
-    "notOwnVehicle": "Este vehículo no pertenece a tu cuenta."
+    "notOwnVehicle": "Este vehículo no pertenece a tu cuenta.",
+    "weightRequired": "Introduce la masa máxima autorizada en kilogramos.",
+    "trailerWeightRequired": "Introduce la masa máxima autorizada del remolque en kilogramos.",
+    "weightOverLimit": "No se pueden registrar vehículos de más de 3.500 kg, remolque incluido."
   },
   "country": {
     "notLive": "PickLte aún no está disponible en {{country}}.",
-    "required": "Elige tu país."
+    "required": "Elige tu país.",
+    "crossBorder": "Tu mudanza debe empezar y terminar en el mismo país.",
+    "pickupNotLive": "PickLte aún no está disponible en esta dirección de recogida."
   },
   "fees": {
     "restricted": "Tienes comisiones de la plataforma sin pagar. Paga tu saldo para conectarte y aceptar mudanzas.",

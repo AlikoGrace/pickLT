@@ -223,14 +223,6 @@
   "details": {
     "title": "Detalles de la mudanza"
   },
-  "disposal": {
-    "helper": "Indica los muebles u objetos de los que quieres que nos deshagamos.",
-    "items": {
-      "label": "Objetos para retirar"
-    },
-    "placeholder": "p. ej., Sofá viejo, estantería rota, colchón…",
-    "title": "Objetos para retirar"
-  },
   "dropoff": {
     "edit": {
       "a11y": "Editar el lugar de entrega"
@@ -327,9 +319,6 @@
     },
     "crewSize": {
       "label": "Tamaño del equipo"
-    },
-    "disposalItems": {
-      "label": "Objetos para retirar"
     },
     "distance": {
       "label": "Distancia"
@@ -1201,10 +1190,6 @@
       "helper": "Desmontamos camas, armarios y mesas antes de cargar",
       "label": "Desmontaje de muebles"
     },
-    "disposal": {
-      "helper": "Retirada de los muebles y objetos que no quieras",
-      "label": "Retirada de residuos (Entsorgung)"
-    },
     "storage": {
       "helper": "Guarda tus cosas de forma segura entre mudanzas",
       "label": "Almacenamiento temporal"
@@ -1231,12 +1216,8 @@
     "detailsSubtitle": "Los servicios y las preferencias que has elegido",
     "detailsTitle": "Detalles del servicio",
     "disposal": {
-      "helper": "Llevar los objetos no deseados al punto limpio municipal",
       "label": "Retirada de residuos",
       "option": "Retirada de residuos"
-    },
-    "disposalItems": {
-      "label": "Objetos para retirar: {{items}}"
     },
     "furnitureAssembly": {
       "helper": "Montamos los muebles en el nuevo domicilio",
@@ -1502,6 +1483,19 @@
           "label": "Días"
         }
       }
+    },
+    "grossWeight": {
+      "label": "Masa máxima autorizada (kg)",
+      "placeholder": "3500",
+      "helper": "Campo F.2 del permiso de circulación. No se pueden registrar vehículos de más de 3.500 kg, remolque incluido.",
+      "review": "Masa máxima"
+    },
+    "trailer": {
+      "label": "Llevo remolque"
+    },
+    "trailerWeight": {
+      "label": "Masa máxima autorizada del remolque (kg)",
+      "placeholder": "750"
     }
   },
   "extraHelpers": {

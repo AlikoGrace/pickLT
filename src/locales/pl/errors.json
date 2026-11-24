@@ -94,7 +94,9 @@
       "notFound": "Nie znaleziono pojazdu.",
       "notPending": "Ten pojazd nie oczekuje na weryfikację.",
       "reasonRequired": "Odrzucenie pojazdu wymaga podania powodu.",
-      "verifyFailed": "Weryfikacja pojazdu nie powiodła się (status {{status}}). Proszę spróbować ponownie."
+      "verifyFailed": "Weryfikacja pojazdu nie powiodła się (status {{status}}). Proszę spróbować ponownie.",
+      "weightMissing": "Dla tego pojazdu nie podano masy całkowitej. Odrzuć go i poproś kierowcę o jej uzupełnienie.",
+      "weightOverLimit": "Ten pojazd przekracza 3500 kg łącznie z przyczepą i nie można go zweryfikować."
     }
   },
   "appwrite": {
@@ -373,11 +375,16 @@
     "rentalWindowTooLong": "Wynajem może obejmować maksymalnie 30 dni naraz. Możesz go później przedłużyć.",
     "rentalExpired": "Twój okres wynajmu dobiegł końca. Zarejestruj wynajem ponownie, aby kontynuować.",
     "notInWindow": "Ten pojazd nie jest teraz dostępny do pracy.",
-    "notOwnVehicle": "Ten pojazd nie należy do Twojego konta."
+    "notOwnVehicle": "Ten pojazd nie należy do Twojego konta.",
+    "weightRequired": "Podaj dopuszczalną masę całkowitą w kilogramach.",
+    "trailerWeightRequired": "Podaj dopuszczalną masę całkowitą przyczepy w kilogramach.",
+    "weightOverLimit": "Pojazdów powyżej 3500 kg łącznie z przyczepą nie można zarejestrować."
   },
   "country": {
     "notLive": "PickLte nie jest jeszcze dostępny w kraju: {{country}}.",
-    "required": "Wybierz swój kraj."
+    "required": "Wybierz swój kraj.",
+    "crossBorder": "Przeprowadzka musi zaczynać się i kończyć w tym samym kraju.",
+    "pickupNotLive": "PickLte nie jest jeszcze dostępny pod tym adresem odbioru."
   },
   "fees": {
     "restricted": "Masz nieopłacone opłaty platformy. Ureguluj saldo, aby przejść w tryb online i przyjmować przeprowadzki.",

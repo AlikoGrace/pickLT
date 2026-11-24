@@ -47,6 +47,10 @@ export interface CompleteProfileFields {
   vehicleModel: string
   vehicleYear: string
   vehicleCapacity: string
+  /** 3.5 t rule (plan legal/1.scope-lock S4). */
+  vehicleGrossWeightKg: string
+  vehicleHasTrailer: boolean
+  vehicleTrailerGrossWeightKg: string
   vehicleRegistration: string
   vehicleType: string
   hasFrontPlatePhoto: boolean
@@ -95,6 +99,9 @@ export function vehicleStepValid(f: CompleteProfileFields, nowMs: number = Date.
       year: f.vehicleYear,
       vehicleType: f.vehicleType,
       capacityM3: f.vehicleCapacity,
+      grossWeightKg: f.vehicleGrossWeightKg,
+      hasTrailer: f.vehicleHasTrailer,
+      trailerGrossWeightKg: f.vehicleTrailerGrossWeightKg,
       frontPlatePhoto: f.hasFrontPlatePhoto ? 'pending' : '',
       rearPlatePhoto: f.hasRearPlatePhoto ? 'pending' : '',
       fullVehiclePhoto: f.hasFullVehiclePhoto ? 'pending' : '',

@@ -533,7 +533,7 @@ export function quoteMove(input: QuoteInput, config?: PricingConfig | null): Quo
 
   const serviceLines: QuoteLine[] = []
   let services = 0
-  for (const id of uniqueSorted(input.services)) {
+  for (const id of stripRetiredServices(uniqueSorted(input.services))) {
     // An unknown service id costs nothing rather than failing the quote; it is
     // still listed so the breakdown shows what was selected.
     const unitEur = trace.maybe(`service.${id}`) ?? 0
@@ -711,6 +711,19 @@ export function parseBreakdown(raw: unknown): QuoteBreakdown | null {
       crewCapped: !!b.flags?.crewCapped,
     },
   } as QuoteBreakdown
+}
+
+// ── Retired services ───────────────────────────────────────────────────────
+
+/**
+ * Services that are no longer offered (plan `legal/1.scope-lock` S1). A retired
+ * id is dropped from every new quote and every new write; a move booked before
+ * the change keeps the line and the price it was booked with.
+ */
+export const RETIRED_SERVICES: readonly string[] = ['disposal_entsorgung']
+
+export function stripRetiredServices(ids: readonly string[] | null | undefined): string[] {
+  return (ids ?? []).filter((id) => typeof id === 'string' && !RETIRED_SERVICES.includes(id.trim()))
 }
 
 // ── Small utilities ────────────────────────────────────────────────────────

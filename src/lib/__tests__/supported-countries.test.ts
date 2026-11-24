@@ -9,9 +9,10 @@ import {
 } from '@/lib/supportedCountries';
 
 describe('supported countries (plan wave-2026-10/4 C3)', () => {
-  it('ships all ten euro-area markets live', () => {
+  it('seeds ten euro-area markets with only Germany live (plan legal/1.scope-lock S3)', () => {
     expect(DEFAULT_COUNTRY_CODE).toBe('DE');
-    expect(liveCountryCodes(SUPPORTED_COUNTRIES)).toEqual(['DE', 'AT', 'NL', 'BE', 'FR', 'IT', 'ES', 'PT', 'IE', 'LU']);
+    expect(SUPPORTED_COUNTRIES.map((c) => c.code)).toEqual(['DE', 'AT', 'NL', 'BE', 'FR', 'IT', 'ES', 'PT', 'IE', 'LU']);
+    expect(liveCountryCodes(SUPPORTED_COUNTRIES)).toEqual(['DE']);
     expect(SUPPORTED_COUNTRIES.every((c) => c.currency === 'EUR')).toBe(true);
     expect(findSupportedCountry(SUPPORTED_COUNTRIES, 'it')?.vatRate).toBe(0.22);
     expect(findSupportedCountry(SUPPORTED_COUNTRIES, 'LU')?.vatRate).toBe(0.17);

@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 /**
  * `POST /api/moves/create-instant` and `/create-scheduled` — the server basket,
@@ -30,7 +30,13 @@ vi.mock('@/lib/appwrite-server', () => ({ createAdminClient: () => ({ databases:
 vi.mock('@/lib/auth-session', () => ({ getSessionUserId: async () => 'user_1' }))
 vi.mock('@/lib/i18n-server', () => ({ getTranslations: async () => ({ t: (k: string) => k }) }))
 vi.mock('@/lib/mover-gates', () => ({ directAssignmentBlock: () => null }))
-vi.mock('@/lib/moveCountry', () => ({ resolveMoveCountry: async () => 'DE' }))
+// `scopeLock.violation` lets a case exercise the scope lock (plan legal/1.scope-lock S2/S3).
+const scopeLock = vi.hoisted(() => ({ violation: null as string | null }))
+vi.mock('@/lib/moveCountry', () => ({
+  resolveMoveCountryWithLock: async () => ({ countryCode: 'DE', violation: scopeLock.violation }),
+  scopeLockStatus: (code: string) => (code === 'country.pickupNotLive' ? 403 : 400),
+}))
+vi.mock('@/lib/live-countries-server', () => ({ loadLiveCountries: async () => ['DE'] }))
 vi.mock('@/lib/notify', () => ({ relId: (v: unknown) => (typeof v === 'string' ? v : null) }))
 
 import type { QuoteBreakdown } from '@/lib/pricingEngine'
@@ -126,5 +132,44 @@ describe('create-instant crew gate reads the stored crewSize', () => {
     mover = { ...mover, crewSize: null, crew_members: [{ role: 'helper', isActive: true }, { role: 'driver' }] }
     const res = await createInstant(req({ moverProfileId: 'mp_1', moveType: 'premium', inventoryItems: { piano: 1 } }))
     expect(res.status).toBe(200)
+  })
+})
+
+// Plan legal/1.scope-lock S2/S3: a closed pickup market or a cross-border move
+// is refused before anything is written.
+describe.each([
+  ['create-instant', createInstant, { moverProfileId: 'mp_1' }],
+  ['create-scheduled', createScheduled, {}],
+] as const)('%s scope lock', (_name, route, extra) => {
+  afterEach(() => {
+    scopeLock.violation = null
+  })
+
+  it('400 country.crossBorder and nothing written', async () => {
+    scopeLock.violation = 'country.crossBorder'
+    const res = await route(req({ ...extra, moveType: 'light', inventoryItems: { cardboard_boxes: 2 } }))
+    expect(res.status).toBe(400)
+    expect(await res.json()).toMatchObject({ fnCode: 'country.crossBorder', error: 'errors:country.crossBorder' })
+    expect(db.createDocument).not.toHaveBeenCalled()
+  })
+
+  it('403 country.pickupNotLive and nothing written', async () => {
+    scopeLock.violation = 'country.pickupNotLive'
+    const res = await route(req({ ...extra, moveType: 'light', inventoryItems: { cardboard_boxes: 2 } }))
+    expect(res.status).toBe(403)
+    expect((await res.json()).fnCode).toBe('country.pickupNotLive')
+    expect(db.createDocument).not.toHaveBeenCalled()
+  })
+})
+
+// Plan legal/1.scope-lock S1: waste disposal is retired and never stored.
+describe('create-scheduled retired services', () => {
+  it('strips disposal_entsorgung from the row and the quote', async () => {
+    const res = await createScheduled(
+      req({ moveType: 'light', inventoryItems: { cardboard_boxes: 2 }, additionalServices: ['disposal_entsorgung', 'furniture_assembly'] }),
+    )
+    expect(res.status).toBe(200)
+    expect(moveWrite().additionalServices).toEqual(['furniture_assembly'])
+    expect(String(moveWrite().priceBreakdown)).not.toContain('disposal')
   })
 })

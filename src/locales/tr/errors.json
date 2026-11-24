@@ -90,7 +90,9 @@
       "notFound": "Araç bulunamadı.",
       "notPending": "Bu araç inceleme beklemiyor.",
       "reasonRequired": "Bir aracı reddetmek için gerekçe gereklidir.",
-      "verifyFailed": "Araç doğrulaması başarısız oldu (durum {{status}}). Lütfen tekrar deneyin."
+      "verifyFailed": "Araç doğrulaması başarısız oldu (durum {{status}}). Lütfen tekrar deneyin.",
+      "weightMissing": "Bu araç için azami ağırlık kayıtlı değil. Reddedin ve sürücüden eklemesini isteyin.",
+      "weightOverLimit": "Bu araç römork dahil 3.500 kg üzerinde olduğu için doğrulanamaz."
     }
   },
   "appwrite": {
@@ -369,11 +371,16 @@
     "rentalWindowTooLong": "Bir kiralama tek seferde en fazla 30 günü kapsayabilir. Daha sonra uzatabilirsiniz.",
     "rentalExpired": "Kiralama süreniz sona erdi. Devam etmek için yeniden bir kiralama kaydedin.",
     "notInWindow": "Bu araç şu anda hizmet için uygun değil.",
-    "notOwnVehicle": "Bu araç hesabınıza ait değil."
+    "notOwnVehicle": "Bu araç hesabınıza ait değil.",
+    "weightRequired": "Azami yüklü ağırlığı kilogram olarak girin.",
+    "trailerWeightRequired": "Römorkun azami yüklü ağırlığını kilogram olarak girin.",
+    "weightOverLimit": "Römork dahil 3.500 kg üzerindeki araçlar kaydedilemez."
   },
   "country": {
     "notLive": "PickLte henüz {{country}} için kullanılamıyor.",
-    "required": "Lütfen ülkenizi seçin."
+    "required": "Lütfen ülkenizi seçin.",
+    "crossBorder": "Taşınmanız aynı ülkede başlayıp bitmelidir.",
+    "pickupNotLive": "PickLte bu alım adresinde henüz kullanılamıyor."
   },
   "fees": {
     "restricted": "Ödenmemiş platform ücretleriniz var. Çevrimiçi olmak ve taşıma kabul etmek için bakiyenizi ödeyin.",

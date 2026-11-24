@@ -137,3 +137,124 @@ export async function resolveMoveCountry(opts) {
 
   return { countryCode: DEFAULT_COUNTRY_CODE, source: 'default' };
 }
+
+// ── Scope lock (plan `legal/1.scope-lock` S2/S3) ────────────────────────────
+//
+// A move must start and end in the same country, and that country must be an
+// open market. Both rules are enforced where the row is written, so an old app
+// build cannot book around them.
+
+/** Sources that name the pickup's country from the pickup itself. */
+const KNOWN_PICKUP_SOURCES = ['row', 'geocode', 'hint'];
+
+/**
+ * True when `resolveMoveCountry` answered from the pickup (stored, geocoded or
+ * hinted) rather than from the client's own country or the default. Only a
+ * known pickup can be refused: an unknown one has nothing to check against.
+ */
+export function pickupCountryKnown(resolved) {
+  return !!resolved && KNOWN_PICKUP_SOURCES.includes(resolved.source);
+}
+
+/**
+ * The drop-off's country: Mapbox reverse geocode of the drop-off coordinates,
+ * else the client's `dropoffCountryCode` hint, else `null`. Never throws: a
+ * geocoder outage leaves the country unknown and the booking goes ahead.
+ */
+export async function resolveDropoffCountry(opts) {
+  const row = (opts && opts.row) || {};
+  const geocoded = await reverseGeocodeCountry(row.dropoffLatitude, row.dropoffLongitude, opts && opts.error);
+  if (geocoded) return geocoded;
+  const body = opts && opts.body;
+  return body && typeof body === 'object' ? countryToIso2(body.dropoffCountryCode) : null;
+}
+
+/** Both countries are known and they differ. An unknown side never blocks. */
+export function isCrossBorder(pickupCountryCode, dropoffCountryCode) {
+  const a = countryToIso2(pickupCountryCode);
+  const b = countryToIso2(dropoffCountryCode);
+  return !!a && !!b && a !== b;
+}
+
+/** Open markets when `platform_config.supported_countries` cannot be read. */
+export const DEFAULT_LIVE_COUNTRIES = [DEFAULT_COUNTRY_CODE];
+
+/**
+ * The live ISO2 codes out of the operator's `supported_countries` JSON (an
+ * array of `{ code, live }`). `null` when the document is missing, malformed
+ * or names no valid country, so the caller falls back to the compiled list.
+ */
+export function parseLiveCountries(raw) {
+  let value = raw;
+  if (typeof raw === 'string') {
+    try {
+      value = JSON.parse(raw);
+    } catch {
+      return null;
+    }
+  }
+  if (!Array.isArray(value)) return null;
+  const live = [];
+  let valid = 0;
+  for (const item of value) {
+    if (!item || typeof item !== 'object') continue;
+    const code = countryToIso2(item.code);
+    if (!code) continue;
+    valid += 1;
+    if (item.live === true) live.push(code);
+  }
+  return valid ? live : null;
+}
+
+/**
+ * The open markets, read through the caller's `listRows(key)` (which returns
+ * the `platform_config` rows for that key). Never throws: any failure yields
+ * `DEFAULT_LIVE_COUNTRIES`, so an unreadable config can neither open a closed
+ * market nor close the home one.
+ */
+export async function loadLiveCountries(listRows, error) {
+  try {
+    const rows = await listRows('supported_countries');
+    const parsed = parseLiveCountries(rows && rows[0] ? rows[0].value : null);
+    if (parsed) return parsed;
+  } catch (e) {
+    if (error) error(`supported countries lookup failed (using defaults): ${e && e.message ? e.message : String(e)}`);
+  }
+  return [...DEFAULT_LIVE_COUNTRIES];
+}
+
+/**
+ * Why this move may not be written, or `null`. `resolved` is the answer of
+ * `resolveMoveCountry`; the checks only run for a pickup whose country is
+ * known. Returns the response body and status the function sends as-is.
+ */
+export async function scopeLockViolation(opts) {
+  const resolved = opts.resolved;
+  if (!pickupCountryKnown(resolved)) return null;
+  const pickup = resolved.countryCode;
+
+  const live = await loadLiveCountries(opts.listRows, opts.error);
+  if (!live.includes(pickup)) {
+    return {
+      status: 403,
+      body: {
+        error: `Moves are not available in ${pickup} yet.`,
+        fnCode: 'country.pickupNotLive',
+        fnParams: { country: pickup },
+      },
+    };
+  }
+
+  const dropoff = await resolveDropoffCountry({ row: opts.row, body: opts.body, error: opts.error });
+  if (isCrossBorder(pickup, dropoff)) {
+    return {
+      status: 400,
+      body: {
+        error: `A move must start and end in the same country (pickup ${pickup}, drop-off ${dropoff}).`,
+        fnCode: 'country.crossBorder',
+        fnParams: { country: pickup, dropoffCountry: dropoff },
+      },
+    };
+  }
+  return null;
+}
