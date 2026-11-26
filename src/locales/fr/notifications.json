@@ -164,6 +164,26 @@
     "verified": {
       "body": "Félicitations ! Votre profil déménageur a été vérifié. Vous pouvez maintenant accepter des déménagements.",
       "title": "Profil vérifié"
+    },
+    "residenceVerified": {
+      "title": "Document de séjour approuvé",
+      "body": "Votre document de séjour a été vérifié et approuvé."
+    },
+    "residenceRejected": {
+      "title": "Document de séjour refusé",
+      "body": "Votre document de séjour n'a pas été accepté. {{reason}}"
+    },
+    "certificateVerified": {
+      "title": "Certificat de déménagement approuvé",
+      "body": "Votre certificat de déménagement a été approuvé. Vous êtes désormais présenté en premier aux clients et n'avez plus de limite quotidienne."
+    },
+    "certificateRejected": {
+      "title": "Certificat de déménagement refusé",
+      "body": "Votre certificat de déménagement n'a pas été accepté. {{reason}}"
+    },
+    "residenceExpiring": {
+      "title": "Le document de séjour expire bientôt",
+      "body": "Votre document de séjour expire dans {{days}} jours. Téléversez le nouveau pour continuer à recevoir des déménagements."
     }
   },
   "fees": {
@@ -188,6 +208,20 @@
     "missed": {
       "title": "Appel manqué",
       "body": "Appel manqué de {{name}}"
+    }
+  },
+  "offer": {
+    "priceConfirm": {
+      "title": "Nouveau prix à confirmer",
+      "body": "Un déménageur plus éloigné peut effectuer votre déménagement pour {{amount}} {{currency}} au lieu de {{previousAmount}} {{currency}}. Ouvrez le déménagement pour accepter ou refuser."
+    },
+    "clientDeclined": {
+      "title": "Prix non accepté",
+      "body": "Le client n'a pas accepté le prix correspondant à votre distance. Le déménagement {{handle}} ne vous a pas été attribué."
+    },
+    "clientNoAnswer": {
+      "title": "Offre clôturée",
+      "body": "Le client n'a pas confirmé le prix à temps. Le déménagement {{handle}} ne vous a pas été attribué."
     }
   }
 }

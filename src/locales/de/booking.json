@@ -1118,6 +1118,9 @@
       },
       "vehicle": {
         "label": "Fahrzeug ({{vehicle}})"
+      },
+      "approach": {
+        "label": "Anfahrt zur Abholung ({{km}})"
       }
     },
     "minimumApplied": {

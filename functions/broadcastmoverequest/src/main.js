@@ -1,6 +1,7 @@
 import { Client, Databases, ID, Permission, Query, Role } from 'node-appwrite';
 
 import { countryMatches, countryToIso2, moverCountryCode } from './country-code.js';
+import { compareCandidates, filterUnderDailyCap, isCertified, loadVettingConfig, residenceAllowsWork } from './vetting.js';
 import {
   GLOBAL_PRICING_SCOPE,
   loadedVolumeM3,
@@ -10,15 +11,31 @@ import {
   requiredCrewFor,
   toPricingConfig,
 } from './pricing-engine.js';
+import { offerColumns, priceOfferForMover } from './offer-pricing.js';
+import { AWAITING_CLIENT, isUnknownAttributeError } from './pending-offer.js';
 
 const DATABASE_ID = process.env.APPWRITE_DATABASE_ID;
 const MOVES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVES;
+const PLATFORM_CONFIG_COLLECTION = process.env.APPWRITE_COLLECTION_PLATFORM_CONFIG || 'platform_config';
 const MOVER_PROFILES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVER_PROFILES;
 const MOVE_REQUESTS_COLLECTION = process.env.APPWRITE_COLLECTION_MOVE_REQUESTS;
 const INVENTORY_CATALOG_COLLECTION = process.env.APPWRITE_COLLECTION_INVENTORY_CATALOG;
 const PRICING_CONFIG_COLLECTION = process.env.APPWRITE_COLLECTION_PRICING_CONFIG || 'pricing_config';
 
 const MAX_MOVERS = 10;
+// The two rings of an instant search (`lib/search-radius.ts`). A request is
+// offered to movers in the near ring; only when there is nobody there is it
+// offered in the extended ring, which is where a client who widened the search
+// found their mover.
+export const NEAR_RADIUS_KM = 20;
+export const EXTENDED_RADIUS_KM = 50;
+
+/** Movers in the near ring, or, when it is empty, those in the extended ring. */
+export function withinSearchRings(movers) {
+  const near = movers.filter((m) => m.distanceKm <= NEAR_RADIUS_KM);
+  if (near.length > 0) return near;
+  return movers.filter((m) => m.distanceKm <= EXTENDED_RADIUS_KM);
+}
 // Rebroadcast offers last 5 min, after the chosen mover's 10 min priority
 // window (createpriorityrequest) — time to read the job before deciding.
 const REQUEST_TIMEOUT_SECONDS = 300;
@@ -264,6 +281,20 @@ export default async ({ req, res, log, error }) => {
     );
     const openUntil = Date.now() + OFFER_EXPIRY_GRACE_MS;
     const offers = pendingOffers.documents || [];
+    // A mover has accepted at a higher price and the client is being asked
+    // (plan pricing/8): the move is spoken for until the client answers.
+    const awaitingClient = await databases
+      .listDocuments(DATABASE_ID, MOVE_REQUESTS_COLLECTION, [
+        Query.equal('moveId', moveId),
+        Query.equal('status', AWAITING_CLIENT),
+        Query.limit(1),
+      ])
+      .then((r) => (r.documents || []).length > 0)
+      .catch(() => false);
+    if (awaitingClient) {
+      log(`[broadcast] skipped ${moveId}: waiting for the client to confirm a price`);
+      return res.json({ ok: true, skipped: 'awaiting_client', broadcast: 0 });
+    }
     if (offers.some((r) => Date.parse(r.expiresAt) > openUntil)) {
       log(`[broadcast] skipped ${moveId}: an offer is still open`);
       return res.json({ ok: true, skipped: 'offer_open', broadcast: 0 });
@@ -321,30 +352,63 @@ export default async ({ req, res, log, error }) => {
       log(`fee gate: ${feeGated}/${ready.length} ready movers dropped (platform fees restricted)`);
     }
 
+    // Residence gate (plan legal/7, V1): no verified residence document, no new
+    // work once the gate date has passed.
+    const vettingConfig = await loadVettingConfig({
+      databases,
+      Query,
+      databaseId: DATABASE_ID,
+      collectionId: PLATFORM_CONFIG_COLLECTION,
+      error,
+    });
+    const vettingNow = Date.now();
+    const vetted = workable.filter(m => residenceAllowsWork(m, vettingNow, vettingConfig.residenceGateFromMs));
+    if (vetted.length < workable.length) {
+      log(`residence gate: ${workable.length - vetted.length}/${workable.length} movers dropped (residence document not verified)`);
+    }
+
     // Country gate (plan wave-2026-10/4 C6): a move is offered only to movers
     // working in its pickup country — the client's segregation ask, and it keeps
     // a mover from ending up under another country's VAT. A null on EITHER side
     // (rows from before the country columns) keeps today's radius-only matching.
     const moveCountry = countryToIso2(move.countryCode);
-    const inCountry = workable.filter(m => countryMatches(moverCountryCode(m), moveCountry));
-    const countryGated = workable.length - inCountry.length;
+    const inCountry = vetted.filter(m => countryMatches(moverCountryCode(m), moveCountry));
+    const countryGated = vetted.length - inCountry.length;
     if (!moveCountry) {
       log(`country gate: move ${moveId} has no countryCode — radius-only matching (legacy row)`);
     } else if (countryGated > 0) {
-      log(`country gate: ${countryGated}/${workable.length} ready movers dropped (not in ${moveCountry})`);
+      log(`country gate: ${countryGated}/${vetted.length} ready movers dropped (not in ${moveCountry})`);
     }
 
-    // Calculate distances and sort by proximity
-    const inRange = inCountry
-      .map(m => ({
+    // Calculate distances; certified movers first among equally near ones,
+    // then proximity (plan legal/7, V2).
+    const withinRadius = withinSearchRings(
+      inCountry.map(m => ({
         ...m,
+        certified: isCertified(m),
         distanceKm: haversineKm(
           move.pickupLatitude, move.pickupLongitude,
           m.currentLatitude, m.currentLongitude
         ),
-      }))
-      .filter(m => m.distanceKm <= 15)
-      .sort((a, b) => a.distanceKm - b.distanceKm);
+      })),
+    ).sort(compareCandidates);
+
+    // Daily cap (plan legal/7, V2): a mover without a verified certificate who
+    // has used today's allowance is not offered the move.
+    const inRange = await filterUnderDailyCap({
+      databases,
+      Query,
+      databaseId: DATABASE_ID,
+      movesCollectionId: MOVES_COLLECTION,
+      movers: withinRadius,
+      config: vettingConfig,
+      nowMs: vettingNow,
+      tz: PLATFORM_TZ,
+      error,
+    });
+    if (inRange.length < withinRadius.length) {
+      log(`daily cap: ${withinRadius.length - inRange.length}/${withinRadius.length} movers dropped (uncertified, cap reached)`);
+    }
 
     // ── Double-booking gate ────────────────────────────────────────────────
     //
@@ -468,22 +532,34 @@ export default async ({ req, res, log, error }) => {
       const requestPermissions = [];
       if (moverAuthId) requestPermissions.push(Permission.read(Role.user(moverAuthId)));
       if (moveClientAuthId) requestPermissions.push(Permission.read(Role.user(moveClientAuthId)));
-      const request = await databases.createDocument(
-        DATABASE_ID,
-        MOVE_REQUESTS_COLLECTION,
-        ID.unique(),
-        {
-          moveId,
-          moverProfileId: mover.$id,
-          status: 'pending',
-          sentAt: now.toISOString(),
-          respondedAt: null,
-          expiresAt,
-        },
-        // The target mover needs their inbox; the client's tracking screen
-        // lists who was pinged.
-        requestPermissions
-      );
+      const requestRow = {
+        moveId,
+        moverProfileId: mover.$id,
+        status: 'pending',
+        sentAt: now.toISOString(),
+        respondedAt: null,
+        expiresAt,
+      };
+      // Each offer carries the price for THIS mover: the move's quote with the
+      // approach line for their distance (plan pricing/8). Skipped silently for
+      // a move without a v3 quote, and when the schema is not applied yet.
+      let offer = null;
+      try {
+        offer = priceOfferForMover({ move, mover, config: overrides });
+      } catch (e) {
+        error(`broadcast: offer price skipped for mover ${mover.$id}: ${e.message}`);
+      }
+      // The target mover needs their inbox; the client's tracking screen
+      // lists who was pinged.
+      let request;
+      try {
+        request = await databases.createDocument(
+          DATABASE_ID, MOVE_REQUESTS_COLLECTION, ID.unique(), { ...requestRow, ...offerColumns(offer) }, requestPermissions
+        );
+      } catch (e) {
+        if (!offer || !isUnknownAttributeError(e)) throw e;
+        request = await databases.createDocument(DATABASE_ID, MOVE_REQUESTS_COLLECTION, ID.unique(), requestRow, requestPermissions);
+      }
       requests.push(request);
     }
 

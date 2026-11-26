@@ -24,7 +24,9 @@ import {
   CalendarIcon,
   CheckCircleIcon,
 } from '@heroicons/react/24/outline'
-import { formatDateWith, formatMoney } from '@/lib/format'
+import { formatDateWith, formatDistanceKm, formatMoney } from '@/lib/format'
+import { offerApproachKm, offerOutcome, offerPayout } from '@/lib/pending-offer'
+import { formatCountdown } from '@/components/PendingOfferPrompt'
 import { moveSubtitle, moveTypeAndCategoryValue, requestCategoryAndType } from '@/lib/move-subtitle'
 import { Trans, useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
@@ -72,7 +74,26 @@ interface IncomingRequest {
   expiresAt?: string
   sentAt?: string
   move: MoveDetails | null
+  /** The price of THIS offer (plan pricing/8): what the mover earns, in cents. Absent on older offers. */
+  offerPayoutCents?: unknown
+  /** Straight-line metres from the mover to the pickup the offer was priced for. */
+  offerApproachM?: unknown
 }
+
+/** An offer the mover accepted at a higher price: the client is being asked. */
+interface WaitingOffer {
+  requestId: string
+  moveId: string
+  /** ISO time the client's answer is due. */
+  expiresAt: string
+  /** What the client would pay, for the waiting text. */
+  total: number | null
+}
+
+/** After the client's deadline the sweeper closes the offer within a minute; then the screen closes by itself. */
+const WAITING_GRACE_SECONDS = 45
+/** How often the waiting screen re-reads the request (realtime is the fast path). */
+const WAITING_POLL_MS = 3000
 
 /** Fallback offer length (priority default, `createpriorityrequest`). */
 const FALLBACK_WINDOW_SECONDS = 600
@@ -296,9 +317,64 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
   const timerRef = useRef<NodeJS.Timeout | null>(null)
   const alertRef = useRef<{ play: () => void; stop: () => void } | null>(null)
   const incomingRef = useRef<IncomingRequest | null>(null)
+  // The client is being asked to confirm this mover's higher price (plan pricing/8).
+  const [waiting, setWaiting] = useState<WaitingOffer | null>(null)
+  const waitingRef = useRef<WaitingOffer | null>(null)
+  const [waitingNowMs, setWaitingNowMs] = useState(() => Date.now())
+  // How a waiting offer ended without an assignment.
+  const [offerNotice, setOfferNotice] = useState<'declined' | 'closed' | null>(null)
 
   // Keep incomingRef in sync
   useEffect(() => { incomingRef.current = incoming }, [incoming])
+  useEffect(() => { waitingRef.current = waiting }, [waiting])
+
+  // While the client decides: a countdown, the request re-read every few
+  // seconds and on every realtime update, and the outcome as soon as it lands.
+  useEffect(() => {
+    if (!waiting) return
+    let done = false
+    const finish = (status: unknown) => {
+      if (done) return
+      const outcome = offerOutcome(status)
+      if (outcome === 'waiting' || outcome === 'open') return
+      done = true
+      setWaiting(null)
+      if (outcome === 'assigned') {
+        // The client confirmed: from here it is a normal accept.
+        router.push('/active-move')
+      } else {
+        setOfferNotice(outcome)
+      }
+    }
+    const check = async () => {
+      // No answer and no sweeper update well past the deadline: stop waiting.
+      if (Date.now() > Date.parse(waiting.expiresAt) + WAITING_GRACE_SECONDS * 1000) {
+        finish('expired')
+        return
+      }
+      try {
+        const doc = await databases.getDocument(DATABASE_ID, MOVE_REQUESTS_COLLECTION, waiting.requestId)
+        finish((doc as Models.Document & Record<string, unknown>).status)
+      } catch {
+        // Unreadable this round; the next poll or the deadline settles it.
+      }
+    }
+    const tick = setInterval(() => setWaitingNowMs(Date.now()), 1000)
+    const poll = setInterval(check, WAITING_POLL_MS)
+    const unsubscribe = client.subscribe<Models.Document>(
+      `databases.${DATABASE_ID}.collections.${MOVE_REQUESTS_COLLECTION}.documents.${waiting.requestId}`,
+      (response: RealtimeResponseEvent<Models.Document>) => {
+        const doc = response.payload as (Models.Document & Record<string, unknown>) | undefined
+        if (doc && doc.$id === waiting.requestId) finish(doc.status)
+      },
+    )
+    return () => {
+      done = true
+      clearInterval(tick)
+      clearInterval(poll)
+      unsubscribe()
+    }
+  }, [waiting, router])
 
   // Countdown timer + alarm sound
   useEffect(() => {
@@ -384,7 +460,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
 
     // Check for existing pending requests on mount
     const checkForPendingRequests = async () => {
-      if (incomingRef.current) return // Already showing
+      if (incomingRef.current || waitingRef.current) return // Already showing, or waiting for a client's answer
       try {
         const res = await databases.listDocuments(
           DATABASE_ID,
@@ -409,6 +485,8 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                 expiresAt,
                 sentAt: doc.sentAt as string | undefined,
                 move,
+                offerPayoutCents: doc.offerPayoutCents,
+                offerApproachM: doc.offerApproachM,
               })
             }
           }
@@ -441,6 +519,8 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
         const docMoverProfileId = extractMoverProfileId(doc.moverProfileId)
         if (docMoverProfileId !== moverProfileId) return
         if (doc.status !== 'pending') return
+        // One thing at a time: the 5 s poll shows this offer once the wait is over.
+        if (waitingRef.current) return
 
         const moveId = extractMoveId(doc.moveId)
 
@@ -453,6 +533,8 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
           expiresAt: doc.expiresAt as string | undefined,
           sentAt: doc.sentAt as string | undefined,
           move,
+          offerPayoutCents: doc.offerPayoutCents,
+          offerApproachM: doc.offerApproachM,
         })
       }
     )
@@ -476,13 +558,31 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
           moveId: incoming.moveId,
         }),
       })
-      if (res.ok) {
+      const data = await res.json().catch(() => ({}))
+      if (res.ok && data.awaitingClient === true) {
+        // This mover's price is higher than the one the client agreed to, so
+        // nothing is assigned yet: the client is asked first (plan pricing/8).
+        // Clearing `incoming` stops the alarm and the offer countdown.
+        setWaitingNowMs(Date.now())
+        setWaiting({
+          requestId: incoming.requestId,
+          moveId: incoming.moveId,
+          expiresAt: typeof data.expiresAt === 'string' ? data.expiresAt : new Date().toISOString(),
+          total: typeof data.total === 'number' ? data.total : null,
+        })
+        setIncoming(null)
+        setShowDetails(false)
+      } else if (res.ok) {
         setIncoming(null)
         setShowDetails(false)
         router.push('/active-move')
+      } else if (data.alreadyTaken === true) {
+        // Another mover's price is already with the client: this offer is gone.
+        setIncoming(null)
+        setShowDetails(false)
+        setOfferNotice('closed')
       } else {
-        const errData = await res.json().catch(() => ({}))
-        alert(errData.error || t('errors:mover.acceptFailed.error'))
+        alert(data.error || t('errors:mover.acceptFailed.error'))
       }
     } catch {
       alert(t('errors:network.generic.error'))
@@ -525,6 +625,24 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
         if (url) galleryImages.push(url)
       })
     }
+
+    // What this offer pays this mover when it carries its own price; otherwise
+    // the move's stored price, as before.
+    const payout = offerPayout(incoming)
+    const approachKm = offerApproachKm(incoming)
+    const earnings = payout ?? (move?.estimatedPrice != null ? move.estimatedPrice : null)
+    const offerNote =
+      payout !== null ? (
+        <p className="mt-1 text-xs text-green-700/90 dark:text-green-300/90">
+          {approachKm !== null && (
+            <span className="font-medium">
+              {t('web:mover.request.offer.distanceToPickup.label', { distance: formatDistanceKm(approachKm) })}
+              {'. '}
+            </span>
+          )}
+          {t('web:mover.request.offer.includesDrive.helper')}
+        </p>
+      ) : null
 
     const pickupDisplay =
       move?.pickupStreetAddress || move?.pickupLocation?.split(',')[0] || t('booking:map.pickup.placeholder')
@@ -682,13 +800,17 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
               </div>
             )}
 
-            {/* Price — prominent */}
-            {move?.estimatedPrice && move.estimatedPrice > 0 && (
-              <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800">
-                <span className="text-sm font-medium text-green-700 dark:text-green-300">{t('web:mover.request.earnings.label')}</span>
-                <span className="text-2xl font-bold text-green-700 dark:text-green-300">
-                  {formatMoney(move.estimatedPrice, { compact: true })}
-                </span>
+            {/* Price — prominent. An offer that carries its own price (plan
+                pricing/8) shows what THIS mover earns, drive to the pickup included. */}
+            {earnings !== null && earnings > 0 && (
+              <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-green-700 dark:text-green-300">{t('web:mover.request.earnings.label')}</span>
+                  <span className="text-2xl font-bold text-green-700 dark:text-green-300">
+                    {formatMoney(earnings, { compact: true })}
+                  </span>
+                </div>
+                {offerNote}
               </div>
             )}
           </div>
@@ -785,11 +907,11 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                     {moveSubtitle(t, move.moveType, move.moveCategory, formatDate(move.moveDate))}
                   </p>
                 </div>
-                {move.estimatedPrice != null && move.estimatedPrice > 0 && (
+                {earnings !== null && earnings > 0 && (
                   <div className="text-right">
                     <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('web:mover.earnings.label')}</p>
                     <p className="text-3xl font-bold text-green-600 dark:text-green-400">
-                      {formatMoney(move.estimatedPrice, { compact: true })}
+                      {formatMoney(earnings, { compact: true })}
                     </p>
                   </div>
                 )}
@@ -944,9 +1066,10 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                       <div className="flex justify-between text-base">
                         <span className="font-semibold text-neutral-900 dark:text-neutral-100">{t('web:mover.earnings.label')}</span>
                         <span className="font-bold text-green-600 dark:text-green-400">
-                          {formatMoney(move.estimatedPrice ?? 0, { compact: true })}
+                          {formatMoney(earnings ?? 0, { compact: true })}
                         </span>
                       </div>
+                      {offerNote}
                     </div>
                   </div>
 
@@ -1000,10 +1123,62 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
     )
   }
 
+  /** The client is deciding on this mover's price: nothing is assigned yet. */
+  const renderWaiting = () => {
+    if (!waiting) return null
+    const left = Math.max(0, Math.ceil((Date.parse(waiting.expiresAt) - waitingNowMs) / 1000))
+    return (
+      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="offer-waiting-title">
+        <div className="w-full max-w-md bg-white dark:bg-neutral-800 rounded-3xl overflow-hidden shadow-2xl">
+          <div className="bg-amber-500 p-5 text-white">
+            <div className="flex items-center gap-2">
+              <ClockIcon className="w-6 h-6" />
+              <h2 id="offer-waiting-title" className="font-bold text-lg">{t('web:mover.request.offer.waiting.title')}</h2>
+            </div>
+            <p className="mt-2 text-sm font-medium tabular-nums" aria-live="polite">
+              {t('web:mover.request.offer.waiting.countdown.label', { time: formatCountdown(left) })}
+            </p>
+          </div>
+          <div className="p-5 space-y-3">
+            <p className="text-sm text-neutral-700 dark:text-neutral-200">
+              {t('web:mover.request.offer.waiting.body', { amount: formatMoney(waiting.total) })}
+            </p>
+            <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('web:mover.request.offer.waiting.helper')}</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  /** The offer ended without an assignment: say so at once. */
+  const renderOfferNotice = () => {
+    if (!offerNotice || waiting) return null
+    // i18n-keys: web:mover.request.offer.declined.title, web:mover.request.offer.declined.body, web:mover.request.offer.closed.title, web:mover.request.offer.closed.body
+    return (
+      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm" role="alertdialog" aria-modal="true" aria-labelledby="offer-notice-title">
+        <div className="w-full max-w-md bg-white dark:bg-neutral-800 rounded-3xl p-6 shadow-2xl space-y-3">
+          <h2 id="offer-notice-title" className="text-lg font-bold text-neutral-900 dark:text-white">
+            {t(`web:mover.request.offer.${offerNotice}.title`)}
+          </h2>
+          <p className="text-sm text-neutral-700 dark:text-neutral-200">{t(`web:mover.request.offer.${offerNotice}.body`)}</p>
+          <button
+            type="button"
+            onClick={() => setOfferNotice(null)}
+            className="w-full py-3 px-4 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold text-sm transition-colors"
+          >
+            {t('common:action.ok.cta')}
+          </button>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <>
       {children}
       {renderPopup()}
+      {renderWaiting()}
+      {renderOfferNotice()}
     </>
   )
 }

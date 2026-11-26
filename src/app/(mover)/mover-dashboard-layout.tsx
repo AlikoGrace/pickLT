@@ -10,9 +10,13 @@ import NotifyDropdown from '@/components/Header/NotifyDropdown'
 import VehicleConfirmModal from '@/components/mover/VehicleConfirmModal'
 import VehicleStatusBanner from '@/components/mover/VehicleStatusBanner'
 import FeeStatusBanner from '@/components/mover/FeeStatusBanner'
+import VettingStatusBanner from '@/components/mover/VettingStatusBanner'
 import OnlineSwitch from '@/components/mover/OnlineSwitch'
 import { feeStandingAllowsWork } from '@/lib/feeLedger'
 import type { VehicleDoc } from '@/lib/types'
+import type { VettingView } from '@/lib/mover-vetting-view'
+import { fetchVettingView } from '@/lib/vetting-client'
+import { DOCUMENTS_HREF } from '@/lib/vetting-form'
 import { fetchVehicleOverview } from '@/lib/vehicle-client'
 import { withExpiredRental } from '@/lib/vehicle-labels'
 import { rentalRemainingMs, vehicleServiceReady, vehicleServiceState } from '@/lib/vehicle-service'
@@ -249,6 +253,27 @@ const MoverDashboardLayout = ({ children }: Props) => {
       cancelled = true
     }
   }, [profileId, currentVehicleId, vehicleStatus])
+  // ── Residence document (plan legal/7) ──────────────────────────────
+  // Read on every navigation: the writers are the documents page (the driver)
+  // and the admin app (the review), and neither reaches the auth profile.
+  const [vetting, setVetting] = useState<VettingView | null>(null)
+  useEffect(() => {
+    if (!profileId) {
+      setVetting(null)
+      return
+    }
+    let cancelled = false
+    fetchVettingView()
+      .then((v) => {
+        if (!cancelled) setVetting(v)
+      })
+      .catch(() => {
+        /* no banner rather than a wrong one */
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [profileId, pathname])
   const vehicleState = withExpiredRental(vehicleServiceState(moverDetails, currentVehicle, nowMs), moverDetails, expiredRental)
   // After an expiry nothing is current; the expired rental names the prompt and the banner.
   const shownVehicle = currentVehicle ?? (vehicleState === 'RENTAL_EXPIRED' ? expiredRental : null)
@@ -562,6 +587,15 @@ const MoverDashboardLayout = ({ children }: Props) => {
             standing={moverDetails?.feeStanding}
             owedCents={moverDetails?.feeOwedCents}
             oldestDueAt={moverDetails?.feeOldestDueAt}
+          />
+        )}
+        {/* Residence document: missing / under review / rejected / expired (plan legal/7) */}
+        {hasCompletedProfile && !isOnCompleteProfilePage && pathname !== DOCUMENTS_HREF && vetting && (
+          <VettingStatusBanner
+            prompt={vetting.residence.prompt}
+            gateActive={vetting.residenceGateActive}
+            gateFrom={vetting.residenceGateFrom}
+            rejectionReason={vetting.residence.rejectionReason}
           />
         )}
         <div className="min-h-screen">{children}</div>

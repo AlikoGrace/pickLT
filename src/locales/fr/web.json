@@ -652,6 +652,14 @@
         "platesOk": "Photos des plaques et du véhicule jointes",
         "rentalWindow": {
           "value": "Loué jusqu'au {{time}}"
+        },
+        "residencePhotosOk": "Les deux photos du document sont jointes",
+        "certificate": {
+          "yes": "Certificat de déménagement : photo jointe, en attente de vérification",
+          "no": "Certificat de déménagement : aucun"
+        },
+        "businessInsurance": {
+          "value": "Assurance professionnelle : {{answer}}"
         }
       },
       "step": {
@@ -672,6 +680,9 @@
         },
         "ownership": {
           "label": "Propriété"
+        },
+        "residence": {
+          "label": "Situation de séjour"
         }
       },
       "submit": {
@@ -746,6 +757,30 @@
       "title": "Nouvelle demande de déménagement !",
       "viewDetails": {
         "cta": "Voir tous les détails"
+      },
+      "offer": {
+        "distanceToPickup": {
+          "label": "{{distance}} jusqu'à l'adresse d'enlèvement"
+        },
+        "includesDrive": {
+          "helper": "Comprend votre trajet jusqu'à l'adresse d'enlèvement."
+        },
+        "waiting": {
+          "title": "En attente du client",
+          "body": "En raison de votre distance jusqu'à l'adresse d'enlèvement, votre prix de {{amount}} est plus élevé que celui accepté par le client. Le client a été invité à le confirmer.",
+          "helper": "Le déménagement n'est pas encore attribué. Vous verrez la réponse ici.",
+          "countdown": {
+            "label": "Temps restant : {{time}}"
+          }
+        },
+        "declined": {
+          "title": "Prix non accepté",
+          "body": "Le client n'a pas accepté le prix correspondant à votre distance. Le déménagement ne vous a pas été attribué. Cela n'a aucune conséquence pour votre compte."
+        },
+        "closed": {
+          "title": "Offre clôturée",
+          "body": "Cette offre n'est plus ouverte. Le déménagement ne vous a pas été attribué. Cela n'a aucune conséquence pour votre compte."
+        }
       }
     },
     "roleLabel": "Déménageur",
@@ -773,6 +808,9 @@
       "subtitle": "Gérez votre compte et vos préférences",
       "version": {
         "label": "PickLte Mover App v{{version}}"
+      },
+      "documents": {
+        "helper": "Document de séjour, certificat de déménagement, assurance"
       }
     },
     "startRoute": {
@@ -1057,6 +1095,23 @@
         "countdown": {
           "label": "Votre location se termine dans {{time}}"
         }
+      },
+      "insurance": {
+        "question": "Ce véhicule est-il couvert par une assurance responsabilité civile automobile ?",
+        "label": "Assurance responsabilité civile automobile",
+        "uninsured": {
+          "notice": "Vous pouvez envoyer ce véhicule, mais il ne pourra être ni approuvé ni utilisé tant qu’il n’a pas d’assurance responsabilité civile automobile.",
+          "pending": "Ce véhicule a été déclaré sans assurance responsabilité civile automobile. Il ne pourra être ni approuvé ni utilisé tant qu’il n’est pas assuré."
+        },
+        "update": {
+          "cta": "Modifier la réponse"
+        },
+        "renewBlocked": {
+          "error": "Une location ne peut pas être renouvelée sans assurance responsabilité civile automobile."
+        },
+        "review": {
+          "value": "Assurance responsabilité civile automobile : {{answer}}"
+        }
       }
     },
     "fees": {
@@ -1186,11 +1241,226 @@
       "then": {
         "label": "Puis"
       }
+    },
+    "vetting": {
+      "loadFailed": {
+        "error": "Impossible de charger vos documents. Veuillez réessayer."
+      },
+      "uploadFailed": {
+        "error": "Impossible de téléverser la photo. Veuillez réessayer."
+      },
+      "submitFailed": {
+        "error": "Impossible d’enregistrer vos documents. Veuillez réessayer."
+      },
+      "rejectionReason": {
+        "value": "Motif : {{reason}}"
+      },
+      "residence": {
+        "title": "Situation de séjour",
+        "why": "Nous le demandons pour vérifier que vous avez le droit de travailler ici. Seule l’équipe de vérification de PickLte voit ces photos, elles ne sont jamais montrées aux clients.",
+        "docType": {
+          "label": "Quel document avez-vous ?",
+          "passport": {
+            "label": "Passeport"
+          },
+          "residencePermit": {
+            "label": "Titre de séjour"
+          }
+        },
+        "photo": {
+          "passportData": {
+            "label": "Page d’identité"
+          },
+          "passportStamp": {
+            "label": "Page avec le visa ou le tampon de séjour"
+          },
+          "permitFront": {
+            "label": "Recto"
+          },
+          "permitBack": {
+            "label": "Verso"
+          }
+        },
+        "expiry": {
+          "label": "Valable jusqu’au",
+          "permit": {
+            "helper": "Obligatoire pour un titre de séjour."
+          },
+          "passport": {
+            "helper": "Facultatif pour un passeport."
+          }
+        },
+        "validUntil": {
+          "value": "Valable jusqu’au {{date}}"
+        }
+      },
+      "certificate": {
+        "question": "Avez-vous un certificat de déménagement ?",
+        "notice_one": "Les déménageurs dont le certificat est vérifié sont présentés en premier aux clients et peuvent accepter plus de déménagements par jour. Sans certificat, vous pouvez tout de même vous inscrire et travailler, avec une limite de {{count}} déménagement par jour.",
+        "notice_other": "Les déménageurs dont le certificat est vérifié sont présentés en premier aux clients et peuvent accepter plus de déménagements par jour. Sans certificat, vous pouvez tout de même vous inscrire et travailler, avec une limite de {{count}} déménagements par jour.",
+        "photo": {
+          "label": "Photo de votre certificat",
+          "helper": "Le certificat compte une fois vérifié et approuvé."
+        },
+        "answerRequired": {
+          "error": "Répondez à la question sur le certificat de déménagement."
+        }
+      },
+      "insurance": {
+        "question": "Avez-vous une assurance responsabilité civile professionnelle ou une assurance des marchandises transportées ?",
+        "notice": "Vous êtes responsable de l’assurance de votre activité. PickLte n’assure pas les déménagements.",
+        "answerRequired": {
+          "error": "Répondez à la question sur l’assurance professionnelle."
+        }
+      },
+      "status": {
+        "missing": {
+          "label": "Non envoyé"
+        },
+        "review": {
+          "label": "En cours de vérification"
+        },
+        "approved": {
+          "label": "Approuvé"
+        },
+        "rejected": {
+          "label": "Refusé"
+        },
+        "expired": {
+          "label": "Expiré"
+        }
+      },
+      "banner": {
+        "missing": {
+          "title": "Ajoutez votre document de séjour",
+          "body": {
+            "open": "Téléversez votre passeport ou votre titre de séjour pour qu’il soit vérifié.",
+            "deadline": "À partir du {{date}}, il vous faut un passeport ou un titre de séjour approuvé pour passer en ligne et accepter des déménagements.",
+            "blocked": "Vous ne pouvez ni passer en ligne ni accepter de déménagements tant que votre passeport ou votre titre de séjour n’est pas approuvé."
+          }
+        },
+        "pending": {
+          "title": "Document de séjour en cours de vérification",
+          "body": {
+            "open": "Vous serez averti à la fin de la vérification.",
+            "deadline": "Vous serez averti à la fin de la vérification. À partir du {{date}}, un document approuvé est nécessaire pour passer en ligne et accepter des déménagements.",
+            "blocked": "Vous serez averti à la fin de la vérification. D’ici là, vous ne pouvez ni passer en ligne ni accepter de nouveaux déménagements."
+          }
+        },
+        "rejected": {
+          "title": "Document de séjour non accepté",
+          "body": {
+            "open": "Téléversez à nouveau le document pour qu’il soit vérifié.",
+            "deadline": "Téléversez à nouveau le document. À partir du {{date}}, un document approuvé est nécessaire pour passer en ligne et accepter des déménagements.",
+            "blocked": "Téléversez à nouveau le document. Tant qu’il n’est pas approuvé, vous ne pouvez ni passer en ligne ni accepter de nouveaux déménagements."
+          }
+        },
+        "expired": {
+          "title": "Document de séjour expiré",
+          "body": {
+            "blocked": "Téléversez le nouveau document pour repasser en ligne et accepter des déménagements."
+          }
+        },
+        "cta": {
+          "add": "Ajouter le document",
+          "view": "Voir",
+          "replace": "Téléverser à nouveau"
+        }
+      },
+      "dailyCap": {
+        "progress_one": "{{accepted}} sur {{count}} déménagement aujourd’hui",
+        "progress_other": "{{accepted}} sur {{count}} déménagements aujourd’hui",
+        "reached": "Vous avez atteint la limite du jour. Aucun autre déménagement ne peut être accepté aujourd’hui.",
+        "helper": "Les déménageurs dont le certificat de déménagement est vérifié n’ont pas de limite quotidienne.",
+        "inReview": "Votre certificat de déménagement est en cours de vérification. La limite quotidienne s’applique jusqu’à son approbation.",
+        "addCertificate": {
+          "cta": "Ajouter un certificat"
+        }
+      },
+      "documents": {
+        "title": "Documents",
+        "subtitle": "Votre document de séjour, votre certificat de déménagement et votre déclaration d’assurance.",
+        "open": {
+          "cta": "Ouvrir les documents"
+        },
+        "submitted": {
+          "success": "Envoyé. Vous serez averti à la fin de la vérification."
+        },
+        "saved": {
+          "success": "Enregistré."
+        },
+        "action": {
+          "submit": {
+            "cta": "Envoyer pour vérification"
+          },
+          "replace": {
+            "cta": "Remplacer le document"
+          },
+          "change": {
+            "cta": "Modifier la réponse"
+          },
+          "answer": {
+            "cta": "Répondre"
+          }
+        },
+        "residence": {
+          "missing": {
+            "body": "Aucun document envoyé pour l’instant."
+          },
+          "review": {
+            "body": "Votre document est en cours de vérification. Vous serez averti à la fin de la vérification."
+          },
+          "approved": {
+            "body": "Votre document a été vérifié et approuvé."
+          },
+          "rejected": {
+            "body": "Votre document n’a pas été accepté. Téléversez-le à nouveau."
+          },
+          "expired": {
+            "body": "Votre document a expiré. Téléversez le nouveau."
+          },
+          "replaceNote": "Un document envoyé à nouveau est vérifié à nouveau avant de compter."
+        },
+        "certificate": {
+          "title": "Certificat de déménagement",
+          "missing": {
+            "body": "Aucun certificat enregistré."
+          },
+          "review": {
+            "body": "Votre certificat est en cours de vérification. La limite quotidienne s’applique jusqu’à son approbation."
+          },
+          "approved": {
+            "body": "Votre certificat est vérifié. Vous êtes présenté en premier aux clients et n’avez pas de limite quotidienne."
+          },
+          "rejected": {
+            "body": "Votre certificat n’a pas été accepté. Vous pouvez le téléverser à nouveau."
+          },
+          "removeNote": "Répondre non supprime le certificat enregistré."
+        },
+        "insurance": {
+          "title": "Assurance professionnelle",
+          "missing": {
+            "body": "Pas encore de réponse."
+          },
+          "answer": {
+            "value": "Votre réponse : {{answer}}"
+          },
+          "declaredAt": {
+            "value": "Déclaré le {{date}}"
+          }
+        }
+      }
     }
   },
   "moverCard": {
     "vehicleVerified": {
       "badge": "Véhicule vérifié"
+    },
+    "certified": {
+      "badge": "Déménageur certifié"
+    },
+    "recommended": {
+      "badge": "Recommandé"
     }
   },
   "moverDashboard": {
@@ -1503,14 +1773,31 @@
     },
     "experienceYears_one": "{{count}} an d'exp.",
     "experienceYears_other": "{{count}} ans d'exp.",
+    "extend": {
+      "cta": "Étendre la recherche à {{distance}}"
+    },
+    "extended": {
+      "helper": "Déménageurs affichés jusqu'à {{distance}}."
+    },
     "languages": {
       "label": "Langues : {{languages}}"
+    },
+    "nearEmpty": {
+      "subtitle": "Aucun déménageur n'est disponible près de votre adresse d'enlèvement pour le moment. Vous pouvez chercher dans une zone plus large.",
+      "title": "Aucun déménageur dans un rayon de {{distance}}"
+    },
+    "noneFound": {
+      "subtitle": "Aucun déménageur n'a été trouvé pour un déménagement immédiat, même dans la zone élargie. Vous pouvez planifier ce déménagement pour plus tard. Vos adresses et vos objets sont conservés.",
+      "title": "Aucun déménageur disponible pour le moment"
     },
     "pricing": {
       "disclaimer": "Le prix final peut varier selon les conditions réelles.",
       "helper_one": "Les prix comprennent la prestation de base, la distance ({{distance}}), la main-d'œuvre de l'équipe, la catégorie de véhicule du déménageur et {{count}} objet. La TVA est incluse.",
       "helper_other": "Les prix comprennent la prestation de base, la distance ({{distance}}), la main-d'œuvre de l'équipe, la catégorie de véhicule du déménageur et {{count}} objets. La TVA est incluse.",
       "title": "Comment le prix est calculé :"
+    },
+    "scheduleInstead": {
+      "cta": "Planifier ce déménagement"
     },
     "searching": {
       "subtitle": "Nous recherchons des déménageurs vérifiés près de votre lieu d'enlèvement",
@@ -1620,6 +1907,41 @@
     },
     "stepTotal": {
       "label": "/{{total}}"
+    }
+  },
+  "priceConfirm": {
+    "title": "Nouveau prix à confirmer",
+    "body": {
+      "named": "{{name}} peut effectuer votre déménagement. Ce déménageur est plus éloigné de votre adresse d'enlèvement, le prix est donc plus élevé.",
+      "unnamed": "Un déménageur plus éloigné de votre adresse d'enlèvement peut effectuer votre déménagement, le prix est donc plus élevé."
+    },
+    "distance": {
+      "label": "Distance du déménageur jusqu'à l'adresse d'enlèvement"
+    },
+    "previous": {
+      "label": "Prix que vous avez accepté"
+    },
+    "new": {
+      "label": "Nouveau prix"
+    },
+    "difference": {
+      "label": "Différence"
+    },
+    "countdown": {
+      "label": "Temps restant pour répondre : {{time}}"
+    },
+    "accept": {
+      "cta": "Accepter {{amount}}"
+    },
+    "decline": {
+      "cta": "Refuser"
+    },
+    "helper": "Si vous refusez ou ne répondez pas à temps, ce déménageur n'est pas attribué et le prix que vous avez accepté reste valable.",
+    "declined": {
+      "notice": "Vous avez refusé le nouveau prix. Le prix que vous avez accepté reste valable."
+    },
+    "failed": {
+      "error": "Nous n'avons pas pu enregistrer votre réponse. Veuillez réessayer."
     }
   }
 }

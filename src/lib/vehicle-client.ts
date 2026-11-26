@@ -88,6 +88,11 @@ export interface SubmitVehiclePayload {
   frontPlatePhoto: string
   rearPlatePhoto: string
   fullVehiclePhoto: string
+  /**
+   * "Does this vehicle have motor liability insurance?" (plan legal/7 V3).
+   * Required by the server; `false` is stored but the vehicle cannot be approved.
+   */
+  hasMotorInsurance: boolean
   source: 'registration' | 'settings' | 'login' | 'post_move'
   vehicleId?: string | null
   /** Required for a rented vehicle (plan wave-2026-10/1 R1). */
@@ -116,6 +121,8 @@ export async function confirmVehicleSame(source: 'login' | 'post_move', moveId?:
 export interface RenewRentalPayload {
   vehicleId: string
   rental: RentalWindowInput
+  /** Asked again on every renewal (plan legal/7 V3); the server refuses `false`. */
+  hasMotorInsurance: boolean
   /** Fresh plate photos, when the renewal needs review again (R5). */
   frontPlatePhoto?: string | null
   rearPlatePhoto?: string | null

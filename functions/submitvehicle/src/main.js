@@ -310,6 +310,36 @@ export function buildVehicleChecks({ registrationNormalized, previouslyUsedByDri
   });
 }
 
+// ── Motor liability declaration (plan legal/7, V3) ──────────────────────────
+// The driver answers yes or no for every vehicle, and again for every renewed
+// rental (a renewal is a new contract). "No" is stored: the vehicle can be
+// submitted but an admin cannot approve it, and a rental cannot be renewed
+// into service. An app build from before the question sends no answer; that is
+// stored as "not answered", which an admin cannot approve either. Set
+// INSURANCE_DECLARATION_REQUIRED=true once those builds are gone to refuse a
+// missing answer outright.
+const INSURANCE_DECLARATION_REQUIRED = process.env.INSURANCE_DECLARATION_REQUIRED === 'true';
+
+/** `true` / `false` as the driver answered, `undefined` when the caller sent nothing. */
+export function insuranceAnswer(body) {
+  return body && typeof body.hasMotorInsurance === 'boolean' ? body.hasMotorInsurance : undefined;
+}
+
+/** The columns a declaration writes; empty when there was no answer. */
+export function insuranceFields(answer, nowIso) {
+  return answer === undefined ? {} : { hasMotorInsurance: answer, insuranceDeclaredAt: nowIso };
+}
+
+/**
+ * Whether this request is refused over the declaration. A new vehicle may be
+ * submitted with "no"; a renewal may not, because renewing can put the vehicle
+ * straight back into service.
+ */
+export function insuranceRefusal(answer, { renew, required }) {
+  if (answer === undefined) return required === true;
+  return renew === true && answer === false;
+}
+
 function optionalNumber(v) {
   if (v === undefined || v === null || String(v).trim() === '') return null;
   const n = Number(v);
@@ -498,12 +528,19 @@ async function handleRenew({ databases, res, log, error, body, profile, authId, 
   if (weightCodes.length > 0) {
     return res.json({ ok: false, error: 'This vehicle has no valid gross weight on file', fnCode: weightCodes[0], fnCodes: weightCodes }, 400);
   }
+  const insured = insuranceAnswer(body);
+  // No new answer on a vehicle already declared uninsured is still a "no".
+  const effectiveInsured = insured === undefined && existing.hasMotorInsurance === false ? false : insured;
+  if (insuranceRefusal(effectiveInsured, { renew: true, required: INSURANCE_DECLARATION_REQUIRED })) {
+    return res.json({ ok: false, error: 'This vehicle needs motor liability insurance', fnCode: 'vehicle.insuranceRequired', fnCodes: ['vehicle.insuranceRequired'] }, 400);
+  }
   const resolved = resolveRentalWindow(body.rental, nowMs);
   if (!resolved.ok) {
     return res.json({ ok: false, error: 'Rental window is missing or invalid', fnCode: resolved.codes[0], fnCodes: resolved.codes }, 400);
   }
   const window = resolved.window;
   const nowIso = new Date(nowMs).toISOString();
+  const insurance = insuranceFields(insured, nowIso);
   const today = serviceDate(nowMs, PLATFORM_TZ);
   const autoRenewed = canAutoRenew(renewalCandidate(existing), nowMs);
   const eventBase = {
@@ -523,6 +560,7 @@ async function handleRenew({ databases, res, log, error, body, profile, authId, 
     const { ownedVehicleId } = await demoteOtherCurrentRows(databases, profile, authId, vehicleId, true, eventBase, nowIso, error);
     const vehicle = await databases.updateDocument(DATABASE_ID, VEHICLES_COLLECTION, vehicleId, {
       ...vehicleWindowFields(window),
+      ...insurance,
       status: 'verified',
       isCurrent: true,
       renewalCount: (Number(existing.renewalCount) || 0) + 1,
@@ -573,6 +611,7 @@ async function handleRenew({ databases, res, log, error, body, profile, authId, 
     : await demoteOtherCurrentRows(databases, profile, authId, vehicleId, true, eventBase, nowIso, error);
   const vehicle = await databases.updateDocument(DATABASE_ID, VEHICLES_COLLECTION, vehicleId, {
     ...vehicleWindowFields(window),
+    ...insurance,
     frontPlatePhoto: String(body.frontPlatePhoto).trim(),
     rearPlatePhoto: String(body.rearPlatePhoto).trim(),
     fullVehiclePhoto: String(body.fullVehiclePhoto).trim(),
@@ -682,6 +721,10 @@ export default async ({ req, res, log, error }) => {
       else codes.push(...resolved.codes);
     }
     codes.push(...validateVehicleInput(body));
+    const insured = insuranceAnswer(body);
+    if (insuranceRefusal(insured, { renew: false, required: INSURANCE_DECLARATION_REQUIRED })) {
+      codes.push('vehicle.insuranceRequired');
+    }
     if (codes.length > 0) {
       return res.json({ ok: false, error: 'Vehicle details are incomplete or invalid', fnCode: codes[0], fnCodes: codes }, 400);
     }
@@ -754,6 +797,7 @@ export default async ({ req, res, log, error }) => {
       checks,
       submittedAt: nowIso,
       ...vehicleWindowFields(window),
+      ...insuranceFields(insured, nowIso),
       expiredAt: null,
     };
     const eventBase = {

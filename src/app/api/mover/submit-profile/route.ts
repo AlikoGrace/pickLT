@@ -8,6 +8,7 @@ import { writeDroppingUnknownAttributes } from '@/lib/appwrite-write'
 import { writeNotification } from '@/lib/notify'
 import { moverProfilePermissions } from '@/lib/doc-permissions'
 import { resolveOwnershipWrite } from '@/lib/mover-gates'
+import { vettingPatch } from '@/lib/mover-vetting'
 import { countryName, countryToIso2, isCountryCode } from '@/lib/countryCode'
 import { ID, Query } from 'node-appwrite'
 
@@ -29,6 +30,38 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json()
+
+    // Driver vetting (plan legal/7): residence status, moving certificate and
+    // the business-insurance declaration. Sent with the whole profile at
+    // registration, or alone (`action: 'vetting'`) by a registered driver.
+    // Same rules and refusals as `functions/submitmoverprofile`.
+    const vetting = vettingPatch(body, Date.now())
+    if (vetting.fnCode) {
+      return NextResponse.json({ error: t(`errors:${vetting.fnCode}`), fnCode: vetting.fnCode }, { status: 400 })
+    }
+    if (body.action === 'vetting') {
+      if (Object.keys(vetting.patch).length === 0) {
+        return NextResponse.json({ error: 'Nothing to update', fnCode: 'generic.badRequest' }, { status: 400 })
+      }
+      const { databases: db } = createAdminClient()
+      const own = await db.listDocuments(APPWRITE.DATABASE_ID, APPWRITE.COLLECTIONS.MOVER_PROFILES, [
+        Query.equal('userId', userId),
+        Query.limit(1),
+      ])
+      if (own.total === 0) {
+        return NextResponse.json({ error: t('errors:mover.profileNotFound'), fnCode: 'mover.notAMover' }, { status: 403 })
+      }
+      // Only the vetting columns: `verificationStatus` is not touched, so a
+      // verified driver stays verified while the new document is reviewed.
+      const updated = await db.updateDocument(
+        APPWRITE.DATABASE_ID,
+        APPWRITE.COLLECTIONS.MOVER_PROFILES,
+        own.documents[0].$id,
+        vetting.patch,
+      )
+      return NextResponse.json({ success: true, profile: updated })
+    }
+
     const {
       fullName,
       phone,
@@ -144,6 +177,8 @@ export async function POST(req: NextRequest) {
       // only by the admin verify route and the backfill.
       languages: languages || [],
       yearsExperience: yearsExperience ? Number(yearsExperience) : 0,
+      // Only the vetting sections this caller sent (see above).
+      ...vetting.patch,
     }
 
     // An update that omits the ownership leaves it alone: defaulting to

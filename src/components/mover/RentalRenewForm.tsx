@@ -5,11 +5,13 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import CameraCaptureModal from '@/components/CameraCaptureModal'
+import MotorInsuranceField from '@/components/mover/MotorInsuranceField'
 import RentalWindowPicker from '@/components/mover/RentalWindowPicker'
 import VehiclePhotoField from '@/components/mover/VehiclePhotoField'
 import { formatDateTime } from '@/lib/format'
 import type { VehicleDoc } from '@/lib/types'
 import { renewRental, uploadVehiclePhoto, VehicleApiError } from '@/lib/vehicle-client'
+import { renewInsuranceError } from '@/lib/vehicle-form'
 import { canAutoRenew, resolveRentalWindow, type RentalWindowInput } from '@/lib/vehicle-service'
 
 type PhotoKind = 'front' | 'rear' | 'full'
@@ -34,6 +36,9 @@ export default function RentalRenewForm({ vehicle, onSuccess }: Props) {
   const [rental, setRental] = useState<RentalWindowInput>({ hours: 24, endAt: null, provider: vehicle.rentalProvider ?? '' })
   const [photos, setPhotos] = useState<Record<PhotoKind, File | null>>({ front: null, rear: null, full: null })
   const [previews, setPreviews] = useState<Record<PhotoKind, string | null>>({ front: null, rear: null, full: null })
+  // A renewed rental is a new contract, so the insurance question is asked
+  // again, unanswered (plan legal/7 V3); "no" cannot be renewed.
+  const [hasMotorInsurance, setHasMotorInsurance] = useState<boolean | null>(null)
   const [cameraFor, setCameraFor] = useState<PhotoKind | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
@@ -48,7 +53,8 @@ export default function RentalRenewForm({ vehicle, onSuccess }: Props) {
 
   const resolved = resolveRentalWindow(rental, nowMs)
   const photosComplete = autoVerified || (photos.front && photos.rear && photos.full)
-  const valid = resolved.ok && !!photosComplete
+  const insuranceError = renewInsuranceError(hasMotorInsurance)
+  const valid = resolved.ok && !!photosComplete && insuranceError === null
 
   const submit = async () => {
     if (!resolved.ok) {
@@ -58,6 +64,14 @@ export default function RentalRenewForm({ vehicle, onSuccess }: Props) {
     }
     if (!photosComplete) {
       setError(t('errors:vehicle.photosRequired'))
+      return
+    }
+    if (insuranceError !== null || hasMotorInsurance !== true) {
+      setError(
+        insuranceError === 'uninsured'
+          ? t('web:mover.vehicle.insurance.renewBlocked.error')
+          : t('errors:vehicle.insuranceRequired'),
+      )
       return
     }
     setSubmitting(true)
@@ -70,11 +84,11 @@ export default function RentalRenewForm({ vehicle, onSuccess }: Props) {
             rearPlatePhoto: await uploadVehiclePhoto(photos.rear as File),
             fullVehiclePhoto: await uploadVehiclePhoto(photos.full as File),
           }
-      const res = await renewRental({ vehicleId: vehicle.$id, rental, ...uploaded })
+      const res = await renewRental({ vehicleId: vehicle.$id, rental, hasMotorInsurance, ...uploaded })
       await onSuccess({ autoVerified: res.autoVerified, endAt: res.vehicle.rentalEndAt ?? resolved.window.endAt })
     } catch (err) {
       if (err instanceof VehicleApiError && err.fnCode) {
-        // i18n-keys: errors:vehicle.notFound, errors:vehicle.notOwnVehicle, errors:vehicle.notRental, errors:vehicle.photosRequired
+        // i18n-keys: errors:vehicle.notFound, errors:vehicle.notOwnVehicle, errors:vehicle.notRental, errors:vehicle.photosRequired, errors:vehicle.insuranceRequired
         setError(t(`errors:${err.fnCode}`, { defaultValue: err.message }))
       } else {
         setError(err instanceof Error ? err.message : t('web:mover.vehicle.renew.failed.error'))
@@ -144,6 +158,17 @@ export default function RentalRenewForm({ vehicle, onSuccess }: Props) {
           />
         </div>
       )}
+
+      <MotorInsuranceField
+        name="renewMotorInsurance"
+        value={hasMotorInsurance}
+        onChange={(v) => {
+          setHasMotorInsurance(v)
+          setError('')
+        }}
+        renew
+        disabled={submitting}
+      />
 
       {error && (
         <div className="rounded-xl bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">{error}</div>

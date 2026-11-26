@@ -1,9 +1,11 @@
 'use client'
 
 import clsx from 'clsx'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { DOCUMENTS_HREF, isVettingRefusal } from '@/lib/vetting-form'
 import { Switch } from '@/shared/switch'
 
 interface OnlineSwitchProps {
@@ -28,6 +30,8 @@ export default function OnlineSwitch({ isOnline, canGoOnline, onChanged }: Onlin
   const [online, setOnline] = useState(isOnline)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  // A residence-document refusal (plan legal/7) is fixed on the documents page: link there.
+  const [errorNeedsDocuments, setErrorNeedsDocuments] = useState(false)
 
   // Follow the session when it changes underneath us (another tab, the app,
   // or a fee restriction taking the mover offline).
@@ -39,6 +43,7 @@ export default function OnlineSwitch({ isOnline, canGoOnline, onChanged }: Onlin
     if (busy) return
     setBusy(true)
     setError(null)
+    setErrorNeedsDocuments(false)
     setOnline(next)
     try {
       const res = await fetch('/api/mover/online', {
@@ -50,6 +55,7 @@ export default function OnlineSwitch({ isOnline, canGoOnline, onChanged }: Onlin
       if (!res.ok || data.ok !== true) {
         setOnline(!next)
         setError(typeof data.error === 'string' && data.error ? data.error : t('web:mover.online.failed.body'))
+        setErrorNeedsDocuments(isVettingRefusal(data.fnCode))
         return
       }
       onChanged(data.isOnline === true)
@@ -79,6 +85,14 @@ export default function OnlineSwitch({ isOnline, canGoOnline, onChanged }: Onlin
           {error && (
             <p role="alert" className="mt-1 text-sm text-red-600 dark:text-red-400">
               {error}
+              {errorNeedsDocuments && (
+                <>
+                  {' '}
+                  <Link href={DOCUMENTS_HREF} className="font-semibold underline">
+                    {t('web:mover.vetting.documents.open.cta')}
+                  </Link>
+                </>
+              )}
             </p>
           )}
         </div>

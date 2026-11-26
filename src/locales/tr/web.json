@@ -652,6 +652,14 @@
         "platesOk": "Plaka ve araç fotoğrafları eklendi",
         "rentalWindow": {
           "value": "Kiralama bitişi: {{time}}"
+        },
+        "residencePhotosOk": "Belgenin iki fotoğrafı da eklendi",
+        "certificate": {
+          "yes": "Taşımacılık sertifikası: fotoğraf eklendi, incelenecek",
+          "no": "Taşımacılık sertifikası: yok"
+        },
+        "businessInsurance": {
+          "value": "İş sigortası: {{answer}}"
         }
       },
       "step": {
@@ -672,6 +680,9 @@
         },
         "ownership": {
           "label": "Mülkiyet"
+        },
+        "residence": {
+          "label": "İkamet durumu"
         }
       },
       "submit": {
@@ -746,6 +757,30 @@
       "title": "Yeni taşınma talebi!",
       "viewDetails": {
         "cta": "Tüm ayrıntıları gör"
+      },
+      "offer": {
+        "distanceToPickup": {
+          "label": "Alım adresine {{distance}}"
+        },
+        "includesDrive": {
+          "helper": "Alım adresine kadar olan yolunuz dahildir."
+        },
+        "waiting": {
+          "title": "Müşteri bekleniyor",
+          "body": "Alım adresine olan mesafeniz nedeniyle {{amount}} tutarındaki fiyatınız, müşterinin kabul ettiği fiyattan yüksek. Müşteriden bunu onaylaması istendi.",
+          "helper": "Taşıma henüz atanmadı. Yanıtı burada göreceksiniz.",
+          "countdown": {
+            "label": "Kalan süre: {{time}}"
+          }
+        },
+        "declined": {
+          "title": "Fiyat kabul edilmedi",
+          "body": "Müşteri, mesafeniz için fiyatı kabul etmedi. Taşıma size atanmadı. Bunun hesabınız üzerinde hiçbir etkisi yoktur."
+        },
+        "closed": {
+          "title": "Teklif kapandı",
+          "body": "Bu teklif artık açık değil. Taşıma size atanmadı. Bunun hesabınız üzerinde hiçbir etkisi yoktur."
+        }
       }
     },
     "roleLabel": "Nakliyeci",
@@ -773,6 +808,9 @@
       "subtitle": "Hesabınızı ve tercihlerinizi yönetin",
       "version": {
         "label": "PickLte Nakliyeci Uygulaması v{{version}}"
+      },
+      "documents": {
+        "helper": "İkamet belgesi, taşımacılık sertifikası, sigorta"
       }
     },
     "startRoute": {
@@ -1057,6 +1095,23 @@
         "countdown": {
           "label": "Kiralamanızın bitmesine {{time}} kaldı"
         }
+      },
+      "insurance": {
+        "question": "Bu aracın zorunlu trafik sigortası var mı?",
+        "label": "Zorunlu trafik sigortası",
+        "uninsured": {
+          "notice": "Bu aracı gönderebilirsiniz, ancak zorunlu trafik sigortası olana kadar onaylanamaz ve kullanılamaz.",
+          "pending": "Bu araç zorunlu trafik sigortası olmadan bildirildi. Sigortalanana kadar onaylanamaz ve kullanılamaz."
+        },
+        "update": {
+          "cta": "Yanıtı güncelle"
+        },
+        "renewBlocked": {
+          "error": "Zorunlu trafik sigortası olmadan kiralama yenilenemez."
+        },
+        "review": {
+          "value": "Zorunlu trafik sigortası: {{answer}}"
+        }
       }
     },
     "fees": {
@@ -1186,11 +1241,226 @@
       "then": {
         "label": "Sonra"
       }
+    },
+    "vetting": {
+      "loadFailed": {
+        "error": "Belgeleriniz yüklenemedi. Lütfen tekrar deneyin."
+      },
+      "uploadFailed": {
+        "error": "Fotoğraf yüklenemedi. Lütfen tekrar deneyin."
+      },
+      "submitFailed": {
+        "error": "Belgeleriniz kaydedilemedi. Lütfen tekrar deneyin."
+      },
+      "rejectionReason": {
+        "value": "Neden: {{reason}}"
+      },
+      "residence": {
+        "title": "İkamet durumu",
+        "why": "Bunu, burada çalışma izninizin olduğunu kontrol etmek için istiyoruz. Bu fotoğrafları yalnızca PickLte inceleme ekibi görür ve müşterilere asla gösterilmez.",
+        "docType": {
+          "label": "Hangi belgeniz var?",
+          "passport": {
+            "label": "Pasaport"
+          },
+          "residencePermit": {
+            "label": "İkamet izni"
+          }
+        },
+        "photo": {
+          "passportData": {
+            "label": "Kimlik bilgileri sayfası"
+          },
+          "passportStamp": {
+            "label": "Vize veya ikamet damgasının bulunduğu sayfa"
+          },
+          "permitFront": {
+            "label": "Ön yüz"
+          },
+          "permitBack": {
+            "label": "Arka yüz"
+          }
+        },
+        "expiry": {
+          "label": "Geçerlilik bitiş tarihi",
+          "permit": {
+            "helper": "İkamet izni için zorunludur."
+          },
+          "passport": {
+            "helper": "Pasaport için isteğe bağlıdır."
+          }
+        },
+        "validUntil": {
+          "value": "{{date}} tarihine kadar geçerli"
+        }
+      },
+      "certificate": {
+        "question": "Taşımacılık sertifikanız var mı?",
+        "notice_one": "Doğrulanmış sertifikası olan nakliyeciler müşterilere ilk sırada gösterilir ve günde daha fazla taşıma alabilir. Sertifikanız olmadan da kayıt olup çalışabilirsiniz, ancak günde {{count}} taşıma sınırı uygulanır.",
+        "notice_other": "Doğrulanmış sertifikası olan nakliyeciler müşterilere ilk sırada gösterilir ve günde daha fazla taşıma alabilir. Sertifikanız olmadan da kayıt olup çalışabilirsiniz, ancak günde {{count}} taşıma sınırı uygulanır.",
+        "photo": {
+          "label": "Sertifikanızın fotoğrafı",
+          "helper": "Sertifika, incelenip onaylandıktan sonra geçerli sayılır."
+        },
+        "answerRequired": {
+          "error": "Taşımacılık sertifikası sorusunu yanıtlayın."
+        }
+      },
+      "insurance": {
+        "question": "İşletme sorumluluk sigortanız veya taşınan eşya sigortanız var mı?",
+        "notice": "İşinizi sigortalamak sizin sorumluluğunuzdadır. PickLte taşımaları sigortalamaz.",
+        "answerRequired": {
+          "error": "İş sigortası sorusunu yanıtlayın."
+        }
+      },
+      "status": {
+        "missing": {
+          "label": "Gönderilmedi"
+        },
+        "review": {
+          "label": "İnceleniyor"
+        },
+        "approved": {
+          "label": "Onaylandı"
+        },
+        "rejected": {
+          "label": "Reddedildi"
+        },
+        "expired": {
+          "label": "Süresi doldu"
+        }
+      },
+      "banner": {
+        "missing": {
+          "title": "İkamet belgenizi ekleyin",
+          "body": {
+            "open": "İncelenebilmesi için pasaportunuzu veya ikamet izninizi yükleyin.",
+            "deadline": "{{date}} tarihinden itibaren çevrimiçi olmak ve taşıma kabul etmek için onaylanmış bir pasaport veya ikamet izni gerekir.",
+            "blocked": "Pasaportunuz veya ikamet izniniz onaylanana kadar çevrimiçi olamaz ve taşıma kabul edemezsiniz."
+          }
+        },
+        "pending": {
+          "title": "İkamet belgesi inceleniyor",
+          "body": {
+            "open": "İnceleme bittiğinde size bildirim gönderilir.",
+            "deadline": "İnceleme bittiğinde size bildirim gönderilir. {{date}} tarihinden itibaren çevrimiçi olmak ve taşıma kabul etmek için onaylanmış bir belge gerekir.",
+            "blocked": "İnceleme bittiğinde size bildirim gönderilir. O zamana kadar çevrimiçi olamaz ve yeni taşıma kabul edemezsiniz."
+          }
+        },
+        "rejected": {
+          "title": "İkamet belgesi kabul edilmedi",
+          "body": {
+            "open": "İncelenebilmesi için belgeyi yeniden yükleyin.",
+            "deadline": "Belgeyi yeniden yükleyin. {{date}} tarihinden itibaren çevrimiçi olmak ve taşıma kabul etmek için onaylanmış bir belge gerekir.",
+            "blocked": "Belgeyi yeniden yükleyin. Onaylanana kadar çevrimiçi olamaz ve yeni taşıma kabul edemezsiniz."
+          }
+        },
+        "expired": {
+          "title": "İkamet belgesinin süresi doldu",
+          "body": {
+            "blocked": "Yeniden çevrimiçi olmak ve taşıma kabul etmek için yeni belgeyi yükleyin."
+          }
+        },
+        "cta": {
+          "add": "Belge ekle",
+          "view": "Görüntüle",
+          "replace": "Yeniden yükle"
+        }
+      },
+      "dailyCap": {
+        "progress_one": "Bugün {{count}} taşımadan {{accepted}} tanesi alındı",
+        "progress_other": "Bugün {{count}} taşımadan {{accepted}} tanesi alındı",
+        "reached": "Bugünkü sınıra ulaştınız. Bugün başka taşıma kabul edilemez.",
+        "helper": "Doğrulanmış taşımacılık sertifikası olan nakliyeciler için günlük sınır yoktur.",
+        "inReview": "Taşımacılık sertifikanız inceleniyor. Onaylanana kadar günlük sınır geçerlidir.",
+        "addCertificate": {
+          "cta": "Sertifika ekle"
+        }
+      },
+      "documents": {
+        "title": "Belgeler",
+        "subtitle": "İkamet belgeniz, taşımacılık sertifikanız ve sigorta beyanınız.",
+        "open": {
+          "cta": "Belgeleri aç"
+        },
+        "submitted": {
+          "success": "Gönderildi. İnceleme bittiğinde size bildirim gönderilir."
+        },
+        "saved": {
+          "success": "Kaydedildi."
+        },
+        "action": {
+          "submit": {
+            "cta": "İncelemeye gönder"
+          },
+          "replace": {
+            "cta": "Belgeyi değiştir"
+          },
+          "change": {
+            "cta": "Yanıtı değiştir"
+          },
+          "answer": {
+            "cta": "Yanıtla"
+          }
+        },
+        "residence": {
+          "missing": {
+            "body": "Henüz belge gönderilmedi."
+          },
+          "review": {
+            "body": "Belgeniz inceleniyor. İnceleme bittiğinde size bildirim gönderilir."
+          },
+          "approved": {
+            "body": "Belgeniz incelendi ve onaylandı."
+          },
+          "rejected": {
+            "body": "Belgeniz kabul edilmedi. Yeniden yükleyin."
+          },
+          "expired": {
+            "body": "Belgenizin süresi doldu. Yenisini yükleyin."
+          },
+          "replaceNote": "Yeniden gönderdiğiniz belge, geçerli sayılmadan önce yeniden incelenir."
+        },
+        "certificate": {
+          "title": "Taşımacılık sertifikası",
+          "missing": {
+            "body": "Kayıtlı sertifika yok."
+          },
+          "review": {
+            "body": "Sertifikanız inceleniyor. Onaylanana kadar günlük sınır geçerlidir."
+          },
+          "approved": {
+            "body": "Sertifikanız doğrulandı. Müşterilere ilk sırada gösteriliyorsunuz ve günlük sınırınız yok."
+          },
+          "rejected": {
+            "body": "Sertifikanız kabul edilmedi. Yeniden yükleyebilirsiniz."
+          },
+          "removeNote": "Hayır yanıtı kayıtlı sertifikayı kaldırır."
+        },
+        "insurance": {
+          "title": "İş sigortası",
+          "missing": {
+            "body": "Henüz yanıtlanmadı."
+          },
+          "answer": {
+            "value": "Yanıtınız: {{answer}}"
+          },
+          "declaredAt": {
+            "value": "{{date}} tarihinde beyan edildi"
+          }
+        }
+      }
     }
   },
   "moverCard": {
     "vehicleVerified": {
       "badge": "Doğrulanmış araç"
+    },
+    "certified": {
+      "badge": "Sertifikalı nakliyeci"
+    },
+    "recommended": {
+      "badge": "Önerilen"
     }
   },
   "moverDashboard": {
@@ -1503,14 +1773,31 @@
     },
     "experienceYears_one": "{{count}} yıl deneyim",
     "experienceYears_other": "{{count}} yıl deneyim",
+    "extend": {
+      "cta": "Aramayı {{distance}} olarak genişlet"
+    },
+    "extended": {
+      "helper": "{{distance}} uzaklığa kadar olan nakliyeciler gösteriliyor."
+    },
     "languages": {
       "label": "Diller: {{languages}}"
+    },
+    "nearEmpty": {
+      "subtitle": "Şu anda alım adresinizin yakınında uygun bir nakliyeci yok. Daha geniş bir alanda arayabilirsiniz.",
+      "title": "{{distance}} içinde nakliyeci yok"
+    },
+    "noneFound": {
+      "subtitle": "Geniş alanda bile anında taşıma için nakliyeci bulunamadı. Bunun yerine bu taşımayı daha sonraki bir zaman için planlayabilirsiniz. Adresleriniz ve eşyalarınız korunur.",
+      "title": "Şu anda uygun nakliyeci yok"
     },
     "pricing": {
       "disclaimer": "Nihai fiyat, gerçek koşullara göre değişebilir.",
       "helper_one": "Fiyatlara temel hizmet, mesafe ({{distance}}), ekip işçiliği, nakliyecinin araç sınıfı ve {{count}} eşya dahildir. KDV dahildir.",
       "helper_other": "Fiyatlara temel hizmet, mesafe ({{distance}}), ekip işçiliği, nakliyecinin araç sınıfı ve {{count}} eşya dahildir. KDV dahildir.",
       "title": "Fiyatlandırma nasıl işler:"
+    },
+    "scheduleInstead": {
+      "cta": "Bu taşımayı planla"
     },
     "searching": {
       "subtitle": "Alış konumunuzun yakınındaki doğrulanmış nakliyecileri arıyoruz",
@@ -1620,6 +1907,41 @@
     },
     "stepTotal": {
       "label": "/{{total}}"
+    }
+  },
+  "priceConfirm": {
+    "title": "Onaylanacak yeni fiyat",
+    "body": {
+      "named": "{{name}} taşımanızı yapabilir. Bu nakliyeci alım adresinize daha uzak olduğu için fiyat daha yüksek.",
+      "unnamed": "Alım adresinize daha uzak bir nakliyeci taşımanızı yapabilir, bu nedenle fiyat daha yüksek."
+    },
+    "distance": {
+      "label": "Nakliyecinin alım adresine mesafesi"
+    },
+    "previous": {
+      "label": "Kabul ettiğiniz fiyat"
+    },
+    "new": {
+      "label": "Yeni fiyat"
+    },
+    "difference": {
+      "label": "Fark"
+    },
+    "countdown": {
+      "label": "Yanıtlamak için kalan süre: {{time}}"
+    },
+    "accept": {
+      "cta": "{{amount}} tutarını kabul et"
+    },
+    "decline": {
+      "cta": "Reddet"
+    },
+    "helper": "Reddederseniz veya zamanında yanıtlamazsanız bu nakliyeci atanmaz ve kabul ettiğiniz fiyat geçerli kalır.",
+    "declined": {
+      "notice": "Yeni fiyatı reddettiniz. Kabul ettiğiniz fiyat geçerli kalır."
+    },
+    "failed": {
+      "error": "Yanıtınız kaydedilemedi. Lütfen tekrar deneyin."
     }
   }
 }

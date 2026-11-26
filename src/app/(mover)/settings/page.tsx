@@ -19,6 +19,7 @@ import {
   EnvelopeIcon,
   PhoneIcon,
   PencilSquareIcon,
+  DocumentCheckIcon,
 } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -307,6 +308,15 @@ const SettingsPage = () => {
               })
             : vehicleStatusLabel(t, user?.moverDetails?.vehicleStatus),
           action: () => router.push('/vehicle'),
+        },
+        {
+          // Residence document, moving certificate and insurance declaration
+          // (plan legal/7): submitted and replaced on their own page.
+          id: 'documents',
+          icon: DocumentCheckIcon,
+          label: t('web:mover.vetting.documents.title'),
+          description: t('web:mover.settings.documents.helper'),
+          action: () => router.push('/settings/documents'),
         },
         {
           id: 'payouts',

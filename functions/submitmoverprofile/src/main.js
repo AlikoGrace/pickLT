@@ -1,6 +1,7 @@
 import { Client, Databases, ID, Permission, Query, Role } from 'node-appwrite';
 
 import { countryToIso2 } from './country-code.js';
+import { expiryToIso, residenceSubmissionError } from './vetting.js';
 
 const DATABASE_ID = process.env.APPWRITE_DATABASE_ID;
 const USERS_COLLECTION = process.env.APPWRITE_COLLECTION_USERS;
@@ -28,6 +29,83 @@ export function isSanctionedCountry(primaryCountry, sanctionedList) {
   if (!code) return false;
   return Array.isArray(sanctionedList) && sanctionedList.includes(code);
 }
+
+// ── Driver vetting (plan legal/7) ───────────────────────────────────────────
+// Residence status, moving certificate and the business-insurance declaration
+// arrive either with the whole profile (registration) or on their own from a
+// driver who is already registered (`action: 'vetting'`). Both paths go
+// through this one builder, so the rules cannot differ between them.
+
+const has = (v) => typeof v === 'string' && v.trim() !== '';
+
+/**
+ * The vetting columns to write for this request body.
+ *
+ * Each of the three sections is written only when the caller sent it: an app
+ * build from before the feature sends none, and its profile is stored as
+ * before with `residenceStatus` left at `none` (an admin then cannot verify
+ * it). A section that IS sent is validated in full.
+ *
+ * Returns `{ patch }` or `{ fnCode }` for a refusal.
+ */
+export function vettingPatch(body, nowMs) {
+  const patch = {};
+  const nowIso = new Date(nowMs).toISOString();
+
+  const residenceGiven =
+    body.residenceDocType != null || has(body.residenceDocFront) || has(body.residenceDocBack) || has(body.residenceDocExpiresAt);
+  if (residenceGiven) {
+    const fnCode = residenceSubmissionError(
+      {
+        docType: body.residenceDocType,
+        front: body.residenceDocFront,
+        back: body.residenceDocBack,
+        expiresAt: body.residenceDocExpiresAt,
+      },
+      nowMs,
+    );
+    if (fnCode) return { fnCode };
+    patch.residenceDocType = body.residenceDocType;
+    patch.residenceDocFront = body.residenceDocFront.trim();
+    patch.residenceDocBack = body.residenceDocBack.trim();
+    patch.residenceDocExpiresAt = expiryToIso(body.residenceDocExpiresAt);
+    // Every submission is reviewed again: a new photograph is a new document.
+    patch.residenceStatus = 'pending_review';
+    patch.residenceRejectionReason = null;
+    patch.residenceReviewedAt = null;
+    patch.residenceReviewedBy = null;
+    patch.residenceExpiryNoticeDays = null;
+  }
+
+  if (typeof body.hasMovingCertificate === 'boolean') {
+    if (body.hasMovingCertificate) {
+      if (!has(body.movingCertificatePhoto)) return { fnCode: 'vetting.certificatePhotoRequired' };
+      patch.hasMovingCertificate = true;
+      patch.movingCertificatePhoto = body.movingCertificatePhoto.trim();
+      patch.movingCertificateStatus = 'pending_review';
+    } else {
+      patch.hasMovingCertificate = false;
+      patch.movingCertificatePhoto = null;
+      patch.movingCertificateStatus = 'none';
+    }
+    patch.movingCertificateRejectionReason = null;
+  }
+
+  if (typeof body.hasBusinessInsurance === 'boolean') {
+    patch.hasBusinessInsurance = body.hasBusinessInsurance;
+    patch.insuranceDeclaredAt = nowIso;
+  }
+
+  return { patch };
+}
+
+const VETTING_REFUSALS = {
+  'vetting.residenceTypeRequired': 'Choose passport or residence permit.',
+  'vetting.residencePhotosRequired': 'Photograph both sides of the document.',
+  'vetting.residenceExpiryRequired': 'Enter the date the document is valid until.',
+  'vetting.residenceExpiryPast': 'This document has expired.',
+  'vetting.certificatePhotoRequired': 'Add a photo of your moving certificate.',
+};
 
 export default async ({ req, res, log, error }) => {
   // Startup assertion. A missing id used to be swallowed by a guarded
@@ -58,6 +136,29 @@ export default async ({ req, res, log, error }) => {
     // Identity comes from the authenticated session, never the body.
     const userId = req.headers['x-appwrite-user-id'] ?? null;
     if (!userId) return res.json({ error: 'Unauthenticated', fnCode: 'api.unauthorized' }, 401);
+
+    const vetting = vettingPatch(body, Date.now());
+    if (vetting.fnCode) {
+      return res.json({ error: VETTING_REFUSALS[vetting.fnCode] || 'Invalid request', fnCode: vetting.fnCode }, 400);
+    }
+
+    // A registered driver adding or replacing their documents. Only the vetting
+    // columns are written: `verificationStatus` is NOT touched, so a verified
+    // driver who uploads a residence document stays verified while it is
+    // reviewed (the residence gate decides whether they may work meanwhile).
+    if (body.action === 'vetting') {
+      if (Object.keys(vetting.patch).length === 0) {
+        return res.json({ error: 'Nothing to update', fnCode: 'generic.badRequest' }, 400);
+      }
+      const own = await databases.listDocuments(DATABASE_ID, MOVER_PROFILES_COLLECTION, [
+        Query.equal('userId', userId),
+        Query.limit(1),
+      ]);
+      if (own.documents.length === 0) return res.json({ error: 'Not a mover', fnCode: 'mover.notAMover' }, 403);
+      const updated = await databases.updateDocument(DATABASE_ID, MOVER_PROFILES_COLLECTION, own.documents[0].$id, vetting.patch);
+      log(`Mover vetting updated: ${updated.$id} (${Object.keys(vetting.patch).join(', ')})`);
+      return res.json({ success: true, profile: updated });
+    }
 
     const {
       fullName,
@@ -177,6 +278,9 @@ export default async ({ req, res, log, error }) => {
       languages: languages || [],
       yearsExperience: yearsExperience || 0,
       verificationStatus: 'pending_verification',
+      // Residence status, certificate and insurance declaration (plan legal/7),
+      // only the sections this caller sent.
+      ...vetting.patch,
     };
 
     // Upsert: update the existing profile if one exists, else create.

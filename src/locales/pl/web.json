@@ -662,6 +662,14 @@
         "platesOk": "Dołączono zdjęcia tablic i pojazdu",
         "rentalWindow": {
           "value": "Wynajęty do {{time}}"
+        },
+        "residencePhotosOk": "Dołączono oba zdjęcia dokumentu",
+        "certificate": {
+          "yes": "Certyfikat przeprowadzkowy: zdjęcie dołączone, czeka na weryfikację",
+          "no": "Certyfikat przeprowadzkowy: brak"
+        },
+        "businessInsurance": {
+          "value": "Ubezpieczenie działalności: {{answer}}"
         }
       },
       "step": {
@@ -682,6 +690,9 @@
         },
         "ownership": {
           "label": "Własność"
+        },
+        "residence": {
+          "label": "Status pobytu"
         }
       },
       "submit": {
@@ -756,6 +767,30 @@
       "title": "Nowe zgłoszenie przeprowadzki!",
       "viewDetails": {
         "cta": "Zobacz pełne szczegóły"
+      },
+      "offer": {
+        "distanceToPickup": {
+          "label": "{{distance}} do adresu odbioru"
+        },
+        "includesDrive": {
+          "helper": "Obejmuje Twój dojazd do adresu odbioru."
+        },
+        "waiting": {
+          "title": "Oczekiwanie na klienta",
+          "body": "Ze względu na Twoją odległość od adresu odbioru Twoja cena {{amount}} jest wyższa niż ta, na którą zgodził się klient. Klient został poproszony o jej potwierdzenie.",
+          "helper": "Przeprowadzka nie została jeszcze przydzielona. Odpowiedź zobaczysz tutaj.",
+          "countdown": {
+            "label": "Pozostały czas: {{time}}"
+          }
+        },
+        "declined": {
+          "title": "Cena nie została zaakceptowana",
+          "body": "Klient nie zaakceptował ceny dla Twojej odległości. Przeprowadzka nie została Ci przydzielona. Nie ma to żadnego wpływu na Twoje konto."
+        },
+        "closed": {
+          "title": "Oferta zamknięta",
+          "body": "Ta oferta nie jest już otwarta. Przeprowadzka nie została Ci przydzielona. Nie ma to żadnego wpływu na Twoje konto."
+        }
       }
     },
     "roleLabel": "Przewoźnik",
@@ -783,6 +818,9 @@
       "subtitle": "Zarządzaj kontem i preferencjami",
       "version": {
         "label": "PickLte Mover App v{{version}}"
+      },
+      "documents": {
+        "helper": "Dokument pobytowy, certyfikat przeprowadzkowy, ubezpieczenie"
       }
     },
     "startRoute": {
@@ -1069,6 +1107,23 @@
         "countdown": {
           "label": "Wynajem kończy się za {{time}}"
         }
+      },
+      "insurance": {
+        "question": "Czy ten pojazd ma ubezpieczenie OC?",
+        "label": "Ubezpieczenie OC pojazdu",
+        "uninsured": {
+          "notice": "Możesz zgłosić ten pojazd, ale nie zostanie on zatwierdzony ani dopuszczony do użytku, dopóki nie będzie miał ubezpieczenia OC.",
+          "pending": "Ten pojazd zgłoszono bez ubezpieczenia OC. Nie zostanie zatwierdzony ani dopuszczony do użytku, dopóki nie będzie ubezpieczony."
+        },
+        "update": {
+          "cta": "Zmień odpowiedź"
+        },
+        "renewBlocked": {
+          "error": "Wynajmu nie można przedłużyć bez ubezpieczenia OC pojazdu."
+        },
+        "review": {
+          "value": "Ubezpieczenie OC pojazdu: {{answer}}"
+        }
       }
     },
     "fees": {
@@ -1198,11 +1253,230 @@
       "then": {
         "label": "Następnie"
       }
+    },
+    "vetting": {
+      "loadFailed": {
+        "error": "Nie udało się wczytać dokumentów. Spróbuj ponownie."
+      },
+      "uploadFailed": {
+        "error": "Nie udało się przesłać zdjęcia. Spróbuj ponownie."
+      },
+      "submitFailed": {
+        "error": "Nie udało się zapisać dokumentów. Spróbuj ponownie."
+      },
+      "rejectionReason": {
+        "value": "Powód: {{reason}}"
+      },
+      "residence": {
+        "title": "Status pobytu",
+        "why": "Prosimy o to, aby sprawdzić, czy możesz tu pracować. Te zdjęcia widzi tylko zespół weryfikacyjny PickLte i nigdy nie są pokazywane klientom.",
+        "docType": {
+          "label": "Jaki dokument posiadasz?",
+          "passport": {
+            "label": "Paszport"
+          },
+          "residencePermit": {
+            "label": "Zezwolenie na pobyt"
+          }
+        },
+        "photo": {
+          "passportData": {
+            "label": "Strona z danymi"
+          },
+          "passportStamp": {
+            "label": "Strona z wizą lub stemplem pobytowym"
+          },
+          "permitFront": {
+            "label": "Przód"
+          },
+          "permitBack": {
+            "label": "Tył"
+          }
+        },
+        "expiry": {
+          "label": "Ważny do",
+          "permit": {
+            "helper": "Wymagane w przypadku zezwolenia na pobyt."
+          },
+          "passport": {
+            "helper": "Opcjonalne w przypadku paszportu."
+          }
+        },
+        "validUntil": {
+          "value": "Ważny do {{date}}"
+        }
+      },
+      "certificate": {
+        "question": "Czy masz certyfikat przeprowadzkowy?",
+        "notice_one": "Przewoźnicy ze zweryfikowanym certyfikatem są pokazywani klientom w pierwszej kolejności i mogą przyjmować więcej przeprowadzek dziennie. Bez certyfikatu nadal możesz się zarejestrować i pracować, z limitem {{count}} przeprowadzki dziennie.",
+        "notice_few": "Przewoźnicy ze zweryfikowanym certyfikatem są pokazywani klientom w pierwszej kolejności i mogą przyjmować więcej przeprowadzek dziennie. Bez certyfikatu nadal możesz się zarejestrować i pracować, z limitem {{count}} przeprowadzek dziennie.",
+        "notice_many": "Przewoźnicy ze zweryfikowanym certyfikatem są pokazywani klientom w pierwszej kolejności i mogą przyjmować więcej przeprowadzek dziennie. Bez certyfikatu nadal możesz się zarejestrować i pracować, z limitem {{count}} przeprowadzek dziennie.",
+        "notice_other": "Przewoźnicy ze zweryfikowanym certyfikatem są pokazywani klientom w pierwszej kolejności i mogą przyjmować więcej przeprowadzek dziennie. Bez certyfikatu nadal możesz się zarejestrować i pracować, z limitem {{count}} przeprowadzki dziennie.",
+        "photo": {
+          "label": "Zdjęcie Twojego certyfikatu",
+          "helper": "Certyfikat liczy się po sprawdzeniu i zatwierdzeniu."
+        },
+        "answerRequired": {
+          "error": "Odpowiedz na pytanie o certyfikat przeprowadzkowy."
+        }
+      },
+      "insurance": {
+        "question": "Czy masz ubezpieczenie OC działalności lub ubezpieczenie przewożonych rzeczy?",
+        "notice": "Za ubezpieczenie swojej pracy odpowiadasz samodzielnie. PickLte nie ubezpiecza przeprowadzek.",
+        "answerRequired": {
+          "error": "Odpowiedz na pytanie o ubezpieczenie działalności."
+        }
+      },
+      "status": {
+        "missing": {
+          "label": "Nie przesłano"
+        },
+        "review": {
+          "label": "W weryfikacji"
+        },
+        "approved": {
+          "label": "Zatwierdzono"
+        },
+        "rejected": {
+          "label": "Odrzucono"
+        },
+        "expired": {
+          "label": "Stracił ważność"
+        }
+      },
+      "banner": {
+        "missing": {
+          "title": "Dodaj dokument pobytowy",
+          "body": {
+            "open": "Prześlij paszport lub zezwolenie na pobyt, aby można było je sprawdzić.",
+            "deadline": "Od {{date}} do przejścia w tryb online i przyjmowania przeprowadzek potrzebny jest zatwierdzony paszport lub zatwierdzone zezwolenie na pobyt.",
+            "blocked": "Nie możesz przejść do trybu online ani przyjmować przeprowadzek, dopóki Twój paszport lub zezwolenie na pobyt nie zostanie zatwierdzone."
+          }
+        },
+        "pending": {
+          "title": "Dokument pobytowy w weryfikacji",
+          "body": {
+            "open": "Otrzymasz powiadomienie po zakończeniu weryfikacji.",
+            "deadline": "Otrzymasz powiadomienie po zakończeniu weryfikacji. Od {{date}} do przejścia w tryb online i przyjmowania przeprowadzek potrzebny jest zatwierdzony dokument.",
+            "blocked": "Otrzymasz powiadomienie po zakończeniu weryfikacji. Do tego czasu nie możesz przejść do trybu online ani przyjmować nowych przeprowadzek."
+          }
+        },
+        "rejected": {
+          "title": "Dokument pobytowy nie został przyjęty",
+          "body": {
+            "open": "Prześlij dokument ponownie, aby można było go sprawdzić.",
+            "deadline": "Prześlij dokument ponownie. Od {{date}} do przejścia w tryb online i przyjmowania przeprowadzek potrzebny jest zatwierdzony dokument.",
+            "blocked": "Prześlij dokument ponownie. Dopóki nie zostanie zatwierdzony, nie możesz przejść do trybu online ani przyjmować nowych przeprowadzek."
+          }
+        },
+        "expired": {
+          "title": "Dokument pobytowy stracił ważność",
+          "body": {
+            "blocked": "Prześlij nowy dokument, aby znów przejść do trybu online i przyjmować przeprowadzki."
+          }
+        },
+        "cta": {
+          "add": "Dodaj dokument",
+          "view": "Zobacz",
+          "replace": "Prześlij ponownie"
+        }
+      },
+      "dailyCap": {
+        "progress_one": "{{accepted}} z {{count}} przeprowadzki dzisiaj",
+        "progress_few": "{{accepted}} z {{count}} przeprowadzek dzisiaj",
+        "progress_many": "{{accepted}} z {{count}} przeprowadzek dzisiaj",
+        "progress_other": "{{accepted}} z {{count}} przeprowadzki dzisiaj",
+        "reached": "Osiągnięto dzisiejszy limit. Dzisiaj nie można już przyjąć kolejnych przeprowadzek.",
+        "helper": "Przewoźników ze zweryfikowanym certyfikatem przeprowadzkowym limit dzienny nie obowiązuje.",
+        "inReview": "Twój certyfikat przeprowadzkowy jest w weryfikacji. Limit dzienny obowiązuje do czasu jego zatwierdzenia.",
+        "addCertificate": {
+          "cta": "Dodaj certyfikat"
+        }
+      },
+      "documents": {
+        "title": "Dokumenty",
+        "subtitle": "Twój dokument pobytowy, certyfikat przeprowadzkowy i oświadczenie o ubezpieczeniu.",
+        "open": {
+          "cta": "Otwórz dokumenty"
+        },
+        "submitted": {
+          "success": "Przesłano. Otrzymasz powiadomienie po zakończeniu weryfikacji."
+        },
+        "saved": {
+          "success": "Zapisano."
+        },
+        "action": {
+          "submit": {
+            "cta": "Prześlij do weryfikacji"
+          },
+          "replace": {
+            "cta": "Wymień dokument"
+          },
+          "change": {
+            "cta": "Zmień odpowiedź"
+          },
+          "answer": {
+            "cta": "Odpowiedz"
+          }
+        },
+        "residence": {
+          "missing": {
+            "body": "Nie przesłano jeszcze dokumentu."
+          },
+          "review": {
+            "body": "Twój dokument jest sprawdzany. Otrzymasz powiadomienie po zakończeniu weryfikacji."
+          },
+          "approved": {
+            "body": "Twój dokument został sprawdzony i zatwierdzony."
+          },
+          "rejected": {
+            "body": "Twój dokument nie został przyjęty. Prześlij go ponownie."
+          },
+          "expired": {
+            "body": "Twój dokument stracił ważność. Prześlij nowy."
+          },
+          "replaceNote": "Dokument przesłany ponownie jest ponownie sprawdzany, zanim zacznie się liczyć."
+        },
+        "certificate": {
+          "title": "Certyfikat przeprowadzkowy",
+          "missing": {
+            "body": "Brak zapisanego certyfikatu."
+          },
+          "review": {
+            "body": "Twój certyfikat jest sprawdzany. Limit dzienny obowiązuje do czasu jego zatwierdzenia."
+          },
+          "approved": {
+            "body": "Twój certyfikat jest zweryfikowany. Klienci widzą Cię w pierwszej kolejności i nie masz limitu dziennego."
+          },
+          "rejected": {
+            "body": "Twój certyfikat nie został przyjęty. Możesz przesłać go ponownie."
+          },
+          "removeNote": "Odpowiedź „nie” usuwa zapisany certyfikat."
+        },
+        "insurance": {
+          "title": "Ubezpieczenie działalności",
+          "missing": {
+            "body": "Brak odpowiedzi."
+          },
+          "answer": {
+            "value": "Twoja odpowiedź: {{answer}}"
+          },
+          "declaredAt": {
+            "value": "Zadeklarowano {{date}}"
+          }
+        }
+      }
     }
   },
   "moverCard": {
     "vehicleVerified": {
       "badge": "Zweryfikowany pojazd"
+    },
+    "certified": {
+      "badge": "Certyfikowany przewoźnik"
+    },
+    "recommended": {
+      "badge": "Polecany"
     }
   },
   "moverDashboard": {
@@ -1527,8 +1801,22 @@
     "experienceYears_many": "{{count}} lat dośw.",
     "experienceYears_one": "{{count}} rok dośw.",
     "experienceYears_other": "{{count}} roku dośw.",
+    "extend": {
+      "cta": "Rozszerz wyszukiwanie do {{distance}}"
+    },
+    "extended": {
+      "helper": "Wyświetlani są przewoźnicy w odległości do {{distance}}."
+    },
     "languages": {
       "label": "Języki: {{languages}}"
+    },
+    "nearEmpty": {
+      "subtitle": "W pobliżu adresu odbioru nie ma teraz dostępnego przewoźnika. Możesz poszukać na większym obszarze.",
+      "title": "Brak przewoźników w promieniu {{distance}}"
+    },
+    "noneFound": {
+      "subtitle": "Nie znaleziono przewoźnika do natychmiastowej przeprowadzki, także na większym obszarze. Możesz zaplanować tę przeprowadzkę na późniejszy termin. Twoje adresy i rzeczy zostaną zachowane.",
+      "title": "Obecnie brak dostępnego przewoźnika"
     },
     "pricing": {
       "disclaimer": "Cena końcowa może się różnić w zależności od rzeczywistych warunków.",
@@ -1537,6 +1825,9 @@
       "helper_one": "Ceny obejmują usługę podstawową, dystans ({{distance}}), pracę ekipy, klasę pojazdu przewoźnika oraz {{count}} przedmiot. VAT jest wliczony.",
       "helper_other": "Ceny obejmują usługę podstawową, dystans ({{distance}}), pracę ekipy, klasę pojazdu przewoźnika oraz {{count}} przedmiotu. VAT jest wliczony.",
       "title": "Jak działa wycena:"
+    },
+    "scheduleInstead": {
+      "cta": "Zaplanuj tę przeprowadzkę"
     },
     "searching": {
       "subtitle": "Szukamy zweryfikowanych przewoźników w pobliżu miejsca odbioru",
@@ -1646,6 +1937,41 @@
     },
     "stepTotal": {
       "label": "/{{total}}"
+    }
+  },
+  "priceConfirm": {
+    "title": "Nowa cena do potwierdzenia",
+    "body": {
+      "named": "{{name}} może wykonać Twoją przeprowadzkę. Ten przewoźnik znajduje się dalej od Twojego adresu odbioru, dlatego cena jest wyższa.",
+      "unnamed": "Przewoźnik znajdujący się dalej od Twojego adresu odbioru może wykonać Twoją przeprowadzkę, dlatego cena jest wyższa."
+    },
+    "distance": {
+      "label": "Odległość przewoźnika od adresu odbioru"
+    },
+    "previous": {
+      "label": "Uzgodniona cena"
+    },
+    "new": {
+      "label": "Nowa cena"
+    },
+    "difference": {
+      "label": "Różnica"
+    },
+    "countdown": {
+      "label": "Pozostały czas na odpowiedź: {{time}}"
+    },
+    "accept": {
+      "cta": "Zaakceptuj {{amount}}"
+    },
+    "decline": {
+      "cta": "Odrzuć"
+    },
+    "helper": "Jeśli odrzucisz lub nie odpowiesz na czas, ten przewoźnik nie zostanie przydzielony, a uzgodniona cena pozostanie bez zmian.",
+    "declined": {
+      "notice": "Nowa cena została odrzucona. Uzgodniona cena pozostaje bez zmian."
+    },
+    "failed": {
+      "error": "Nie udało się zapisać Twojej odpowiedzi. Spróbuj ponownie."
     }
   }
 }

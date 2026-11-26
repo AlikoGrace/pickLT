@@ -142,6 +142,8 @@ export async function GET(
         rawStatus: move.status,
         moveCategory: move.moveCategory ?? null,
       },
+      // Only the client answers a price prompt (`move.pendingOffer`, plan pricing/8).
+      viewerIsClient: isOwner,
       isAssignedMover: isMover,
       viewerMoverProfileId: isMover
         ? moverProfileId

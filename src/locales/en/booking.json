@@ -1120,6 +1120,9 @@
       },
       "vehicle": {
         "label": "Vehicle ({{vehicle}})"
+      },
+      "approach": {
+        "label": "Travel to pickup ({{km}})"
       }
     },
     "minimumApplied": {

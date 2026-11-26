@@ -17,7 +17,7 @@ import { ID, Permission, Query, Role } from 'node-appwrite'
 
 import { withRetry } from './appwrite-server'
 import { APPWRITE } from './constants'
-import { FEES_RESTRICTED, feeRestricted } from './mover-gates'
+import { FEES_RESTRICTED, feeRestricted, residenceBlock, type ResidenceBlock } from './mover-gates'
 import { TRACKED_STATUSES, isOnJob, moverMaySharePosition, movesOnJob } from './mover-position'
 import { relId } from './notify'
 import { vehicleServiceReady, type VehicleProfileFields } from './vehicle-service'
@@ -234,7 +234,12 @@ export async function recordMoverPosition(databases: PositionDb, ping: PositionP
 
 // ── Online switch ────────────────────────────────────────────────────────────
 
-export type OnlineBlock = 'mover.notAMover' | 'mover.notVerified' | 'mover.vehicleNotReady' | typeof FEES_RESTRICTED
+export type OnlineBlock =
+  | 'mover.notAMover'
+  | 'mover.notVerified'
+  | 'mover.vehicleNotReady'
+  | typeof FEES_RESTRICTED
+  | ResidenceBlock
 
 export type OnlineResult =
   | { ok: false; fnCode: OnlineBlock; status: 403 | 404 }
@@ -244,22 +249,28 @@ export type OnlineResult =
  * Why this mover may not go online, or `null`. Same checks, order and codes as
  * the `setmoveronline` function. Going offline is never blocked.
  */
-export function goOnlineBlock(profile: AnyDoc, nowMs: number, tz: string): OnlineBlock | null {
+export function goOnlineBlock(
+  profile: AnyDoc,
+  nowMs: number,
+  tz: string,
+  gateFromMs: number | null = null,
+): OnlineBlock | null {
   if (profile.verificationStatus !== 'verified') return 'mover.notVerified'
   if (!vehicleServiceReady(profile as VehicleProfileFields, nowMs, tz)) return 'mover.vehicleNotReady'
   if (feeRestricted(profile)) return FEES_RESTRICTED
-  return null
+  // Residence gate (plan legal/7, V1).
+  return residenceBlock(profile, nowMs, gateFromMs)
 }
 
 export async function setMoverOnline(
   databases: PositionDb,
-  input: { userId: string; isOnline: boolean; nowMs: number; tz: string },
+  input: { userId: string; isOnline: boolean; nowMs: number; tz: string; residenceGateFromMs?: number | null },
 ): Promise<OnlineResult> {
   const profile = await moverProfileOf(databases, input.userId)
   if (!profile) return { ok: false, fnCode: 'mover.notAMover', status: 404 }
 
   if (input.isOnline) {
-    const block = goOnlineBlock(profile, input.nowMs, input.tz)
+    const block = goOnlineBlock(profile, input.nowMs, input.tz, input.residenceGateFromMs ?? null)
     if (block) return { ok: false, fnCode: block, status: 403 }
   }
 

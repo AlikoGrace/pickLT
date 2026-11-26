@@ -1,6 +1,7 @@
 import { countryToIso2 } from './countryCode'
 import { feeStandingAllowsWork } from './feeLedger'
 import { vehicleServiceReady, type VehicleOwnership, type VehicleProfileFields } from './vehicle-service'
+import { residenceBlockCode, type VettingProfileFields } from './vetting'
 
 /**
  * Route-level gate decisions around `vehicleServiceReady`, pulled out of the
@@ -39,11 +40,30 @@ export function feeRestricted(profile: AnyDoc | null | undefined): boolean {
 }
 // --- fee-standing (mirror) ---
 
+// --- residence gate (plan legal/7, V1) ---
+/**
+ * A driver without a verified, unexpired residence document takes no new work
+ * once the gate date (`platform_config.residence_gate_from`) has passed. Same
+ * rule and codes as the functions (`lib/vetting.ts` `residenceBlockCode`).
+ * `gateFromMs` is `null` while the owner has not set the date.
+ */
+export type ResidenceBlock = 'mover.residenceNotVerified' | 'mover.residenceExpired'
+
+export function residenceBlock(
+  profile: AnyDoc | null | undefined,
+  nowMs: number,
+  gateFromMs: number | null | undefined,
+): ResidenceBlock | null {
+  return residenceBlockCode(profile as VettingProfileFields | null | undefined, nowMs, gateFromMs)
+}
+// --- residence gate ---
+
 export type DirectAssignmentBlock =
   | 'mover.notVerified'
   | 'mover.offline'
   | 'mover.vehicleNotReady'
   | typeof FEES_RESTRICTED
+  | ResidenceBlock
 
 /**
  * `POST /api/moves/create-instant` pins a move to a mover the client picked
@@ -55,13 +75,14 @@ export function directAssignmentBlock(
   mover: AnyDoc | null | undefined,
   nowMs: number,
   tz: string,
+  gateFromMs: number | null = null,
 ): DirectAssignmentBlock | null {
   if (mover?.verificationStatus !== 'verified') return 'mover.notVerified'
   if (mover.isOnline === false) return 'mover.offline'
   if (!isLocationFresh(mover, nowMs)) return 'mover.offline'
   if (!vehicleServiceReady(mover as VehicleProfileFields, nowMs, tz)) return 'mover.vehicleNotReady'
   if (feeRestricted(mover)) return FEES_RESTRICTED
-  return null
+  return residenceBlock(mover, nowMs, gateFromMs)
 }
 
 /**
@@ -76,14 +97,23 @@ export function startGate(
   profile: AnyDoc | null | undefined,
   nowMs: number,
   tz: string,
-): { blocked: boolean; vehicleId: string | null; fnCode?: 'mover.vehicleNotReady' | typeof FEES_RESTRICTED } {
+  gateFromMs: number | null = null,
+): {
+  blocked: boolean
+  vehicleId: string | null
+  /** True when this transition is the moment the job is taken (the cap and the accept stamp apply). */
+  taking?: boolean
+  fnCode?: 'mover.vehicleNotReady' | typeof FEES_RESTRICTED | ResidenceBlock
+} {
   if (move.status !== 'mover_assigned') return { blocked: false, vehicleId: null }
   if (!vehicleServiceReady(profile as VehicleProfileFields, nowMs, tz)) {
     return { blocked: true, vehicleId: null, fnCode: 'mover.vehicleNotReady' }
   }
   if (feeRestricted(profile)) return { blocked: true, vehicleId: null, fnCode: FEES_RESTRICTED }
+  const residence = residenceBlock(profile, nowMs, gateFromMs)
+  if (residence) return { blocked: true, vehicleId: null, fnCode: residence }
   const current = typeof profile?.currentVehicleId === 'string' ? profile.currentVehicleId : null
-  return { blocked: false, vehicleId: move.vehicleId ? null : current }
+  return { blocked: false, vehicleId: move.vehicleId ? null : current, taking: true }
 }
 
 /**
@@ -93,8 +123,17 @@ export function startGate(
  * the driver may be finishing a move (D4). A fee-restricted driver is never
  * marked online (`settlefees` enforce takes them offline on entering it).
  */
-export function mayMarkOnline(profile: AnyDoc | null | undefined, nowMs: number, tz: string): boolean {
-  return vehicleServiceReady(profile as VehicleProfileFields, nowMs, tz) && !feeRestricted(profile)
+export function mayMarkOnline(
+  profile: AnyDoc | null | undefined,
+  nowMs: number,
+  tz: string,
+  gateFromMs: number | null = null,
+): boolean {
+  return (
+    vehicleServiceReady(profile as VehicleProfileFields, nowMs, tz) &&
+    !feeRestricted(profile) &&
+    residenceBlock(profile, nowMs, gateFromMs) === null
+  )
 }
 
 /**

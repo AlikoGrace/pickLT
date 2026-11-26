@@ -86,6 +86,8 @@ export async function GET(
 
     // Build enriched response
     const response: Record<string, unknown> = {
+      // Only the client answers a price prompt (`move.pendingOffer`, plan pricing/8).
+      viewerIsClient: isOwner,
       move: {
         ...move,
         // Flatten moverProfileId to just the ID string

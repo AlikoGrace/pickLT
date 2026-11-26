@@ -1,5 +1,7 @@
 import { Client, Databases, ID, Permission, Query, Role } from 'node-appwrite';
 
+import { residenceExpiryNoticeDue } from './vetting.js';
+
 /**
  * expirerentals — rental-window housekeeping (plan wave-2026-10/1 R2/R4/R9/R10).
  *
@@ -390,6 +392,67 @@ async function findOwnedFallback(databases, profile) {
   }
 }
 
+/**
+ * Residence documents about to expire (plan legal/7, V1): one reminder 30 days
+ * and one 7 days before the end date. `residenceExpiryNoticeDays` on the
+ * profile is the dedupe key, so this sweep's frequency does not matter. On the
+ * day itself the residence gate takes over; nothing is written here for it.
+ * Returns how many drivers were reminded. Never throws.
+ */
+export async function remindResidenceExpiry(databases, nowMs, log, error) {
+  let reminded = 0;
+  let rows;
+  try {
+    rows = await databases.listDocuments(DATABASE_ID, MOVER_PROFILES_COLLECTION, [
+      Query.equal('residenceStatus', 'verified'),
+      Query.greaterThan('residenceDocExpiresAt', new Date(nowMs).toISOString()),
+      Query.lessThanEqual('residenceDocExpiresAt', new Date(nowMs + 30 * 86400000).toISOString()),
+      Query.limit(BATCH_SIZE),
+    ]);
+  } catch (e) {
+    // The columns do not exist until `npm run schema:vetting` has been applied.
+    error(`[expirerentals] residence expiry query failed (schema not applied yet?): ${e.message}`);
+    return 0;
+  }
+  for (const profile of rows.documents) {
+    const days = residenceExpiryNoticeDue(profile.residenceDocExpiresAt, nowMs, profile.residenceExpiryNoticeDays);
+    if (days === null) continue;
+    const userId = relId(profile.userId);
+    try {
+      // Claim first: a failed notification is then skipped, not repeated every sweep.
+      await databases.updateDocument(DATABASE_ID, MOVER_PROFILES_COLLECTION, profile.$id, { residenceExpiryNoticeDays: days });
+      if (NOTIFICATIONS_COLLECTION && userId) {
+        await databases.createDocument(
+          DATABASE_ID,
+          NOTIFICATIONS_COLLECTION,
+          ID.unique(),
+          {
+            userId,
+            // 'verification' is in the enum already and is pushed by `sendpush`.
+            type: 'verification',
+            title: 'Residence document expires soon',
+            body: `Your residence document expires in ${days} days. Upload the new one to keep receiving moves.`,
+            data: JSON.stringify({
+              moverProfileId: profile.$id,
+              document: 'residence',
+              i18nKey: 'verification.residenceExpiring',
+              i18nParams: { days },
+              route: '/vetting',
+            }),
+            isRead: false,
+          },
+          [Permission.read(Role.user(userId)), Permission.update(Role.user(userId)), Permission.delete(Role.user(userId))],
+        );
+      }
+      reminded += 1;
+      log(`[expirerentals] ${profile.$id} residence document expires in <= ${days} days: reminded`);
+    } catch (e) {
+      error(`[expirerentals] residence reminder ${profile.$id} failed: ${e.message}`);
+    }
+  }
+  return reminded;
+}
+
 async function pageThrough(databases, baseQueries, onRow, error, label) {
   let cursor = null;
   for (let batch = 0; batch < MAX_BATCHES; batch += 1) {
@@ -558,6 +621,8 @@ export default async ({ req, res, log, error }) => {
     Query.lessThanEqual('rentalEndAt', soonIso),
   ], warnOne, error, 'warn');
   summary.errors += warnOne.failed ?? 0;
+
+  summary.residenceReminded = await remindResidenceExpiry(databases, nowMs, log, error);
 
   log(`[expirerentals] expired=${summary.expired} fallback=${summary.fallback} cleared=${summary.cleared} skippedActiveMove=${summary.skippedActiveMove} warned=${summary.warned} errors=${summary.errors}`);
   return res.json({ ok: true, ...summary });

@@ -28,6 +28,7 @@ export async function POST(req: NextRequest) {
       frontPlatePhoto: body.frontPlatePhoto ?? null,
       rearPlatePhoto: body.rearPlatePhoto ?? null,
       fullVehiclePhoto: body.fullVehiclePhoto ?? null,
+      hasMotorInsurance: typeof body.hasMotorInsurance === 'boolean' ? body.hasMotorInsurance : null,
       note: webAuditNote(body.note, req.headers.get('user-agent')),
     })
     return NextResponse.json({

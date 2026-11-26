@@ -108,6 +108,11 @@ export interface QuoteInput {
    */
   extraHelpers?: number
   /**
+   * Straight-line distance, in km, from the mover to the pickup address (plan
+   * pricing/8). Priced for instant moves only; absent or 0 means no charge.
+   */
+  approachKm?: number
+  /**
    * ISO-3166-1 alpha-2 of the PICKUP country (plan `wave-2026-10/4` C2) — the
    * market whose VAT and tariff this quote was priced with. The caller resolves
    * the matching config (`toPricingConfig(rows, countryCode)`); the engine only
@@ -135,6 +140,8 @@ export interface QuoteProfile {
   extraHelpers: number
   /** `crew + extraHelpers` — the crew that turns up and is stored on the move. */
   totalCrew: number
+  /** Driving distance to the pickup the approach line was priced on; 0 when none. */
+  approachKm: number
   vehicleType: VehicleClass
   billableHours: number
   distanceKm: number
@@ -150,6 +157,8 @@ export interface QuoteLines {
   items: number
   packing: number
   handling: number
+  /** The mover's drive to the pickup address (instant moves). */
+  approach: number
   services: number
   storage: number
 }
@@ -463,6 +472,82 @@ export function suggestedUnitPriceEur(
   return round2(value)
 }
 
+// ── Travel to pickup (plan pricing/8) ──────────────────────────────────────
+
+/**
+ * The charge for the mover's drive to the pickup address, in cents, and the
+ * driving distance it was priced on. Instant moves only. `straightKm` is a
+ * straight line; the road factor turns it into a driving distance, the first
+ * kilometres are free and the charge is capped. Nothing is read (so nothing
+ * enters the rates trace) unless a distance was given.
+ */
+function approachCharge(
+  mode: BookingMode,
+  tier: ServiceTier,
+  straightKm: unknown,
+  trace: RateTrace,
+): { approachKm: number; approach: number } {
+  const straight = mode === 'instant' ? nonNegative(straightKm) : 0
+  if (!(straight > 0)) return { approachKm: 0, approach: 0 }
+  const approachKm = straight * Math.max(1, trace.get('approach.roadFactor'))
+  const billableKm = Math.max(0, approachKm - Math.max(0, trace.get('approach.freeKm')))
+  const ownRate = trace.get('approach.ratePerKm')
+  const perKm = ownRate > 0 ? ownRate : trace.get(tierKey(tier, 'distanceRatePerKm'))
+  const approach = Math.min(
+    roundHalfUp(billableKm * perKm * 100),
+    cents(Math.max(0, trace.get('approach.maxCharge'))),
+  )
+  return { approachKm, approach }
+}
+
+/**
+ * The same quote for a mover at another distance from the pickup: only the
+ * approach line changes, and every total is recomputed from it. Used when an
+ * instant request is offered to a mover other than the one it was priced for
+ * (plan pricing/8, option B), so each offer carries the price for that mover.
+ *
+ * The fee rate, VAT rate and minimum charge are the ones the quote was priced
+ * with (`breakdown.rates`); the approach rates come from `config`. The result
+ * equals `quoteMove` run again with the new `approachKm`.
+ */
+export function repriceApproach(
+  breakdown: QuoteBreakdown,
+  straightKm: unknown,
+  config?: PricingConfig | null,
+): QuoteBreakdown {
+  const trace = new RateTrace(config)
+  const { approachKm, approach } = approachCharge(breakdown.mode, breakdown.tier, straightKm, trace)
+  const used: Record<string, number> = breakdown.rates ?? {}
+  const rateOf = (key: PricingKey): number =>
+    typeof used[key] === 'number' && Number.isFinite(used[key]) ? used[key] : rate(config, key)
+
+  const lines = { ...breakdown.lines, approach: eur(approach) }
+  const operationalSubtotal = Object.values(lines).reduce((sum, v) => sum + cents(v), 0)
+  const adjustedSubtotal = roundHalfUp(operationalSubtotal * breakdown.modeMultiplier)
+  const platformFee =
+    roundHalfUp(adjustedSubtotal * rateOf('platformFee.rate')) + cents(rateOf('platformFee.fixed'))
+  const discount = Math.min(cents(breakdown.discount), adjustedSubtotal + platformFee)
+  const netRaw = adjustedSubtotal + platformFee - discount
+  const net = Math.max(cents(rateOf('pricing.minimumCharge')), netRaw)
+  const vat = roundHalfUp(net * breakdown.vatRate)
+
+  return {
+    ...breakdown,
+    profile: { ...breakdown.profile, approachKm: round3(approachKm) },
+    lines,
+    operationalSubtotal: eur(operationalSubtotal),
+    modeAdjustment: eur(adjustedSubtotal - operationalSubtotal),
+    adjustedSubtotal: eur(adjustedSubtotal),
+    platformFee: eur(platformFee),
+    discount: eur(discount),
+    minimumApplied: net > netRaw,
+    net: eur(net),
+    vat: eur(vat),
+    total: eur(net + vat),
+    rates: sortedRecord({ ...used, ...trace.used }),
+  }
+}
+
 // ── The quote ──────────────────────────────────────────────────────────────
 
 export function quoteMove(input: QuoteInput, config?: PricingConfig | null): QuoteBreakdown {
@@ -531,6 +616,9 @@ export function quoteMove(input: QuoteInput, config?: PricingConfig | null): Quo
     floorsNoLift * cents(trace.get('access.floorSurchargeNoElevator')) +
     haltverbot * cents(trace.get('access.haltverbotFee'))
 
+  // Travel to pickup (plan pricing/8): the mover's drive to the pickup address.
+  const { approachKm, approach } = approachCharge(mode, tier, input.approachKm, trace)
+
   const serviceLines: QuoteLine[] = []
   let services = 0
   for (const id of stripRetiredServices(uniqueSorted(input.services))) {
@@ -548,7 +636,7 @@ export function quoteMove(input: QuoteInput, config?: PricingConfig | null): Quo
 
   // 5. Totals.
   const operationalSubtotal =
-    base + distance + vehicle + labor + extraHelpers + items + packing + handling + services + storage
+    base + distance + vehicle + labor + extraHelpers + items + packing + handling + approach + services + storage
   const modeMultiplier = mode === 'instant' ? trace.get(tierKey(tier, 'instantMultiplier')) : 1
   const adjustedSubtotal = roundHalfUp(operationalSubtotal * modeMultiplier)
   const modeAdjustment = adjustedSubtotal - operationalSubtotal
@@ -566,12 +654,12 @@ export function quoteMove(input: QuoteInput, config?: PricingConfig | null): Quo
 
   // 6. Reconcile (master D4). Integer arithmetic makes these exact; the checks
   // exist so a future edit that breaks the invariant fails loudly.
-  const lineSum = base + distance + vehicle + labor + extraHelpers + items + packing + handling + services + storage
+  const lineSum = base + distance + vehicle + labor + extraHelpers + items + packing + handling + approach + services + storage
   if (lineSum !== operationalSubtotal) throw new PricingReconcileError('lines ≠ operational subtotal')
   if (operationalSubtotal + modeAdjustment !== adjustedSubtotal) throw new PricingReconcileError('mode adjustment')
   if (Math.max(minimum, adjustedSubtotal + platformFee - discount) !== net) throw new PricingReconcileError('net')
   if (net + vat !== total) throw new PricingReconcileError('vat')
-  if (![base, distance, vehicle, labor, extraHelpers, items, packing, handling, services, storage, total].every(Number.isInteger)) {
+  if (![base, distance, vehicle, labor, extraHelpers, items, packing, handling, approach, services, storage, total].every(Number.isInteger)) {
     throw new PricingReconcileError('non-integer cents')
   }
 
@@ -595,6 +683,7 @@ export function quoteMove(input: QuoteInput, config?: PricingConfig | null): Quo
       crew,
       extraHelpers: extraHelpersCount,
       totalCrew: crew + extraHelpersCount,
+      approachKm: round3(approachKm),
       vehicleType,
       billableHours: hours,
       distanceKm: round3(distanceKm),
@@ -609,6 +698,7 @@ export function quoteMove(input: QuoteInput, config?: PricingConfig | null): Quo
       items: eur(items),
       packing: eur(packing),
       handling: eur(handling),
+      approach: eur(approach),
       services: eur(services),
       storage: eur(storage),
     },
@@ -642,10 +732,13 @@ export function quoteMove(input: QuoteInput, config?: PricingConfig | null): Quo
  */
 export function quoteForMover(
   input: Omit<QuoteInput, 'vehicleType'>,
-  mover: { vehicleType: string | null | undefined; crewSize: number | null | undefined },
+  mover: { vehicleType: string | null | undefined; crewSize: number | null | undefined; distanceKm?: number | null },
   config?: PricingConfig | null,
 ): { quote: QuoteBreakdown; eligible: boolean; reason: 'ok' | 'crew' } {
-  const quote = quoteMove({ ...input, vehicleType: mover.vehicleType ?? null }, config)
+  const quote = quoteMove(
+    { ...input, vehicleType: mover.vehicleType ?? null, approachKm: mover.distanceKm ?? input.approachKm },
+    config,
+  )
   // An unknown crew size (null, undefined, unparseable) is not "one mover" —
   // it passes, exactly like the capacity gate passes an unmeasured load.
   const crewSize = typeof mover.crewSize === 'number' ? mover.crewSize : NaN
@@ -690,10 +783,15 @@ export function parseBreakdown(raw: unknown): QuoteBreakdown | null {
   const extraHelpers = typeof profile.extraHelpers === 'number' ? profile.extraHelpers : 0
   return {
     ...b,
-    lines: { ...lines, extraHelpers: typeof lines.extraHelpers === 'number' ? lines.extraHelpers : 0 },
+    lines: {
+      ...lines,
+      extraHelpers: typeof lines.extraHelpers === 'number' ? lines.extraHelpers : 0,
+      approach: typeof lines.approach === 'number' ? lines.approach : 0,
+    },
     profile: {
       ...profile,
       extraHelpers,
+      approachKm: typeof profile.approachKm === 'number' ? profile.approachKm : 0,
       totalCrew:
         typeof profile.totalCrew === 'number'
           ? profile.totalCrew

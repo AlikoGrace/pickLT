@@ -1117,6 +1117,9 @@
       },
       "vehicle": {
         "label": "Vehículo ({{vehicle}})"
+      },
+      "approach": {
+        "label": "Trayecto a la recogida ({{km}})"
       }
     },
     "minimumApplied": {

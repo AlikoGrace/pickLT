@@ -164,6 +164,26 @@
     "verified": {
       "body": "Congratulazioni! Il tuo profilo traslocatore è stato verificato. Ora puoi accettare traslochi.",
       "title": "Profilo verificato"
+    },
+    "residenceVerified": {
+      "title": "Documento di soggiorno approvato",
+      "body": "Il tuo documento di soggiorno è stato controllato e approvato."
+    },
+    "residenceRejected": {
+      "title": "Documento di soggiorno non accettato",
+      "body": "Il tuo documento di soggiorno non è stato accettato. {{reason}}"
+    },
+    "certificateVerified": {
+      "title": "Certificato di trasloco approvato",
+      "body": "Il tuo certificato di trasloco è stato approvato. Ora vieni mostrato per primo ai clienti e non hai un limite giornaliero."
+    },
+    "certificateRejected": {
+      "title": "Certificato di trasloco non accettato",
+      "body": "Il tuo certificato di trasloco non è stato accettato. {{reason}}"
+    },
+    "residenceExpiring": {
+      "title": "Il documento di soggiorno scade a breve",
+      "body": "Il tuo documento di soggiorno scade tra {{days}} giorni. Carica quello nuovo per continuare a ricevere traslochi."
     }
   },
   "fees": {
@@ -188,6 +208,20 @@
     "missed": {
       "title": "Chiamata persa",
       "body": "Chiamata persa da {{name}}"
+    }
+  },
+  "offer": {
+    "priceConfirm": {
+      "title": "Nuovo prezzo da confermare",
+      "body": "Un traslocatore più lontano può eseguire il tuo trasloco per {{amount}} {{currency}} invece di {{previousAmount}} {{currency}}. Apri il trasloco per accettare o rifiutare."
+    },
+    "clientDeclined": {
+      "title": "Prezzo non accettato",
+      "body": "Il cliente non ha accettato il prezzo per la tua distanza. Il trasloco {{handle}} non ti è stato assegnato."
+    },
+    "clientNoAnswer": {
+      "title": "Offerta chiusa",
+      "body": "Il cliente non ha confermato il prezzo in tempo. Il trasloco {{handle}} non ti è stato assegnato."
     }
   }
 }

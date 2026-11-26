@@ -39,7 +39,7 @@ vi.mock('@/lib/moveCountry', () => ({
 vi.mock('@/lib/live-countries-server', () => ({ loadLiveCountries: async () => ['DE'] }))
 vi.mock('@/lib/notify', () => ({ relId: (v: unknown) => (typeof v === 'string' ? v : null) }))
 
-import type { QuoteBreakdown } from '@/lib/pricingEngine'
+import { repriceApproach, type QuoteBreakdown } from '@/lib/pricingEngine'
 import { POST as createInstant } from '../create-instant/route'
 import { POST as createScheduled } from '../create-scheduled/route'
 
@@ -174,5 +174,79 @@ describe('create-scheduled retired services', () => {
     expect(moveWrite().storageWeeks).toBe(0)
     expect(String(moveWrite().priceBreakdown)).not.toContain('furniture_assembly')
     expect(String(moveWrite().priceBreakdown)).not.toContain('disposal')
+  })
+})
+
+// Plan pricing/8: the price of an instant move is the price for the chosen
+// mover, with their drive to the pickup measured on the server.
+describe('create-instant travel to pickup', () => {
+  const PICKUP = { pickupLatitude: 52.52, pickupLongitude: 13.405 }
+  /** A stored position `km` north of the pickup. */
+  const north = (km: number) => ({ currentLatitude: 52.52 + km / 111.195, currentLongitude: 13.405 })
+  const base = { moverProfileId: 'mp_1', moveType: 'light', inventoryItems: { cardboard_boxes: 2 }, routeDistanceMeters: 10_000, ...PICKUP }
+  const requestWrite = () => db.createDocument.mock.calls.find((c) => c[1] === 'move_requests')?.[3] as Record<string, unknown>
+
+  it('adds the chosen mover\'s distance to the price, the row and the offer; the response carries the total', async () => {
+    const without = (await (await createInstant(req(base))).json()).breakdown as QuoteBreakdown
+    expect(without.lines.approach).toBe(0)
+    db.createDocument.mockClear()
+
+    mover = { ...mover, ...north(30) }
+    const res = await createInstant(req(base))
+    expect(res.status).toBe(200)
+    const body = await res.json()
+    const b = body.breakdown as QuoteBreakdown
+    expect(Math.abs(body.approachM - 30_000)).toBeLessThanOrEqual(2)
+    expect(b.lines.approach).toBeGreaterThan(0)
+    expect(b.total).toBeGreaterThan(without.total)
+    expect(b.total).toBe(repriceApproach(without, body.approachM / 1000, {}).total)
+    expect(body).toMatchObject({ total: b.total, estimatedPrice: b.total })
+    expect(moveWrite()).toMatchObject({ estimatedPrice: b.total, approachM: body.approachM, pricingVersion: 'v3' })
+    expect(JSON.parse(String(moveWrite().priceBreakdown)).total).toBe(b.total)
+    expect(requestWrite()).toMatchObject({
+      status: 'pending',
+      offerTotalCents: Math.round(b.total * 100),
+      offerPayoutCents: Math.round((b.net - b.platformFee) * 100),
+      offerApproachM: body.approachM,
+    })
+  })
+
+  it('never reads a distance or a price sent by the browser', async () => {
+    mover = { ...mover, ...north(30) }
+    const honest = await (await createInstant(req(base))).json()
+    db.createDocument.mockClear()
+    const res = await createInstant(req({ ...base, approachKm: 0, approachM: 0, distanceKm: 0, estimatedPrice: 1, total: 1, offerTotalCents: 1 }))
+    const body = await res.json()
+    expect(body.total).toBe(honest.total)
+    expect(body.approachM).toBe(honest.approachM)
+    expect(moveWrite().estimatedPrice).toBe(honest.total)
+    expect(requestWrite().offerTotalCents).toBe(Math.round(honest.total * 100))
+  })
+
+  it('books at the price without the line when the mover has no usable position', async () => {
+    mover = { ...mover, currentLatitude: 0, currentLongitude: 0 }
+    const res = await createInstant(req(base))
+    const body = await res.json()
+    expect(body.approachM).toBeUndefined()
+    expect((body.breakdown as QuoteBreakdown).lines.approach).toBe(0)
+    expect(moveWrite()).not.toHaveProperty('approachM')
+    expect(requestWrite()).not.toHaveProperty('offerApproachM')
+  })
+
+  it('still books when the schema has no columns for the feature', async () => {
+    mover = { ...mover, ...north(30) }
+    const newColumns = ['approachM', 'offerTotalCents', 'offerPayoutCents', 'offerApproachM']
+    db.createDocument.mockImplementation(async (_d: string, _c: string, id: string, data: Record<string, unknown>) => {
+      const bad = Object.keys(data).find((k) => newColumns.includes(k))
+      if (bad) throw new Error(`Invalid document structure: Unknown attribute: "${bad}"`)
+      return { ...data, $id: id }
+    })
+    const res = await createInstant(req(base))
+    expect(res.status).toBe(200)
+    const writes = db.createDocument.mock.calls
+    const lastOf = (col: string) => [...writes].reverse().find((c) => c[1] === col)?.[3] as Record<string, unknown>
+    expect(lastOf('moves')).not.toHaveProperty('approachM')
+    expect(lastOf('move_requests')).toEqual(expect.objectContaining({ status: 'pending', moveId: expect.any(String) }))
+    expect(lastOf('move_requests')).not.toHaveProperty('offerTotalCents')
   })
 })

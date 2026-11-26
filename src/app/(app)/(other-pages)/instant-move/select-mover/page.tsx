@@ -14,6 +14,7 @@ import ExtraHelpersStepper from '@/components/booking/ExtraHelpersStepper'
 import { basketItemCount, serializeBasket } from '@/components/inventory/basket'
 import { toClassifyCustom } from '@/components/inventory/selector-logic'
 import { classifyMove, enforcedTier, thresholdsFromConfig } from '@/lib/classifyMove'
+import { recommendedMoverId, sortMoversForDisplay } from '@/lib/mover-recommendation'
 import ButtonPrimary from '@/shared/ButtonPrimary'
 import ButtonSecondary from '@/shared/ButtonSecondary'
 import {
@@ -34,7 +35,8 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState, useMemo } from 'react'
 import { formatMoney } from '@/lib/format'
 import { useTranslation } from 'react-i18next'
-import { formatVolumeM3 } from '@/lib/format'
+import { formatDistanceKm, formatVolumeM3 } from '@/lib/format'
+import { EXTENDED_RADIUS_KM, NEAR_RADIUS_KM, radiusForStage, searchOutcome, type SearchStage } from '@/lib/search-radius'
 
 // Mover types - matches API response from /api/movers/nearby
 interface Mover {
@@ -66,6 +68,8 @@ interface Mover {
   currentLatitude?: number
   currentLongitude?: number
   distanceKm?: number
+  /** Holds an admin-approved moving certificate (plan legal/7 V2). The API sorts these first. */
+  certified?: boolean
   // `baseRatePerKm` used to be declared here and read by the pricing block.
   // No such field exists on mover_profiles (the column is `baseRate`, and it is
   // read by no quoting code in any app), so the read always fell through to a
@@ -93,6 +97,8 @@ interface MoverWithQuote {
   yearsExperience: number
   languages: string[]
   isVerified: boolean
+  /** Renders as the "Certified mover" badge. */
+  certified: boolean
   price: number
   quote: QuoteBreakdown
   estimatedArrival: number
@@ -138,6 +144,7 @@ const SelectMoverPage = () => {
     moveType,
     extraHelpers,
     setExtraHelpers,
+    setIsInstantMove,
   } = useMoveSearch()
 
   const [isLoading, setIsLoading] = useState(true)
@@ -146,6 +153,10 @@ const SelectMoverPage = () => {
   const [routeDuration, setRouteDuration] = useState<number | null>(null)
   const [apiMovers, setApiMovers] = useState<Mover[]>([])
   const [fetchError, setFetchError] = useState<string | null>(null)
+  // The search starts in the near ring; the client widens it on request
+  // (plan pickltmobile `.agent/plans/matching/1`).
+  const [stage, setStage] = useState<SearchStage>('near')
+  const radiusKm = radiusForStage(stage)
   // Admin rate overrides (`{}` → compiled defaults) and the priced catalog —
   // the two inputs the engine needs besides the basket and the route.
   // Per pickup country (plan wave-2026-10/4 C5): the market's VAT and tariff.
@@ -215,7 +226,7 @@ const SelectMoverPage = () => {
 
         // Country-scoped (C6): only movers in the pickup's market.
         const country = pickupCountryCode ? `&country=${encodeURIComponent(pickupCountryCode)}` : ''
-        const res = await fetch(`/api/movers/nearby?lat=${lat}&lng=${lng}&radiusKm=25${country}`)
+        const res = await fetch(`/api/movers/nearby?lat=${lat}&lng=${lng}&radiusKm=${radiusKm}${country}`)
         if (!res.ok) {
           const errData = await res.json().catch(() => ({}))
           throw new Error(errData.error || t('errors:movers.fetchFailed'))
@@ -233,7 +244,22 @@ const SelectMoverPage = () => {
     // Small delay for better UX
     const timer = setTimeout(fetchMovers, 1000)
     return () => clearTimeout(timer)
-  }, [pickupCoordinates, pickupCountryCode])
+  }, [pickupCoordinates, pickupCountryCode, radiusKm])
+
+  const outcome = searchOutcome(stage, apiMovers.length)
+
+  const extendSearch = () => {
+    setIsLoading(true)
+    setStage('extended')
+  }
+
+  // Nobody was found, even in the wider ring: continue as a scheduled move.
+  // Addresses, items, photos and helpers live in the shared booking state, so
+  // the scheduling steps open with them already filled in.
+  const scheduleInstead = () => {
+    setIsInstantMove(false)
+    router.push('/add-listing/1')
+  }
 
   // The mover-independent part of the quote: tier, mode, route and basket.
   // Each mover then only changes the vehicle line (pricing master D8) — the
@@ -270,7 +296,15 @@ const SelectMoverPage = () => {
     for (const mover of apiMovers) {
       const crewSize = mover.crewSize || 1
       const vehicleType = asVehicleType(mover.vehicleType)
-      const { quote, eligible } = quoteForMover(quoteInput, { vehicleType, crewSize }, pricingConfig)
+      // Travel to pickup (plan pricing/8): this mover's own straight-line
+      // distance to the pickup, in km, as `/api/movers/nearby` measured it.
+      // Whole metres, like the server stores it, so the list price and the
+      // booked price agree to the cent. Unknown → no approach line.
+      const approachKm =
+        typeof mover.distanceKm === 'number' && Number.isFinite(mover.distanceKm) && mover.distanceKm >= 0
+          ? Math.round(mover.distanceKm * 1000) / 1000
+          : null
+      const { quote, eligible } = quoteForMover(quoteInput, { vehicleType, crewSize, distanceKm: approachKm }, pricingConfig)
       loadedVolumeM3 = quote.profile.loadedVolumeM3
 
       if (!moverFitsLoad(quote.profile.loadedVolumeM3, { vehicleType, vehicleCapacity: mover.vehicleCapacity }, pricingConfig)) {
@@ -301,7 +335,10 @@ const SelectMoverPage = () => {
         yearsExperience: mover.yearsExperience || 0,
         languages: mover.languages || ['German'],
         isVerified: mover.verificationStatus === 'verified',
-        // The customer pays the gross total (master D11); it varies by vehicle class only.
+        // Strict `=== true`: "unknown" must render as no badge, not as a certified one.
+        certified: mover.certified === true,
+        // The customer pays the gross total (master D11); it varies by vehicle
+        // class and by the mover's distance to the pickup (plan pricing/8).
         price: quote.total,
         quote,
         estimatedArrival,
@@ -311,9 +348,13 @@ const SelectMoverPage = () => {
       })
     }
 
-    priced.sort((a, b) => a.price - b.price) // Sort by price
-    return { moversWithPrices: priced, hiddenForCrew, hiddenForCapacity, loadedVolumeM3 }
+    // Cheapest first; at the same price the server's order stands (certified
+    // first inside a distance band, then nearer: plan legal/7 V2).
+    return { moversWithPrices: sortMoversForDisplay(priced), hiddenForCrew, hiddenForCapacity, loadedVolumeM3 }
   }, [quoteInput, apiMovers, pricingConfig, routeDistance, t])
+
+  // The mark goes to the first certified mover in the list when there is one.
+  const recommendedId = useMemo(() => recommendedMoverId(moversWithPrices), [moversWithPrices])
 
   const handleSelectMover = (moverId: string) => {
     setSelectedMover(moverId)
@@ -496,6 +537,35 @@ const SelectMoverPage = () => {
     )
   }
 
+  // Nobody in the near ring: ask before searching the wider one. Nobody in the
+  // wider ring either: suggest a scheduled move.
+  if (!fetchError && outcome !== 'list') {
+    const extend = outcome === 'offerExtend'
+    return (
+      <div className="min-h-screen bg-white dark:bg-neutral-900 flex flex-col items-center justify-center p-6">
+        <HugeiconsIcon icon={Alert02Icon} size={48} strokeWidth={1.5} className="text-amber-500 mb-4" />
+        <h2 className="text-xl font-semibold text-neutral-900 dark:text-white mb-2 text-center">
+          {extend
+            ? t('web:selectMover.nearEmpty.title', { distance: formatDistanceKm(NEAR_RADIUS_KM) })
+            : t('web:selectMover.noneFound.title')}
+        </h2>
+        <p className="text-neutral-500 dark:text-neutral-400 text-center max-w-sm mb-6">
+          {extend ? t('web:selectMover.nearEmpty.subtitle') : t('web:selectMover.noneFound.subtitle')}
+        </p>
+        <div className="flex flex-wrap justify-center gap-3">
+          <ButtonSecondary href="/instant-move/photos">{t('common:action.goBack.cta')}</ButtonSecondary>
+          {extend ? (
+            <ButtonPrimary onClick={extendSearch}>
+              {t('web:selectMover.extend.cta', { distance: formatDistanceKm(EXTENDED_RADIUS_KM) })}
+            </ButtonPrimary>
+          ) : (
+            <ButtonPrimary onClick={scheduleInstead}>{t('web:selectMover.scheduleInstead.cta')}</ButtonPrimary>
+          )}
+        </div>
+      </div>
+    )
+  }
+
   // Error or no movers found
   if (fetchError || moversWithPrices.length === 0) {
     return (
@@ -625,6 +695,11 @@ const SelectMoverPage = () => {
         <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-4">
           {t('web:selectMover.available.title', { count: moversWithPrices.length })}
         </h2>
+        {stage === 'extended' && (
+          <p className="-mt-2 mb-4 text-sm text-neutral-500 dark:text-neutral-400">
+            {t('web:selectMover.extended.helper', { distance: formatDistanceKm(EXTENDED_RADIUS_KM) })}
+          </p>
+        )}
 
         <div className="space-y-4">
           {moversWithPrices.map((mover) => (
@@ -671,10 +746,15 @@ const SelectMoverPage = () => {
 
                 {/* Mover Info */}
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-1">
                     <h3 className="min-w-0 break-words font-semibold text-neutral-900 dark:text-white">
                       {mover.name}
                     </h3>
+                    {mover.id === recommendedId && (
+                      <span className="rounded-full bg-primary-50 px-2 py-0.5 text-xs font-medium text-primary-700 dark:bg-primary-900/30 dark:text-primary-300">
+                        {t('web:moverCard.recommended.badge')}
+                      </span>
+                    )}
                   </div>
                   
                   {/* Rating & Experience */}
@@ -718,6 +798,13 @@ const SelectMoverPage = () => {
                       <HugeiconsIcon icon={CheckmarkCircle02Icon} size={12} strokeWidth={2} />
                       {t('web:moverCard.vehicleVerified.badge')}
                     </span>
+                    {/* An admin-approved moving certificate (plan legal/7 V2). */}
+                    {mover.certified && (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-primary-50 px-2 py-0.5 text-xs font-medium text-primary-700 dark:bg-primary-900/30 dark:text-primary-300">
+                        <HugeiconsIcon icon={CheckmarkCircle02Icon} size={12} strokeWidth={2} />
+                        {t('web:moverCard.certified.badge')}
+                      </span>
+                    )}
                   </div>
 
                   {/* Capacity & Crew */}

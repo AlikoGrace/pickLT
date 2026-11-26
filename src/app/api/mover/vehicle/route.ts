@@ -21,7 +21,7 @@ import { profileVehicleFields, repoErrorResponse } from '@/lib/vehicle-route-uti
  * (master §6.1) plus the read the vehicle pages need.
  *
  * POST body: `{ ownership, registrationNumber, brand, model, year?, vehicleType,
- * capacityM3?, frontPlatePhoto, rearPlatePhoto, fullVehiclePhoto, source, vehicleId?,
+ * capacityM3?, frontPlatePhoto, rearPlatePhoto, fullVehiclePhoto, hasMotorInsurance, source, vehicleId?,
  * rental?: { startAt?, endAt | hours, provider? } }` — `rental` is required for a
  * rented vehicle (plan wave-2026-10/1 R1; 400 `vehicle.rentalWindow*`).
  * Photo values are the view URLs returned by `/api/user/upload-photo`

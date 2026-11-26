@@ -1,7 +1,9 @@
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE, PLATFORM_TZ } from '@/lib/constants'
 import { vehicleServiceReady } from '@/lib/vehicle-service'
-import { FEES_RESTRICTED, feeRestricted } from '@/lib/mover-gates'
+import { FEES_RESTRICTED, feeRestricted, residenceBlock } from '@/lib/mover-gates'
+import { dailyCapCheck, loadVettingConfig } from '@/lib/mover-vetting'
+import type { VettingConfig } from '@/lib/vetting'
 import { getSessionUserId } from '@/lib/auth-session'
 import { Query } from 'node-appwrite'
 import { NextResponse } from 'next/server'
@@ -11,6 +13,8 @@ import type { Models } from 'node-appwrite'
 interface VerifiedMoverResult {
   userId: string
   moverProfile: Models.Document
+  /** Set by `requireServiceReadyMover`: the cap and gate date it read (plan legal/7). */
+  vettingConfig?: VettingConfig
 }
 
 /**
@@ -99,7 +103,38 @@ export async function requireServiceReadyMover(): Promise<
   if (feeRestricted(result.moverProfile)) {
     return feeRestrictedResponse()
   }
-  return result
+  // Residence gate (plan legal/7, V1): no verified residence document, no new
+  // work once the gate date has passed.
+  const { databases } = createAdminClient()
+  const vettingConfig = await loadVettingConfig(databases)
+  const residence = residenceBlock(result.moverProfile, Date.now(), vettingConfig.residenceGateFromMs)
+  if (residence) return vettingRefusalResponse(residence)
+  return { ...result, vettingConfig }
+}
+
+/** A vetting refusal with the same `fnCode` the functions return. */
+export async function vettingRefusalResponse(
+  fnCode: 'mover.residenceNotVerified' | 'mover.residenceExpired' | 'mover.dailyCapReached',
+): Promise<NextResponse> {
+  const { t } = await getTranslations()
+  return NextResponse.json({ error: t(`errors:${fnCode}`), fnCode }, { status: 403 })
+}
+
+/**
+ * The daily cap for a driver without a verified certificate (plan legal/7,
+ * V2), checked by every route that takes a job. `null` when the driver may
+ * accept; otherwise the refusal. `excludeMoveId` is the move being accepted,
+ * so a repeated tap on the same move is not counted against itself.
+ */
+export async function dailyCapRefusal(
+  moverProfile: Models.Document,
+  vettingConfig: VettingConfig | undefined,
+  excludeMoveId: string | null,
+): Promise<NextResponse | null> {
+  const { databases } = createAdminClient()
+  const config = vettingConfig ?? (await loadVettingConfig(databases))
+  const check = await dailyCapCheck(databases, moverProfile, config, Date.now(), PLATFORM_TZ, excludeMoveId)
+  return check.ok ? null : vettingRefusalResponse('mover.dailyCapReached')
 }
 
 /** The fee-balance refusal every work-handing route returns (`errors:fees.restricted`). */

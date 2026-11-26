@@ -168,6 +168,26 @@
     "verified": {
       "body": "Gratulacje! Twój profil przewoźnika został zweryfikowany. Możesz już przyjmować przeprowadzki.",
       "title": "Profil zweryfikowany"
+    },
+    "residenceVerified": {
+      "title": "Dokument pobytowy zatwierdzony",
+      "body": "Twój dokument pobytowy został sprawdzony i zatwierdzony."
+    },
+    "residenceRejected": {
+      "title": "Dokument pobytowy nie został przyjęty",
+      "body": "Twój dokument pobytowy nie został przyjęty. {{reason}}"
+    },
+    "certificateVerified": {
+      "title": "Certyfikat przeprowadzkowy zatwierdzony",
+      "body": "Twój certyfikat przeprowadzkowy został zatwierdzony. Klienci widzą Cię teraz w pierwszej kolejności i nie masz limitu dziennego."
+    },
+    "certificateRejected": {
+      "title": "Certyfikat przeprowadzkowy nie został przyjęty",
+      "body": "Twój certyfikat przeprowadzkowy nie został przyjęty. {{reason}}"
+    },
+    "residenceExpiring": {
+      "title": "Dokument pobytowy wkrótce straci ważność",
+      "body": "Twój dokument pobytowy straci ważność za {{days}} dni. Prześlij nowy, aby nadal otrzymywać przeprowadzki."
     }
   },
   "fees": {
@@ -192,6 +212,20 @@
     "missed": {
       "title": "Nieodebrane połączenie",
       "body": "Nieodebrane połączenie od {{name}}"
+    }
+  },
+  "offer": {
+    "priceConfirm": {
+      "title": "Nowa cena do potwierdzenia",
+      "body": "Przewoźnik znajdujący się dalej może wykonać Twoją przeprowadzkę za {{amount}} {{currency}} zamiast {{previousAmount}} {{currency}}. Otwórz przeprowadzkę, aby zaakceptować lub odrzucić."
+    },
+    "clientDeclined": {
+      "title": "Cena nie została zaakceptowana",
+      "body": "Klient nie zaakceptował ceny dla Twojej odległości. Przeprowadzka {{handle}} nie została Ci przydzielona."
+    },
+    "clientNoAnswer": {
+      "title": "Oferta zamknięta",
+      "body": "Klient nie potwierdził ceny na czas. Przeprowadzka {{handle}} nie została Ci przydzielona."
     }
   }
 }

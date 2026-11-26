@@ -652,6 +652,14 @@
         "platesOk": "Fotos de las placas y del vehículo adjuntas",
         "rentalWindow": {
           "value": "Alquilado hasta {{time}}"
+        },
+        "residencePhotosOk": "Las dos fotos del documento están adjuntas",
+        "certificate": {
+          "yes": "Certificado de mudanzas: foto adjunta, pendiente de revisión",
+          "no": "Certificado de mudanzas: ninguno"
+        },
+        "businessInsurance": {
+          "value": "Seguro profesional: {{answer}}"
         }
       },
       "step": {
@@ -672,6 +680,9 @@
         },
         "ownership": {
           "label": "Propiedad"
+        },
+        "residence": {
+          "label": "Situación de residencia"
         }
       },
       "submit": {
@@ -746,6 +757,30 @@
       "title": "¡Nueva solicitud de mudanza!",
       "viewDetails": {
         "cta": "Ver todos los detalles"
+      },
+      "offer": {
+        "distanceToPickup": {
+          "label": "{{distance}} hasta la dirección de recogida"
+        },
+        "includesDrive": {
+          "helper": "Incluye tu trayecto hasta la dirección de recogida."
+        },
+        "waiting": {
+          "title": "Esperando al cliente",
+          "body": "Por tu distancia hasta la dirección de recogida, tu precio de {{amount}} es más alto que el que aceptó el cliente. Se le ha pedido al cliente que lo confirme.",
+          "helper": "La mudanza aún no está asignada. Verás la respuesta aquí.",
+          "countdown": {
+            "label": "Tiempo restante: {{time}}"
+          }
+        },
+        "declined": {
+          "title": "Precio no aceptado",
+          "body": "El cliente no aceptó el precio para tu distancia. La mudanza no se te ha asignado. Esto no tiene ningún efecto en tu cuenta."
+        },
+        "closed": {
+          "title": "Oferta cerrada",
+          "body": "Esta oferta ya no está abierta. La mudanza no se te ha asignado. Esto no tiene ningún efecto en tu cuenta."
+        }
       }
     },
     "roleLabel": "Transportista",
@@ -773,6 +808,9 @@
       "subtitle": "Gestiona tu cuenta y tus preferencias",
       "version": {
         "label": "PickLte Mover App v{{version}}"
+      },
+      "documents": {
+        "helper": "Documento de residencia, certificado de mudanzas, seguro"
       }
     },
     "startRoute": {
@@ -1057,6 +1095,23 @@
         "countdown": {
           "label": "Su alquiler termina en {{time}}"
         }
+      },
+      "insurance": {
+        "question": "¿Tiene este vehículo seguro de responsabilidad civil?",
+        "label": "Seguro de responsabilidad civil del vehículo",
+        "uninsured": {
+          "notice": "Puedes enviar este vehículo, pero no se podrá aprobar ni utilizar hasta que tenga seguro de responsabilidad civil.",
+          "pending": "Este vehículo se declaró sin seguro de responsabilidad civil. No se podrá aprobar ni utilizar hasta que esté asegurado."
+        },
+        "update": {
+          "cta": "Actualizar la respuesta"
+        },
+        "renewBlocked": {
+          "error": "Un alquiler no se puede renovar sin seguro de responsabilidad civil del vehículo."
+        },
+        "review": {
+          "value": "Seguro de responsabilidad civil del vehículo: {{answer}}"
+        }
       }
     },
     "fees": {
@@ -1186,11 +1241,226 @@
       "then": {
         "label": "Después"
       }
+    },
+    "vetting": {
+      "loadFailed": {
+        "error": "No se pudieron cargar tus documentos. Inténtalo de nuevo."
+      },
+      "uploadFailed": {
+        "error": "No se pudo subir la foto. Inténtalo de nuevo."
+      },
+      "submitFailed": {
+        "error": "No se pudieron guardar tus documentos. Inténtalo de nuevo."
+      },
+      "rejectionReason": {
+        "value": "Motivo: {{reason}}"
+      },
+      "residence": {
+        "title": "Situación de residencia",
+        "why": "Lo pedimos para comprobar que puedes trabajar aquí. Solo el equipo de revisión de PickLte ve estas fotos y nunca se muestran a los clientes.",
+        "docType": {
+          "label": "¿Qué documento tienes?",
+          "passport": {
+            "label": "Pasaporte"
+          },
+          "residencePermit": {
+            "label": "Permiso de residencia"
+          }
+        },
+        "photo": {
+          "passportData": {
+            "label": "Página de datos"
+          },
+          "passportStamp": {
+            "label": "Página con el visado o el sello de residencia"
+          },
+          "permitFront": {
+            "label": "Anverso"
+          },
+          "permitBack": {
+            "label": "Reverso"
+          }
+        },
+        "expiry": {
+          "label": "Válido hasta",
+          "permit": {
+            "helper": "Obligatorio para un permiso de residencia."
+          },
+          "passport": {
+            "helper": "Opcional para un pasaporte."
+          }
+        },
+        "validUntil": {
+          "value": "Válido hasta el {{date}}"
+        }
+      },
+      "certificate": {
+        "question": "¿Tienes un certificado de mudanzas?",
+        "notice_one": "Los transportistas con un certificado verificado aparecen primero ante los clientes y pueden aceptar más mudanzas al día. Sin certificado puedes registrarte y trabajar igualmente, con un límite de {{count}} mudanza al día.",
+        "notice_other": "Los transportistas con un certificado verificado aparecen primero ante los clientes y pueden aceptar más mudanzas al día. Sin certificado puedes registrarte y trabajar igualmente, con un límite de {{count}} mudanzas al día.",
+        "photo": {
+          "label": "Foto de tu certificado",
+          "helper": "El certificado cuenta una vez revisado y aprobado."
+        },
+        "answerRequired": {
+          "error": "Responde a la pregunta sobre el certificado de mudanzas."
+        }
+      },
+      "insurance": {
+        "question": "¿Tienes un seguro de responsabilidad civil profesional o de mercancías en tránsito?",
+        "notice": "Asegurar tu trabajo es responsabilidad tuya. PickLte no asegura las mudanzas.",
+        "answerRequired": {
+          "error": "Responde a la pregunta sobre el seguro profesional."
+        }
+      },
+      "status": {
+        "missing": {
+          "label": "No enviado"
+        },
+        "review": {
+          "label": "En revisión"
+        },
+        "approved": {
+          "label": "Aprobado"
+        },
+        "rejected": {
+          "label": "Rechazado"
+        },
+        "expired": {
+          "label": "Caducado"
+        }
+      },
+      "banner": {
+        "missing": {
+          "title": "Añade tu documento de residencia",
+          "body": {
+            "open": "Sube tu pasaporte o permiso de residencia para que se pueda revisar.",
+            "deadline": "A partir del {{date}} necesitas un pasaporte o permiso de residencia aprobado para conectarte y aceptar mudanzas.",
+            "blocked": "No puedes conectarte ni aceptar mudanzas hasta que se apruebe tu pasaporte o permiso de residencia."
+          }
+        },
+        "pending": {
+          "title": "Documento de residencia en revisión",
+          "body": {
+            "open": "Recibirás un aviso cuando termine la revisión.",
+            "deadline": "Recibirás un aviso cuando termine la revisión. A partir del {{date}} hace falta un documento aprobado para conectarte y aceptar mudanzas.",
+            "blocked": "Recibirás un aviso cuando termine la revisión. Hasta entonces no puedes conectarte ni aceptar nuevas mudanzas."
+          }
+        },
+        "rejected": {
+          "title": "Documento de residencia no aceptado",
+          "body": {
+            "open": "Vuelve a subir el documento para que se pueda revisar.",
+            "deadline": "Vuelve a subir el documento. A partir del {{date}} hace falta un documento aprobado para conectarte y aceptar mudanzas.",
+            "blocked": "Vuelve a subir el documento. Hasta que se apruebe no puedes conectarte ni aceptar nuevas mudanzas."
+          }
+        },
+        "expired": {
+          "title": "Documento de residencia caducado",
+          "body": {
+            "blocked": "Sube el documento nuevo para volver a conectarte y aceptar mudanzas."
+          }
+        },
+        "cta": {
+          "add": "Añadir documento",
+          "view": "Ver",
+          "replace": "Subir de nuevo"
+        }
+      },
+      "dailyCap": {
+        "progress_one": "{{accepted}} de {{count}} mudanza hoy",
+        "progress_other": "{{accepted}} de {{count}} mudanzas hoy",
+        "reached": "Has alcanzado el límite de hoy. Hoy no se pueden aceptar más mudanzas.",
+        "helper": "Los transportistas con un certificado de mudanzas verificado no tienen límite diario.",
+        "inReview": "Tu certificado de mudanzas está en revisión. El límite diario se aplica hasta que se apruebe.",
+        "addCertificate": {
+          "cta": "Añadir un certificado"
+        }
+      },
+      "documents": {
+        "title": "Documentos",
+        "subtitle": "Tu documento de residencia, tu certificado de mudanzas y tu declaración de seguro.",
+        "open": {
+          "cta": "Abrir documentos"
+        },
+        "submitted": {
+          "success": "Enviado. Recibirás un aviso cuando termine la revisión."
+        },
+        "saved": {
+          "success": "Guardado."
+        },
+        "action": {
+          "submit": {
+            "cta": "Enviar a revisión"
+          },
+          "replace": {
+            "cta": "Sustituir documento"
+          },
+          "change": {
+            "cta": "Cambiar respuesta"
+          },
+          "answer": {
+            "cta": "Responder"
+          }
+        },
+        "residence": {
+          "missing": {
+            "body": "Aún no se ha enviado ningún documento."
+          },
+          "review": {
+            "body": "Tu documento está en revisión. Recibirás un aviso cuando termine."
+          },
+          "approved": {
+            "body": "Tu documento ha sido revisado y aprobado."
+          },
+          "rejected": {
+            "body": "Tu documento no fue aceptado. Vuelve a subirlo."
+          },
+          "expired": {
+            "body": "Tu documento ha caducado. Sube el nuevo."
+          },
+          "replaceNote": "Un documento que envías de nuevo se revisa otra vez antes de contar."
+        },
+        "certificate": {
+          "title": "Certificado de mudanzas",
+          "missing": {
+            "body": "No hay ningún certificado registrado."
+          },
+          "review": {
+            "body": "Tu certificado está en revisión. El límite diario se aplica hasta que se apruebe."
+          },
+          "approved": {
+            "body": "Tu certificado está verificado. Apareces primero ante los clientes y no tienes límite diario."
+          },
+          "rejected": {
+            "body": "Tu certificado no fue aceptado. Puedes volver a subirlo."
+          },
+          "removeNote": "Si respondes que no, se elimina el certificado registrado."
+        },
+        "insurance": {
+          "title": "Seguro profesional",
+          "missing": {
+            "body": "Aún sin responder."
+          },
+          "answer": {
+            "value": "Tu respuesta: {{answer}}"
+          },
+          "declaredAt": {
+            "value": "Declarado el {{date}}"
+          }
+        }
+      }
     }
   },
   "moverCard": {
     "vehicleVerified": {
       "badge": "Vehículo verificado"
+    },
+    "certified": {
+      "badge": "Transportista certificado"
+    },
+    "recommended": {
+      "badge": "Recomendado"
     }
   },
   "moverDashboard": {
@@ -1503,14 +1773,31 @@
     },
     "experienceYears_one": "{{count}} año exp.",
     "experienceYears_other": "{{count}} años exp.",
+    "extend": {
+      "cta": "Ampliar la búsqueda a {{distance}}"
+    },
+    "extended": {
+      "helper": "Se muestran transportistas a un máximo de {{distance}}."
+    },
     "languages": {
       "label": "Idiomas: {{languages}}"
+    },
+    "nearEmpty": {
+      "subtitle": "Ahora mismo no hay ningún transportista disponible cerca de tu dirección de recogida. Puedes buscar en una zona más amplia.",
+      "title": "No hay transportistas a menos de {{distance}}"
+    },
+    "noneFound": {
+      "subtitle": "No se ha encontrado ningún transportista para una mudanza inmediata, ni siquiera en la zona ampliada. Puedes programar esta mudanza para más tarde. Tus direcciones y objetos se conservan.",
+      "title": "No hay ningún transportista disponible ahora"
     },
     "pricing": {
       "disclaimer": "El precio final puede variar según las condiciones reales.",
       "helper_one": "Los precios incluyen el servicio base, la distancia ({{distance}}), la mano de obra del equipo, la clase de vehículo del transportista y {{count}} objeto. El IVA está incluido.",
       "helper_other": "Los precios incluyen el servicio base, la distancia ({{distance}}), la mano de obra del equipo, la clase de vehículo del transportista y {{count}} objetos. El IVA está incluido.",
       "title": "Cómo se calcula el precio:"
+    },
+    "scheduleInstead": {
+      "cta": "Programar esta mudanza"
     },
     "searching": {
       "subtitle": "Estamos buscando transportistas verificados cerca de tu punto de recogida",
@@ -1620,6 +1907,41 @@
     },
     "stepTotal": {
       "label": "/{{total}}"
+    }
+  },
+  "priceConfirm": {
+    "title": "Nuevo precio por confirmar",
+    "body": {
+      "named": "{{name}} puede hacer tu mudanza. Este transportista está más lejos de tu dirección de recogida, por eso el precio es más alto.",
+      "unnamed": "Un transportista que está más lejos de tu dirección de recogida puede hacer tu mudanza, por eso el precio es más alto."
+    },
+    "distance": {
+      "label": "Distancia del transportista a la dirección de recogida"
+    },
+    "previous": {
+      "label": "Precio que aceptaste"
+    },
+    "new": {
+      "label": "Nuevo precio"
+    },
+    "difference": {
+      "label": "Diferencia"
+    },
+    "countdown": {
+      "label": "Tiempo restante para responder: {{time}}"
+    },
+    "accept": {
+      "cta": "Aceptar {{amount}}"
+    },
+    "decline": {
+      "cta": "Rechazar"
+    },
+    "helper": "Si rechazas o no respondes a tiempo, este transportista no se asigna y se mantiene el precio que aceptaste.",
+    "declined": {
+      "notice": "Has rechazado el nuevo precio. Se mantiene el precio que aceptaste."
+    },
+    "failed": {
+      "error": "No pudimos guardar tu respuesta. Inténtalo de nuevo."
     }
   }
 }

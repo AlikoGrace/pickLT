@@ -85,6 +85,8 @@ const goodBody = {
   vehicleType: 'medium_truck',
   capacityM3: '15',
   grossWeightKg: '3500',
+  // Motor liability declaration (plan legal/7, V3): required on the web.
+  hasMotorInsurance: true,
   frontPlatePhoto: 'https://x/front',
   rearPlatePhoto: 'https://x/rear',
   fullVehiclePhoto: 'https://x/full',
@@ -588,7 +590,7 @@ describe('renewRental (R5)', () => {
       mover_profiles: [profile({ vehicleOwnership: 'rented', vehicleStatus: 'none', currentVehicleId: 'veh_rent', vehicleRentalEndAt: '2026-09-17T16:00:00.000Z' })],
       vehicles: [rentalVerified({ status: 'retired', expiredAt: '2026-09-17T16:00:01.000Z', isCurrent: true })],
     })
-    const { vehicle, profile: p, autoVerified } = await renewRental(db, { userId: 'user_1', vehicleId: 'veh_rent', rental: { hours: 4 }, nowMs: NOW })
+    const { vehicle, profile: p, autoVerified } = await renewRental(db, { userId: 'user_1', vehicleId: 'veh_rent', rental: { hours: 4 }, hasMotorInsurance: true, nowMs: NOW })
     expect(autoVerified).toBe(true)
     expect(vehicle.status).toBe('verified')
     expect(vehicle.renewalCount).toBe(1)
@@ -608,7 +610,7 @@ describe('renewRental (R5)', () => {
       mover_profiles: [profile({ vehicleOwnership: 'rented', vehicleStatus: 'none', currentVehicleId: 'veh_rent' })],
       vehicles: [rentalVerified({ rentalEndAt: '2026-07-01T16:00:00.000Z' })],
     })
-    const r = await renewRental(db, { userId: 'user_1', vehicleId: 'veh_rent', rental: { hours: 24 }, nowMs: NOW })
+    const r = await renewRental(db, { userId: 'user_1', vehicleId: 'veh_rent', rental: { hours: 24 }, hasMotorInsurance: true, nowMs: NOW })
     expect(r.autoVerified).toBe(false)
     expect(r.vehicle.status).toBe('pending_review')
     expect(r.profile.vehicleStatus).toBe('pending_review')
@@ -618,7 +620,7 @@ describe('renewRental (R5)', () => {
       mover_profiles: [profile({ vehicleOwnership: 'rented' })],
       vehicles: [rentalVerified({ status: 'rejected', rejectionReason: 'blurry' })],
     })
-    const err = await failure(renewRental(rejected, { userId: 'user_1', vehicleId: 'veh_rent', rental: { hours: 24 }, nowMs: NOW }))
+    const err = await failure(renewRental(rejected, { userId: 'user_1', vehicleId: 'veh_rent', rental: { hours: 24 }, hasMotorInsurance: true, nowMs: NOW }))
     expect(err.fnCode).toBe('vehicle.photosRequired')
   })
 
@@ -627,7 +629,7 @@ describe('renewRental (R5)', () => {
       mover_profiles: [profile({ vehicleStatus: 'verified', currentVehicleId: 'veh_own' })],
       vehicles: [ownedVerified(), rentalVerified({ rentalEndAt: '2026-07-01T16:00:00.000Z' })],
     })
-    const r = await renewRental(db, { userId: 'user_1', vehicleId: 'veh_rent', rental: { hours: 24 }, nowMs: NOW })
+    const r = await renewRental(db, { userId: 'user_1', vehicleId: 'veh_rent', rental: { hours: 24 }, hasMotorInsurance: true, nowMs: NOW })
     expect(r.autoVerified).toBe(false)
     expect(r.profile.currentVehicleId).toBe('veh_own')
     expect(r.profile.ownedVehicleId).toBe('veh_own')
@@ -639,10 +641,10 @@ describe('renewRental (R5)', () => {
       mover_profiles: [profile(), { ...profile(), $id: 'prof_2', userId: 'user_2' }],
       vehicles: [ownedVerified(), rentalVerified()],
     })
-    expect((await failure(renewRental(db, { userId: 'user_2', vehicleId: 'veh_rent', rental: { hours: 4 }, nowMs: NOW }))).fnCode).toBe('vehicle.notOwnVehicle')
-    expect((await failure(renewRental(db, { userId: 'user_1', vehicleId: 'veh_own', rental: { hours: 4 }, nowMs: NOW }))).fnCode).toBe('vehicle.notRental')
-    expect((await failure(renewRental(db, { userId: 'user_1', vehicleId: 'veh_rent', rental: null, nowMs: NOW }))).fnCode).toBe('vehicle.rentalWindowRequired')
-    expect((await failure(renewRental(db, { userId: 'user_1', vehicleId: 'nope', rental: { hours: 4 }, nowMs: NOW }))).status).toBe(404)
+    expect((await failure(renewRental(db, { userId: 'user_2', vehicleId: 'veh_rent', rental: { hours: 4 }, hasMotorInsurance: true, nowMs: NOW }))).fnCode).toBe('vehicle.notOwnVehicle')
+    expect((await failure(renewRental(db, { userId: 'user_1', vehicleId: 'veh_own', rental: { hours: 4 }, hasMotorInsurance: true, nowMs: NOW }))).fnCode).toBe('vehicle.notRental')
+    expect((await failure(renewRental(db, { userId: 'user_1', vehicleId: 'veh_rent', rental: null, hasMotorInsurance: true, nowMs: NOW }))).fnCode).toBe('vehicle.rentalWindowRequired')
+    expect((await failure(renewRental(db, { userId: 'user_1', vehicleId: 'nope', rental: { hours: 4 }, hasMotorInsurance: true, nowMs: NOW }))).status).toBe(404)
   })
 })
 
@@ -724,7 +726,7 @@ describe('schema / enum staging fallbacks', () => {
       }
       return create(d, col, id, data, perms)
     }
-    await renewRental(db, { userId: 'user_1', vehicleId: 'veh_rent', rental: { hours: 4 }, nowMs: NOW })
+    await renewRental(db, { userId: 'user_1', vehicleId: 'veh_rent', rental: { hours: 4 }, hasMotorInsurance: true, nowMs: NOW })
     const ev = db.store.vehicle_events[0]
     expect([ev.action, ev.source]).toEqual(['resubmitted', 'settings'])
     expect(ev.note).toContain('[renewed/renewal]')

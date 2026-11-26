@@ -3,6 +3,8 @@ import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE, PLATFORM_TZ } from '@/lib/constants'
 import { startGate } from '@/lib/mover-gates'
+import { acceptedServiceDateFor, dailyCapCheck, loadVettingConfig } from '@/lib/mover-vetting'
+import { writeDroppingUnknownAttributes } from '@/lib/appwrite-write'
 import { relId, writeNotification, statusNotification } from '@/lib/notify'
 import { paymentPermissions } from '@/lib/doc-permissions'
 import { wipeAfterMoveEnded, type PositionDb } from '@/lib/mover-position-server'
@@ -91,14 +93,28 @@ export async function POST(request: NextRequest) {
     // Leaving `mover_assigned` starts a job that was pinned to this mover
     // without an accept route, so it takes the accept gate here (master D4).
     // Every later transition is a move already under way and stays ungated.
-    const start = startGate(move, moverProfile, Date.now(), PLATFORM_TZ)
+    // The vetting settings are only needed for that one transition (plan legal/7).
+    const vettingConfig = move.status === 'mover_assigned' ? await loadVettingConfig(databases) : null
+    const start = startGate(move, moverProfile, Date.now(), PLATFORM_TZ, vettingConfig?.residenceGateFromMs ?? null)
     if (start.blocked) {
       const fnCode = start.fnCode ?? 'mover.vehicleNotReady'
       return NextResponse.json(
-        // i18n-keys: errors:mover.vehicleNotReady, errors:fees.restricted
+        // i18n-keys: errors:mover.vehicleNotReady, errors:fees.restricted,
+        // i18n-keys: errors:mover.residenceNotVerified, errors:mover.residenceExpired
         { error: t(`errors:${fnCode}`), fnCode },
         { status: 403 }
       )
+    }
+    // Taking the job counts against the daily cap of a driver without a
+    // verified certificate (V2), exactly as an accept route would.
+    if (start.taking && vettingConfig) {
+      const cap = await dailyCapCheck(databases, moverProfile, vettingConfig, Date.now(), PLATFORM_TZ, moveId)
+      if (!cap.ok) {
+        return NextResponse.json(
+          { error: t('errors:mover.dailyCapReached'), fnCode: 'mover.dailyCapReached' },
+          { status: 403 }
+        )
+      }
     }
 
     // Prevent starting a route before the scheduled move date
@@ -119,6 +135,8 @@ export async function POST(request: NextRequest) {
     const updateData: Record<string, unknown> = { status }
     // Vehicle snapshot (master D13) when the accept route never wrote one.
     if (start.vehicleId) updateData.vehicleId = start.vehicleId
+    // The service day the job was taken: what the daily cap counts on.
+    if (start.taking) updateData.acceptedServiceDate = acceptedServiceDateFor(Date.now(), PLATFORM_TZ)
 
     // If transitioning to awaiting_payment, create a payment record
     if (status === 'awaiting_payment') {
@@ -151,11 +169,10 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    await databases.updateDocument(
-      APPWRITE.DATABASE_ID,
-      APPWRITE.COLLECTIONS.MOVES,
-      moveId,
-      updateData
+    await writeDroppingUnknownAttributes(
+      updateData,
+      (data) => databases.updateDocument(APPWRITE.DATABASE_ID, APPWRITE.COLLECTIONS.MOVES, moveId, data),
+      'update-move-status',
     )
 
     // The job is over: an offline mover with no other job may no longer be

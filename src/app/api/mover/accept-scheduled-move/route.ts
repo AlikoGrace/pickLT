@@ -1,7 +1,9 @@
 import { getTranslations } from '@/lib/i18n-server'
 import { createAdminClient } from '@/lib/appwrite-server'
-import { APPWRITE } from '@/lib/constants'
-import { isErrorResponse, requireServiceReadyMover } from '@/lib/mover-auth'
+import { APPWRITE, PLATFORM_TZ } from '@/lib/constants'
+import { writeDroppingUnknownAttributes } from '@/lib/appwrite-write'
+import { dailyCapRefusal, isErrorResponse, requireServiceReadyMover } from '@/lib/mover-auth'
+import { acceptedServiceDateFor } from '@/lib/mover-vetting'
 import { NextRequest, NextResponse } from 'next/server'
 
 /**
@@ -26,6 +28,10 @@ export async function POST(request: NextRequest) {
     if (!moveId) {
       return NextResponse.json({ error: 'moveId is required' }, { status: 400 })
     }
+
+    // Daily cap for a driver without a verified certificate (plan legal/7, V2).
+    const capRefusal = await dailyCapRefusal(moverProfile, auth.vettingConfig, moveId)
+    if (capRefusal) return capRefusal
 
     const { databases } = createAdminClient()
 
@@ -57,16 +63,17 @@ export async function POST(request: NextRequest) {
     }
 
     // Assign the mover and update status to mover_accepted
-    await databases.updateDocument(
-      APPWRITE.DATABASE_ID,
-      APPWRITE.COLLECTIONS.MOVES,
-      moveId,
+    await writeDroppingUnknownAttributes(
       {
         moverProfileId: moverProfile.$id,
         status: 'mover_accepted',
         // Vehicle snapshot at assignment (master D13).
         vehicleId: (moverProfile as Record<string, unknown>).currentVehicleId ?? null,
-      }
+        // The service day of the acceptance: what the daily cap counts on.
+        acceptedServiceDate: acceptedServiceDateFor(Date.now(), PLATFORM_TZ),
+      },
+      (data) => databases.updateDocument(APPWRITE.DATABASE_ID, APPWRITE.COLLECTIONS.MOVES, moveId, data),
+      'accept-scheduled-move',
     )
 
     return NextResponse.json({

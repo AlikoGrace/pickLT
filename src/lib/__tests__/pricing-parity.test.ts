@@ -100,7 +100,7 @@ describe('MoveDNA §5 worked examples (master §6.4)', () => {
     expect(movedna('regular', 'scheduled').profile).toMatchObject({ crew: 2, billableHours: 2, vehicleType: 'medium_truck' })
     expect(movedna('premium', 'scheduled').profile).toMatchObject({ crew: 3, billableHours: 2, vehicleType: 'large_truck' })
     expect(movedna('light', 'scheduled').lines).toEqual({
-      base: 35, distance: 22, vehicle: 15, labor: 44, extraHelpers: 0, items: 0, packing: 0, handling: 0, services: 0, storage: 0,
+      base: 35, distance: 22, vehicle: 15, labor: 44, extraHelpers: 0, items: 0, packing: 0, handling: 0, approach: 0, services: 0, storage: 0,
     })
     expect(movedna('premium', 'scheduled').lines).toMatchObject({ base: 85, distance: 34, vehicle: 45, labor: 168, packing: 65, handling: 40 })
   })
@@ -174,8 +174,8 @@ describe('golden fixture — quoteMove (shared with pickltmobile)', () => {
 // ── 3. Registry parity ───────────────────────────────────────────────────────
 
 describe('registry — PRICING_DEFAULTS', () => {
-  it('is exactly the 66-key v3 registry (master §5 less the retired services)', () => {
-    expect(Object.keys(PRICING_DEFAULTS)).toHaveLength(66)
+  it('is exactly the 70-key v3 registry (master §5 less the retired services)', () => {
+    expect(Object.keys(PRICING_DEFAULTS)).toHaveLength(70)
     expect(Object.keys(PRICING_DEFAULTS).filter((k) => k.startsWith('service.') || k.startsWith('storage.'))).toEqual([])
     for (const legacy of ['instant.', 'scheduled.', 'mover.', 'pricing.model', 'pricing.local', 'pricing.volume', 'pricing.access', 'pricing.leadTime']) {
       expect(Object.keys(PRICING_DEFAULTS).filter((k) => k.startsWith(legacy))).toEqual([])

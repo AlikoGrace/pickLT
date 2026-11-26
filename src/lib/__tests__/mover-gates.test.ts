@@ -68,11 +68,11 @@ describe('startGate (update-move-status)', () => {
   })
 
   it('snapshots the current vehicle when leaving mover_assigned with none on the move (D13)', () => {
-    expect(startGate({ status: 'mover_assigned', vehicleId: null }, mover(), NOW, TZ)).toEqual({ blocked: false, vehicleId: 'v1' })
+    expect(startGate({ status: 'mover_assigned', vehicleId: null }, mover(), NOW, TZ)).toEqual({ blocked: false, vehicleId: 'v1', taking: true })
   })
 
   it('keeps a vehicle the assignment already snapshotted', () => {
-    expect(startGate({ status: 'mover_assigned', vehicleId: 'v0' }, mover(), NOW, TZ)).toEqual({ blocked: false, vehicleId: null })
+    expect(startGate({ status: 'mover_assigned', vehicleId: 'v0' }, mover(), NOW, TZ)).toEqual({ blocked: false, vehicleId: null, taking: true })
   })
 
   it('never gates a move that is already under way (D4)', () => {

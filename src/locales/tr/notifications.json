@@ -164,6 +164,26 @@
     "verified": {
       "body": "Tebrikler! Nakliyeci profiliniz doğrulandı. Artık taşınma işlerini kabul edebilirsiniz.",
       "title": "Profil doğrulandı"
+    },
+    "residenceVerified": {
+      "title": "İkamet belgesi onaylandı",
+      "body": "İkamet belgeniz incelendi ve onaylandı."
+    },
+    "residenceRejected": {
+      "title": "İkamet belgesi kabul edilmedi",
+      "body": "İkamet belgeniz kabul edilmedi. {{reason}}"
+    },
+    "certificateVerified": {
+      "title": "Taşımacılık sertifikası onaylandı",
+      "body": "Taşımacılık sertifikanız onaylandı. Artık müşterilere ilk sırada gösteriliyorsunuz ve günlük sınırınız yok."
+    },
+    "certificateRejected": {
+      "title": "Taşımacılık sertifikası kabul edilmedi",
+      "body": "Taşımacılık sertifikanız kabul edilmedi. {{reason}}"
+    },
+    "residenceExpiring": {
+      "title": "İkamet belgesinin süresi yakında doluyor",
+      "body": "İkamet belgenizin süresi {{days}} gün içinde doluyor. Taşıma almaya devam etmek için yenisini yükleyin."
     }
   },
   "fees": {
@@ -188,6 +208,20 @@
     "missed": {
       "title": "Cevapsız arama",
       "body": "{{name}} adlı kişiden cevapsız arama"
+    }
+  },
+  "offer": {
+    "priceConfirm": {
+      "title": "Onaylanacak yeni fiyat",
+      "body": "Daha uzaktaki bir nakliyeci taşımanızı {{previousAmount}} {{currency}} yerine {{amount}} {{currency}} karşılığında yapabilir. Kabul etmek veya reddetmek için taşımayı açın."
+    },
+    "clientDeclined": {
+      "title": "Fiyat kabul edilmedi",
+      "body": "Müşteri, mesafeniz için fiyatı kabul etmedi. {{handle}} taşıması size atanmadı."
+    },
+    "clientNoAnswer": {
+      "title": "Teklif kapandı",
+      "body": "Müşteri fiyatı zamanında onaylamadı. {{handle}} taşıması size atanmadı."
     }
   }
 }

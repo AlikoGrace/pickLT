@@ -164,6 +164,26 @@
     "verified": {
       "body": "Congratulations! Your mover profile has been verified. You can now accept moves.",
       "title": "Profile verified"
+    },
+    "residenceVerified": {
+      "title": "Residence document approved",
+      "body": "Your residence document has been checked and approved."
+    },
+    "residenceRejected": {
+      "title": "Residence document not accepted",
+      "body": "Your residence document was not accepted. {{reason}}"
+    },
+    "certificateVerified": {
+      "title": "Moving certificate approved",
+      "body": "Your moving certificate has been approved. You are now shown first to clients and have no daily limit."
+    },
+    "certificateRejected": {
+      "title": "Moving certificate not accepted",
+      "body": "Your moving certificate was not accepted. {{reason}}"
+    },
+    "residenceExpiring": {
+      "title": "Residence document expires soon",
+      "body": "Your residence document expires in {{days}} days. Upload the new one to keep receiving moves."
     }
   },
   "fees": {
@@ -188,6 +208,20 @@
     "missed": {
       "title": "Missed call",
       "body": "Missed call from {{name}}"
+    }
+  },
+  "offer": {
+    "priceConfirm": {
+      "title": "New price to confirm",
+      "body": "A mover farther away can take your move for {{amount}} {{currency}} instead of {{previousAmount}} {{currency}}. Open the move to accept or decline."
+    },
+    "clientDeclined": {
+      "title": "Price not accepted",
+      "body": "The client did not accept the price for your distance. Move {{handle}} was not assigned to you."
+    },
+    "clientNoAnswer": {
+      "title": "Offer closed",
+      "body": "The client did not confirm the price in time. Move {{handle}} was not assigned to you."
     }
   }
 }

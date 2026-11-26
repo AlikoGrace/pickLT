@@ -164,6 +164,26 @@
     "verified": {
       "body": "Herzlichen Glückwunsch! Ihr Umzugsprofi-Profil wurde verifiziert. Sie können jetzt Umzüge annehmen.",
       "title": "Profil verifiziert"
+    },
+    "residenceVerified": {
+      "title": "Aufenthaltsdokument freigegeben",
+      "body": "Ihr Aufenthaltsdokument wurde geprüft und freigegeben."
+    },
+    "residenceRejected": {
+      "title": "Aufenthaltsdokument nicht akzeptiert",
+      "body": "Ihr Aufenthaltsdokument wurde nicht akzeptiert. {{reason}}"
+    },
+    "certificateVerified": {
+      "title": "Umzugszertifikat freigegeben",
+      "body": "Ihr Umzugszertifikat wurde freigegeben. Sie werden Kunden jetzt zuerst angezeigt und haben kein Tageslimit."
+    },
+    "certificateRejected": {
+      "title": "Umzugszertifikat nicht akzeptiert",
+      "body": "Ihr Umzugszertifikat wurde nicht akzeptiert. {{reason}}"
+    },
+    "residenceExpiring": {
+      "title": "Aufenthaltsdokument läuft bald ab",
+      "body": "Ihr Aufenthaltsdokument läuft in {{days}} Tagen ab. Laden Sie das neue hoch, um weiterhin Umzüge zu erhalten."
     }
   },
   "fees": {
@@ -188,6 +208,20 @@
     "missed": {
       "title": "Verpasster Anruf",
       "body": "Verpasster Anruf von {{name}}"
+    }
+  },
+  "offer": {
+    "priceConfirm": {
+      "title": "Neuen Preis bestätigen",
+      "body": "Ein weiter entfernter Umzugshelfer kann Ihren Umzug für {{amount}} {{currency}} statt {{previousAmount}} {{currency}} übernehmen. Öffnen Sie den Umzug, um anzunehmen oder abzulehnen."
+    },
+    "clientDeclined": {
+      "title": "Preis nicht angenommen",
+      "body": "Der Kunde hat den Preis für Ihre Entfernung nicht angenommen. Der Umzug {{handle}} wurde Ihnen nicht zugewiesen."
+    },
+    "clientNoAnswer": {
+      "title": "Angebot geschlossen",
+      "body": "Der Kunde hat den Preis nicht rechtzeitig bestätigt. Der Umzug {{handle}} wurde Ihnen nicht zugewiesen."
     }
   }
 }

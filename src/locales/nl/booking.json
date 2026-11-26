@@ -1117,6 +1117,9 @@
       },
       "vehicle": {
         "label": "Voertuig ({{vehicle}})"
+      },
+      "approach": {
+        "label": "Rit naar ophaaladres ({{km}})"
       }
     },
     "minimumApplied": {

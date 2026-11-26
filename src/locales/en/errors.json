@@ -269,7 +269,10 @@
     "vehicleNotReady": "Confirm or verify your vehicle before going online or accepting moves.",
     "withdrawFailed": "Failed to withdraw from move",
     "withdrawRetry": "Failed to withdraw. Please try again.",
-    "countryMismatch": "This move is in {{country}}; your account is registered in another country."
+    "countryMismatch": "This move is in {{country}}; your account is registered in another country.",
+    "residenceNotVerified": "Your residence document has not been approved yet. Upload it, or wait for the review to finish.",
+    "residenceExpired": "Your residence document has expired. Upload the new one to keep working.",
+    "dailyCapReached": "You have reached today's limit of moves. Movers with a verified moving certificate have no daily limit."
   },
   "movers": {
     "fetchFailed": "Failed to fetch movers",
@@ -374,7 +377,8 @@
     "notOwnVehicle": "This vehicle does not belong to your account.",
     "weightRequired": "Enter the gross vehicle weight in kilograms.",
     "trailerWeightRequired": "Enter the trailer's gross weight in kilograms.",
-    "weightOverLimit": "Vehicles above 3,500 kg including trailer cannot be registered."
+    "weightOverLimit": "Vehicles above 3,500 kg including trailer cannot be registered.",
+    "insuranceRequired": "Answer the motor liability insurance question. A vehicle without this insurance cannot be used."
   },
   "country": {
     "notLive": "PickLte is not available in {{country}} yet.",
@@ -400,5 +404,16 @@
     "reauthRequired": "Sign in again to delete your account.",
     "adminNotDeletable": "An administrator account cannot be deleted here.",
     "deletionIncomplete": "Your account could not be deleted completely. Please try again."
+  },
+  "vetting": {
+    "residenceTypeRequired": "Choose passport or residence permit.",
+    "residencePhotosRequired": "Photograph both sides of the document.",
+    "residenceExpiryRequired": "Enter the date the document is valid until.",
+    "residenceExpiryPast": "This document has expired.",
+    "certificatePhotoRequired": "Add a photo of your moving certificate."
+  },
+  "offer": {
+    "notPending": "There is no price waiting for confirmation.",
+    "expired": "This offer is no longer open."
   }
 }

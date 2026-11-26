@@ -11,6 +11,9 @@ import Avatar from '@/shared/Avatar'
 import { formatDateWith, formatMoney, formatPercent } from '@/lib/format'
 import { payoutRatesFrom } from '@/lib/moverPayout'
 import { feeStandingAllowsWork } from '@/lib/feeLedger'
+import DailyCapCard from '@/components/mover/DailyCapCard'
+import type { VettingView } from '@/lib/mover-vetting-view'
+import { fetchVettingView } from '@/lib/vetting-client'
 
 interface DashboardData {
   activeMoves: string[]
@@ -60,6 +63,21 @@ const DashboardPage = () => {
   const [dashboard, setDashboard] = useState<DashboardData | null>(null)
   const [availableMovesCount, setAvailableMovesCount] = useState(0)
   const [loading, setLoading] = useState(true)
+  // Daily limit for a driver without a verified certificate (plan legal/7 V2).
+  const [vetting, setVetting] = useState<VettingView | null>(null)
+  useEffect(() => {
+    let cancelled = false
+    fetchVettingView()
+      .then((v) => {
+        if (!cancelled) setVetting(v)
+      })
+      .catch(() => {
+        /* the card is simply not shown */
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   const isVerified = user?.moverDetails?.verificationStatus === 'verified'
   // Unpaid platform fees past the limit (plan fees §5): no going online, no new moves.
@@ -261,6 +279,9 @@ const DashboardPage = () => {
           </Link>
         ))}
       </div>
+
+      {/* x of y moves today: uncertified drivers only */}
+      <DailyCapCard vetting={vetting} />
 
       {/* Quick Actions */}
       <div className="mb-8">

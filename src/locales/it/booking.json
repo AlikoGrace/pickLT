@@ -1117,6 +1117,9 @@
       },
       "vehicle": {
         "label": "Veicolo ({{vehicle}})"
+      },
+      "approach": {
+        "label": "Tragitto verso il ritiro ({{km}})"
       }
     },
     "minimumApplied": {

@@ -652,6 +652,14 @@
         "platesOk": "Number plate and vehicle photos attached",
         "rentalWindow": {
           "value": "Rented until {{time}}"
+        },
+        "residencePhotosOk": "Both document photos attached",
+        "certificate": {
+          "yes": "Moving certificate: photo attached, to be reviewed",
+          "no": "Moving certificate: none"
+        },
+        "businessInsurance": {
+          "value": "Business insurance: {{answer}}"
         }
       },
       "step": {
@@ -672,6 +680,9 @@
         },
         "ownership": {
           "label": "Ownership"
+        },
+        "residence": {
+          "label": "Residence status"
         }
       },
       "submit": {
@@ -746,6 +757,30 @@
       "title": "New Move Request!",
       "viewDetails": {
         "cta": "View Full Details"
+      },
+      "offer": {
+        "distanceToPickup": {
+          "label": "{{distance}} to the pickup address"
+        },
+        "includesDrive": {
+          "helper": "Includes your drive to the pickup address."
+        },
+        "waiting": {
+          "title": "Waiting for the client",
+          "body": "Because of your distance to the pickup address, your price of {{amount}} is higher than the one the client agreed to. The client has been asked to confirm it.",
+          "helper": "The move is not assigned yet. You will see the answer here.",
+          "countdown": {
+            "label": "Time left: {{time}}"
+          }
+        },
+        "declined": {
+          "title": "Price not accepted",
+          "body": "The client did not accept the price for your distance. The move was not assigned to you. This has no effect on your account."
+        },
+        "closed": {
+          "title": "Offer closed",
+          "body": "This offer is no longer open. The move was not assigned to you. This has no effect on your account."
+        }
       }
     },
     "roleLabel": "Mover",
@@ -773,6 +808,9 @@
       "subtitle": "Manage your account and preferences",
       "version": {
         "label": "PickLte Mover App v{{version}}"
+      },
+      "documents": {
+        "helper": "Residence document, moving certificate, insurance"
       }
     },
     "startRoute": {
@@ -1057,6 +1095,23 @@
         "countdown": {
           "label": "Your rental ends in {{time}}"
         }
+      },
+      "insurance": {
+        "question": "Does this vehicle have motor liability insurance?",
+        "label": "Motor liability insurance",
+        "uninsured": {
+          "notice": "You can submit this vehicle, but it cannot be approved or used until it has motor liability insurance.",
+          "pending": "This vehicle was declared without motor liability insurance. It cannot be approved or used until it is insured."
+        },
+        "update": {
+          "cta": "Update the answer"
+        },
+        "renewBlocked": {
+          "error": "A rental cannot be renewed without motor liability insurance."
+        },
+        "review": {
+          "value": "Motor liability insurance: {{answer}}"
+        }
       }
     },
     "fees": {
@@ -1186,11 +1241,226 @@
       "then": {
         "label": "Then"
       }
+    },
+    "vetting": {
+      "loadFailed": {
+        "error": "Could not load your documents. Please try again."
+      },
+      "uploadFailed": {
+        "error": "Could not upload the photo. Please try again."
+      },
+      "submitFailed": {
+        "error": "Could not save your documents. Please try again."
+      },
+      "rejectionReason": {
+        "value": "Reason: {{reason}}"
+      },
+      "residence": {
+        "title": "Residence status",
+        "why": "We ask for this to check that you are allowed to work here. Only the PickLte review team sees these photos, and they are never shown to clients.",
+        "docType": {
+          "label": "Which document do you have?",
+          "passport": {
+            "label": "Passport"
+          },
+          "residencePermit": {
+            "label": "Residence permit"
+          }
+        },
+        "photo": {
+          "passportData": {
+            "label": "Data page"
+          },
+          "passportStamp": {
+            "label": "Page with the visa or residence stamp"
+          },
+          "permitFront": {
+            "label": "Front"
+          },
+          "permitBack": {
+            "label": "Back"
+          }
+        },
+        "expiry": {
+          "label": "Valid until",
+          "permit": {
+            "helper": "Required for a residence permit."
+          },
+          "passport": {
+            "helper": "Optional for a passport."
+          }
+        },
+        "validUntil": {
+          "value": "Valid until {{date}}"
+        }
+      },
+      "certificate": {
+        "question": "Do you hold a moving certificate?",
+        "notice_one": "Movers with a verified certificate are shown first to clients and can take more moves per day. Without one you can still register and work, with a limit of {{count}} move per day.",
+        "notice_other": "Movers with a verified certificate are shown first to clients and can take more moves per day. Without one you can still register and work, with a limit of {{count}} moves per day.",
+        "photo": {
+          "label": "Photo of your certificate",
+          "helper": "The certificate counts once it has been reviewed and approved."
+        },
+        "answerRequired": {
+          "error": "Answer the moving certificate question."
+        }
+      },
+      "insurance": {
+        "question": "Do you have business liability or goods-in-transit insurance?",
+        "notice": "You are responsible for insuring your work. PickLte does not insure moves.",
+        "answerRequired": {
+          "error": "Answer the business insurance question."
+        }
+      },
+      "status": {
+        "missing": {
+          "label": "Not submitted"
+        },
+        "review": {
+          "label": "Under review"
+        },
+        "approved": {
+          "label": "Approved"
+        },
+        "rejected": {
+          "label": "Rejected"
+        },
+        "expired": {
+          "label": "Expired"
+        }
+      },
+      "banner": {
+        "missing": {
+          "title": "Add your residence document",
+          "body": {
+            "open": "Upload your passport or residence permit so it can be reviewed.",
+            "deadline": "From {{date}} you need an approved passport or residence permit to go online and accept moves.",
+            "blocked": "You cannot go online or accept moves until your passport or residence permit has been approved."
+          }
+        },
+        "pending": {
+          "title": "Residence document under review",
+          "body": {
+            "open": "You will be notified when the review is finished.",
+            "deadline": "You will be notified when the review is finished. From {{date}} an approved document is needed to go online and accept moves.",
+            "blocked": "You will be notified when the review is finished. Until then you cannot go online or accept new moves."
+          }
+        },
+        "rejected": {
+          "title": "Residence document not accepted",
+          "body": {
+            "open": "Upload the document again so it can be reviewed.",
+            "deadline": "Upload the document again. From {{date}} an approved document is needed to go online and accept moves.",
+            "blocked": "Upload the document again. Until it is approved you cannot go online or accept new moves."
+          }
+        },
+        "expired": {
+          "title": "Residence document expired",
+          "body": {
+            "blocked": "Upload the new document to go online and accept moves again."
+          }
+        },
+        "cta": {
+          "add": "Add document",
+          "view": "View",
+          "replace": "Upload again"
+        }
+      },
+      "dailyCap": {
+        "progress_one": "{{accepted}} of {{count}} move today",
+        "progress_other": "{{accepted}} of {{count}} moves today",
+        "reached": "You have reached today's limit. No more moves can be accepted today.",
+        "helper": "Movers with a verified moving certificate have no daily limit.",
+        "inReview": "Your moving certificate is under review. The daily limit applies until it is approved.",
+        "addCertificate": {
+          "cta": "Add a certificate"
+        }
+      },
+      "documents": {
+        "title": "Documents",
+        "subtitle": "Your residence document, moving certificate and insurance declaration.",
+        "open": {
+          "cta": "Open documents"
+        },
+        "submitted": {
+          "success": "Submitted. You will be notified when the review is finished."
+        },
+        "saved": {
+          "success": "Saved."
+        },
+        "action": {
+          "submit": {
+            "cta": "Submit for review"
+          },
+          "replace": {
+            "cta": "Replace document"
+          },
+          "change": {
+            "cta": "Change answer"
+          },
+          "answer": {
+            "cta": "Answer"
+          }
+        },
+        "residence": {
+          "missing": {
+            "body": "No document submitted yet."
+          },
+          "review": {
+            "body": "Your document is being reviewed. You will be notified when the review is finished."
+          },
+          "approved": {
+            "body": "Your document has been reviewed and approved."
+          },
+          "rejected": {
+            "body": "Your document was not accepted. Upload it again."
+          },
+          "expired": {
+            "body": "Your document has expired. Upload the new one."
+          },
+          "replaceNote": "A document you submit again is reviewed again before it counts."
+        },
+        "certificate": {
+          "title": "Moving certificate",
+          "missing": {
+            "body": "No certificate on file."
+          },
+          "review": {
+            "body": "Your certificate is being reviewed. The daily limit applies until it is approved."
+          },
+          "approved": {
+            "body": "Your certificate is verified. You are shown first to clients and have no daily limit."
+          },
+          "rejected": {
+            "body": "Your certificate was not accepted. You can upload it again."
+          },
+          "removeNote": "Answering no removes the certificate on file."
+        },
+        "insurance": {
+          "title": "Business insurance",
+          "missing": {
+            "body": "Not answered yet."
+          },
+          "answer": {
+            "value": "Your answer: {{answer}}"
+          },
+          "declaredAt": {
+            "value": "Declared on {{date}}"
+          }
+        }
+      }
     }
   },
   "moverCard": {
     "vehicleVerified": {
       "badge": "Verified vehicle"
+    },
+    "certified": {
+      "badge": "Certified mover"
+    },
+    "recommended": {
+      "badge": "Recommended"
     }
   },
   "moverDashboard": {
@@ -1503,14 +1773,31 @@
     },
     "experienceYears_one": "{{count}}y exp",
     "experienceYears_other": "{{count}}y exp",
+    "extend": {
+      "cta": "Extend search to {{distance}}"
+    },
+    "extended": {
+      "helper": "Showing movers up to {{distance}} away."
+    },
     "languages": {
       "label": "Languages: {{languages}}"
+    },
+    "nearEmpty": {
+      "subtitle": "No mover is available close to your pickup address right now. You can search a wider area.",
+      "title": "No movers within {{distance}}"
+    },
+    "noneFound": {
+      "subtitle": "No mover could be found for an instant move, even in the wider area. You can schedule this move for a later time instead. Your addresses and items are kept.",
+      "title": "No mover available right now"
     },
     "pricing": {
       "disclaimer": "Final price may vary based on actual conditions.",
       "helper_one": "Prices include the base service, distance ({{distance}}), crew labour, the mover's vehicle class and {{count}} item. VAT is included.",
       "helper_other": "Prices include the base service, distance ({{distance}}), crew labour, the mover's vehicle class and {{count}} items. VAT is included.",
       "title": "How pricing works:"
+    },
+    "scheduleInstead": {
+      "cta": "Schedule this move"
     },
     "searching": {
       "subtitle": "We're searching for verified movers near your pickup location",
@@ -1620,6 +1907,41 @@
     },
     "stepTotal": {
       "label": "/{{total}}"
+    }
+  },
+  "priceConfirm": {
+    "title": "New price to confirm",
+    "body": {
+      "named": "{{name}} can take your move. This mover is farther from your pickup address, so the price is higher.",
+      "unnamed": "A mover farther from your pickup address can take your move, so the price is higher."
+    },
+    "distance": {
+      "label": "Mover's distance to the pickup address"
+    },
+    "previous": {
+      "label": "Price you agreed to"
+    },
+    "new": {
+      "label": "New price"
+    },
+    "difference": {
+      "label": "Difference"
+    },
+    "countdown": {
+      "label": "Time left to answer: {{time}}"
+    },
+    "accept": {
+      "cta": "Accept {{amount}}"
+    },
+    "decline": {
+      "cta": "Decline"
+    },
+    "helper": "If you decline or do not answer in time, this mover is not assigned and the price you agreed to stays.",
+    "declined": {
+      "notice": "You declined the new price. The price you agreed to stays."
+    },
+    "failed": {
+      "error": "We could not save your answer. Please try again."
     }
   }
 }

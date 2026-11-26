@@ -316,6 +316,16 @@ export default function VehiclePage() {
                 </p>
               )}
 
+              {/* Declared uninsured (plan legal/7 V3): stored, but it cannot be approved or used. */}
+              {vehicle.hasMotorInsurance === false && vehicle.status === 'pending_review' && (
+                <p className="mt-3 rounded-xl bg-amber-50 p-3 text-sm text-amber-800 dark:bg-amber-900/20 dark:text-amber-200">
+                  {t('web:mover.vehicle.insurance.uninsured.pending')}{' '}
+                  <Link href="/vehicle/setup?mode=resubmit" className="font-semibold underline">
+                    {t('web:mover.vehicle.insurance.update.cta')}
+                  </Link>
+                </p>
+              )}
+
               <dl className="mt-4 grid grid-cols-1 gap-3 text-sm min-[400px]:grid-cols-2">
                 <div>
                   <dt className="text-xs uppercase text-neutral-400">{t('web:mover.vehicle.submittedAt.label')}</dt>
@@ -331,6 +341,14 @@ export default function VehiclePage() {
                   <div>
                     <dt className="text-xs uppercase text-neutral-400">{t('booking:vehicle.rental.endsAt.label')}</dt>
                     <dd className="text-neutral-800 dark:text-neutral-200">{formatDateTime(vehicle.rentalEndAt)}</dd>
+                  </div>
+                )}
+                {typeof vehicle.hasMotorInsurance === 'boolean' && (
+                  <div>
+                    <dt className="text-xs uppercase text-neutral-400">{t('web:mover.vehicle.insurance.label')}</dt>
+                    <dd className="text-neutral-800 dark:text-neutral-200">
+                      {vehicle.hasMotorInsurance ? t('common:answer.yes.label') : t('common:answer.no.label')}
+                    </dd>
                   </div>
                 )}
               </dl>

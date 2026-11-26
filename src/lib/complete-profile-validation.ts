@@ -1,4 +1,7 @@
-import { resolveRentalWindow, validateVehicleInput, type VehicleOwnership } from './vehicle-service'
+import { validateVehicleForm } from './vehicle-form'
+import { resolveRentalWindow, type VehicleOwnership } from './vehicle-service'
+import type { ResidenceDocType } from './vetting'
+import { vettingStepValid } from './vetting-form'
 
 /**
  * Step gating for the driver registration wizard
@@ -15,20 +18,33 @@ import { resolveRentalWindow, validateVehicleInput, type VehicleOwnership } from
  * rented vehicle WITH its rental period during onboarding, on the same step.
  * The step stays skippable for them — leave every vehicle field empty and the
  * rental is added later from the dashboard (`vehicleStatus` stays `none`).
+ *
+ * Plan `legal/7.driver-vetting.md`: the **residence** step follows
+ * verification (passport or residence permit, the moving-certificate question,
+ * the business-insurance declaration), and the vehicle step asks whether the
+ * vehicle has motor liability insurance.
  */
 
-export type CompleteProfileStep = 'personal' | 'verification' | 'ownership' | 'vehicle' | 'experience' | 'review'
+export type CompleteProfileStep =
+  | 'personal'
+  | 'verification'
+  | 'residence'
+  | 'ownership'
+  | 'vehicle'
+  | 'experience'
+  | 'review'
 
 export const ALL_STEPS: readonly CompleteProfileStep[] = [
   'personal',
   'verification',
+  'residence',
   'ownership',
   'vehicle',
   'experience',
   'review',
 ]
 
-/** The wizard's steps for a given ownership choice — every driver walks all six since wave 2026-10. */
+/** The wizard's steps for a given ownership choice — every driver walks all of them since wave 2026-10. */
 export function stepsForOwnership(_ownership: VehicleOwnership | ''): CompleteProfileStep[] {
   return [...ALL_STEPS]
 }
@@ -42,6 +58,15 @@ export interface CompleteProfileFields {
   socialSecurityNumber: string
   taxNumber: string
   hasSelfiePhoto: boolean
+  /** Residence status step (plan legal/7): see `lib/vetting-form.ts`. */
+  residenceDocType: ResidenceDocType | ''
+  hasResidenceDocFront: boolean
+  hasResidenceDocBack: boolean
+  /** `YYYY-MM-DD`; required for a permit, optional for a passport. */
+  residenceDocExpiresAt: string
+  hasMovingCertificate: boolean | null
+  hasMovingCertificatePhoto: boolean
+  hasBusinessInsurance: boolean | null
   vehicleOwnership: VehicleOwnership | ''
   vehicleBrand: string
   vehicleModel: string
@@ -56,6 +81,8 @@ export interface CompleteProfileFields {
   hasFrontPlatePhoto: boolean
   hasRearPlatePhoto: boolean
   hasFullVehiclePhoto: boolean
+  /** "Does this vehicle have motor liability insurance?" (plan legal/7 V3); `null` until answered. */
+  vehicleHasMotorInsurance: boolean | null
   /** Rental window (rented drivers): one of the two must resolve — see `resolveRentalWindow`. */
   rentalHours?: string
   rentalEndAt?: string
@@ -65,7 +92,10 @@ export interface CompleteProfileFields {
 
 const filled = (v: string) => v.trim().length > 0
 
-/** True when a rental driver left the vehicle step untouched — the rental is added later (D10). */
+/**
+ * True when a rental driver left the vehicle step untouched — the rental is added later (D10).
+ * The insurance answer alone does not count as touching the step.
+ */
 export function vehicleStepSkipped(f: CompleteProfileFields): boolean {
   return (
     f.vehicleOwnership === 'rented' &&
@@ -85,12 +115,13 @@ export function vehicleStepSkipped(f: CompleteProfileFields): boolean {
  * with input the submit call would reject (same `fnCode`s). Photo presence is
  * expressed as placeholder URLs — the validator only checks non-emptiness and
  * the real URLs exist only after upload. Year is required at registration,
- * as it always was on this form.
+ * as it always was on this form. The motor-insurance question must be
+ * answered; either answer passes (`validateVehicleForm`).
  */
 export function vehicleStepValid(f: CompleteProfileFields, nowMs: number = Date.now()): boolean {
   if (!filled(f.vehicleYear)) return false
   const rented = f.vehicleOwnership === 'rented'
-  const codes = validateVehicleInput(
+  const codes = validateVehicleForm(
     {
       ownership: rented ? 'rented' : 'owned',
       registrationNumber: f.vehicleRegistration,
@@ -106,6 +137,7 @@ export function vehicleStepValid(f: CompleteProfileFields, nowMs: number = Date.
       rearPlatePhoto: f.hasRearPlatePhoto ? 'pending' : '',
       fullVehiclePhoto: f.hasFullVehiclePhoto ? 'pending' : '',
       rental: rented ? { hours: f.rentalHours || null, endAt: f.rentalEndAt || null } : null,
+      hasMotorInsurance: f.vehicleHasMotorInsurance,
     },
     { requireRentalWindow: true, nowMs },
   )
@@ -131,6 +163,8 @@ export function canGoNext(step: CompleteProfileStep, f: CompleteProfileFields, n
         filled(f.taxNumber) &&
         f.hasSelfiePhoto
       )
+    case 'residence':
+      return vettingStepValid(f, nowMs)
     case 'ownership':
       return f.vehicleOwnership === 'owned' || f.vehicleOwnership === 'rented'
     case 'vehicle':

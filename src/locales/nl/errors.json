@@ -269,7 +269,10 @@
     "vehicleNotReady": "Bevestig of verifieer uw voertuig voordat u online gaat of verhuizingen accepteert.",
     "withdrawFailed": "Terugtrekken uit de verhuizing mislukt",
     "withdrawRetry": "Terugtrekken mislukt. Probeer het opnieuw.",
-    "countryMismatch": "Deze verhuizing is in {{country}}; je account is in een ander land geregistreerd."
+    "countryMismatch": "Deze verhuizing is in {{country}}; je account is in een ander land geregistreerd.",
+    "residenceNotVerified": "Je verblijfsdocument is nog niet goedgekeurd. Upload het of wacht tot de controle klaar is.",
+    "residenceExpired": "Je verblijfsdocument is verlopen. Upload het nieuwe om te blijven werken.",
+    "dailyCapReached": "Je hebt de limiet aan verhuizingen voor vandaag bereikt. Voor verhuizers met een geverifieerd verhuiscertificaat geldt geen daglimiet."
   },
   "movers": {
     "fetchFailed": "Verhuizers konden niet worden opgehaald",
@@ -374,7 +377,8 @@
     "notOwnVehicle": "Dit voertuig hoort niet bij jouw account.",
     "weightRequired": "Vul de toegestane maximummassa in kilogram in.",
     "trailerWeightRequired": "Vul de toegestane maximummassa van de aanhanger in kilogram in.",
-    "weightOverLimit": "Voertuigen boven 3.500 kg inclusief aanhanger kunnen niet worden geregistreerd."
+    "weightOverLimit": "Voertuigen boven 3.500 kg inclusief aanhanger kunnen niet worden geregistreerd.",
+    "insuranceRequired": "Beantwoord de vraag over de WA-verzekering van het voertuig. Een voertuig zonder deze verzekering kan niet worden gebruikt."
   },
   "country": {
     "notLive": "PickLte is nog niet beschikbaar in {{country}}.",
@@ -400,5 +404,16 @@
     "reauthRequired": "Meld je opnieuw aan om je account te verwijderen.",
     "adminNotDeletable": "Een beheerdersaccount kan hier niet worden verwijderd.",
     "deletionIncomplete": "Je account kon niet volledig worden verwijderd. Probeer het opnieuw."
+  },
+  "vetting": {
+    "residenceTypeRequired": "Kies paspoort of verblijfsvergunning.",
+    "residencePhotosRequired": "Fotografeer beide zijden van het document.",
+    "residenceExpiryRequired": "Vul in tot wanneer het document geldig is.",
+    "residenceExpiryPast": "Dit document is verlopen.",
+    "certificatePhotoRequired": "Voeg een foto van je verhuiscertificaat toe."
+  },
+  "offer": {
+    "notPending": "Er wacht geen prijs op bevestiging.",
+    "expired": "Dit aanbod is niet meer open."
   }
 }

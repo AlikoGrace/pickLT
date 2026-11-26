@@ -28,6 +28,8 @@ import { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { getMapboxDirections } from '@/utils/mapbox-directions'
 import { formatDistanceKm, formatMoney } from '@/lib/format'
 import PriceBreakdown from '@/components/PriceBreakdown'
+import PendingOfferPrompt from '@/components/PendingOfferPrompt'
+import { parsePendingOffer } from '@/lib/pending-offer'
 import CallInAppButton from '@/components/calls/CallInAppButton'
 import { isPhoneFallbackOpen } from '@/lib/call-state'
 import { parseBreakdown } from '@/lib/pricingEngine'
@@ -77,6 +79,10 @@ interface MoveData {
   moverProfileId: string | null
   /** `moves.priceBreakdown` — the v3 estimate the server stored on create. */
   priceBreakdown?: string | null
+  /** A mover's higher price waiting for the client's answer (plan pricing/8); JSON. */
+  pendingOffer?: unknown
+  /** Straight-line metres from the mover to the pickup the price includes. */
+  approachM?: number | null
 }
 
 type MovePhase =
@@ -113,6 +119,27 @@ const InstantMovePage = () => {
   const [isLoadingData, setIsLoadingData] = useState(true)
   const [loadError, setLoadError] = useState<string | null>(null)
   const moveIdRef = useRef<string | null>(null)
+  // Requests that reached the client as a price prompt (plan pricing/8). They
+  // come from a mover other than the chosen one, so their closing is not the
+  // chosen mover turning the move down.
+  const promptRequestIdsRef = useRef<Set<string>>(new Set())
+  useEffect(() => {
+    const prompt = parsePendingOffer(moveData?.pendingOffer)
+    if (prompt) promptRequestIdsRef.current.add(prompt.requestId)
+  }, [moveData?.pendingOffer])
+
+  /** Reload the move and its mover after the client answered a price prompt. */
+  const refreshMove = useCallback(() => {
+    const id = moveIdRef.current
+    if (!id) return
+    fetch(`/api/moves/${id}/full`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.move) setMoveData(data.move as MoveData)
+        if (data?.mover) setMover(data.mover as MoverInfo)
+      })
+      .catch(() => {})
+  }, [])
 
   // ─── Fetch move + mover from database on mount ───────
   useEffect(() => {
@@ -352,6 +379,8 @@ const InstantMovePage = () => {
                 routeDurationSeconds: (doc.routeDurationSeconds as number) ?? null,
                 moverProfileId: newMoverProfileId,
                 priceBreakdown: (doc.priceBreakdown as string) ?? null,
+                pendingOffer: doc.pendingOffer ?? null,
+                approachM: (doc.approachM as number) ?? null,
               }
             }
             return {
@@ -419,7 +448,7 @@ const InstantMovePage = () => {
           const docMoveId = typeof doc.moveId === 'string' ? doc.moveId : (doc.moveId as Record<string, string>)?.$id
           if (docMoveId === moveId) {
             const status = doc.status as string
-            if (status === 'declined' || status === 'expired') {
+            if ((status === 'declined' || status === 'expired') && !promptRequestIdsRef.current.has(doc.$id)) {
               // Store the declined mover ID to exclude from future selections
               const declinedMoverId = typeof doc.moverProfileId === 'string'
                 ? doc.moverProfileId
@@ -910,6 +939,8 @@ const InstantMovePage = () => {
 
   return (
     <div className="fixed inset-0 z-40 bg-neutral-100 dark:bg-neutral-900">
+      {/* A mover's higher price, for the client to accept or decline (plan pricing/8). */}
+      <PendingOfferPrompt moveId={moveData?.$id} pendingOffer={moveData?.pendingOffer} onResolved={refreshMove} />
       <div className="absolute inset-0">
         <MapboxMap
           pickupCoordinates={pickupCoordinates || undefined}

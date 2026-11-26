@@ -164,6 +164,26 @@
     "verified": {
       "body": "Gefeliciteerd! Je verhuizersprofiel is geverifieerd. Je kunt nu verhuizingen accepteren.",
       "title": "Profiel geverifieerd"
+    },
+    "residenceVerified": {
+      "title": "Verblijfsdocument goedgekeurd",
+      "body": "Je verblijfsdocument is gecontroleerd en goedgekeurd."
+    },
+    "residenceRejected": {
+      "title": "Verblijfsdocument niet geaccepteerd",
+      "body": "Je verblijfsdocument is niet geaccepteerd. {{reason}}"
+    },
+    "certificateVerified": {
+      "title": "Verhuiscertificaat goedgekeurd",
+      "body": "Je verhuiscertificaat is goedgekeurd. Je wordt nu als eerste aan klanten getoond en hebt geen daglimiet."
+    },
+    "certificateRejected": {
+      "title": "Verhuiscertificaat niet geaccepteerd",
+      "body": "Je verhuiscertificaat is niet geaccepteerd. {{reason}}"
+    },
+    "residenceExpiring": {
+      "title": "Verblijfsdocument verloopt binnenkort",
+      "body": "Je verblijfsdocument verloopt over {{days}} dagen. Upload het nieuwe om verhuizingen te blijven ontvangen."
     }
   },
   "fees": {
@@ -188,6 +208,20 @@
     "missed": {
       "title": "Gemiste oproep",
       "body": "Gemiste oproep van {{name}}"
+    }
+  },
+  "offer": {
+    "priceConfirm": {
+      "title": "Nieuwe prijs bevestigen",
+      "body": "Een verhuizer die verder weg is kan je verhuizing doen voor {{amount}} {{currency}} in plaats van {{previousAmount}} {{currency}}. Open de verhuizing om te accepteren of te weigeren."
+    },
+    "clientDeclined": {
+      "title": "Prijs niet geaccepteerd",
+      "body": "De klant heeft de prijs voor jouw afstand niet geaccepteerd. Verhuizing {{handle}} is niet aan jou toegewezen."
+    },
+    "clientNoAnswer": {
+      "title": "Aanbod gesloten",
+      "body": "De klant heeft de prijs niet op tijd bevestigd. Verhuizing {{handle}} is niet aan jou toegewezen."
     }
   }
 }

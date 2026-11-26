@@ -6,11 +6,13 @@ import { useTranslation } from 'react-i18next'
 
 import CameraCaptureModal from '@/components/CameraCaptureModal'
 import RentalWindowPicker from '@/components/mover/RentalWindowPicker'
+import MotorInsuranceField from '@/components/mover/MotorInsuranceField'
 import VehiclePhotoField from '@/components/mover/VehiclePhotoField'
 import type { VehicleDoc } from '@/lib/types'
 import { submitVehicle, uploadVehiclePhoto, VehicleApiError, type SubmitVehiclePayload } from '@/lib/vehicle-client'
 import { vehicleCapacityLabel } from '@/lib/vehicle-capacity'
-import { validateVehicleInput, type RentalWindowInput, type VehicleOwnership } from '@/lib/vehicle-service'
+import { validateVehicleForm } from '@/lib/vehicle-form'
+import type { RentalWindowInput, VehicleOwnership } from '@/lib/vehicle-service'
 
 /** Stored slug → catalog segment. Never derive the slug from a label. */
 export const VEHICLE_TYPE_OPTIONS: { value: string; key: 'smallVan' | 'mediumTruck' | 'largeTruck' }[] = [
@@ -92,6 +94,11 @@ export default function VehicleForm({ mode, source, initialOwnership, prefill, l
     rear: prefill ? { file: null, preview: prefill.rearPlatePhoto, existingUrl: prefill.rearPlatePhoto } : emptySlot(),
     full: prefill ? { file: null, preview: prefill.fullVehiclePhoto, existingUrl: prefill.fullVehiclePhoto } : emptySlot(),
   }))
+  // Motor liability insurance (plan legal/7 V3). A resubmission starts from the
+  // answer on file; a new vehicle starts unanswered.
+  const [hasMotorInsurance, setHasMotorInsurance] = useState<boolean | null>(
+    typeof prefill?.hasMotorInsurance === 'boolean' ? prefill.hasMotorInsurance : null,
+  )
   const [cameraFor, setCameraFor] = useState<PhotoKind | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
@@ -122,7 +129,7 @@ export default function VehicleForm({ mode, source, initialOwnership, prefill, l
 
   const hasPhoto = (kind: PhotoKind) => !!(photos[kind].file || photos[kind].existingUrl)
 
-  const codes = validateVehicleInput(
+  const codes = validateVehicleForm(
     {
       ownership,
       ...fields,
@@ -130,17 +137,19 @@ export default function VehicleForm({ mode, source, initialOwnership, prefill, l
       frontPlatePhoto: hasPhoto('front') ? 'pending' : '',
       rearPlatePhoto: hasPhoto('rear') ? 'pending' : '',
       fullVehiclePhoto: hasPhoto('full') ? 'pending' : '',
+      hasMotorInsurance,
     },
     { requireRentalWindow: true },
   )
   const valid = codes.length === 0
 
   const handleSubmit = async () => {
-    if (!valid) {
+    if (!valid || hasMotorInsurance === null) {
       // i18n-keys: errors:vehicle.photosRequired, errors:vehicle.plateInvalid, errors:vehicle.fieldsRequired,
       // errors:vehicle.typeInvalid, errors:vehicle.capacityOutOfRange, errors:vehicle.yearInvalid,
       // errors:vehicle.rentalWindowRequired, errors:vehicle.rentalWindowInvalid, errors:vehicle.rentalWindowTooLong,
-      // errors:vehicle.weightRequired, errors:vehicle.trailerWeightRequired, errors:vehicle.weightOverLimit
+      // errors:vehicle.weightRequired, errors:vehicle.trailerWeightRequired, errors:vehicle.weightOverLimit,
+      // errors:vehicle.insuranceRequired
       setError(t(`errors:${codes[0]}`))
       return
     }
@@ -171,6 +180,7 @@ export default function VehicleForm({ mode, source, initialOwnership, prefill, l
         frontPlatePhoto,
         rearPlatePhoto,
         fullVehiclePhoto,
+        hasMotorInsurance,
         source,
         vehicleId: mode === 'resubmit' ? (prefill?.$id ?? null) : null,
         rental: ownership === 'rented' ? rental : null,
@@ -178,7 +188,7 @@ export default function VehicleForm({ mode, source, initialOwnership, prefill, l
       await onSuccess()
     } catch (err) {
       if (err instanceof VehicleApiError && err.fnCode) {
-        // i18n-keys: errors:vehicle.plateInUse, errors:vehicle.notFound, errors:vehicle.notPending
+        // i18n-keys: errors:vehicle.plateInUse, errors:vehicle.notFound, errors:vehicle.notPending, errors:vehicle.insuranceRequired
         setError(t(`errors:${err.fnCode}`, { defaultValue: err.message }))
       } else {
         setError(err instanceof Error ? err.message : t('web:mover.vehicle.submitFailed.error'))
@@ -421,6 +431,14 @@ export default function VehicleForm({ mode, source, initialOwnership, prefill, l
           onFile={(f) => setPhoto('full', f)}
         />
       </div>
+
+      {/* Motor liability insurance (plan legal/7 V3): "no" may be submitted, and the form says what that means. */}
+      <MotorInsuranceField
+        name="vehicleFormMotorInsurance"
+        value={hasMotorInsurance}
+        onChange={setHasMotorInsurance}
+        disabled={submitting}
+      />
 
       {note}
 

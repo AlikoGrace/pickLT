@@ -10,6 +10,106 @@ const ADMIN_SECRET = process.env.ADMIN_FUNCTION_SECRET;
 
 const VALID_STATUSES = ['verified', 'rejected', 'suspended'];
 
+// ── Document review (plan legal/7) ──────────────────────────────────────────
+// Besides the profile decision, an admin reviews two documents on their own:
+// the residence document (`action: 'residence'`) and the moving certificate
+// (`action: 'certificate'`), each with `decision: 'verified' | 'rejected'`.
+const DOCUMENT_ACTIONS = ['residence', 'certificate'];
+const DOCUMENT_DECISIONS = ['verified', 'rejected'];
+
+function isoMs(value) {
+  if (typeof value !== 'string' || value.trim() === '') return null;
+  const ms = Date.parse(value);
+  return Number.isFinite(ms) ? ms : null;
+}
+
+/**
+ * Why a profile may not be set to `verified`, or null. A driver cannot be
+ * verified before their residence document is: the lawyer's point 1 is that it
+ * is reviewed before the driver can work. An expired document counts as not
+ * verified. Mirrors `residenceVerifyBlock` in the admin app.
+ */
+export function residenceVerifyBlock(profile, nowMs) {
+  if (profile?.residenceStatus !== 'verified') return 'notVerified';
+  const expiresMs = isoMs(profile.residenceDocExpiresAt);
+  if (expiresMs != null && nowMs >= expiresMs) return 'expired';
+  return null;
+}
+
+/**
+ * The columns a document decision writes, or `{ fnCode }` for a refusal.
+ * Approving needs something to approve: the photographs must be on file, and a
+ * residence document must not already be past its end date.
+ */
+export function documentDecisionPatch({ action, decision, profile, reason, adminId, nowMs }) {
+  const trimmed = typeof reason === 'string' ? reason.trim().slice(0, 500) : '';
+  if (decision === 'rejected' && !trimmed) return { fnCode: 'api.mover.reasonRequired' };
+  if (action === 'residence') {
+    if (!profile.residenceDocFront || !profile.residenceDocBack) return { fnCode: 'api.mover.noDocument' };
+    if (decision === 'verified') {
+      const expiresMs = isoMs(profile.residenceDocExpiresAt);
+      if (expiresMs != null && nowMs >= expiresMs) return { fnCode: 'api.mover.documentExpired' };
+    }
+    return {
+      patch: {
+        residenceStatus: decision,
+        residenceRejectionReason: decision === 'rejected' ? trimmed : null,
+        residenceReviewedAt: new Date(nowMs).toISOString(),
+        residenceReviewedBy: adminId || null,
+      },
+    };
+  }
+  if (!profile.movingCertificatePhoto) return { fnCode: 'api.mover.noDocument' };
+  return {
+    patch: {
+      movingCertificateStatus: decision,
+      movingCertificateRejectionReason: decision === 'rejected' ? trimmed : null,
+    },
+  };
+}
+
+const DOCUMENT_REFUSALS = {
+  'api.mover.reasonRequired': 'A reason is required when rejecting a document.',
+  'api.mover.noDocument': 'There is no document on file to review.',
+  'api.mover.documentExpired': 'This document has expired and cannot be approved.',
+};
+
+const DOCUMENT_COPY = {
+  residence: {
+    verified: {
+      key: 'verification.residenceVerified',
+      title: 'Residence document approved',
+      body: 'Your residence document has been checked and approved.',
+    },
+    rejected: {
+      key: 'verification.residenceRejected',
+      title: 'Residence document not accepted',
+      body: 'Your residence document was not accepted.',
+    },
+  },
+  certificate: {
+    verified: {
+      key: 'verification.certificateVerified',
+      title: 'Moving certificate approved',
+      body: 'Your moving certificate has been approved. You are now shown first to clients and have no daily limit.',
+    },
+    rejected: {
+      key: 'verification.certificateRejected',
+      title: 'Moving certificate not accepted',
+      body: 'Your moving certificate was not accepted.',
+    },
+  },
+};
+
+/** Notification copy for a document decision. A rejection always carries its reason. */
+export function documentCopy(action, decision, reason) {
+  const entry = DOCUMENT_COPY[action]?.[decision];
+  if (!entry) return null;
+  const trimmed = typeof reason === 'string' ? reason.trim() : '';
+  if (decision === 'verified') return { key: entry.key, title: entry.title, body: entry.body, params: {} };
+  return { key: entry.key, title: entry.title, body: `${entry.body} ${trimmed}`.trim(), params: { reason: trimmed } };
+}
+
 /** Timing-safe-ish string compare (avoids early-exit on length/first-diff). */
 function secretEquals(a, b) {
   if (typeof a !== 'string' || typeof b !== 'string' || a.length !== b.length) return false;
@@ -206,7 +306,7 @@ function verificationCopy(newStatus, reason) {
   };
 }
 
-async function notifyMover({ databases, profile, moverProfileId, newStatus, reason, log }) {
+async function notifyMover({ databases, profile, moverProfileId, newStatus, reason, log, copyOverride, extraData }) {
   const userId = resolveUserId(profile.userId);
   if (!userId) {
     log(`adminverifymover: profile ${moverProfileId} has no linked user — notification skipped`);
@@ -224,7 +324,7 @@ async function notifyMover({ databases, profile, moverProfileId, newStatus, reas
     }
   }
 
-  const copy = verificationCopy(newStatus, reason);
+  const copy = copyOverride ?? verificationCopy(newStatus, reason);
   if (!copy) {
     log(
       `adminverifymover: no notification copy for status '${newStatus}' — profile ${moverProfileId} was updated but the mover was NOT told. Add a VERIFICATION_COPY entry and a notifications catalog key.`,
@@ -247,6 +347,7 @@ async function notifyMover({ databases, profile, moverProfileId, newStatus, reas
       data: JSON.stringify({
         moverProfileId,
         newStatus,
+        ...(extraData || {}),
         i18nKey: copy.key,
         ...(copy.bodyKey ? { i18nBodyKey: copy.bodyKey } : {}),
         i18nParams: copy.params,
@@ -300,7 +401,45 @@ export default async ({ req, res, log, error }) => {
     } catch {
       return res.json({ error: 'Invalid JSON body', fnCode: 'generic.badRequest' }, 400);
     }
-    const { moverProfileId, newStatus, adminId, reason } = body;
+    const { moverProfileId, newStatus, adminId, reason, action, decision } = body;
+
+    // ── Document review (plan legal/7) ──
+    if (action !== undefined && action !== null) {
+      if (!moverProfileId || !DOCUMENT_ACTIONS.includes(action) || !DOCUMENT_DECISIONS.includes(decision)) {
+        return res.json(
+          { error: 'moverProfileId, action (residence|certificate) and decision (verified|rejected) are required', fnCode: 'generic.badRequest' },
+          400,
+        );
+      }
+      const docAuth = await authorize({ req, databases, adminId, log });
+      if (!docAuth.ok) {
+        error(`adminverifymover: unauthorized (${docAuth.reason})`);
+        return res.json({ error: `Forbidden: ${docAuth.reason}`, fnCode: 'auth.forbidden' }, 403);
+      }
+      let current;
+      try {
+        current = await databases.getDocument(DATABASE_ID, MOVER_PROFILES_COLLECTION, moverProfileId);
+      } catch {
+        return res.json({ error: 'Mover not found', fnCode: 'api.mover.notFound' }, 404);
+      }
+      const plan = documentDecisionPatch({ action, decision, profile: current, reason, adminId: docAuth.adminId, nowMs: Date.now() });
+      if (plan.fnCode) {
+        return res.json({ error: DOCUMENT_REFUSALS[plan.fnCode] || 'Invalid request', fnCode: plan.fnCode }, 400);
+      }
+      const updated = await databases.updateDocument(DATABASE_ID, MOVER_PROFILES_COLLECTION, moverProfileId, plan.patch);
+      log(`Mover ${moverProfileId} ${action} document ${decision} by admin ${docAuth.adminId}`);
+      const docNotified = await notifyMover({
+        databases,
+        profile: updated,
+        moverProfileId,
+        newStatus: decision,
+        reason,
+        log,
+        copyOverride: documentCopy(action, decision, reason),
+        extraData: { document: action },
+      });
+      return res.json({ success: true, profile: updated, notified: docNotified });
+    }
 
     if (!moverProfileId || !newStatus) {
       return res.json({ error: 'moverProfileId and newStatus are required', fnCode: 'generic.badRequest' }, 400);
@@ -317,6 +456,27 @@ export default async ({ req, res, log, error }) => {
       return res.json({ error: `Forbidden: ${auth.reason}`, fnCode: 'auth.forbidden' }, 403);
     }
     const effectiveAdminId = auth.adminId;
+
+    // A driver is not verified before their residence document is (plan
+    // legal/7, V1). Rejecting and suspending stay possible at any time.
+    if (newStatus === 'verified') {
+      let current = null;
+      try {
+        current = await databases.getDocument(DATABASE_ID, MOVER_PROFILES_COLLECTION, moverProfileId);
+      } catch {
+        // Let the update below surface a missing profile.
+      }
+      const block = current ? residenceVerifyBlock(current, Date.now()) : null;
+      if (block) {
+        return res.json(
+          {
+            error: 'Approve the residence document before verifying this mover.',
+            fnCode: block === 'expired' ? 'api.mover.residenceExpired' : 'api.mover.residenceNotVerified',
+          },
+          409,
+        );
+      }
+    }
 
     // Update mover profile status, repairing a dangling user link if present.
     const payload = await buildUpdatePayload({ databases, moverProfileId, newStatus, log });

@@ -284,6 +284,8 @@ export interface PricedMove {
   classification: BasketClassification
   /** The normalised basket in the `moves` column shapes — write these, not the body's. */
   basket: WireBasket
+  /** The rates the quote was priced with, for re-pricing it for one mover (plan pricing/8). */
+  config: PricingConfig
 }
 
 /**
@@ -309,5 +311,5 @@ export async function priceMoveFields(
     quoteInputFromMove({ ...fields, moveType: classification.moveType }, catalog, mode, countryCode),
     config,
   )
-  return { breakdown, columns: quoteColumns(breakdown), classification, basket: serializeBasket(basket) }
+  return { breakdown, columns: quoteColumns(breakdown), classification, basket: serializeBasket(basket), config }
 }

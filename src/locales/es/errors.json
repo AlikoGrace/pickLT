@@ -269,7 +269,10 @@
     "vehicleNotReady": "Confirme o verifique su vehículo antes de conectarse o aceptar mudanzas.",
     "withdrawFailed": "No se ha podido retirar de la mudanza",
     "withdrawRetry": "No se ha podido retirar. Inténtalo de nuevo.",
-    "countryMismatch": "Esta mudanza es en {{country}}; tu cuenta está registrada en otro país."
+    "countryMismatch": "Esta mudanza es en {{country}}; tu cuenta está registrada en otro país.",
+    "residenceNotVerified": "Tu documento de residencia aún no ha sido aprobado. Súbelo o espera a que termine la revisión.",
+    "residenceExpired": "Tu documento de residencia ha caducado. Sube el nuevo para seguir trabajando.",
+    "dailyCapReached": "Has alcanzado el límite de mudanzas de hoy. Los transportistas con un certificado de mudanzas verificado no tienen límite diario."
   },
   "movers": {
     "fetchFailed": "No se han podido obtener los transportistas",
@@ -374,7 +377,8 @@
     "notOwnVehicle": "Este vehículo no pertenece a tu cuenta.",
     "weightRequired": "Introduce la masa máxima autorizada en kilogramos.",
     "trailerWeightRequired": "Introduce la masa máxima autorizada del remolque en kilogramos.",
-    "weightOverLimit": "No se pueden registrar vehículos de más de 3.500 kg, remolque incluido."
+    "weightOverLimit": "No se pueden registrar vehículos de más de 3.500 kg, remolque incluido.",
+    "insuranceRequired": "Responde a la pregunta sobre el seguro de responsabilidad civil del vehículo. Un vehículo sin este seguro no se puede utilizar."
   },
   "country": {
     "notLive": "PickLte aún no está disponible en {{country}}.",
@@ -400,5 +404,16 @@
     "reauthRequired": "Vuelve a iniciar sesión para eliminar tu cuenta.",
     "adminNotDeletable": "Una cuenta de administrador no se puede eliminar aquí.",
     "deletionIncomplete": "No se pudo eliminar tu cuenta por completo. Inténtalo de nuevo."
+  },
+  "vetting": {
+    "residenceTypeRequired": "Elige pasaporte o permiso de residencia.",
+    "residencePhotosRequired": "Fotografía ambas caras del documento.",
+    "residenceExpiryRequired": "Indica hasta qué fecha es válido el documento.",
+    "residenceExpiryPast": "Este documento ha caducado.",
+    "certificatePhotoRequired": "Añade una foto de tu certificado de mudanzas."
+  },
+  "offer": {
+    "notPending": "No hay ningún precio pendiente de confirmación.",
+    "expired": "Esta oferta ya no está abierta."
   }
 }

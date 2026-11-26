@@ -32,6 +32,7 @@ import {
 } from '@/lib/inventory-labels'
 import { formatDateWith, formatMoney, formatVolumeM3 } from '@/lib/format'
 import PriceBreakdown from '@/components/PriceBreakdown'
+import PendingOfferPrompt from '@/components/PendingOfferPrompt'
 import { isPriceConfirmed } from '@/components/PriceBreakdown'
 import MoveRouteMap from '@/components/MoveRouteMap'
 import { toCoordinate } from '@/lib/route-caption'
@@ -245,6 +246,9 @@ export default function MoveDetailsPage() {
   const [moveDocId, setMoveDocId] = useState<string | null>(null)
   const [moveCategory, setMoveCategory] = useState<string | null>(null)
   const processedEvents = useRef<Set<string>>(new Set())
+  // A mover's higher price waiting for this client's answer (plan pricing/8).
+  const [pendingOfferRaw, setPendingOfferRaw] = useState<unknown>(null)
+  const [viewerIsClient, setViewerIsClient] = useState(false)
   // Admin catalog names, so persisted items render the wording the client saw.
   const inventoryNames = useInventoryNames()
 
@@ -271,6 +275,8 @@ export default function MoveDetailsPage() {
         setRawStatus(data.move.rawStatus ?? data.move.status ?? '')
         setMoveDocId(data.move.$id ?? data.move.id ?? null)
         setMoveCategory(data.move.moveCategory ?? null)
+        setPendingOfferRaw(data.move.pendingOffer ?? null)
+        setViewerIsClient(data.viewerIsClient === true)
       } else {
         setError('not_found')
       }
@@ -302,6 +308,10 @@ export default function MoveDetailsPage() {
     const unsubscribe = client.subscribe(channel, (event) => {
       const payload = event.payload as Record<string, unknown>
       if (!payload) return
+
+      // Before the status de-duplication: a price prompt arrives and leaves
+      // without the status changing.
+      if ('pendingOffer' in payload) setPendingOfferRaw(payload.pendingOffer ?? null)
 
       const eventKey = `${payload.$id}-${payload.status}`
       if (processedEvents.current.has(eventKey)) return
@@ -547,6 +557,10 @@ export default function MoveDetailsPage() {
 
   return (
     <div className="container pb-24 lg:pb-32 pt-8 lg:pt-12">
+      {/* A mover's higher price, for the client to accept or decline. */}
+      {viewerIsClient && (
+        <PendingOfferPrompt moveId={moveDocId} pendingOffer={pendingOfferRaw} onResolved={() => fetchFromDb()} />
+      )}
       {/* Back link */}
       <Link
         href="/account-savelists"

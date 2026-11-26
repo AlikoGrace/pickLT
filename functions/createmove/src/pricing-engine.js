@@ -86,6 +86,10 @@ export const PRICING_DEFAULTS = {
   'handling.hoursPerM3': 0.2,
   'access.floorSurchargeNoElevator': 15,
   'access.haltverbotFee': 0,
+  'approach.freeKm': 5,
+  'approach.ratePerKm': 0,
+  'approach.maxCharge': 50,
+  'approach.roadFactor': 1.3,
 
   'packing.none': 0,
   'packing.partial': 50,
@@ -682,6 +686,82 @@ export function suggestedUnitPriceEur(item, config) {
   return round2(value);
 }
 
+// ── Travel to pickup (plan pricing/8) ──────────────────────────────────────
+
+/**
+ * The charge for the mover's drive to the pickup address, in cents, and the
+ * driving distance it was priced on. Instant moves only. `straightKm` is a
+ * straight line; the road factor turns it into a driving distance, the first
+ * kilometres are free and the charge is capped. Nothing is read (so nothing
+ * enters the rates trace) unless a distance was given.
+ */
+function approachCharge(
+  mode,
+  tier,
+  straightKm,
+  trace,
+) {
+  const straight = mode === 'instant' ? nonNegative(straightKm) : 0;
+  if (!(straight > 0)) return { approachKm: 0, approach: 0 };
+  const approachKm = straight * Math.max(1, trace.get('approach.roadFactor'));
+  const billableKm = Math.max(0, approachKm - Math.max(0, trace.get('approach.freeKm')));
+  const ownRate = trace.get('approach.ratePerKm');
+  const perKm = ownRate > 0 ? ownRate : trace.get(tierKey(tier, 'distanceRatePerKm'));
+  const approach = Math.min(
+    roundHalfUp(billableKm * perKm * 100),
+    cents(Math.max(0, trace.get('approach.maxCharge'))),
+  );
+  return { approachKm, approach };
+}
+
+/**
+ * The same quote for a mover at another distance from the pickup: only the
+ * approach line changes, and every total is recomputed from it. Used when an
+ * instant request is offered to a mover other than the one it was priced for
+ * (plan pricing/8, option B), so each offer carries the price for that mover.
+ *
+ * The fee rate, VAT rate and minimum charge are the ones the quote was priced
+ * with (`breakdown.rates`); the approach rates come from `config`. The result
+ * equals `quoteMove` run again with the new `approachKm`.
+ */
+export function repriceApproach(
+  breakdown,
+  straightKm,
+  config,
+) {
+  const trace = new RateTrace(config);
+  const { approachKm, approach } = approachCharge(breakdown.mode, breakdown.tier, straightKm, trace);
+  const used = breakdown.rates ?? {};
+  const rateOf = (key) =>
+    typeof used[key] === 'number' && Number.isFinite(used[key]) ? used[key] : rate(config, key);
+
+  const lines = { ...breakdown.lines, approach: eur(approach) };
+  const operationalSubtotal = Object.values(lines).reduce((sum, v) => sum + cents(v), 0);
+  const adjustedSubtotal = roundHalfUp(operationalSubtotal * breakdown.modeMultiplier);
+  const platformFee =
+    roundHalfUp(adjustedSubtotal * rateOf('platformFee.rate')) + cents(rateOf('platformFee.fixed'));
+  const discount = Math.min(cents(breakdown.discount), adjustedSubtotal + platformFee);
+  const netRaw = adjustedSubtotal + platformFee - discount;
+  const net = Math.max(cents(rateOf('pricing.minimumCharge')), netRaw);
+  const vat = roundHalfUp(net * breakdown.vatRate);
+
+  return {
+    ...breakdown,
+    profile: { ...breakdown.profile, approachKm: round3(approachKm) },
+    lines,
+    operationalSubtotal: eur(operationalSubtotal),
+    modeAdjustment: eur(adjustedSubtotal - operationalSubtotal),
+    adjustedSubtotal: eur(adjustedSubtotal),
+    platformFee: eur(platformFee),
+    discount: eur(discount),
+    minimumApplied: net > netRaw,
+    net: eur(net),
+    vat: eur(vat),
+    total: eur(net + vat),
+    rates: sortedRecord({ ...used, ...trace.used }),
+  };
+}
+
 // ── The quote ──────────────────────────────────────────────────────────────
 
 export function quoteMove(input, config) {
@@ -742,6 +822,9 @@ export function quoteMove(input, config) {
     floorsNoLift * cents(trace.get('access.floorSurchargeNoElevator')) +
     haltverbot * cents(trace.get('access.haltverbotFee'));
 
+  // Travel to pickup (plan pricing/8): the mover's drive to the pickup address.
+  const { approachKm, approach } = approachCharge(mode, tier, input.approachKm, trace);
+
   const serviceLines = [];
   let services = 0;
   for (const id of stripRetiredServices(uniqueSorted(input.services))) {
@@ -757,7 +840,7 @@ export function quoteMove(input, config) {
 
   // 5. Totals.
   const operationalSubtotal =
-    base + distance + vehicle + labor + extraHelpers + items + packing + handling + services + storage;
+    base + distance + vehicle + labor + extraHelpers + items + packing + handling + approach + services + storage;
   const modeMultiplier = mode === 'instant' ? trace.get(tierKey(tier, 'instantMultiplier')) : 1;
   const adjustedSubtotal = roundHalfUp(operationalSubtotal * modeMultiplier);
   const modeAdjustment = adjustedSubtotal - operationalSubtotal;
@@ -774,12 +857,12 @@ export function quoteMove(input, config) {
   const total = net + vat;
 
   // 6. Reconcile (master D4).
-  const lineSum = base + distance + vehicle + labor + extraHelpers + items + packing + handling + services + storage;
+  const lineSum = base + distance + vehicle + labor + extraHelpers + items + packing + handling + approach + services + storage;
   if (lineSum !== operationalSubtotal) throw new PricingReconcileError('lines ≠ operational subtotal');
   if (operationalSubtotal + modeAdjustment !== adjustedSubtotal) throw new PricingReconcileError('mode adjustment');
   if (Math.max(minimum, adjustedSubtotal + platformFee - discount) !== net) throw new PricingReconcileError('net');
   if (net + vat !== total) throw new PricingReconcileError('vat');
-  if (![base, distance, vehicle, labor, extraHelpers, items, packing, handling, services, storage, total].every(Number.isInteger)) {
+  if (![base, distance, vehicle, labor, extraHelpers, items, packing, handling, approach, services, storage, total].every(Number.isInteger)) {
     throw new PricingReconcileError('non-integer cents');
   }
 
@@ -803,6 +886,7 @@ export function quoteMove(input, config) {
       crew,
       extraHelpers: extraHelpersCount,
       totalCrew: crew + extraHelpersCount,
+      approachKm: round3(approachKm),
       vehicleType,
       billableHours: hours,
       distanceKm: round3(distanceKm),
@@ -817,6 +901,7 @@ export function quoteMove(input, config) {
       items: eur(items),
       packing: eur(packing),
       handling: eur(handling),
+      approach: eur(approach),
       services: eur(services),
       storage: eur(storage),
     },
@@ -844,7 +929,10 @@ export function quoteMove(input, config) {
 }
 
 export function quoteForMover(input, mover, config) {
-  const quote = quoteMove({ ...input, vehicleType: mover.vehicleType ?? null }, config);
+  const quote = quoteMove(
+    { ...input, vehicleType: mover.vehicleType ?? null, approachKm: mover.distanceKm ?? input.approachKm },
+    config,
+  );
   // An unknown crew size (null, undefined, unparseable) is not "one mover" —
   // it passes, exactly like the capacity gate passes an unmeasured load.
   const crewSize = typeof mover.crewSize === 'number' ? mover.crewSize : NaN;
@@ -879,10 +967,15 @@ export function parseBreakdown(raw) {
   const extraHelpers = typeof b.profile.extraHelpers === 'number' ? b.profile.extraHelpers : 0;
   return {
     ...b,
-    lines: { ...b.lines, extraHelpers: typeof b.lines.extraHelpers === 'number' ? b.lines.extraHelpers : 0 },
+    lines: {
+      ...b.lines,
+      extraHelpers: typeof b.lines.extraHelpers === 'number' ? b.lines.extraHelpers : 0,
+      approach: typeof b.lines.approach === 'number' ? b.lines.approach : 0,
+    },
     profile: {
       ...b.profile,
       extraHelpers,
+      approachKm: typeof b.profile.approachKm === 'number' ? b.profile.approachKm : 0,
       totalCrew:
         typeof b.profile.totalCrew === 'number'
           ? b.profile.totalCrew
@@ -956,6 +1049,10 @@ export function quoteInputFromRow(row, catalog, vehicleTypeOverride) {
     discountEur: 0,
     // Client-added helpers (crew master D2); the engine clamps to crew.maxExtraHelpers.
     extraHelpers: nonNegative(row.extraHelpers),
+    // Straight-line distance of the priced mover to the pickup (plan pricing/8),
+    // stored in metres (`moves.approachM`) by the function from the mover's own
+    // position; never client input.
+    approachKm: nonNegative(row.approachM) / 1000,
     // Pickup country (plan wave-2026-10/4 C2) — resolved by the function before
     // quoting and stored on the row; the engine only echoes it on the breakdown.
     countryCode: typeof row.countryCode === 'string' ? row.countryCode : null,

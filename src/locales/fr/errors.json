@@ -269,7 +269,10 @@
     "vehicleNotReady": "Confirmez ou faites vérifier votre véhicule avant de passer en ligne ou d'accepter des déménagements.",
     "withdrawFailed": "Échec du retrait du déménagement",
     "withdrawRetry": "Échec du retrait. Veuillez réessayer.",
-    "countryMismatch": "Ce déménagement a lieu en {{country}} ; votre compte est enregistré dans un autre pays."
+    "countryMismatch": "Ce déménagement a lieu en {{country}} ; votre compte est enregistré dans un autre pays.",
+    "residenceNotVerified": "Votre document de séjour n'a pas encore été approuvé. Téléversez-le ou attendez la fin de la vérification.",
+    "residenceExpired": "Votre document de séjour a expiré. Téléversez le nouveau pour continuer à travailler.",
+    "dailyCapReached": "Vous avez atteint la limite de déménagements pour aujourd'hui. Les déménageurs dont le certificat de déménagement est vérifié n'ont pas de limite quotidienne."
   },
   "movers": {
     "fetchFailed": "Échec de la récupération des déménageurs",
@@ -374,7 +377,8 @@
     "notOwnVehicle": "Ce véhicule n’appartient pas à votre compte.",
     "weightRequired": "Veuillez indiquer le poids total autorisé en charge en kilogrammes.",
     "trailerWeightRequired": "Veuillez indiquer le poids total autorisé de la remorque en kilogrammes.",
-    "weightOverLimit": "Les véhicules de plus de 3 500 kg, remorque comprise, ne peuvent pas être enregistrés."
+    "weightOverLimit": "Les véhicules de plus de 3 500 kg, remorque comprise, ne peuvent pas être enregistrés.",
+    "insuranceRequired": "Répondez à la question sur l'assurance responsabilité civile automobile. Un véhicule sans cette assurance ne peut pas être utilisé."
   },
   "country": {
     "notLive": "PickLte n’est pas encore disponible en {{country}}.",
@@ -400,5 +404,16 @@
     "reauthRequired": "Reconnectez-vous pour supprimer votre compte.",
     "adminNotDeletable": "Un compte administrateur ne peut pas être supprimé ici.",
     "deletionIncomplete": "Votre compte n'a pas pu être entièrement supprimé. Veuillez réessayer."
+  },
+  "vetting": {
+    "residenceTypeRequired": "Choisissez passeport ou titre de séjour.",
+    "residencePhotosRequired": "Photographiez les deux côtés du document.",
+    "residenceExpiryRequired": "Indiquez la date de fin de validité du document.",
+    "residenceExpiryPast": "Ce document a expiré.",
+    "certificatePhotoRequired": "Ajoutez une photo de votre certificat de déménagement."
+  },
+  "offer": {
+    "notPending": "Aucun prix n'attend de confirmation.",
+    "expired": "Cette offre n'est plus ouverte."
   }
 }

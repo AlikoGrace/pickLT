@@ -1117,6 +1117,9 @@
       },
       "vehicle": {
         "label": "Araç ({{vehicle}})"
+      },
+      "approach": {
+        "label": "Alım adresine yol ({{km}})"
       }
     },
     "minimumApplied": {

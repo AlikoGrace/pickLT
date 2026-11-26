@@ -158,6 +158,15 @@ export function breakdownRows(t: TFunction, b: QuoteBreakdown): BreakdownRow[] {
       amount: lines.handling,
     },
     {
+      // The mover's drive to the pickup address (plan pricing/8); instant moves.
+      key: 'approach',
+      label: t('booking:pricing.line.approach.label', {
+        defaultValue: 'Travel to pickup ({{km}})',
+        km: formatDistanceKm(profile.approachKm ?? 0),
+      }),
+      amount: lines.approach ?? 0,
+    },
+    {
       key: 'services',
       label: t('booking:pricing.line.services.label', { defaultValue: 'Additional services' }),
       amount: lines.services,

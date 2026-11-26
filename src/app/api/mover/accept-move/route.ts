@@ -1,20 +1,24 @@
 import { getTranslations } from '@/lib/i18n-server'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
-import { isErrorResponse, requireServiceReadyMover } from '@/lib/mover-auth'
+import { dailyCapRefusal, isErrorResponse, requireServiceReadyMover } from '@/lib/mover-auth'
 import { relId, writeNotification } from '@/lib/notify'
-import { Query } from 'node-appwrite'
+import { displayNameOf } from '@/lib/account-delete'
+import {
+  ASSIGNABLE_STATUSES,
+  AWAITING_CLIENT,
+  assignMoveToMover,
+  buildPendingOffer,
+  closeOtherOffers,
+  loadPricingOverrides,
+  movePriceColumns,
+  offerNeedsClientConfirmation,
+  parsePendingOffer,
+  pendingOfferExpired,
+  priceOfferForMover,
+  type MoverOffer,
+} from '@/lib/offer-pricing-server'
 import { NextRequest, NextResponse } from 'next/server'
-
-// A move is assignable when it sits in a pre-assignment status.
-// Mirrors functions/acceptmove/src/main.js and pickltmover/lib/move-requests.ts.
-const ASSIGNABLE_STATUSES = new Set([
-  'draft',
-  'pending_payment',
-  'paid',
-  'booked',
-  'mover_assigned',
-])
 
 // POST /api/mover/accept-move — Accept a move request
 export async function POST(request: NextRequest) {
@@ -32,6 +36,10 @@ export async function POST(request: NextRequest) {
     if (!requestId || !moveId) {
       return NextResponse.json({ error: 'requestId and moveId are required' }, { status: 400 })
     }
+
+    // Daily cap for a driver without a verified certificate (plan legal/7, V2).
+    const capRefusal = await dailyCapRefusal(moverProfile, auth.vettingConfig, moveId)
+    if (capRefusal) return capRefusal
 
     const { databases } = createAdminClient()
 
@@ -90,6 +98,99 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // ── The price for THIS mover (plan pricing/8, option B) ──────────────
+    // The offer was priced for this mover's own drive to the pickup. The same
+    // price or a lower one goes through (the client pays the lower amount). A
+    // higher one is the client's to accept: the move is not assigned yet.
+    // An offer row without `offerApproachM` (sent before the feature, or the
+    // column does not exist yet) is accepted at the stored price, as before.
+    let priceColumns: Record<string, unknown> | null = null
+    const offerApproachM = typeof moveRequest.offerApproachM === 'number' ? moveRequest.offerApproachM : null
+    if (offerApproachM !== null && targetMove.moveCategory === 'instant') {
+      let offer: MoverOffer | null = null
+      try {
+        const overrides = await loadPricingOverrides(databases, targetMove.countryCode)
+        offer = priceOfferForMover({ move: targetMove, mover: moverProfile, config: overrides, approachM: offerApproachM })
+      } catch (e) {
+        console.error(`[accept-move] offer price unavailable for request ${requestId} (accepting at the stored price):`, e)
+      }
+      if (offer && offerNeedsClientConfirmation(targetMove.estimatedPrice, offer.total)) {
+        const open = parsePendingOffer(targetMove.pendingOffer)
+        if (open && open.requestId !== requestId && !pendingOfferExpired(open, Date.now())) {
+          // Another mover's higher price is already with the client.
+          return NextResponse.json(
+            { ok: false, alreadyTaken: true, reason: 'awaiting_other_offer', error: t('errors:move.noLongerAcceptable') },
+            { status: 409 }
+          )
+        }
+        const nowMs = Date.now()
+        // The name the client reads on the prompt.
+        let moverName = ''
+        try {
+          const moverUser = await databases.getDocument(APPWRITE.DATABASE_ID, APPWRITE.COLLECTIONS.USERS, auth.userId)
+          moverName = displayNameOf(moverUser.fullName, '', '')
+        } catch {
+          /* the prompt then names no one */
+        }
+        const pendingOffer = buildPendingOffer({
+          requestId,
+          moverProfileId: moverProfile.$id,
+          moverName,
+          total: offer.total,
+          previousTotal: targetMove.estimatedPrice,
+          approachM: offer.approachM,
+          nowMs,
+        })
+        await databases.updateDocument(APPWRITE.DATABASE_ID, APPWRITE.COLLECTIONS.MOVE_REQUESTS, requestId, {
+          status: AWAITING_CLIENT,
+          respondedAt: new Date(nowMs).toISOString(),
+        })
+        try {
+          await databases.updateDocument(APPWRITE.DATABASE_ID, APPWRITE.COLLECTIONS.MOVES, moveId, { pendingOffer })
+        } catch (e) {
+          // The client cannot be asked (for example `moves.pendingOffer` does
+          // not exist yet), and a higher price is never charged unasked: put
+          // the offer back as it was and fail the tap.
+          await databases
+            .updateDocument(APPWRITE.DATABASE_ID, APPWRITE.COLLECTIONS.MOVE_REQUESTS, requestId, { status: 'pending', respondedAt: null })
+            .catch(() => {})
+          throw e
+        }
+        const pending = parsePendingOffer(pendingOffer)
+        const clientAuthId = relId(targetMove.clientId)
+        if (clientAuthId) {
+          await writeNotification({
+            userId: clientAuthId,
+            type: 'system',
+            title: 'New price to confirm',
+            body: 'A mover farther away can take your move at a different price. Please confirm.',
+            data: { moveId, handle: targetMove.handle ?? null },
+            i18n: {
+              key: 'offer.priceConfirm',
+              params: {
+                amount: offer.total.toFixed(2),
+                previousAmount: Number(targetMove.estimatedPrice || 0).toFixed(2),
+                currency: 'EUR',
+              },
+            },
+          })
+        }
+        return NextResponse.json({
+          ok: true,
+          awaitingClient: true,
+          expiresAt: pending?.expiresAt ?? new Date(nowMs).toISOString(),
+          total: offer.total,
+          moveId,
+          handle: targetMove.handle ?? null,
+          requestId,
+        })
+      }
+      if (offer) priceColumns = movePriceColumns(offer)
+    }
+
+    // Another mover's price that may be with the client, as read before the assignment clears it.
+    const pendingBefore = targetMove.pendingOffer
+
     // Accept the request
     await databases.updateDocument(
       APPWRITE.DATABASE_ID,
@@ -103,18 +204,8 @@ export async function POST(request: NextRequest) {
 
     // Update the move to assign this mover
     // Per architecture: move_requests.status = 'accepted', moves.status = 'mover_accepted'
-    const move = await databases.updateDocument(
-      APPWRITE.DATABASE_ID,
-      APPWRITE.COLLECTIONS.MOVES,
-      moveId,
-      {
-        moverProfileId: moverProfile.$id,
-        status: 'mover_accepted',
-        // Snapshot of the vehicle doing the job (master D13); the client's
-        // requested class in `moves.vehicleType` is left alone.
-        vehicleId: (moverProfile as Record<string, unknown>).currentVehicleId ?? null,
-      }
-    )
+    // With this mover's price when the offer carried one, and any price prompt cleared.
+    const move = await assignMoveToMover({ databases, moveId, moverProfile, priceColumns, tag: 'accept-move' })
 
     // Notify the client that a mover accepted their move.
     const clientId = relId(move.clientId)
@@ -129,44 +220,12 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    // Best-effort: Decline all other pending requests for this move.
-    // Wrapped in its own try-catch so a failure here doesn't return
-    // t('errors:generic.internal') when the accept itself already succeeded.
-    try {
-      const otherRequests = await databases.listDocuments(
-        APPWRITE.DATABASE_ID,
-        APPWRITE.COLLECTIONS.MOVE_REQUESTS,
-        [
-          Query.equal('status', ['pending']),
-          Query.limit(100),
-        ]
-      )
+    // Best-effort: decline all other pending requests for this move, and close
+    // another mover's price that was still with the client. Never throws, so a
+    // failure here doesn't fail an accept that already succeeded.
+    await closeOtherOffers({ databases, moveId, acceptedRequestId: requestId, pendingOfferRaw: pendingBefore })
 
-      // Filter in application code to avoid Query issues with relationship fields
-      const toDecline = otherRequests.documents.filter((req) => {
-        if (req.$id === requestId) return false
-        const reqMoveId = typeof req.moveId === 'string'
-          ? req.moveId
-          : (req.moveId as Record<string, string>)?.$id || ''
-        return reqMoveId === moveId
-      })
-
-      await Promise.all(
-        toDecline.map((req) =>
-          databases.updateDocument(
-            APPWRITE.DATABASE_ID,
-            APPWRITE.COLLECTIONS.MOVE_REQUESTS,
-            req.$id,
-            { status: 'declined', respondedAt: new Date().toISOString() }
-          ).catch((e) => console.warn('Failed to decline request', req.$id, e))
-        )
-      )
-    } catch (declineErr) {
-      // Non-fatal — the move was already accepted successfully
-      console.warn('Failed to decline other requests (non-fatal):', declineErr)
-    }
-
-    return NextResponse.json({ success: true, moveId, requestId })
+    return NextResponse.json({ ok: true, success: true, moveId, requestId, handle: move.handle ?? null })
   } catch (error) {
     console.error('Error accepting move:', error)
     return NextResponse.json({ error: t('errors:generic.internal') }, { status: 500 })

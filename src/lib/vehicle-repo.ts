@@ -128,6 +128,26 @@ export interface SubmitVehicleBody {
   note?: string | null
   /** Rental window (plan wave-2026-10/1 R1) — required when `ownership === 'rented'`. */
   rental?: RentalWindowInput | null
+  /** Motor liability declaration (plan legal/7, V3): the driver's yes or no. Required. */
+  hasMotorInsurance?: boolean | null
+}
+
+/**
+ * Motor liability declaration (plan legal/7, V3). The web form and this route
+ * ship together, so an answer is always required here (the function tolerates
+ * a missing one from app builds that predate the question). "No" is stored on
+ * a new vehicle, which an admin then cannot approve; a renewal needs "yes",
+ * because renewing can put the vehicle straight back into service.
+ */
+export function insuranceColumns(
+  answer: unknown,
+  now: string,
+  opts: { renew: boolean },
+): { hasMotorInsurance: boolean; insuranceDeclaredAt: string } {
+  if (typeof answer !== 'boolean' || (opts.renew && answer === false)) {
+    throw new VehicleRepoError('vehicle.insuranceRequired', 400, ['vehicle.insuranceRequired'])
+  }
+  return { hasMotorInsurance: answer, insuranceDeclaredAt: now }
 }
 
 const DB = () => APPWRITE.DATABASE_ID
@@ -445,6 +465,7 @@ export async function submitVehicle(
   // Plan wave-2026-10/1 R1: every rental has a window. Validated with the same
   // function the browser ran, so the same `fnCode` comes back either way.
   const window: RentalWindow | null = ownership === 'rented' ? requireRentalWindow(body.rental, nowMs) : null
+  const insurance = insuranceColumns(body.hasMotorInsurance, now, { renew: false })
 
   const registrationNumber = input.registrationNumber.toUpperCase()
   const registrationNormalized = normalizePlate(registrationNumber)
@@ -498,6 +519,7 @@ export async function submitVehicle(
     fullVehiclePhoto: input.fullVehiclePhoto,
     checks,
     ...vehicleWindowColumns(window),
+    ...insurance,
   }
 
   let vehicle: AnyDoc
@@ -649,6 +671,8 @@ export interface RenewRentalParams {
   frontPlatePhoto?: string | null
   rearPlatePhoto?: string | null
   fullVehiclePhoto?: string | null
+  /** Asked again on every renewal: a renewed rental is a new contract (plan legal/7, V3). */
+  hasMotorInsurance?: boolean | null
   note?: string | null
   nowMs?: number
   tz?: string
@@ -688,6 +712,7 @@ export async function renewRental(
   if (weightCodes.length) throw new VehicleRepoError(weightCodes[0], 400, weightCodes)
 
   const window = requireRentalWindow(params.rental, nowMs)
+  const insurance = insuranceColumns(params.hasMotorInsurance, now, { renew: true })
   const previous = { startAt: vehicle.rentalStartAt ?? null, endAt: vehicle.rentalEndAt ?? null }
   // `canAutoRenew` also accepts a rental the cron closed (`retired` + `expiredAt`): same verified plates (R5).
   const auto = canAutoRenew(vehicle, nowMs)
@@ -722,6 +747,7 @@ export async function renewRental(
     }
     const updated = await updateDoc(db, VEHICLES(), vehicle.$id, {
       ...vehicleWindowColumns(window),
+      ...insurance,
       status: 'verified',
       isCurrent: true,
       retiredAt: null,
@@ -760,6 +786,7 @@ export async function renewRental(
   // keeps the service meanwhile (R8), a rental in service is replaced in place.
   const updated = await updateDoc(db, VEHICLES(), vehicle.$id, {
     ...vehicleWindowColumns(window),
+    ...insurance,
     ...photos,
     status: 'pending_review',
     rejectionReason: null,

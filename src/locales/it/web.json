@@ -652,6 +652,14 @@
         "platesOk": "Foto delle targhe e del veicolo allegate",
         "rentalWindow": {
           "value": "Noleggiato fino al {{time}}"
+        },
+        "residencePhotosOk": "Entrambe le foto del documento sono allegate",
+        "certificate": {
+          "yes": "Certificato di trasloco: foto allegata, in attesa di verifica",
+          "no": "Certificato di trasloco: nessuno"
+        },
+        "businessInsurance": {
+          "value": "Assicurazione professionale: {{answer}}"
         }
       },
       "step": {
@@ -672,6 +680,9 @@
         },
         "ownership": {
           "label": "Proprietà"
+        },
+        "residence": {
+          "label": "Stato di soggiorno"
         }
       },
       "submit": {
@@ -746,6 +757,30 @@
       "title": "Nuova richiesta di trasloco!",
       "viewDetails": {
         "cta": "Vedi tutti i dettagli"
+      },
+      "offer": {
+        "distanceToPickup": {
+          "label": "{{distance}} dall'indirizzo di ritiro"
+        },
+        "includesDrive": {
+          "helper": "Include il tuo tragitto fino all'indirizzo di ritiro."
+        },
+        "waiting": {
+          "title": "In attesa del cliente",
+          "body": "Per la tua distanza dall'indirizzo di ritiro, il tuo prezzo di {{amount}} è più alto di quello accettato dal cliente. Al cliente è stato chiesto di confermarlo.",
+          "helper": "Il trasloco non è ancora assegnato. Vedrai la risposta qui.",
+          "countdown": {
+            "label": "Tempo rimasto: {{time}}"
+          }
+        },
+        "declined": {
+          "title": "Prezzo non accettato",
+          "body": "Il cliente non ha accettato il prezzo per la tua distanza. Il trasloco non ti è stato assegnato. Questo non ha alcun effetto sul tuo account."
+        },
+        "closed": {
+          "title": "Offerta chiusa",
+          "body": "Questa offerta non è più aperta. Il trasloco non ti è stato assegnato. Questo non ha alcun effetto sul tuo account."
+        }
       }
     },
     "roleLabel": "Traslocatore",
@@ -773,6 +808,9 @@
       "subtitle": "Gestisci il tuo account e le tue preferenze",
       "version": {
         "label": "PickLte Mover App v{{version}}"
+      },
+      "documents": {
+        "helper": "Documento di soggiorno, certificato di trasloco, assicurazione"
       }
     },
     "startRoute": {
@@ -1057,6 +1095,23 @@
         "countdown": {
           "label": "Il Suo noleggio termina tra {{time}}"
         }
+      },
+      "insurance": {
+        "question": "Questo veicolo ha un'assicurazione di responsabilità civile auto?",
+        "label": "Assicurazione di responsabilità civile auto",
+        "uninsured": {
+          "notice": "Puoi inviare questo veicolo, ma non potrà essere approvato né utilizzato finché non avrà un'assicurazione di responsabilità civile auto.",
+          "pending": "Questo veicolo è stato dichiarato senza assicurazione di responsabilità civile auto. Non potrà essere approvato né utilizzato finché non sarà assicurato."
+        },
+        "update": {
+          "cta": "Aggiorna la risposta"
+        },
+        "renewBlocked": {
+          "error": "Un noleggio non può essere rinnovato senza assicurazione di responsabilità civile auto."
+        },
+        "review": {
+          "value": "Assicurazione di responsabilità civile auto: {{answer}}"
+        }
       }
     },
     "fees": {
@@ -1186,11 +1241,226 @@
       "then": {
         "label": "Poi"
       }
+    },
+    "vetting": {
+      "loadFailed": {
+        "error": "Impossibile caricare i tuoi documenti. Riprova."
+      },
+      "uploadFailed": {
+        "error": "Impossibile caricare la foto. Riprova."
+      },
+      "submitFailed": {
+        "error": "Impossibile salvare i tuoi documenti. Riprova."
+      },
+      "rejectionReason": {
+        "value": "Motivo: {{reason}}"
+      },
+      "residence": {
+        "title": "Stato di soggiorno",
+        "why": "Lo chiediamo per verificare che tu possa lavorare qui. Solo il team di verifica di PickLte vede queste foto, che non vengono mai mostrate ai clienti.",
+        "docType": {
+          "label": "Quale documento hai?",
+          "passport": {
+            "label": "Passaporto"
+          },
+          "residencePermit": {
+            "label": "Permesso di soggiorno"
+          }
+        },
+        "photo": {
+          "passportData": {
+            "label": "Pagina dei dati"
+          },
+          "passportStamp": {
+            "label": "Pagina con il visto o il timbro di soggiorno"
+          },
+          "permitFront": {
+            "label": "Fronte"
+          },
+          "permitBack": {
+            "label": "Retro"
+          }
+        },
+        "expiry": {
+          "label": "Valido fino al",
+          "permit": {
+            "helper": "Obbligatorio per un permesso di soggiorno."
+          },
+          "passport": {
+            "helper": "Facoltativo per un passaporto."
+          }
+        },
+        "validUntil": {
+          "value": "Valido fino al {{date}}"
+        }
+      },
+      "certificate": {
+        "question": "Hai un certificato di trasloco?",
+        "notice_one": "I traslocatori con un certificato verificato vengono mostrati per primi ai clienti e possono accettare più traslochi al giorno. Senza certificato puoi comunque registrarti e lavorare, con un limite di {{count}} trasloco al giorno.",
+        "notice_other": "I traslocatori con un certificato verificato vengono mostrati per primi ai clienti e possono accettare più traslochi al giorno. Senza certificato puoi comunque registrarti e lavorare, con un limite di {{count}} traslochi al giorno.",
+        "photo": {
+          "label": "Foto del tuo certificato",
+          "helper": "Il certificato conta una volta verificato e approvato."
+        },
+        "answerRequired": {
+          "error": "Rispondi alla domanda sul certificato di trasloco."
+        }
+      },
+      "insurance": {
+        "question": "Hai un'assicurazione di responsabilità civile professionale o per le merci trasportate?",
+        "notice": "Assicurare il tuo lavoro è una tua responsabilità. PickLte non assicura i traslochi.",
+        "answerRequired": {
+          "error": "Rispondi alla domanda sull'assicurazione professionale."
+        }
+      },
+      "status": {
+        "missing": {
+          "label": "Non inviato"
+        },
+        "review": {
+          "label": "In verifica"
+        },
+        "approved": {
+          "label": "Approvato"
+        },
+        "rejected": {
+          "label": "Rifiutato"
+        },
+        "expired": {
+          "label": "Scaduto"
+        }
+      },
+      "banner": {
+        "missing": {
+          "title": "Aggiungi il tuo documento di soggiorno",
+          "body": {
+            "open": "Carica il passaporto o il permesso di soggiorno perché possa essere verificato.",
+            "deadline": "Dal {{date}} ti serve un passaporto o un permesso di soggiorno approvato per andare online e accettare traslochi.",
+            "blocked": "Non puoi andare online né accettare traslochi finché il passaporto o il permesso di soggiorno non è approvato."
+          }
+        },
+        "pending": {
+          "title": "Documento di soggiorno in verifica",
+          "body": {
+            "open": "Riceverai un avviso al termine della verifica.",
+            "deadline": "Riceverai un avviso al termine della verifica. Dal {{date}} serve un documento approvato per andare online e accettare traslochi.",
+            "blocked": "Riceverai un avviso al termine della verifica. Fino ad allora non puoi andare online né accettare nuovi traslochi."
+          }
+        },
+        "rejected": {
+          "title": "Documento di soggiorno non accettato",
+          "body": {
+            "open": "Carica di nuovo il documento perché possa essere verificato.",
+            "deadline": "Carica di nuovo il documento. Dal {{date}} serve un documento approvato per andare online e accettare traslochi.",
+            "blocked": "Carica di nuovo il documento. Finché non è approvato non puoi andare online né accettare nuovi traslochi."
+          }
+        },
+        "expired": {
+          "title": "Documento di soggiorno scaduto",
+          "body": {
+            "blocked": "Carica il nuovo documento per tornare online e accettare traslochi."
+          }
+        },
+        "cta": {
+          "add": "Aggiungi documento",
+          "view": "Vedi",
+          "replace": "Carica di nuovo"
+        }
+      },
+      "dailyCap": {
+        "progress_one": "{{accepted}} di {{count}} trasloco oggi",
+        "progress_other": "{{accepted}} di {{count}} traslochi oggi",
+        "reached": "Hai raggiunto il limite di oggi. Oggi non si possono accettare altri traslochi.",
+        "helper": "I traslocatori con un certificato di trasloco verificato non hanno un limite giornaliero.",
+        "inReview": "Il tuo certificato di trasloco è in verifica. Il limite giornaliero vale finché non è approvato.",
+        "addCertificate": {
+          "cta": "Aggiungi un certificato"
+        }
+      },
+      "documents": {
+        "title": "Documenti",
+        "subtitle": "Il tuo documento di soggiorno, il certificato di trasloco e la dichiarazione sull'assicurazione.",
+        "open": {
+          "cta": "Apri i documenti"
+        },
+        "submitted": {
+          "success": "Inviato. Riceverai un avviso al termine della verifica."
+        },
+        "saved": {
+          "success": "Salvato."
+        },
+        "action": {
+          "submit": {
+            "cta": "Invia per la verifica"
+          },
+          "replace": {
+            "cta": "Sostituisci documento"
+          },
+          "change": {
+            "cta": "Cambia risposta"
+          },
+          "answer": {
+            "cta": "Rispondi"
+          }
+        },
+        "residence": {
+          "missing": {
+            "body": "Nessun documento inviato finora."
+          },
+          "review": {
+            "body": "Il tuo documento è in verifica. Riceverai un avviso al termine."
+          },
+          "approved": {
+            "body": "Il tuo documento è stato controllato e approvato."
+          },
+          "rejected": {
+            "body": "Il tuo documento non è stato accettato. Caricalo di nuovo."
+          },
+          "expired": {
+            "body": "Il tuo documento è scaduto. Carica quello nuovo."
+          },
+          "replaceNote": "Un documento inviato di nuovo viene verificato di nuovo prima di contare."
+        },
+        "certificate": {
+          "title": "Certificato di trasloco",
+          "missing": {
+            "body": "Nessun certificato registrato."
+          },
+          "review": {
+            "body": "Il tuo certificato è in verifica. Il limite giornaliero vale finché non è approvato."
+          },
+          "approved": {
+            "body": "Il tuo certificato è verificato. Vieni mostrato per primo ai clienti e non hai un limite giornaliero."
+          },
+          "rejected": {
+            "body": "Il tuo certificato non è stato accettato. Puoi caricarlo di nuovo."
+          },
+          "removeNote": "Rispondendo no, il certificato registrato viene rimosso."
+        },
+        "insurance": {
+          "title": "Assicurazione professionale",
+          "missing": {
+            "body": "Ancora senza risposta."
+          },
+          "answer": {
+            "value": "La tua risposta: {{answer}}"
+          },
+          "declaredAt": {
+            "value": "Dichiarato il {{date}}"
+          }
+        }
+      }
     }
   },
   "moverCard": {
     "vehicleVerified": {
       "badge": "Veicolo verificato"
+    },
+    "certified": {
+      "badge": "Traslocatore certificato"
+    },
+    "recommended": {
+      "badge": "Consigliato"
     }
   },
   "moverDashboard": {
@@ -1503,14 +1773,31 @@
     },
     "experienceYears_one": "{{count}} anno di esp.",
     "experienceYears_other": "{{count}} anni di esp.",
+    "extend": {
+      "cta": "Estendi la ricerca a {{distance}}"
+    },
+    "extended": {
+      "helper": "Sono mostrati i traslocatori fino a {{distance}} di distanza."
+    },
     "languages": {
       "label": "Lingue: {{languages}}"
+    },
+    "nearEmpty": {
+      "subtitle": "Al momento non ci sono traslocatori disponibili vicino al tuo indirizzo di ritiro. Puoi cercare in un'area più ampia.",
+      "title": "Nessun traslocatore entro {{distance}}"
+    },
+    "noneFound": {
+      "subtitle": "Non è stato trovato alcun traslocatore per un trasloco immediato, nemmeno nell'area più ampia. Puoi programmare questo trasloco per un altro momento. I tuoi indirizzi e i tuoi oggetti vengono conservati.",
+      "title": "Nessun traslocatore disponibile al momento"
     },
     "pricing": {
       "disclaimer": "Il prezzo finale può variare in base alle condizioni effettive.",
       "helper_one": "I prezzi comprendono il servizio base, la distanza ({{distance}}), la manodopera della squadra, la classe di veicolo del traslocatore e {{count}} oggetto. L'IVA è inclusa.",
       "helper_other": "I prezzi comprendono il servizio base, la distanza ({{distance}}), la manodopera della squadra, la classe di veicolo del traslocatore e {{count}} oggetti. L'IVA è inclusa.",
       "title": "Come funziona il prezzo:"
+    },
+    "scheduleInstead": {
+      "cta": "Programma questo trasloco"
     },
     "searching": {
       "subtitle": "Stiamo cercando traslocatori verificati vicino al tuo luogo di ritiro",
@@ -1620,6 +1907,41 @@
     },
     "stepTotal": {
       "label": "/{{total}}"
+    }
+  },
+  "priceConfirm": {
+    "title": "Nuovo prezzo da confermare",
+    "body": {
+      "named": "{{name}} può eseguire il tuo trasloco. Questo traslocatore è più lontano dal tuo indirizzo di ritiro, quindi il prezzo è più alto.",
+      "unnamed": "Un traslocatore più lontano dal tuo indirizzo di ritiro può eseguire il tuo trasloco, quindi il prezzo è più alto."
+    },
+    "distance": {
+      "label": "Distanza del traslocatore dall'indirizzo di ritiro"
+    },
+    "previous": {
+      "label": "Prezzo che hai accettato"
+    },
+    "new": {
+      "label": "Nuovo prezzo"
+    },
+    "difference": {
+      "label": "Differenza"
+    },
+    "countdown": {
+      "label": "Tempo rimasto per rispondere: {{time}}"
+    },
+    "accept": {
+      "cta": "Accetta {{amount}}"
+    },
+    "decline": {
+      "cta": "Rifiuta"
+    },
+    "helper": "Se rifiuti o non rispondi in tempo, questo traslocatore non viene assegnato e resta il prezzo che hai accettato.",
+    "declined": {
+      "notice": "Hai rifiutato il nuovo prezzo. Resta il prezzo che hai accettato."
+    },
+    "failed": {
+      "error": "Non è stato possibile salvare la tua risposta. Riprova."
     }
   }
 }

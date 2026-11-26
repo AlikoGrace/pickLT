@@ -273,7 +273,10 @@
     "vehicleNotReady": "Proszę potwierdzić lub zweryfikować pojazd przed przejściem w tryb online lub przyjęciem przeprowadzki.",
     "withdrawFailed": "Nie udało się wycofać z przeprowadzki",
     "withdrawRetry": "Nie udało się wycofać. Spróbuj ponownie.",
-    "countryMismatch": "Ta przeprowadzka odbywa się w kraju: {{country}}; Twoje konto jest zarejestrowane w innym kraju."
+    "countryMismatch": "Ta przeprowadzka odbywa się w kraju: {{country}}; Twoje konto jest zarejestrowane w innym kraju.",
+    "residenceNotVerified": "Twój dokument pobytowy nie został jeszcze zatwierdzony. Prześlij go lub poczekaj na zakończenie weryfikacji.",
+    "residenceExpired": "Twój dokument pobytowy stracił ważność. Prześlij nowy, aby dalej pracować.",
+    "dailyCapReached": "Osiągnięto dzisiejszy limit przeprowadzek. Przewoźników ze zweryfikowanym certyfikatem przeprowadzkowym limit dzienny nie obowiązuje."
   },
   "movers": {
     "fetchFailed": "Nie udało się pobrać przewoźników",
@@ -378,7 +381,8 @@
     "notOwnVehicle": "Ten pojazd nie należy do Twojego konta.",
     "weightRequired": "Podaj dopuszczalną masę całkowitą w kilogramach.",
     "trailerWeightRequired": "Podaj dopuszczalną masę całkowitą przyczepy w kilogramach.",
-    "weightOverLimit": "Pojazdów powyżej 3500 kg łącznie z przyczepą nie można zarejestrować."
+    "weightOverLimit": "Pojazdów powyżej 3500 kg łącznie z przyczepą nie można zarejestrować.",
+    "insuranceRequired": "Odpowiedz na pytanie o ubezpieczenie OC pojazdu. Pojazdu bez tego ubezpieczenia nie można używać."
   },
   "country": {
     "notLive": "PickLte nie jest jeszcze dostępny w kraju: {{country}}.",
@@ -404,5 +408,16 @@
     "reauthRequired": "Zaloguj się ponownie, aby usunąć konto.",
     "adminNotDeletable": "Konta administratora nie można tutaj usunąć.",
     "deletionIncomplete": "Nie udało się całkowicie usunąć konta. Spróbuj ponownie."
+  },
+  "vetting": {
+    "residenceTypeRequired": "Wybierz paszport lub zezwolenie na pobyt.",
+    "residencePhotosRequired": "Sfotografuj obie strony dokumentu.",
+    "residenceExpiryRequired": "Podaj datę, do której dokument jest ważny.",
+    "residenceExpiryPast": "Ten dokument stracił ważność.",
+    "certificatePhotoRequired": "Dodaj zdjęcie swojego certyfikatu przeprowadzkowego."
+  },
+  "offer": {
+    "notPending": "Żadna cena nie czeka na potwierdzenie.",
+    "expired": "Ta oferta nie jest już otwarta."
   }
 }

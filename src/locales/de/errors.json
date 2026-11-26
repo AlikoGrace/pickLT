@@ -269,7 +269,10 @@
     "vehicleNotReady": "Bestätigen oder verifizieren Sie Ihr Fahrzeug, bevor Sie online gehen oder Umzüge annehmen.",
     "withdrawFailed": "Rücktritt vom Umzug fehlgeschlagen",
     "withdrawRetry": "Rücktritt fehlgeschlagen. Bitte versuchen Sie es erneut.",
-    "countryMismatch": "Dieser Umzug findet in {{country}} statt; Ihr Konto ist in einem anderen Land registriert."
+    "countryMismatch": "Dieser Umzug findet in {{country}} statt; Ihr Konto ist in einem anderen Land registriert.",
+    "residenceNotVerified": "Ihr Aufenthaltsdokument wurde noch nicht freigegeben. Laden Sie es hoch oder warten Sie, bis die Prüfung abgeschlossen ist.",
+    "residenceExpired": "Ihr Aufenthaltsdokument ist abgelaufen. Laden Sie das neue hoch, um weiterzuarbeiten.",
+    "dailyCapReached": "Sie haben das heutige Limit an Umzügen erreicht. Für Umzugshelfer mit geprüftem Umzugszertifikat gilt kein Tageslimit."
   },
   "movers": {
     "fetchFailed": "Umzugsprofis konnten nicht abgerufen werden",
@@ -374,7 +377,8 @@
     "notOwnVehicle": "Dieses Fahrzeug gehört nicht zu Ihrem Konto.",
     "weightRequired": "Bitte geben Sie das zulässige Gesamtgewicht in Kilogramm an.",
     "trailerWeightRequired": "Bitte geben Sie das zulässige Gesamtgewicht des Anhängers in Kilogramm an.",
-    "weightOverLimit": "Fahrzeuge über 3.500 kg einschließlich Anhänger können nicht registriert werden."
+    "weightOverLimit": "Fahrzeuge über 3.500 kg einschließlich Anhänger können nicht registriert werden.",
+    "insuranceRequired": "Beantworten Sie die Frage zur Kfz-Haftpflichtversicherung. Ein Fahrzeug ohne diese Versicherung kann nicht eingesetzt werden."
   },
   "country": {
     "notLive": "PickLte ist in {{country}} noch nicht verfügbar.",
@@ -400,5 +404,16 @@
     "reauthRequired": "Melden Sie sich erneut an, um Ihr Konto zu löschen.",
     "adminNotDeletable": "Ein Administratorkonto kann hier nicht gelöscht werden.",
     "deletionIncomplete": "Ihr Konto konnte nicht vollständig gelöscht werden. Bitte versuchen Sie es erneut."
+  },
+  "vetting": {
+    "residenceTypeRequired": "Wählen Sie Reisepass oder Aufenthaltstitel.",
+    "residencePhotosRequired": "Fotografieren Sie beide Seiten des Dokuments.",
+    "residenceExpiryRequired": "Geben Sie an, bis wann das Dokument gültig ist.",
+    "residenceExpiryPast": "Dieses Dokument ist abgelaufen.",
+    "certificatePhotoRequired": "Fügen Sie ein Foto Ihres Umzugszertifikats hinzu."
+  },
+  "offer": {
+    "notPending": "Es wartet kein Preis auf Bestätigung.",
+    "expired": "Dieses Angebot ist nicht mehr offen."
   }
 }

@@ -269,7 +269,10 @@
     "vehicleNotReady": "Çevrimiçi olmadan veya taşınma kabul etmeden önce aracınızı onaylayın veya doğrulatın.",
     "withdrawFailed": "Taşınmadan geri çekilme işlemi başarısız oldu",
     "withdrawRetry": "Geri çekilme işlemi başarısız oldu. Lütfen tekrar deneyin.",
-    "countryMismatch": "Bu taşıma {{country}} içinde; hesabınız başka bir ülkede kayıtlı."
+    "countryMismatch": "Bu taşıma {{country}} içinde; hesabınız başka bir ülkede kayıtlı.",
+    "residenceNotVerified": "İkamet belgeniz henüz onaylanmadı. Belgeyi yükleyin veya incelemenin bitmesini bekleyin.",
+    "residenceExpired": "İkamet belgenizin süresi doldu. Çalışmaya devam etmek için yenisini yükleyin.",
+    "dailyCapReached": "Bugünkü taşıma sınırına ulaştınız. Doğrulanmış taşımacılık sertifikası olan nakliyeciler için günlük sınır yoktur."
   },
   "movers": {
     "fetchFailed": "Nakliyeciler getirilemedi",
@@ -374,7 +377,8 @@
     "notOwnVehicle": "Bu araç hesabınıza ait değil.",
     "weightRequired": "Azami yüklü ağırlığı kilogram olarak girin.",
     "trailerWeightRequired": "Römorkun azami yüklü ağırlığını kilogram olarak girin.",
-    "weightOverLimit": "Römork dahil 3.500 kg üzerindeki araçlar kaydedilemez."
+    "weightOverLimit": "Römork dahil 3.500 kg üzerindeki araçlar kaydedilemez.",
+    "insuranceRequired": "Zorunlu trafik sigortası sorusunu yanıtlayın. Bu sigortası olmayan bir araç kullanılamaz."
   },
   "country": {
     "notLive": "PickLte henüz {{country}} için kullanılamıyor.",
@@ -400,5 +404,16 @@
     "reauthRequired": "Hesabınızı silmek için yeniden oturum açın.",
     "adminNotDeletable": "Yönetici hesabı buradan silinemez.",
     "deletionIncomplete": "Hesabınız tamamen silinemedi. Lütfen tekrar deneyin."
+  },
+  "vetting": {
+    "residenceTypeRequired": "Pasaport veya ikamet iznini seçin.",
+    "residencePhotosRequired": "Belgenin her iki yüzünün fotoğrafını çekin.",
+    "residenceExpiryRequired": "Belgenin geçerlilik bitiş tarihini girin.",
+    "residenceExpiryPast": "Bu belgenin süresi dolmuş.",
+    "certificatePhotoRequired": "Taşımacılık sertifikanızın fotoğrafını ekleyin."
+  },
+  "offer": {
+    "notPending": "Onay bekleyen bir fiyat yok.",
+    "expired": "Bu teklif artık açık değil."
   }
 }

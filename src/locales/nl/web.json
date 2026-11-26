@@ -652,6 +652,14 @@
         "platesOk": "Foto's van kentekenplaten en voertuig toegevoegd",
         "rentalWindow": {
           "value": "Gehuurd tot {{time}}"
+        },
+        "residencePhotosOk": "Beide foto's van het document toegevoegd",
+        "certificate": {
+          "yes": "Verhuiscertificaat: foto toegevoegd, wordt gecontroleerd",
+          "no": "Verhuiscertificaat: geen"
+        },
+        "businessInsurance": {
+          "value": "Bedrijfsverzekering: {{answer}}"
         }
       },
       "step": {
@@ -672,6 +680,9 @@
         },
         "ownership": {
           "label": "Eigendom"
+        },
+        "residence": {
+          "label": "Verblijfsstatus"
         }
       },
       "submit": {
@@ -746,6 +757,30 @@
       "title": "Nieuw verhuisverzoek!",
       "viewDetails": {
         "cta": "Alle details bekijken"
+      },
+      "offer": {
+        "distanceToPickup": {
+          "label": "{{distance}} tot het ophaaladres"
+        },
+        "includesDrive": {
+          "helper": "Inclusief je rit naar het ophaaladres."
+        },
+        "waiting": {
+          "title": "Wachten op de klant",
+          "body": "Door je afstand tot het ophaaladres is jouw prijs van {{amount}} hoger dan de prijs waarmee de klant akkoord ging. De klant is gevraagd deze te bevestigen.",
+          "helper": "De verhuizing is nog niet toegewezen. Je ziet het antwoord hier.",
+          "countdown": {
+            "label": "Resterende tijd: {{time}}"
+          }
+        },
+        "declined": {
+          "title": "Prijs niet geaccepteerd",
+          "body": "De klant heeft de prijs voor jouw afstand niet geaccepteerd. De verhuizing is niet aan jou toegewezen. Dit heeft geen gevolgen voor je account."
+        },
+        "closed": {
+          "title": "Aanbod gesloten",
+          "body": "Dit aanbod is niet meer open. De verhuizing is niet aan jou toegewezen. Dit heeft geen gevolgen voor je account."
+        }
       }
     },
     "roleLabel": "Verhuizer",
@@ -773,6 +808,9 @@
       "subtitle": "Beheer je account en voorkeuren",
       "version": {
         "label": "PickLte Mover App v{{version}}"
+      },
+      "documents": {
+        "helper": "Verblijfsdocument, verhuiscertificaat, verzekering"
       }
     },
     "startRoute": {
@@ -1057,6 +1095,23 @@
         "countdown": {
           "label": "Uw huur eindigt over {{time}}"
         }
+      },
+      "insurance": {
+        "question": "Heeft dit voertuig een WA-verzekering?",
+        "label": "WA-verzekering van het voertuig",
+        "uninsured": {
+          "notice": "Je kunt dit voertuig indienen, maar het kan pas worden goedgekeurd en gebruikt als het een WA-verzekering heeft.",
+          "pending": "Dit voertuig is opgegeven zonder WA-verzekering. Het kan pas worden goedgekeurd en gebruikt als het verzekerd is."
+        },
+        "update": {
+          "cta": "Antwoord aanpassen"
+        },
+        "renewBlocked": {
+          "error": "Een huurvoertuig kan niet worden verlengd zonder WA-verzekering."
+        },
+        "review": {
+          "value": "WA-verzekering van het voertuig: {{answer}}"
+        }
       }
     },
     "fees": {
@@ -1186,11 +1241,226 @@
       "then": {
         "label": "Daarna"
       }
+    },
+    "vetting": {
+      "loadFailed": {
+        "error": "Je documenten konden niet worden geladen. Probeer het opnieuw."
+      },
+      "uploadFailed": {
+        "error": "De foto kon niet worden geüpload. Probeer het opnieuw."
+      },
+      "submitFailed": {
+        "error": "Je documenten konden niet worden opgeslagen. Probeer het opnieuw."
+      },
+      "rejectionReason": {
+        "value": "Reden: {{reason}}"
+      },
+      "residence": {
+        "title": "Verblijfsstatus",
+        "why": "We vragen dit om te controleren of je hier mag werken. Alleen het controleteam van PickLte ziet deze foto's en ze worden nooit aan klanten getoond.",
+        "docType": {
+          "label": "Welk document heb je?",
+          "passport": {
+            "label": "Paspoort"
+          },
+          "residencePermit": {
+            "label": "Verblijfsvergunning"
+          }
+        },
+        "photo": {
+          "passportData": {
+            "label": "Pagina met persoonsgegevens"
+          },
+          "passportStamp": {
+            "label": "Pagina met het visum of de verblijfsstempel"
+          },
+          "permitFront": {
+            "label": "Voorkant"
+          },
+          "permitBack": {
+            "label": "Achterkant"
+          }
+        },
+        "expiry": {
+          "label": "Geldig tot",
+          "permit": {
+            "helper": "Verplicht bij een verblijfsvergunning."
+          },
+          "passport": {
+            "helper": "Optioneel bij een paspoort."
+          }
+        },
+        "validUntil": {
+          "value": "Geldig tot {{date}}"
+        }
+      },
+      "certificate": {
+        "question": "Heb je een verhuiscertificaat?",
+        "notice_one": "Verhuizers met een geverifieerd certificaat worden als eerste aan klanten getoond en kunnen meer verhuizingen per dag aannemen. Zonder certificaat kun je je toch registreren en werken, met een limiet van {{count}} verhuizing per dag.",
+        "notice_other": "Verhuizers met een geverifieerd certificaat worden als eerste aan klanten getoond en kunnen meer verhuizingen per dag aannemen. Zonder certificaat kun je je toch registreren en werken, met een limiet van {{count}} verhuizingen per dag.",
+        "photo": {
+          "label": "Foto van je certificaat",
+          "helper": "Het certificaat telt zodra het is gecontroleerd en goedgekeurd."
+        },
+        "answerRequired": {
+          "error": "Beantwoord de vraag over het verhuiscertificaat."
+        }
+      },
+      "insurance": {
+        "question": "Heb je een bedrijfsaansprakelijkheidsverzekering of een goederentransportverzekering?",
+        "notice": "Je bent zelf verantwoordelijk voor het verzekeren van je werk. PickLte verzekert geen verhuizingen.",
+        "answerRequired": {
+          "error": "Beantwoord de vraag over de bedrijfsverzekering."
+        }
+      },
+      "status": {
+        "missing": {
+          "label": "Niet ingediend"
+        },
+        "review": {
+          "label": "In controle"
+        },
+        "approved": {
+          "label": "Goedgekeurd"
+        },
+        "rejected": {
+          "label": "Afgewezen"
+        },
+        "expired": {
+          "label": "Verlopen"
+        }
+      },
+      "banner": {
+        "missing": {
+          "title": "Voeg je verblijfsdocument toe",
+          "body": {
+            "open": "Upload je paspoort of verblijfsvergunning zodat het kan worden gecontroleerd.",
+            "deadline": "Vanaf {{date}} heb je een goedgekeurd paspoort of een goedgekeurde verblijfsvergunning nodig om online te gaan en verhuizingen aan te nemen.",
+            "blocked": "Je kunt pas online gaan en verhuizingen aannemen als je paspoort of verblijfsvergunning is goedgekeurd."
+          }
+        },
+        "pending": {
+          "title": "Verblijfsdocument wordt gecontroleerd",
+          "body": {
+            "open": "Je krijgt bericht zodra de controle klaar is.",
+            "deadline": "Je krijgt bericht zodra de controle klaar is. Vanaf {{date}} is een goedgekeurd document nodig om online te gaan en verhuizingen aan te nemen.",
+            "blocked": "Je krijgt bericht zodra de controle klaar is. Tot die tijd kun je niet online gaan en geen nieuwe verhuizingen aannemen."
+          }
+        },
+        "rejected": {
+          "title": "Verblijfsdocument niet geaccepteerd",
+          "body": {
+            "open": "Upload het document opnieuw zodat het kan worden gecontroleerd.",
+            "deadline": "Upload het document opnieuw. Vanaf {{date}} is een goedgekeurd document nodig om online te gaan en verhuizingen aan te nemen.",
+            "blocked": "Upload het document opnieuw. Tot het is goedgekeurd kun je niet online gaan en geen nieuwe verhuizingen aannemen."
+          }
+        },
+        "expired": {
+          "title": "Verblijfsdocument verlopen",
+          "body": {
+            "blocked": "Upload het nieuwe document om weer online te gaan en verhuizingen aan te nemen."
+          }
+        },
+        "cta": {
+          "add": "Document toevoegen",
+          "view": "Bekijken",
+          "replace": "Opnieuw uploaden"
+        }
+      },
+      "dailyCap": {
+        "progress_one": "{{accepted}} van {{count}} verhuizing vandaag",
+        "progress_other": "{{accepted}} van {{count}} verhuizingen vandaag",
+        "reached": "Je hebt de limiet van vandaag bereikt. Vandaag kunnen geen verhuizingen meer worden aangenomen.",
+        "helper": "Voor verhuizers met een geverifieerd verhuiscertificaat geldt geen daglimiet.",
+        "inReview": "Je verhuiscertificaat wordt gecontroleerd. De daglimiet geldt tot het is goedgekeurd.",
+        "addCertificate": {
+          "cta": "Certificaat toevoegen"
+        }
+      },
+      "documents": {
+        "title": "Documenten",
+        "subtitle": "Je verblijfsdocument, je verhuiscertificaat en je verzekeringsverklaring.",
+        "open": {
+          "cta": "Documenten openen"
+        },
+        "submitted": {
+          "success": "Ingediend. Je krijgt bericht zodra de controle klaar is."
+        },
+        "saved": {
+          "success": "Opgeslagen."
+        },
+        "action": {
+          "submit": {
+            "cta": "Indienen ter controle"
+          },
+          "replace": {
+            "cta": "Document vervangen"
+          },
+          "change": {
+            "cta": "Antwoord wijzigen"
+          },
+          "answer": {
+            "cta": "Beantwoorden"
+          }
+        },
+        "residence": {
+          "missing": {
+            "body": "Nog geen document ingediend."
+          },
+          "review": {
+            "body": "Je document wordt gecontroleerd. Je krijgt bericht zodra de controle klaar is."
+          },
+          "approved": {
+            "body": "Je document is gecontroleerd en goedgekeurd."
+          },
+          "rejected": {
+            "body": "Je document is niet geaccepteerd. Upload het opnieuw."
+          },
+          "expired": {
+            "body": "Je document is verlopen. Upload het nieuwe."
+          },
+          "replaceNote": "Een document dat je opnieuw indient, wordt opnieuw gecontroleerd voordat het telt."
+        },
+        "certificate": {
+          "title": "Verhuiscertificaat",
+          "missing": {
+            "body": "Geen certificaat geregistreerd."
+          },
+          "review": {
+            "body": "Je certificaat wordt gecontroleerd. De daglimiet geldt tot het is goedgekeurd."
+          },
+          "approved": {
+            "body": "Je certificaat is geverifieerd. Je wordt als eerste aan klanten getoond en hebt geen daglimiet."
+          },
+          "rejected": {
+            "body": "Je certificaat is niet geaccepteerd. Je kunt het opnieuw uploaden."
+          },
+          "removeNote": "Als je nee antwoordt, wordt het geregistreerde certificaat verwijderd."
+        },
+        "insurance": {
+          "title": "Bedrijfsverzekering",
+          "missing": {
+            "body": "Nog niet beantwoord."
+          },
+          "answer": {
+            "value": "Je antwoord: {{answer}}"
+          },
+          "declaredAt": {
+            "value": "Verklaard op {{date}}"
+          }
+        }
+      }
     }
   },
   "moverCard": {
     "vehicleVerified": {
       "badge": "Geverifieerd voertuig"
+    },
+    "certified": {
+      "badge": "Gecertificeerde verhuizer"
+    },
+    "recommended": {
+      "badge": "Aanbevolen"
     }
   },
   "moverDashboard": {
@@ -1503,14 +1773,31 @@
     },
     "experienceYears_one": "{{count}} j ervaring",
     "experienceYears_other": "{{count}} j ervaring",
+    "extend": {
+      "cta": "Zoekgebied uitbreiden tot {{distance}}"
+    },
+    "extended": {
+      "helper": "Verhuizers tot op {{distance}} afstand worden getoond."
+    },
     "languages": {
       "label": "Talen: {{languages}}"
+    },
+    "nearEmpty": {
+      "subtitle": "Er is nu geen verhuizer beschikbaar in de buurt van je ophaaladres. Je kunt in een groter gebied zoeken.",
+      "title": "Geen verhuizers binnen {{distance}}"
+    },
+    "noneFound": {
+      "subtitle": "Er is geen verhuizer gevonden voor een directe verhuizing, ook niet in het grotere gebied. Je kunt deze verhuizing voor een later moment plannen. Je adressen en spullen blijven bewaard.",
+      "title": "Nu geen verhuizer beschikbaar"
     },
     "pricing": {
       "disclaimer": "De uiteindelijke prijs kan afwijken op basis van de werkelijke omstandigheden.",
       "helper_one": "De prijzen omvatten de basisdienst, de afstand ({{distance}}), de arbeid van het team, de voertuigklasse van de verhuizer en {{count}} voorwerp. De btw is inbegrepen.",
       "helper_other": "De prijzen omvatten de basisdienst, de afstand ({{distance}}), de arbeid van het team, de voertuigklasse van de verhuizer en {{count}} voorwerpen. De btw is inbegrepen.",
       "title": "Zo komt de prijs tot stand:"
+    },
+    "scheduleInstead": {
+      "cta": "Deze verhuizing plannen"
     },
     "searching": {
       "subtitle": "We zoeken geverifieerde verhuizers bij je ophaaladres in de buurt",
@@ -1620,6 +1907,41 @@
     },
     "stepTotal": {
       "label": "/{{total}}"
+    }
+  },
+  "priceConfirm": {
+    "title": "Nieuwe prijs bevestigen",
+    "body": {
+      "named": "{{name}} kan je verhuizing doen. Deze verhuizer is verder van je ophaaladres, daarom is de prijs hoger.",
+      "unnamed": "Een verhuizer die verder van je ophaaladres is kan je verhuizing doen, daarom is de prijs hoger."
+    },
+    "distance": {
+      "label": "Afstand van de verhuizer tot het ophaaladres"
+    },
+    "previous": {
+      "label": "Prijs waarmee je akkoord ging"
+    },
+    "new": {
+      "label": "Nieuwe prijs"
+    },
+    "difference": {
+      "label": "Verschil"
+    },
+    "countdown": {
+      "label": "Resterende tijd om te antwoorden: {{time}}"
+    },
+    "accept": {
+      "cta": "{{amount}} accepteren"
+    },
+    "decline": {
+      "cta": "Weigeren"
+    },
+    "helper": "Als je weigert of niet op tijd antwoordt, wordt deze verhuizer niet toegewezen en blijft de prijs waarmee je akkoord ging gelden.",
+    "declined": {
+      "notice": "Je hebt de nieuwe prijs geweigerd. De prijs waarmee je akkoord ging blijft gelden."
+    },
+    "failed": {
+      "error": "We konden je antwoord niet opslaan. Probeer het opnieuw."
     }
   }
 }

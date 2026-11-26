@@ -6,9 +6,11 @@ import { getSessionUserId } from '@/lib/auth-session'
 import { asText, asTextArray } from '@/lib/move-normalizers'
 import { movePermissions, moveRequestPermissions } from '@/lib/doc-permissions'
 import { directAssignmentBlock } from '@/lib/mover-gates'
+import { dailyCapCheck, loadVettingConfig } from '@/lib/mover-vetting'
 import { relId } from '@/lib/notify'
 import { PricingReconcileError } from '@/lib/pricingEngine'
-import { BasketCapError, priceMoveFields, type PricedMove } from '@/lib/pricing-server'
+import { BasketCapError, priceMoveFields, quoteColumns, type PricedMove } from '@/lib/pricing-server'
+import { movePriceColumns, offerColumns, priceOfferForMover, type MoverOffer } from '@/lib/offer-pricing-server'
 import { profileCrewSize } from '@/app/api/crew/crew-size'
 import { resolveMoveCountryWithLock, scopeLockStatus } from '@/lib/moveCountry'
 import { loadLiveCountries } from '@/lib/live-countries-server'
@@ -100,7 +102,14 @@ export async function POST(req: NextRequest) {
     } catch {
       // Unknown profile id — same answer as an unverified one.
     }
-    const blocked = directAssignmentBlock(mover, Date.now(), PLATFORM_TZ)
+    // Driver vetting (plan legal/7): the residence gate, and the daily cap of a
+    // driver without a verified certificate. The client's list is a snapshot.
+    const vettingConfig = await loadVettingConfig(databases)
+    let blocked: string | null = directAssignmentBlock(mover, Date.now(), PLATFORM_TZ, vettingConfig.residenceGateFromMs)
+    if (mover && !blocked) {
+      const cap = await dailyCapCheck(databases, mover, vettingConfig, Date.now(), PLATFORM_TZ)
+      if (!cap.ok) blocked = 'mover.dailyCapReached'
+    }
     if (!mover || blocked) {
       // The reader is the client, so the sentence is the client-facing one;
       // `fnCode` carries the function contract's reason.
@@ -175,7 +184,35 @@ export async function POST(req: NextRequest) {
       }
       throw err
     }
-    const { breakdown, classification } = priced
+    const { classification } = priced
+
+    // Travel to pickup (plan pricing/8), as `createpriorityrequest` does it:
+    // the quote above is the move without a mover; the client has chosen one,
+    // so the price becomes the price for THIS mover. The distance comes from
+    // the mover's own stored position, never from the request body. Without a
+    // usable position the move keeps the price above and is offered at it.
+    let offer: MoverOffer | null = null
+    try {
+      offer = priceOfferForMover({
+        move: {
+          moveCategory: 'instant',
+          priceBreakdown: priced.columns.priceBreakdown,
+          pickupLatitude,
+          pickupLongitude,
+        },
+        mover,
+        config: priced.config,
+      })
+    } catch (err) {
+      // Never refuse a booking over the approach line.
+      console.warn('[create-instant] approach pricing skipped:', err)
+      offer = null
+    }
+    const breakdown = offer ? offer.breakdown : priced.breakdown
+    // `pricedAt` and the charged vehicle and crew are unchanged by the approach line.
+    const priceColumns = offer
+      ? { ...quoteColumns(breakdown, new Date(priced.columns.pricedAt)), approachM: movePriceColumns(offer).approachM }
+      : priced.columns
 
     // Crew gate (master D7), server side: the list hid movers whose crew is
     // smaller than the load requires, but the list is a snapshot. The mover's
@@ -229,8 +266,9 @@ export async function POST(req: NextRequest) {
 
         // Server-computed quote columns (master D13): estimatedPrice,
         // priceBreakdown, pricingVersion, pricedAt, currency, vehicleType,
-        // crewSize (whole crew), extraHelpers (billed count).
-        ...priced.columns,
+        // crewSize (whole crew), extraHelpers (billed count); with the chosen
+        // mover's approach line and `approachM` when it could be measured.
+        ...priceColumns,
         // Settled at completion; card charges run through the app's Stripe flow.
         paymentMethod: paymentMethod === 'card' ? 'card' : 'cash',
         routeDistanceMeters: routeDistanceMeters ?? null,
@@ -259,19 +297,26 @@ export async function POST(req: NextRequest) {
     // ── Create a move_request targeting the mover ───────────
     const expiresAt = new Date(Date.now() + 600_000).toISOString() // 10 min priority window (createpriorityrequest DEFAULT_WINDOW_SECONDS)
     const moveRequestId = ID.unique()
-    await databases.createDocument(
-      APPWRITE.DATABASE_ID,
-      APPWRITE.COLLECTIONS.MOVE_REQUESTS,
-      moveRequestId,
+    // The offer columns are dropped when the schema script has not been applied yet.
+    await writeDroppingUnknownAttributes(
       {
         moveId: moveId,
         moverProfileId: moverProfileId,
         status: 'pending',
         sentAt: new Date().toISOString(),
         expiresAt,
+        ...offerColumns(offer),
       },
-      // The targeted mover's inbox + the client's tracking screen.
-      moveRequestPermissions(moverUserId, userId)
+      (data) =>
+        databases.createDocument(
+          APPWRITE.DATABASE_ID,
+          APPWRITE.COLLECTIONS.MOVE_REQUESTS,
+          moveRequestId,
+          data,
+          // The targeted mover's inbox + the client's tracking screen.
+          moveRequestPermissions(moverUserId, userId),
+        ),
+      'create-instant',
     )
 
     return NextResponse.json({
@@ -281,6 +326,10 @@ export async function POST(req: NextRequest) {
       handle,
       estimatedPrice: breakdown.total,
       breakdown,
+      // The price the client is booked at (plan pricing/8); `approachM` is
+      // absent when the mover's distance could not be measured.
+      total: breakdown.total,
+      ...(offer ? { approachM: offer.approachM } : {}),
       moveType: classification.moveType,
       systemMoveType: classification.systemMoveType,
       countryCode,

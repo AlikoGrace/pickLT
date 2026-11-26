@@ -164,6 +164,26 @@
     "verified": {
       "body": "¡Enhorabuena! Tu perfil de transportista ha sido verificado. Ya puedes aceptar mudanzas.",
       "title": "Perfil verificado"
+    },
+    "residenceVerified": {
+      "title": "Documento de residencia aprobado",
+      "body": "Tu documento de residencia ha sido revisado y aprobado."
+    },
+    "residenceRejected": {
+      "title": "Documento de residencia no aceptado",
+      "body": "Tu documento de residencia no ha sido aceptado. {{reason}}"
+    },
+    "certificateVerified": {
+      "title": "Certificado de mudanzas aprobado",
+      "body": "Tu certificado de mudanzas ha sido aprobado. Ahora apareces primero ante los clientes y no tienes límite diario."
+    },
+    "certificateRejected": {
+      "title": "Certificado de mudanzas no aceptado",
+      "body": "Tu certificado de mudanzas no ha sido aceptado. {{reason}}"
+    },
+    "residenceExpiring": {
+      "title": "El documento de residencia caduca pronto",
+      "body": "Tu documento de residencia caduca en {{days}} días. Sube el nuevo para seguir recibiendo mudanzas."
     }
   },
   "fees": {
@@ -188,6 +208,20 @@
     "missed": {
       "title": "Llamada perdida",
       "body": "Llamada perdida de {{name}}"
+    }
+  },
+  "offer": {
+    "priceConfirm": {
+      "title": "Nuevo precio por confirmar",
+      "body": "Un transportista más lejano puede hacer tu mudanza por {{amount}} {{currency}} en lugar de {{previousAmount}} {{currency}}. Abre la mudanza para aceptar o rechazar."
+    },
+    "clientDeclined": {
+      "title": "Precio no aceptado",
+      "body": "El cliente no aceptó el precio para tu distancia. La mudanza {{handle}} no se te ha asignado."
+    },
+    "clientNoAnswer": {
+      "title": "Oferta cerrada",
+      "body": "El cliente no confirmó el precio a tiempo. La mudanza {{handle}} no se te ha asignado."
     }
   }
 }

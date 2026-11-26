@@ -1,12 +1,19 @@
 'use client'
 
 import { useAuth } from '@/context/auth'
-import { formatDateTime, formatVolumeM3, languageName } from '@/lib/format'
+import { formatDate, formatDateTime, formatVolumeM3, languageName } from '@/lib/format'
 import { vehicleCapacityLabel } from '@/lib/vehicle-capacity'
 import { compressImage } from '@/utils/compressImage'
 import CameraCaptureModal from '@/components/CameraCaptureModal'
 import RentalWindowPicker from '@/components/mover/RentalWindowPicker'
+import MotorInsuranceField from '@/components/mover/MotorInsuranceField'
 import VehiclePhotoField from '@/components/mover/VehiclePhotoField'
+import {
+  BusinessInsuranceField,
+  CertificateFields,
+  ResidenceFields,
+  residenceDocTypeLabel,
+} from '@/components/mover/VettingFields'
 import {
   canGoNext as stepCanGoNext,
   onboardingRentalWindow,
@@ -19,6 +26,9 @@ import { countryFlag, countryName, localizedCountryName } from '@/lib/countryCod
 import { SUPPORTED_COUNTRIES } from '@/lib/supportedCountries'
 import { submitVehicle, uploadVehiclePhoto } from '@/lib/vehicle-client'
 import type { RentalWindowInput, VehicleOwnership } from '@/lib/vehicle-service'
+import { DEFAULT_UNCERTIFIED_DAILY_MOVE_CAP, type ResidenceDocType } from '@/lib/vetting'
+import { fetchDailyCap, uploadVettingPhoto } from '@/lib/vetting-client'
+import { minExpiryDate, vettingErrorKey, vettingStepErrors } from '@/lib/vetting-form'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
@@ -34,6 +44,7 @@ import {
   KeyIcon,
   CameraIcon,
   ArrowUpTrayIcon,
+  DocumentCheckIcon,
 } from '@heroicons/react/24/outline'
 
 /**
@@ -86,13 +97,14 @@ type Step = CompleteProfileStep
 const STEP_ICONS: Record<Step, typeof TruckIcon> = {
   personal: IdentificationIcon,
   verification: ShieldCheckIcon,
+  residence: DocumentCheckIcon,
   ownership: KeyIcon,
   vehicle: TruckIcon,
   experience: ClipboardDocumentCheckIcon,
   review: CheckCircleIcon,
 }
 
-type PhotoKind = 'license' | 'selfie' | 'front' | 'rear' | 'full'
+type PhotoKind = 'license' | 'selfie' | 'front' | 'rear' | 'full' | 'residenceFront' | 'residenceBack' | 'certificate'
 
 /**
  * The required marker lives here rather than in the catalog (catalog
@@ -145,6 +157,20 @@ export default function CompleteProfilePage() {
   // Which field the live-camera modal is capturing for. The selfie opens the
   // front camera; the licence and the three vehicle photos the back one.
   const [cameraFor, setCameraFor] = useState<PhotoKind | null>(null)
+  // The daily limit named in the certificate notice (plan legal/7 V2). Read
+  // from the server's config; the default stands in until, or unless, it loads.
+  const [dailyCap, setDailyCap] = useState(DEFAULT_UNCERTIFIED_DAILY_MOVE_CAP)
+  useEffect(() => {
+    let cancelled = false
+    void fetchDailyCap().then((cap) => {
+      if (!cancelled) setDailyCap(cap)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+  // One clock reading for the valid-until rule, so *Next* does not flicker.
+  const [nowMs] = useState(() => Date.now())
 
   // Form state
   const [form, setForm] = useState({
@@ -163,6 +189,18 @@ export default function CompleteProfilePage() {
     primaryCity: '',
     primaryCountry: '',
     countryCode: '',
+    // Residence status step (plan legal/7): the identity document, the moving
+    // certificate question and the business-insurance declaration.
+    residenceDocType: '' as ResidenceDocType | '',
+    residenceFrontPhoto: null as File | null,
+    residenceFrontPreview: '',
+    residenceBackPhoto: null as File | null,
+    residenceBackPreview: '',
+    residenceDocExpiresAt: '',
+    hasMovingCertificate: null as boolean | null,
+    certificatePhoto: null as File | null,
+    certificatePreview: '',
+    hasBusinessInsurance: null as boolean | null,
     vehicleOwnership: '' as VehicleOwnership | '',
     frontPlatePhoto: null as File | null,
     frontPlatePreview: '',
@@ -179,6 +217,8 @@ export default function CompleteProfilePage() {
     vehicleTrailerGrossWeightKg: '',
     vehicleRegistration: '',
     vehicleType: '' as string,
+    // "Does this vehicle have motor liability insurance?" (plan legal/7 V3).
+    vehicleHasMotorInsurance: null as boolean | null,
     // Rental window for a rented driver's vehicle (plan wave-2026-10/1 R1).
     rental: { hours: 24, endAt: null, provider: '' } as RentalWindowInput,
     yearsExperience: '',
@@ -204,6 +244,9 @@ export default function CompleteProfilePage() {
       if (form.frontPlatePreview) URL.revokeObjectURL(form.frontPlatePreview)
       if (form.rearPlatePreview) URL.revokeObjectURL(form.rearPlatePreview)
       if (form.fullVehiclePreview) URL.revokeObjectURL(form.fullVehiclePreview)
+      if (form.residenceFrontPreview) URL.revokeObjectURL(form.residenceFrontPreview)
+      if (form.residenceBackPreview) URL.revokeObjectURL(form.residenceBackPreview)
+      if (form.certificatePreview) URL.revokeObjectURL(form.certificatePreview)
     }
   }, [
     form.driversLicensePhotoPreview,
@@ -211,6 +254,9 @@ export default function CompleteProfilePage() {
     form.frontPlatePreview,
     form.rearPlatePreview,
     form.fullVehiclePreview,
+    form.residenceFrontPreview,
+    form.residenceBackPreview,
+    form.certificatePreview,
   ])
 
   const updateForm = (updates: Partial<typeof form>) => {
@@ -231,6 +277,12 @@ export default function CompleteProfilePage() {
         return updateForm({ rearPlatePhoto: file, rearPlatePreview: preview })
       case 'full':
         return updateForm({ fullVehiclePhoto: file, fullVehiclePreview: preview })
+      case 'residenceFront':
+        return updateForm({ residenceFrontPhoto: file, residenceFrontPreview: preview })
+      case 'residenceBack':
+        return updateForm({ residenceBackPhoto: file, residenceBackPreview: preview })
+      case 'certificate':
+        return updateForm({ certificatePhoto: file, certificatePreview: preview })
     }
   }
 
@@ -253,6 +305,13 @@ export default function CompleteProfilePage() {
       socialSecurityNumber: form.socialSecurityNumber,
       taxNumber: form.taxNumber,
       hasSelfiePhoto: form.selfiePhoto !== null,
+      residenceDocType: form.residenceDocType,
+      hasResidenceDocFront: form.residenceFrontPhoto !== null,
+      hasResidenceDocBack: form.residenceBackPhoto !== null,
+      residenceDocExpiresAt: form.residenceDocExpiresAt,
+      hasMovingCertificate: form.hasMovingCertificate,
+      hasMovingCertificatePhoto: form.certificatePhoto !== null,
+      hasBusinessInsurance: form.hasBusinessInsurance,
       vehicleOwnership: form.vehicleOwnership,
       vehicleBrand: form.vehicleBrand,
       vehicleModel: form.vehicleModel,
@@ -266,12 +325,15 @@ export default function CompleteProfilePage() {
       hasFrontPlatePhoto: form.frontPlatePhoto !== null,
       hasRearPlatePhoto: form.rearPlatePhoto !== null,
       hasFullVehiclePhoto: form.fullVehiclePhoto !== null,
+      vehicleHasMotorInsurance: form.vehicleHasMotorInsurance,
       rentalHours: form.rental.hours != null ? String(form.rental.hours) : '',
       rentalEndAt: form.rental.endAt ?? '',
       yearsExperience: form.yearsExperience,
       languages: form.languages,
   })
-  const canGoNext = () => stepCanGoNext(currentStep, validationFields())
+  const canGoNext = () => stepCanGoNext(currentStep, validationFields(), nowMs)
+  // What still stops the residence step, said next to the disabled *Next*.
+  const residenceStepProblem = currentStep === 'residence' ? (vettingStepErrors(validationFields(), nowMs)[0] ?? null) : null
   const rentalSkipped = form.vehicleOwnership === 'rented' && vehicleStepSkipped(validationFields())
 
   const goNext = () => {
@@ -336,6 +398,19 @@ export default function CompleteProfilePage() {
         throw new Error(t('errors:mover.selfieRequired'))
       }
 
+      // Residence document and moving certificate (plan legal/7): stored
+      // readable by the uploader only; the review team reads them in admin.
+      if (!form.residenceDocType || !form.residenceFrontPhoto || !form.residenceBackPhoto) {
+        throw new Error(t('errors:vetting.residencePhotosRequired'))
+      }
+      const [residenceDocFront, residenceDocBack, movingCertificatePhoto] = await Promise.all([
+        uploadVettingPhoto(form.residenceFrontPhoto, 'residence'),
+        uploadVettingPhoto(form.residenceBackPhoto, 'residence'),
+        form.hasMovingCertificate === true && form.certificatePhoto
+          ? uploadVettingPhoto(form.certificatePhoto, 'certificate')
+          : Promise.resolve(undefined),
+      ])
+
       // Submit mover profile (includes personal info)
       const res = await fetch('/api/mover/submit-profile', {
         method: 'POST',
@@ -357,6 +432,14 @@ export default function CompleteProfilePage() {
           // Master D10: the profile carries the ownership declaration only;
           // the vehicle is submitted as its own record right after.
           vehicleOwnership: form.vehicleOwnership || 'owned',
+          // Driver vetting (plan legal/7): reviewed by an admin, beside the profile.
+          residenceDocType: form.residenceDocType,
+          residenceDocFront,
+          residenceDocBack,
+          residenceDocExpiresAt: form.residenceDocExpiresAt || undefined,
+          hasMovingCertificate: form.hasMovingCertificate === true,
+          movingCertificatePhoto,
+          hasBusinessInsurance: form.hasBusinessInsurance === true,
           languages: form.languages,
           yearsExperience: Number(form.yearsExperience),
         }),
@@ -399,6 +482,7 @@ export default function CompleteProfilePage() {
             frontPlatePhoto,
             rearPlatePhoto,
             fullVehiclePhoto,
+            hasMotorInsurance: form.vehicleHasMotorInsurance === true,
             source: 'registration',
           })
         } catch (vehicleErr) {
@@ -476,7 +560,7 @@ export default function CompleteProfilePage() {
           {STEPS.map((step, idx) => {
             const isActive = idx === stepIdx
             const isCompleted = idx < stepIdx
-            // i18n-keys: web:mover.onboarding.step.personal.label, web:mover.onboarding.step.verification.label, web:mover.onboarding.step.ownership.label, web:mover.onboarding.step.vehicle.label, web:mover.onboarding.step.experience.label, web:mover.onboarding.step.review.label
+            // i18n-keys: web:mover.onboarding.step.personal.label, web:mover.onboarding.step.verification.label, web:mover.onboarding.step.residence.label, web:mover.onboarding.step.ownership.label, web:mover.onboarding.step.vehicle.label, web:mover.onboarding.step.experience.label, web:mover.onboarding.step.review.label
             const stepLabel = t(`web:mover.onboarding.step.${step.key}.label`)
             return (
               <div key={step.key} className="flex flex-1 items-center">
@@ -842,6 +926,43 @@ export default function CompleteProfilePage() {
           </div>
         )}
 
+        {/* Residence status (plan legal/7): identity document, moving certificate, business insurance */}
+        {currentStep === 'residence' && (
+          <div className="space-y-6">
+            <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+              {t('web:mover.vetting.residence.title')}
+            </h2>
+            <ResidenceFields
+              docType={form.residenceDocType}
+              onDocType={(residenceDocType) => updateForm({ residenceDocType })}
+              frontPreview={form.residenceFrontPreview || null}
+              backPreview={form.residenceBackPreview || null}
+              expiresAt={form.residenceDocExpiresAt}
+              onExpiresAt={(residenceDocExpiresAt) => updateForm({ residenceDocExpiresAt })}
+              minExpiresAt={minExpiryDate(nowMs)}
+              onTakePhoto={setCameraFor}
+              onFile={setPhoto}
+            />
+            <hr className="border-neutral-200 dark:border-neutral-700" />
+            <CertificateFields
+              answer={form.hasMovingCertificate}
+              onAnswer={(hasMovingCertificate) => updateForm({ hasMovingCertificate })}
+              photoPreview={form.certificatePreview || null}
+              cap={dailyCap}
+              onTakePhoto={setCameraFor}
+              onFile={setPhoto}
+            />
+            <hr className="border-neutral-200 dark:border-neutral-700" />
+            <BusinessInsuranceField
+              answer={form.hasBusinessInsurance}
+              onAnswer={(hasBusinessInsurance) => updateForm({ hasBusinessInsurance })}
+            />
+            {residenceStepProblem && (
+              <p className="text-xs text-neutral-500 dark:text-neutral-400">{t(vettingErrorKey(residenceStepProblem))}</p>
+            )}
+          </div>
+        )}
+
         {/* Step 3: Ownership — decides whether the vehicle step follows (D10) */}
         {currentStep === 'ownership' && (
           <div className="space-y-5">
@@ -1092,6 +1213,12 @@ export default function CompleteProfilePage() {
                 onFile={(f) => setPhoto('full', f)}
               />
             </div>
+            {/* Motor liability insurance (plan legal/7 V3): required answer; "no" can be submitted but not approved. */}
+            <MotorInsuranceField
+              name="vehicleHasMotorInsurance"
+              value={form.vehicleHasMotorInsurance}
+              onChange={(vehicleHasMotorInsurance) => updateForm({ vehicleHasMotorInsurance })}
+            />
             {form.vehicleOwnership === 'rented' && rentalSkipped && (
               <p className="text-xs text-neutral-500 dark:text-neutral-400">{t('web:mover.onboarding.vehicle.skip.helper')}</p>
             )}
@@ -1218,6 +1345,37 @@ export default function CompleteProfilePage() {
               <hr className="border-neutral-200 dark:border-neutral-600" />
               <div>
                 <p className="text-xs font-medium uppercase text-neutral-400">
+                  {t('web:mover.vetting.residence.title')}
+                </p>
+                {form.residenceDocType && (
+                  <p className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">
+                    {residenceDocTypeLabel(t, form.residenceDocType)}
+                  </p>
+                )}
+                {form.residenceDocExpiresAt && (
+                  <p className="text-sm text-neutral-500">
+                    {t('web:mover.vetting.residence.validUntil.value', { date: formatDate(form.residenceDocExpiresAt) })}
+                  </p>
+                )}
+                {form.residenceFrontPreview && form.residenceBackPreview && (
+                  <p className="text-sm text-green-600 dark:text-green-400">
+                    {t('web:mover.onboarding.review.residencePhotosOk')}
+                  </p>
+                )}
+                <p className="text-sm text-neutral-500">
+                  {form.hasMovingCertificate
+                    ? t('web:mover.onboarding.review.certificate.yes')
+                    : t('web:mover.onboarding.review.certificate.no')}
+                </p>
+                <p className="text-sm text-neutral-500">
+                  {t('web:mover.onboarding.review.businessInsurance.value', {
+                    answer: form.hasBusinessInsurance ? t('common:answer.yes.label') : t('common:answer.no.label'),
+                  })}
+                </p>
+              </div>
+              <hr className="border-neutral-200 dark:border-neutral-600" />
+              <div>
+                <p className="text-xs font-medium uppercase text-neutral-400">
                   {t('booking:field.vehicle.label')}
                 </p>
                 {/* i18n-keys: common:vehicleOwnership.owned.label, common:vehicleOwnership.rented.label */}
@@ -1265,6 +1423,18 @@ export default function CompleteProfilePage() {
                 {form.frontPlatePreview && form.rearPlatePreview && form.fullVehiclePreview && (
                   <p className="text-sm text-green-600 dark:text-green-400">
                     {t('web:mover.onboarding.review.platesOk')}
+                  </p>
+                )}
+                {form.vehicleHasMotorInsurance !== null && (
+                  <p className="text-sm text-neutral-500">
+                    {t('web:mover.vehicle.insurance.review.value', {
+                      answer: form.vehicleHasMotorInsurance ? t('common:answer.yes.label') : t('common:answer.no.label'),
+                    })}
+                  </p>
+                )}
+                {form.vehicleHasMotorInsurance === false && (
+                  <p className="text-sm text-amber-700 dark:text-amber-300">
+                    {t('web:mover.vehicle.insurance.uninsured.notice')}
                   </p>
                 )}
                 </>

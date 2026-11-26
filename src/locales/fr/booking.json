@@ -1119,6 +1119,9 @@
       },
       "vehicle": {
         "label": "Véhicule ({{vehicle}})"
+      },
+      "approach": {
+        "label": "Trajet vers l'enlèvement ({{km}})"
       }
     },
     "minimumApplied": {

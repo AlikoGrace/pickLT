@@ -652,6 +652,14 @@
         "platesOk": "Kennzeichen- und Fahrzeugfotos angehängt",
         "rentalWindow": {
           "value": "Gemietet bis {{time}}"
+        },
+        "residencePhotosOk": "Beide Dokumentfotos angehängt",
+        "certificate": {
+          "yes": "Umzugszertifikat: Foto angehängt, wird geprüft",
+          "no": "Umzugszertifikat: keines"
+        },
+        "businessInsurance": {
+          "value": "Betriebliche Versicherung: {{answer}}"
         }
       },
       "step": {
@@ -672,6 +680,9 @@
         },
         "ownership": {
           "label": "Besitz"
+        },
+        "residence": {
+          "label": "Aufenthaltsstatus"
         }
       },
       "submit": {
@@ -746,6 +757,30 @@
       "title": "Neue Umzugsanfrage!",
       "viewDetails": {
         "cta": "Alle Details anzeigen"
+      },
+      "offer": {
+        "distanceToPickup": {
+          "label": "{{distance}} bis zur Abholadresse"
+        },
+        "includesDrive": {
+          "helper": "Enthält Ihre Anfahrt zur Abholadresse."
+        },
+        "waiting": {
+          "title": "Warten auf den Kunden",
+          "body": "Wegen Ihrer Entfernung zur Abholadresse liegt Ihr Preis von {{amount}} über dem Preis, dem der Kunde zugestimmt hat. Der Kunde wurde gebeten, ihn zu bestätigen.",
+          "helper": "Der Umzug ist noch nicht zugewiesen. Die Antwort sehen Sie hier.",
+          "countdown": {
+            "label": "Verbleibende Zeit: {{time}}"
+          }
+        },
+        "declined": {
+          "title": "Preis nicht angenommen",
+          "body": "Der Kunde hat den Preis für Ihre Entfernung nicht angenommen. Der Umzug wurde Ihnen nicht zugewiesen. Das hat keine Auswirkungen auf Ihr Konto."
+        },
+        "closed": {
+          "title": "Angebot geschlossen",
+          "body": "Dieses Angebot ist nicht mehr offen. Der Umzug wurde Ihnen nicht zugewiesen. Das hat keine Auswirkungen auf Ihr Konto."
+        }
       }
     },
     "roleLabel": "Umzugsprofi",
@@ -773,6 +808,9 @@
       "subtitle": "Verwalten Sie Ihr Konto und Ihre Einstellungen",
       "version": {
         "label": "PickLte Mover App v{{version}}"
+      },
+      "documents": {
+        "helper": "Aufenthaltsdokument, Umzugszertifikat, Versicherung"
       }
     },
     "startRoute": {
@@ -1057,6 +1095,23 @@
         "countdown": {
           "label": "Ihre Miete endet in {{time}}"
         }
+      },
+      "insurance": {
+        "question": "Besteht für dieses Fahrzeug eine Kfz-Haftpflichtversicherung?",
+        "label": "Kfz-Haftpflichtversicherung",
+        "uninsured": {
+          "notice": "Sie können dieses Fahrzeug einreichen, es kann aber erst freigegeben und eingesetzt werden, wenn eine Kfz-Haftpflichtversicherung besteht.",
+          "pending": "Dieses Fahrzeug wurde ohne Kfz-Haftpflichtversicherung angegeben. Es kann erst freigegeben und eingesetzt werden, wenn es versichert ist."
+        },
+        "update": {
+          "cta": "Angabe ändern"
+        },
+        "renewBlocked": {
+          "error": "Ein Mietfahrzeug kann ohne Kfz-Haftpflichtversicherung nicht verlängert werden."
+        },
+        "review": {
+          "value": "Kfz-Haftpflichtversicherung: {{answer}}"
+        }
       }
     },
     "fees": {
@@ -1186,11 +1241,226 @@
       "then": {
         "label": "Dann"
       }
+    },
+    "vetting": {
+      "loadFailed": {
+        "error": "Ihre Dokumente konnten nicht geladen werden. Bitte versuchen Sie es erneut."
+      },
+      "uploadFailed": {
+        "error": "Das Foto konnte nicht hochgeladen werden. Bitte versuchen Sie es erneut."
+      },
+      "submitFailed": {
+        "error": "Ihre Dokumente konnten nicht gespeichert werden. Bitte versuchen Sie es erneut."
+      },
+      "rejectionReason": {
+        "value": "Grund: {{reason}}"
+      },
+      "residence": {
+        "title": "Aufenthaltsstatus",
+        "why": "Wir fragen danach, um zu prüfen, ob Sie hier arbeiten dürfen. Nur das Prüfteam von PickLte sieht diese Fotos, Kunden werden sie nie angezeigt.",
+        "docType": {
+          "label": "Welches Dokument haben Sie?",
+          "passport": {
+            "label": "Reisepass"
+          },
+          "residencePermit": {
+            "label": "Aufenthaltstitel"
+          }
+        },
+        "photo": {
+          "passportData": {
+            "label": "Datenseite"
+          },
+          "passportStamp": {
+            "label": "Seite mit dem Visum oder Aufenthaltsstempel"
+          },
+          "permitFront": {
+            "label": "Vorderseite"
+          },
+          "permitBack": {
+            "label": "Rückseite"
+          }
+        },
+        "expiry": {
+          "label": "Gültig bis",
+          "permit": {
+            "helper": "Bei einem Aufenthaltstitel erforderlich."
+          },
+          "passport": {
+            "helper": "Bei einem Reisepass freiwillig."
+          }
+        },
+        "validUntil": {
+          "value": "Gültig bis {{date}}"
+        }
+      },
+      "certificate": {
+        "question": "Haben Sie ein Umzugszertifikat?",
+        "notice_one": "Umzugshelfer mit geprüftem Zertifikat werden Kunden zuerst angezeigt und können mehr Umzüge pro Tag annehmen. Ohne Zertifikat können Sie sich trotzdem registrieren und arbeiten, mit einem Limit von {{count}} Umzug pro Tag.",
+        "notice_other": "Umzugshelfer mit geprüftem Zertifikat werden Kunden zuerst angezeigt und können mehr Umzüge pro Tag annehmen. Ohne Zertifikat können Sie sich trotzdem registrieren und arbeiten, mit einem Limit von {{count}} Umzügen pro Tag.",
+        "photo": {
+          "label": "Foto Ihres Zertifikats",
+          "helper": "Das Zertifikat zählt, sobald es geprüft und freigegeben wurde."
+        },
+        "answerRequired": {
+          "error": "Beantworten Sie die Frage zum Umzugszertifikat."
+        }
+      },
+      "insurance": {
+        "question": "Haben Sie eine Betriebshaftpflicht- oder Transportversicherung?",
+        "notice": "Für die Versicherung Ihrer Arbeit sind Sie selbst verantwortlich. PickLte versichert keine Umzüge.",
+        "answerRequired": {
+          "error": "Beantworten Sie die Frage zur betrieblichen Versicherung."
+        }
+      },
+      "status": {
+        "missing": {
+          "label": "Nicht eingereicht"
+        },
+        "review": {
+          "label": "In Prüfung"
+        },
+        "approved": {
+          "label": "Freigegeben"
+        },
+        "rejected": {
+          "label": "Abgelehnt"
+        },
+        "expired": {
+          "label": "Abgelaufen"
+        }
+      },
+      "banner": {
+        "missing": {
+          "title": "Aufenthaltsdokument hinzufügen",
+          "body": {
+            "open": "Laden Sie Ihren Reisepass oder Aufenthaltstitel hoch, damit er geprüft werden kann.",
+            "deadline": "Ab dem {{date}} brauchen Sie einen freigegebenen Reisepass oder Aufenthaltstitel, um online zu gehen und Umzüge anzunehmen.",
+            "blocked": "Sie können erst online gehen und Umzüge annehmen, wenn Ihr Reisepass oder Aufenthaltstitel freigegeben wurde."
+          }
+        },
+        "pending": {
+          "title": "Aufenthaltsdokument wird geprüft",
+          "body": {
+            "open": "Sie werden benachrichtigt, sobald die Prüfung abgeschlossen ist.",
+            "deadline": "Sie werden benachrichtigt, sobald die Prüfung abgeschlossen ist. Ab dem {{date}} ist ein freigegebenes Dokument nötig, um online zu gehen und Umzüge anzunehmen.",
+            "blocked": "Sie werden benachrichtigt, sobald die Prüfung abgeschlossen ist. Bis dahin können Sie nicht online gehen und keine neuen Umzüge annehmen."
+          }
+        },
+        "rejected": {
+          "title": "Aufenthaltsdokument nicht akzeptiert",
+          "body": {
+            "open": "Laden Sie das Dokument erneut hoch, damit es geprüft werden kann.",
+            "deadline": "Laden Sie das Dokument erneut hoch. Ab dem {{date}} ist ein freigegebenes Dokument nötig, um online zu gehen und Umzüge anzunehmen.",
+            "blocked": "Laden Sie das Dokument erneut hoch. Bis zur Freigabe können Sie nicht online gehen und keine neuen Umzüge annehmen."
+          }
+        },
+        "expired": {
+          "title": "Aufenthaltsdokument abgelaufen",
+          "body": {
+            "blocked": "Laden Sie das neue Dokument hoch, um wieder online zu gehen und Umzüge anzunehmen."
+          }
+        },
+        "cta": {
+          "add": "Dokument hinzufügen",
+          "view": "Ansehen",
+          "replace": "Erneut hochladen"
+        }
+      },
+      "dailyCap": {
+        "progress_one": "{{accepted}} von {{count}} Umzug heute",
+        "progress_other": "{{accepted}} von {{count}} Umzügen heute",
+        "reached": "Sie haben das heutige Limit erreicht. Heute können keine weiteren Umzüge angenommen werden.",
+        "helper": "Für Umzugshelfer mit geprüftem Umzugszertifikat gilt kein Tageslimit.",
+        "inReview": "Ihr Umzugszertifikat wird geprüft. Bis zur Freigabe gilt das Tageslimit.",
+        "addCertificate": {
+          "cta": "Zertifikat hinzufügen"
+        }
+      },
+      "documents": {
+        "title": "Dokumente",
+        "subtitle": "Ihr Aufenthaltsdokument, Ihr Umzugszertifikat und Ihre Versicherungsangabe.",
+        "open": {
+          "cta": "Dokumente öffnen"
+        },
+        "submitted": {
+          "success": "Eingereicht. Sie werden benachrichtigt, sobald die Prüfung abgeschlossen ist."
+        },
+        "saved": {
+          "success": "Gespeichert."
+        },
+        "action": {
+          "submit": {
+            "cta": "Zur Prüfung einreichen"
+          },
+          "replace": {
+            "cta": "Dokument ersetzen"
+          },
+          "change": {
+            "cta": "Antwort ändern"
+          },
+          "answer": {
+            "cta": "Beantworten"
+          }
+        },
+        "residence": {
+          "missing": {
+            "body": "Noch kein Dokument eingereicht."
+          },
+          "review": {
+            "body": "Ihr Dokument wird geprüft. Sie werden benachrichtigt, sobald die Prüfung abgeschlossen ist."
+          },
+          "approved": {
+            "body": "Ihr Dokument wurde geprüft und freigegeben."
+          },
+          "rejected": {
+            "body": "Ihr Dokument wurde nicht akzeptiert. Laden Sie es erneut hoch."
+          },
+          "expired": {
+            "body": "Ihr Dokument ist abgelaufen. Laden Sie das neue hoch."
+          },
+          "replaceNote": "Ein erneut eingereichtes Dokument wird wieder geprüft, bevor es zählt."
+        },
+        "certificate": {
+          "title": "Umzugszertifikat",
+          "missing": {
+            "body": "Kein Zertifikat hinterlegt."
+          },
+          "review": {
+            "body": "Ihr Zertifikat wird geprüft. Bis zur Freigabe gilt das Tageslimit."
+          },
+          "approved": {
+            "body": "Ihr Zertifikat ist geprüft. Sie werden Kunden zuerst angezeigt und haben kein Tageslimit."
+          },
+          "rejected": {
+            "body": "Ihr Zertifikat wurde nicht akzeptiert. Sie können es erneut hochladen."
+          },
+          "removeNote": "Mit der Antwort Nein wird das hinterlegte Zertifikat entfernt."
+        },
+        "insurance": {
+          "title": "Betriebliche Versicherung",
+          "missing": {
+            "body": "Noch nicht beantwortet."
+          },
+          "answer": {
+            "value": "Ihre Antwort: {{answer}}"
+          },
+          "declaredAt": {
+            "value": "Angegeben am {{date}}"
+          }
+        }
+      }
     }
   },
   "moverCard": {
     "vehicleVerified": {
       "badge": "Verifiziertes Fahrzeug"
+    },
+    "certified": {
+      "badge": "Zertifizierter Umzugshelfer"
+    },
+    "recommended": {
+      "badge": "Empfohlen"
     }
   },
   "moverDashboard": {
@@ -1503,14 +1773,31 @@
     },
     "experienceYears_one": "{{count}} J. Erfahrung",
     "experienceYears_other": "{{count}} J. Erfahrung",
+    "extend": {
+      "cta": "Suche auf {{distance}} erweitern"
+    },
+    "extended": {
+      "helper": "Angezeigt werden Umzugshelfer im Umkreis von bis zu {{distance}}."
+    },
     "languages": {
       "label": "Sprachen: {{languages}}"
+    },
+    "nearEmpty": {
+      "subtitle": "In der Nähe Ihrer Abholadresse ist gerade kein Umzugshelfer verfügbar. Sie können in einem größeren Umkreis suchen.",
+      "title": "Keine Umzugshelfer im Umkreis von {{distance}}"
+    },
+    "noneFound": {
+      "subtitle": "Für einen Sofortumzug wurde auch im größeren Umkreis kein Umzugshelfer gefunden. Sie können den Umzug stattdessen für einen späteren Zeitpunkt planen. Ihre Adressen und Gegenstände bleiben erhalten.",
+      "title": "Derzeit kein Umzugshelfer verfügbar"
     },
     "pricing": {
       "disclaimer": "Der Endpreis kann je nach tatsächlichen Gegebenheiten abweichen.",
       "helper_one": "Die Preise enthalten die Grundleistung, die Entfernung ({{distance}}), die Arbeitszeit des Teams, die Fahrzeugklasse des Umzugsprofis und {{count}} Gegenstand. Die Mehrwertsteuer ist enthalten.",
       "helper_other": "Die Preise enthalten die Grundleistung, die Entfernung ({{distance}}), die Arbeitszeit des Teams, die Fahrzeugklasse des Umzugsprofis und {{count}} Gegenstände. Die Mehrwertsteuer ist enthalten.",
       "title": "So entsteht der Preis:"
+    },
+    "scheduleInstead": {
+      "cta": "Diesen Umzug planen"
     },
     "searching": {
       "subtitle": "Wir suchen verifizierte Umzugsprofis in der Nähe Ihrer Abholadresse",
@@ -1620,6 +1907,41 @@
     },
     "stepTotal": {
       "label": "/{{total}}"
+    }
+  },
+  "priceConfirm": {
+    "title": "Neuen Preis bestätigen",
+    "body": {
+      "named": "{{name}} kann Ihren Umzug übernehmen. Dieser Umzugshelfer ist weiter von Ihrer Abholadresse entfernt, daher ist der Preis höher.",
+      "unnamed": "Ein Umzugshelfer, der weiter von Ihrer Abholadresse entfernt ist, kann Ihren Umzug übernehmen, daher ist der Preis höher."
+    },
+    "distance": {
+      "label": "Entfernung des Umzugshelfers zur Abholadresse"
+    },
+    "previous": {
+      "label": "Vereinbarter Preis"
+    },
+    "new": {
+      "label": "Neuer Preis"
+    },
+    "difference": {
+      "label": "Differenz"
+    },
+    "countdown": {
+      "label": "Verbleibende Zeit für Ihre Antwort: {{time}}"
+    },
+    "accept": {
+      "cta": "{{amount}} annehmen"
+    },
+    "decline": {
+      "cta": "Ablehnen"
+    },
+    "helper": "Wenn Sie ablehnen oder nicht rechtzeitig antworten, wird dieser Umzugshelfer nicht zugewiesen und der vereinbarte Preis bleibt bestehen.",
+    "declined": {
+      "notice": "Sie haben den neuen Preis abgelehnt. Der vereinbarte Preis bleibt bestehen."
+    },
+    "failed": {
+      "error": "Ihre Antwort konnte nicht gespeichert werden. Bitte versuchen Sie es erneut."
     }
   }
 }

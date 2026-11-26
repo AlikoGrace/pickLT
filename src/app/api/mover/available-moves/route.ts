@@ -6,8 +6,9 @@ import { Query } from 'node-appwrite'
 import { NextResponse } from 'next/server'
 import { loadPricingConfig } from '@/lib/pricing-server'
 import { moverPayoutEur } from '@/lib/moverPayout'
-import { feeRestricted } from '@/lib/mover-gates'
-import { feeRestrictedResponse } from '@/lib/mover-auth'
+import { feeRestricted, residenceBlock } from '@/lib/mover-gates'
+import { feeRestrictedResponse, vettingRefusalResponse } from '@/lib/mover-auth'
+import { loadVettingConfig } from '@/lib/mover-vetting'
 
 // GET /api/mover/available-moves — Get move requests for the authenticated mover
 export async function GET() {
@@ -35,6 +36,9 @@ export async function GET() {
     // A fee-restricted driver is not offered requests (plan fees §5, the
     // `listavailablemoves` gate).
     if (feeRestricted(moverProfile)) return feeRestrictedResponse()
+    // Nor is a driver whose residence document is not approved (plan legal/7, V1).
+    const residence = residenceBlock(moverProfile, Date.now(), (await loadVettingConfig(databases)).residenceGateFromMs)
+    if (residence) return vettingRefusalResponse(residence)
 
     // Get pending move requests for this mover
     const moveRequests = await databases.listDocuments(

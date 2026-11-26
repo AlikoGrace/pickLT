@@ -269,7 +269,10 @@
     "vehicleNotReady": "Confermi o faccia verificare il Suo veicolo prima di andare online o accettare traslochi.",
     "withdrawFailed": "Impossibile ritirarsi dal trasloco",
     "withdrawRetry": "Ritiro non riuscito. Riprova.",
-    "countryMismatch": "Questo trasloco è in {{country}}; il tuo account è registrato in un altro paese."
+    "countryMismatch": "Questo trasloco è in {{country}}; il tuo account è registrato in un altro paese.",
+    "residenceNotVerified": "Il tuo documento di soggiorno non è ancora stato approvato. Caricalo oppure attendi la fine della verifica.",
+    "residenceExpired": "Il tuo documento di soggiorno è scaduto. Carica quello nuovo per continuare a lavorare.",
+    "dailyCapReached": "Hai raggiunto il limite di traslochi di oggi. I traslocatori con un certificato di trasloco verificato non hanno un limite giornaliero."
   },
   "movers": {
     "fetchFailed": "Impossibile recuperare i traslocatori",
@@ -374,7 +377,8 @@
     "notOwnVehicle": "Questo veicolo non appartiene al tuo account.",
     "weightRequired": "Inserisci la massa complessiva in chilogrammi.",
     "trailerWeightRequired": "Inserisci la massa complessiva del rimorchio in chilogrammi.",
-    "weightOverLimit": "Non è possibile registrare veicoli oltre 3.500 kg, rimorchio compreso."
+    "weightOverLimit": "Non è possibile registrare veicoli oltre 3.500 kg, rimorchio compreso.",
+    "insuranceRequired": "Rispondi alla domanda sull'assicurazione di responsabilità civile auto. Un veicolo senza questa assicurazione non può essere utilizzato."
   },
   "country": {
     "notLive": "PickLte non è ancora disponibile in {{country}}.",
@@ -400,5 +404,16 @@
     "reauthRequired": "Accedi di nuovo per eliminare il tuo account.",
     "adminNotDeletable": "Un account amministratore non può essere eliminato qui.",
     "deletionIncomplete": "Non è stato possibile eliminare completamente il tuo account. Riprova."
+  },
+  "vetting": {
+    "residenceTypeRequired": "Scegli passaporto o permesso di soggiorno.",
+    "residencePhotosRequired": "Fotografa entrambi i lati del documento.",
+    "residenceExpiryRequired": "Indica fino a quando è valido il documento.",
+    "residenceExpiryPast": "Questo documento è scaduto.",
+    "certificatePhotoRequired": "Aggiungi una foto del tuo certificato di trasloco."
+  },
+  "offer": {
+    "notPending": "Non c'è alcun prezzo in attesa di conferma.",
+    "expired": "Questa offerta non è più aperta."
   }
 }

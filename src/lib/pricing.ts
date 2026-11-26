@@ -129,6 +129,12 @@ export const PRICING_DEFAULTS = {
   'handling.hoursPerM3': 0.2,
   'access.floorSurchargeNoElevator': 15,
   'access.haltverbotFee': 0,
+  // Travel to pickup (plan pricing/8): free kilometres, rate per km (0 = the
+  // tier's distance rate), cap, and the straight-line-to-road factor.
+  'approach.freeKm': 5,
+  'approach.ratePerKm': 0,
+  'approach.maxCharge': 50,
+  'approach.roadFactor': 1.3,
 
   // ── Selectable services ───────────────────────────────────────────────────
   'packing.none': 0,

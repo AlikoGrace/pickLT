@@ -334,6 +334,12 @@ export interface VehicleDoc extends AppwriteDoc {
   rentalProvider?: string | null
   expiredAt?: string | null
   renewalCount?: number | null
+  /**
+   * The driver's motor liability insurance declaration (plan legal/7 V3).
+   * Absent on rows from before the question; `false` cannot be approved.
+   */
+  hasMotorInsurance?: boolean | null
+  insuranceDeclaredAt?: string | null
 }
 
 export type VehicleEventAction =
