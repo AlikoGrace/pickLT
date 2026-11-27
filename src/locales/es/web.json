@@ -1951,5 +1951,22 @@
     "cardUnavailable": {
       "helper": "El pago con tarjeta aún no está disponible para mudanzas en este país. Se paga al transportista en efectivo."
     }
+  },
+  "cookies": {
+    "title": "Cookies",
+    "text": "Este sitio usa las cookies que necesita para funcionar: inicio de sesión, tu idioma y tu borrador de reserva. Con tu consentimiento también usa un servicio de monitorización de errores (Sentry) para encontrar y corregir fallos; los datos personales se eliminan antes de enviar nada. Puedes cambiar tu elección en cualquier momento en \"Configuración de cookies\", al pie de la página. Más información en la <0>política de privacidad</0>.",
+    "onlyNecessary": "Solo necesarias",
+    "acceptAll": "Aceptar todas",
+    "save": "Guardar selección",
+    "close": "Cerrar",
+    "settingsLink": "Configuración de cookies",
+    "necessary": {
+      "title": "Necesarias",
+      "description": "Inicio de sesión, idioma, borrador de reserva, y pago y mapas cuando los usas. Siempre activas."
+    },
+    "monitoring": {
+      "title": "Monitorización de errores (Sentry)",
+      "description": "Informa de los errores del sitio para poder corregirlos. Desactivada hasta que aceptes. Desactivarla surte efecto en la siguiente carga de página."
+    }
   }
 }

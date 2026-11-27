@@ -1951,5 +1951,22 @@
     "cardUnavailable": {
       "helper": "Card payment is not available for moves in this country yet. You pay the mover in cash."
     }
+  },
+  "cookies": {
+    "title": "Cookies",
+    "text": "This site uses cookies it needs to work: sign-in, your language and your booking draft. With your consent it also uses error monitoring (Sentry) to find and fix faults; personal data is removed before anything is sent. You can change your choice at any time under \"Cookie settings\" in the footer. Details are in the <0>privacy policy</0>.",
+    "onlyNecessary": "Only necessary",
+    "acceptAll": "Accept all",
+    "save": "Save choices",
+    "close": "Close",
+    "settingsLink": "Cookie settings",
+    "necessary": {
+      "title": "Necessary",
+      "description": "Sign-in, language, booking draft, and payment and maps when you use them. Always on."
+    },
+    "monitoring": {
+      "title": "Error monitoring (Sentry)",
+      "description": "Reports errors on this site so they can be fixed. Off until you accept. Turning it off takes effect on the next page load."
+    }
   }
 }

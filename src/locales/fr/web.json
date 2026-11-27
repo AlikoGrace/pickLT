@@ -1951,5 +1951,22 @@
     "cardUnavailable": {
       "helper": "Le paiement par carte n’est pas encore disponible pour les déménagements dans ce pays. Vous réglez le déménageur en espèces."
     }
+  },
+  "cookies": {
+    "title": "Cookies",
+    "text": "Ce site utilise les cookies nécessaires à son fonctionnement : connexion, votre langue et votre brouillon de réservation. Avec votre accord, il utilise aussi un suivi des erreurs (Sentry) pour détecter et corriger les problèmes ; les données personnelles sont supprimées avant tout envoi. Vous pouvez modifier votre choix à tout moment via « Paramètres des cookies » en bas de page. Plus d'informations dans la <0>politique de confidentialité</0>.",
+    "onlyNecessary": "Nécessaires uniquement",
+    "acceptAll": "Tout accepter",
+    "save": "Enregistrer mes choix",
+    "close": "Fermer",
+    "settingsLink": "Paramètres des cookies",
+    "necessary": {
+      "title": "Nécessaires",
+      "description": "Connexion, langue, brouillon de réservation, ainsi que paiement et cartes lorsque vous les utilisez. Toujours actifs."
+    },
+    "monitoring": {
+      "title": "Suivi des erreurs (Sentry)",
+      "description": "Signale les erreurs du site afin qu'elles soient corrigées. Désactivé tant que vous n'avez pas accepté. La désactivation prend effet au prochain chargement de page."
+    }
   }
 }

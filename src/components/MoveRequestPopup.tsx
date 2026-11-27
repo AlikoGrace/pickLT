@@ -322,6 +322,9 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
   const timerRef = useRef<NodeJS.Timeout | null>(null)
   const alertRef = useRef<{ play: () => void; stop: () => void } | null>(null)
   const incomingRef = useRef<IncomingRequest | null>(null)
+  // True while this mover's Accept or Decline is on its way: the poll then
+  // leaves the offer on screen, because its own answer closes it.
+  const actingRef = useRef(false)
   // The client is being asked to confirm this mover's higher price (plan pricing/8).
   const [waiting, setWaiting] = useState<WaitingOffer | null>(null)
   const waitingRef = useRef<WaitingOffer | null>(null)
@@ -465,7 +468,27 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
 
     // Check for existing pending requests on mount
     const checkForPendingRequests = async () => {
-      if (incomingRef.current || waitingRef.current) return // Already showing, or waiting for a client's answer
+      const shown = incomingRef.current
+      if (shown) {
+        // The offer on screen may have stopped being pending elsewhere
+        // (accepted in the app, cancelled by the client, sent to the client
+        // for a price check): close it rather than leave an offer that can no
+        // longer be taken (device pass 2026-11-27, mover app).
+        if (actingRef.current) return
+        try {
+          const current = await databases.getDocument(DATABASE_ID, MOVE_REQUESTS_COLLECTION, shown.requestId)
+          const stillShown = incomingRef.current?.requestId === shown.requestId
+          if (stillShown && !actingRef.current && (current as Models.Document & Record<string, unknown>).status !== 'pending') {
+            alertRef.current?.stop()
+            setIncoming(null)
+            setShowDetails(false)
+          }
+        } catch {
+          // Unreadable this round; the countdown or the next poll settles it.
+        }
+        return
+      }
+      if (waitingRef.current) return // Waiting for a client's answer
       try {
         const res = await databases.listDocuments(
           DATABASE_ID,
@@ -552,6 +575,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
 
   const handleAccept = useCallback(async () => {
     if (!incoming) return
+    actingRef.current = true
     try {
       setIsAccepting(true)
       alertRef.current?.stop()
@@ -593,12 +617,14 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
     } catch {
       alert(t('errors:network.generic.error'))
     } finally {
+      actingRef.current = false
       setIsAccepting(false)
     }
   }, [incoming, router, t])
 
   const handleDecline = useCallback(async () => {
     if (!incoming) return
+    actingRef.current = true
     try {
       setIsDeclining(true)
       alertRef.current?.stop()
@@ -610,6 +636,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
       setIncoming(null)
       setShowDetails(false)
     } finally {
+      actingRef.current = false
       setIsDeclining(false)
     }
   }, [incoming])

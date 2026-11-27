@@ -1981,5 +1981,22 @@
     "cardUnavailable": {
       "helper": "Płatność kartą nie jest jeszcze dostępna dla przeprowadzek w tym kraju. Płaci się przewoźnikowi gotówką."
     }
+  },
+  "cookies": {
+    "title": "Pliki cookie",
+    "text": "Ta strona używa plików cookie niezbędnych do działania: logowanie, Twój język i Twój szkic rezerwacji. Za Twoją zgodą używa też monitorowania błędów (Sentry), aby wykrywać i naprawiać usterki; dane osobowe są usuwane przed wysłaniem. Wybór możesz zmienić w każdej chwili w „Ustawieniach plików cookie” w stopce. Szczegóły znajdziesz w <0>polityce prywatności</0>.",
+    "onlyNecessary": "Tylko niezbędne",
+    "acceptAll": "Akceptuj wszystkie",
+    "save": "Zapisz wybór",
+    "close": "Zamknij",
+    "settingsLink": "Ustawienia plików cookie",
+    "necessary": {
+      "title": "Niezbędne",
+      "description": "Logowanie, język, szkic rezerwacji oraz płatności i mapy, gdy z nich korzystasz. Zawsze włączone."
+    },
+    "monitoring": {
+      "title": "Monitorowanie błędów (Sentry)",
+      "description": "Zgłasza błędy na stronie, aby można było je naprawić. Wyłączone, dopóki nie wyrazisz zgody. Wyłączenie działa od następnego załadowania strony."
+    }
   }
 }

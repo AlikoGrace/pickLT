@@ -1,3 +1,4 @@
+import { CookieSettingsLink } from '@/components/CookieConsent'
 import Logo from '@/shared/Logo'
 import { getTranslations, resolveLocale } from '@/lib/i18n-server'
 import { getLegalContent, type LegalContent } from '@/lib/legal'
@@ -135,6 +136,11 @@ export default async function Footer2() {
                     </Link>
                   </li>
                 ))}
+                <li>
+                  <CookieSettingsLink className="text-left text-sm/6 text-gray-600 hover:text-gray-900 dark:text-neutral-400">
+                    {t('web:cookies.settingsLink')}
+                  </CookieSettingsLink>
+                </li>
               </ul>
             </div>
           </div>

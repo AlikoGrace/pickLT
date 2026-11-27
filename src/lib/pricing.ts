@@ -132,7 +132,6 @@ export const PRICING_DEFAULTS = {
   // mover. Tune against completed-move timings.
   'handling.hoursPerM3': 0.2,
   'access.floorSurchargeNoElevator': 15,
-  'access.haltverbotFee': 0,
   // Travel to pickup (plan pricing/8): free kilometres, rate per km (0 = the
   // tier's distance rate), cap, and the straight-line-to-road factor.
   'approach.freeKm': 5,

@@ -7,6 +7,7 @@ import ThemeProvider from './theme-provider'
 import MoveSearchProvider from '@/context/moveSearch'
 import { AuthProvider } from '@/context/auth'
 import DisplayCurrencyProvider from '@/components/DisplayCurrency'
+import CookieConsent from '@/components/CookieConsent'
 import I18nProvider from './i18n-provider'
 import { getResources } from '@/lib/i18n-catalog'
 import { getTranslations, resolveLocale } from '@/lib/i18n-server'
@@ -58,6 +59,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 </DisplayCurrencyProvider>
               </AuthProvider>
               <CustomizeControl />
+              {/* Cookie banner; gates browser Sentry (plan legal/6.web-cleanup, W3). */}
+              <CookieConsent />
             </I18nProvider>
           </div>
         </ThemeProvider>

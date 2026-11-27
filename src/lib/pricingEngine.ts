@@ -617,11 +617,12 @@ export function quoteMove(input: QuoteInput, config?: PricingConfig | null): Quo
     cents(trace.maybe(`packing.${packingLevel}`) ?? 0)
 
   const floorsNoLift = Math.floor(nonNegative(input.floorsNoLift))
-  const haltverbot = Math.floor(nonNegative(input.haltverbotCount))
+  // No Halteverbot fee: arranging a no-parking zone was a service of the
+  // platform and is retired like the other additional services (plan
+  // pickltmobile device-pass/1 T1). `haltverbotCount` is accepted and ignored.
   const handling =
     cents(trace.get(tierKey(tier, 'handlingAllowance'))) +
-    floorsNoLift * cents(trace.get('access.floorSurchargeNoElevator')) +
-    haltverbot * cents(trace.get('access.haltverbotFee'))
+    floorsNoLift * cents(trace.get('access.floorSurchargeNoElevator'))
 
   // Travel to pickup (plan pricing/8): the mover's drive to the pickup address.
   const { approachKm, approach } = approachCharge(mode, tier, input.approachKm, trace)

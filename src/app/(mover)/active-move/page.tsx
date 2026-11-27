@@ -521,6 +521,17 @@ export default function ActiveMovePage() {
 
   const isNearPickup = distanceToPickup !== null && distanceToPickup <= ARRIVAL_GEOFENCE_M
 
+  // The drop-off arrival needs the same presence as the pickup one (device
+  // pass 2026-11-27: it was ungated in the app and here).
+  const distanceToDropoff = useMemo(() => {
+    if (!moverCoords || !dropoffCoords) return null
+    const dLat = dropoffCoords.latitude - moverCoords.latitude
+    const dLng = dropoffCoords.longitude - moverCoords.longitude
+    return Math.sqrt(dLat * dLat + dLng * dLng) * 111_000 // approx meters
+  }, [moverCoords, dropoffCoords])
+  const isNearDropoff = distanceToDropoff !== null && distanceToDropoff <= ARRIVAL_GEOFENCE_M
+  const arrivalBlocked = (phase === 'en_route' && !isNearPickup) || (phase === 'in_transit' && !isNearDropoff)
+
   // ── Real ETA via Mapbox Directions ─────────────────────
   const [moverEtaMinutes, setMoverEtaMinutes] = useState(0)
   const [moverDistanceKm, setMoverDistanceKm] = useState(0)
@@ -727,7 +738,7 @@ export default function ActiveMovePage() {
                 hasNextPhase ? (
                   <ButtonPrimary
                     onClick={advancePhase}
-                    disabled={isUpdating || (phase === 'en_route' && !isNearPickup)}
+                    disabled={isUpdating || arrivalBlocked}
                     className="w-full"
                   >
                     {isUpdating ? t('common:state.updating.label') : t('web:mover.activeMove.advance.cta')}
@@ -750,11 +761,22 @@ export default function ActiveMovePage() {
               </p>
             </div>
           )}
+          {phase === 'in_transit' && !isNearDropoff && distanceToDropoff !== null && (
+            <div className="rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 p-3 flex items-center gap-2">
+              <ExclamationTriangleIcon className="h-5 w-5 text-amber-500 shrink-0" />
+              <p className="text-xs text-amber-700 dark:text-amber-300">
+                {t('web:mover.activeMove.proximityDropoff.helper', {
+                  radius: formatDistanceM(ARRIVAL_GEOFENCE_M),
+                  distance: formatDistanceM(distanceToDropoff),
+                })}
+              </p>
+            </div>
+          )}
           {/* Normal phase advancement (NOT during awaiting_payment or completed) */}
           {phase !== 'completed' && phase !== 'awaiting_payment' && hasNextPhase && (
             <ButtonPrimary
               onClick={advancePhase}
-              disabled={isUpdating || (phase === 'en_route' && !isNearPickup)}
+              disabled={isUpdating || arrivalBlocked}
               className="w-full shadow-lg boder border-black"
             >
               {isUpdating

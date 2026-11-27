@@ -1951,5 +1951,22 @@
     "cardUnavailable": {
       "helper": "Kartenzahlung ist für Umzüge in diesem Land noch nicht verfügbar. Sie zahlen bar an den Umzugsprofi."
     }
+  },
+  "cookies": {
+    "title": "Cookies",
+    "text": "Diese Website verwendet Cookies, die für den Betrieb nötig sind: Anmeldung, Ihre Sprache und Ihr Buchungsentwurf. Mit Ihrer Einwilligung nutzt sie außerdem eine Fehlerüberwachung (Sentry), um Fehler zu finden und zu beheben; personenbezogene Daten werden vor dem Senden entfernt. Sie können Ihre Wahl jederzeit unter „Cookie-Einstellungen“ in der Fußzeile ändern. Einzelheiten finden Sie in den <0>Datenschutzhinweisen</0>.",
+    "onlyNecessary": "Nur notwendige",
+    "acceptAll": "Alle akzeptieren",
+    "save": "Auswahl speichern",
+    "close": "Schließen",
+    "settingsLink": "Cookie-Einstellungen",
+    "necessary": {
+      "title": "Notwendig",
+      "description": "Anmeldung, Sprache, Buchungsentwurf sowie Zahlung und Karten, wenn Sie diese nutzen. Immer aktiv."
+    },
+    "monitoring": {
+      "title": "Fehlerüberwachung (Sentry)",
+      "description": "Meldet Fehler auf dieser Website, damit sie behoben werden können. Aus, bis Sie zustimmen. Das Ausschalten wirkt ab dem nächsten Seitenaufruf."
+    }
   }
 }

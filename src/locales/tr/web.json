@@ -1951,5 +1951,22 @@
     "cardUnavailable": {
       "helper": "Bu ülkedeki taşımalar için kartla ödeme henüz kullanılamıyor. Nakliyeciye nakit ödenir."
     }
+  },
+  "cookies": {
+    "title": "Çerezler",
+    "text": "Bu site, çalışması için gerekli çerezleri kullanır: oturum açma, diliniz ve rezervasyon taslağınız. Onayınızla, hataları bulup düzeltmek için hata izleme (Sentry) da kullanır; kişisel veriler gönderilmeden önce kaldırılır. Seçiminizi istediğiniz zaman alt bilgideki \"Çerez ayarları\" bölümünden değiştirebilirsiniz. Ayrıntılar <0>gizlilik politikasında</0>.",
+    "onlyNecessary": "Yalnızca gerekli",
+    "acceptAll": "Tümünü kabul et",
+    "save": "Seçimi kaydet",
+    "close": "Kapat",
+    "settingsLink": "Çerez ayarları",
+    "necessary": {
+      "title": "Gerekli",
+      "description": "Oturum açma, dil, rezervasyon taslağı ve kullandığınızda ödeme ile haritalar. Her zaman açık."
+    },
+    "monitoring": {
+      "title": "Hata izleme (Sentry)",
+      "description": "Sitedeki hataları düzeltilebilmeleri için bildirir. Siz kabul edene kadar kapalı. Kapatma, bir sonraki sayfa yüklemesinde geçerli olur."
+    }
   }
 }

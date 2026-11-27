@@ -1951,5 +1951,22 @@
     "cardUnavailable": {
       "helper": "Betalen met kaart is nog niet beschikbaar voor verhuizingen in dit land. Je betaalt de verhuizer contant."
     }
+  },
+  "cookies": {
+    "title": "Cookies",
+    "text": "Deze site gebruikt cookies die nodig zijn om te werken: inloggen, je taal en je boekingsconcept. Met je toestemming gebruikt ze ook foutbewaking (Sentry) om fouten te vinden en te verhelpen; persoonsgegevens worden verwijderd voordat er iets wordt verzonden. Je kunt je keuze altijd wijzigen via \"Cookie-instellingen\" onderaan de pagina. Meer informatie in de <0>privacyverklaring</0>.",
+    "onlyNecessary": "Alleen noodzakelijke",
+    "acceptAll": "Alles accepteren",
+    "save": "Keuze opslaan",
+    "close": "Sluiten",
+    "settingsLink": "Cookie-instellingen",
+    "necessary": {
+      "title": "Noodzakelijk",
+      "description": "Inloggen, taal, boekingsconcept, en betaling en kaarten als je die gebruikt. Altijd aan."
+    },
+    "monitoring": {
+      "title": "Foutbewaking (Sentry)",
+      "description": "Meldt fouten op deze site zodat ze verholpen kunnen worden. Uit tot je akkoord gaat. Uitzetten werkt vanaf het volgende laden van de pagina."
+    }
   }
 }

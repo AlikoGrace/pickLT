@@ -195,7 +195,6 @@
         "itemLines": [],
         "rates": {
           "access.floorSurchargeNoElevator": 15,
-          "access.haltverbotFee": 0,
           "capacityM3.small_van": 10,
           "crew.m3PerMover": 15,
           "crew.max": 4,
@@ -353,7 +352,6 @@
         "itemLines": [],
         "rates": {
           "access.floorSurchargeNoElevator": 15,
-          "access.haltverbotFee": 0,
           "capacityM3.small_van": 10,
           "crew.m3PerMover": 15,
           "crew.max": 4,
@@ -512,7 +510,6 @@
         "itemLines": [],
         "rates": {
           "access.floorSurchargeNoElevator": 15,
-          "access.haltverbotFee": 0,
           "capacityM3.medium_truck": 25,
           "crew.m3PerMover": 15,
           "crew.max": 4,
@@ -670,7 +667,6 @@
         "itemLines": [],
         "rates": {
           "access.floorSurchargeNoElevator": 15,
-          "access.haltverbotFee": 0,
           "capacityM3.medium_truck": 25,
           "crew.m3PerMover": 15,
           "crew.max": 4,
@@ -829,7 +825,6 @@
         "itemLines": [],
         "rates": {
           "access.floorSurchargeNoElevator": 15,
-          "access.haltverbotFee": 0,
           "capacityM3.large_truck": 45,
           "crew.m3PerMover": 15,
           "crew.max": 4,
@@ -987,7 +982,6 @@
         "itemLines": [],
         "rates": {
           "access.floorSurchargeNoElevator": 15,
-          "access.haltverbotFee": 0,
           "capacityM3.large_truck": 45,
           "crew.m3PerMover": 15,
           "crew.max": 4,
@@ -1168,7 +1162,6 @@
         ],
         "rates": {
           "access.floorSurchargeNoElevator": 15,
-          "access.haltverbotFee": 0,
           "capacityM3.medium_truck": 25,
           "crew.m3PerMover": 15,
           "crew.max": 4,
@@ -1335,7 +1328,6 @@
         ],
         "rates": {
           "access.floorSurchargeNoElevator": 15,
-          "access.haltverbotFee": 0,
           "capacityM3.large_truck": 45,
           "capacityM3.medium_truck": 25,
           "capacityM3.small_van": 10,
@@ -1507,7 +1499,6 @@
         ],
         "rates": {
           "access.floorSurchargeNoElevator": 15,
-          "access.haltverbotFee": 0,
           "capacityM3.small_van": 10,
           "crew.m3PerMover": 15,
           "crew.max": 4,
@@ -1674,7 +1665,6 @@
         ],
         "rates": {
           "access.floorSurchargeNoElevator": 15,
-          "access.haltverbotFee": 0,
           "capacityM3.large_truck": 45,
           "crew.m3PerMover": 15,
           "crew.max": 4,
@@ -1833,7 +1823,6 @@
         "itemLines": [],
         "rates": {
           "access.floorSurchargeNoElevator": 15,
-          "access.haltverbotFee": 0,
           "capacityM3.small_van": 10,
           "crew.m3PerMover": 15,
           "crew.max": 4,
@@ -1992,7 +1981,6 @@
         "itemLines": [],
         "rates": {
           "access.floorSurchargeNoElevator": 15,
-          "access.haltverbotFee": 0,
           "capacityM3.medium_truck": 25,
           "crew.m3PerMover": 15,
           "crew.max": 4,
@@ -2202,7 +2190,6 @@
         ],
         "rates": {
           "access.floorSurchargeNoElevator": 15,
-          "access.haltverbotFee": 0,
           "capacityM3.medium_truck": 25,
           "crew.m3PerMover": 15,
           "crew.max": 4,
@@ -2378,7 +2365,6 @@
         ],
         "rates": {
           "access.floorSurchargeNoElevator": 15,
-          "access.haltverbotFee": 0,
           "crew.m3PerMover": 15,
           "crew.max": 4,
           "handling.hoursPerM3": 0.2,
@@ -2552,7 +2538,6 @@
         ],
         "rates": {
           "access.floorSurchargeNoElevator": 15,
-          "access.haltverbotFee": 0,
           "capacityM3.medium_truck": 25,
           "crew.m3PerMover": 15,
           "crew.max": 4,
@@ -2736,7 +2721,6 @@
         ],
         "rates": {
           "access.floorSurchargeNoElevator": 15,
-          "access.haltverbotFee": 0,
           "capacityM3.large_truck": 45,
           "crew.m3PerMover": 15,
           "crew.max": 4,
@@ -2906,7 +2890,6 @@
         ],
         "rates": {
           "access.floorSurchargeNoElevator": 15,
-          "access.haltverbotFee": 0,
           "capacityM3.small_van": 10,
           "crew.m3PerMover": 15,
           "crew.max": 4,
@@ -3099,7 +3082,6 @@
         ],
         "rates": {
           "access.floorSurchargeNoElevator": 15,
-          "access.haltverbotFee": 0,
           "capacityM3.large_truck": 45,
           "crew.m3PerMover": 15,
           "crew.max": 4,
@@ -3278,7 +3260,6 @@
         ],
         "rates": {
           "access.floorSurchargeNoElevator": 15,
-          "access.haltverbotFee": 0,
           "capacityM3.large_truck": 45,
           "crew.m3PerMover": 15,
           "crew.max": 4,
@@ -3437,7 +3418,6 @@
         "itemLines": [],
         "rates": {
           "access.floorSurchargeNoElevator": 15,
-          "access.haltverbotFee": 0,
           "approach.freeKm": 5,
           "approach.maxCharge": 50,
           "approach.ratePerKm": 0,
@@ -3601,7 +3581,6 @@
         "itemLines": [],
         "rates": {
           "access.floorSurchargeNoElevator": 15,
-          "access.haltverbotFee": 0,
           "approach.freeKm": 5,
           "approach.maxCharge": 50,
           "approach.ratePerKm": 0,
@@ -3765,7 +3744,6 @@
         "itemLines": [],
         "rates": {
           "access.floorSurchargeNoElevator": 15,
-          "access.haltverbotFee": 0,
           "approach.freeKm": 5,
           "approach.maxCharge": 50,
           "approach.ratePerKm": 0,
@@ -3929,7 +3907,6 @@
         "itemLines": [],
         "rates": {
           "access.floorSurchargeNoElevator": 15,
-          "access.haltverbotFee": 0,
           "approach.freeKm": 5,
           "approach.maxCharge": 50,
           "approach.ratePerKm": 0,
@@ -4093,7 +4070,6 @@
         "itemLines": [],
         "rates": {
           "access.floorSurchargeNoElevator": 15,
-          "access.haltverbotFee": 0,
           "capacityM3.small_van": 10,
           "crew.m3PerMover": 15,
           "crew.max": 4,

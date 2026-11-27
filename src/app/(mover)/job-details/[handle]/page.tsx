@@ -32,6 +32,7 @@ import { formatDateWith, formatDistanceKm, formatDurationHm, formatMoney, format
 import PriceBreakdown from '@/components/PriceBreakdown'
 import { moveCurrency } from '@/lib/currency'
 import CallInAppButton from '@/components/calls/CallInAppButton'
+import { DELETED_NAME, displayNameOf } from '@/lib/account-delete'
 import { canCallOnMove } from '@/lib/call-state'
 import MoveRouteMap from '@/components/MoveRouteMap'
 import { toCoordinate } from '@/lib/route-caption'
@@ -511,7 +512,9 @@ export default function MoverMoveDetailsPage() {
     isBusinessMove, companyName, vatId,
   } = move
 
-  const canCallClient = isAssignedMover && !!moveDocId && canCallOnMove(rawStatus, true)
+  // A client who deleted their account cannot be reached (device pass 2026-11-27).
+  const clientDeleted = contactInfo?.fullName?.trim() === DELETED_NAME
+  const canCallClient = isAssignedMover && !clientDeleted && !!moveDocId && canCallOnMove(rawStatus, true)
 
   // The itemised v3 estimate stored with the row (pricing master D13); null on
   // moves booked before the engine — those show the plain total only.
@@ -946,13 +949,16 @@ export default function MoverMoveDetailsPage() {
               <CallInAppButton
                 moveId={moveDocId}
                 moveStatus={rawStatus}
-                hasCounterpart={isAssignedMover}
-                counterpartName={contactInfo?.fullName}
+                hasCounterpart={isAssignedMover && !clientDeleted}
+                counterpartName={displayNameOf(contactInfo?.fullName, t('common:user.deleted.label'), contactInfo?.fullName ?? '')}
                 fallbackName={t('web:call.party.client')}
                 className="mb-4 w-full"
               />
               {contactInfo?.fullName && (
-                <InfoRow label={t('common:field.name.label')} value={contactInfo.fullName} />
+                <InfoRow
+                  label={t('common:field.name.label')}
+                  value={displayNameOf(contactInfo.fullName, t('common:user.deleted.label'), contactInfo.fullName)}
+                />
               )}
               {/* No phone number or email (calls plan 4 in pickltmobile): the client is
                   reached through the in-app call, which keeps the job on PickLte. */}

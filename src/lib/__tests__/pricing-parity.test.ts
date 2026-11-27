@@ -174,8 +174,8 @@ describe('golden fixture — quoteMove (shared with pickltmobile)', () => {
 // ── 3. Registry parity ───────────────────────────────────────────────────────
 
 describe('registry — PRICING_DEFAULTS', () => {
-  it('is exactly the 71-key v3 registry (master §5 less the retired services)', () => {
-    expect(Object.keys(PRICING_DEFAULTS)).toHaveLength(71)
+  it('is exactly the 70-key v3 registry (master §5 less the retired services and Halteverbot)', () => {
+    expect(Object.keys(PRICING_DEFAULTS)).toHaveLength(70)
     expect(Object.keys(PRICING_DEFAULTS).filter((k) => k.startsWith('service.') || k.startsWith('storage.'))).toEqual([])
     for (const legacy of ['instant.', 'scheduled.', 'mover.', 'pricing.model', 'pricing.local', 'pricing.volume', 'pricing.access', 'pricing.leadTime']) {
       expect(Object.keys(PRICING_DEFAULTS).filter((k) => k.startsWith(legacy))).toEqual([])

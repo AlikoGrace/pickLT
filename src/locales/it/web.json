@@ -1951,5 +1951,22 @@
     "cardUnavailable": {
       "helper": "Il pagamento con carta non è ancora disponibile per i traslochi in questo Paese. Si paga il traslocatore in contanti."
     }
+  },
+  "cookies": {
+    "title": "Cookie",
+    "text": "Questo sito usa i cookie necessari al suo funzionamento: accesso, la tua lingua e la tua bozza di prenotazione. Con il tuo consenso usa anche un monitoraggio degli errori (Sentry) per trovare e correggere i problemi; i dati personali vengono rimossi prima di qualsiasi invio. Puoi cambiare la tua scelta in qualsiasi momento da \"Impostazioni cookie\" a piè di pagina. Maggiori dettagli nell'<0>informativa sulla privacy</0>.",
+    "onlyNecessary": "Solo necessari",
+    "acceptAll": "Accetta tutti",
+    "save": "Salva le scelte",
+    "close": "Chiudi",
+    "settingsLink": "Impostazioni cookie",
+    "necessary": {
+      "title": "Necessari",
+      "description": "Accesso, lingua, bozza di prenotazione, e pagamento e mappe quando li usi. Sempre attivi."
+    },
+    "monitoring": {
+      "title": "Monitoraggio degli errori (Sentry)",
+      "description": "Segnala gli errori del sito perché possano essere corretti. Disattivato finché non accetti. La disattivazione ha effetto dal caricamento successivo della pagina."
+    }
   }
 }
