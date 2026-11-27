@@ -17,10 +17,14 @@
  * mover and admin repos carry byte-identical copies.
  */
 
+import type { CurrencyCode } from './currency';
+import { normalizeCurrency } from './currency';
+
 export interface SupportedCountry {
   /** ISO-3166-1 alpha-2 */
   code: string;
-  currency: 'EUR';
+  /** The one currency of this market (plan currency/0). */
+  currency: CurrencyCode;
   /** Standard VAT rate as a fraction — the seed for `pricing_config` `tax.vatRate` scoped to this country. */
   vatRate: number;
   /** Open for clients and movers. */
@@ -73,7 +77,9 @@ export function parseSupportedCountries(raw: unknown): SupportedCountry[] {
     if (vat == null || vat < 0 || vat > 1) continue;
     out.push({
       code,
-      currency: 'EUR',
+      // The operator's choice when it is a known code; otherwise the compiled
+      // market's currency, else euro.
+      currency: normalizeCurrency(typeof o.currency === 'string' && o.currency ? o.currency : def?.currency),
       vatRate: vat,
       live: o.live === true,
       timeZone: typeof o.timeZone === 'string' && o.timeZone ? o.timeZone : def?.timeZone ?? 'Europe/Berlin',

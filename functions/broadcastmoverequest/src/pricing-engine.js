@@ -69,6 +69,7 @@ export const PRICING_DEFAULTS = {
   'items.custom.extraLarge': 25,
   'items.suggest.perKg': 0.15,
   'items.suggest.perM3': 10,
+  'items.priceFactor': 1,
 
   'crew.m3PerMover': 15,
   'crew.max': 4,
@@ -498,6 +499,20 @@ export function isServiceTier(v) {
   return v === 'light' || v === 'regular' || v === 'premium';
 }
 
+// ── Currency (mirror of lib/currency.ts; plan currency/0) ──────────────────
+
+export const CURRENCY_CODES = ['EUR', 'GBP', 'PLN', 'CHF', 'USD', 'GHS'];
+export const DEFAULT_CURRENCY = 'EUR';
+
+export function isCurrencyCode(v) {
+  return typeof v === 'string' && CURRENCY_CODES.includes(v);
+}
+
+export function normalizeCurrency(v) {
+  const up = typeof v === 'string' ? v.trim().toUpperCase() : '';
+  return isCurrencyCode(up) ? up : DEFAULT_CURRENCY;
+}
+
 export class PricingReconcileError extends Error {
   constructor(message) {
     super(message);
@@ -873,7 +888,7 @@ export function quoteMove(input, config) {
 
   return {
     version: 'v3',
-    currency: 'EUR',
+    currency: normalizeCurrency(input.currency),
     ...(countryCode ? { countryCode } : {}),
     tier,
     mode,
@@ -960,7 +975,7 @@ export function parseBreakdown(raw) {
   }
   if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
   const b = value;
-  if (b.version !== 'v3' || b.currency !== 'EUR') return null;
+  if (b.version !== 'v3' || !isCurrencyCode(b.currency)) return null;
   if (!isServiceTier(b.tier) || (b.mode !== 'instant' && b.mode !== 'scheduled')) return null;
   if (!b.lines || typeof b.lines !== 'object' || !b.profile || typeof b.profile !== 'object') return null;
   if (typeof b.total !== 'number' || !Number.isFinite(b.total)) return null;
@@ -1056,6 +1071,9 @@ export function quoteInputFromRow(row, catalog, vehicleTypeOverride) {
     // Pickup country (plan wave-2026-10/4 C2) — resolved by the function before
     // quoting and stored on the row; the engine only echoes it on the breakdown.
     countryCode: typeof row.countryCode === 'string' ? row.countryCode : null,
+    // The market's currency (plan currency/0), resolved by the function and
+    // stored on the row; a row without one is euro.
+    currency: typeof row.currency === 'string' ? row.currency : null,
   };
 }
 
@@ -1071,7 +1089,7 @@ export function quoteColumns(breakdown, pricedAtIso) {
     priceBreakdown: serializeBreakdown(breakdown),
     pricingVersion: 'v3',
     pricedAt: pricedAtIso,
-    currency: 'EUR',
+    currency: normalizeCurrency(breakdown.currency),
     vehicleType: breakdown.profile.vehicleType,
     crewSize: String(breakdown.profile.totalCrew ?? breakdown.profile.crew),
     extraHelpers: breakdown.profile.extraHelpers ?? 0,

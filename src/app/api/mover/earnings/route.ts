@@ -1,4 +1,6 @@
 import { getTranslations } from '@/lib/i18n-server'
+import { moveCurrency } from '@/lib/currency'
+import { loadMarketCurrency } from '@/lib/market-currency-server'
 import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
@@ -109,14 +111,22 @@ export async function GET(request: NextRequest) {
         date: move.$createdAt,
         description: `${(move.pickupLocation as string)?.split(',')[0] || 'Pickup'} → ${(move.dropoffLocation as string)?.split(',')[0] || 'Dropoff'}`,
         amount: moverPayoutFromGross(gross, rates),
+        // The move's own currency (plan currency/0); euro for an older row.
+        currency: moveCurrency(move as { currency?: unknown }),
         type: 'earning' as const,
         moveType: move.moveType,
       }
     })
     const totalEarnings = round2(entries.reduce((sum, e) => sum + e.amount, 0))
 
+    // A mover works in one market, so every entry shares a currency (plan
+    // currency/0); with no entry yet it is the currency of the mover's market.
+    const currency =
+      entries[0]?.currency ?? (await loadMarketCurrency(databases, (moverProfile as Record<string, unknown>).countryCode))
+
     return NextResponse.json({
       total: totalEarnings,
+      currency,
       moves: totalMoves,
       entries,
       period,

@@ -296,7 +296,9 @@
       "initFailed": "No se pudo iniciar el pago. Inténtalo de nuevo."
     },
     "confirmFailed": "No se ha podido confirmar el pago",
-    "notAwaiting": "Esta mudanza no está a la espera de pago. Vuelve a cargar la mudanza e inténtalo de nuevo."
+    "notAwaiting": "Esta mudanza no está a la espera de pago. Vuelve a cargar la mudanza e inténtalo de nuevo.",
+    "currencyNotSupported": "Los pagos con tarjeta aún no están disponibles en este mercado. Paga en efectivo.",
+    "belowMinimum": "Este importe es demasiado pequeño para pagarlo con tarjeta."
   },
   "pricing": {
     "exceedsLargestVehicle": "Esta carga es demasiado grande para un solo vehículo. Ponte en contacto con el soporte.",

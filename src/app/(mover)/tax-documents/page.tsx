@@ -23,6 +23,8 @@ interface Statement {
   grossDigital: number
   commission: number
   net: number
+  /** The statement's currency when the row carries one; otherwise the mover's market (plan currency/0). */
+  currency?: string | null
 }
 
 function periodLabel(period: string): string {
@@ -82,8 +84,8 @@ export default function TaxDocumentsPage() {
                 <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-300">
                   {t('web:mover.tax.row.summary', {
                     count: st.moves ?? 0,
-                    gross: formatMoney(st.grossTotal ?? 0),
-                    net: formatMoney(st.net ?? 0),
+                    gross: formatMoney(st.grossTotal ?? 0, { currency: st.currency }),
+                    net: formatMoney(st.net ?? 0, { currency: st.currency }),
                   })}
                 </p>
               </div>

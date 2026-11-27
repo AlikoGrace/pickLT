@@ -30,6 +30,7 @@ import {
 } from '@/lib/inventory-labels'
 import { formatDateWith, formatDistanceKm, formatDurationHm, formatMoney, formatPercent } from '@/lib/format'
 import PriceBreakdown from '@/components/PriceBreakdown'
+import { moveCurrency } from '@/lib/currency'
 import CallInAppButton from '@/components/calls/CallInAppButton'
 import { canCallOnMove } from '@/lib/call-state'
 import MoveRouteMap from '@/components/MoveRouteMap'
@@ -69,6 +70,8 @@ interface MoveData {
   createdAt: string
   /** What the customer pays — `finalPrice` once set at completion, else the estimate. */
   totalPrice: number
+  /** The currency every amount of this move is in: the move's own (plan currency/0). */
+  currency: string
   /** `moves.finalPrice`, set when the move completes; null before that. */
   finalPrice: number | null
   bookingCode: string
@@ -194,6 +197,7 @@ function docToMoveData(doc: any): MoveData {
     status: mapDbStatus(doc.status ?? ''),
     createdAt: doc.$createdAt ?? '',
     totalPrice: (typeof doc.finalPrice === 'number' && doc.finalPrice > 0 ? doc.finalPrice : doc.estimatedPrice) ?? 0,
+    currency: moveCurrency(doc),
     finalPrice: typeof doc.finalPrice === 'number' ? doc.finalPrice : null,
     bookingCode: doc.handle ?? '',
     moveType: doc.moveType ?? doc.systemMoveType ?? null,
@@ -500,7 +504,7 @@ export default function MoverMoveDetailsPage() {
     additionalServices, storageWeeks,
     vehicleType, arrivalWindow, flexibility, inventoryCount,
     inventoryItems, customItems,
-    contactInfo, totalPrice, finalPrice, bookingCode,
+    contactInfo, totalPrice, currency, finalPrice, bookingCode,
     coverPhotoId, galleryPhotoIds, createdAt,
     routeDistanceMeters, routeDurationSeconds, paymentMethod,
     pickupLatitude, pickupLongitude, dropoffLatitude, dropoffLongitude,
@@ -578,7 +582,7 @@ export default function MoverMoveDetailsPage() {
         <div className="sm:text-right">
           <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('web:mover.earnings.label')}</p>
           <p className="text-3xl font-bold text-green-600 dark:text-green-400">
-            {formatMoney(payout)}
+            {formatMoney(payout, { currency })}
           </p>
           <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">{payoutHelper}</p>
         </div>
@@ -800,13 +804,13 @@ export default function MoverMoveDetailsPage() {
               <div className="my-4 border-t border-neutral-100 dark:border-neutral-700" />
               <div className="flex justify-between gap-3 text-base">
                 <span className="font-semibold text-neutral-900 dark:text-neutral-100">{t('web:mover.earnings.label')}</span>
-                <span className="font-bold text-green-600 dark:text-green-400">{formatMoney(payout)}</span>
+                <span className="font-bold text-green-600 dark:text-green-400">{formatMoney(payout, { currency })}</span>
               </div>
               <p className="text-xs text-neutral-500 dark:text-neutral-400 -mt-1">{payoutHelper}</p>
               {/* The customer's gross — what the breakdown card below itemises. */}
               <div className="flex justify-between mt-2">
                 <span className="text-neutral-500 dark:text-neutral-400">{t('booking:pricing.customerPays.label')}</span>
-                <span className="font-medium text-neutral-900 dark:text-neutral-100">{formatMoney(totalPrice)}</span>
+                <span className="font-medium text-neutral-900 dark:text-neutral-100">{formatMoney(totalPrice, { currency })}</span>
               </div>
               {moveBreakdown && (
                 <PriceBreakdown breakdown={moveBreakdown} compact showAssumptions={false} itemNames={inventoryNames} className="mt-3 !p-3" />

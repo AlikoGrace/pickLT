@@ -2,6 +2,7 @@ import type { Databases, Models } from 'node-appwrite'
 import { ID, Query } from 'node-appwrite'
 
 import { APPWRITE } from '@/lib/constants'
+import { DEFAULT_CURRENCY, normalizeCurrency, type CurrencyCode } from '@/lib/currency'
 import { moverLedgerPermissions } from '@/lib/doc-permissions'
 import {
   computeFeeStanding,
@@ -88,6 +89,21 @@ export function centsToAmountParam(cents: number): string {
   return (Math.abs(Math.round(cents)) / 100).toFixed(2)
 }
 
+/**
+ * The currency a driver's balance is kept in: that of their ledger rows (plan
+ * currency/0; port of `ledgerCurrency` in the functions' `fee-standing.js`). A
+ * driver works in one market, so every row shares it; a row from before
+ * markets had currencies is euro. An empty ledger is euro.
+ */
+export function ledgerCurrency(rows: readonly AnyDoc[] | null | undefined): CurrencyCode {
+  const list = rows ?? []
+  for (let i = list.length - 1; i >= 0; i -= 1) {
+    const c = list[i]?.currency
+    if (typeof c === 'string' && c) return normalizeCurrency(c)
+  }
+  return DEFAULT_CURRENCY
+}
+
 export interface StripeIntentLike {
   id?: string
   status?: string
@@ -104,12 +120,15 @@ export type IntentRefusal =
 
 /**
  * `settlefees` confirm: the intent must have succeeded, be a fee settlement
- * for THIS driver, and have collected exactly what it asked for, in euros.
+ * for THIS driver, and have collected exactly what it asked for, in the
+ * currency of the driver's ledger (plan currency/0: one balance, one currency,
+ * nothing converted; euro when the caller names none).
  * Returns the amount to credit, or the refusal code (same codes as chargemove).
  */
 export function verifyFeeSettlementIntent(
   intent: StripeIntentLike,
   moverProfileId: string,
+  expectedCurrency: string = DEFAULT_CURRENCY,
 ): { ok: true; amountCents: number } | { ok: false; fnCode: IntentRefusal } {
   if (intent.status !== 'succeeded') return { ok: false, fnCode: 'payment.intentNotSucceeded' }
   if (intent.metadata?.kind !== 'fee_settlement' || intent.metadata?.moverProfileId !== moverProfileId) {
@@ -120,7 +139,7 @@ export function verifyFeeSettlementIntent(
     typeof amount !== 'number' ||
     !(amount > 0) ||
     (typeof intent.amount_received === 'number' && intent.amount_received !== amount) ||
-    (intent.currency ?? '').toLowerCase() !== 'eur'
+    (intent.currency ?? '').toUpperCase() !== normalizeCurrency(expectedCurrency)
   ) {
     return { ok: false, fnCode: 'payment.amountMismatch' }
   }
@@ -183,17 +202,40 @@ export interface LedgerRowInput {
   note?: string | null
 }
 
+/** The refusal of a row in another currency than the driver's ledger (plan currency/0). */
+export const CURRENCY_MISMATCH = 'fees.currencyMismatch'
+
 /**
  * Appends one row; readable by the driver only (contract). Idempotent on
  * `idempotencyKey` (unique index): a duplicate returns `{ created: false }`.
+ *
+ * One balance, one currency (plan currency/0): a row in another currency than
+ * the driver's ledger is refused and logged, never converted
+ * (`{ created: false, refused: 'fees.currencyMismatch' }`), as
+ * `postCompletedMove` and `settlefees` do.
  */
-export async function appendLedgerRow(databases: Databases, row: LedgerRowInput): Promise<{ created: boolean }> {
+export async function appendLedgerRow(
+  databases: Databases,
+  row: LedgerRowInput,
+): Promise<{ created: boolean; refused?: typeof CURRENCY_MISMATCH }> {
+  const currency = normalizeCurrency(row.currency)
+  const latest = await databases.listDocuments(APPWRITE.DATABASE_ID, MOVER_LEDGER_COLLECTION, [
+    Query.equal('moverProfileId', row.moverProfileId),
+    Query.orderDesc('$createdAt'),
+    Query.limit(1),
+  ])
+  if (latest.documents.length > 0 && ledgerCurrency(latest.documents) !== currency) {
+    console.error(
+      `[fees] ${row.kind} in ${currency} refused, the ledger of ${row.moverProfileId} is in ${ledgerCurrency(latest.documents)}`,
+    )
+    return { created: false, refused: CURRENCY_MISMATCH }
+  }
   const data: Record<string, unknown> = {
     moverProfileId: row.moverProfileId,
     driverUserId: row.driverUserId,
     kind: row.kind,
     amountCents: Math.round(row.amountCents),
-    currency: row.currency ?? 'EUR',
+    currency,
     actorRole: row.actorRole,
     idempotencyKey: row.idempotencyKey,
   }
@@ -224,7 +266,7 @@ export async function recomputeFeeSnapshot(
   databases: Databases,
   profile: AnyDoc,
   nowMs: number = Date.now(),
-): Promise<{ before: FeeSnapshot; result: FeeStandingResult }> {
+): Promise<{ before: FeeSnapshot; result: FeeStandingResult; currency: CurrencyCode }> {
   const [rows, policy] = await Promise.all([
     listAllLedgerRows(databases, profile.$id),
     loadFeePolicy(databases, profile.countryCode),
@@ -236,5 +278,5 @@ export async function recomputeFeeSnapshot(
     profile.$id,
     snapshotPatch(profile, result, new Date(nowMs).toISOString()),
   )
-  return { before: snapshotOf(profile), result }
+  return { before: snapshotOf(profile), result, currency: ledgerCurrency(rows) }
 }

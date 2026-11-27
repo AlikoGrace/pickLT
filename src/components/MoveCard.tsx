@@ -92,6 +92,7 @@ const MoveCard: FC<MoveCardProps> = ({ size = 'default', className = '', data })
     crewSize,
     vehicleType,
     totalPrice,
+    currency,
     coverPhotoId,
     galleryPhotoIds,
   } = data
@@ -161,7 +162,7 @@ const MoveCard: FC<MoveCardProps> = ({ size = 'default', className = '', data })
         <div className="w-14 border-b border-neutral-100 dark:border-neutral-800"></div>
         <div className="flex items-center justify-between gap-2">
           <div>
-            <span className="text-base font-semibold">{formatMoney(totalPrice)}</span>
+            <span className="text-base font-semibold">{formatMoney(totalPrice, { currency })}</span>
           </div>
           <span className="text-sm text-neutral-500 dark:text-neutral-400">
             {t('moves:itemCount', { count: inventoryCount })} ·{' '}

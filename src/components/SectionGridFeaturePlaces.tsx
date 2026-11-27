@@ -1,6 +1,7 @@
 'use client'
 
 import { MoveStatus, StoredMove } from '@/context/moveSearch'
+import { moveCurrency } from '@/lib/currency'
 import { useAuth } from '@/context/auth'
 import ButtonPrimary from '@/shared/ButtonPrimary'
 import { ArrowRightIcon } from '@heroicons/react/24/solid'
@@ -76,6 +77,7 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
         createdAt: doc.$createdAt ?? '',
         paidAt: doc.paidAt ?? doc.$createdAt ?? '',
         totalPrice: doc.estimatedPrice ?? 0,
+        currency: moveCurrency(doc),
         bookingCode: doc.handle ?? '',
         moveType: doc.moveType ?? doc.systemMoveType ?? null,
         moveDate: doc.moveDate ?? null,

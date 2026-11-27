@@ -1191,6 +1191,9 @@
         },
         "success": "Pago recibido. Su saldo se ha actualizado.",
         "unavailable": "El pago con tarjeta no está disponible ahora. Contacte con soporte para pagar de otra forma.",
+        "cardUnavailable": {
+          "helper": "El pago con tarjeta no está disponible en su moneda. Las comisiones de la plataforma se pagan por transferencia bancaria y un administrador registra el pago en su saldo."
+        },
         "secure": {
           "helper": "Los pagos con tarjeta los procesa Stripe de forma segura."
         }
@@ -1942,6 +1945,11 @@
     },
     "failed": {
       "error": "No pudimos guardar tu respuesta. Inténtalo de nuevo."
+    }
+  },
+  "payment": {
+    "cardUnavailable": {
+      "helper": "El pago con tarjeta aún no está disponible para mudanzas en este país. Se paga al transportista en efectivo."
     }
   }
 }

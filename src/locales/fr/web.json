@@ -1191,6 +1191,9 @@
         },
         "success": "Paiement reçu. Votre solde a été mis à jour.",
         "unavailable": "Le paiement par carte n’est pas disponible pour le moment. Contactez le support pour payer autrement.",
+        "cardUnavailable": {
+          "helper": "Le paiement par carte n’est pas disponible dans votre devise. Les frais de plateforme se règlent par virement bancaire et un administrateur enregistre le paiement sur votre solde."
+        },
         "secure": {
           "helper": "Les paiements par carte sont traités de manière sécurisée par Stripe."
         }
@@ -1942,6 +1945,11 @@
     },
     "failed": {
       "error": "Nous n'avons pas pu enregistrer votre réponse. Veuillez réessayer."
+    }
+  },
+  "payment": {
+    "cardUnavailable": {
+      "helper": "Le paiement par carte n’est pas encore disponible pour les déménagements dans ce pays. Vous réglez le déménageur en espèces."
     }
   }
 }

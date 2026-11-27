@@ -296,7 +296,9 @@
       "initFailed": "Could not start payment. Try again."
     },
     "confirmFailed": "Failed to confirm payment",
-    "notAwaiting": "This move is not awaiting payment. Please reload the move and try again."
+    "notAwaiting": "This move is not awaiting payment. Please reload the move and try again.",
+    "currencyNotSupported": "Card payments are not available in this market yet. Please pay in cash.",
+    "belowMinimum": "This amount is too small to pay by card."
   },
   "pricing": {
     "exceedsLargestVehicle": "This load is too large for a single vehicle. Please contact support.",

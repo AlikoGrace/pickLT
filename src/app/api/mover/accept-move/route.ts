@@ -170,7 +170,8 @@ export async function POST(request: NextRequest) {
               params: {
                 amount: offer.total.toFixed(2),
                 previousAmount: Number(targetMove.estimatedPrice || 0).toFixed(2),
-                currency: 'EUR',
+                // The move's own currency (plan currency/0); the offer keeps the quote's.
+                currency: offer.breakdown.currency,
               },
             },
           })

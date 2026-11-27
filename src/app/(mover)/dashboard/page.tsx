@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next'
 import Avatar from '@/shared/Avatar'
 import { formatDateWith, formatMoney, formatPercent } from '@/lib/format'
 import { payoutRatesFrom } from '@/lib/moverPayout'
+import { moveCurrency } from '@/lib/currency'
 import { feeStandingAllowsWork } from '@/lib/feeLedger'
 import DailyCapCard from '@/components/mover/DailyCapCard'
 import type { VettingView } from '@/lib/mover-vetting-view'
@@ -38,6 +39,8 @@ interface RecentMoveFromApi {
   estimatedPrice: number
   /** What the driver earns: net after the platform fee (plan 7). */
   payout?: number
+  /** The move's own currency (plan currency/0). */
+  currency?: string | null
   moveCategory: string
   totalItems: number
   routeDistanceMeters: number | null
@@ -52,6 +55,7 @@ interface RecentMove {
   date: string
   status: 'completed' | 'in_progress' | 'pending' | 'cancelled'
   amount: number
+  currency: string
   moveTypeLabel: string
   itemCount: number
   distance: string
@@ -152,6 +156,7 @@ const DashboardPage = () => {
       : '',
     status: mapApiMoveStatus(m.status),
     amount: m.payout ?? 0,
+    currency: moveCurrency(m),
     moveTypeLabel: moveTypeLabelFor(m.moveCategory),
     itemCount: m.totalItems || 0,
     distance: m.routeDistanceMeters ? `${(m.routeDistanceMeters / 1000).toFixed(1)} km` : '-',
@@ -379,7 +384,7 @@ const DashboardPage = () => {
                     </h3>
                   </div>
                   <p className="text-xl font-bold text-green-600 dark:text-green-400 ml-2">
-                    {formatMoney(move.amount, { compact: true })}
+                    {formatMoney(move.amount, { compact: true, currency: move.currency })}
                   </p>
                 </div>
 

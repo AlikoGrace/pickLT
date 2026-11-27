@@ -12,6 +12,8 @@ import {
 } from '@/lib/basket-server'
 import { classifyMove, enforcedTier, thresholdsFromConfig, type InventoryItemDef } from '@/lib/classifyMove'
 import { countryToIso2 } from '@/lib/countryCode'
+import { catalogForMarket, type CurrencyCode } from '@/lib/currency'
+import { loadMarketCurrency } from '@/lib/market-currency-server'
 import { GLOBAL_PRICING_SCOPE, toPricingConfig, type PricingConfig, type PricingConfigRow } from '@/lib/pricing'
 import {
   basketFromWire,
@@ -44,8 +46,20 @@ import {
 export const PRICING_CONFIG_COLLECTION =
   process.env.APPWRITE_COLLECTION_PRICING_CONFIG || 'pricing_config'
 
+/**
+ * An item with the prices entered for single markets (plan currency/0):
+ * `{ "PL": 110 }`, the price in that market's own currency. Only present on a
+ * row that has any, so a catalog without them reads exactly as before.
+ */
+export type CatalogItemDef = InventoryItemDef & { unitPrices?: unknown }
+
+function hasMarketPrices(raw: unknown): boolean {
+  if (typeof raw === 'string') return raw.trim() !== '' && raw.trim() !== '{}'
+  return !!raw && typeof raw === 'object' && !Array.isArray(raw) && Object.keys(raw).length > 0
+}
+
 /** A catalog document as the engine's item definition. */
-export function catalogDocToItemDef(doc: Models.Document & Record<string, unknown>): InventoryItemDef {
+export function catalogDocToItemDef(doc: Models.Document & Record<string, unknown>): CatalogItemDef {
   const num = (v: unknown, fallback: number) => {
     const n = typeof v === 'number' ? v : Number(v)
     return Number.isFinite(n) ? n : fallback
@@ -68,6 +82,7 @@ export function catalogDocToItemDef(doc: Models.Document & Record<string, unknow
     // null as 0 and flags the item in `assumptions.unpricedItemIds`.
     unitPriceEur: typeof unit === 'number' && Number.isFinite(unit) ? unit : null,
     requiredCrew: typeof crew === 'number' && Number.isFinite(crew) && crew >= 1 ? Math.floor(crew) : 1,
+    ...(hasMarketPrices(doc.unitPrices) ? { unitPrices: doc.unitPrices } : {}),
   }
 }
 
@@ -75,7 +90,7 @@ export function catalogDocToItemDef(doc: Models.Document & Record<string, unknow
  * Every catalog row. 500, not 200: the admin platform owns this catalog, and
  * silently truncating it would price the missing items at zero.
  */
-export async function loadCatalog(databases: Databases): Promise<InventoryItemDef[]> {
+export async function loadCatalog(databases: Databases): Promise<CatalogItemDef[]> {
   const res = await databases.listDocuments(
     APPWRITE.DATABASE_ID,
     APPWRITE.COLLECTIONS.INVENTORY_CATALOG,
@@ -159,12 +174,15 @@ export function quoteInputFromMove(
   catalog: InventoryItemDef[],
   mode: BookingMode,
   countryCode?: string | null,
+  /** The market's currency (plan currency/0); recorded on the quote, never converted. */
+  currency?: string | null,
 ): QuoteInput {
   const storage = Number(fields.storageWeeks)
   return {
     // The market the quote is priced for (plan wave-2026-10/4 C2); the engine
     // stamps it on the breakdown so the stored quote names its country.
     ...(countryToIso2(countryCode) ? { countryCode: countryToIso2(countryCode) } : {}),
+    ...(currency ? { currency } : {}),
     tier: isServiceTier(fields.moveType) ? fields.moveType : 'regular',
     mode,
     distanceKm: kmFromMeters(fields.routeDistanceMeters),
@@ -187,7 +205,8 @@ export interface QuoteColumns {
   priceBreakdown: string
   pricingVersion: 'v3'
   pricedAt: string
-  currency: 'EUR'
+  /** The currency the quote was priced in: the market's (plan currency/0). */
+  currency: CurrencyCode
   vehicleType: string
   crewSize: string
   /** The clamped extra-helper count actually billed (crew master D2). */
@@ -200,7 +219,7 @@ export function quoteColumns(breakdown: QuoteBreakdown, pricedAt = new Date()): 
     priceBreakdown: serializeBreakdown(breakdown),
     pricingVersion: 'v3',
     pricedAt: pricedAt.toISOString(),
-    currency: 'EUR',
+    currency: breakdown.currency,
     // `moves.vehicleType` / `crewSize` are text columns holding the *charged*
     // class and crew — what the job needs, not what the customer guessed.
     // `crewSize` is the whole crew that turns up: charged crew + extra helpers.
@@ -217,8 +236,29 @@ export async function quoteMoveFields(
   mode: BookingMode,
   countryCode?: string | null,
 ): Promise<QuoteBreakdown> {
-  const [catalog, config] = await Promise.all([loadCatalog(databases), loadPricingConfig(databases, countryCode)])
-  return quoteMove(quoteInputFromMove(fields, catalog, mode, countryCode), config)
+  const { catalog, config, currency } = await loadMarketPricing(databases, countryCode)
+  return quoteMove(
+    quoteInputFromMove(fields, catalogForMarket(catalog, countryToIso2(countryCode), config), mode, countryCode, currency),
+    config,
+  )
+}
+
+/**
+ * What a quote for a market is priced with (plan currency/0): the catalog, the
+ * market's rates and the market's currency. The engine is handed
+ * `catalogForMarket(catalog, country, config)`, so every item price is in that
+ * currency; classification and the caps read the catalog as stored.
+ */
+export async function loadMarketPricing(
+  databases: Databases,
+  countryCode?: string | null,
+): Promise<{ catalog: CatalogItemDef[]; config: PricingConfig; currency: CurrencyCode }> {
+  const [catalog, config, currency] = await Promise.all([
+    loadCatalog(databases),
+    loadPricingConfig(databases, countryCode),
+    loadMarketCurrency(databases, countryCode),
+  ])
+  return { catalog, config, currency }
 }
 
 /** A basket with a count over the caps (`inventory.quantityTooHigh`, HTTP 400). */
@@ -302,13 +342,21 @@ export async function priceMoveFields(
   countryCode: string | null | undefined,
   fallbackTier: ServiceTier,
 ): Promise<PricedMove> {
-  const [catalog, config] = await Promise.all([loadCatalog(databases), loadPricingConfig(databases, countryCode)])
+  // The market's currency and item prices (plan currency/0): the move is
+  // priced, stored and later settled in the currency of its pickup country.
+  const { catalog, config, currency } = await loadMarketPricing(databases, countryCode)
   const basket = normalizedBasketFromWire(fields.inventoryItems, fields.customItems)
   const violation = basketCapViolation(basket, catalog)
   if (violation) throw new BasketCapError(violation)
   const classification = classifyBasketServer(basket, catalog, config, fields.moveType, fallbackTier)
   const breakdown = quoteMove(
-    quoteInputFromMove({ ...fields, moveType: classification.moveType }, catalog, mode, countryCode),
+    quoteInputFromMove(
+      { ...fields, moveType: classification.moveType },
+      catalogForMarket(catalog, countryToIso2(countryCode), config),
+      mode,
+      countryCode,
+      currency,
+    ),
     config,
   )
   return { breakdown, columns: quoteColumns(breakdown), classification, basket: serializeBasket(basket), config }

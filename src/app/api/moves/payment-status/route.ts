@@ -1,4 +1,5 @@
 import { getTranslations } from '@/lib/i18n-server'
+import { normalizeCurrency } from '@/lib/currency'
 import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { getMoveAccess } from '@/lib/move-access'
@@ -54,7 +55,7 @@ export async function GET(request: NextRequest) {
         id: payment.$id,
         moveId: payment.moveId,
         amount: payment.amount,
-        currency: payment.currency || 'EUR',
+        currency: normalizeCurrency(payment.currency),
         status: payment.status,
         paymentMethod: payment.paymentMethod || 'cash',
         clientConfirmedAt: payment.clientConfirmedAt || null,

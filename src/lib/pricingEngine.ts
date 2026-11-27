@@ -27,6 +27,7 @@
 import type { InventoryItemDef } from './classifyMove'
 import type { MoveType } from './types'
 import { computeMoveVolume, type CustomItemSize } from './moveVolume'
+import { isCurrencyCode, normalizeCurrency, type CurrencyCode } from './currency'
 import { rate, rateOrNull, type PricingConfig, type PricingKey } from './pricing'
 
 // ── Vocabulary ─────────────────────────────────────────────────────────────
@@ -118,7 +119,12 @@ export interface QuoteInput {
    * the matching config (`toPricingConfig(rows, countryCode)`); the engine only
    * records it on the breakdown so a stored quote names its market.
    */
-  countryCode?: string | null
+  countryCode?: string | null  /**
+   * The market's currency (plan currency/0). The caller resolves it with the
+   * config; the engine does no conversion and only records it on the quote.
+   * Absent or unknown reads as euro.
+   */
+  currency?: string | null
 }
 
 export interface QuoteLine {
@@ -165,7 +171,8 @@ export interface QuoteLines {
 
 export interface QuoteBreakdown {
   version: 'v3'
-  currency: 'EUR'
+  /** The currency every amount of this quote is in: the market's (plan currency/0). */
+  currency: CurrencyCode
   /** Pickup country the quote was priced for (ISO2); absent on quotes from before the country wave. */
   countryCode?: string | null
   tier: ServiceTier
@@ -670,7 +677,7 @@ export function quoteMove(input: QuoteInput, config?: PricingConfig | null): Quo
 
   return {
     version: 'v3',
-    currency: 'EUR',
+    currency: normalizeCurrency(input.currency),
     ...(countryCode ? { countryCode } : {}),
     tier,
     mode,
@@ -772,7 +779,7 @@ export function parseBreakdown(raw: unknown): QuoteBreakdown | null {
   }
   if (!value || typeof value !== 'object' || Array.isArray(value)) return null
   const b = value as Partial<QuoteBreakdown>
-  if (b.version !== 'v3' || b.currency !== 'EUR') return null
+  if (b.version !== 'v3' || !isCurrencyCode(b.currency)) return null
   if (!isServiceTier(b.tier) || (b.mode !== 'instant' && b.mode !== 'scheduled')) return null
   if (!b.lines || typeof b.lines !== 'object' || !b.profile || typeof b.profile !== 'object') return null
   if (typeof b.total !== 'number' || !Number.isFinite(b.total)) return null

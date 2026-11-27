@@ -93,7 +93,8 @@ export function crewAssumption(t: TFunction, totalCrew: number): string {
  */
 export function breakdownRows(t: TFunction, b: QuoteBreakdown): BreakdownRow[] {
   const { lines, profile } = b
-  const money = (n: number) => formatMoney(n)
+  // Every amount of a quote is in the quote's own currency (plan currency/0).
+  const money = (n: number) => formatMoney(n, { currency: b.currency })
   const rows: BreakdownRow[] = [
     {
       key: 'base',
@@ -248,7 +249,7 @@ export function breakdownHeader(t: TFunction, b: QuoteBreakdown): string {
     : t('booking:pricing.header.scheduled.label', { defaultValue: '{{tier}} · Scheduled move', tier })
 }
 
-const Row = ({ row }: { row: BreakdownRow }) => {
+const Row = ({ row, currency }: { row: BreakdownRow; currency: string }) => {
   const emphasis =
     row.emphasis === 'total'
       ? 'text-base font-semibold text-neutral-900 dark:text-white'
@@ -262,7 +263,7 @@ const Row = ({ row }: { row: BreakdownRow }) => {
       }`}
     >
       <span className="min-w-0 flex-1">{row.label}</span>
-      <span className="shrink-0 tabular-nums">{formatMoney(row.amount)}</span>
+      <span className="shrink-0 tabular-nums">{formatMoney(row.amount, { currency })}</span>
     </div>
   )
 }
@@ -312,7 +313,7 @@ export default function PriceBreakdown({
           )}
         </div>
         <div className="flex-shrink-0 text-right">
-          <p className="text-xl font-bold whitespace-nowrap text-primary-600">{formatMoney(b.total)}</p>
+          <p className="text-xl font-bold whitespace-nowrap text-primary-600">{formatMoney(b.total, { currency: b.currency })}</p>
           <p className="max-w-[9rem] text-[11px] text-neutral-500 sm:max-w-none dark:text-neutral-400">
             {t('booking:pricing.vat.label', { defaultValue: 'VAT ({{rate}})', rate: formatPercent(b.vatRate) })}{' '}
             {t('web:pricing.breakdown.included.label')}
@@ -335,7 +336,7 @@ export default function PriceBreakdown({
         <div className="space-y-1.5">
           {visible.map((row) => (
             <Fragment key={row.key}>
-              <Row row={row} />
+              <Row row={row} currency={b.currency} />
               {row.key === 'items' && itemLines.length > 0 && (
                 <ul className="mb-1 space-y-0.5 pl-3 text-xs text-neutral-500 dark:text-neutral-400">
                   {itemLines.map((line) => (
@@ -345,7 +346,7 @@ export default function PriceBreakdown({
                           ? t('web:pricing.breakdown.customItems.label', { count: line.qty ?? 0 })
                           : `${formatInventoryLabel(line.key, itemNames)} × ${line.qty}`}
                       </span>
-                      <span className="shrink-0 tabular-nums">{formatMoney(line.amountEur)}</span>
+                      <span className="shrink-0 tabular-nums">{formatMoney(line.amountEur, { currency: b.currency })}</span>
                     </li>
                   ))}
                 </ul>
@@ -355,7 +356,7 @@ export default function PriceBreakdown({
                   {serviceLines.map((line) => (
                     <li key={line.key} className="flex justify-between gap-4">
                       <span className="min-w-0 flex-1 truncate">{additionalServiceLabel(t, line.key)}</span>
-                      <span className="shrink-0 tabular-nums">{formatMoney(line.amountEur)}</span>
+                      <span className="shrink-0 tabular-nums">{formatMoney(line.amountEur, { currency: b.currency })}</span>
                     </li>
                   ))}
                 </ul>
@@ -366,14 +367,14 @@ export default function PriceBreakdown({
             <p className="text-xs text-neutral-500 dark:text-neutral-400">
               {t('booking:pricing.minimumApplied.helper', {
                 defaultValue: 'Minimum charge of {{amount}} applied',
-                amount: formatMoney(b.rates['pricing.minimumCharge'] ?? b.net),
+                amount: formatMoney(b.rates['pricing.minimumCharge'] ?? b.net, { currency: b.currency }),
               })}
             </p>
           )}
         </div>
       )}
 
-      {!open && <Row row={headline} />}
+      {!open && <Row row={headline} currency={b.currency} />}
 
       {showAssumptions && (
         <footer className="mt-3 border-t border-neutral-100 pt-3 text-xs text-neutral-500 dark:border-neutral-700 dark:text-neutral-400">

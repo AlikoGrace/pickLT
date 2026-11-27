@@ -22,6 +22,7 @@ import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { getMapboxDirections } from '@/utils/mapbox-directions'
 import { formatMoney } from '@/lib/format'
+import { moveCurrency } from '@/lib/currency'
 import { platformFeeCents } from '@/lib/feeLedger'
 import type { QuoteBreakdown } from '@/lib/pricingEngine'
 import { useTranslation } from 'react-i18next'
@@ -474,6 +475,8 @@ export default function ActiveMovePage() {
 
   // Cash in hand: the platform fee on this move goes onto the driver's balance
   // (plan fees/0.master.md D1) — the same figure `postmoverledger` posts.
+  // The move's money is in the move's own currency (plan currency/0).
+  const currency = moveCurrency(move)
   const cashFeeCents =
     move && move.paymentMethod !== 'card'
       ? platformFeeCents({
@@ -769,7 +772,7 @@ export default function ActiveMovePage() {
                 </p>
                 {paymentAmount && (
                   <p className="text-2xl font-bold text-primary-600">
-                     {formatMoney(paymentAmount, { compact: true })}
+                     {formatMoney(paymentAmount, { compact: true, currency })}
                   </p>
                 )}
                 <p className="text-xs text-neutral-500 dark:text-neutral-400">
@@ -777,7 +780,7 @@ export default function ActiveMovePage() {
                 </p>
                 {cashFeeCents > 0 && (
                   <p className="text-xs font-medium text-neutral-700 dark:text-neutral-200">
-                    {t('web:mover.fees.cashMove.label', { amount: formatMoney(cashFeeCents / 100) })}
+                    {t('web:mover.fees.cashMove.label', { amount: formatMoney(cashFeeCents / 100, { currency }) })}
                   </p>
                 )}
               </div>

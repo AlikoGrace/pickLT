@@ -300,7 +300,9 @@
       "initFailed": "Nie udało się rozpocząć płatności. Spróbuj ponownie."
     },
     "confirmFailed": "Nie udało się potwierdzić płatności",
-    "notAwaiting": "Ta przeprowadzka nie oczekuje na płatność. Odśwież przeprowadzkę i spróbuj ponownie."
+    "notAwaiting": "Ta przeprowadzka nie oczekuje na płatność. Odśwież przeprowadzkę i spróbuj ponownie.",
+    "currencyNotSupported": "Płatności kartą nie są jeszcze dostępne na tym rynku. Zapłać gotówką.",
+    "belowMinimum": "Ta kwota jest zbyt mała, aby zapłacić kartą."
   },
   "pricing": {
     "exceedsLargestVehicle": "Ten ładunek jest za duży dla jednego pojazdu. Skontaktuj się z pomocą techniczną.",

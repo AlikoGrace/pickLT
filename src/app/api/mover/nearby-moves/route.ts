@@ -1,4 +1,5 @@
 import { getTranslations } from '@/lib/i18n-server'
+import { moveCurrency } from '@/lib/currency'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { requireVerifiedMover, isErrorResponse, feeRestrictedResponse, vettingRefusalResponse } from '@/lib/mover-auth'
 import { feeRestricted, residenceBlock } from '@/lib/mover-gates'
@@ -171,6 +172,8 @@ export async function GET(req: NextRequest) {
         estimatedPrice: doc.estimatedPrice,
         finalPrice: doc.finalPrice ?? null,
         priceBreakdown: doc.priceBreakdown ?? null,
+        // The move's own currency (plan currency/0); euro for an older row.
+        currency: moveCurrency(doc as { currency?: unknown }),
         // What the driver earns: net after the platform fee (plan 7). The
         // customer's gross stays in `estimatedPrice`.
         payout: moverPayoutEur(

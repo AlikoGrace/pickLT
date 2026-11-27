@@ -1191,6 +1191,9 @@
         },
         "success": "Betaling ontvangen. Uw saldo is bijgewerkt.",
         "unavailable": "Betalen met kaart is nu niet beschikbaar. Neem contact op met support om op een andere manier te betalen.",
+        "cardUnavailable": {
+          "helper": "Betalen met kaart is niet beschikbaar in uw valuta. Platformkosten worden per bankoverschrijving voldaan en een beheerder boekt de betaling op uw saldo."
+        },
         "secure": {
           "helper": "Kaartbetalingen worden veilig verwerkt door Stripe."
         }
@@ -1942,6 +1945,11 @@
     },
     "failed": {
       "error": "We konden je antwoord niet opslaan. Probeer het opnieuw."
+    }
+  },
+  "payment": {
+    "cardUnavailable": {
+      "helper": "Betalen met kaart is nog niet beschikbaar voor verhuizingen in dit land. Je betaalt de verhuizer contant."
     }
   }
 }

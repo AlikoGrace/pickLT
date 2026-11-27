@@ -60,6 +60,35 @@ import { getActiveLocale as getLocale } from './i18n-runtime'
  */
 export const PLATFORM_CURRENCY = 'EUR'
 
+/**
+ * The currency money is shown in when a caller names none: the currency of
+ * the signed-in user's own market (plan currency/0). The app sets it once the
+ * user and the market list are known. A screen that shows the money of one
+ * particular move passes that move's currency instead (`options.currency`),
+ * which matters only for a move outside the user's own market.
+ */
+let displayCurrency: string = PLATFORM_CURRENCY
+
+const KNOWN_CURRENCIES = ['EUR', 'GBP', 'PLN', 'CHF', 'USD', 'GHS']
+
+function knownCurrency(code: unknown): string | null {
+  const up = typeof code === 'string' ? code.trim().toUpperCase() : ''
+  return KNOWN_CURRENCIES.includes(up) ? up : null
+}
+
+/** Set the default display currency; an unknown code resets it to the platform currency. */
+export function setDisplayCurrency(code: unknown): void {
+  displayCurrency = knownCurrency(code) ?? PLATFORM_CURRENCY
+}
+
+export function getDisplayCurrency(): string {
+  return displayCurrency
+}
+
+function currencyFor(options: { currency?: string | null }): string {
+  return knownCurrency(options.currency) ?? displayCurrency
+}
+
 /** Anything a formatter can be handed. `null`/`undefined`/NaN render as a dash. */
 export type Amount = number | null | undefined
 
@@ -98,6 +127,11 @@ function dateFormatter(locale: string, options: Intl.DateTimeFormatOptions): Int
 // ── Money ────────────────────────────────────────────────────────────────────
 
 export interface MoneyOptions {
+  /**
+   * The currency of this amount (a move's `currency`, a ledger row's). Omit
+   * for the signed-in user's own market. Unknown codes fall back to it.
+   */
+  currency?: string | null
   /** Override the active locale. Omit in app code; used by tests and by the
    *  server-message layer, which formats for the *recipient's* locale. */
   locale?: string
@@ -121,7 +155,7 @@ export function formatMoney(amount: Amount, options: MoneyOptions = {}): string 
   const whole = options.compact && Number.isInteger(amount)
   return numberFormatter(locale, {
     style: 'currency',
-    currency: PLATFORM_CURRENCY,
+    currency: currencyFor(options),
     minimumFractionDigits: whole ? 0 : 2,
     maximumFractionDigits: whole ? 0 : 2,
   }).format(amount)
@@ -136,7 +170,7 @@ export function formatMoneyRounded(amount: Amount, options: MoneyOptions = {}): 
   const locale = options.locale ?? getLocale()
   return numberFormatter(locale, {
     style: 'currency',
-    currency: PLATFORM_CURRENCY,
+    currency: currencyFor(options),
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(amount)

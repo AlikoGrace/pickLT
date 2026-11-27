@@ -1,4 +1,5 @@
 import { getTranslations } from '@/lib/i18n-server'
+import { moveCurrency } from '@/lib/currency'
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
@@ -141,6 +142,8 @@ export async function GET() {
       scheduledDate: doc.moveDate || null,
       status: doc.status,
       estimatedPrice: doc.estimatedPrice || 0,
+      // The move's own currency (plan currency/0); euro for an older row.
+      currency: moveCurrency(doc as { currency?: unknown }),
       // What the driver earns on this move: net after the platform fee.
       payout: moverPayoutEur(
         {

@@ -17,6 +17,8 @@ export interface MoveMarker {
   lat: number
   lng: number
   price: number
+  /** The move's own currency (plan currency/0). Omit for the user's own. */
+  currency?: string | null
   isSelected?: boolean
 }
 
@@ -51,7 +53,7 @@ export const MoverMapboxMap = ({
   const [mapLoaded, setMapLoaded] = useState(false)
 
   // Create price marker element
-  const createPriceMarker = useCallback((price: number, isSelected: boolean, isHovered: boolean) => {
+  const createPriceMarker = useCallback((price: number, currency: string | null | undefined, isSelected: boolean, isHovered: boolean) => {
     const el = document.createElement('div')
     el.className = 'cursor-pointer transition-transform'
     
@@ -72,7 +74,7 @@ export const MoverMapboxMap = ({
     
     el.innerHTML = `
       <div class="${bgColor} ${textColor} ${scale} ${zIndex} px-3 py-1.5 rounded-full shadow-lg font-semibold text-sm whitespace-nowrap border border-neutral-200 dark:border-neutral-700 transition-all">
-        ${formatMoney(price, { compact: true })}
+        ${formatMoney(price, { compact: true, currency })}
       </div>
     `
     
@@ -156,7 +158,7 @@ export const MoverMapboxMap = ({
       }
 
       // Create new marker
-      const el = createPriceMarker(markerData.price, isSelected, false)
+      const el = createPriceMarker(markerData.price, markerData.currency, isSelected, false)
       
       // Add event listeners
       el.addEventListener('click', () => {

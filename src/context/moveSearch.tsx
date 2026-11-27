@@ -94,6 +94,8 @@ export type StoredMove = {
   createdAt: string
   paidAt: string
   totalPrice: number
+  /** The currency `totalPrice` is in: the move's own (plan currency/0). */
+  currency?: string | null
   bookingCode: string
   moveCategory?: 'instant' | 'scheduled'
   // Core move details

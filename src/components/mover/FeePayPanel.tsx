@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { formatMoney } from '@/lib/format'
+import { t as translate } from '@/lib/i18n-runtime'
 import ButtonPrimary from '@/shared/ButtonPrimary'
 
 /**
@@ -68,8 +69,21 @@ export async function confirmFeePayment(paymentIntentId: string): Promise<{ stan
     body: JSON.stringify({ mode: 'confirm', paymentIntentId }),
   })
   const data = await res.json().catch(() => ({}))
-  if (!res.ok) throw new Error(data.error || 'confirm failed')
+  if (!res.ok) throw new Error(cardRefusalMessage(data.fnCode) ?? data.error ?? 'confirm failed')
   return data
+}
+
+/**
+ * The two refusals of a card payment in a market's currency (plan currency/0),
+ * in the reader's language; `null` for any other code. A fee in a currency
+ * without card payments is settled by transfer and recorded by an
+ * administrator, so the shared sentence ("pay in cash", written for a client
+ * paying a move) is not shown here.
+ */
+export function cardRefusalMessage(fnCode: unknown): string | null {
+  if (fnCode === 'payment.currencyNotSupported') return translate('web:mover.fees.pay.cardUnavailable.helper')
+  if (fnCode === 'payment.belowMinimum') return translate('errors:payment.belowMinimum')
+  return null
 }
 
 interface Props {
@@ -82,6 +96,8 @@ export default function FeePayPanel({ onPaid, onCancel }: Props) {
   const mountRef = useRef<HTMLDivElement>(null)
   const stripeRef = useRef<{ stripe: StripeJs; elements: StripeElements } | null>(null)
   const [amountCents, setAmountCents] = useState<number | null>(null)
+  // The fee is paid in the currency of the driver's ledger (plan currency/0).
+  const [currency, setCurrency] = useState<string | null>(null)
   const [ready, setReady] = useState(false)
   const [paying, setPaying] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -98,7 +114,7 @@ export default function FeePayPanel({ onPaid, onCancel }: Props) {
         })
         const data = await res.json().catch(() => ({}))
         if (!res.ok || !data.clientSecret || !data.publishableKey) {
-          throw new Error(data.error || t('web:mover.fees.pay.unavailable'))
+          throw new Error(cardRefusalMessage(data.fnCode) ?? data.error ?? t('web:mover.fees.pay.unavailable'))
         }
         await loadStripeJs()
         if (cancelled || !window.Stripe || !mountRef.current) return
@@ -112,6 +128,7 @@ export default function FeePayPanel({ onPaid, onCancel }: Props) {
         element.mount(mountRef.current)
         stripeRef.current = { stripe, elements }
         setAmountCents(data.amountCents)
+        setCurrency(typeof data.currency === 'string' ? data.currency : null)
         setReady(true)
       } catch (err) {
         if (!cancelled) setError(err instanceof Error ? err.message : t('web:mover.fees.pay.unavailable'))
@@ -161,7 +178,7 @@ export default function FeePayPanel({ onPaid, onCancel }: Props) {
           {paying
             ? t('web:mover.fees.pay.paying.cta')
             : amountCents != null
-              ? t('web:mover.fees.pay.amount.cta', { amount: formatMoney(amountCents / 100) })
+              ? t('web:mover.fees.pay.amount.cta', { amount: formatMoney(amountCents / 100, { currency }) })
               : t('web:mover.fees.pay.cta')}
         </ButtonPrimary>
         <button

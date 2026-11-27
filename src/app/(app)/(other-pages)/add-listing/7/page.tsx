@@ -2,6 +2,8 @@
 
 import { useAuth } from '@/context/auth'
 import { useMoveSearch } from '@/context/moveSearch'
+import { useQuoteCurrency } from '@/components/DisplayCurrency'
+import { cardPaymentsAvailable } from '@/lib/currency'
 import { Checkbox, CheckboxField, CheckboxGroup } from '@/shared/Checkbox'
 import { Divider } from '@/shared/divider'
 import { Fieldset, Label } from '@/shared/fieldset'
@@ -31,7 +33,14 @@ const Page = () => {
     updateContactInfo,
     paymentMethod,
     setPaymentMethod,
+    pickupCountryCode,
   } = useMoveSearch()
+  // A currency without card payments (plan currency/0): the card option stays
+  // visible, disabled, with the reason, and cannot stay chosen.
+  const cardAvailable = cardPaymentsAvailable(useQuoteCurrency(pickupCountryCode))
+  useEffect(() => {
+    if (!cardAvailable && paymentMethod === 'card') setPaymentMethod('cash')
+  }, [cardAvailable, paymentMethod, setPaymentMethod])
 
   // Auto-populate contact info from auth context on mount
   useEffect(() => {
@@ -144,10 +153,12 @@ const Page = () => {
         >
           <div className="flex flex-col gap-3">
             {/* i18n-keys: booking.payment.cash.label, booking.payment.bankTransfer.label, booking.payment.card.label */}
-            {PAYMENT_METHODS.map((option) => (
+            {PAYMENT_METHODS.map((option) => {
+              const unavailable = option.value === 'card' && !cardAvailable
+              return (
               <label
                 key={option.value}
-                className={`flex items-center gap-3 cursor-pointer rounded-xl border p-4 transition-colors ${
+                className={`flex items-center gap-3 rounded-xl border p-4 transition-colors ${unavailable ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'} ${
                   paymentMethod === option.value
                     ? 'border-primary-600 bg-primary-50 dark:bg-primary-900/20'
                     : 'border-neutral-200 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600'
@@ -159,11 +170,16 @@ const Page = () => {
                   value={option.value}
                   checked={paymentMethod === option.value}
                   onChange={() => setPaymentMethod(option.value)}
+                  disabled={unavailable}
                   className="accent-primary-600"
                 />
                 <span className="text-sm font-medium">{t(`booking:payment.${option.key}.label`)}</span>
               </label>
-            ))}
+              )
+            })}
+            {!cardAvailable && (
+              <p className="text-xs text-neutral-500 dark:text-neutral-400">{t('web:payment.cardUnavailable.helper')}</p>
+            )}
           </div>
         </FormItem>
 

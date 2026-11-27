@@ -24,12 +24,16 @@ interface EarningEntry {
   date: string
   description: string
   amount: number
+  /** The move's own currency (plan currency/0). */
+  currency?: string | null
   type: 'earning' | 'tip' | 'bonus'
   moveType?: string
 }
 
 interface EarningsData {
   total: number
+  /** The currency of the totals: the mover's market (plan currency/0). */
+  currency?: string | null
   moves: number
   entries: EarningEntry[]
   period: string
@@ -65,6 +69,7 @@ const EarningsPage = () => {
       const result = await res.json()
       setData({
         total: result.total || 0,
+        currency: typeof result.currency === 'string' ? result.currency : null,
         moves: result.moves || 0,
         entries: (result.entries || []).map((e: Record<string, unknown>) => ({
           id: e.id as string,
@@ -73,6 +78,7 @@ const EarningsPage = () => {
           }),
           description: e.description as string,
           amount: e.amount as number,
+          currency: typeof e.currency === 'string' ? e.currency : null,
           type: 'earning' as const,
           moveType: e.moveType as string | undefined,
         })),
@@ -123,6 +129,8 @@ const EarningsPage = () => {
   }
 
   const total = data?.total || 0
+  // A mover's earnings are in the currency of their market (plan currency/0).
+  const currency = data?.currency
   // Every figure on this page is net of the platform fee (plan 7).
   const payoutHelper = t('booking:pricing.payout.helper', {
     rate: formatPercent(payoutRatesFrom(null).feeRate),
@@ -184,7 +192,7 @@ const EarningsPage = () => {
             <BanknotesIcon className="w-5 h-5" />
             <span className="text-sm opacity-90">{t('web:mover.earnings.total.label')}</span>
           </div>
-          <p className="text-2xl sm:text-3xl font-bold break-words mb-1">{formatMoney(total, { compact: true })}</p>
+          <p className="text-2xl sm:text-3xl font-bold break-words mb-1">{formatMoney(total, { compact: true, currency })}</p>
           <div className="flex items-center gap-1 text-sm">
             <ArrowTrendingUpIcon className="w-4 h-4" />
             <span>{periodCaption(period)}</span>
@@ -213,7 +221,7 @@ const EarningsPage = () => {
               {t('web:mover.earnings.average.label')}
             </p>
             <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
-              {formatMoney(averagePerMove, { compact: true })}
+              {formatMoney(averagePerMove, { compact: true, currency })}
             </p>
           </div>
           <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
@@ -282,7 +290,7 @@ const EarningsPage = () => {
                       : 'text-green-600 dark:text-green-400'
                   }`}
                 >
-                  +{formatMoney(entry.amount, { compact: true })}
+                  +{formatMoney(entry.amount, { compact: true, currency: entry.currency ?? currency })}
                 </p>
               </div>
             </div>
@@ -299,7 +307,7 @@ const EarningsPage = () => {
               {t('web:mover.earnings.payoutAvailable.label')}
             </p>
             <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
-              {formatMoney(Number(total))}
+              {formatMoney(Number(total), { currency })}
             </p>
           </div>
           <button className="px-4 py-2 max-sm:min-h-10 bg-primary-600 text-white rounded-full text-sm font-medium hover:bg-primary-700 transition-colors">

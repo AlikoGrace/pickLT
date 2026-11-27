@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next'
 
 import FeePayPanel, { confirmFeePayment } from '@/components/mover/FeePayPanel'
 import { useAuth } from '@/context/auth'
+import { cardPaymentsAvailable } from '@/lib/currency'
 import { formatDate, formatMoney } from '@/lib/format'
 
 /**
@@ -22,6 +23,8 @@ interface LedgerRow {
   id: string
   kind: string
   amountCents: number
+  /** The row's own currency (plan currency/0). */
+  currency?: string | null
   moveHandle: string | null
   dueAt: string | null
   createdAt: string
@@ -32,6 +35,8 @@ interface FeesResponse {
   feeOwedCents: number
   feeOldestDueAt: string | null
   feeStanding: Standing
+  /** The currency the balance is kept in: the ledger's, else the mover's market (plan currency/0). */
+  currency?: string | null
   payAvailable: boolean
   entries: LedgerRow[]
   nextCursor: string | null
@@ -120,6 +125,9 @@ export default function FeeBalanceCard() {
   const standing: Standing = owed ? data.feeStanding : 'ok'
   const dueDate = data.feeOldestDueAt ? formatDate(data.feeOldestDueAt) : null
   const amount = owed ? data.feeOwedCents : Math.max(0, data.feeBalanceCents)
+  const currency = data.currency
+  // A currency without card payments (plan currency/0): Pay now stays visible, disabled, with the reason.
+  const cardAvailable = cardPaymentsAvailable(currency)
 
   const tone = standing === 'restricted' ? 'red' : standing === 'overdue' ? 'amber' : owed ? 'blue' : 'green'
   const Icon = standing === 'restricted' ? NoSymbolIcon : standing === 'overdue' ? ExclamationTriangleIcon : owed ? BanknotesIcon : CheckCircleIcon
@@ -166,7 +174,7 @@ export default function FeeBalanceCard() {
           {t('web:mover.fees.balance.title')}
         </div>
         <p className="mt-3 text-sm text-neutral-600 dark:text-neutral-300">{headline}</p>
-        <p className="text-3xl font-bold break-words text-neutral-900 dark:text-neutral-100">{formatMoney(amount / 100)}</p>
+        <p className="text-3xl font-bold break-words text-neutral-900 dark:text-neutral-100">{formatMoney(amount / 100, { currency })}</p>
         <p
           className={clsx(
             'mt-1 text-sm',
@@ -182,7 +190,18 @@ export default function FeeBalanceCard() {
         {error && <p className="mt-2 text-sm text-red-600 dark:text-red-400">{error}</p>}
         {owed && !paying && (
           <div className="mt-4">
-            {data.payAvailable ? (
+            {!cardAvailable ? (
+              <>
+                <button
+                  type="button"
+                  disabled
+                  className="cursor-not-allowed rounded-full bg-primary-600 px-5 py-2 text-sm font-medium text-white opacity-50 max-sm:min-h-10"
+                >
+                  {t('web:mover.fees.pay.cta')}
+                </button>
+                <p className="mt-2 text-xs text-neutral-500 dark:text-neutral-400">{t('web:mover.fees.pay.cardUnavailable.helper')}</p>
+              </>
+            ) : data.payAvailable ? (
               <button
                 type="button"
                 onClick={() => {
@@ -234,7 +253,7 @@ export default function FeeBalanceCard() {
                   )}
                 >
                   {positive ? '+' : '−'}
-                  {formatMoney(Math.abs(row.amountCents) / 100)}
+                  {formatMoney(Math.abs(row.amountCents) / 100, { currency: row.currency ?? currency })}
                 </p>
               </li>
             )

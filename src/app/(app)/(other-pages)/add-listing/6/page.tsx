@@ -1,6 +1,7 @@
 'use client'
 
 import ExtraHelpersStepper from '@/components/booking/ExtraHelpersStepper'
+import { useQuoteCurrency } from '@/components/DisplayCurrency'
 import { usePricingConfig } from '@/hooks/usePricingConfig'
 import { useMoveSearch } from '@/context/moveSearch'
 import { compressImage } from '@/utils/compressImage'
@@ -35,6 +36,8 @@ const Page = () => {
   } = useMoveSearch()
   // Live config: the extra-helper cap and the tier's hourly rate (crew master D2).
   const pricingConfig = usePricingConfig(pickupCountryCode)
+  // The helper rate is in the pickup market's currency (plan currency/0).
+  const currency = useQuoteCurrency(pickupCountryCode)
 
   // Prefetch the next step to improve performance
   useEffect(() => {
@@ -225,6 +228,7 @@ const Page = () => {
           onChange={setExtraHelpers}
           tier={moveType || 'regular'}
           config={pricingConfig}
+          currency={currency}
         />
 
         {/* Hidden fields for form data */}

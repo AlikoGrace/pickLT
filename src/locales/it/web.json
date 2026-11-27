@@ -1191,6 +1191,9 @@
         },
         "success": "Pagamento ricevuto. Il Suo saldo è stato aggiornato.",
         "unavailable": "Il pagamento con carta non è disponibile al momento. Contatti l’assistenza per pagare in altro modo.",
+        "cardUnavailable": {
+          "helper": "Il pagamento con carta non è disponibile nella Sua valuta. Le commissioni della piattaforma si saldano con bonifico bancario e un amministratore registra il pagamento sul Suo saldo."
+        },
         "secure": {
           "helper": "I pagamenti con carta sono elaborati in modo sicuro da Stripe."
         }
@@ -1942,6 +1945,11 @@
     },
     "failed": {
       "error": "Non è stato possibile salvare la tua risposta. Riprova."
+    }
+  },
+  "payment": {
+    "cardUnavailable": {
+      "helper": "Il pagamento con carta non è ancora disponibile per i traslochi in questo Paese. Si paga il traslocatore in contanti."
     }
   }
 }

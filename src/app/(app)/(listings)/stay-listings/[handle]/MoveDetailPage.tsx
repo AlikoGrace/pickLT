@@ -364,7 +364,7 @@ const MoveDetailPage: FC<MoveDetailPageProps> = ({ handle }) => {
         {/* PRICE */}
         <div className="flex flex-col gap-y-2">
           <span className="text-sm text-neutral-500">{t('common:label.total')}</span>
-          <span className="text-3xl font-semibold text-primary-600">{formatMoney(totalPrice)}</span>
+          <span className="text-3xl font-semibold text-primary-600">{formatMoney(totalPrice, { currency: move.currency })}</span>
         </div>
 
         <Divider />

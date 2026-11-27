@@ -9,6 +9,7 @@ import {
   serializeBasket,
 } from './basket.js';
 import { resolveMoveCountry, scopeLockViolation, warnIfNoMapboxToken } from './move-country.js';
+import { cardPaymentsAvailable, catalogForMarket, loadMarketCurrency } from './market-currency.js';
 import {
   GLOBAL_PRICING_SCOPE,
   PricingReconcileError,
@@ -276,9 +277,24 @@ export default async ({ req, res, log, error }) => {
     Object.assign(data, classified);
     const systemMoveType = classified.systemMoveType;
 
+    // The market's currency and item prices (plan currency/0): the move is
+    // priced, stored and later charged in the currency of its pickup country.
+    data.currency = await loadMarketCurrency({
+      databases, Query, databaseId: DATABASE_ID, collectionId: PLATFORM_CONFIG_COLLECTION, countryCode: country.countryCode, error,
+    });
+    const marketCatalog = catalogForMarket(catalog, country.countryCode, overrides);
+    // A currency with no card payments is cash only. Both clients already
+    // offer cash alone there; this makes a card move in such a market
+    // impossible to store, because nothing downstream could ever collect it
+    // (chargemove refuses it and the client cannot change the method later).
+    if (data.paymentMethod === 'card' && !cardPaymentsAvailable(data.currency)) {
+      log(`createmove: card is not available in ${data.currency}; move stored as cash`);
+      data.paymentMethod = 'cash';
+    }
+
     let breakdown;
     try {
-      breakdown = quoteMove(quoteInputFromRow(data, catalog, null), overrides);
+      breakdown = quoteMove(quoteInputFromRow(data, marketCatalog, null), overrides);
     } catch (e) {
       if (e instanceof PricingReconcileError) {
         error(`createmove: quote did not reconcile: ${e.message}`);
@@ -324,7 +340,7 @@ export default async ({ req, res, log, error }) => {
     );
 
     log(
-      `Move created: ${move.$id} (${handle}) for client ${clientId} — €${breakdown.total} ` +
+      `Move created: ${move.$id} (${handle}) for client ${clientId} — ${breakdown.total} ${breakdown.currency} ` +
         `(${breakdown.tier}/${breakdown.mode}, ${country.countryCode} via ${country.source})`,
     );
 

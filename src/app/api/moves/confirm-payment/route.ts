@@ -1,4 +1,5 @@
 import { getTranslations } from '@/lib/i18n-server'
+import { moveCurrency } from '@/lib/currency'
 import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
@@ -83,7 +84,8 @@ export async function POST(request: NextRequest) {
         {
           moveId: moveId,
           amount: finalPrice,
-          currency: 'EUR',
+          // The currency the move was priced in (plan currency/0).
+          currency: moveCurrency(move as { currency?: unknown }),
           status: 'pending',
           // Record how the move actually settles — card moves were being logged as cash (T7 parity fix).
             paymentMethod: (move.paymentMethod as string) || 'cash',

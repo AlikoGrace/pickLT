@@ -17,6 +17,7 @@ import { Badge } from '@/shared/Badge'
 import Image from 'next/image'
 import Link from 'next/link'
 import { formatDayMonth, formatDistanceKm, formatDistanceM, formatDurationHm, formatMoneyRounded, formatSeconds } from '@/lib/format'
+import { moveCurrency } from '@/lib/currency'
 import { AVAILABLE_MOVES_POLL_SECONDS, NEARBY_MOVES_RADIUS_KM } from '@/lib/service-limits'
 import { homeTypeAndMoveTypeBadge, moveTypeLabel } from '@/lib/move-subtitle'
 import { useTranslation } from 'react-i18next'
@@ -47,6 +48,8 @@ interface NearbyMove {
   totalItemCount: number
   /** The customer's gross — not shown to the driver here. */
   estimatedPrice: number | null
+  /** The move's own currency (plan currency/0). */
+  currency?: string | null
   finalPrice?: number | null
   priceBreakdown?: string | null
   /** Server-computed driver payout (net after the platform fee). */
@@ -192,6 +195,7 @@ const AvailableMovesPage = () => {
       lat: m.pickupLatitude!,
       lng: m.pickupLongitude!,
       price: earnings(m),
+      currency: moveCurrency(m),
       isSelected: selectedMove?.id === m.id,
     }))
 
@@ -371,7 +375,7 @@ const AvailableMovesPage = () => {
                           </p>
                         </div>
                         <span className="text-xl font-bold text-neutral-900 dark:text-neutral-100 ml-3 shrink-0">
-                          {formatMoneyRounded(earnings(selectedMove))}
+                          {formatMoneyRounded(earnings(selectedMove), { currency: moveCurrency(selectedMove) })}
                         </span>
                       </div>
                       <div className="flex flex-wrap gap-1.5">
@@ -444,7 +448,7 @@ const AvailableMovesPage = () => {
                         </h3>
                       </div>
                       <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100 ml-3 shrink-0">
-                        {formatMoneyRounded(earnings(move))}
+                        {formatMoneyRounded(earnings(move), { currency: moveCurrency(move) })}
                       </p>
                     </div>
 

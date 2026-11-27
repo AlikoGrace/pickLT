@@ -100,6 +100,10 @@ export const PRICING_DEFAULTS = {
   'items.custom.extraLarge': 25,
   'items.suggest.perKg': 0.15,
   'items.suggest.perM3': 10,
+  // A market's multiplier on the base item prices, for a market whose
+  // currency or price level differs and whose items carry no own price yet
+  // (plan currency/0, `lib/currency.ts`).
+  'items.priceFactor': 1,
 
   // ── Crew requirement (MoveDNA §6.3) ──────────────────────────────────────
   'crew.m3PerMover': 15,

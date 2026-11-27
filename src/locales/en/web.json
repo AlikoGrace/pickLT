@@ -1191,6 +1191,9 @@
         },
         "success": "Payment received. Your balance is updated.",
         "unavailable": "Card payment isn’t available right now. Contact support to pay another way.",
+        "cardUnavailable": {
+          "helper": "Card payment is not available in your currency. Platform fees are settled by bank transfer, and an administrator records the payment on your balance."
+        },
         "secure": {
           "helper": "Card payments are processed securely by Stripe."
         }
@@ -1942,6 +1945,11 @@
     },
     "failed": {
       "error": "We could not save your answer. Please try again."
+    }
+  },
+  "payment": {
+    "cardUnavailable": {
+      "helper": "Card payment is not available for moves in this country yet. You pay the mover in cash."
     }
   }
 }

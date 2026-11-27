@@ -1,7 +1,9 @@
 import { getTranslations } from '@/lib/i18n-server'
+import { normalizeCurrency } from '@/lib/currency'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
-import { MOVER_LEDGER_COLLECTION, snapshotOf } from '@/lib/fee-ledger-server'
+import { ledgerCurrency, MOVER_LEDGER_COLLECTION, snapshotOf } from '@/lib/fee-ledger-server'
+import { loadMarketCurrency } from '@/lib/market-currency-server'
 import { isErrorResponse, requireMoverProfile } from '@/lib/mover-auth'
 import { stripeConfigured } from '@/lib/stripe-server'
 import { Query } from 'node-appwrite'
@@ -51,14 +53,21 @@ export async function GET(req: NextRequest) {
       console.warn('[fees] ledger read failed, returning no rows:', err)
     }
 
+    // The balance is kept in the currency of the ledger (plan currency/0); a
+    // driver with no row yet sees the currency of their market.
+    const currency = rows.some((r) => typeof r.currency === 'string' && r.currency)
+      ? ledgerCurrency([...rows].reverse())
+      : await loadMarketCurrency(databases, (moverProfile as Record<string, unknown>).countryCode)
+
     return NextResponse.json({
       ...snapshotOf(moverProfile),
+      currency,
       payAvailable: stripeConfigured(),
       entries: rows.map((r) => ({
         id: r.$id,
         kind: r.kind,
         amountCents: r.amountCents,
-        currency: r.currency ?? 'EUR',
+        currency: normalizeCurrency(r.currency),
         moveId: r.moveId ?? null,
         moveHandle: r.moveHandle ?? null,
         dueAt: r.dueAt ?? null,

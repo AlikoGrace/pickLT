@@ -15,6 +15,8 @@ interface Props {
   /** The tier being priced — sets the hourly rate and the helpers already included. */
   tier: MoveType
   config: PricingConfig | null | undefined
+  /** The currency of the market being priced (plan currency/0). Omit for the user's own. */
+  currency?: string | null
   className?: string
 }
 
@@ -23,7 +25,7 @@ interface Props {
  * each billed at the tier's hourly crew rate. Used by the instant mover
  * selection and the scheduled wizard (step 6).
  */
-const ExtraHelpersStepper: FC<Props> = ({ value, onChange, tier, config, className = '' }) => {
+const ExtraHelpersStepper: FC<Props> = ({ value, onChange, tier, config, currency, className = '' }) => {
   const { t } = useTranslation()
   const max = maxExtraHelpers(config)
   const current = clampExtraHelpers(value, max)
@@ -67,7 +69,7 @@ const ExtraHelpersStepper: FC<Props> = ({ value, onChange, tier, config, classNa
         {included > 0
           ? t('booking:extraHelpers.included', { count: included })
           : t('booking:extraHelpers.includedDriverOnly')}{' '}
-        {t('booking:extraHelpers.helper', { rate: formatMoney(helperRateEur(config, tier)) })}{' '}
+        {t('booking:extraHelpers.helper', { rate: formatMoney(helperRateEur(config, tier), { currency }) })}{' '}
         {t('booking:extraHelpers.max', { count: max })}
       </p>
     </div>

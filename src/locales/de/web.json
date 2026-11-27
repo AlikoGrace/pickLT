@@ -1191,6 +1191,9 @@
         },
         "success": "Zahlung erhalten. Ihr Saldo wurde aktualisiert.",
         "unavailable": "Kartenzahlung ist gerade nicht verfügbar. Wenden Sie sich an den Support, um anders zu bezahlen.",
+        "cardUnavailable": {
+          "helper": "Kartenzahlung ist in Ihrer Währung nicht verfügbar. Plattformgebühren werden per Überweisung beglichen, und ein Administrator verbucht die Zahlung auf Ihrem Saldo."
+        },
         "secure": {
           "helper": "Kartenzahlungen werden sicher von Stripe abgewickelt."
         }
@@ -1942,6 +1945,11 @@
     },
     "failed": {
       "error": "Ihre Antwort konnte nicht gespeichert werden. Bitte versuchen Sie es erneut."
+    }
+  },
+  "payment": {
+    "cardUnavailable": {
+      "helper": "Kartenzahlung ist für Umzüge in diesem Land noch nicht verfügbar. Sie zahlen bar an den Umzugsprofi."
     }
   }
 }

@@ -1,6 +1,7 @@
 'use client'
 
 import MoveCard from '@/components/MoveCard'
+import { moveCurrency } from '@/lib/currency'
 import { MoveStatus, StoredMove } from '@/context/moveSearch'
 import { Divider } from '@/shared/divider'
 import { ArrowLeftIcon, TruckIcon } from '@heroicons/react/24/outline'
@@ -39,6 +40,7 @@ function docToStoredMove(doc: any): StoredMove {
     createdAt: doc.$createdAt ?? '',
     paidAt: doc.paidAt ?? doc.$createdAt ?? '',
     totalPrice: doc.estimatedPrice ?? 0,
+    currency: moveCurrency(doc),
     bookingCode: doc.handle ?? '',
     moveType: doc.moveType ?? doc.systemMoveType ?? null,
     moveDate: doc.moveDate ?? null,

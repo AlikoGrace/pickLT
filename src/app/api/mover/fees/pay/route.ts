@@ -1,9 +1,12 @@
 import { getTranslations } from '@/lib/i18n-server'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
+import { belowCardMinimum, cardPaymentsAvailable } from '@/lib/currency'
 import {
   appendLedgerRow,
   centsToAmountParam,
+  ledgerCurrency,
+  listAllLedgerRows,
   recomputeFeeSnapshot,
   verifyFeeSettlementIntent,
 } from '@/lib/fee-ledger-server'
@@ -21,11 +24,16 @@ import { NextRequest, NextResponse } from 'next/server'
  * POST /api/mover/fees/pay — the driver pays what they owe the platform by
  * card (plan `fees/0.master.md` D3). Same contract as `settlefees` `pay`:
  *
- *   { mode: 'intent' }                    → { ok, clientSecret, paymentIntentId, amountCents, publishableKey }
+ *   { mode: 'intent' }                    → { ok, clientSecret, paymentIntentId, amountCents, currency, publishableKey }
  *                                           for the full owed amount (400 `fees.nothingOwed` when 0)
  *   { mode: 'confirm', paymentIntentId }  → verifies succeeded + metadata + amount, posts
  *                                           `driver_payment` (key `pi:<id>`), recomputes the
  *                                           snapshot → { ok, balanceCents, owedCents, standing }
+ *
+ * The fee is paid in the currency of the driver's ledger (plan currency/0):
+ * the intent is created in it (400 `payment.currencyNotSupported` for a
+ * cash-only currency, 400 `payment.belowMinimum` under the card minimum), and
+ * a payment in another currency is refused, never converted.
  */
 export async function POST(req: NextRequest) {
   const { t } = await getTranslations()
@@ -47,9 +55,20 @@ export async function POST(req: NextRequest) {
 
     if (mode === 'intent') {
       // The live amount, not a stale snapshot: recompute (and store) first.
-      const { result } = await recomputeFeeSnapshot(databases, moverProfile)
+      const { result, currency } = await recomputeFeeSnapshot(databases, moverProfile)
       if (result.owedCents <= 0) {
         return NextResponse.json({ error: t('errors:fees.nothingOwed'), fnCode: 'fees.nothingOwed' }, { status: 400 })
+      }
+      // The fee is paid in the currency of the driver's ledger (plan currency/0).
+      if (!cardPaymentsAvailable(currency)) {
+        return NextResponse.json(
+          // Not the shared sentence ("pay in cash"): a fee is settled by transfer and recorded by an administrator.
+          { error: t('web:mover.fees.pay.cardUnavailable.helper'), fnCode: 'payment.currencyNotSupported' },
+          { status: 400 },
+        )
+      }
+      if (belowCardMinimum(result.owedCents, currency)) {
+        return NextResponse.json({ error: t('errors:payment.belowMinimum'), fnCode: 'payment.belowMinimum' }, { status: 400 })
       }
       let customer: string | undefined
       try {
@@ -60,7 +79,7 @@ export async function POST(req: NextRequest) {
       }
       const intent = await createPaymentIntent({
         amount: result.owedCents,
-        currency: 'eur',
+        currency: currency.toLowerCase(),
         customer,
         automatic_payment_methods: { enabled: true },
         description: 'PickLte platform fees',
@@ -71,6 +90,7 @@ export async function POST(req: NextRequest) {
         clientSecret: intent.client_secret,
         paymentIntentId: intent.id,
         amountCents: result.owedCents,
+        currency,
         publishableKey: stripePublishableKey(),
       })
     }
@@ -80,17 +100,20 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'paymentIntentId is required' }, { status: 400 })
     }
     const intent = await retrievePaymentIntent(paymentIntentId)
-    const verdict = verifyFeeSettlementIntent(intent, moverProfile.$id)
+    // The payment must be in the currency of the driver's ledger (plan
+    // currency/0): one balance, one currency, nothing converted.
+    const expectedCurrency = ledgerCurrency(await listAllLedgerRows(databases, moverProfile.$id))
+    const verdict = verifyFeeSettlementIntent(intent, moverProfile.$id, expectedCurrency)
     if (!verdict.ok) {
       return NextResponse.json({ error: t('errors:fees.payFailed'), fnCode: verdict.fnCode }, { status: 400 })
     }
 
-    const { created } = await appendLedgerRow(databases, {
+    const { created, refused } = await appendLedgerRow(databases, {
       moverProfileId: moverProfile.$id,
       driverUserId: userId,
       kind: 'driver_payment',
       amountCents: verdict.amountCents,
-      currency: 'EUR',
+      currency: expectedCurrency,
       countryCode: typeof (moverProfile as Record<string, unknown>).countryCode === 'string'
         ? ((moverProfile as Record<string, unknown>).countryCode as string)
         : null,
@@ -100,6 +123,9 @@ export async function POST(req: NextRequest) {
       reference: paymentIntentId,
       idempotencyKey: `pi:${paymentIntentId}`,
     })
+    if (refused) {
+      return NextResponse.json({ error: t('errors:fees.payFailed'), fnCode: refused }, { status: 400 })
+    }
     const { before, result } = await recomputeFeeSnapshot(databases, moverProfile)
 
     // Back to ok after this payment → one `fee_paid` (contract: one per transition).
@@ -109,9 +135,9 @@ export async function POST(req: NextRequest) {
         userId,
         type: 'fee_paid',
         title: 'Platform fees paid',
-        body: `We received ${amount} EUR. Your platform balance is settled.`,
+        body: `We received ${amount} ${expectedCurrency}. Your platform balance is settled.`,
         data: { kind: 'fee_paid', paymentIntentId },
-        i18n: { key: 'fees.paid', params: { amount, currency: 'EUR', dueDate: '' } },
+        i18n: { key: 'fees.paid', params: { amount, currency: expectedCurrency, dueDate: '' } },
       })
     }
 

@@ -140,7 +140,7 @@ const PayDoneContent = () => {
                   <Trans
                     i18nKey="booking:payment.reminder.body"
                     values={{
-                      amount: formatMoney(move?.totalPrice ?? 0),
+                      amount: formatMoney(move?.totalPrice ?? 0, { currency: move?.currency }),
                       when: isInstantMove
                         ? t('booking:payment.reminder.whenInstant.label')
                         : t('booking:payment.reminder.whenScheduled.label'),
@@ -253,7 +253,7 @@ const PayDoneContent = () => {
 
             <DescriptionTerm>{t('booking:pricing.total.label')}</DescriptionTerm>
             <DescriptionDetails className="text-primary-600 font-semibold">
-              {formatMoney(move?.totalPrice ?? 0)}
+              {formatMoney(move?.totalPrice ?? 0, { currency: move?.currency })}
             </DescriptionDetails>
             
             <DescriptionTerm>{t('moves:payment.method.label')}</DescriptionTerm>

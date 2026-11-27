@@ -9,6 +9,8 @@ import { useInventoryCatalog } from '@/hooks/useInventoryCatalog'
 import { usePricingConfig } from '@/hooks/usePricingConfig'
 import { useInventoryNames } from '@/lib/inventory-labels'
 import PriceBreakdown from '@/components/PriceBreakdown'
+import { useQuoteCurrency } from '@/components/DisplayCurrency'
+import { cardPaymentsAvailable, catalogForMarket } from '@/lib/currency'
 import { crewLabel } from '@/components/mover/crewLabel'
 import ExtraHelpersStepper from '@/components/booking/ExtraHelpersStepper'
 import { basketItemCount, serializeBasket } from '@/components/inventory/basket'
@@ -164,6 +166,14 @@ const SelectMoverPage = () => {
   // Quotes wait for a ready, non-empty catalog (crew plan 1 #8).
   const { catalog, status: catalogStatus, ready: catalogReady, retry: retryCatalog } = useInventoryCatalog()
   const inventoryNames = useInventoryNames()
+  // The market's currency and item prices (plan currency/0): every quote on
+  // this page is in the currency of the pickup country, as the server prices it.
+  const currency = useQuoteCurrency(pickupCountryCode)
+  const marketCatalog = useMemo(
+    () => catalogForMarket(catalog, pickupCountryCode, pricingConfig),
+    [catalog, pickupCountryCode, pricingConfig],
+  )
+  const cardAvailable = cardPaymentsAvailable(currency)
 
   // Catalog + custom quantities (not the number of custom rows).
   const inventoryCount = basketItemCount(inventory, customItems)
@@ -274,10 +284,11 @@ const SelectMoverPage = () => {
       distanceKm: kmFromMeters(routeDistance),
       durationSeconds: routeDuration ?? 0,
       basket: basketFromWire(inventory, customItems),
-      catalog,
+      catalog: marketCatalog,
       countryCode: pickupCountryCode,
+      currency,
     }
-  }, [routeDistance, routeDuration, catalogReady, catalog, pricedTier, extraHelpers, inventory, customItems, pickupCountryCode])
+  }, [routeDistance, routeDuration, catalogReady, marketCatalog, currency, pricedTier, extraHelpers, inventory, customItems, pickupCountryCode])
 
   // Price every mover with the shared v3 engine and gate out anyone the job
   // exceeds: a vehicle that cannot hold the load, or a crew smaller than the
@@ -365,6 +376,10 @@ const SelectMoverPage = () => {
   // T7 parity: both methods settle at completion — cash in person, card via
   // the mobile app's Stripe flow. Nothing is charged at booking.
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card'>('cash')
+  // Card cannot stay chosen in a currency that has no card payments.
+  useEffect(() => {
+    if (!cardAvailable) setPaymentMethod('cash')
+  }, [cardAvailable])
 
   const handleConfirmMover = async () => {
     if (!selectedMover || isConfirming) return
@@ -688,6 +703,7 @@ const SelectMoverPage = () => {
           onChange={setExtraHelpers}
           tier={pricedTier}
           config={pricingConfig}
+          currency={currency}
           className="mb-6 bg-white dark:bg-neutral-800"
         />
 
@@ -827,7 +843,7 @@ const SelectMoverPage = () => {
                 {/* Price & ETA */}
                 <div className="text-right shrink-0">
                   <p className="text-xl font-bold text-neutral-900 dark:text-white">
-                    {formatMoney(mover.price, { compact: true })}
+                    {formatMoney(mover.price, { compact: true, currency: mover.quote.currency })}
                   </p>
                   <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
                     {t('web:selectMover.eta.label', { count: mover.estimatedArrival })}
@@ -899,7 +915,9 @@ const SelectMoverPage = () => {
                 key={method}
                 type="button"
                 onClick={() => setPaymentMethod(method)}
-                className={`flex-1 rounded-xl border px-4 py-3 text-sm font-semibold transition-colors ${
+                // A currency without card payments (plan currency/0): the option stays visible, disabled.
+                disabled={method === 'card' && !cardAvailable}
+                className={`flex-1 rounded-xl border px-4 py-3 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
                   paymentMethod === method
                     ? 'bg-primary-6000 border-primary-6000 text-white'
                     : 'border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300'
@@ -914,6 +932,9 @@ const SelectMoverPage = () => {
               ? t('booking:payment.card.helper')
               : t('booking:payment.cash.helper')}
           </p>
+          {!cardAvailable && (
+            <p className="mt-2 text-xs text-neutral-500 dark:text-neutral-400">{t('web:payment.cardUnavailable.helper')}</p>
+          )}
         </div>
       </div>
 
@@ -942,7 +963,7 @@ const SelectMoverPage = () => {
                 ? t('web:selectMover.confirm.cta', {
                     amount: formatMoney(
                       moversWithPrices.find((m) => m.id === selectedMover)?.price || 0,
-                      { compact: true },
+                      { compact: true, currency },
                     ),
                   })
                 : t('web:selectMover.selectFirst.cta')}

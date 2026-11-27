@@ -296,7 +296,9 @@
       "initFailed": "Impossibile avviare il pagamento. Riprova."
     },
     "confirmFailed": "Impossibile confermare il pagamento",
-    "notAwaiting": "Questo trasloco non è in attesa di pagamento. Ricarica il trasloco e riprova."
+    "notAwaiting": "Questo trasloco non è in attesa di pagamento. Ricarica il trasloco e riprova.",
+    "currencyNotSupported": "I pagamenti con carta non sono ancora disponibili in questo mercato. Paga in contanti.",
+    "belowMinimum": "Questo importo è troppo basso per essere pagato con carta."
   },
   "pricing": {
     "exceedsLargestVehicle": "Questo carico è troppo grande per un solo veicolo. Contatta l'assistenza.",

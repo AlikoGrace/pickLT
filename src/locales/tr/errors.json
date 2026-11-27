@@ -296,7 +296,9 @@
       "initFailed": "Ödeme başlatılamadı. Tekrar deneyin."
     },
     "confirmFailed": "Ödeme onaylanamadı",
-    "notAwaiting": "Bu taşınma için ödeme beklenmiyor. Lütfen taşınmayı yeniden yükleyip tekrar deneyin."
+    "notAwaiting": "Bu taşınma için ödeme beklenmiyor. Lütfen taşınmayı yeniden yükleyip tekrar deneyin.",
+    "currencyNotSupported": "Kart ile ödeme bu pazarda henüz kullanılamıyor. Lütfen nakit ödeyin.",
+    "belowMinimum": "Bu tutar kartla ödemek için çok küçük."
   },
   "pricing": {
     "exceedsLargestVehicle": "Bu yük tek bir araç için çok büyük. Lütfen destek ekibiyle iletişime geçin.",

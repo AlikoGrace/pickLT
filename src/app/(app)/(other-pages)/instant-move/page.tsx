@@ -29,6 +29,7 @@ import { getMapboxDirections } from '@/utils/mapbox-directions'
 import { formatDistanceKm, formatMoney } from '@/lib/format'
 import PriceBreakdown from '@/components/PriceBreakdown'
 import PendingOfferPrompt from '@/components/PendingOfferPrompt'
+import { moveCurrency } from '@/lib/currency'
 import { parsePendingOffer } from '@/lib/pending-offer'
 import CallInAppButton from '@/components/calls/CallInAppButton'
 import { isPhoneFallbackOpen } from '@/lib/call-state'
@@ -69,6 +70,8 @@ interface MoveData {
   dropoffLatitude: number | null
   dropoffLongitude: number | null
   estimatedPrice: number | null
+  /** The move's own currency (plan currency/0); absent on older rows. */
+  currency?: string | null
   paymentMethod?: string | null
   finalPrice: number | null
   totalItemCount: number | null
@@ -370,6 +373,7 @@ const InstantMovePage = () => {
                 dropoffLatitude: (doc.dropoffLatitude as number) ?? null,
                 dropoffLongitude: (doc.dropoffLongitude as number) ?? null,
                 estimatedPrice: (doc.estimatedPrice as number) ?? null,
+                currency: (doc.currency as string) ?? null,
                 paymentMethod: (doc.paymentMethod as string) ?? null,
                 finalPrice: (doc.finalPrice as number) ?? null,
                 totalItemCount: (doc.totalItemCount as number) ?? null,
@@ -641,6 +645,8 @@ const InstantMovePage = () => {
   const estimatedPrice = moveData?.estimatedPrice || 0
   // Itemised estimate stored by `create-instant` (pricing master D13/D15).
   const breakdown = parseBreakdown(moveData?.priceBreakdown)
+  // Every amount of this move is in the move's own currency (plan currency/0).
+  const currency = moveCurrency({ currency: moveData?.currency ?? breakdown?.currency })
   const itemCount = moveData?.totalItemCount || 0
   const pickupDisplay = moveData?.pickupLocation || t('booking:pickup.label')
   const dropoffDisplay = moveData?.dropoffLocation || t('booking:dropoff.label')
@@ -706,7 +712,7 @@ const InstantMovePage = () => {
             )}
             {phase === 'mover_arrived' && (
               <div className="text-right shrink-0">
-                <p className="text-lg font-semibold text-primary-600">{formatMoney(estimatedPrice, { compact: true })}</p>
+                <p className="text-lg font-semibold text-primary-600">{formatMoney(estimatedPrice, { compact: true, currency })}</p>
                 <p className="text-xs text-neutral-500 dark:text-neutral-400">{t('booking:price.estimated.label')}</p>
               </div>
             )}
@@ -723,7 +729,7 @@ const InstantMovePage = () => {
             )}
             {(phase === 'arrived_destination' || phase === 'unloading' || phase === 'awaiting_payment') && (
               <div className="text-right shrink-0">
-                <p className="text-lg font-semibold text-primary-600">{formatMoney(moveData?.finalPrice || estimatedPrice, { compact: true })}</p>
+                <p className="text-lg font-semibold text-primary-600">{formatMoney(moveData?.finalPrice || estimatedPrice, { compact: true, currency })}</p>
                 <p className="text-xs text-neutral-500 dark:text-neutral-400">{t('booking:price.final.label')}</p>
               </div>
             )}
@@ -940,7 +946,7 @@ const InstantMovePage = () => {
   return (
     <div className="fixed inset-0 z-40 bg-neutral-100 dark:bg-neutral-900">
       {/* A mover's higher price, for the client to accept or decline (plan pricing/8). */}
-      <PendingOfferPrompt moveId={moveData?.$id} pendingOffer={moveData?.pendingOffer} onResolved={refreshMove} />
+      <PendingOfferPrompt moveId={moveData?.$id} pendingOffer={moveData?.pendingOffer} currency={currency} onResolved={refreshMove} />
       <div className="absolute inset-0">
         <MapboxMap
           pickupCoordinates={pickupCoordinates || undefined}
@@ -1014,7 +1020,7 @@ const InstantMovePage = () => {
             <div className="rounded-2xl border border-neutral-200 bg-white/95 backdrop-blur-sm dark:border-neutral-700 dark:bg-neutral-800/95 p-4 shadow-lg space-y-3">
               <div className="text-center">
                 <p className="text-lg font-bold text-neutral-900 dark:text-white">
-                  {formatMoney(paymentAmount || moveData?.finalPrice || estimatedPrice, { compact: true })}
+                  {formatMoney(paymentAmount || moveData?.finalPrice || estimatedPrice, { compact: true, currency })}
                 </p>
                 <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('booking:payment.amountCard.label')}</p>
               </div>
@@ -1029,7 +1035,7 @@ const InstantMovePage = () => {
             <div className="rounded-2xl border border-neutral-200 bg-white/95 backdrop-blur-sm dark:border-neutral-700 dark:bg-neutral-800/95 p-4 shadow-lg space-y-4">
               <div className="text-center">
                 <p className="text-lg font-bold text-neutral-900 dark:text-white">
-                  {formatMoney(paymentAmount || moveData?.finalPrice || estimatedPrice, { compact: true })}
+                  {formatMoney(paymentAmount || moveData?.finalPrice || estimatedPrice, { compact: true, currency })}
                 </p>
                 <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('booking:payment.amount.label')}</p>
               </div>

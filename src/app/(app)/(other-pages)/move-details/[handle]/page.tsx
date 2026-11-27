@@ -33,6 +33,7 @@ import {
 import { formatDateWith, formatMoney, formatVolumeM3 } from '@/lib/format'
 import PriceBreakdown from '@/components/PriceBreakdown'
 import PendingOfferPrompt from '@/components/PendingOfferPrompt'
+import { moveCurrency } from '@/lib/currency'
 import { isPriceConfirmed } from '@/components/PriceBreakdown'
 import MoveRouteMap from '@/components/MoveRouteMap'
 import { toCoordinate } from '@/lib/route-caption'
@@ -148,6 +149,7 @@ function docToStoredMove(doc: any): StoredMove {
     createdAt: doc.$createdAt ?? '',
     paidAt: doc.paidAt ?? doc.$createdAt ?? '',
     totalPrice: doc.estimatedPrice ?? 0,
+    currency: moveCurrency(doc),
     bookingCode: doc.handle ?? '',
     moveCategory: doc.moveCategory ?? null,
     moveType: doc.moveType ?? doc.systemMoveType ?? null,
@@ -534,6 +536,9 @@ export default function MoveDetailsPage() {
   // The itemised v3 estimate the server stored with the row (pricing master
   // D13). Null on moves booked before the engine — those render the plain total.
   const breakdown = parseBreakdown(priceBreakdown)
+  // Every amount of this move is in the move's own currency (plan currency/0);
+  // a locally kept move without one shows the user's own.
+  const currency = move.currency ?? breakdown?.currency
 
   const pickupDisplay = pickupStreetAddress || pickupLocation || t('booking:pickup.fallback.label')
   const dropoffDisplay = dropoffStreetAddress || dropoffLocation || t('booking:dropoff.fallback.label')
@@ -559,7 +564,7 @@ export default function MoveDetailsPage() {
     <div className="container pb-24 lg:pb-32 pt-8 lg:pt-12">
       {/* A mover's higher price, for the client to accept or decline. */}
       {viewerIsClient && (
-        <PendingOfferPrompt moveId={moveDocId} pendingOffer={pendingOfferRaw} onResolved={() => fetchFromDb()} />
+        <PendingOfferPrompt moveId={moveDocId} pendingOffer={pendingOfferRaw} currency={currency} onResolved={() => fetchFromDb()} />
       )}
       {/* Back link */}
       <Link
@@ -591,7 +596,7 @@ export default function MoveDetailsPage() {
         <div className="text-right">
           <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('common:label.total')}</p>
           <p className="text-3xl font-bold text-neutral-900 dark:text-neutral-100">
-            {formatMoney(totalPrice)}
+            {formatMoney(totalPrice, { currency })}
           </p>
         </div>
       </div>
@@ -814,7 +819,7 @@ export default function MoveDetailsPage() {
               ) : (
                 <div className="flex justify-between text-base">
                   <span className="font-semibold text-neutral-900 dark:text-neutral-100">{t('common:label.total')}</span>
-                  <span className="font-bold text-neutral-900 dark:text-neutral-100">{formatMoney(totalPrice)}</span>
+                  <span className="font-bold text-neutral-900 dark:text-neutral-100">{formatMoney(totalPrice, { currency })}</span>
                 </div>
               )}
               {paymentMethod && (

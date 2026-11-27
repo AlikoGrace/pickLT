@@ -26,6 +26,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { formatDateWith, formatDistanceKm, formatMoney } from '@/lib/format'
 import { offerApproachKm, offerOutcome, offerPayout } from '@/lib/pending-offer'
+import { moveCurrency } from '@/lib/currency'
 import { formatCountdown } from '@/components/PendingOfferPrompt'
 import { moveSubtitle, moveTypeAndCategoryValue, requestCategoryAndType } from '@/lib/move-subtitle'
 import { Trans, useTranslation } from 'react-i18next'
@@ -52,6 +53,8 @@ interface MoveDetails {
   totalItemCount: number | null
   totalWeightKg: number | null
   estimatedPrice: number | null
+  /** The move's own currency (plan currency/0); absent on older rows. */
+  currency?: string | null
   /** Total charged crew (driver + helpers); a number on the raw row. */
   crewSize: string | number | null
   /** Helpers the client added on top of the tier (crew master D2). */
@@ -88,6 +91,8 @@ interface WaitingOffer {
   expiresAt: string
   /** What the client would pay, for the waiting text. */
   total: number | null
+  /** The move's currency (plan currency/0). */
+  currency: string
 }
 
 /** After the client's deadline the sweeper closes the offer within a minute; then the screen closes by itself. */
@@ -569,6 +574,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
           moveId: incoming.moveId,
           expiresAt: typeof data.expiresAt === 'string' ? data.expiresAt : new Date().toISOString(),
           total: typeof data.total === 'number' ? data.total : null,
+          currency: moveCurrency(incoming.move),
         })
         setIncoming(null)
         setShowDetails(false)
@@ -631,6 +637,8 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
     const payout = offerPayout(incoming)
     const approachKm = offerApproachKm(incoming)
     const earnings = payout ?? (move?.estimatedPrice != null ? move.estimatedPrice : null)
+    // The offer is in the move's own currency (plan currency/0).
+    const currency = moveCurrency(move)
     const offerNote =
       payout !== null ? (
         <p className="mt-1 text-xs text-green-700/90 dark:text-green-300/90">
@@ -807,7 +815,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium text-green-700 dark:text-green-300">{t('web:mover.request.earnings.label')}</span>
                   <span className="text-2xl font-bold text-green-700 dark:text-green-300">
-                    {formatMoney(earnings, { compact: true })}
+                    {formatMoney(earnings, { compact: true, currency })}
                   </span>
                 </div>
                 {offerNote}
@@ -911,7 +919,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                   <div className="text-right">
                     <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('web:mover.earnings.label')}</p>
                     <p className="text-3xl font-bold text-green-600 dark:text-green-400">
-                      {formatMoney(earnings, { compact: true })}
+                      {formatMoney(earnings, { compact: true, currency })}
                     </p>
                   </div>
                 )}
@@ -1066,7 +1074,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
                       <div className="flex justify-between text-base">
                         <span className="font-semibold text-neutral-900 dark:text-neutral-100">{t('web:mover.earnings.label')}</span>
                         <span className="font-bold text-green-600 dark:text-green-400">
-                          {formatMoney(earnings ?? 0, { compact: true })}
+                          {formatMoney(earnings ?? 0, { compact: true, currency })}
                         </span>
                       </div>
                       {offerNote}
@@ -1141,7 +1149,7 @@ export default function MoveRequestPopup({ children }: { children: ReactNode }) 
           </div>
           <div className="p-5 space-y-3">
             <p className="text-sm text-neutral-700 dark:text-neutral-200">
-              {t('web:mover.request.offer.waiting.body', { amount: formatMoney(waiting.total) })}
+              {t('web:mover.request.offer.waiting.body', { amount: formatMoney(waiting.total, { currency: waiting.currency }) })}
             </p>
             <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('web:mover.request.offer.waiting.helper')}</p>
           </div>

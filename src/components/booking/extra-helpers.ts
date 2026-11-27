@@ -22,7 +22,7 @@ export function stepExtraHelpers(current: number, delta: 1 | -1, max: number): n
   return clampExtraHelpers(clampExtraHelpers(current, max) + delta, max)
 }
 
-/** EUR per helper-hour for `tier`. */
+/** Per helper-hour for `tier`, in the currency of the market the rates are for. */
 export function helperRateEur(config: PricingConfig | null | undefined, tier: MoveType): number {
   return rate(config, `tier.${tier}.laborRatePerHour`)
 }

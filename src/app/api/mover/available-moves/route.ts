@@ -1,4 +1,5 @@
 import { getTranslations } from '@/lib/i18n-server'
+import { moveCurrency } from '@/lib/currency'
 import { getSessionUserId } from '@/lib/auth-session'
 import { createAdminClient } from '@/lib/appwrite-server'
 import { APPWRITE } from '@/lib/constants'
@@ -105,6 +106,8 @@ export async function GET() {
               estimatedPrice: move.estimatedPrice,
               finalPrice: move.finalPrice ?? null,
               priceBreakdown: move.priceBreakdown ?? null,
+              // The move's own currency (plan currency/0); euro for an older row.
+              currency: moveCurrency(move as { currency?: unknown }),
               // What the driver earns: net after the platform fee (plan 7).
               payout: moverPayoutEur(
                 {

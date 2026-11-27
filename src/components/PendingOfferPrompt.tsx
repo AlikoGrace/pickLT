@@ -26,11 +26,14 @@ type Busy = 'accept' | 'decline' | null
 export default function PendingOfferPrompt({
   moveId,
   pendingOffer,
+  currency,
   onResolved,
 }: {
   moveId: string | null | undefined
   /** `moves.pendingOffer` as stored: a JSON string, an object, or nothing. */
   pendingOffer: unknown
+  /** The move's currency (plan currency/0): the offer is in it. Omit for the user's own. */
+  currency?: string | null
   /** Called after the server took the answer (or said the offer is gone), so the page can reload the move. */
   onResolved?: (outcome: 'accepted' | 'declined' | 'closed') => void
 }) {
@@ -142,15 +145,15 @@ export default function PendingOfferPrompt({
             </div>
             <div className="flex justify-between gap-4">
               <dt className="text-neutral-500 dark:text-neutral-400">{t('web:priceConfirm.previous.label')}</dt>
-              <dd className="font-medium text-neutral-900 dark:text-neutral-100">{formatMoney(offer.previousTotal)}</dd>
+              <dd className="font-medium text-neutral-900 dark:text-neutral-100">{formatMoney(offer.previousTotal, { currency })}</dd>
             </div>
             <div className="flex justify-between gap-4">
               <dt className="text-neutral-500 dark:text-neutral-400">{t('web:priceConfirm.difference.label')}</dt>
-              <dd className="font-medium text-amber-700 dark:text-amber-300">+{formatMoney(increase)}</dd>
+              <dd className="font-medium text-amber-700 dark:text-amber-300">+{formatMoney(increase, { currency })}</dd>
             </div>
             <div className="flex justify-between gap-4 border-t border-neutral-200 pt-2 text-base dark:border-neutral-700">
               <dt className="font-semibold text-neutral-900 dark:text-neutral-100">{t('web:priceConfirm.new.label')}</dt>
-              <dd className="font-bold text-neutral-900 dark:text-neutral-100">{formatMoney(offer.total)}</dd>
+              <dd className="font-bold text-neutral-900 dark:text-neutral-100">{formatMoney(offer.total, { currency })}</dd>
             </div>
           </dl>
 
@@ -179,7 +182,7 @@ export default function PendingOfferPrompt({
             >
               {busy === 'accept'
                 ? t('common:state.accepting.label')
-                : t('web:priceConfirm.accept.cta', { amount: formatMoney(offer.total) })}
+                : t('web:priceConfirm.accept.cta', { amount: formatMoney(offer.total, { currency }) })}
             </button>
           </div>
         </div>

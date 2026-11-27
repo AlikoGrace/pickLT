@@ -26,6 +26,8 @@ import { Fragment, useCallback, useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { SectionHeading, SectionSubheading } from '@/components/listings/SectionHeading'
 import PriceBreakdown from '@/components/PriceBreakdown'
+import { useQuoteCurrency } from '@/components/DisplayCurrency'
+import { catalogForMarket } from '@/lib/currency'
 import { crewLabel } from '@/components/mover/crewLabel'
 import { useInventoryCatalog } from '@/hooks/useInventoryCatalog'
 import { usePricingConfig } from '@/hooks/usePricingConfig'
@@ -157,6 +159,13 @@ const Page = () => {
   const pricingConfig = usePricingConfig(pickupCountryCode)
   // Quotes wait for a ready, non-empty catalog (crew plan 1 #8).
   const { catalog, status: catalogStatus, ready: catalogReady, retry: retryCatalog } = useInventoryCatalog()
+  // The market's currency and item prices (plan currency/0): the quote is in
+  // the currency of the pickup country, as the server prices it on create.
+  const currency = useQuoteCurrency(pickupCountryCode)
+  const marketCatalog = useMemo(
+    () => catalogForMarket(catalog, pickupCountryCode, pricingConfig),
+    [catalog, pickupCountryCode, pricingConfig],
+  )
   const [locationPickerOpen, setLocationPickerOpen] = useState(false)
   const [editingLocationType, setEditingLocationType] = useState<'pickup' | 'dropoff'>('pickup')
 
@@ -206,7 +215,8 @@ const Page = () => {
           distanceKm: kmFromMeters(routeInfo?.distance ?? routeDistanceMeters),
           durationSeconds: routeInfo?.duration ?? routeDurationSeconds ?? 0,
           basket: basketFromWire(inventory, customItems),
-          catalog,
+          catalog: marketCatalog,
+          currency,
           floorsNoLift: floorsNoLiftFor({
             pickupFloorLevel: floorLevel,
             pickupElevator: elevatorAvailable,
@@ -229,7 +239,7 @@ const Page = () => {
       return null
     }
   }, [
-    catalogReady, catalog, pricingConfig, pricedTier, extraHelpers, routeInfo, routeDistanceMeters, routeDurationSeconds,
+    catalogReady, marketCatalog, currency, pricingConfig, pricedTier, extraHelpers, routeInfo, routeDistanceMeters, routeDurationSeconds,
     inventory, customItems, floorLevel, elevatorAvailable, dropoffFloorLevel, dropoffElevatorAvailable,
     pickupArrangeHaltverbot, dropoffArrangeHaltverbot, packingServiceLevel, additionalServices, storageWeeks,
   , pickupCountryCode])
@@ -734,7 +744,7 @@ const Page = () => {
         <div className="text-center">
           <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('booking:pricing.estimatedTotal.label')}</p>
           <div className="mt-1 text-3xl font-bold text-primary-600">
-            {formatMoney(totalPrice, { compact: true })}
+            {formatMoney(totalPrice, { compact: true, currency })}
           </div>
           <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
             {t('booking:pricing.finalAfterReview.helper')}

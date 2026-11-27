@@ -6,6 +6,7 @@ import CustomizeControl from './customize-control'
 import ThemeProvider from './theme-provider'
 import MoveSearchProvider from '@/context/moveSearch'
 import { AuthProvider } from '@/context/auth'
+import DisplayCurrencyProvider from '@/components/DisplayCurrency'
 import I18nProvider from './i18n-provider'
 import { getResources } from '@/lib/i18n-catalog'
 import { getTranslations, resolveLocale } from '@/lib/i18n-server'
@@ -51,7 +52,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <div>
             <I18nProvider locale={locale} resources={getResources(locale)}>
               <AuthProvider>
-                <MoveSearchProvider>{children}</MoveSearchProvider>
+                {/* The signed-in user's market currency for every page, client and mover (plan currency/0). */}
+                <DisplayCurrencyProvider>
+                  <MoveSearchProvider>{children}</MoveSearchProvider>
+                </DisplayCurrencyProvider>
               </AuthProvider>
               <CustomizeControl />
             </I18nProvider>

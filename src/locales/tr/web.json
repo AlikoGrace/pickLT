@@ -1191,6 +1191,9 @@
         },
         "success": "Ödeme alındı. Bakiyeniz güncellendi.",
         "unavailable": "Kartla ödeme şu anda kullanılamıyor. Başka bir yolla ödemek için destekle iletişime geçin.",
+        "cardUnavailable": {
+          "helper": "Kartla ödeme para biriminizde kullanılamıyor. Platform ücretleri banka havalesiyle ödenir ve bir yönetici ödemeyi bakiyenize kaydeder."
+        },
         "secure": {
           "helper": "Kartlı ödemeler Stripe tarafından güvenle işlenir."
         }
@@ -1942,6 +1945,11 @@
     },
     "failed": {
       "error": "Yanıtınız kaydedilemedi. Lütfen tekrar deneyin."
+    }
+  },
+  "payment": {
+    "cardUnavailable": {
+      "helper": "Bu ülkedeki taşımalar için kartla ödeme henüz kullanılamıyor. Nakliyeciye nakit ödenir."
     }
   }
 }

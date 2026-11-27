@@ -296,7 +296,9 @@
       "initFailed": "Betaling kon niet worden gestart. Probeer het opnieuw."
     },
     "confirmFailed": "Betaling kon niet worden bevestigd",
-    "notAwaiting": "Deze verhuizing wacht niet op betaling. Laad de verhuizing opnieuw en probeer het nog eens."
+    "notAwaiting": "Deze verhuizing wacht niet op betaling. Laad de verhuizing opnieuw en probeer het nog eens.",
+    "currencyNotSupported": "Kaartbetalingen zijn in deze markt nog niet beschikbaar. Betaal contant.",
+    "belowMinimum": "Dit bedrag is te klein om met een kaart te betalen."
   },
   "pricing": {
     "exceedsLargestVehicle": "Deze lading is te groot voor één voertuig. Neem contact op met de klantenservice.",

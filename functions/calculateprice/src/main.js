@@ -10,6 +10,7 @@ import {
   quoteMove,
   toPricingConfig,
 } from './pricing-engine.js';
+import { catalogForMarket, loadMarketCurrency } from './market-currency.js';
 
 const DATABASE_ID = process.env.APPWRITE_DATABASE_ID;
 const MOVES_COLLECTION = process.env.APPWRITE_COLLECTION_MOVES;
@@ -55,6 +56,8 @@ const PRICING_CONFIG_COLLECTION = process.env.APPWRITE_COLLECTION_PRICING_CONFIG
  * a function deployed ahead of the schema still prices on the admin's rates.
  */
 let warnedLegacyConfig = false;
+const PLATFORM_CONFIG_COLLECTION = process.env.APPWRITE_COLLECTION_PLATFORM_CONFIG || 'platform_config';
+
 async function loadOverrides(databases, error, countryCode) {
   const scopes = countryCode ? [GLOBAL_PRICING_SCOPE, countryCode] : [GLOBAL_PRICING_SCOPE];
   try {
@@ -193,12 +196,16 @@ export default async ({ req, res, log, error }) => {
       loadUserCountry: userCountryLoader(databases, callerId),
       error,
     });
-    const row = { ...baseRow, countryCode: country.countryCode };
-
-    const [overrides, catalog] = await Promise.all([
+    const [overrides, catalog, currency] = await Promise.all([
       loadOverrides(databases, error, country.countryCode),
       loadCatalog(databases),
+      // The market's currency (plan currency/0).
+      loadMarketCurrency({
+        databases, Query, databaseId: DATABASE_ID, collectionId: PLATFORM_CONFIG_COLLECTION, countryCode: country.countryCode, error,
+      }),
     ]);
+    const row = { ...baseRow, countryCode: country.countryCode, currency };
+    const marketCatalog = catalogForMarket(catalog, country.countryCode, overrides);
 
     // The basket as the engine will read it; a preview body is capped (a
     // stored row was capped when it was written).
@@ -212,7 +219,7 @@ export default async ({ req, res, log, error }) => {
     row.moveType = classified.moveType;
 
     const vehicleOverride = typeof body.vehicleType === 'string' && body.vehicleType ? body.vehicleType : null;
-    const input = quoteInputFromRow(row, catalog, move ? vehicleOverride : null);
+    const input = quoteInputFromRow(row, marketCatalog, move ? vehicleOverride : null);
 
     let breakdown;
     try {
@@ -237,7 +244,7 @@ export default async ({ req, res, log, error }) => {
     log(
       `calculateprice[v3] ${breakdown.tier}/${breakdown.mode} ${breakdown.profile.loadedVolumeM3} m³ ` +
         `${breakdown.profile.distanceKm} km crew ${breakdown.profile.totalCrew} ${breakdown.profile.vehicleType} ` +
-        `→ €${breakdown.total} [${country.countryCode} via ${country.source}]${moveId ? ` (persisted on ${moveId})` : ' (preview)'}`,
+        `→ ${breakdown.total} ${breakdown.currency} [${country.countryCode} via ${country.source}]${moveId ? ` (persisted on ${moveId})` : ' (preview)'}`,
     );
 
     return res.json({

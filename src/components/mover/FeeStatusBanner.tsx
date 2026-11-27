@@ -14,6 +14,8 @@ interface Props {
   standing?: 'ok' | 'due' | 'overdue' | 'restricted' | null
   owedCents?: number | null
   oldestDueAt?: string | null
+  /** The currency of the balance. Omit for the mover's own market (plan currency/0). */
+  currency?: string | null
   className?: string
 }
 
@@ -24,14 +26,14 @@ interface Props {
  * Pay now stays visible either way. Renders nothing when nothing is owed.
  * A photo banner (card payment) since 2026-10-06.
  */
-export default function FeeStatusBanner({ standing, owedCents, oldestDueAt, className }: Props) {
+export default function FeeStatusBanner({ standing, owedCents, oldestDueAt, currency, className }: Props) {
   const { t } = useTranslation()
   const [expanded, setExpanded] = useState(false)
   const bodyId = useId()
   const owed = typeof owedCents === 'number' ? owedCents : 0
   if (!standing || standing === 'ok' || owed <= 0) return null
 
-  const amount = formatMoney(owed / 100)
+  const amount = formatMoney(owed / 100, { currency })
   const date = oldestDueAt ? formatDate(oldestDueAt) : ''
   const tone = standing === 'restricted' ? 'red' : standing === 'overdue' ? 'amber' : 'blue'
   const Icon = standing === 'restricted' ? NoSymbolIcon : standing === 'overdue' ? ExclamationTriangleIcon : BanknotesIcon
